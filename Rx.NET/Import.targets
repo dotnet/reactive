@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Non-Portable Library build -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v11.0\Microsoft.Windows.UI.Xaml.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And ('$(BuildPlatform)' == 'DESKTOPCLR' Or '$(BuildPlatform)' == 'XNA') " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7') " />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildPlatform)' == 'XNA' "/>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Compact\Microsoft.CompactFramework.CSharp.targets" Condition=" '$(BuildPlatform)' == 'NETCF' " />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Xbox 360 ADK\Microsoft.Xbox360.Adk.App.targets" Condition=" '$(BuildPlatform)' == 'XBOX' " />
+
+  <!-- Portable Library Build -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
+
+  <Target Name="AfterBuild">
+    <WriteLinesToFile Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' "
+                      File="$(OutDir)\$(TargetFileName).sign" Overwrite="true"
+                      Lines="[$(SignKeyId)] Auto-generated file. Indicates the corresponding binary file needs to be signed." />
+
+    <!-- Hack for Metro; for some reason the XAML build creates intermediary folders, so we flatten the hierarchy for consumption by the setup build at a later stage -->
+    <CreateItem Include="$(OutDir)\*.*" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">
+      <Output TaskParameter="Include" ItemName="BuiltFilesInOutDir" />
+    </CreateItem>
+    <Copy SourceFiles="@(BuiltFilesInOutDir)" DestinationFolder="$(OutDir)\.." Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+  </Target>
+</Project>

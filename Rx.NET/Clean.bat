@@ -1,0 +1,1 @@
+msbuild BuildAll.proj /t:Clean /p:BuildSetup=1

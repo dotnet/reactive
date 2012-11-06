@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LayoutOutputFolder>$(MSBuildProjectDirectory)\..\..\Layout\Rx\</LayoutOutputFolder>
+    <SetupOutputFolder>$(MSBuildProjectDirectory)\..\..\Setup\Rx\</SetupOutputFolder>
+  </PropertyGroup>
+
+  <!-- Current platforms -->
+
+  <ItemGroup>
+    <!-- Important: The HomoIcon build task requires the 4.0 builds to appear first! (currently disabled) -->
+    <Flavor Include="Rx.sln">
+      <Configuration>Debug40</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Release40</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Debug45</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Release45</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Debug8</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Release8</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugPL</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleasePL</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugWP7</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleaseWP7</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugSL5</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleaseSL5</Configuration>
+    </Flavor>
+  </ItemGroup>
+
+
+  <!-- Legacy platforms -->
+
+  <ItemGroup>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugSL4</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleaseSL4</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Debug35</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Release35</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugXNA4</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleaseXNA4</Configuration>
+    </Flavor>
+  </ItemGroup>
+
+
+  <!-- Future platforms -->
+
+  <ItemGroup>
+    <Flavor Include="Rx.sln">
+      <Configuration>DebugWP8</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleaseWP8</Configuration>
+    </Flavor>
+  </ItemGroup>
+
+
+  <Target Name="ExpandFlavors">
+    <CreateItem Include="@(Flavor)" AdditionalMetadata="Properties=Configuration=%(Flavor.Configuration)%3BPlatform=Any CPU%3BOutDir=$(LayoutOutputFolder)\%(Flavor.Configuration)\">
+      <Output TaskParameter="Include" ItemName="ProjectToBuild" />
+    </CreateItem>
+    <CreateItem Include="Setup\BuildAll.proj" AdditionalMetadata="Properties=BinariesLayoutFolder=$(LayoutOutputFolder)%3BOutDir=$(SetupOutputFolder)" Condition=" '$(BuildSetup)' == '1' ">
+      <Output TaskParameter="Include" ItemName="SetupToBuild" />
+    </CreateItem>
+  </Target>
+  <Target Name="Build" DependsOnTargets="ExpandFlavors">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Build" />
+    <MSBuild Projects="@(SetupToBuild)" Targets="Build" />
+  </Target>
+  <Target Name="Clean" DependsOnTargets="ExpandFlavors">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Clean" />
+    <MSBuild Projects="@(SetupToBuild)" Targets="Clean" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="ExpandFlavors">
+    <MSBuild Projects="@(ProjectToBuild)" Targets="Rebuild" />
+    <MSBuild Projects="@(SetupToBuild)" Targets="Rebuild" />
+  </Target>
+</Project>

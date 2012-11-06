@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!--
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug40</Configuration>
+    -->
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug40\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR40</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release40\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR40</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug35\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_RXINTERFACES;NO_ZIP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR20</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release35\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_RXINTERFACES;NO_ZIP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR20</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL4|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugSL4\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHT4</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseSL4|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseSL4\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHT4</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL5|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugSL5\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHT5</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseSL5|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseSL5\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHT5</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWP7|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugWP7\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseWP7|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseWP7\</OutputPath>
+    <DefineConstants>$(DefineConstants);TRACE;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(IxRelease)' == 'STABLE' ">
+    <DefineConstants>$(DefineConstants);STABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
+    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
+    <DefineConstants>$(DefineConstants);NO_CODECOVERAGE</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <GetReferenceAssemblyPathsDependsOn>CP_SetBuildReferencePath</GetReferenceAssemblyPathsDependsOn>
+  </PropertyGroup>
+  <Target Name="CP_SetBuildReferencePath">
+    <PropertyGroup>
+      <TargetFrameworkDirectory>$(ProjectDir)..\..\..\References\$(BuildFlavor)</TargetFrameworkDirectory>
+    </PropertyGroup>
+  </Target>
+
+</Project>

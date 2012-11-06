@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2F7D32BD-5BFC-45D4-9899-F1A76DB32FCB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <AssemblyName>System.Reactive.Windows.Threading</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="WindowsBase" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Reactive\Concurrency\CoreDispatcherScheduler.cs" />
+    <Compile Include="Reactive\Internal\Constants.cs" />
+    <Compile Include="Reactive\Linq\CoreDispatcherObservable.cs" />
+    <Compile Include="Reactive\Linq\DispatcherObservable.cs" />
+    <Compile Include="Reactive\Concurrency\DispatcherScheduler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strings_WindowsThreading.Generated.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Core\System.Reactive.Core.csproj">
+      <Project>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</Project>
+      <Name>System.Reactive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings_WindowsThreading.resx" />
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>

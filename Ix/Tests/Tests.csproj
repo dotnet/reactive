@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4C8532A-F8D2-428B-962E-FD578A1E647C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
+    <SilverlightApplication>true</SilverlightApplication>
+    <XapOutputs>true</XapOutputs>
+    <XapFilename>$(AssemblyName).xap</XapFilename>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>InteractiveTests.App</SilverlightAppEntry>
+    <TestPageFileName>TestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+  </PropertyGroup>
+  <!-- Temporary workaround to disable tests as part of automated builds (defeating the **\Tests*.dll the search pattern). -->
+  <PropertyGroup Condition="'$(BuildPlatform)' != 'DESKTOPCLR'">
+    <AssemblyName>_$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- See readme.txt file in the References\$(BuildFlavor) folder for information on the test assemblies used here. -->
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+    <Reference Include="System.Windows" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="System.Windows.Browser" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')" />
+    <Reference Include="Microsoft.Silverlight.Testing" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+    <Reference Include="WindowsBase" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="AsyncTests.Creation.cs" />
+    <Compile Include="AsyncTests.cs" />
+    <Compile Include="AsyncTests.Conversions.cs" />
+    <Compile Include="AsyncTests.Single.cs" />
+    <Compile Include="AsyncTests.Multiple.cs" />
+    <Compile Include="AsyncTests.Aggregates.cs" />
+    <Compile Include="AsyncTests.Bugs.cs" />
+    <Compile Include="AsyncTests.Exceptions.cs" />
+    <Compile Include="Tests.Imperative.cs" />
+    <Compile Include="Tests.Qbservable.cs" />
+    <Compile Include="Tests.Single.cs" />
+    <Compile Include="Tests.Multiple.cs" />
+    <Compile Include="Tests.Exceptions.cs" />
+    <Compile Include="Tests.Creation.cs" />
+    <Compile Include="Tests.Buffering.cs" />
+    <Compile Include="Tests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests.Aggregates.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' ">
+      <Project>{7269A578-326A-4C3E-9874-A2D2600095BC}</Project>
+      <Name>System.Interactive.Async</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Interactive.Providers\System.Interactive.Providers.csproj" Condition=" '$(BuildFlavor)' != 'SILVERLIGHTM7' And '$(BuildPlatform)' != 'XNA' ">
+      <Project>{6D62E966-469D-4A99-BD43-0A17FA14FB4F}</Project>
+      <Name>System.Interactive.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj">
+      <Project>{8E4B04F0-915E-48F9-9796-76278C6094BD}</Project>
+      <Name>System.Interactive</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EE655A70-A899-4B38-84D3-FB9F63A8C661}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <AssemblyName>System.Reactive.WindowsRuntime</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EventPatternSource.cs" />
+    <Compile Include="Foundation\AsyncInfoExtensions.cs" />
+    <Compile Include="Linq\AsyncInfoObservable.cs" />
+    <Compile Include="Foundation\AsyncInfoToObservableBridge.cs" />
+    <Compile Include="IEventPatternSource.cs" />
+    <Compile Include="Linq\WindowsObservable.StandardSequenceOperators.cs" />
+    <Compile Include="Linq\WindowsObservable.Events.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Core\System.Reactive.Core.csproj">
+      <Project>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</Project>
+      <Name>System.Reactive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Linq\System.Reactive.Linq.csproj">
+      <Project>{63252ae9-5186-45ca-bfcd-fa51c6b66a43}</Project>
+      <Name>System.Reactive.Linq</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>
