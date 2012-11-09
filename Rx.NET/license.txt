@@ -1,6 +1,6 @@
 Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.
 Microsoft Open Technologies would like to thank its contributors, a list
-of whom are at http://aspnetwebstack.codeplex.com/wikipage?title=Contributors.
+of whom are at http://rx.codeplex.com/wikipage?title=Contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you
 may not use this file except in compliance with the License. You may
