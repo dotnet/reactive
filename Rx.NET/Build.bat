@@ -1,1 +1,0 @@
-msbuild BuildAll.proj
