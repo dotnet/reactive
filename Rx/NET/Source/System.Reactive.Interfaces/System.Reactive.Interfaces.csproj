@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <AssemblyName>System.Reactive.Interfaces</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyFileVersionAttribute.cs" />
+    <Compile Include="DateTimeOffset.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IObservable.cs" />
+    <Compile Include="IObserver.cs" />
+    <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactive\Concurrency\ISchedulerPeriodic.cs" />
+    <Compile Include="Reactive\Concurrency\IStopwatchProvider.cs" />
+    <Compile Include="Reactive\Concurrency\IScheduledItem.cs" />
+    <Compile Include="Reactive\Concurrency\IScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ISchedulerLongRunning.cs" />
+    <Compile Include="Reactive\Concurrency\IStopwatch.cs" />
+    <Compile Include="Reactive\Disposables\ICancelable.cs" />
+    <Compile Include="Reactive\IEventPattern.cs" />
+    <Compile Include="Reactive\IEventPatternSource.cs" />
+    <Compile Include="Reactive\IEventSource.cs" />
+    <Compile Include="Reactive\IObserver.Result.cs" />
+    <Compile Include="Reactive\Linq\IGroupedObservable.cs" />
+    <Compile Include="Reactive\Linq\IQbservable.cs" />
+    <Compile Include="Reactive\Linq\IQbservableProvider.cs" />
+    <Compile Include="Reactive\Subjects\IConnectableObservable.cs" />
+    <Compile Include="Reactive\Subjects\ISubject.cs" />
+    <Compile Include="Reactive\Subjects\ISubject.Multi.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\Import.targets" />
+</Project>

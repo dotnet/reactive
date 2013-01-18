@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RxMouseServer", "RxMouseServer\RxMouseServer.csproj", "{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RxMouseClient", "RxMouseClient\RxMouseClient.csproj", "{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RxMouseService", "RxMouseService\RxMouseService.csproj", "{E1C1D499-15ED-454A-AE34-35F62E53250C}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://vstfpg04:8080/tfs/pg04
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = RxMouseClient\\RxMouseClient.csproj
+		SccProjectName1 = RxMouseClient
+		SccLocalPath1 = RxMouseClient
+		SccProjectUniqueName2 = RxMouseServer\\RxMouseServer.csproj
+		SccProjectName2 = RxMouseServer
+		SccLocalPath2 = RxMouseServer
+		SccProjectUniqueName3 = RxMouseService\\RxMouseService.csproj
+		SccProjectName3 = RxMouseService
+		SccLocalPath3 = RxMouseService
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Debug|x86.ActiveCfg = Debug|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Debug|x86.Build.0 = Debug|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Release|Any CPU.ActiveCfg = Release|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Release|x86.ActiveCfg = Release|x86
+		{52568D5F-7C8A-49FE-A28D-119C7CBCC71D}.Release|x86.Build.0 = Release|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Debug|x86.ActiveCfg = Debug|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Debug|x86.Build.0 = Debug|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Release|Any CPU.ActiveCfg = Release|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Release|x86.ActiveCfg = Release|x86
+		{5719C4C6-D7CC-47FA-B294-C57E0BC6B06F}.Release|x86.Build.0 = Release|x86
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E1C1D499-15ED-454A-AE34-35F62E53250C}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

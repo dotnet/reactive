@@ -1,0 +1,21 @@
+Visual Studio 2010 changes the .csproj file's reference to Microsoft.VisualStudio.QualityTools.UnitTestFramework
+aggressively upon each edit of test projects. In particular, it changes the following:
+
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+
+into
+
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+
+dropping the conditional include. In order to reach a fixpoint when opening the project, we choose to include
+a file with the name Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll in every reference assemblies
+folder. This file actually contains the testing suite used and ***IS NOT NECESSARILY*** the same as the one
+used for desktop CLR (which has that name).
+
+In particular, for Silverlight, this file is a rename of
+
+    Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+
+into
+
+    Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

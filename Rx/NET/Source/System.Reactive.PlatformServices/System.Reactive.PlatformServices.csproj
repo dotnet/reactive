@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0CCCF009-763F-40D2-8655-7A94828023BF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <AssemblyName>System.Reactive.PlatformServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+    <Reference Include="Microsoft.Phone" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+    <Reference Include="System.Windows" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactive\Concurrency\ConcurrencyAbstractionLayerImpl.Windows.cs" />
+    <Compile Include="Reactive\Concurrency\EventLoopScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\NewThreadScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ConcurrencyAbstractionLayerImpl.cs" />
+    <Compile Include="Reactive\Concurrency\Thread.Stub.cs" />
+    <Compile Include="Reactive\Concurrency\ThreadPoolScheduler.Windows.cs" />
+    <Compile Include="Reactive\EnlightenmentProvider.cs" />
+    <Compile Include="Reactive\Internal\HostLifecycleNotifications.WindowsPhone.cs" />
+    <Compile Include="Reactive\Internal\HostLifecycleNotifications.Windows.cs" />
+    <Compile Include="Reactive\Internal\PhoneShellThunks.cs" />
+    <Compile Include="Reactive\Internal\StopwatchImpl.cs" />
+    <Compile Include="Reactive\Concurrency\TaskPoolScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ThreadPoolScheduler.cs" />
+    <Compile Include="Reactive\Internal\ExceptionServicesImpl.cs" />
+    <Compile Include="Reactive\Internal\PlatformEnlightenmentProvider.cs" />
+    <Compile Include="Reactive\Internal\Stubs.cs" />
+    <Compile Include="Strings_PlatformServices.Generated.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Core\System.Reactive.Core.csproj">
+      <Project>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</Project>
+      <Name>System.Reactive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Linq\System.Reactive.Linq.csproj">
+      <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
+      <Name>System.Reactive.Linq</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings_PlatformServices.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>

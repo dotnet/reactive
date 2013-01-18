@@ -1,0 +1,1 @@
+msbuild BuildAll.proj /p:BuildSetup=1 /p:BuildNumber=0.9.0.0 /p:RxRelease=EXPERIMENTAL

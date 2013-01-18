@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2FEFC068-E2DE-43A9-A4E6-E0336A532B7A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ReactiveTests</RootNamespace>
+    <AssemblyName>Tests.System.Reactive</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <CodeAnalysisRuleSet>..\Test.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
+    <SilverlightApplication>true</SilverlightApplication>
+    <XapOutputs>true</XapOutputs>
+    <XapFilename>$(AssemblyName).xap</XapFilename>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>ReactiveTests.App</SilverlightAppEntry>
+    <TestPageFileName>TestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+  </PropertyGroup>
+  <!-- Temporary workaround to disable tests as part of automated builds (defeating the **\Tests*.dll the search pattern). -->
+  <PropertyGroup Condition="'$(BuildPlatform)' != 'DESKTOPCLR'">
+    <AssemblyName>_$(AssemblyName)</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- See readme.txt file in the References\$(BuildFlavor) folder for information on the test assemblies used here. -->
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+    <Reference Include="System.Windows" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="System.Windows.Browser" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')" />
+    <Reference Include="Microsoft.Silverlight.Testing" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+    <Reference Include="WindowsBase" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' " />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="DispatcherHelpers.cs" />
+    <Compile Include="Semaphore.cs" />
+    <Compile Include="Stress\Core\Disposables\Composite.cs" />
+    <Compile Include="Stress\Core\Disposables\Serial.cs" />
+    <Compile Include="Stress\Core\Disposables\SingleAssignment.cs" />
+    <Compile Include="Stress\Core\Disposables\RefCount.cs" />
+    <Compile Include="Stress\Linq\Delay.cs" />
+    <Compile Include="Stress\Linq\FromEvent.cs" />
+    <Compile Include="Stress\Helpers.cs" />
+    <Compile Include="Stress\Linq\Replay.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="TestLongRunningScheduler.cs" />
+    <Compile Include="Tests\AnonymousTest.cs" />
+    <Compile Include="Tests\Concurrency\ConcurrencyTest.cs" />
+    <Compile Include="Tests\Concurrency\ScheduledItemTest.cs" />
+    <Compile Include="Tests\Concurrency\StopwatchTest.cs" />
+    <Compile Include="Tests\Concurrency\SynchronizationTest.cs" />
+    <Compile Include="Tests\ConnectableObservable.cs" />
+    <Compile Include="Tests\ConnectableObservableTest.cs" />
+    <Compile Include="Tests\Concurrency\AsyncLockTest.cs" />
+    <Compile Include="Tests\Concurrency\ControlSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\CurrentThreadSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\DefaultSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\DispatcherSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\EventLoopSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\HistoricalSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\ImmediateSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\NewThreadSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\SchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\SynchronizationContextSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\TaskPoolSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\ThreadPoolSchedulerTest.cs" />
+    <Compile Include="Tests\Concurrency\VirtualSchedulerTest.cs" />
+    <Compile Include="Tests\Disposables\DisposableTests.cs" />
+    <Compile Include="Tests\Linq\ObservableAggregateTest.cs" />
+    <Compile Include="Tests\Linq\ObservableAsyncTest.cs" />
+    <Compile Include="Tests\Linq\ObservableAwaiterTest.cs" />
+    <Compile Include="Tests\Linq\ObservableBindingTest.cs" />
+    <Compile Include="Tests\Linq\ObservableBlockingTest.cs" />
+    <Compile Include="Tests\Linq\ObservableConcurrencyTest.cs" />
+    <Compile Include="Tests\Linq\ObservableConversionTests.cs" />
+    <Compile Include="Tests\Linq\ObservableCreationTest.cs" />
+    <Compile Include="Tests\Linq\ObservableEventsTest.cs" />
+    <Compile Include="Tests\Linq\ObservableExtensionsTest.cs" />
+    <Compile Include="Tests\Linq\ObservableExTest.cs" />
+    <Compile Include="Tests\Linq\ObservableImperativeTest.cs" />
+    <Compile Include="Tests\Linq\ObservableJoinsTest.cs" />
+    <Compile Include="Tests\Linq\ObservableMultipleTest.cs" />
+    <Compile Include="Tests\Linq\ObservableRemotingTest.cs" />
+    <Compile Include="Tests\Linq\ObservableSafetyTest.cs" />
+    <Compile Include="Tests\Linq\ObservableSingleTest.cs" />
+    <Compile Include="Tests\Linq\ObservableStandardQueryOperatorTest.cs" />
+    <Compile Include="Tests\Linq\ObservableTimeTest.cs" />
+    <Compile Include="Tests\Linq\QbservableExTest.cs" />
+    <Compile Include="Tests\Linq\QbservableTest.cs" />
+    <Compile Include="Tests\Linq\Subjects\AsyncSubjectTest.cs" />
+    <Compile Include="Tests\Linq\Subjects\BehaviorSubjectTest.cs" />
+    <Compile Include="Tests\Linq\Subjects\ReplaySubjectTest.cs" />
+    <Compile Include="Tests\Linq\Subjects\SubjectTest.cs" />
+    <Compile Include="Tests\MySubject.cs" />
+    <Compile Include="Tests\RogueEnumerable.cs" />
+    <Compile Include="Tests\SystemClockTest.cs" />
+    <Compile Include="Tests\DefaultConcurrencyAbstractionLayerTest.cs" />
+    <Compile Include="Tests\EventPatternSourceBaseTest.cs" />
+    <Compile Include="Tests\NotificationTest.cs" />
+    <Compile Include="Tests\TaskObservableExtensionsTest.cs" />
+    <Compile Include="Tests\TimeTests.cs" />
+    <Compile Include="Tests\UnitTest.cs" />
+    <Compile Include="Dummies\DummyDisposable.cs" />
+    <Compile Include="Dummies\DummyEnumerable.cs" />
+    <Compile Include="Dummies\DummyFunc.cs" />
+    <Compile Include="Dummies\DummyObservable.cs" />
+    <Compile Include="Dummies\DummyObserver.cs" />
+    <Compile Include="Dummies\DummyScheduler.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="MockDisposable.cs" />
+    <Compile Include="MockEnumerable.cs" />
+    <Compile Include="NullErrorObservable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\ListObservableTest.cs" />
+    <Compile Include="Tests\ObserverTest.cs" />
+    <Compile Include="Tests\PrivateTypesTest.cs" />
+    <Compile Include="Tests\RegressionTest.cs" />
+    <Compile Include="TestTaskScheduler.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
+      <Project>{E7B7408B-B039-4F30-B6CF-CC06218CE4CA}</Project>
+      <Name>Microsoft.Reactive.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Core\System.Reactive.Core.csproj">
+      <Project>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</Project>
+      <Name>System.Reactive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Experimental\System.Reactive.Experimental.csproj">
+      <Project>{41E65B96-733B-41C4-A1BB-7476359B89EB}</Project>
+      <Name>System.Reactive.Experimental</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj">
+      <Project>{0CCCF009-763F-40D2-8655-7A94828023BF}</Project>
+      <Name>System.Reactive.PlatformServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Providers\System.Reactive.Providers.csproj" Condition=" '$(BuildFlavor)' != 'SILVERLIGHTM7' And '$(BuildPlatform)' != 'XNA' ">
+      <Project>{C7B9D7BE-F47F-466B-A6B0-E46F1069B171}</Project>
+      <Name>System.Reactive.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Linq\System.Reactive.Linq.csproj">
+      <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
+      <Name>System.Reactive.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj"  Condition=" '$(BuildPlatform)' != 'WINDOWS_PHONE' And '$(BuildTarget)' != 'WP7' ">
+      <Project>{7A6EF49E-7946-4101-9C89-407B9C53A173}</Project>
+      <Name>System.Reactive.Runtime.Remoting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' ">
+      <Project>{E32328A1-1F5B-45F9-B005-02EF5CC2CF0D}</Project>
+      <Name>System.Reactive.Windows.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Windows.Threading\System.Reactive.Windows.Threading.csproj">
+      <Project>{2F7D32BD-5BFC-45D4-9899-F1A76DB32FCB}</Project>
+      <Name>System.Reactive.Windows.Threading</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>

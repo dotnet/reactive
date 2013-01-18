@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://services.aonaware.com/DictService/DictService.asmx?wsdl" docRef="http://services.aonaware.com/DictService/DictService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://services.aonaware.com/DictService/DictService.asmx" xmlns:q1="http://services.aonaware.com/webservices/" binding="q1:DictServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://services.aonaware.com/DictService/DictService.asmx" xmlns:q2="http://services.aonaware.com/webservices/" binding="q2:DictServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

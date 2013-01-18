@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E7B7408B-B039-4F30-B6CF-CC06218CE4CA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Reactive.Testing</RootNamespace>
+    <AssemblyName>Microsoft.Reactive.Testing</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' " />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" Condition=" '$(BuildPlatform)' == 'DESKTOPCLR' Or '$(BuildPlatform)' == 'WINDOWS_PHONE' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(BuildFlavor)' == 'WINDOWS8' ">
+    <SDKReference Include="MSTestFramework, Version=11.0" />
+    <SDKReference Include="TestPlatform, Version=11.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ColdObservable.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HotObservable.cs" />
+    <Compile Include="ITestObservable.cs" />
+    <Compile Include="ITestObserver.cs" />
+    <Compile Include="MockObserver.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactiveAssert.cs" />
+    <Compile Include="ReactiveTest.cs" />
+    <Compile Include="Recorded.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="TestScheduler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Core\System.Reactive.Core.csproj">
+      <Project>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</Project>
+      <Name>System.Reactive.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Linq\System.Reactive.Linq.csproj">
+      <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
+      <Name>System.Reactive.Linq</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>

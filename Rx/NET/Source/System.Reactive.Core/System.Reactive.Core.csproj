@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4E516F10-DA7A-4D43-963E-A93865ABEA5B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Reactive</RootNamespace>
+    <AssemblyName>System.Reactive.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProductSignAssembly>true</ProductSignAssembly>
+    <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
+    <OutputPath>bin\ReleaseXBLV\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
+    <OutputPath>bin\DebugXBLV\</OutputPath>
+  </PropertyGroup>
+  <Import Project="..\Common.targets" />
+  <PropertyGroup>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+    <Reference Include="Microsoft.Phone" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="InternalsVisibleTo.cs" />
+    <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="Observable.Extensions.cs" />
+    <Compile Include="Observer.Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactive\AnonymousObservable.cs" />
+    <Compile Include="Reactive\AnonymousObserver.cs" />
+    <Compile Include="Reactive\AnonymousSafeObserver.cs" />
+    <Compile Include="Reactive\Concurrency\AsyncLock.cs" />
+    <Compile Include="Reactive\Concurrency\CatchScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ConcurrencyAbstractionLayer.cs" />
+    <Compile Include="Reactive\Concurrency\ConcurrencyAbstractionLayer.Default.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Wrappers.cs" />
+    <Compile Include="Reactive\Concurrency\DisableOptimizationsScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Services.Emulation.cs" />
+    <Compile Include="Reactive\Concurrency\LocalScheduler.TimerQueue.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Services.cs" />
+    <Compile Include="Reactive\Concurrency\CurrentThreadScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ImmediateScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\LocalScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\ScheduledItem.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Async.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Recursive.cs" />
+    <Compile Include="Reactive\Concurrency\Scheduler.Simple.cs" />
+    <Compile Include="Reactive\Concurrency\SchedulerDefaults.cs" />
+    <Compile Include="Reactive\Concurrency\SchedulerOperation.cs" />
+    <Compile Include="Reactive\Concurrency\SchedulerQueue.cs" />
+    <Compile Include="Reactive\Concurrency\SchedulerWrapper.cs" />
+    <Compile Include="Reactive\Concurrency\Stopwatch.Default.cs" />
+    <Compile Include="Reactive\Concurrency\Synchronization.cs" />
+    <Compile Include="Reactive\Concurrency\Synchronization.ObserveOn.cs" />
+    <Compile Include="Reactive\Concurrency\Synchronization.Synchronize.cs" />
+    <Compile Include="Reactive\Concurrency\SynchronizationContextScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\DefaultScheduler.cs" />
+    <Compile Include="Reactive\Internal\AsyncLockObserver.cs" />
+    <Compile Include="Reactive\Internal\CheckedObserver.cs" />
+    <Compile Include="Reactive\Internal\ConcurrentDictionary.cs" />
+    <Compile Include="Reactive\Internal\ConcurrentQueue.cs" />
+    <Compile Include="Reactive\Internal\Constants.cs" />
+    <Compile Include="Reactive\Disposables\AnonymousDisposable.cs" />
+    <Compile Include="Reactive\Disposables\BooleanDisposable.cs" />
+    <Compile Include="Reactive\Disposables\CancellationDisposable.cs" />
+    <Compile Include="Reactive\Disposables\CompositeDisposable.cs" />
+    <Compile Include="Reactive\Disposables\ContextDisposable.cs" />
+    <Compile Include="Reactive\Disposables\DefaultDisposable.cs" />
+    <Compile Include="Reactive\Disposables\Disposable.cs" />
+    <Compile Include="Reactive\Disposables\MultipleAssignmentDisposable.cs" />
+    <Compile Include="Reactive\Disposables\RefCountDisposable.cs" />
+    <Compile Include="Reactive\Disposables\ScheduledDisposable.cs" />
+    <Compile Include="Reactive\Disposables\SerialDisposable.cs" />
+    <Compile Include="Reactive\Disposables\SingleAssignmentDisposable.cs" />
+    <Compile Include="Reactive\Internal\AutoDetachObserver.cs" />
+    <Compile Include="Reactive\Internal\ExceptionServices.Default.cs" />
+    <Compile Include="Reactive\Internal\ExceptionServices.cs" />
+    <Compile Include="Reactive\Internal\HostLifecycleService.cs" />
+    <Compile Include="Reactive\Internal\ImmutableList.cs" />
+    <Compile Include="Reactive\Internal\Lazy.cs" />
+    <Compile Include="Reactive\Internal\Observers.cs" />
+    <Compile Include="Reactive\Internal\PlatformEnlightenmentProvider.cs" />
+    <Compile Include="Reactive\Internal\PriorityQueue.cs" />
+    <Compile Include="Reactive\Internal\Producer.cs" />
+    <Compile Include="Reactive\Internal\SafeObserver.cs" />
+    <Compile Include="Reactive\Internal\ScheduledObserver.cs" />
+    <Compile Include="Reactive\Internal\Semaphore.Silverlight.cs" />
+    <Compile Include="Reactive\Internal\Semaphore.Xna.cs" />
+    <Compile Include="Reactive\Internal\Sink.cs" />
+    <Compile Include="Reactive\Internal\Stubs.cs" />
+    <Compile Include="Reactive\Internal\SynchronizationContextExtensions.cs" />
+    <Compile Include="Reactive\Internal\SynchronizedObserver.cs" />
+    <Compile Include="Reactive\Internal\SystemClock.cs" />
+    <Compile Include="Reactive\Internal\SystemClock.Default.cs" />
+    <Compile Include="Reactive\Notification.cs" />
+    <Compile Include="Reactive\ObservableBase.cs" />
+    <Compile Include="Reactive\ObserverBase.cs" />
+    <Compile Include="Reactive\Unit.cs" />
+    <Compile Include="Strings_Core.Generated.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
+      <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Strings_Core.resx" />
+  </ItemGroup>
+  <Import Project="..\Import.targets" />
+</Project>
