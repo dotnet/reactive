@@ -88,7 +88,7 @@
     <CreateItem Include="@(Flavor)" AdditionalMetadata="Properties=Configuration=%(Flavor.Configuration)%3BPlatform=Any CPU%3BOutDir=$(LayoutOutputFolder)\%(Flavor.Configuration)\">
       <Output TaskParameter="Include" ItemName="ProjectToBuild" />
     </CreateItem>
-    <CreateItem Include="Setup\BuildAll.proj" AdditionalMetadata="Properties=BinariesLayoutFolder=$(LayoutOutputFolder)%3BOutDir=$(SetupOutputFolder)" Condition=" '$(BuildSetup)' == '1' ">
+    <CreateItem Include="..\..\Private\Setup\BuildAll.proj" AdditionalMetadata="Properties=BinariesLayoutFolder=$(LayoutOutputFolder)%3BOutDir=$(SetupOutputFolder)" Condition=" '$(BuildSetup)' == '1' ">
       <Output TaskParameter="Include" ItemName="SetupToBuild" />
     </CreateItem>
   </Target>

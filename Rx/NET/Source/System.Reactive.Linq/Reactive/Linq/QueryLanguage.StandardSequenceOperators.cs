@@ -838,6 +838,11 @@ namespace System.Reactive.Linq
             return SelectMany_<TSource, TResult>(source, selector);
         }
 
+        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
+        {
+            return SelectMany_<TSource, TResult>(source, selector);
+        }
+
 #if !NO_TPL
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
@@ -859,6 +864,11 @@ namespace System.Reactive.Linq
 #endif
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+        }
+
+        public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
             return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -892,7 +902,25 @@ namespace System.Reactive.Linq
 #endif
         }
 
+        private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
+        {
+#if !NO_PERF
+            return new SelectMany<TSource, TResult>(source, selector);
+#else
+            return source.Select(selector).Merge();
+#endif
+        }
+
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+#if !NO_PERF
+            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+#else
+            return SelectMany_<TSource, TResult>(source, x => collectionSelector(x).Select(y => resultSelector(x, y)));
+#endif
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
 #if !NO_PERF
             return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
@@ -918,7 +946,33 @@ namespace System.Reactive.Linq
 #endif
         }
 
+        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, int, IObservable<TResult>> onError, Func<int, IObservable<TResult>> onCompleted)
+        {
+#if !NO_PERF
+            return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+#else
+            return source.Materialize().SelectMany(notification =>
+            {
+                if (notification.Kind == NotificationKind.OnNext)
+                    return onNext(notification.Value);
+                else if (notification.Kind == NotificationKind.OnError)
+                    return onError(notification.Exception);
+                else
+                    return onCompleted();
+            });
+#endif
+        }
+
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
+        {
+#if !NO_PERF
+            return new SelectMany<TSource, TResult>(source, selector);
+#else
+            return SelectMany_<TSource, TResult, TResult>(source, selector, (_, x) => x);
+#endif
+        }
+
+        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
 #if !NO_PERF
             return new SelectMany<TSource, TResult>(source, selector);
@@ -989,6 +1043,11 @@ namespace System.Reactive.Linq
                 )
             );
 #endif
+        }
+
+        public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        {
+            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
         #endregion

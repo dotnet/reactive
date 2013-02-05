@@ -3568,6 +3568,56 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [TestMethod]
+        public void StartWith_Enumerable()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(150, 1),
+                OnNext(220, 4),
+                OnCompleted<int>(250)
+            );
+
+            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var res = scheduler.Start(() =>
+                xs.StartWith(data)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(200, 1),
+                OnNext(200, 2),
+                OnNext(200, 3),
+                OnNext(220, 4),
+                OnCompleted<int>(250)
+            );
+        }
+
+        [TestMethod]
+        public void StartWith_Enumerable_Scheduler()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(150, 1),
+                OnNext(220, 4),
+                OnCompleted<int>(250)
+            );
+
+            List<int> data = new List<int>(new[] { 1, 2, 3 });
+            var res = scheduler.Start(() =>
+                xs.StartWith(scheduler, data)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(201, 1),
+                OnNext(202, 2),
+                OnNext(203, 3),
+                OnNext(220, 4),
+                OnCompleted<int>(250)
+            );
+        }
+
         #endregion
 
         #region + TakeLast +

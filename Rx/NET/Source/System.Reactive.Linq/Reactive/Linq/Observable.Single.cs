@@ -511,6 +511,30 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to prepend values to.</param>
+        /// <param name="values">Values to prepend to the specified sequence.</param>
+        /// <returns>The source sequence prepended with the specified values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="values"/> is null.</exception>
+        public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, IEnumerable<TSource> values)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (values == null)
+                throw new ArgumentNullException("values");
+
+            TSource[] valueArray = values as TSource[];
+            if (valueArray == null)
+            {
+                List<TSource> valueList = new List<TSource>(values);
+                valueArray = valueList.ToArray();
+            }
+            return s_impl.StartWith<TSource>(source, valueArray);
+        }
+
+        /// <summary>
+        /// Prepends a sequence of values to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend values to.</param>
         /// <param name="scheduler">Scheduler to emit the prepended values on.</param>
         /// <param name="values">Values to prepend to the specified sequence.</param>
         /// <returns>The source sequence prepended with the specified values.</returns>
@@ -525,6 +549,33 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException("values");
 
             return s_impl.StartWith<TSource>(source, scheduler, values);
+        }
+
+        /// <summary>
+        /// Prepends a sequence of values to an observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Source sequence to prepend values to.</param>
+        /// <param name="scheduler">Scheduler to emit the prepended values on.</param>
+        /// <param name="values">Values to prepend to the specified sequence.</param>
+        /// <returns>The source sequence prepended with the specified values.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> or <paramref name="values"/> is null.</exception>
+        public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            if (values == null)
+                throw new ArgumentNullException("values");
+
+            TSource[] valueArray = values as TSource[];
+            if (valueArray == null)
+            {
+                List<TSource> valueList = new List<TSource>(values);
+                valueArray = valueList.ToArray();
+            }
+            return s_impl.StartWith<TSource>(source, scheduler, valueArray);
         }
 
         #endregion

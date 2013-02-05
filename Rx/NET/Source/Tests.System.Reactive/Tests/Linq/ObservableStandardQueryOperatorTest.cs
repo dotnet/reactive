@@ -8425,6 +8425,198 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        // Tests this overload:
+        // IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector);
+        public void SelectMany_WithIndex_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            ITestableObservable<char> cs = scheduler.CreateHotObservable(
+                 OnNext(190, 'h'),   // Test scheduler starts pushing events at time 200, so this is ignored.
+                 OnNext(250, 'a'),
+                 OnNext(270, 'l'),
+                 OnNext(310, 'o'),
+                 OnCompleted<char>(410)
+                 );
+
+            var res = scheduler.Start(() =>
+                cs.SelectMany(
+                    (x, i) => Observable.Return(new { x, i }, scheduler)
+                ));
+
+            res.Messages.AssertEqual(
+                OnNext(251, new { x = 'a', i = 0 }),
+                OnNext(271, new { x = 'l', i = 1 }),
+                OnNext(311, new { x = 'o', i = 2 }),
+                OnCompleted(new { x = default(char), i = default(int) }, 410)
+            );
+
+            cs.Subscriptions.AssertEqual(
+                Subscribe(200, 410));
+        }
+
+        [TestMethod]
+        // Tests this overload:
+        // IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector);
+        public void SelectMany_WithIndex_IEnumerable_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            ITestableObservable<char> cs = scheduler.CreateHotObservable(
+                 OnNext(190, 'h'),   // Test scheduler starts pushing events at time 200, so this is ignored.
+                 OnNext(250, 'a'),
+                 OnNext(270, 'l'),
+                 OnNext(310, 'o'),
+                 OnCompleted<char>(410)
+                 );
+
+            var res = scheduler.Start(() =>
+                cs.SelectMany(
+                    (c, i) => new [] { new { c = c, i = i } }
+                ));
+
+            
+            res.Messages.AssertEqual(
+                OnNext(250, new { c = 'a', i = 0 }),
+                OnNext(270, new { c = 'l', i = 1 }),
+                OnNext(310, new { c = 'o', i = 2 }),
+                OnCompleted(new { c = default(char), i = default(int) }, 410)
+            );
+
+            cs.Subscriptions.AssertEqual(
+                Subscribe(200, 410));
+        }
+
+
+        [TestMethod]
+        // Tests this overload:
+        // IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, int, TResult> resultSelector);
+        public void SelectMany_WithIndex_IObservable_ResultSelector_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            ITestableObservable<ITestableObservable<char>> css = scheduler.CreateHotObservable(
+                 OnNext(190, scheduler.CreateColdObservable(
+                        OnNext(1, 'h'),
+                        OnCompleted<char>(2))),
+                 OnNext(250, scheduler.CreateColdObservable(
+                        OnNext(1, 'a'),
+                        OnCompleted<char>(2))),
+                 OnNext(270, scheduler.CreateColdObservable(
+                        OnNext(1, 'l'),
+                        OnCompleted<char>(2))),
+                 OnNext(310, scheduler.CreateColdObservable(
+                        OnNext(1, 'o'),
+                        OnNext(2, ' '),
+                        OnNext(3, 'r'),
+                        OnNext(4, 'u'),
+                        OnNext(5, 'l'),
+                        OnNext(6, 'e'),
+                        OnNext(7, 'z'),
+                        OnCompleted<char>(8))),
+                 OnCompleted<ITestableObservable<char>>(410)
+                 );
+
+            var res = scheduler.Start(() =>
+                css.SelectMany(
+                    (foo, i) =>
+                    {
+                        return foo.Select(c => new { c = c, i = i });
+                    },
+                    (source, i, cs, j) => new { c = cs.c, i = cs.i, i2 = i, j = j }
+                ));
+
+            res.Messages.AssertEqual(
+                OnNext(251, new { c = 'a', i = 0, i2 = 0, j = 0 }),
+                OnNext(271, new { c = 'l', i = 1, i2 = 1, j = 0 }),
+                OnNext(311, new { c = 'o', i = 2, i2 = 2, j = 0 }),
+                OnNext(312, new { c = ' ', i = 2, i2 = 2, j = 1 }),
+                OnNext(313, new { c = 'r', i = 2, i2 = 2, j = 2 }),
+                OnNext(314, new { c = 'u', i = 2, i2 = 2, j = 3 }),
+                OnNext(315, new { c = 'l', i = 2, i2 = 2, j = 4 }),
+                OnNext(316, new { c = 'e', i = 2, i2 = 2, j = 5 }),
+                OnNext(317, new { c = 'z', i = 2, i2 = 2, j = 6 }),
+                OnCompleted(new { c = 'a', i = 0, i2 = 0, j = 0 }, 410)
+            );
+
+            css.Subscriptions.AssertEqual(
+                Subscribe(200, 410));
+        }
+
+        
+        [TestMethod]
+        // Tests this overload:
+        // IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector);
+        public void SelectMany_WithIndex_IEnumerable_ResultSelector_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, 5),
+                OnNext(340, 4),
+                OnNext(420, 3),
+                OnCompleted<int>(600)
+            );
+
+            var res = scheduler.Start(() =>
+                        xs.SelectMany(
+                          (x, i) => new[] { new { x = x + 1, i = i }, new { x = -x, i = i }, new { x = x * x, i = i } },
+                          (x, i, y, j) => new { x = x, i = i, y = y.x, y_i = y.i, j = j })
+            );
+            
+            res.Messages.AssertEqual(
+                OnNext(210, new { x = 5, i = 0, y = 6, y_i = 0, j = 0 }),
+                OnNext(210, new { x = 5, i = 0, y = -5, y_i = 0, j = 1 }),
+                OnNext(210, new { x = 5, i = 0, y = 25, y_i = 0, j = 2 }),
+                OnNext(340, new { x = 4, i = 1, y = 5, y_i = 1, j = 0 }),
+                OnNext(340, new { x = 4, i = 1, y = -4, y_i = 1, j = 1 }),
+                OnNext(340, new { x = 4, i = 1, y = 16, y_i = 1, j = 2 }),
+                OnNext(420, new { x = 3, i = 2, y = 4, y_i = 2, j = 0 }),
+                OnNext(420, new { x = 3, i = 2, y = -3, y_i = 2, j = 1 }),
+                OnNext(420, new { x = 3, i = 2, y = 9, y_i = 2, j = 2 }),
+                OnCompleted(new { x = default(int), i = default(int), y = default(int), y_i = default(int), j = default(int) }, 600)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 600)
+            );
+        }
+
+        [TestMethod]
+        // Tests this overload:
+        // IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, int, IObservable<TResult>> onError, Func<int, IObservable<TResult>> onCompleted);
+        public void SelectMany_WithIndex_Triple_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            ITestableObservable<char> cs = scheduler.CreateHotObservable(
+                 OnNext(190, 'h'),   // Test scheduler starts pushing events at time 200, so this is ignored.
+                 OnNext(250, 'a'),
+                 OnNext(270, 'l'),
+                 OnNext(310, 'o'),
+                 OnCompleted<char>(410)
+                 );
+
+            var res = scheduler.Start(() =>
+                cs.SelectMany(
+                    (c, i) => Observable.Return(new { c = c, i = i }, scheduler),
+                    (ex, i) => { throw ex; },
+                    (i) => Observable.Repeat(new { c = 'x', i = -1 }, i, scheduler)
+                ));
+
+            res.Messages.AssertEqual(
+                OnNext(251, new { c = 'a', i = 0 }),
+                OnNext(271, new { c = 'l', i = 1 }),
+                OnNext(311, new { c = 'o', i = 2 }),
+                OnCompleted(new { c = default(char), i = default(int) }, 410)
+            );
+
+            cs.Subscriptions.AssertEqual(
+                Subscribe(200, 410));
+        }
+
+
+        [TestMethod]
         public void SelectMany_Enumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, IEnumerable<int>>.Instance));

@@ -93,7 +93,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <NoStdLib>true</NoStdLib>
-    <SignKeyEnhanced>true</SignKeyEnhanced>
+    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '45' ">
@@ -102,7 +102,7 @@
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR45</BuildFlavor>
-    <SignKeyEnhanced>true</SignKeyEnhanced>
+    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
@@ -113,7 +113,7 @@
     <BuildPlatform>WINDOWS</BuildPlatform>
     <BuildFlavor>WINDOWS8</BuildFlavor>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <SignKeyEnhanced>true</SignKeyEnhanced>
+    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '40' ">
@@ -153,7 +153,7 @@
     <BuildPlatform>WINDOWS_PHONE</BuildPlatform>
     <BuildFlavor>WINDOWS_PHONE8</BuildFlavor>
     <NoStdLib>true</NoStdLib>
-    <SignKeyEnhanced>true</SignKeyEnhanced>
+    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'XBLV' ">

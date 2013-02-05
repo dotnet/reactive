@@ -112,4 +112,22 @@ namespace System.Reactive
             return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
         }
     }
+
+    /// <summary>
+    /// A helper class with a factory method for creating Timestamped&lt;T&gt; instances.
+    /// </summary>
+    public static class Timestamped
+    {
+        /// <summary>
+        /// Creates an instance of a Timestamped&lt;T&gt;.  This is syntactic sugar that uses type inference
+        /// to avoid specifying a type in a constructor call, which is very useful when using anonymous types.
+        /// </summary>
+        /// <param name="value">The value to be annotated with a timestamp.</param>
+        /// <param name="timestamp">Timestamp associated with the value.</param>
+        /// <returns>Creates a new timestamped value.</returns>
+        public static Timestamped<T> Create<T>(T value, DateTimeOffset timestamp)
+        {
+            return new Timestamped<T>(value, timestamp);
+        }
+    }
 }

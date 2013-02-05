@@ -65,6 +65,20 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Factory method for an OnCompleted notification record at a given time.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="dummy">An unused instance of type T, to force the compiler to infer that T as part of the method's return value.</param>
+        /// <param name="ticks">Recorded virtual time the OnCompleted notification occurs.</param>
+        /// <returns>Recorded OnCompleted notification.</returns>
+        /// <remarks>This overload is used for anonymous types - by passing in an instance of the type, the compiler can infer the 
+        /// anonymous type without you having to try naming the type.</remarks>
+        public static Recorded<Notification<T>> OnCompleted<T>(T dummy, long ticks)
+        {
+            return new Recorded<Notification<T>>(ticks, Notification.CreateOnCompleted<T>());
+        }
+
+        /// <summary>
         /// Factory method for an OnError notification record at a given time with a given error.
         /// </summary>
         /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
@@ -89,6 +103,44 @@ namespace Microsoft.Reactive.Testing
         /// <returns>Recorded OnError notification with a predicate to assert a given exception.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
         public static Recorded<Notification<T>> OnError<T>(long ticks, Func<Exception, bool> predicate)
+        {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate");
+
+            return new Recorded<Notification<T>>(ticks, new OnErrorPredicate<T>(predicate));
+        }
+
+        /// <summary>
+        /// Factory method for an OnError notification record at a given time with a given error.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="dummy">An unused instance of type T, to force the compiler to infer that T as part of the method's return value.</param>
+        /// <param name="ticks">Recorded virtual time the OnError notification occurs.</param>
+        /// <param name="exception">Recorded exception stored in the OnError notification.</param>
+        /// <returns>Recorded OnError notification.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
+        /// <remarks>This overload is used for anonymous types - by passing in an instance of the type, the compiler can infer the 
+        /// anonymous type without you having to try naming the type.</remarks>
+        public static Recorded<Notification<T>> OnError<T>(T dummy, long ticks, Exception exception)
+        {
+            if (exception == null)
+                throw new ArgumentNullException("exception");
+
+            return new Recorded<Notification<T>>(ticks, Notification.CreateOnError<T>(exception));
+        }
+
+        /// <summary>
+        /// Factory method for writing an assert that checks for an OnError notification record at a given time, using the specified predicate to check the exception.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="dummy">An unused instance of type T, to force the compiler to infer that T as part of the method's return value.</param>
+        /// <param name="ticks">Recorded virtual time the OnError notification occurs.</param>
+        /// <param name="predicate">Predicate function to check the OnError notification value against an expected exception.</param>
+        /// <returns>Recorded OnError notification with a predicate to assert a given exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+        /// <remarks>This overload is used for anonymous types - by passing in an instance of the type, the compiler can infer the 
+        /// anonymous type without you having to try naming the type.</remarks>
+        public static Recorded<Notification<T>> OnError<T>(T dummy, long ticks, Func<Exception, bool> predicate)
         {
             if (predicate == null)
                 throw new ArgumentNullException("predicate");

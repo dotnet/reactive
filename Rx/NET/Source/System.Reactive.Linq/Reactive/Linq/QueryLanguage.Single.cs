@@ -496,6 +496,25 @@ namespace System.Reactive.Linq
             return StartWith_<TSource>(source, scheduler, values);
         }
 
+        public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IEnumerable<TSource> values)
+        {
+            return StartWith(source, SchedulerDefaults.ConstantTimeOperations, values);
+        }
+
+        public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
+        {
+            if (values == null)
+                throw new ArgumentNullException("values");
+
+            var valueArray = values as TSource[];
+            if (valueArray == null)
+            {
+                List<TSource> valueList = new List<TSource>(values);
+                valueArray = valueList.ToArray();
+            }
+            return StartWith_<TSource>(source, scheduler, valueArray);
+        }
+
         private static IObservable<TSource> StartWith_<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values)
         {
             return values.ToObservable(scheduler).Concat(source);
