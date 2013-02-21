@@ -45,10 +45,10 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 1
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tfs1:8085/tfs/interop%20team%20projects
+		SccTeamFoundationServer = http://tfs1:8080/tfs/interop%20team%20projects
 		SccProjectUniqueName0 = Playground\\Playground.csproj
 		SccProjectName0 = Playground
-		SccAuxPath0 = http://tfs1:8085/tfs/interop%20team%20projects
+		SccAuxPath0 = http://tfs1:8080/tfs/interop%20team%20projects
 		SccLocalPath0 = Playground
 		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
@@ -1056,6 +1056,7 @@ Global
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP7|Mixed Platforms.ActiveCfg = DebugWP7|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP7|x86.ActiveCfg = DebugWP7|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP8|Any CPU.ActiveCfg = DebugWP8|Any CPU
+		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP8|Any CPU.Build.0 = DebugWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP8|Mixed Platforms.ActiveCfg = DebugWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugWP8|x86.ActiveCfg = DebugWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.DebugXBLV|Any CPU.ActiveCfg = DebugXBLV|Any CPU
@@ -1104,6 +1105,7 @@ Global
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP7|Mixed Platforms.ActiveCfg = ReleaseWP7|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP7|x86.ActiveCfg = ReleaseWP7|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP8|Any CPU.ActiveCfg = ReleaseWP8|Any CPU
+		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP8|Any CPU.Build.0 = ReleaseWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP8|Mixed Platforms.ActiveCfg = ReleaseWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseWP8|x86.ActiveCfg = ReleaseWP8|Any CPU
 		{EE655A70-A899-4B38-84D3-FB9F63A8C661}.ReleaseXBLV|Any CPU.ActiveCfg = ReleaseXBLV|Any CPU

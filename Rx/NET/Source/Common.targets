@@ -145,7 +145,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'WP8' ">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS_COLLECTIONS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>$(DefineConstants);HAS_EDI;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;NO_EVENTARGS_CONSTRAINT;USE_SL_DISPATCHER;HAS_WINRT;NO_SERIALIZABLE;NO_REMOTING;NO_CDS_COLLECTIONS;USE_TIMER_SELF_ROOT</DefineConstants>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
