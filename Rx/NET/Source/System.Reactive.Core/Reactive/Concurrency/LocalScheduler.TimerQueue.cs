@@ -93,6 +93,11 @@ namespace System.Reactive.Concurrency
         /// </summary>
         private static readonly TimeSpan RETRYSHORT = TimeSpan.FromMilliseconds(50);
 
+        /// <summary>
+        /// Longest interval supported by <see cref="System.Threading.Timer"/>.
+        /// </summary>
+        private static readonly TimeSpan MAXSUPPORTEDTIMER = TimeSpan.FromMilliseconds((1L << 32) - 2);
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "We can't really lift this into a field initializer, and would end up checking for an initialization flag in every static method anyway (which is roughly what the JIT does in a thread-safe manner).")]
         static LocalScheduler()
         {
@@ -317,8 +322,13 @@ namespace System.Reactive.Concurrency
                 var remainder = TimeSpan.FromTicks(Math.Max(due.Ticks / MAXERRORRATIO, LONGTOSHORT.Ticks));
                 var dueEarly = due - remainder;
 
+                //
+                // Limit the interval to maximum supported by underlying Timer.
+                //
+                var dueCapped = TimeSpan.FromTicks(Math.Min(dueEarly.Ticks, MAXSUPPORTEDTIMER.Ticks));
+
                 s_nextLongTermWorkItem = next;
-                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(EvaluateLongTermQueue, null, dueEarly);
+                s_nextLongTermTimer.Disposable = ConcurrencyAbstractionLayer.Current.StartTimer(EvaluateLongTermQueue, null, dueCapped);
             }
         }
 
