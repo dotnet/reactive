@@ -11,6 +11,6 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
 
   <Target Name="AfterBuild" Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
-    <WriteLinesToFile File="$(OutDir)\$(TargetFileName).sign" Overwrite="true" Lines="Auto-generated file. Indicates the corresponding binary file needs to be signed." />
+    <WriteLinesToFile File="$(OutDir)\$(TargetFileName).sign" Overwrite="true" Lines="[$(SignKeyId)] Auto-generated file. Indicates the corresponding binary file needs to be signed." />
   </Target>
 </Project>

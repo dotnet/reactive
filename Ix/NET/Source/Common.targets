@@ -160,8 +160,9 @@
   <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
     <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
     <DelaySign>true</DelaySign>
+    <SignKeyId>72</SignKeyId>	
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
