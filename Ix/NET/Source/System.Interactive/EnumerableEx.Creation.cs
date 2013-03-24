@@ -20,6 +20,17 @@ namespace System.Linq
             return new AnonymousEnumerable<TResult>(getEnumerator);
         }
 
+#if HAS_AWAIT
+        public static IEnumerable<T> Create<T>(Action<IYielder<T>> create)
+        {
+            if (create == null)
+                throw new ArgumentNullException("create");
+
+            foreach (var x in new Yielder<T>(create))
+                yield return x;
+        }
+#endif
+
         class AnonymousEnumerable<TResult> : IEnumerable<TResult>
         {
             private readonly Func<IEnumerator<TResult>> _getEnumerator;
