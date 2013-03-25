@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-#if DESKTOPCLR40
+#if !NO_TPL
 
 using System;
 using System.Collections.Generic;
@@ -364,7 +364,7 @@ namespace Tests
             Assert.IsTrue(b);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Finally6()
         {
             var b = false;

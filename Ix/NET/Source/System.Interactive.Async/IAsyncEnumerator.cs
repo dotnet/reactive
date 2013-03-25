@@ -11,8 +11,8 @@ namespace System.Collections.Generic
     /// </summary>
     /// <typeparam name="T">Element type.</typeparam>
     public interface IAsyncEnumerator<
-#if DESKTOPCLR40 || SILVERLIGHT4
-        out
+#if !NO_VARIANCE
+out
 #endif
         T> : IDisposable
     {

@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <!--
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug40</Configuration>
-    -->
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
+  
+<!--   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugPL|AnyCPU' ">
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <OutputPath>bin\DebugPL\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+ -->
+ 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;HAS_AWAIT</DefineConstants>
+    <OutputPath>bin\Debug45\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+  </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>$(DefineConstants);TRACE;HAS_AWAIT</DefineConstants>
+    <OutputPath>bin\Release45\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+  </PropertyGroup>
+
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -22,6 +59,7 @@
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR40</BuildFlavor>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -46,6 +84,7 @@
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR20</BuildFlavor>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -73,6 +112,7 @@
     <BuildPlatform>SILVERLIGHT</BuildPlatform>
     <BuildFlavor>SILVERLIGHT4</BuildFlavor>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseSL4|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -87,6 +127,7 @@
     <BuildPlatform>SILVERLIGHT</BuildPlatform>
     <BuildFlavor>SILVERLIGHT4</BuildFlavor>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL5|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -133,6 +174,7 @@
     <BuildPlatform>SILVERLIGHT</BuildPlatform>
     <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseWP7|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -156,6 +198,11 @@
   <PropertyGroup Condition=" '$(IxRelease)' == 'STABLE' ">
     <DefineConstants>$(DefineConstants);STABLE</DefineConstants>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
+    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>  
 
   <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
     <DefineConstants>$(DefineConstants);NO_CODECOVERAGE</DefineConstants>
@@ -166,7 +213,7 @@
   </PropertyGroup>
   <Target Name="CP_SetBuildReferencePath">
     <PropertyGroup>
-      <TargetFrameworkDirectory>$(ProjectDir)..\..\..\References\$(BuildFlavor)</TargetFrameworkDirectory>
+      <TargetFrameworkDirectory>$(ProjectDir)..\..\References\$(BuildFlavor)</TargetFrameworkDirectory>
     </PropertyGroup>
   </Target>
 

@@ -15,6 +15,46 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug40|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release40|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug35|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release35|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSL4|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseSL4|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSL5|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseSL5|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWP7|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWP7|AnyCPU'">
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release45|AnyCPU'">
+    <OutputPath>bin\Release45\</OutputPath>
+    <DefineConstants>;TRACE;DESKTOPCLR;DESKTOPCLR40</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
     <SilverlightApplication>true</SilverlightApplication>
@@ -74,7 +114,7 @@
     <Compile Include="Tests.Aggregates.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' ">
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' Or '$(BuildFlavor)' == 'DESKTOPCLR45' ">
       <Project>{7269A578-326A-4C3E-9874-A2D2600095BC}</Project>
       <Name>System.Interactive.Async</Name>
     </ProjectReference>

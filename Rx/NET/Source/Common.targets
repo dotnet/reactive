@@ -322,12 +322,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(SignAssembly)' == 'true' AND '$(SignKeyEnhanced)' != 'true' ">
-    <AssemblyOriginatorKeyFile>..\..\..\Private\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Private\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
     <SignKeyId>72</SignKeyId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(SignAssembly)' == 'true' AND '$(SignKeyEnhanced)' == 'true' ">
-    <AssemblyOriginatorKeyFile>..\..\..\Private\272MSSharedLibSN2048.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Private\272MSSharedLibSN2048.snk</AssemblyOriginatorKeyFile>
     <DefineConstants>$(DefineConstants);SIGNENHANCED</DefineConstants>
     <SignKeyId>272</SignKeyId>
   </PropertyGroup>

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 namespace System.Linq
 {
     public interface IOrderedAsyncEnumerable<
-#if DESKTOPCLR4 || SILVERLIGHT4
-        out 
+#if !NO_VARIANCE
+out 
 #endif
         TElement> : IAsyncEnumerable<TElement>
     {

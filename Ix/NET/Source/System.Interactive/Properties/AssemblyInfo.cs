@@ -16,7 +16,7 @@ using System.Security;
 #if STABLE
 [assembly: AssemblyProduct("Interactive Extensions")]
 #else
-[assembly: AssemblyProduct("Interactive Extensions (Experimental Release)")]
+[assembly: AssemblyProduct("Interactive Extensions")]
 #endif
 [assembly: AssemblyCopyright("\x00a9 Microsoft Corporation.  All rights reserved.")]
 [assembly: NeutralResourcesLanguage("en-US")]

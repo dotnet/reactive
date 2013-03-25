@@ -9,8 +9,8 @@ namespace System.Collections.Generic
     /// </summary>
     /// <typeparam name="T">Element type.</typeparam>
     public interface IAsyncEnumerable<
-#if DESKTOPCLR40 || SILVERLIGHT4
-        out
+#if !NO_VARIANCE
+out
 #endif
         T>
     {

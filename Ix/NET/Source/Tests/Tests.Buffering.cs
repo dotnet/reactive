@@ -63,7 +63,7 @@ namespace Tests
             NoNext(e1);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void Share4()
         {
             var rng = Enumerable.Range(0, 5).Share();
