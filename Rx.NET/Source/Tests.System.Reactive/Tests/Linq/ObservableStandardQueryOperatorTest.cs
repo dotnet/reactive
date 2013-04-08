@@ -10,7 +10,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ReactiveTests.Dummies;
 
 #if !NO_TPL
@@ -2486,8 +2485,1754 @@ namespace ReactiveTests.Tests
 
             var nullGroup = scheduler.CreateObserver<string>();
             var err = default(Exception);
-            
+
             scheduler.ScheduleAbsolute(200, () => xs.GroupBy(x => x[0] == 'b' ? null : x.ToUpper()).Where(g => g.Key == null).Subscribe(g => g.Subscribe(nullGroup), ex_ => err = ex_));
+            scheduler.Start();
+
+            Assert.AreSame(ex, err);
+
+            nullGroup.Messages.AssertEqual(
+                OnNext(220, "bar"),
+                OnNext(470, "baz"),
+                OnError<string>(500, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        class GroupByComparer : IEqualityComparer<string>
+        {
+            TestScheduler scheduler;
+            int equalsThrowsAfter;
+            ushort getHashCodeThrowsAfter;
+
+            public Exception HashCodeException = new Exception();
+            public Exception EqualsException = new Exception();
+
+            public GroupByComparer(TestScheduler scheduler, ushort equalsThrowsAfter, ushort getHashCodeThrowsAfter)
+            {
+                this.scheduler = scheduler;
+                this.equalsThrowsAfter = equalsThrowsAfter;
+                this.getHashCodeThrowsAfter = getHashCodeThrowsAfter;
+            }
+
+            public GroupByComparer(TestScheduler scheduler)
+                : this(scheduler, ushort.MaxValue, ushort.MaxValue)
+            {
+            }
+
+            public bool Equals(string x, string y)
+            {
+                if (scheduler.Clock > equalsThrowsAfter)
+                    throw EqualsException;
+
+                return x.Equals(y, StringComparison.OrdinalIgnoreCase);
+            }
+
+            public int GetHashCode(string obj)
+            {
+                if (scheduler.Clock > getHashCodeThrowsAfter)
+                    throw HashCodeException;
+
+                return StringComparer.OrdinalIgnoreCase.GetHashCode(obj);
+            }
+        }
+
+        static string Reverse(string s)
+        {
+            var sb = new StringBuilder();
+
+            for (var i = s.Length - 1; i >= 0; i--)
+                sb.Append(s[i]);
+
+            return sb.ToString();
+        }
+
+        #endregion
+
+        #region + GroupBy w/capacity +
+
+        private const int _groupByCapacity = 1024;
+
+        [TestMethod]
+        public void GroupBy_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, (Func<int, int>)null, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default).Subscribe(null));
+
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, -1, EqualityComparer<int>.Default));
+        }
+
+        [TestMethod]
+        public void GroupBy_KeyEle_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, DummyFunc<int, int>.Instance, _groupByCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, (Func<int, int>)null, _groupByCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, _groupByCapacity).Subscribe(null));
+
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, -1));
+        }
+
+        [TestMethod]
+        public void GroupBy_KeyComparer_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, _groupByCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, (IEqualityComparer<int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity, EqualityComparer<int>.Default).Subscribe(null));
+
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, -1, EqualityComparer<int>.Default));
+        }
+
+        [TestMethod]
+        public void GroupBy_Key_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy((Func<int, int>)null, _groupByCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, _groupByCapacity).Subscribe(null));
+
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => DummyObservable<int>.Instance.GroupBy(DummyFunc<int, int>.Instance, -1));
+        }
+
+        [TestMethod]
+        public void GroupBy_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(x =>
+                {
+                    keyInvoked++;
+                    return x.Trim();
+                }, _groupByCapacity, comparer).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+            Assert.AreEqual(12, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnError<string>(570, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+            Assert.AreEqual(12, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    }, x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    }, _groupByCapacity, comparer
+                ).Select(g => g.Key),
+                355
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz")
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 355)
+            );
+
+            Assert.AreEqual(5, keyInvoked);
+            Assert.AreEqual(5, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_KeyThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        if (keyInvoked == 10)
+                            throw ex;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnError<string>(480, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 480)
+            );
+
+            Assert.AreEqual(10, keyInvoked);
+            Assert.AreEqual(9, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_EleThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        if (eleInvoked == 10)
+                            throw ex;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnError<string>(480, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 480)
+            );
+
+            Assert.AreEqual(10, keyInvoked);
+            Assert.AreEqual(10, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_ComparerEqualsThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, 250, ushort.MaxValue);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnError<string>(310, comparer.EqualsException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 310)
+            );
+
+            Assert.AreEqual(4, keyInvoked);
+            Assert.AreEqual(3, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_ComparerGetHashCodeThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, ushort.MaxValue, 410);
+
+            var res = scheduler.Start(() =>
+                xs.GroupBy(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    _groupByCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+
+            Assert.AreEqual(8, keyInvoked);
+            Assert.AreEqual(7, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                scheduler.ScheduleRelative(100, () => innerSubscriptions[group.Key] = group.Subscribe(result));
+            }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(570)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnCompleted<string>(570)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Complete_All()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(570)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnCompleted<string>(570)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex1 = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex1),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                scheduler.ScheduleRelative(100, () => innerSubscriptions[group.Key] = group.Subscribe(result));
+            }, ex => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnError<string>(570, ex1)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnError<string>(570, ex1)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnError<string>(570, ex1)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnError<string>(570, ex1)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }));
+
+            scheduler.ScheduleAbsolute(400, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof")
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   ")
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB ")
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  ")
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 400)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_KeyThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            var keyInvoked = 0;
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x =>
+            {
+                keyInvoked++;
+                if (keyInvoked == 6)
+                    throw ex;
+                return x.Trim();
+            }, x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(3, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnError<string>(360, ex)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnError<string>(360, ex)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(360, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 360)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_EleThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            var eleInvoked = 0;
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x =>
+            {
+                eleInvoked++;
+                if (eleInvoked == 6)
+                    throw ex;
+                return Reverse(x);
+            }, _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnError<string>(360, ex)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnError<string>(360, ex)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(360, ex)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnError<string>(360, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 360)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Comparer_EqualsThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, 400, ushort.MaxValue);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Comparer_GetHashCodeThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, ushort.MaxValue, 400);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Outer_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => outerSubscription.Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(2, inners.Count);
+
+            outerResults.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR")
+            );
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof")
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(570)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnCompleted<string>(570)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Multiple_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), x => Reverse(x), _groupByCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
+            scheduler.ScheduleAbsolute(280, () => innerSubscriptions["baR"].Dispose());
+            scheduler.ScheduleAbsolute(355, () => innerSubscriptions["Baz"].Dispose());
+            scheduler.ScheduleAbsolute(400, () => innerSubscriptions["qux"].Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof")
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab")
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB ")
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  ")
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Escape_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570)
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), _groupByCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }));
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<string>(600)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Escape_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex)
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), _groupByCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            res.Messages.AssertEqual(
+                OnError<string>(600, ex)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_Inner_Escape_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, new Exception())
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupBy(x => x.Trim(), _groupByCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }));
+
+            scheduler.ScheduleAbsolute(400, () => outerSubscription.Dispose());
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 400)
+            );
+
+            res.Messages.AssertEqual(
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_NullKeys_Simple()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnCompleted<string>(500)
+            );
+
+            var res = scheduler.Start(() => xs.GroupBy(x => x[0] == 'b' ? null : x.ToUpper(), _groupByCapacity).SelectMany(g => g, (g, x) => (g.Key ?? "(null)") + x));
+
+            res.Messages.AssertEqual(
+                OnNext(220, "(null)bar"),
+                OnNext(240, "FOOfoo"),
+                OnNext(310, "QUXqux"),
+                OnNext(470, "(null)baz"),
+                OnCompleted<string>(500)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        [TestMethod]
+        public void GroupBy_NullKeys_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnError<string>(500, ex)
+            );
+
+            var nullGroup = scheduler.CreateObserver<string>();
+            var err = default(Exception);
+
+            scheduler.ScheduleAbsolute(200, () => xs.GroupBy(x => x[0] == 'b' ? null : x.ToUpper(), _groupByCapacity).Where(g => g.Key == null).Subscribe(g => g.Subscribe(nullGroup), ex_ => err = ex_));
             scheduler.Start();
 
             Assert.AreSame(ex, err);
@@ -4388,6 +6133,1874 @@ namespace ReactiveTests.Tests
             var err = default(Exception);
 
             scheduler.ScheduleAbsolute(200, () => xs.GroupByUntil(x => x[0] == 'b' ? null : x.ToUpper(), g => Observable.Never<Unit>()).Where(g => g.Key == null).Subscribe(g => g.Subscribe(nullGroup), ex_ => err = ex_));
+            scheduler.Start();
+
+            Assert.AreSame(ex, err);
+
+            nullGroup.Messages.AssertEqual(
+                OnNext(220, "bar"),
+                OnNext(470, "baz"),
+                OnError<string>(500, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        #endregion
+
+        #region + GroupByUntil w/capacity +
+
+        private const int _groupByUntilCapacity = 1024;
+
+        [TestMethod]
+        public void GroupByUntil_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default(IObservable<int>), DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, default(Func<int, int>), DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, default(Func<int, int>), DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, default(Func<IGroupedObservable<int, int>, IObservable<int>>), _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, default(IEqualityComparer<int>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default(IObservable<int>), DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, default(Func<int, int>), DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, default(Func<int, int>), DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, default(Func<IGroupedObservable<int, int>, IObservable<int>>), _groupByUntilCapacity));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default(IObservable<int>), DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, default(Func<int, int>), DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, default(Func<IGroupedObservable<int, int>, IObservable<int>>), _groupByUntilCapacity, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity, default(IEqualityComparer<int>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(default(IObservable<int>), DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, default(Func<int, int>), DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, _groupByUntilCapacity));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, default(Func<IGroupedObservable<int, int>, IObservable<int>>), _groupByUntilCapacity));
+
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, -1, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, -1));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, -1, EqualityComparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.GroupByUntil(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, DummyFunc<IGroupedObservable<int, int>, IObservable<int>>.Instance, -1));
+        }
+
+        [TestMethod]
+        public void GroupByUntil_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "FOO"),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "FOO"),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+            Assert.AreEqual(12, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "FOO"),
+                OnError<string>(570, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+            Assert.AreEqual(12, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key),
+                355
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz")
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 355)
+            );
+
+            Assert.AreEqual(5, keyInvoked);
+            Assert.AreEqual(5, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_KeyThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        if (keyInvoked == 10)
+                            throw ex;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "FOO"),
+                OnError<string>(480, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 480)
+            );
+
+            Assert.AreEqual(10, keyInvoked);
+            Assert.AreEqual(9, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_EleThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        if (eleInvoked == 10)
+                            throw ex;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "FOO"),
+                OnError<string>(480, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 480)
+            );
+
+            Assert.AreEqual(10, keyInvoked);
+            Assert.AreEqual(10, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_ComparerEqualsThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, 250, ushort.MaxValue);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnError<string>(310, comparer.EqualsException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 310)
+            );
+
+            Assert.AreEqual(4, keyInvoked);
+            Assert.AreEqual(3, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_ComparerGetHashCodeThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, ushort.MaxValue, 410);
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity,
+                    comparer
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR"),
+                OnNext(350, "Baz"),
+                OnNext(360, "qux"),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+
+            Assert.AreEqual(8, keyInvoked);
+            Assert.AreEqual(7, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                scheduler.ScheduleRelative(100, () => innerSubscriptions[group.Key] = group.Subscribe(result));
+            }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(5, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnCompleted<string>(320)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(390, "rab   "),
+                OnCompleted<string>(420)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(480, "  zab"),
+                OnCompleted<string>(510)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnCompleted<string>(570)
+            );
+
+            res["FOO"].Messages.AssertEqual(
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Complete_All()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(5, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(420)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnCompleted<string>(510)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnCompleted<string>(570)
+            );
+
+            res["FOO"].Messages.AssertEqual(
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex1 = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex1),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                scheduler.ScheduleRelative(100, () => innerSubscriptions[group.Key] = group.Subscribe(result));
+            }, ex => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(5, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnCompleted<string>(320)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(390, "rab   "),
+                OnCompleted<string>(420)
+               );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(480, "  zab"),
+                OnCompleted<string>(510)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnError<string>(570, ex1)
+            );
+
+            res["FOO"].Messages.AssertEqual(
+                OnError<string>(570, ex1)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }));
+
+            scheduler.ScheduleAbsolute(400, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   ")
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB ")
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  ")
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 400)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_KeyThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            var keyInvoked = 0;
+            var ex = new Exception();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x =>
+            {
+                keyInvoked++;
+                if (keyInvoked == 6)
+                    throw ex;
+                return x.Trim();
+            }, x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(3, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnError<string>(360, ex)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(360, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 360)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_EleThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            var eleInvoked = 0;
+            var ex = new Exception();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x =>
+            {
+                eleInvoked++;
+                if (eleInvoked == 6)
+                    throw ex;
+                return Reverse(x);
+            }, g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnError<string>(360, ex)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(360, ex)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnError<string>(360, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 360)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Comparer_EqualsThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, 400, ushort.MaxValue);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnError<string>(420, comparer.EqualsException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Comparer_GetHashCodeThrow()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler, ushort.MaxValue, 400);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.Start();
+
+            Assert.AreEqual(4, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnError<string>(420, comparer.HashCodeException)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Outer_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => outerSubscription.Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(2, inners.Count);
+
+            outerResults.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "baR")
+            );
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(420)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 420)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(5, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab"),
+                OnNext(390, "rab   "),
+                OnNext(420, "  RAB "),
+                OnCompleted<string>(420)
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB "),
+                OnNext(480, "  zab"),
+                OnNext(510, " ZAb "),
+                OnCompleted<string>(510)
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  "),
+                OnCompleted<string>(570)
+            );
+
+            res["FOO"].Messages.AssertEqual(
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Multiple_Independence()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var comparer = new GroupByComparer(scheduler);
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inners = new Dictionary<string, IObservable<string>>();
+            var innerSubscriptions = new Dictionary<string, IDisposable>();
+            var res = new Dictionary<string, ITestableObserver<string>>();
+            var outerResults = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), x => Reverse(x), g => g.Skip(2), _groupByUntilCapacity, comparer));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                outerResults.OnNext(group.Key);
+                var result = scheduler.CreateObserver<string>();
+                inners[group.Key] = group;
+                res[group.Key] = result;
+                innerSubscriptions[group.Key] = group.Subscribe(result);
+            }, outerResults.OnError, outerResults.OnCompleted));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                foreach (var d in innerSubscriptions.Values)
+                    d.Dispose();
+            });
+
+            scheduler.ScheduleAbsolute(320, () => innerSubscriptions["foo"].Dispose());
+            scheduler.ScheduleAbsolute(280, () => innerSubscriptions["baR"].Dispose());
+            scheduler.ScheduleAbsolute(355, () => innerSubscriptions["Baz"].Dispose());
+            scheduler.ScheduleAbsolute(400, () => innerSubscriptions["qux"].Dispose());
+
+            scheduler.Start();
+
+            Assert.AreEqual(5, inners.Count);
+
+            res["foo"].Messages.AssertEqual(
+                OnNext(220, "oof  "),
+                OnNext(240, " OoF "),
+                OnNext(310, " Oof"),
+                OnCompleted<string>(310)
+            );
+
+            res["baR"].Messages.AssertEqual(
+                OnNext(270, "  Rab")
+            );
+
+            res["Baz"].Messages.AssertEqual(
+                OnNext(350, "   zaB ")
+            );
+
+            res["qux"].Messages.AssertEqual(
+                OnNext(360, " xuq  ")
+            );
+
+            res["FOO"].Messages.AssertEqual(
+                OnNext(470, " OOF"),
+                OnNext(530, "    oOf    "),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Escape_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570)
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), g => g.Skip(2), _groupByUntilCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }));
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<string>(600)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Escape_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, ex)
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), g => g.Skip(2), _groupByUntilCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }, _ => { }));
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                outerSubscription.Dispose();
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            res.Messages.AssertEqual(
+                OnError<string>(600, ex)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Inner_Escape_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(310, "foO "),
+                OnNext(470, "FOO "),
+                OnNext(530, "    fOo    "),
+                OnError<string>(570, new Exception())
+            );
+
+            var outer = default(IObservable<IGroupedObservable<string, string>>);
+            var outerSubscription = default(IDisposable);
+            var inner = default(IObservable<string>);
+            var innerSubscription = default(IDisposable);
+            var res = scheduler.CreateObserver<string>();
+
+            scheduler.ScheduleAbsolute(Created, () => outer = xs.GroupByUntil(x => x.Trim(), g => g.Skip(2), _groupByUntilCapacity));
+
+            scheduler.ScheduleAbsolute(Subscribed, () => outerSubscription = outer.Subscribe(group =>
+            {
+                inner = group;
+            }));
+
+            scheduler.ScheduleAbsolute(290, () => outerSubscription.Dispose());
+
+            scheduler.ScheduleAbsolute(600, () => innerSubscription = inner.Subscribe(res));
+
+            scheduler.ScheduleAbsolute(Disposed, () =>
+            {
+                innerSubscription.Dispose();
+            });
+
+            scheduler.Start();
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 290)
+            );
+
+            res.Messages.AssertEqual(
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_Default()
+        {
+            var scheduler = new TestScheduler();
+
+            var keyInvoked = 0;
+            var eleInvoked = 0;
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(90, "error"),
+                OnNext(110, "error"),
+                OnNext(130, "error"),
+                OnNext(220, "  foo"),
+                OnNext(240, " FoO "),
+                OnNext(270, "baR  "),
+                OnNext(310, "foO "),
+                OnNext(350, " Baz   "),
+                OnNext(360, "  qux "),
+                OnNext(390, "   bar"),
+                OnNext(420, " BAR  "),
+                OnNext(470, "FOO "),
+                OnNext(480, "baz  "),
+                OnNext(510, " bAZ "),
+                OnNext(530, "    fOo    "),
+                OnCompleted<string>(570),
+                OnNext(580, "error"),
+                OnCompleted<string>(600),
+                OnError<string>(650, new Exception())
+            );
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil(
+                    x =>
+                    {
+                        keyInvoked++;
+                        return x.Trim().ToLower();
+                    },
+                    x =>
+                    {
+                        eleInvoked++;
+                        return Reverse(x);
+                    },
+                    g => g.Skip(2),
+                    _groupByUntilCapacity
+                ).Select(g => g.Key)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(220, "foo"),
+                OnNext(270, "bar"),
+                OnNext(350, "baz"),
+                OnNext(360, "qux"),
+                OnNext(470, "foo"),
+                OnCompleted<string>(570)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 570)
+            );
+
+            Assert.AreEqual(12, keyInvoked);
+            Assert.AreEqual(12, eleInvoked);
+        }
+
+        [TestMethod]
+        public void GroupByUntil_DurationSelector_Throws()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, "foo")
+            );
+
+            var ex = new Exception();
+
+            var res = scheduler.Start(() =>
+                xs.GroupByUntil<string, string, string>(x => x, g => { throw ex; }, _groupByUntilCapacity)
+            );
+
+            res.Messages.AssertEqual(
+                OnError<IGroupedObservable<string, string>>(210, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 210)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_NullKeys_Simple_Never()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnCompleted<string>(500)
+            );
+
+            var res = scheduler.Start(() => xs.GroupByUntil(x => x[0] == 'b' ? null : x.ToUpper(), g => Observable.Never<Unit>(), _groupByUntilCapacity).SelectMany(g => g, (g, x) => (g.Key ?? "(null)") + x));
+
+            res.Messages.AssertEqual(
+                OnNext(220, "(null)bar"),
+                OnNext(240, "FOOfoo"),
+                OnNext(310, "QUXqux"),
+                OnNext(470, "(null)baz"),
+                OnCompleted<string>(500)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_NullKeys_Simple_Expire1()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnCompleted<string>(500)
+            );
+
+            var n = 0;
+            var res = scheduler.Start(() => xs.GroupByUntil(x => x[0] == 'b' ? null : x.ToUpper(), g => { if (g.Key == null) n++; return Observable.Timer(TimeSpan.FromTicks(50), scheduler); }, _groupByUntilCapacity).SelectMany(g => g, (g, x) => (g.Key ?? "(null)") + x));
+
+            Assert.AreEqual(2, n);
+
+            res.Messages.AssertEqual(
+                OnNext(220, "(null)bar"),
+                OnNext(240, "FOOfoo"),
+                OnNext(310, "QUXqux"),
+                OnNext(470, "(null)baz"),
+                OnCompleted<string>(500)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_NullKeys_Simple_Expire2()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnCompleted<string>(500)
+            );
+
+            var n = 0;
+            var res = scheduler.Start(() => xs.GroupByUntil(x => x[0] == 'b' ? null : x.ToUpper(), g => { if (g.Key == null) n++; return Observable.Timer(TimeSpan.FromTicks(50), scheduler).IgnoreElements(); }, _groupByUntilCapacity).SelectMany(g => g, (g, x) => (g.Key ?? "(null)") + x));
+
+            Assert.AreEqual(2, n);
+
+            res.Messages.AssertEqual(
+                OnNext(220, "(null)bar"),
+                OnNext(240, "FOOfoo"),
+                OnNext(310, "QUXqux"),
+                OnNext(470, "(null)baz"),
+                OnCompleted<string>(500)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        [TestMethod]
+        public void GroupByUntil_NullKeys_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(220, "bar"),
+                OnNext(240, "foo"),
+                OnNext(310, "qux"),
+                OnNext(470, "baz"),
+                OnError<string>(500, ex)
+            );
+
+            var nullGroup = scheduler.CreateObserver<string>();
+            var err = default(Exception);
+
+            scheduler.ScheduleAbsolute(200, () => xs.GroupByUntil(x => x[0] == 'b' ? null : x.ToUpper(), g => Observable.Never<Unit>(), _groupByUntilCapacity).Where(g => g.Key == null).Subscribe(g => g.Subscribe(nullGroup), ex_ => err = ex_));
             scheduler.Start();
 
             Assert.AreSame(ex, err);
@@ -8427,8 +12040,8 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void SelectManyWithIndex_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>) null).SelectMany<int, int>(DummyFunc<int, int, IObservable<int>>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IObservable<int>>) null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IObservable<int>>.Instance).Subscribe(null));
         }
 
@@ -9737,13 +13350,13 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void SelectManyWithIndex_Enumerable_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>) null).SelectMany<int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>) null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance).Subscribe(null));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>) null).SelectMany<int, int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>) null, DummyFunc<int, int, int, int, int>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance, (Func<int, int, int, int, int>) null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, int, IEnumerable<int>>.Instance, DummyFunc<int, int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, int, IEnumerable<int>>)null, DummyFunc<int, int, int, int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, int, IEnumerable<int>>.Instance, (Func<int, int, int, int, int>)null));
         }
 
         [TestMethod]
@@ -10655,7 +14268,7 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 221)
             );
         }
-        
+
         [TestMethod]
         public void SelectManyWithIndex_QueryOperator_ArgumentChecking()
         {
@@ -10836,7 +14449,7 @@ namespace ReactiveTests.Tests
                 xs.SelectMany(
                     (x, _) => x == 2
                             ? Observable.Throw<long>(ex, scheduler)
-                            : Observable.Interval(TimeSpan.FromTicks(1), scheduler).Take(x), 
+                            : Observable.Interval(TimeSpan.FromTicks(1), scheduler).Take(x),
                     (x, _, y, __) => x * 10 + (int)y)
             );
 
@@ -10897,7 +14510,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
 
             var res = scheduler.Start(() =>
-                xs.SelectMany((x, _) => Throw<IObservable<long>>(ex), (x, _, y, __) => x * 10 + (int) y)
+                xs.SelectMany((x, _) => Throw<IObservable<long>>(ex), (x, _, y, __) => x * 10 + (int)y)
             );
 
             res.Messages.AssertEqual(
@@ -10942,7 +14555,7 @@ namespace ReactiveTests.Tests
         public void SelectMany_Triple_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(null, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, (Func<int, IObservable<int>>) null, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, (Func<int, IObservable<int>>)null, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, null, DummyFunc<IObservable<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SelectMany(DummyObservable<int>.Instance, DummyFunc<int, IObservable<int>>.Instance, DummyFunc<Exception, IObservable<int>>.Instance, DummyFunc<IObservable<int>>.Instance).Subscribe(null));
