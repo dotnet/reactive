@@ -8,6 +8,7 @@
 
 #if NO_CDS_COLLECTIONS
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
