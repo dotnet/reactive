@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
-
+using System.Reactive.Disposables;
+using System.Reactive.Subjects;
 
 #if !NO_TPL
+using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -892,30 +895,12 @@ namespace System.Reactive.Linq
 #endif
         }
 
-        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
-        {
-#if !NO_PERF
-            return new SelectMany<TSource, TResult>(source, (x, i, token) => selector(x, i));
-#else
-            return SelectMany_<TSource, TResult>(source, (x, i) => selector(x, i).ToObservable());
-#endif
-        }
-
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
 #if !NO_PERF
             return new SelectMany<TSource, TResult>(source, selector);
 #else
             return SelectMany_<TSource, TResult>(source, x => FromAsync(ct => selector(x, ct)));
-#endif
-        }
-
-        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
-        {
-#if !NO_PERF
-            return new SelectMany<TSource, TResult>(source, selector);
-#else
-            return SelectMany_<TSource, TResult>(source, (x, i) => FromAsync(ct => selector(x, i, ct)));
 #endif
         }
 #endif
@@ -940,30 +925,12 @@ namespace System.Reactive.Linq
 #endif
         }
 
-        public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
-        {
-#if !NO_PERF
-            return new SelectMany<TSource, TTaskResult, TResult>(source, (x, i, token) => taskSelector(x, i), resultSelector);
-#else
-            return SelectMany_<TSource, TTaskResult, TResult>(source, (x, i) => taskSelector(x, i).ToObservable(), (x, i, t, _) => resultSelector(x, i, t));
-#endif
-        }
-
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
 #if !NO_PERF
             return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
 #else
             return SelectMany_<TSource, TTaskResult, TResult>(source, x => FromAsync(ct => taskSelector(x, ct)), resultSelector);
-#endif
-        }
-
-        public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
-        {
-#if !NO_PERF
-            return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
-#else
-            return SelectMany_<TSource, TTaskResult, TResult>(source, (x, i) => FromAsync(ct => taskSelector(x, i, ct)), (x, i, t, _) => resultSelector(x, i, t));
 #endif
         }
 #endif
@@ -1000,7 +967,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
 #else
-            return SelectMany_<TSource, TResult>(source, (x, i) => collectionSelector(x, i).Select((y, i2) => resultSelector(x, i, y, i2)));
+            return SelectMany_<TSource, TResult>(source, x => collectionSelector(x).Select(y => resultSelector(x, y)));
 #endif
         }
 
@@ -1021,23 +988,19 @@ namespace System.Reactive.Linq
 #endif
         }
 
-        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
+        public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, int, IObservable<TResult>> onError, Func<int, IObservable<TResult>> onCompleted)
         {
 #if !NO_PERF
             return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
 #else
-            return Defer(() =>
+            return source.Materialize().SelectMany(notification =>
             {
-                var index = 0;
-                return source.Materialize().SelectMany(notification =>
-                {
-                    if (notification.Kind == NotificationKind.OnNext)
-                        return onNext(notification.Value, checked(index++));
-                    else if (notification.Kind == NotificationKind.OnError)
-                        return onError(notification.Exception);
-                    else
-                        return onCompleted();
-                });
+                if (notification.Kind == NotificationKind.OnNext)
+                    return onNext(notification.Value);
+                else if (notification.Kind == NotificationKind.OnError)
+                    return onError(notification.Exception);
+                else
+                    return onCompleted();
             });
 #endif
         }
@@ -1056,16 +1019,11 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             return new SelectMany<TSource, TResult>(source, selector);
 #else
-            return SelectMany_<TSource, TResult, TResult>(source, selector, (_, __, x, ___) => x);
+            return SelectMany_<TSource, TResult, TResult>(source, selector, (_, x) => x);
 #endif
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
-        {
-            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-        }
-
-        public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
             return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
@@ -1129,67 +1087,9 @@ namespace System.Reactive.Linq
 #endif
         }
 
-        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-#if !NO_PERF
             return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
-#else
-            return new AnonymousObservable<TResult>(observer => 
-            {
-                var index = 0;
-
-                return source.Subscribe(
-                    x =>
-                    {
-                        var xs = default(IEnumerable<TCollection>);
-                        try
-                        {
-                            xs = collectionSelector(x, checked(index++));
-                        }
-                        catch (Exception exception)
-                        {
-                            observer.OnError(exception);
-                            return;
-                        }
-
-                        var e = xs.GetEnumerator();
-
-                        try
-                        {
-                            var eIndex = 0;
-                            var hasNext = true;
-                            while (hasNext)
-                            {
-                                hasNext = false;
-                                var current = default(TResult);
-
-                                try
-                                {
-                                    hasNext = e.MoveNext();
-                                    if (hasNext)
-                                        current = resultSelector(x, index, e.Current, checked(eIndex++));
-                                }
-                                catch (Exception exception)
-                                {
-                                    observer.OnError(exception);
-                                    return;
-                                }
-
-                                if (hasNext)
-                                    observer.OnNext(current);
-                            }
-                        }
-                        finally
-                        {
-                            if (e != null)
-                                e.Dispose();
-                        }
-                    },
-                    observer.OnError,
-                    observer.OnCompleted
-                )
-            });
-#endif
         }
 
         #endregion
