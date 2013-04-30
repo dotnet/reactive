@@ -11,6 +11,38 @@ namespace System.Reactive.Subjects
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
     public sealed class BehaviorSubject<T> : ISubject<T>, IDisposable
     {
+        /// <summary>
+        /// Gets the current value or throws an exception.
+        /// </summary>
+        /// <value>The initial value passed to the constructor until <see cref="OnNext"/> is called; after which, the last value passed to <see cref="OnNext"/>.</value>
+        /// <remarks>
+        /// <para><see cref="Value"/> is frozen after <see cref="OnCompleted"/> is called.</para>
+        /// <para>After <see cref="OnError"/> is called, <see cref="Value"/> always throws the specified exception.</para>
+        /// <para>An exception is always thrown after <see cref="Dispose"/> is called.</para>
+        /// <alert type="caller">
+        /// Reading <see cref="Value"/> is a thread-safe operation, though there's a potential race condition when <see cref="OnNext"/> or <see cref="OnError"/> are being invoked concurrently.
+        /// In some cases, it may be necessary for a caller to use external synchronization to avoid race conditions.
+        /// </alert>
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException">Dispose was called.</exception>
+        public T Value
+        {
+            get
+            {
+                lock (_gate)
+                {
+                    CheckDisposed();
+
+                    if (_exception != null)
+                    {
+                        throw _exception;
+                    }
+
+                    return _value;
+                }
+            }
+        }
+
         private readonly object _gate = new object();
 
         private ImmutableList<IObserver<T>> _observers;

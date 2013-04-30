@@ -431,5 +431,76 @@ namespace ReactiveTests.Tests
             s.OnError(new Exception());
             Assert.IsFalse(s.HasObservers);
         }
+
+        [TestMethod]
+        public void Value_Initial()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+        }
+
+        [TestMethod]
+        public void Value_First()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+
+            s.OnNext(43);
+            Assert.AreEqual(43, s.Value);
+        }
+
+        [TestMethod]
+        public void Value_Second()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+
+            s.OnNext(43);
+            Assert.AreEqual(43, s.Value);
+
+            s.OnNext(44);
+            Assert.AreEqual(44, s.Value);
+        }
+
+        [TestMethod]
+        public void Value_FrozenAfterOnCompleted()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+
+            s.OnNext(43);
+            Assert.AreEqual(43, s.Value);
+
+            s.OnNext(44);
+            Assert.AreEqual(44, s.Value);
+
+            s.OnCompleted();
+            Assert.AreEqual(44, s.Value);
+
+            s.OnNext(1234);
+            Assert.AreEqual(44, s.Value);
+        }
+
+        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        public void Value_ThrowsAfterOnError()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+
+            s.OnError(new InvalidOperationException());
+            
+            Assert.Fail("Should not be able to read Value: {0}", s.Value);
+        }
+
+        [TestMethod, ExpectedException(typeof(ObjectDisposedException))]
+        public void Value_ThrowsOnDispose()
+        {
+            var s = new BehaviorSubject<int>(42);
+            Assert.AreEqual(42, s.Value);
+
+            s.Dispose();
+
+            Assert.Fail("Should not be able to read Value: {0}", s.Value);
+        }
     }
 }
