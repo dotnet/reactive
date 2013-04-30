@@ -22,16 +22,21 @@ namespace System.Reactive.Concurrency
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
-            //
-            // MSDN documentation states the following:
-            //
-            //    "If period is zero (0) or negative one (-1) milliseconds and dueTime is positive, callback is invoked once;
-            //     the periodic behavior of the timer is disabled, but can be re-enabled using the Change method."
-            //
-            if (period <= TimeSpan.Zero)
+            if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException("period");
 
-            return new PeriodicTimer(action, period);
+            //
+            // The contract for periodic scheduling in Rx is that specifying TimeSpan.Zero as the period causes the scheduler to 
+            // call back periodically as fast as possible, sequentially.
+            //
+            if (period == TimeSpan.Zero)
+            {
+                return new FastPeriodicTimer(action);
+            }
+            else
+            {
+                return new PeriodicTimer(action, period);
+            }
         }
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
@@ -366,6 +371,37 @@ namespace System.Reactive.Concurrency
             }
         }
 #endif
+
+        class FastPeriodicTimer : IDisposable
+        {
+            private readonly Action _action;
+            private bool disposed;
+
+            public FastPeriodicTimer(Action action)
+            {
+                _action = action;
+                
+                new System.Threading.Thread(Loop)
+                {
+                    Name = "Rx-FastPeriodicTimer",
+                    IsBackground = true
+                }
+                .Start();
+            }
+            
+            private void Loop()
+            {
+                while (!disposed)
+                {
+                    _action();
+                }
+            }
+
+            public void Dispose()
+            {
+                disposed = true;
+            }
+        }
     }
 }
 #endif

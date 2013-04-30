@@ -22,16 +22,21 @@ namespace System.Reactive.Concurrency
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
-            //
-            // MSDN documentation states the following:
-            //
-            //    "If period is zero (0) or negative one (-1) milliseconds and dueTime is positive, callback is invoked once;
-            //     the periodic behavior of the timer is disabled, but can be re-enabled using the Change method."
-            //
-            if (period <= TimeSpan.Zero)
+            if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException("period");
 
-            return new PeriodicTimer(action, period);
+            //
+            // The contract for periodic scheduling in Rx is that specifying TimeSpan.Zero as the period causes the scheduler to 
+            // call back periodically as fast as possible, sequentially.
+            //
+            if (period == TimeSpan.Zero)
+            {
+                return new FastPeriodicTimer(action);
+            }
+            else
+            {
+                return new PeriodicTimer(action, period);
+            }
         }
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
@@ -362,6 +367,37 @@ namespace System.Reactive.Concurrency
             }
         }
 #endif
+
+        class FastPeriodicTimer : IDisposable
+        {
+            private readonly Action _action;
+            private bool disposed;
+
+            public FastPeriodicTimer(Action action)
+            {
+                _action = action;
+
+                new System.Threading.Thread(Loop)
+                {
+                    Name = "Rx-FastPeriodicTimer",
+                    IsBackground = true
+                }
+                .Start();
+            }
+
+            private void Loop()
+            {
+                while (!disposed)
+                {
+                    _action();
+                }
+            }
+
+            public void Dispose()
+            {
+                disposed = true;
+            }
+        }
     }
 }
 #else
@@ -385,24 +421,31 @@ namespace System.Reactive.Concurrency
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
-            var cancel = new CancellationDisposable();
-
-            var moveNext = default(Action);
-            moveNext = () =>
+            if (period <= TimeSpan.Zero)
             {
-                Task.Delay(period, cancel.Token).ContinueWith(
-                    _ =>
-                    {
-                        moveNext();
-                        action();
-                    },
-                    TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion
-                );
-            };
+                return new FastPeriodicTimer(action);
+            }
+            else
+            {
+                var cancel = new CancellationDisposable();
 
-            moveNext();
+                var moveNext = default(Action);
+                moveNext = () =>
+                {
+                    Task.Delay(period, cancel.Token).ContinueWith(
+                        _ =>
+                        {
+                            moveNext();
+                            action();
+                        },
+                        TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion
+                    );
+                };
 
-            return cancel;
+                moveNext();
+
+                return cancel;
+            }
         }
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
@@ -433,6 +476,32 @@ namespace System.Reactive.Concurrency
             {
                 action(state);
             }, TaskCreationOptions.LongRunning);
+        }
+
+        class FastPeriodicTimer : IDisposable
+        {
+            private readonly Action _action;
+            private bool disposed;
+
+            public FastPeriodicTimer(Action action)
+            {
+                _action = action;
+                
+                Task.Factory.StartNew(Loop, TaskCreationOptions.LongRunning);
+            }
+
+            private void Loop()
+            {
+                while (!disposed)
+                {
+                    _action();
+                }
+            }
+
+            public void Dispose()
+            {
+                disposed = true;
+            }
         }
     }
 }
