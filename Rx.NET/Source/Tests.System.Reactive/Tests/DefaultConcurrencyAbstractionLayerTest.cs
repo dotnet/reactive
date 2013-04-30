@@ -147,6 +147,69 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void StartPeriodicTimer_Fast()
+        {
+            var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
+            _domain.SetData("state", e);
+
+            Run(() =>
+            {
+                var n = 0;
+
+                Scheduler.Default.SchedulePeriodic(TimeSpan.Zero, () =>
+                {
+                    var state = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("state");
+
+                    if (n++ == 10)
+                        state.Value.Set();
+                });
+            });
+
+            e.Value.WaitOne();
+        }
+
+        [TestMethod]
+        public void StartPeriodicTimer_Fast_Cancel()
+        {
+            var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
+            _domain.SetData("set_cancel", e);
+
+            Run(() =>
+            {
+                var n = 0;
+                
+                var schedule = Scheduler.Default.SchedulePeriodic(TimeSpan.Zero, () =>
+                {
+                    _domain.SetData("value", n++);
+                });
+
+                _domain.SetData("cancel", new MarshalByRefAction(schedule.Dispose));
+
+                var setCancel = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("set_cancel");
+                setCancel.Value.Set();
+            });
+
+            e.Value.WaitOne();
+
+            var value = (int)_domain.GetData("value");
+
+            var cancel = (MarshalByRefAction)_domain.GetData("cancel");
+            cancel.Invoke();
+            
+            Thread.Sleep(TimeSpan.FromMilliseconds(50));
+            
+            var newValue = (int)_domain.GetData("value");
+            
+            Assert.IsTrue(newValue >= value);
+
+            Thread.Sleep(TimeSpan.FromMilliseconds(50));
+
+            value = (int)_domain.GetData("value");
+            
+            Assert.AreEqual(newValue, value);
+        }
+
+        [TestMethod]
         public void CreateThread()
         {
             var e = new MarshalByRefCell<ManualResetEvent> { Value = new ManualResetEvent(false) };
@@ -286,6 +349,21 @@ namespace ReactiveTests.Tests
     public class MarshalByRefCell<T> : MarshalByRefObject
     {
         public T Value;
+    }
+
+    public class MarshalByRefAction : MarshalByRefObject
+    {
+        private readonly Action _action;
+
+        public MarshalByRefAction(Action action)
+        {
+            _action = action;
+        }
+
+        public void Invoke()
+        {
+            _action();
+        }
     }
 }
 #endif
