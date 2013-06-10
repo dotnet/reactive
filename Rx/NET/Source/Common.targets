@@ -155,6 +155,8 @@
       Profile88  = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 7.5
       Profile96  = .NET for Windows Store apps, .NET Framework 4.0.3, Silverlight 4, Windows Phone 7.5
       Profile014 = .NET for Windows Store apps, .NET Framework 4.5, Silverlight 4, Windows Phone 7.5	  
+      TODO: CHANGE TO Profile136 and test when running VS 2012
+      Profile136 = .NET for Windows Store apps, .NET Framework 4, Silverlight 5, Windows Phone 8 
       -->
     <TargetFrameworkProfile>Profile37</TargetFrameworkProfile>
     <NoStdLib>true</NoStdLib>
