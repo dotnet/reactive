@@ -150,15 +150,12 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
       <!-- 
       Profile2   = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 7
-      Profile4   = .NET for Windows Store apps, .NET Framework 4.5, Silverlight 4, Windows Phone 7
-      Profile37  = .NET for Windows Store apps, .NET Framework 4, Silverlight 5
+      Profile36  = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 8
       Profile88  = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 7.5
       Profile96  = .NET for Windows Store apps, .NET Framework 4.0.3, Silverlight 4, Windows Phone 7.5
-      Profile014 = .NET for Windows Store apps, .NET Framework 4.5, Silverlight 4, Windows Phone 7.5	  
-      TODO: CHANGE TO Profile136 and test when running VS 2012
-      Profile136 = .NET for Windows Store apps, .NET Framework 4, Silverlight 5, Windows Phone 8 
+      Profile136 = .NET for Windows Store apps, .NET Framework 4, Silverlight 5, Windows Phone 8
       -->
-    <TargetFrameworkProfile>Profile37</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
 
@@ -389,7 +386,7 @@
     </Reference>
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\portable-net40+sl5+win8+wp8\System.Threading.Tasks.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <!--- Microsoft.Bcl.Async References -->
     <Reference Include="Microsoft.Threading.Tasks">
@@ -399,12 +396,12 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
       <Private>False</Private>
-    </Reference>	
+    </Reference>    
   </ItemGroup>
    
   <ItemGroup Condition=" '$(BuildTarget)' == '40' ">
   
-	<Reference Include="Microsoft.Threading.Tasks">
+    <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -416,7 +413,7 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>False</Private>
     </Reference>
-	<Reference Include="System.Runtime">
+    <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
