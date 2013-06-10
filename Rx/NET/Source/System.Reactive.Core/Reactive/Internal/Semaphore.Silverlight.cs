@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
-#if NO_SEMAPHORE && SILVERLIGHT
+#if NO_SEMAPHORE && (SILVERLIGHT || PLIB_LITE)
 using System;
 using System.Threading;
 

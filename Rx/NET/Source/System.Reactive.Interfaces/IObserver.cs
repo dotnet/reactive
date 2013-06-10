@@ -30,4 +30,6 @@ namespace System
         void OnCompleted();
     }
 }
+#else
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.IObserver<>))]
 #endif

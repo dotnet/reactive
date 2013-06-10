@@ -34,6 +34,12 @@
       <Configuration>ReleasePL</Configuration>
     </Flavor>
     <Flavor Include="Rx.sln">
+      <Configuration>DebugPLLITE</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>ReleasePLLITE</Configuration>
+    </Flavor>	
+    <Flavor Include="Rx.sln">
       <Configuration>DebugWP7</Configuration>
     </Flavor>
     <Flavor Include="Rx.sln">
