@@ -18,4 +18,7 @@ namespace System
         IDisposable Subscribe(IObserver<T> observer);
     }
 }
+#else
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.IObservable<>))]
 #endif
+

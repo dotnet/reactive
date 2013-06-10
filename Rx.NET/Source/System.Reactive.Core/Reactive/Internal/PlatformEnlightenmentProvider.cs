@@ -60,7 +60,7 @@ namespace System.Reactive.PlatformServices
 #if NETCF35
                             var name = "System.Reactive.PlatformServices.CurrentPlatformEnlightenmentProvider, System.Reactive.PlatformServices";
 #else
-#if CRIPPLED_REFLECTION
+#if CRIPPLED_REFLECTION && HAS_WINRT
                             var ifType = typeof(IPlatformEnlightenmentProvider).GetTypeInfo();
 #else
                             var ifType = typeof(IPlatformEnlightenmentProvider);

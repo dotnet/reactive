@@ -184,7 +184,7 @@ namespace System.Reactive
             {
                 var method = node.Method;
                 var declaringType = method.DeclaringType;
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
                 var baseType = declaringType.GetTypeInfo().BaseType;
 #else
                 var baseType = declaringType.BaseType;
@@ -368,7 +368,7 @@ namespace System.Reactive
                 {
                     targetType = method.DeclaringType;
 
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
                     var typeInfo = targetType.GetTypeInfo();
                     if (typeInfo.IsDefined(typeof(LocalQueryMethodImplementationTypeAttribute), false))
                     {
@@ -417,7 +417,7 @@ namespace System.Reactive
 
             private static ILookup<string, MethodInfo> GetMethods(Type type)
             {
-#if !CRIPPLED_REFLECTION
+#if !(CRIPPLED_REFLECTION && HAS_WINRT)
                 return type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToLookup(m => m.Name);
 #else
                 return type.GetTypeInfo().DeclaredMethods.Where(m => m.IsStatic && m.IsPublic).ToLookup(m => m.Name);
@@ -492,7 +492,7 @@ namespace System.Reactive
         }
     }
 
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
     static class Helpers
     {
         public static MethodInfo GetMethod(this Type type, string name)

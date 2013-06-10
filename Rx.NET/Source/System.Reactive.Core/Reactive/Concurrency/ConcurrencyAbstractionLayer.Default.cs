@@ -411,8 +411,12 @@ namespace System.Reactive.Concurrency
     {
         public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime)
         {
-            var cancel = new CancellationDisposable();
+            var cancel = new CancellationDisposable();            
+#if USE_TASKEX
+            TaskEx.Delay(dueTime, cancel.Token).ContinueWith(
+#else
             Task.Delay(dueTime, cancel.Token).ContinueWith(
+#endif
                 _ => action(state),
                 TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion
             );
@@ -432,7 +436,11 @@ namespace System.Reactive.Concurrency
                 var moveNext = default(Action);
                 moveNext = () =>
                 {
+#if USE_TASKEX
+                TaskEx.Delay(period, cancel.Token).ContinueWith(
+#else
                     Task.Delay(period, cancel.Token).ContinueWith(
+#endif
                         _ =>
                         {
                             moveNext();
@@ -457,7 +465,12 @@ namespace System.Reactive.Concurrency
         
         public void Sleep(TimeSpan timeout)
         {
+#if USE_TASKEX
+            TaskEx.Delay(timeout).Wait();
+#else
             Task.Delay(timeout).Wait();
+#endif
+
         }
 
         public IStopwatch StartStopwatch()
