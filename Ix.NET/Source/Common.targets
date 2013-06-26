@@ -2,219 +2,218 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   
-<!--   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugPL|AnyCPU' ">
-    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
-    <OutputPath>bin\DebugPL\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <!--
+       ***********************
+       * SUPPORTED PLATFORMS *
+       ***********************
+   -->
+  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugPL|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>PL</BuildTarget>
   </PropertyGroup>
- -->
- 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleasePL|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>PL</BuildTarget>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug45|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG;HAS_AWAIT</DefineConstants>
-    <OutputPath>bin\Debug45\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>45</BuildTarget>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>$(DefineConstants);TRACE;HAS_AWAIT</DefineConstants>
-    <OutputPath>bin\Release45\</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>45</BuildTarget>
   </PropertyGroup>
 
-  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug8|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>8</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release8|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>8</BuildTarget>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug40\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR40</BuildFlavor>
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>40</BuildTarget>
   </PropertyGroup>
-  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release40|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release40\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR40</BuildFlavor>
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>40</BuildTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug35\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_RXINTERFACES;NO_ZIP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR20</BuildFlavor>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release35\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_RXINTERFACES;NO_ZIP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <BuildPlatform>DESKTOPCLR</BuildPlatform>
-    <BuildFlavor>DESKTOPCLR20</BuildFlavor>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL4|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\DebugSL4\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHT4</BuildFlavor>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseSL4|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\ReleaseSL4\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHT4</BuildFlavor>
-  </PropertyGroup>
-  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL5|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\DebugSL5\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHT5</BuildFlavor>
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>SL5</BuildTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseSL5|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\ReleaseSL5\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHT5</BuildFlavor>
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>SL5</BuildTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWP7|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>WP7</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseWP7|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>WP7</BuildTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugWP8|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>WP8</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseWP8|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>WP8</BuildTarget>
+  </PropertyGroup>
+
+  <!--DM: Commented out until we understand what this configuration was for-->
+  <!--<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>XBLV</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>XBLV</BuildTarget>
+  </PropertyGroup>-->
+  
+
+  <!-- Build properties for each platform, independent of debug/release build -->
+  
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'PL' ">
+    <DefineConstants>$(DefineConstants);HAS_AWAIT</DefineConstants>
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(BuildTarget)' == '45' ">
+    <DefineConstants>$(DefineConstants);HAS_AWAIT;HAS_APTCA</DefineConstants>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+  </PropertyGroup>
+
+
+  <!--DM: TODO - see if a win8 build target is needed for Ix-->
+  
+  <!--<PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
+    <DefineConstants>$(DefineConstants);HAS_AWAIT</DefineConstants>
+    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <BuildPlatform>WINDOWS</BuildPlatform>
+    <BuildFlavor>WINDOWS8</BuildFlavor>
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>-->
+
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == '40' ">
+    <DefineConstants>$(DefineConstants);HAS_APTCA</DefineConstants>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR40</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == '35' ">
+    <DefineConstants>$(DefineConstants);NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_RXINTERFACES;NO_ZIP;HAS_APTCA</DefineConstants>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR20</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'SL5' ">
+    <DefineConstants>$(DefineConstants);NO_SERIALIZABLE;NO_TPL;NO_REMOTING;NO_SEMAPHORE;NO_RXINTERFACES</DefineConstants>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHT5</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'WP7' ">
+    <DefineConstants>$(DefineConstants);WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP</DefineConstants>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <BuildPlatform>SILVERLIGHT</BuildPlatform>
+    <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
+  </PropertyGroup>
+
+  <!--DM: Note - there is no WP8 target, need to see if we need one-->  
+
+
+  <!--
+       ********************
+       * GENERAL SETTINGS *
+       ********************
+   -->
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor);TRACE</DefineConstants>
+    <OutputPath>bin\$(BuildConfig)$(BuildTarget)</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildConfig)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\DebugWP7\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
   </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseWP7|AnyCPU' ">
+
+  <PropertyGroup Condition=" '$(BuildConfig)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\ReleaseWP7\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor)</DefineConstants>
+  <PropertyGroup Condition=" '$(NoOpt)' == '1' ">
+    <DefineConstants>$(DefineConstants);NO_PERF</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(IxRelease)' == 'STABLE' ">
-    <DefineConstants>$(DefineConstants);STABLE</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
+  <ItemGroup Condition=" '$(NoStdLib)' == 'true' ">
+    <Reference Include="mscorlib" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(BuildPlatform)' == 'NETCF' ">
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <!--<PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
     <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>  
+  </PropertyGroup>-->
 
   <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
     <DefineConstants>$(DefineConstants);NO_CODECOVERAGE</DefineConstants>
   </PropertyGroup>
-  
-  <PropertyGroup>
-    <GetReferenceAssemblyPathsDependsOn>CP_SetBuildReferencePath</GetReferenceAssemblyPathsDependsOn>
-  </PropertyGroup>
-  <Target Name="CP_SetBuildReferencePath">
-    <PropertyGroup>
-      <TargetFrameworkDirectory>$(ProjectDir)..\..\References\$(BuildFlavor)</TargetFrameworkDirectory>
-    </PropertyGroup>
-  </Target>
 
+  <!-- Hack to support MSTest's Unit Test Framework on Silverlight and Windows Phone.
+       This overwrites one of the paths used by AssemblySearchPaths, which is the variable 
+       used by the ResolveAssemblyReferences task to figure out which directories to look in.
+       Previously, Rx was replacing the TargetFrameworkDirectory to allow this to work.  We can
+       instead use the official .NET reference assemblies while simply looking for the additional
+       unit testing framework assemblies (and a renamed Silverlight clone of the unit test framework).  -->
+  <PropertyGroup>
+    <ReferencePath>$(MSBuildProjectDirectory)\..\References\$(BuildFlavor)</ReferencePath>
+  </PropertyGroup>
+  
 </Project>

@@ -12,13 +12,9 @@ using System.Security;
 #else
 [assembly: AssemblyConfiguration("Retail")]
 #endif
-[assembly: AssemblyCompany("Microsoft Corporation")]
-#if STABLE
+[assembly: AssemblyCompany("Microsoft Open Technologies, Inc.")]
 [assembly: AssemblyProduct("Interactive Extensions")]
-#else
-[assembly: AssemblyProduct("Interactive Extensions")]
-#endif
-[assembly: AssemblyCopyright("\x00a9 Microsoft Corporation.  All rights reserved.")]
+[assembly: AssemblyCopyright("\x00a9 Microsoft Open Technologies, Inc.  All rights reserved.")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
 #if !PLIB
@@ -27,7 +23,7 @@ using System.Security;
 
 [assembly: CLSCompliant(true)]
 
-#if DESKTOPCLR && NO_CODECOVERAGE
+#if HAS_APTCA && NO_CODECOVERAGE
 [assembly: AllowPartiallyTrustedCallers]
 #endif
 
