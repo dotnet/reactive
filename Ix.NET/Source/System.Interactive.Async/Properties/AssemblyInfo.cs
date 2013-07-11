@@ -27,7 +27,10 @@ using System.Security;
 [assembly: AllowPartiallyTrustedCallers]
 #endif
 
-//
-// Note: Assembly (file) version numbers get inserted by the build system on the fly. Inspect the Team Build workflows
-//       and the custom activity in Build/Source/Activities/AppendVersionInfo.cs for more information.
-//
+// ===========================================================================
+//  DO NOT EDIT OR REMOVE ANYTHING BELOW THIS COMMENT.
+//  Version numbers are automatically generated in the msbuild files based on regular expressions 
+// ===========================================================================
+
+[assembly: AssemblyVersion("0.9.0.0")] 
+[assembly: AssemblyFileVersion("0.9.0.0")]

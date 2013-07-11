@@ -50,6 +50,15 @@
     <BuildTarget>40</BuildTarget>
   </PropertyGroup>
 
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug35|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>35</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release35|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>35</BuildTarget>
+  </PropertyGroup>
+ 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugSL5|AnyCPU' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>SL5</BuildTarget>
@@ -155,7 +164,7 @@
     <BuildFlavor>SILVERLIGHTM7</BuildFlavor>
   </PropertyGroup>
 
-  <!--DM: Note - there is no WP8 target, need to see if we need one-->  
+  <!--DM: TODO - there is no WP8 target, need to see if we need one-->  
 
 
   <!--
@@ -164,15 +173,17 @@
        ********************
    -->
 
+  <!-- All configurations -->
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor);TRACE</DefineConstants>
-    <OutputPath>bin\$(BuildConfig)$(BuildTarget)</OutputPath>
+    <OutputPath>..\bin\$(BuildConfig)$(BuildTarget)</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
 
+  <!-- Debug configurations -->
   <PropertyGroup Condition=" '$(BuildConfig)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -180,6 +191,7 @@
     <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
   </PropertyGroup>
 
+  <!-- Release configurations -->
   <PropertyGroup Condition=" '$(BuildConfig)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -197,23 +209,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
 
-  <!--<PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
-    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>-->
-
   <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
     <DefineConstants>$(DefineConstants);NO_CODECOVERAGE</DefineConstants>
   </PropertyGroup>
-
-  <!-- Hack to support MSTest's Unit Test Framework on Silverlight and Windows Phone.
-       This overwrites one of the paths used by AssemblySearchPaths, which is the variable 
-       used by the ResolveAssemblyReferences task to figure out which directories to look in.
-       Previously, Rx was replacing the TargetFrameworkDirectory to allow this to work.  We can
-       instead use the official .NET reference assemblies while simply looking for the additional
-       unit testing framework assemblies (and a renamed Silverlight clone of the unit test framework).  -->
-  <PropertyGroup>
-    <ReferencePath>$(MSBuildProjectDirectory)\..\References\$(BuildFlavor)</ReferencePath>
-  </PropertyGroup>
+ 
+ <PropertyGroup>
+   <GetReferenceAssemblyPathsDependsOn>CP_SetBuildReferencePath</GetReferenceAssemblyPathsDependsOn>
+ </PropertyGroup>
+ <Target Name="CP_SetBuildReferencePath">
+   <PropertyGroup>
+     <TargetFrameworkDirectory>$(ProjectDir)..\..\References\$(BuildFlavor)</TargetFrameworkDirectory>
+   </PropertyGroup>
+ </Target>
   
 </Project>

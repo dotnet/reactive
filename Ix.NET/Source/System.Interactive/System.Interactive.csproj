@@ -12,8 +12,7 @@
     <AssemblyName>System.Interactive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <!-- DM: Going to hardcode signing in Common.targets-->
-    <!--<ProductSignAssembly>true</ProductSignAssembly>-->    
+    <ProductSignAssembly>true</ProductSignAssembly>    
     <NoWarn>1591</NoWarn>
     <TargetFrameworkProfile />
   </PropertyGroup>
