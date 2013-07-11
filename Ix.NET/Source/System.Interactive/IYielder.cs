@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security;
 
 #if HAS_AWAIT
 namespace System.Linq
@@ -12,7 +13,7 @@ namespace System.Linq
         IAwaitable Break();
     }
 
-    class Yielder<T> : IYielder<T>, IAwaitable, IAwaiter, ICriticalNotifyCompletion
+    class Yielder<T> : IYielder<T>, IAwaitable, IAwaiter
     {
         private readonly Action<Yielder<T>> _create;
         private bool _running;
@@ -83,13 +84,13 @@ namespace System.Linq
             get { return false; }
         }
 
+        public void GetResult() { }
+
+        [SecurityCritical]
         public void UnsafeOnCompleted(Action continuation)
         {
             _continuation = continuation;
         }
-
-        public void GetResult() { }
-
 
         public void OnCompleted(Action continuation)
         {
