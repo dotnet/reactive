@@ -15,7 +15,7 @@ namespace System.Reactive
     {
         public static TDelegate CreateDelegate<TDelegate>(object o, MethodInfo method)
         {
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
             return (TDelegate)(object)method.CreateDelegate(typeof(TDelegate), o);
 #else
             return (TDelegate)(object)Delegate.CreateDelegate(typeof(TDelegate), o, method);
@@ -24,7 +24,7 @@ namespace System.Reactive
 
         public static Delegate CreateDelegate(Type delegateType, object o, MethodInfo method)
         {
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
             return method.CreateDelegate(delegateType, o);
 #else
             return Delegate.CreateDelegate(delegateType, o, method);
@@ -101,7 +101,7 @@ namespace System.Reactive
 
         public static EventInfo GetEventEx(this Type type, string name, bool isStatic)
         {
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
             // TODO: replace in the future by System.Reflection.RuntimeExtensions extension methods
             var q = new Queue<TypeInfo>();
             q.Enqueue(type.GetTypeInfo());
@@ -127,7 +127,7 @@ namespace System.Reactive
 #endif
         }
 
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
         public static MethodInfo GetMethod(this Type type, string name)
         {
             return type.GetTypeInfo().GetDeclaredMethod(name);
