@@ -29,7 +29,7 @@ namespace HomoIconize
             Process(root, "System.Reactive.Linq", "System.Reactive.Providers", @"Reactive\Linq\Qbservable.Generated.cs", "System.Reactive.Linq.Observable", "Qbservable", true);
             Console.WriteLine();
 
-            Process(root, "System.Reactive.Experimental", "System.Reactive.Experimental", @"Reactive\Linq\QbservableEx.Generated.cs", "System.Reactive.Linq.ObservableEx", "QbservableEx");            
+            Process(root, "System.Reactive.Experimental", "System.Reactive.Experimental", @"Reactive\Linq\QbservableEx.Generated.cs", "System.Reactive.Linq.ObservableEx", "QbservableEx");
             Console.WriteLine();
         }
 
@@ -79,6 +79,11 @@ namespace HomoIconize
         {
         }
 
+        // Prototype interface to break dependencies. Only used for ToString2 ultimately.
+        interface IOrderedQbservable<T>
+        {
+        }
+
         static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync)
         {
             var docs = XDocument.Load(xml).Root.Element("members").Elements("member").ToDictionary(m => m.Attribute("name").Value, m => m);
@@ -88,6 +93,7 @@ namespace HomoIconize
             var asm = Assembly.LoadFrom(input);
             var t = asm.GetType(sourceTypeName);
             _qbs = typeof(IQbservable<>); //asm.GetType("System.Reactive.Linq.IQbservable`1");
+            _oqbs = typeof(IOrderedQbservable<>);
 
             Console.WriteLine("Checking {0}...", output);
             var attr = File.GetAttributes(output);
@@ -132,7 +138,8 @@ namespace HomoIconize
             }
         }
 
-        static Type _qbs;
+        private const string OrderedObservableFullName = "System.Reactive.Linq.IOrderedObservable`1";
+        static Type _qbs, _oqbs;
 
         static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync)
         {
@@ -214,7 +221,7 @@ using System.Runtime.Remoting.Lifetime;
                     var d = ret.GetGenericTypeDefinition();
                     if (d.Name.StartsWith("IConnectableObservable") || d.Name.StartsWith("ListObservable"))
                         continue;
-                    if (d != typeof(IObservable<>) && d != typeof(IEnumerable<>))
+                    if (d != typeof(IObservable<>) && d != typeof(IEnumerable<>) && d.FullName != OrderedObservableFullName)
                         throw new InvalidOperationException("Invalid return type for " + m.Name);
                 }
                 else
@@ -229,7 +236,7 @@ using System.Runtime.Remoting.Lifetime;
                     if (f.ParameterType.IsGenericType)
                     {
                         var d = f.ParameterType.GetGenericTypeDefinition();
-                        if (d == typeof(IObservable<>)) // Check - e.g. Amb    || d == typeof(IEnumerable<>))
+                        if (d == typeof(IObservable<>) || d.FullName == OrderedObservableFullName) // Check - e.g. Amb    || d == typeof(IEnumerable<>))
                             hasProvider = false;
                     }
                 }
@@ -265,7 +272,7 @@ using System.Runtime.Remoting.Lifetime;
                     }
                     else
                     {
-                        var isObs = new Func<Type, bool>(tt => tt.IsGenericType && tt.GetGenericTypeDefinition() == typeof(IObservable<>));
+                        var isObs = new Func<Type, bool>(tt => tt.IsGenericType && (tt.GetGenericTypeDefinition() == typeof(IObservable<>) || tt.FullName == OrderedObservableFullName));
                         var isEnm = new Func<Type, bool>(tt => tt.IsGenericType && tt.GetGenericTypeDefinition() == typeof(IEnumerable<>));
                         if (isObs(pt) || pt.IsArray && isObs(pt.GetElementType()) || isEnm(pt) || pt.IsArray && isEnm(pt.GetElementType()))
                             args.Add("GetSourceExpression(" + q.Name + ")");
@@ -288,7 +295,9 @@ using System.Runtime.Remoting.Lifetime;
                 var requiresQueryProvider = ret.GetGenericTypeDefinition() == typeof(IQueryable<>);
                 if (requiresQueryProvider)
                     factory = "((IQueryProvider)" + factory + ")";
-                
+                else if (!ret.IsGenericType || ret.GetGenericTypeDefinition() != _qbs)
+                    factory = "(" + ret.ToString2() + ")" + factory;
+
                 var genArgs = m.GetGenericArguments().Select(a => a.ToString2()).ToList();
                 var g = genArgs.Count > 0 ? "<" + string.Join(", ", genArgs) + ">" : "";
                 var name = m.Name;
@@ -811,6 +820,10 @@ using System.Runtime.Remoting.Lifetime;
                 if (g == typeof(IObservable<>))
                 {
                     return _qbs.MakeGenericType(type.GetGenericArguments());
+                }
+                else if (g.FullName == OrderedObservableFullName)
+                {
+                    return _oqbs.MakeGenericType(type.GetGenericArguments());
                 }
                 else if (g == typeof(IEnumerable<>))
                 {

@@ -1790,7 +1790,7 @@ namespace ReactiveTests.Tests
             var pars = string.Join(", ", pss.Select(p => (Attribute.IsDefined(p, typeof(ParamArrayAttribute)) ? "params " : "") + GetTypeName(p.ParameterType, correct) + " " + p.Name).ToArray());
             if (Attribute.IsDefined(m, typeof(ExtensionAttribute)))
             {
-                if (pars.StartsWith("IQbservable") || pars.StartsWith("IQueryable"))
+                if (pars.StartsWith("IQbservable") || pars.StartsWith("IOrderedQbservable") || pars.StartsWith("IQueryable"))
                     pars = "this " + pars;
             }
 
@@ -1811,6 +1811,8 @@ namespace ReactiveTests.Tests
                 var name = len >= 0 ? t.Name.Substring(0, len) : t.Name;
                 if (correct && name == "IQbservable")
                     name = "IObservable";
+                if (correct && name == "IOrderedQbservable")
+                    name = "IOrderedObservable";
                 if (correct && name == "IQueryable")
                     name = "IEnumerable";
 

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="DispatcherHelpers.cs" />
+    <Compile Include="Dummies\DummyOrderedObservable.cs" />
     <Compile Include="Semaphore.cs" />
     <Compile Include="Stress\Core\Disposables\Composite.cs" />
     <Compile Include="Stress\Core\Disposables\Serial.cs" />
