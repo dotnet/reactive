@@ -698,6 +698,12 @@ namespace System.Reactive.Linq
         IObservable<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, IObservable<TRight>, TResult> resultSelector);
         IObservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(IObservable<TLeft> left, IObservable<TRight> right, Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector, Func<TRight, IObservable<TRightDuration>> rightDurationSelector, Func<TLeft, TRight, TResult> resultSelector);
         IObservable<TResult> OfType<TResult>(IObservable<object> source);
+        IOrderedObservable<TSource> OrderBy<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector);
+        IOrderedObservable<TSource> OrderBy<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer);
+        IOrderedObservable<TSource> OrderBy<TSource, TOther>(IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector);
+        IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector);
+        IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer);
+        IOrderedObservable<TSource> OrderByDescending<TSource, TOther>(IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector);
         IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector);
         IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, TResult> selector);
         IObservable<TOther> SelectMany<TSource, TOther>(IObservable<TSource> source, IObservable<TOther> other);
@@ -718,6 +724,12 @@ namespace System.Reactive.Linq
         IObservable<TSource> Take<TSource>(IObservable<TSource> source, int count, IScheduler scheduler);
         IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate);
+        IOrderedObservable<TSource> ThenBy<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector);
+        IOrderedObservable<TSource> ThenBy<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer);
+        IOrderedObservable<TSource> ThenBy<TSource, TOther>(IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector);
+        IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector);
+        IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer);
+        IOrderedObservable<TSource> ThenByDescending<TSource, TOther>(IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector);
         IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate);
 

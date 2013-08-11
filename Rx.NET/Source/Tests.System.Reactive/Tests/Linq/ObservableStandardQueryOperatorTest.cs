@@ -10396,6 +10396,220 @@ namespace ReactiveTests.Tests
 
         #endregion
 
+        #region + OrderBy* +
+
+        [TestMethod]
+        public void OrderBy_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderBy(DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy((Func<int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy(DummyFunc<int, int>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderBy_KeyComparer_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderBy(DummyFunc<int, int>.Instance, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy((Func<int, int>)null, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy(DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy(DummyFunc<int, int>.Instance, Comparer<int>.Default).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderBy_Time_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderBy(DummyFunc<int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy((Func<int, IObservable<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderBy(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderByDescending(DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending((Func<int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending(DummyFunc<int, int>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_KeyComparer_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderByDescending(DummyFunc<int, int>.Instance, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending((Func<int, int>)null, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending(DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending(DummyFunc<int, int>.Instance, Comparer<int>.Default).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_Time_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).OrderByDescending(DummyFunc<int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending((Func<int, IObservable<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.OrderByDescending(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateInterval(5, 1, TimeSpan.FromTicks(100), scheduler)
+                orderby x
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 1),
+                OnNext(501, 2),
+                OnNext(501, 3),
+                OnNext(501, 4),
+                OnNext(501, 5),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+            var comparer = new OrderByComparer(reverse: true);
+
+            var xs = CreateInterval(1, 5, TimeSpan.FromTicks(100), scheduler)
+                .OrderBy(x => x, comparer);
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 5),
+                OnNext(501, 4),
+                OnNext(501, 3),
+                OnNext(501, 2),
+                OnNext(501, 1),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_Key()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateInterval(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby x descending
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 5),
+                OnNext(501, 4),
+                OnNext(501, 3),
+                OnNext(501, 2),
+                OnNext(501, 1),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_Key_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+            var comparer = new OrderByComparer(reverse: true);
+
+            var xs = CreateInterval(1, 5, TimeSpan.FromTicks(100), scheduler)
+                .OrderByDescending(x => x, comparer);
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 1),
+                OnNext(501, 2),
+                OnNext(501, 3),
+                OnNext(501, 4),
+                OnNext(501, 5),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderBy_Time()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateRange(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby Observable.Timer(TimeSpan.FromTicks(100 * (5 - x)), scheduler)
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(102, 5),
+                OnNext(201, 4),
+                OnNext(301, 3),
+                OnNext(401, 2),
+                OnNext(501, 1),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_Time()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateRange(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby Observable.Timer(TimeSpan.FromTicks(100 * (5 - x)), scheduler) descending
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 1),
+                OnNext(501, 2),
+                OnNext(501, 3),
+                OnNext(501, 4),
+                OnNext(501, 5),
+                OnCompleted<int>(501));
+        }
+
+        class OrderByComparer : IComparer<int>
+        {
+            private readonly bool _reverse;
+
+            public OrderByComparer(bool reverse)
+            {
+                _reverse = reverse;
+            }
+
+            public int Compare(int x, int y)
+            {
+                return _reverse ? y.CompareTo(x) : x.CompareTo(y);
+            }
+        }
+
+        static IObservable<int> CreateInterval(int start, int end, TimeSpan period, TestScheduler scheduler)
+        {
+            var ticks = 0L;
+            var range = end >= start
+                    ? Enumerable.Range(start, end - start + 1)
+                    : Enumerable.Range(end, start - end + 1).Reverse();
+
+            return scheduler.CreateColdObservable(
+                range.Select(i => OnNext(ticks += period.Ticks, i))
+                    .Concat(DeferEnumerable(() => new[] { OnCompleted<int>(ticks) }))
+                    .ToArray());
+        }
+
+        static IObservable<int> CreateRange(int start, int end, TimeSpan startTime, TestScheduler scheduler)
+        {
+            var range = end >= start
+                    ? Enumerable.Range(start, end - start + 1)
+                    : Enumerable.Range(end, start - end + 1).Reverse();
+
+            return scheduler.CreateColdObservable(
+                range.Select(i => OnNext(startTime.Ticks, i))
+                    .Concat(new[] { OnCompleted<int>(startTime.Ticks) })
+                    .ToArray());
+        }
+
+        static IEnumerable<T> DeferEnumerable<T>(Func<IEnumerable<T>> factory)
+        {
+            foreach (var value in factory())
+            {
+                yield return value;
+            }
+        }
+
+        #endregion
+
         #region + Select +
 
         [TestMethod]
@@ -16844,6 +17058,241 @@ namespace ReactiveTests.Tests
             xs.Subscriptions.AssertEqual(
                 Subscribe(200, 350)
             );
+        }
+
+        #endregion
+
+        #region + ThenBy* +
+
+        [TestMethod]
+        public void ThenBy_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenBy(DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy((Func<int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy(DummyFunc<int, int>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void ThenBy_KeyComparer_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenBy(DummyFunc<int, int>.Instance, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy((Func<int, int>)null, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy(DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy(DummyFunc<int, int>.Instance, Comparer<int>.Default).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void ThenBy_Time_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenBy(DummyFunc<int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy((Func<int, IObservable<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenBy(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void ThenByDescending_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenByDescending(DummyFunc<int, int>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending((Func<int, int>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending(DummyFunc<int, int>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void ThenByDescending_KeyComparer_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenByDescending(DummyFunc<int, int>.Instance, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending((Func<int, int>)null, Comparer<int>.Default));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending(DummyFunc<int, int>.Instance, null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending(DummyFunc<int, int>.Instance, Comparer<int>.Default).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void ThenByDescending_Time_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => ((IOrderedObservable<int>)null).ThenByDescending(DummyFunc<int, IObservable<int>>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending((Func<int, IObservable<int>>)null));
+            ReactiveAssert.Throws<ArgumentNullException>(() => DummyOrderedObservable<int>.Instance.ThenByDescending(DummyFunc<int, IObservable<int>>.Instance).Subscribe(null));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key_ThenBy_Key()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateInterval(3, 1, TimeSpan.FromTicks(100), scheduler)
+                from y in CreateInterval(8, 6, TimeSpan.FromTicks(100), scheduler)
+                orderby x, y
+                select x * y;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(601, 6),
+                OnNext(601, 7),
+                OnNext(601, 8),
+                OnNext(601, 12),
+                OnNext(601, 14),
+                OnNext(601, 16),
+                OnNext(601, 18),
+                OnNext(601, 21),
+                OnNext(601, 24),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key_ThenBy_Key_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+            var comparer = new OrderByComparer(reverse: true);
+
+            var xs =
+                (from x in CreateInterval(3, 1, TimeSpan.FromTicks(100), scheduler)
+                 from y in CreateInterval(6, 8, TimeSpan.FromTicks(100), scheduler)
+                 select new { x, y })
+                 .OrderBy(pair => pair.x)
+                 .ThenBy(pair => pair.y, comparer)
+                 .Select(pair => pair.x * pair.y);
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(601, 8),
+                OnNext(601, 7),
+                OnNext(601, 6),
+                OnNext(601, 16),
+                OnNext(601, 14),
+                OnNext(601, 12),
+                OnNext(601, 24),
+                OnNext(601, 21),
+                OnNext(601, 18),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key_ThenByDescending_Key()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateInterval(3, 1, TimeSpan.FromTicks(100), scheduler)
+                from y in CreateInterval(6, 8, TimeSpan.FromTicks(100), scheduler)
+                orderby x, y descending
+                select x * y;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(601, 8),
+                OnNext(601, 7),
+                OnNext(601, 6),
+                OnNext(601, 16),
+                OnNext(601, 14),
+                OnNext(601, 12),
+                OnNext(601, 24),
+                OnNext(601, 21),
+                OnNext(601, 18),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Key_ThenByDescending_Key_WithKeyComparer()
+        {
+            var scheduler = new TestScheduler();
+            var comparer = new OrderByComparer(reverse: true);
+
+            var xs =
+                (from x in CreateInterval(3, 1, TimeSpan.FromTicks(100), scheduler)
+                 from y in CreateInterval(6, 8, TimeSpan.FromTicks(100), scheduler)
+                 select new { x, y })
+                 .OrderBy(pair => pair.x)
+                 .ThenByDescending(pair => pair.y, comparer)
+                 .Select(pair => pair.x * pair.y);
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(601, 6),
+                OnNext(601, 7),
+                OnNext(601, 8),
+                OnNext(601, 12),
+                OnNext(601, 14),
+                OnNext(601, 16),
+                OnNext(601, 18),
+                OnNext(601, 21),
+                OnNext(601, 24),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Time_ThenBy_Time()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateRange(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby Observable.Timer(TimeSpan.FromTicks(100 * (5 - x)), scheduler),
+                        Observable.Timer(TimeSpan.FromTicks(x == 3 ? 300 : 50), scheduler)
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(152, 5),
+                OnNext(251, 4),
+                OnNext(451, 2),
+                OnNext(551, 1),
+                OnNext(601, 3),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Time_ThenByDescending_Time()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateRange(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby Observable.Timer(TimeSpan.FromTicks(100 * (5 - x)), scheduler),
+                        Observable.Timer(TimeSpan.FromTicks(x == 3 ? 300 : 50), scheduler) descending
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(601, 3),
+                OnNext(601, 1),
+                OnNext(601, 2),
+                OnNext(601, 4),
+                OnNext(601, 5),
+                OnCompleted<int>(601));
+        }
+
+        [TestMethod]
+        public void OrderBy_Time_ThenByDescending_Key()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateRange(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby Observable.Timer(TimeSpan.FromTicks(100 * (5 - x)), scheduler),
+                        x descending
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(501, 5),
+                OnNext(501, 4),
+                OnNext(501, 3),
+                OnNext(501, 2),
+                OnNext(501, 1),
+                OnCompleted<int>(501));
+        }
+
+        [TestMethod]
+        public void OrderByDescending_Key_ThenBy_Time()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs =
+                from x in CreateInterval(1, 5, TimeSpan.FromTicks(100), scheduler)
+                orderby x descending, Observable.Timer(TimeSpan.FromTicks(50 * x), scheduler)
+                select x;
+
+            scheduler.Start(() => xs, 0, 0, 1000).Messages.AssertEqual(
+                OnNext(551, 1),
+                OnNext(601, 2),
+                OnNext(651, 3),
+                OnNext(701, 4),
+                OnNext(751, 5),
+                OnCompleted<int>(751));
         }
 
         #endregion

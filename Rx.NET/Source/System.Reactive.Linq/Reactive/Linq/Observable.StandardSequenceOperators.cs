@@ -710,6 +710,252 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + OrderBy +
+
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because time information is lost and notifications are only generated when the <paramref name="source"/>
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+
+            return s_impl.OrderBy<TSource, TKey>(source, keySelector);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="IComparer{TKey}"/> to compare keys.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because timing is lost and notifications are only generated when the <paramref name="source"/>
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+            return s_impl.OrderBy<TSource, TKey>(source, keySelector, comparer);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector"/>.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source"/> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="timeSelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// This overload of OrderBy is similar to a particular usage of SelectMany where the elements in the <paramref name="source"/> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// The primary benefits of this overload of OrderBy is that it relates to ordering specifically, thus it's more semantic than SelectMany and it allows an author to avoid 
+        /// defining an unused query variable when applying SelectMany merely as an ordering operator.  It also returns <see cref="IOrderedObservable{TSource}"/> so that it may 
+        /// be used in combination with any overloads of ThenBy and ThenByDescending to define queries that order by time and key.
+        /// </para>
+        /// <alert type="info">
+        /// Unlike the other overload of OrderBy, this overload does not buffer any elements and it does not wait for the <paramref name="source"/> sequence to complete before it 
+        /// pushes notifications.  This overload is entirely reactive.
+        /// </alert>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as the key.
+        /// </para>
+        /// <example>
+        /// <para>
+        /// The following example shows how to use this overload of OrderBy with the orderby LINQ query comprehension syntax in C#.
+        /// </para>
+        /// <para>
+        /// The result of this query is a sequence of integers from 5 to 1, at 1 second intervals.
+        /// </para>
+        /// <code>
+        /// <![CDATA[IObservable<int> xs = 
+        ///   from x in Observable.Range(1, 5)
+        ///   orderby Observable.Timer(TimeSpan.FromSeconds(5 - x))
+        ///   select x;]]>
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderBy<TSource, TOther>(this IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+
+            return s_impl.OrderBy<TSource, TOther>(source, timeSelector);
+        }
+
+        #endregion
+
+        #region + OrderByDescending +
+
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because timing is lost and notifications are only generated when the <paramref name="source"/>
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+
+            return s_impl.OrderByDescending<TSource, TKey>(source, keySelector);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="IComparer{TKey}"/> to compare keys.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because timing is lost and notifications are only generated when the <paramref name="source"/>
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+            return s_impl.OrderByDescending<TSource, TKey>(source, keySelector, comparer);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector"/>.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source"/> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="timeSelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering descending by time requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence descending by time is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because timing from the <paramref name="source"/> sequence is lost and notifications are only generated when 
+        /// the <paramref name="source"/> sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// <para>
+        /// This overload of OrderByDescending is similar to a particular usage of SelectMany where the elements in the <paramref name="source"/> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// The primary benefits of this overload of OrderByDescending is that it relates to ordering specifically, thus it's more semantic than SelectMany and it allows an author to avoid 
+        /// defining an unused query variable when applying SelectMany merely as an ordering operator.  It also returns <see cref="IOrderedObservable{TSource}"/> so that it may 
+        /// be used in combination with any overloads of ThenBy and ThenByDescending to define queries that order by time and key.
+        /// </para>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as the key.
+        /// </para>
+        /// <example>
+        /// <para>
+        /// The following example shows how to use this overload of OrderByDescending with the orderby LINQ query comprehension syntax in C#.
+        /// </para>
+        /// <para>
+        /// The result of this query is a sequence of integers from 1 to 5, all of them arriving at 5 seconds from the time of subscription.
+        /// </para>
+        /// <code>
+        /// <![CDATA[IObservable<int> xs = 
+        ///   from x in Observable.Range(1, 5)
+        ///   orderby Observable.Timer(TimeSpan.FromSeconds(5 - x)) descending
+        ///   select x;]]>
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public static IOrderedObservable<TSource> OrderByDescending<TSource, TOther>(this IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+
+            return s_impl.OrderByDescending<TSource, TOther>(source, timeSelector);
+        }
+
+        #endregion
+
         #region + Select +
 
         /// <summary>
@@ -1236,6 +1482,166 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException("predicate");
 
             return s_impl.TakeWhile<TSource>(source, predicate);
+        }
+
+        #endregion
+
+        #region + ThenBy +
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
+        public static IOrderedObservable<TSource> ThenBy<TSource, TKey>(this IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+
+            return s_impl.ThenBy<TSource, TKey>(source, keySelector);
+        }
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="IComparer{TKey}"/> to compare keys.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
+        public static IOrderedObservable<TSource> ThenBy<TSource, TKey>(this IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+            return s_impl.ThenBy<TSource, TKey>(source, keySelector, comparer);
+        }
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector"/>.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source"/> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="timeSelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// This overload of ThenBy is similar to a particular usage of SelectMany where the elements in the <paramref name="source"/> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <alert type="info">
+        /// Unlike the other overload of ThenBy, this overload does not buffer any elements and it does not wait for the <paramref name="source"/> sequence to complete before it 
+        /// pushes notifications.  This overload is entirely reactive.
+        /// </alert>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as a subsequent key.
+        /// </para>
+        /// </remarks>
+        public static IOrderedObservable<TSource> ThenBy<TSource, TOther>(this IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+
+            return s_impl.ThenBy<TSource, TOther>(source, timeSelector);
+        }
+
+        #endregion
+
+        #region + ThenByDescending +
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> is <see langword="null"/>.</exception>
+        public static IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(this IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+
+            return s_impl.ThenByDescending<TSource, TKey>(source, keySelector);
+        }
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="IComparer{TKey}"/> to compare keys.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="keySelector"/> or <paramref name="comparer"/> is <see langword="null"/>.</exception>
+        public static IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(this IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+
+            return s_impl.ThenByDescending<TSource, TKey>(source, keySelector, comparer);
+        }
+
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source"/> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector"/>.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source"/> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="IOrderedObservable{TSource}"/> whose elements are sorted in descending order according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="timeSelector"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering descending by time requires all of the elements in the <paramref name="source"/> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence descending by time is similar to performing an aggregation 
+        /// such as <see cref="ToList"/> because timing from the <paramref name="source"/> sequence is lost and notifications are only generated when 
+        /// the <paramref name="source"/> sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="OutOfMemoryException"/> being thrown.
+        /// </alert>
+        /// <para>
+        /// This overload of ThenByDescending is similar to a particular usage of SelectMany where the elements in the <paramref name="source"/> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as a subsequent key.
+        /// </para>
+        /// </remarks>
+        public static IOrderedObservable<TSource> ThenByDescending<TSource, TOther>(this IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+
+            return s_impl.ThenByDescending<TSource, TOther>(source, timeSelector);
         }
 
         #endregion

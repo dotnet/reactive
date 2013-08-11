@@ -48,6 +48,8 @@
     <Compile Include="Reactive\IEventPatternSource.cs" />
     <Compile Include="Reactive\IEventSource.cs" />
     <Compile Include="Reactive\IObserver.Result.cs" />
+    <Compile Include="Reactive\Linq\IOrderedQbservable.cs" />
+    <Compile Include="Reactive\Linq\IOrderedObservable.cs" />
     <Compile Include="Reactive\Linq\IGroupedObservable.cs" />
     <Compile Include="Reactive\Linq\IQbservable.cs" />
     <Compile Include="Reactive\Linq\IQbservableProvider.cs" />

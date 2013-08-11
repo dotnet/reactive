@@ -768,6 +768,44 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + OrderBy +
+
+        public virtual IOrderedObservable<TSource> OrderBy<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return new OrderBy<TSource, TKey>(source, keySelector, comparer: null, descending: false);
+        }
+
+        public virtual IOrderedObservable<TSource> OrderBy<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            return new OrderBy<TSource, TKey>(source, keySelector, comparer, descending: false);
+        }
+
+        public virtual IOrderedObservable<TSource> OrderBy<TSource, TOther>(IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            return new OrderBy<TSource, TOther>(source, timeSelector, descending: false);
+        }
+
+        #endregion
+
+        #region + OrderByDescending +
+
+        public virtual IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return new OrderBy<TSource, TKey>(source, keySelector, comparer: null, descending: true);
+        }
+
+        public virtual IOrderedObservable<TSource> OrderByDescending<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            return new OrderBy<TSource, TKey>(source, keySelector, comparer, descending: true);
+        }
+
+        public virtual IOrderedObservable<TSource> OrderByDescending<TSource, TOther>(IObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            return new OrderBy<TSource, TOther>(source, timeSelector, descending: true);
+        }
+
+        #endregion
+
         #region + Select +
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector)
@@ -1280,6 +1318,44 @@ namespace System.Reactive.Linq
             });
         }
 #endif
+
+        #endregion
+
+        #region + ThenBy +
+
+        public virtual IOrderedObservable<TSource> ThenBy<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return source.CreateOrderedObservable(keySelector, comparer: null, descending: false);
+        }
+
+        public virtual IOrderedObservable<TSource> ThenBy<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            return source.CreateOrderedObservable(keySelector, comparer, descending: false);
+        }
+
+        public virtual IOrderedObservable<TSource> ThenBy<TSource, TOther>(IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            return source.CreateOrderedObservable(timeSelector, descending: false);
+        }
+
+        #endregion
+
+        #region + ThenByDescending +
+
+        public virtual IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return source.CreateOrderedObservable(keySelector, comparer: null, descending: true);
+        }
+
+        public virtual IOrderedObservable<TSource> ThenByDescending<TSource, TKey>(IOrderedObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+        {
+            return source.CreateOrderedObservable(keySelector, comparer, descending: true);
+        }
+
+        public virtual IOrderedObservable<TSource> ThenByDescending<TSource, TOther>(IOrderedObservable<TSource> source, Func<TSource, IObservable<TOther>> timeSelector)
+        {
+            return source.CreateOrderedObservable(timeSelector, descending: true);
+        }
 
         #endregion
 

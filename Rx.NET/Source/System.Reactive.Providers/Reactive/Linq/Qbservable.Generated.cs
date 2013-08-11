@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (4/20/2013 1:36:55 PM)
+ * WARNING: Auto-generated file (8/11/2013 9:40:05 AM)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -10753,6 +10753,314 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
+        /// Sorts the elements of a sequence in ascending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because time information is lost and notifications are only generated when the <paramref name="source" />
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderBy<TSource, TKey>(default(IQbservable<TSource>), default(Expression<Func<TSource, TKey>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1" /> to compare keys.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" />, <paramref name="keySelector" /> or <paramref name="comparer" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because timing is lost and notifications are only generated when the <paramref name="source" />
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderBy<TSource, TKey>(default(IQbservable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector,
+                    Expression.Constant(comparer, typeof(IComparer<TKey>))
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Sorts the elements of a sequence in ascending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector" />.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source" /> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="timeSelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// This overload of OrderBy is similar to a particular usage of SelectMany where the elements in the <paramref name="source" /> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// The primary benefits of this overload of OrderBy is that it relates to ordering specifically, thus it's more semantic than SelectMany and it allows an author to avoid 
+        /// defining an unused query variable when applying SelectMany merely as an ordering operator.  It also returns <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> so that it may 
+        /// be used in combination with any overloads of ThenBy and ThenByDescending to define queries that order by time and key.
+        /// </para>
+        /// <alert type="info">
+        /// Unlike the other overload of OrderBy, this overload does not buffer any elements and it does not wait for the <paramref name="source" /> sequence to complete before it 
+        /// pushes notifications.  This overload is entirely reactive.
+        /// </alert>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as the key.
+        /// </para>
+        /// <example>
+        /// <para>
+        /// The following example shows how to use this overload of OrderBy with the orderby LINQ query comprehension syntax in C#.
+        /// </para>
+        /// <para>
+        /// The result of this query is a sequence of integers from 5 to 1, at 1 second intervals.
+        /// </para>
+        /// <code><![CDATA[IObservable<int> xs = 
+        /// from x in Observable.Range(1, 5)
+        /// orderby Observable.Timer(TimeSpan.FromSeconds(5 - x))
+        /// select x;]]></code>
+        /// </example>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderBy<TSource, TOther>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TOther>>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderBy<TSource, TOther>(default(IQbservable<TSource>), default(Expression<Func<TSource, IObservable<TOther>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+#endif
+                    source.Expression,
+                    timeSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because timing is lost and notifications are only generated when the <paramref name="source" />
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderByDescending<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderByDescending<TSource, TKey>(default(IQbservable<TSource>), default(Expression<Func<TSource, TKey>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1" /> to compare keys.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" />, <paramref name="keySelector" /> or <paramref name="comparer" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because timing is lost and notifications are only generated when the <paramref name="source" />
+        /// sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderByDescending<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderByDescending<TSource, TKey>(default(IQbservable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector,
+                    Expression.Constant(comparer, typeof(IComparer<TKey>))
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector" />.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source" /> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="timeSelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering descending by time requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence descending by time is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because timing from the <paramref name="source" /> sequence is lost and notifications are only generated when 
+        /// the <paramref name="source" /> sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// <para>
+        /// This overload of OrderByDescending is similar to a particular usage of SelectMany where the elements in the <paramref name="source" /> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// The primary benefits of this overload of OrderByDescending is that it relates to ordering specifically, thus it's more semantic than SelectMany and it allows an author to avoid 
+        /// defining an unused query variable when applying SelectMany merely as an ordering operator.  It also returns <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> so that it may 
+        /// be used in combination with any overloads of ThenBy and ThenByDescending to define queries that order by time and key.
+        /// </para>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as the key.
+        /// </para>
+        /// <example>
+        /// <para>
+        /// The following example shows how to use this overload of OrderByDescending with the orderby LINQ query comprehension syntax in C#.
+        /// </para>
+        /// <para>
+        /// The result of this query is a sequence of integers from 1 to 5, all of them arriving at 5 seconds from the time of subscription.
+        /// </para>
+        /// <code><![CDATA[IObservable<int> xs = 
+        /// from x in Observable.Range(1, 5)
+        /// orderby Observable.Timer(TimeSpan.FromSeconds(5 - x)) descending
+        /// select x;]]></code>
+        /// </example>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> OrderByDescending<TSource, TOther>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TOther>>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.OrderByDescending<TSource, TOther>(default(IQbservable<TSource>), default(Expression<Func<TSource, IObservable<TOther>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+#endif
+                    source.Expression,
+                    timeSelector
+                )
+            );
+        }
+        
+        /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
         /// This operator is a specialization of Multicast using a regular <see cref="T:System.Reactive.Subjects.Subject`1" />.
         /// </summary>
@@ -11787,78 +12095,6 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
-        /// <param name="source">An observable sequence of elements to project.</param>
-        /// <param name="collectionSelector">A transform function to apply to each element.</param>
-        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
-        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-            
-            return source.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.SelectMany<TSource, TCollection, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, IObservable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
-#endif
-                    source.Expression,
-                    collectionSelector,
-                    resultSelector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
-        /// <param name="source">An observable sequence of elements to project.</param>
-        /// <param name="collectionSelector">A transform function to apply to each source element; the second parameter of the function represents the index of the source element.</param>
-        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
-        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-            
-            return source.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.SelectMany<TSource, TCollection, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, IObservable<TCollection>>>), default(Expression<Func<TSource, int, TCollection, int, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
-#endif
-                    source.Expression,
-                    collectionSelector,
-                    resultSelector
-                )
-            );
-        }
-        
-        /// <summary>
         /// Projects each element of an observable sequence to an enumerable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -11922,6 +12158,78 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.SelectMany<TSource, TCollection, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, IEnumerable<TCollection>>>), default(Expression<Func<TSource, int, TCollection, int, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+#endif
+                    source.Expression,
+                    collectionSelector,
+                    resultSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
+        /// <param name="source">An observable sequence of elements to project.</param>
+        /// <param name="collectionSelector">A transform function to apply to each element.</param>
+        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
+        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
+        public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (collectionSelector == null)
+                throw new ArgumentNullException("collectionSelector");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.SelectMany<TSource, TCollection, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, IObservable<TCollection>>>), default(Expression<Func<TSource, TCollection, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
+#endif
+                    source.Expression,
+                    collectionSelector,
+                    resultSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TCollection">The type of the elements in the projected intermediate sequences.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate sequence elements.</typeparam>
+        /// <param name="source">An observable sequence of elements to project.</param>
+        /// <param name="collectionSelector">A transform function to apply to each source element; the second parameter of the function represents the index of the source element.</param>
+        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
+        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
+        public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (collectionSelector == null)
+                throw new ArgumentNullException("collectionSelector");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.SelectMany<TSource, TCollection, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, IObservable<TCollection>>>), default(Expression<Func<TSource, int, TCollection, int, TResult>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TCollection), typeof(TResult)),
 #endif
@@ -12037,6 +12345,39 @@ namespace System.Reactive.Linq
                     onNext,
                     onError,
                     onCompleted
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Projects each element of an observable sequence to an enumerable sequence and concatenates the resulting enumerable sequences into one observable sequence.
+        /// The index of each source element is used in the projected form of that element. 
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the projected inner enumerable sequences and the elements in the merged result sequence.</typeparam>
+        /// <param name="source">An observable sequence of elements to project.</param>
+        /// <param name="selector">A transform function to apply to each source element; the second parameter of the function represents the index of the source element.</param>
+        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
+        public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.SelectMany<TSource, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, IEnumerable<TResult>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
+#endif
+                    source.Expression,
+                    selector
                 )
             );
         }
@@ -12194,39 +12535,6 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.SelectMany<TSource, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, IEnumerable<TResult>>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Projects each element of an observable sequence to an enumerable sequence and concatenates the resulting enumerable sequences into one observable sequence.
-        /// The index of each source element is used in the projected form of that element. 
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the projected inner enumerable sequences and the elements in the merged result sequence.</typeparam>
-        /// <param name="source">An observable sequence of elements to project.</param>
-        /// <param name="selector">A transform function to apply to each source element; the second parameter of the function represents the index of the source element.</param>
-        /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
-        public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.SelectMany<TSource, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, IEnumerable<TResult>>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TResult)),
 #endif
@@ -14774,6 +15082,232 @@ namespace System.Reactive.Linq
 #endif
                     source.Expression,
                     predicate
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
+        public static IOrderedQbservable<TSource> ThenBy<TSource, TKey>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenBy<TSource, TKey>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, TKey>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1" /> to compare keys.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" />, <paramref name="keySelector" /> or <paramref name="comparer" /> is <see langword="null" />.</exception>
+        public static IOrderedQbservable<TSource> ThenBy<TSource, TKey>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenBy<TSource, TKey>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector,
+                    Expression.Constant(comparer, typeof(IComparer<TKey>))
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in ascending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector" />.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source" /> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="timeSelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// This overload of ThenBy is similar to a particular usage of SelectMany where the elements in the <paramref name="source" /> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <alert type="info">
+        /// Unlike the other overload of ThenBy, this overload does not buffer any elements and it does not wait for the <paramref name="source" /> sequence to complete before it 
+        /// pushes notifications.  This overload is entirely reactive.
+        /// </alert>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as a subsequent key.
+        /// </para>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> ThenBy<TSource, TOther>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, IObservable<TOther>>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenBy<TSource, TOther>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, IObservable<TOther>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+#endif
+                    source.Expression,
+                    timeSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order according to a key.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
+        public static IOrderedQbservable<TSource> ThenByDescending<TSource, TKey>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenByDescending<TSource, TKey>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, TKey>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order by using a specified comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TKey">The type of the sorting key computed for each element in the source sequence.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="keySelector">A function to extract the key for each element.</param>
+        /// <param name="comparer">An <see cref="T:System.Collections.Generic.IComparer`1" /> to compare keys.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to a key.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" />, <paramref name="keySelector" /> or <paramref name="comparer" /> is <see langword="null" />.</exception>
+        public static IOrderedQbservable<TSource> ThenByDescending<TSource, TKey>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (keySelector == null)
+                throw new ArgumentNullException("keySelector");
+            if (comparer == null)
+                throw new ArgumentNullException("comparer");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenByDescending<TSource, TKey>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, TKey>>), default(IComparer<TKey>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TKey)),
+#endif
+                    source.Expression,
+                    keySelector,
+                    Expression.Constant(comparer, typeof(IComparer<TKey>))
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Performs a subsequent ordering of the elements in a sequence in descending order according to the times at which corresponding observable sequences produce their first notification or complete.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the <paramref name="source" /> sequence.</typeparam>
+        /// <typeparam name="TOther">The type of the elements in the observable returned by <paramref name="timeSelector" />.</typeparam>
+        /// <param name="source">An observable sequence of values to order.</param>
+        /// <param name="timeSelector">A function that returns an observable for an element in the <paramref name="source" /> sequence indicating the time at which that element should appear in the ordering.</param>
+        /// <returns>An <see cref="T:System.Reactive.Linq.IOrderedObservable`1" /> whose elements are sorted in descending order according to the times at which corresponding observable sequences produce their first notification or complete.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="timeSelector" /> is <see langword="null" />.</exception>
+        /// <remarks>
+        /// <para>
+        /// Ordering descending by time requires all of the elements in the <paramref name="source" /> sequence to be observed before it can complete, 
+        /// which means that all of the elements must be buffered.  Ordering an observable sequence descending by time is similar to performing an aggregation 
+        /// such as <see cref="M:System.Reactive.Linq.Observable.ToList``1(System.IObservable{``0})" /> because timing from the <paramref name="source" /> sequence is lost and notifications are only generated when 
+        /// the <paramref name="source" /> sequence calls OnCompleted.
+        /// </para>
+        /// <alert type="warn">
+        /// Do not attempt to order an observable sequence that never calls OnCompleted.  There will be no notifications generated, and it 
+        /// may result in an <see cref="T:System.OutOfMemoryException" /> being thrown.
+        /// </alert>
+        /// <para>
+        /// This overload of ThenByDescending is similar to a particular usage of SelectMany where the elements in the <paramref name="source" /> sequence are returned based on the times 
+        /// at which their corresponding inner sequences produce their first notification or complete.  Any elements in the inner sequences are discarded.
+        /// </para>
+        /// <para>
+        /// This overload supports using the orderby LINQ query comprehension syntax in C# and Visual Basic by passing an observable sequence as a subsequent key.
+        /// </para>
+        /// </remarks>
+        public static IOrderedQbservable<TSource> ThenByDescending<TSource, TOther>(this IOrderedQbservable<TSource> source, Expression<Func<TSource, IObservable<TOther>>> timeSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (timeSelector == null)
+                throw new ArgumentNullException("timeSelector");
+            
+            return (IOrderedQbservable<TSource>)source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.ThenByDescending<TSource, TOther>(default(IOrderedQbservable<TSource>), default(Expression<Func<TSource, IObservable<TOther>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TOther)),
+#endif
+                    source.Expression,
+                    timeSelector
                 )
             );
         }

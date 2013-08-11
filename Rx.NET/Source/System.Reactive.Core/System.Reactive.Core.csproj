@@ -91,6 +91,7 @@
     <Compile Include="Reactive\Internal\ImmutableList.cs" />
     <Compile Include="Reactive\Internal\Lazy.cs" />
     <Compile Include="Reactive\Internal\Observers.cs" />
+    <Compile Include="Reactive\Internal\OrderedProducer.cs" />
     <Compile Include="Reactive\Internal\PlatformEnlightenmentProvider.cs" />
     <Compile Include="Reactive\Internal\PriorityQueue.cs" />
     <Compile Include="Reactive\Internal\Producer.cs" />

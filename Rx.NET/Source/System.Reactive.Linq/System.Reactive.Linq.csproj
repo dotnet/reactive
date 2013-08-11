@@ -46,6 +46,7 @@
     <Compile Include="Reactive\Linq\LocalQueryMethodImplementationTypeAttribute.cs" />
     <Compile Include="Reactive\Linq\Observable\Case.cs" />
     <Compile Include="Reactive\Linq\Observable\Collect.cs" />
+    <Compile Include="Reactive\Linq\Observable\OrderBy.cs" />
     <Compile Include="Reactive\Linq\Observable\If.cs" />
     <Compile Include="Reactive\Linq\Observable\For.cs" />
     <Compile Include="Reactive\Linq\Observable\DoWhile.cs" />
