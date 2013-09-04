@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Rx.net by Reactive-Extensions</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Reactive-Extensions/Rx.NET">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Reactive-Extensions/Rx.NET/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Reactive-Extensions/Rx.NET/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Rx.net</h1>
+          <p>A mirror of the Rx.NET repository on codeplex</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Reactive-Extensions">Reactive-Extensions</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="reactive-extensions" class="anchor" href="#reactive-extensions"><span class="octicon octicon-link"></span></a>Reactive Extensions</h1>
+
+<h2>
+<a name="a-brief-intro" class="anchor" href="#a-brief-intro"><span class="octicon octicon-link"></span></a>A Brief Intro</h2>
+
+<p>The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators. Using Rx, developers <em><strong>represent</strong></em> asynchronous data streams with <a href="http://msdn.microsoft.com/library/dd990377.aspx">Observables</a>, <em><strong>query</strong></em> asynchronous data streams using <a href="http://msdn.microsoft.com/en-us/library/hh242983.aspx">LINQ operators</a>, and <em><strong>parameterize</strong></em> the concurrency in the asynchronous data streams using <a href="http://msdn.microsoft.com/en-us/library/hh242963.aspx">Schedulers</a>. Simply put, Rx = Observables + LINQ + Schedulers.</p>
+
+<p>Whether you are authoring a traditional desktop or web-based application, you have to deal with asynchronous and event-based programming from time to time. Desktop applications have I/O operations and computationally expensive tasks that might take a long time to complete and potentially block other active threads. Furthermore, handling exceptions, cancellation, and synchronization is difficult and error-prone.</p>
+
+<p>Using Rx, you can represent multiple asynchronous data streams (that come from diverse sources, e.g., stock quote, tweets, computer events, web service requests, etc.), and subscribe to the event stream using the <code>IObserver&lt;T&gt;</code> interface. The <code>IObservable&lt;T&gt;</code> interface notifies the subscribed <code>IObserver&lt;T&gt;</code> interface whenever an event occurs.</p>
+
+<p>Because observable sequences are data streams, you can query them using standard LINQ query operators implemented by the Observable extension methods. Thus you can filter, project, aggregate, compose and perform time-based operations on multiple events easily by using these standard LINQ operators. In addition, there are a number of other reactive stream specific operators that allow powerful queries to be written.  Cancellation, exceptions, and synchronization are also handled gracefully by using the extension methods provided by Rx.</p>
+
+<p>Rx complements and interoperates smoothly with both synchronous data streams (<code>IEnumerable&lt;T&gt;</code>) and single-value asynchronous computations (<code>Task&lt;T&gt;</code>) as the following diagram shows:</p>
+
+<table>
+<th></th>
+<th>Single return value</th>
+<th>Mutiple return values</th>
+   <tr>
+<td>Pull/Synchronous/Interactive</td>
+      <td>T</td>
+      <td>IEnumerable</td>
+   </tr>
+<tr>
+<td>Push/Asycnhrounous/Reactive</td>
+      <td>Task</td>
+      <td>IObservable</td>
+   </tr>
+</table><p>Additional documentation, video, tutorials and HOL are available on MSDN.</p>
+
+<h2>
+<a name="flavors-of-rx" class="anchor" href="#flavors-of-rx"><span class="octicon octicon-link"></span></a>Flavors of Rx</h2>
+
+<ul>
+<li>
+<strong>Rx.NET</strong>: <em>(this repository)</em> The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators.</li>
+<li>
+<a href="http://rxjs.codeplex.com">RxJS</a>: The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.</li>
+<li>
+<a href="http://rxcpp.codeplex.com">RxCpp</a>: The Reactive Extensions for Native (RxCpp) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in both C and C++.</li>
+<li>
+<a href="http://rxrb.codeplex.com">Rx.rb</a>: A prototype implementation of Reactive Extensions for Ruby (Rx.rb).</li>
+<li>
+<a href="http://rxpy.codeplex.com">RxPy</a>: The Reactive Extensions for Python 3 (Rx.Py) is a set of libraries to compose asynchronous and event-based programs using observable collections and LINQ-style query operators in Python 3. </li>
+</ul><h2>
+<a name="interactive-extensions" class="anchor" href="#interactive-extensions"><span class="octicon octicon-link"></span></a>Interactive Extensions</h2>
+
+<ul>
+<li>
+<strong>Ix.NET</strong>: <em>(included in this repository)</em> The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable.</li>
+<li>
+<a href="http://rxjs.codeplex.com">IxJS</a>: An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.</li>
+<li>
+<a href="http://rxcpp.codeplex.com">IxCpp</a>: An implantation of LINQ for Native Developers in C++</li>
+</ul><h2>
+<a name="applications" class="anchor" href="#applications"><span class="octicon octicon-link"></span></a>Applications</h2>
+
+<ul>
+<li>
+<a href="http://tx.codeplex.com">Tx</a>: a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.</li>
+<li>
+<a href="http://linq2charts.codeplex.com">LINQ2Charts</a>: an example for Rx bindings.  Similar to existing APIs like LINQ to XML, it allows developers to use LINQ to create/change/update charts in an easy way and avoid having to deal with XML or other underneath data structures. We would love to see more Rx bindings like this one.</li>
+</ul><h2>
+<a name="contributing-code" class="anchor" href="#contributing-code"><span class="octicon octicon-link"></span></a>Contributing Code</h2>
+
+<p>Before submitting a feature or substantial code contribution please  discuss it with the team and ensure it follows the product roadmap. Note that all code submissions will be rigorously reviewed and tested by the Rx Team, and only those that meet an extremely high bar for both quality and design/roadmap appropriateness will be merged into the source. </p>
+
+<p>You will need to submit a  Contributor License Agreement form before submitting your pull request. This needs to only be done once for any Microsoft OSS project. Download the Contributor License Agreement (CLA). Please fill in, sign, scan and email it to <a href="mailto:msopentech-cla@microsoft.com">msopentech-cla@microsoft.com</a>. </p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
