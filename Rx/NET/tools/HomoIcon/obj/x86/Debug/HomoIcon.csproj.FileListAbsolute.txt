@@ -1,4 +1,0 @@
-C:\MSOpenTech\RX\NET\Main\Tools\HomoIcon\bin\Debug\HomoIcon.exe
-C:\MSOpenTech\RX\NET\Main\Tools\HomoIcon\bin\Debug\HomoIcon.pdb
-C:\MSOpenTech\RX\NET\Main\Tools\HomoIcon\obj\x86\Debug\HomoIcon.exe
-C:\MSOpenTech\RX\NET\Main\Tools\HomoIcon\obj\x86\Debug\HomoIcon.pdb
