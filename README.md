@@ -43,14 +43,14 @@ Flavors of Rx
 
 Interactive Extensions
 -----------------------
-* __Ix__: *(included in this repository)* The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable<T>.
+* __Ix.NET__: *(included in this repository)* The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable<T>.
 * [IxJS](http://rxjs.codeplex.com): An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.
-* [IxCpp]([IxJS](http://rxjs.codeplex.com): An implantation of LINQ for Native Developers in C++
+* [IxCpp](http://rxcpp.codeplex.com): An implantation of LINQ for Native Developers in C++
 
 Applications
 -------------
-* [Tx] (http://tx.codeplex.com): a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.
-* [LINQ2Charts] (http://linq2charts.codeplex.com): an example for Rx bindings.  Similar to existing APIs like LINQ to XML, it allows developers to use LINQ to create/change/update charts in an easy way and avoid having to deal with XML or other underneath data structures. We would love to see more Rx bindings like this one.
+* [Tx](http://tx.codeplex.com): a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.
+* [LINQ2Charts](http://linq2charts.codeplex.com): an example for Rx bindings.  Similar to existing APIs like LINQ to XML, it allows developers to use LINQ to create/change/update charts in an easy way and avoid having to deal with XML or other underneath data structures. We would love to see more Rx bindings like this one.
 
 Contributing Code
 ------------------
