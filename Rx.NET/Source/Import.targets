@@ -15,21 +15,19 @@
   <!-- Windows Phone 8 -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
-  
-  <!-- XNA -->
-<!--
-   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildPlatform)' == 'XNA' "/>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Compact\Microsoft.CompactFramework.CSharp.targets" Condition=" '$(BuildPlatform)' == 'NETCF' " />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Xbox 360 ADK\Microsoft.Xbox360.Adk.App.targets" Condition=" '$(BuildPlatform)' == 'XBOX' " />
- -->
  
   <!-- Portable Library Build -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
 
+
+  <!-- If "Sign" is set and assembly should be signed, generate a .sign file-->  
   <Target Name="AfterBuild">
-    <WriteLinesToFile Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' "
-                      File="$(OutDir)\$(TargetFileName).sign" Overwrite="true"
-                      Lines="[$(SignKeyId)] Auto-generated file. Indicates the corresponding binary file needs to be signed." />
+    
+    <WriteLinesToFile Condition=" '$(ProductSignAssembly)' == 'true' AND '$(Sign)' == 'Sign' "
+        File="$(OutDir)\$(TargetFileName).sign"
+        Overwrite="true"
+        Lines="Auto-generated file, indicates the corresponding binary file needs to be signed.">
+    </WriteLinesToFile>
 
     <!-- Hack for Metro; for some reason the XAML build creates intermediary folders, so we flatten the hierarchy for consumption by the setup build at a later stage -->
     <CreateItem Include="$(OutDir)\*.*" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">

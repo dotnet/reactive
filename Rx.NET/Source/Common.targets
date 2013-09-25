@@ -77,15 +77,6 @@
     <BuildTarget>WP8</BuildTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU' ">
-    <BuildConfig>Debug</BuildConfig>
-    <BuildTarget>XBLV</BuildTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU' ">
-    <BuildConfig>Release</BuildConfig>
-    <BuildTarget>XBLV</BuildTarget>
-  </PropertyGroup>
-
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'PL' ">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;PLIB;NO_CDS_COLLECTIONS;USE_TIMER_SELF_ROOT</DefineConstants>
@@ -93,7 +84,6 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <NoStdLib>true</NoStdLib>
-    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '45' ">
@@ -102,7 +92,6 @@
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR45</BuildFlavor>
-    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
@@ -113,7 +102,6 @@
     <BuildPlatform>WINDOWS</BuildPlatform>
     <BuildFlavor>WINDOWS8</BuildFlavor>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '40' ">
@@ -153,20 +141,16 @@
     <BuildPlatform>WINDOWS_PHONE</BuildPlatform>
     <BuildFlavor>WINDOWS_PHONE8</BuildFlavor>
     <NoStdLib>true</NoStdLib>
-    <!-- <SignKeyEnhanced>true</SignKeyEnhanced>  Disabled due to CLR signing bug w/ SHA2 keys blocking Windows Phone 8 apps from being signed. -->
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(BuildTarget)' == 'XBLV' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TPL;NO_LAZY;NO_WEAKTABLE;NO_VARIANCE;NO_HASHSET;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_EXPRESSIONS</DefineConstants>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <BuildPlatform>SILVERLIGHT</BuildPlatform>
-    <BuildFlavor>XBOX_LAKEVIEW</BuildFlavor>
-  </PropertyGroup>
-
-
+  <!--<PropertyGroup Condition=" '$(BuildTarget)' == 'PortableWP7' ">
+    <DefineConstants>$(DefineConstants);NO_VARIANCE;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;PLIB;NO_CDS_COLLECTIONS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile4</TargetFrameworkProfile>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>-->
+  
   <!--
        ********************
        * LEGACY PLATFORMS *
@@ -315,21 +299,12 @@
     <DefineConstants>$(DefineConstants);STRESS</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(SignedBuild)' == '1' ">
+  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(Sign)' == 'Sign' ">
     <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
     <SignAssembly>true</SignAssembly>
     <DelaySign>true</DelaySign>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(SignAssembly)' == 'true' AND '$(SignKeyEnhanced)' != 'true' ">
-    <AssemblyOriginatorKeyFile>..\..\Private\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
     <SignKeyId>72</SignKeyId>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(SignAssembly)' == 'true' AND '$(SignKeyEnhanced)' == 'true' ">
-    <AssemblyOriginatorKeyFile>..\..\Private\272MSSharedLibSN2048.snk</AssemblyOriginatorKeyFile>
-    <DefineConstants>$(DefineConstants);SIGNENHANCED</DefineConstants>
-    <SignKeyId>272</SignKeyId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildLab)' == '1' ">
