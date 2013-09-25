@@ -24,7 +24,6 @@
     <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' or '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

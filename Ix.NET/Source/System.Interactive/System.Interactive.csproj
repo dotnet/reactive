@@ -12,11 +12,10 @@
     <AssemblyName>System.Interactive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductSignAssembly>true</ProductSignAssembly>    
+    <ProductSignAssembly>true</ProductSignAssembly>
     <NoWarn>1591</NoWarn>
     <TargetFrameworkProfile />
   </PropertyGroup>
-
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
@@ -25,7 +24,6 @@
     <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' or '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAwaitable.cs" />
