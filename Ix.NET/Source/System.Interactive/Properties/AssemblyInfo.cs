@@ -32,6 +32,6 @@ using System.Security;
 //  Version numbers are automatically generated in the msbuild files based on regular expressions 
 // ===========================================================================
 
-[assembly: AssemblyVersion("0.9.0.0")] 
-[assembly: AssemblyFileVersion("0.9.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]   
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
