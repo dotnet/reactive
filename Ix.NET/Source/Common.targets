@@ -187,6 +187,14 @@
     <DefineConstants>$(DefineConstants);NO_CODECOVERAGE</DefineConstants>
   </PropertyGroup>
  
+  <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(Sign)' == 'Sign' ">
+    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
+    <AssemblyOriginatorKeyFile>..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
+    <SignKeyId>72</SignKeyId>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  
  <PropertyGroup>
    <GetReferenceAssemblyPathsDependsOn>CP_SetBuildReferencePath</GetReferenceAssemblyPathsDependsOn>
  </PropertyGroup>
