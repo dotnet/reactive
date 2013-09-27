@@ -30,9 +30,27 @@
     </WriteLinesToFile>
 
     <!-- Hack for Metro; for some reason the XAML build creates intermediary folders, so we flatten the hierarchy for consumption by the setup build at a later stage -->
+ 
+    <!-- For some reason, using a plain <ItemGroup> does not fill in the list correctly, so we must use <CreateItem> -->
+    <CreateItem Include="$(OutDir)\*.sign;$(OutDir)\*.xml" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">
+      <Output TaskParameter="Include" ItemName="CanaryFiles" />
+    </CreateItem>
+
+    <Message Text="-- Canary files: @(CanaryFiles)" Importance="high"/>
+    <Move
+        SourceFiles="@(CanaryFiles)"
+        DestinationFolder="$(OutDir)\.."
+        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+
+    <!-- For some reason, using a plain <ItemGroup> does not fill in the list correctly, so we must use <CreateItem> -->
     <CreateItem Include="$(OutDir)\*.*" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">
       <Output TaskParameter="Include" ItemName="BuiltFilesInOutDir" />
     </CreateItem>
-    <Copy SourceFiles="@(BuiltFilesInOutDir)" DestinationFolder="$(OutDir)\.." Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+
+    <Message Text="-- Built files: @(BuiltFilesInOutDir)" Importance="high"/>
+    <Copy
+        SourceFiles="@(BuiltFilesInOutDir)"
+        DestinationFolder="$(OutDir)\.."
+        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
   </Target>
 </Project>
