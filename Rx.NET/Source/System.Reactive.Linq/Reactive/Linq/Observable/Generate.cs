@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Generate<TState, TResult> : Producer<TResult>
     {
@@ -52,13 +52,13 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_timeSelectorA != null)
             {
-                var sink = new α(this, observer, cancel);
+                var sink = new SelectorA(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
             else if (_timeSelectorR != null)
             {
-                var sink = new δ(this, observer, cancel);
+                var sink = new Delta(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -70,11 +70,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class α : Sink<TResult>
+        class SelectorA : Sink<TResult>
         {
             private readonly Generate<TState, TResult> _parent;
 
-            public α(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public SelectorA(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -130,11 +130,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class δ : Sink<TResult>
+        class Delta : Sink<TResult>
         {
             private readonly Generate<TState, TResult> _parent;
 
-            public δ(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public Delta(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

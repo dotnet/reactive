@@ -13,7 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     //
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
         private static IObservable<EventPattern<EventArgs>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<EventHandler, EventArgs>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<EventHandler, EventArgs>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
 #else
             var res = Observable.FromEventPattern<EventHandler, EventArgs>(e => new EventHandler(e), addHandler, removeHandler);
             return SynchronizeEvents(res, scheduler);
@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
         private static IObservable<EventPattern<object>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
 #else
             var res = Observable.FromEventPattern<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler);
             return SynchronizeEvents(res, scheduler);
@@ -108,7 +108,7 @@ namespace System.Reactive.Linq
 #endif
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
 #else
             var res = new AnonymousObservable<EventPattern<TEventArgs>>(observer =>
             {
@@ -151,7 +151,7 @@ namespace System.Reactive.Linq
 #endif
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
 #else
             var res = new AnonymousObservable<EventPattern<TEventArgs>>(observer =>
             {
@@ -193,7 +193,7 @@ namespace System.Reactive.Linq
 #endif
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
 #else
             var res = new AnonymousObservable<EventPattern<TSender, TEventArgs>>(observer =>
             {
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq
 #endif
         {
 #if !NO_PERF
-            return new FromEventPattern.τ<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
+            return new FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
 #else
             var res = Observable.FromEventPattern<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler);
             return SynchronizeEvents(res, scheduler);
@@ -480,7 +480,7 @@ namespace System.Reactive.Linq
             if (isWinRT)
             {
 #if !NO_PERF
-                return new FromEventPattern.ρ<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, true, scheduler);
+                return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, true, scheduler);
 #else
                 return new AnonymousObservable<TResult>(observer =>
                 {
@@ -494,7 +494,7 @@ namespace System.Reactive.Linq
 #endif
 
 #if !NO_PERF
-            return new FromEventPattern.ρ<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, false, scheduler);
+            return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, false, scheduler);
 #else
             var res = new AnonymousObservable<TResult>(observer =>
             {

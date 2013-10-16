@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class TakeLastBuffer<TSource> : Producer<IList<TSource>>
     {
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new Impl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -82,12 +82,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<IList<TSource>>, IObserver<TSource>
+        class Impl : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly TakeLastBuffer<TSource> _parent;
             private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-            public τ(TakeLastBuffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
+            public Impl(TakeLastBuffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

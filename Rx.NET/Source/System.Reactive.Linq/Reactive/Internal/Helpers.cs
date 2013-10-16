@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq.Observαble;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Concat<TSource> : Producer<TSource>, IConcatenatable<TSource>
     {

@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class LongCount<TSource> : Producer<long>
     {
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new LongCountImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -77,12 +77,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<long>, IObserver<TSource>
+        class LongCountImpl : Sink<long>, IObserver<TSource>
         {
             private readonly LongCount<TSource> _parent;
             private long _count;
 
-            public π(LongCount<TSource> parent, IObserver<long> observer, IDisposable cancel)
+            public LongCountImpl(LongCount<TSource> parent, IObserver<long> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

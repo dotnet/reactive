@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class SequenceEqual<TSource> : Producer<bool>
     {
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new ε(this, observer, cancel);
+                var sink = new SequenceEqualImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -226,11 +226,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class ε : Sink<bool>, IObserver<TSource>
+        class SequenceEqualImpl : Sink<bool>, IObserver<TSource>
         {
             private readonly SequenceEqual<TSource> _parent;
 
-            public ε(SequenceEqual<TSource> parent, IObserver<bool> observer, IDisposable cancel)
+            public SequenceEqualImpl(SequenceEqual<TSource> parent, IObserver<bool> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

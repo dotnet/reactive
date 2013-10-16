@@ -9,7 +9,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Window<TSource> : Producer<IObservable<TSource>>
     {
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else if (_count > 0)
             {
-                var sink = new μ(this, observer, cancel);
+                var sink = new BoundedWindowImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -62,13 +62,13 @@ namespace System.Reactive.Linq.Observαble
             {
                 if (_timeSpan == _timeShift)
                 {
-                    var sink = new π(this, observer, cancel);
+                    var sink = new TimeShiftImpl(this, observer, cancel);
                     setSink(sink);
                     return sink.Run();
                 }
                 else
                 {
-                    var sink = new τ(this, observer, cancel);
+                    var sink = new WindowImpl(this, observer, cancel);
                     setSink(sink);
                     return sink.Run();
                 }
@@ -151,11 +151,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<IObservable<TSource>>, IObserver<TSource>
+        class WindowImpl : Sink<IObservable<TSource>>, IObserver<TSource>
         {
             private readonly Window<TSource> _parent;
 
-            public τ(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
+            public WindowImpl(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -296,11 +296,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<IObservable<TSource>>, IObserver<TSource>
+        class TimeShiftImpl : Sink<IObservable<TSource>>, IObserver<TSource>
         {
             private readonly Window<TSource> _parent;
 
-            public π(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
+            public TimeShiftImpl(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -371,11 +371,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class μ : Sink<IObservable<TSource>>, IObserver<TSource>
+        class BoundedWindowImpl : Sink<IObservable<TSource>>, IObserver<TSource>
         {
             private readonly Window<TSource> _parent;
 
-            public μ(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
+            public BoundedWindowImpl(Window<TSource> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -516,7 +516,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new β(this, observer, cancel);
+                var sink = new Beta(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -578,7 +578,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var closingSubscription = new SingleAssignmentDisposable();
                 _m.Disposable = closingSubscription;
-                closingSubscription.Disposable = windowClose.SubscribeSafe(new ω(this, closingSubscription));
+                closingSubscription.Disposable = windowClose.SubscribeSafe(new Omega(this, closingSubscription));
             }
 
             private void CloseWindow(IDisposable closingSubscription)
@@ -597,12 +597,12 @@ namespace System.Reactive.Linq.Observαble
                 _windowGate.Wait(CreateWindowClose);
             }
 
-            class ω : IObserver<TWindowClosing>
+            class Omega : IObserver<TWindowClosing>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public ω(_ parent, IDisposable self)
+                public Omega(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -653,11 +653,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class β : Sink<IObservable<TSource>>, IObserver<TSource>
+        class Beta : Sink<IObservable<TSource>>, IObserver<TSource>
         {
             private readonly Window<TSource, TWindowClosing> _parent;
 
-            public β(Window<TSource, TWindowClosing> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
+            public Beta(Window<TSource, TWindowClosing> parent, IObserver<IObservable<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -680,16 +680,16 @@ namespace System.Reactive.Linq.Observαble
                 base._observer.OnNext(window);
 
                 d.Add(_parent._source.SubscribeSafe(this));
-                d.Add(_parent._windowBoundaries.SubscribeSafe(new ω(this)));
+                d.Add(_parent._windowBoundaries.SubscribeSafe(new Omega(this)));
 
                 return _refCountDisposable;
             }
 
-            class ω : IObserver<TWindowClosing>
+            class Omega : IObserver<TWindowClosing>
             {
-                private readonly β _parent;
+                private readonly Beta _parent;
 
-                public ω(β parent)
+                public Omega(Beta parent)
                 {
                     _parent = parent;
                 }

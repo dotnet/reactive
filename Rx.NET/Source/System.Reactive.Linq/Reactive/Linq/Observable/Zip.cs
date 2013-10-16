@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new ε(this, observer, cancel);
+                var sink = new ZipImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -258,11 +258,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class ε : Sink<TResult>, IObserver<TFirst>
+        class ZipImpl : Sink<TResult>, IObserver<TFirst>
         {
             private readonly Zip<TFirst, TSecond, TResult> _parent;
 
-            public ε(Zip<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public ZipImpl(Zip<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

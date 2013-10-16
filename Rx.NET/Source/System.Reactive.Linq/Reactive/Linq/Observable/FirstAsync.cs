@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class FirstAsync<TSource> : Producer<TSource>
     {
@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_predicate != null)
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new FirstAsyncImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -73,11 +73,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<TSource>, IObserver<TSource>
+        class FirstAsyncImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly FirstAsync<TSource> _parent;
 
-            public π(FirstAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public FirstAsyncImpl(FirstAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

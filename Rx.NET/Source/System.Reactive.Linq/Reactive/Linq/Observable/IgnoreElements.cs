@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class IgnoreElements<TSource> : Producer<TSource>
     {
@@ -14,7 +14,7 @@ namespace System.Reactive.Linq.Observαble
             _source = source;
         }
 
-        public IObservable<TSource> Ω()
+        public IObservable<TSource> Omega()
         {
             return this;
         }

@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class LastAsync<TSource> : Producer<TSource>
     {
@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_predicate != null)
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new LastAsyncImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -77,13 +77,13 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<TSource>, IObserver<TSource>
+        class LastAsyncImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly LastAsync<TSource> _parent;
             private TSource _value;
             private bool _seenValue;
 
-            public π(LastAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public LastAsyncImpl(LastAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Case<TValue, TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
     {

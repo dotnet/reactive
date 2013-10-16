@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class SelectMany<TSource, TCollection, TResult> : Producer<TResult>
     {
@@ -73,14 +73,14 @@ namespace System.Reactive.Linq.Observαble
 #if !NO_TPL
             else if (_collectionSelectorT != null)
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SelectManyImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
 #endif
             else
             {
-                var sink = new ε(this, observer, cancel);
+                var sink = new NoSelectorImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var innerSubscription = new SingleAssignmentDisposable();
                 _group.Add(innerSubscription);
-                innerSubscription.Disposable = collection.SubscribeSafe(new ι(this, value, innerSubscription, _indexInSource));
+                innerSubscription.Disposable = collection.SubscribeSafe(new Iter(this, value, innerSubscription, _indexInSource));
             }
 
             public void OnError(Exception error)
@@ -178,21 +178,21 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class ι : IObserver<TCollection>
+            class Iter : IObserver<TCollection>
             {
                 private readonly _ _parent;
                 private readonly TSource _value;
                 private readonly IDisposable _self;
                 private int _indexInSource;
-				private int _indexInIntermediate = -1;
+                private int _indexInIntermediate = -1;
 
-                public ι(_ parent, TSource value, IDisposable self, int indexInSource)
+                public Iter(_ parent, TSource value, IDisposable self, int indexInSource)
                 {
                     _parent = parent;
                     _value = value;
                     _self = self;
                     _indexInSource = indexInSource;
-					_indexInIntermediate = -1;
+                    _indexInIntermediate = -1;
                 }
 
                 public void OnNext(TCollection value)
@@ -254,12 +254,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class ε : Sink<TResult>, IObserver<TSource>
+        class NoSelectorImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TCollection, TResult> _parent;
             private int _indexInSource;   // The "Weird SelectMany" requires indices in the original collection as well as an intermediate collection
 
-            public ε(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public NoSelectorImpl(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -354,11 +354,11 @@ namespace System.Reactive.Linq.Observαble
 
 #if !NO_TPL
 #pragma warning disable 0420
-        class τ : Sink<TResult>, IObserver<TSource>
+        class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TCollection, TResult> _parent;
 
-            public τ(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public SelectManyImpl(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -564,14 +564,14 @@ namespace System.Reactive.Linq.Observαble
 #if !NO_TPL
             else if (_selectorT != null)
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SelectManyImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
 #endif
             else
             {
-                var sink = new ε(this, observer, cancel);
+                var sink = new NoSelectorImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -731,15 +731,15 @@ namespace System.Reactive.Linq.Observαble
             {
                 var innerSubscription = new SingleAssignmentDisposable();
                 _group.Add(innerSubscription);
-                innerSubscription.Disposable = inner.SubscribeSafe(new ι(this, innerSubscription));
+                innerSubscription.Disposable = inner.SubscribeSafe(new Iter(this, innerSubscription));
             }
 
-            class ι : IObserver<TResult>
+            class Iter : IObserver<TResult>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public ι(_ parent, IDisposable self)
+                public Iter(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -782,12 +782,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class ε : Sink<TResult>, IObserver<TSource>
+        class NoSelectorImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TResult> _parent;
             private int _index;
 
-            public ε(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public NoSelectorImpl(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -873,11 +873,11 @@ namespace System.Reactive.Linq.Observαble
 
 #if !NO_TPL
 #pragma warning disable 0420
-        class τ : Sink<TResult>, IObserver<TSource>
+        class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TResult> _parent;
 
-            public τ(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public SelectManyImpl(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

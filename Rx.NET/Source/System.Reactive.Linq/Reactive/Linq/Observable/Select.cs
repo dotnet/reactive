@@ -3,11 +3,11 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     abstract class Select<TResult> : Producer<TResult>
     {
-        public abstract IObservable<TResult2> Ω<TResult2>(Func<TResult, TResult2> selector);
+        public abstract IObservable<TResult2> Omega<TResult2>(Func<TResult, TResult2> selector);
     }
 
     class Select<TSource, TResult> : Select<TResult>
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.Observαble
             _selectorI = selector;
         }
 
-        public override IObservable<TResult2> Ω<TResult2>(Func<TResult, TResult2> selector)
+        public override IObservable<TResult2> Omega<TResult2>(Func<TResult, TResult2> selector)
         {
             if (_selector != null)
                 return new Select<TSource, TResult2>(_source, x => selector(_selector(x)));
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SelectImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -92,12 +92,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TResult>, IObserver<TSource>
+        class SelectImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly Select<TSource, TResult> _parent;
             private int _index;
 
-            public τ(Select<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public SelectImpl(Select<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

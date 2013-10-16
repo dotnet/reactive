@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 #endif
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Merge<TSource> : Producer<TSource>
     {
@@ -41,14 +41,14 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_maxConcurrent > 0)
             {
-                var sink = new μ(this, observer, cancel);
+                var sink = new MergeConcurrent(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
 #if !NO_TPL
             else if (_sourcesT != null)
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new MergeImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -93,7 +93,7 @@ namespace System.Reactive.Linq.Observαble
             {
                 var innerSubscription = new SingleAssignmentDisposable();
                 _group.Add(innerSubscription);
-                innerSubscription.Disposable = value.SubscribeSafe(new ι(this, innerSubscription));
+                innerSubscription.Disposable = value.SubscribeSafe(new Iter(this, innerSubscription));
             }
 
             public void OnError(Exception error)
@@ -129,12 +129,12 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class ι : IObserver<TSource>
+            class Iter : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public ι(_ parent, IDisposable self)
+                public Iter(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -177,11 +177,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class μ : Sink<TSource>, IObserver<IObservable<TSource>>
+        class MergeConcurrent : Sink<TSource>, IObserver<IObservable<TSource>>
         {
             private readonly Merge<TSource> _parent;
 
-            public μ(Merge<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public MergeConcurrent(Merge<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -253,15 +253,15 @@ namespace System.Reactive.Linq.Observαble
             {
                 var subscription = new SingleAssignmentDisposable();
                 _group.Add(subscription);
-                subscription.Disposable = innerSource.SubscribeSafe(new ι(this, subscription));
+                subscription.Disposable = innerSource.SubscribeSafe(new Iter(this, subscription));
             }
 
-            class ι : IObserver<TSource>
+            class Iter : IObserver<TSource>
             {
-                private readonly μ _parent;
+                private readonly MergeConcurrent _parent;
                 private readonly IDisposable _self;
 
-                public ι(μ parent, IDisposable self)
+                public Iter(MergeConcurrent parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -308,11 +308,11 @@ namespace System.Reactive.Linq.Observαble
 
 #if !NO_TPL
 #pragma warning disable 0420
-        class τ : Sink<TSource>, IObserver<Task<TSource>>
+        class MergeImpl : Sink<TSource>, IObserver<Task<TSource>>
         {
             private readonly Merge<TSource> _parent;
 
-            public τ(Merge<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public MergeImpl(Merge<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

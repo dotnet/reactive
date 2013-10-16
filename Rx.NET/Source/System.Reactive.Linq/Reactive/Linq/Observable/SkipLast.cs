@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class SkipLast<TSource> : Producer<TSource>
     {
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SkipLastImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -75,12 +75,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class SkipLastImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly SkipLast<TSource> _parent;
             private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-            public τ(SkipLast<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public SkipLastImpl(SkipLast<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

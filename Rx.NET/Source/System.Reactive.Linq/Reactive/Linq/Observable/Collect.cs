@@ -7,7 +7,7 @@ using System.Reactive;
 using System.Reactive.Threading;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Collect<TSource, TResult> : PushToPullAdapter<TSource, TResult>
     {

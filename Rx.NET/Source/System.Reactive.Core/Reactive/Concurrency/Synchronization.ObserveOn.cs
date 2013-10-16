@@ -35,7 +35,7 @@ namespace System.Reactive.Concurrency
 #if !NO_SYNCCTX
             if (_context != null)
             {
-                var sink = new ς(this, observer, cancel);
+                var sink = new ObserveOnSink(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -49,11 +49,11 @@ namespace System.Reactive.Concurrency
         }
 
 #if !NO_SYNCCTX
-        class ς : Sink<TSource>, IObserver<TSource>
+        class ObserveOnSink : Sink<TSource>, IObserver<TSource>
         {
             private readonly ObserveOn<TSource> _parent;
 
-            public ς(ObserveOn<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public ObserveOnSink(ObserveOn<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

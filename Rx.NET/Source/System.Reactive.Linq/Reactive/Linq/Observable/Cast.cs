@@ -3,9 +3,9 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
-    class Cast<TSource, TResult> : Producer<TResult> /* Could optimize further by deriving from Select<TResult> and providing Ω<TResult2>. We're not doing this (yet) for debuggability. */
+    class Cast<TSource, TResult> : Producer<TResult> /* Could optimize further by deriving from Select<TResult> and providing Omega<TResult2>. We're not doing this (yet) for debuggability. */
     {
         private readonly IObservable<TSource> _source;
 

@@ -8,7 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Buffer<TSource> : Producer<IList<TSource>>
     {
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else if (_count > 0)
             {
-                var sink = new μ(this, observer, cancel);
+                var sink = new Impl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -61,13 +61,13 @@ namespace System.Reactive.Linq.Observαble
             {
                 if (_timeSpan == _timeShift)
                 {
-                    var sink = new π(this, observer, cancel);
+                    var sink = new BufferTimeShift(this, observer, cancel);
                     setSink(sink);
                     return sink.Run();
                 }
                 else
                 {
-                    var sink = new τ(this, observer, cancel);
+                    var sink = new BufferImpl(this, observer, cancel);
                     setSink(sink);
                     return sink.Run();
                 }
@@ -143,11 +143,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<IList<TSource>>, IObserver<TSource>
+        class BufferImpl : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly Buffer<TSource> _parent;
 
-            public τ(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
+            public BufferImpl(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -283,11 +283,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<IList<TSource>>, IObserver<TSource>
+        class BufferTimeShift : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly Buffer<TSource> _parent;
 
-            public π(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
+            public BufferTimeShift(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -346,11 +346,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class μ : Sink<IList<TSource>>, IObserver<TSource>
+        class Impl : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly Buffer<TSource> _parent;
 
-            public μ(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
+            public Impl(Buffer<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -487,7 +487,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new β(this, observer, cancel);
+                var sink = new Beta(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -544,7 +544,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var closingSubscription = new SingleAssignmentDisposable();
                 _m.Disposable = closingSubscription;
-                closingSubscription.Disposable = bufferClose.SubscribeSafe(new ω(this, closingSubscription));
+                closingSubscription.Disposable = bufferClose.SubscribeSafe(new Omega(this, closingSubscription));
             }
 
             private void CloseBuffer(IDisposable closingSubscription)
@@ -561,12 +561,12 @@ namespace System.Reactive.Linq.Observαble
                 _bufferGate.Wait(CreateBufferClose);
             }
 
-            class ω : IObserver<TBufferClosing>
+            class Omega : IObserver<TBufferClosing>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public ω(_ parent, IDisposable self)
+                public Omega(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -617,11 +617,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class β : Sink<IList<TSource>>, IObserver<TSource>
+        class Beta : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly Buffer<TSource, TBufferClosing> _parent;
 
-            public β(Buffer<TSource, TBufferClosing> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
+            public Beta(Buffer<TSource, TBufferClosing> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -641,16 +641,16 @@ namespace System.Reactive.Linq.Observαble
                 _refCountDisposable = new RefCountDisposable(d);
 
                 d.Add(_parent._source.SubscribeSafe(this));
-                d.Add(_parent._bufferBoundaries.SubscribeSafe(new ω(this)));
+                d.Add(_parent._bufferBoundaries.SubscribeSafe(new Omega(this)));
 
                 return _refCountDisposable;
             }
 
-            class ω : IObserver<TBufferClosing>
+            class Omega : IObserver<TBufferClosing>
             {
-                private readonly β _parent;
+                private readonly Beta _parent;
 
-                public ω(β parent)
+                public Omega(Beta parent)
                 {
                     _parent = parent;
                 }

@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    using Observαble;
+    using ObservableImpl;
 
     internal partial class QueryLanguage
     {

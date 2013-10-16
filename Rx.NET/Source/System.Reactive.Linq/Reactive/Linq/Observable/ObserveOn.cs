@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class ObserveOn<TSource> : Producer<TSource>
     {
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.Observαble
 #if !NO_SYNCCTX
             if (_context != null)
             {
-                var sink = new ς(this, observer, cancel);
+                var sink = new ObserveOnImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.Subscribe(sink);
             }
@@ -47,11 +47,11 @@ namespace System.Reactive.Linq.Observαble
         }
 
 #if !NO_SYNCCTX
-        class ς : Sink<TSource>, IObserver<TSource>
+        class ObserveOnImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly ObserveOn<TSource> _parent;
 
-            public ς(ObserveOn<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public ObserveOnImpl(ObserveOn<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

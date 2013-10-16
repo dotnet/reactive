@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Timer : Producer<long>
     {
@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_period.HasValue)
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new TimerImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -76,12 +76,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<long>
+        class TimerImpl : Sink<long>
         {
             private readonly Timer _parent;
             private readonly TimeSpan _period;
 
-            public π(Timer parent, IObserver<long> observer, IDisposable cancel)
+            public TimerImpl(Timer parent, IObserver<long> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

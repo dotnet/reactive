@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class GetEnumerator<TSource> : IEnumerator<TSource>, IObserver<TSource>
     {

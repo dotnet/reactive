@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class GroupBy<TSource, TKey, TElement> : Producer<IGroupedObservable<TKey, TElement>>
     {
