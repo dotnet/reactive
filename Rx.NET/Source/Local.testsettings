@@ -19,21 +19,5 @@
         </Browser>
       </WebTestRunConfiguration>
     </TestTypeSpecific>
-    <AgentRule name="LocalMachineDefaultRole">
-      <DataCollectors>
-        <DataCollector uri="datacollector://microsoft/CodeCoverage/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.CodeCoverage.CoveragePlugIn, Microsoft.VisualStudio.QualityTools.Plugins.CodeCoverage, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Code Coverage">
-          <Configuration>
-            <CodeCoverage xmlns="">
-              <Regular>
-                <CodeCoverageItem binaryFile="System.Reactive.Core\bin\Debug40\System.Reactive.Core.dll" pdbFile="System.Reactive.Core\bin\Debug40\System.Reactive.Core.pdb" instrumentInPlace="true" />
-                <CodeCoverageItem binaryFile="System.Reactive.Interfaces\bin\Debug40\System.Reactive.Interfaces.dll" pdbFile="System.Reactive.Interfaces\bin\Debug40\System.Reactive.Interfaces.pdb" instrumentInPlace="true" />
-                <CodeCoverageItem binaryFile="System.Reactive.Linq\bin\Debug40\System.Reactive.Linq.dll" pdbFile="System.Reactive.Linq\bin\Debug40\System.Reactive.Linq.pdb" instrumentInPlace="true" />
-                <CodeCoverageItem binaryFile="System.Reactive.PlatformServices\bin\Debug40\System.Reactive.PlatformServices.dll" pdbFile="System.Reactive.PlatformServices\bin\Debug40\System.Reactive.PlatformServices.pdb" instrumentInPlace="true" />
-              </Regular>
-            </CodeCoverage>
-          </Configuration>
-        </DataCollector>
-      </DataCollectors>
-    </AgentRule>
   </Execution>
 </TestSettings>
