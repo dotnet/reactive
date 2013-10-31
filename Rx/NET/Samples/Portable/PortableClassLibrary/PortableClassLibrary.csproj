@@ -38,22 +38,22 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Core">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Core.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Debugger">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Debugger.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Debugger.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Experimental">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Experimental.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Experimental.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Interfaces.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Linq">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Linq.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Providers">
-      <HintPath>..\..\..\..\Layout\Rx\DebugPLLITE\System.Reactive.Providers.dll</HintPath>
+      <HintPath>..\..\..\Source\bin\DebugPLLITE\System.Reactive.Providers.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
