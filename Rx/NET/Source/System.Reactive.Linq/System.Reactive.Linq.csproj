@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <ProductSignAssembly>true</ProductSignAssembly>
     <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
     <OutputPath>bin\ReleaseXBLV\</OutputPath>
@@ -217,4 +218,5 @@
     <EmbeddedResource Include="Strings_Linq.resx" />
   </ItemGroup>
   <Import Project="..\Import.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

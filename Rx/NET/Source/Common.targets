@@ -307,7 +307,7 @@
 
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);$(BuildPlatform);$(BuildFlavor);TRACE</DefineConstants>
-    <OutputPath>bin\$(BuildConfig)$(BuildTarget)</OutputPath>
+    <OutputPath>..\bin\$(BuildConfig)$(BuildTarget)</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
