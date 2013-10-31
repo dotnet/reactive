@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PortableLibraryProfile7;
+using PortableLibraryProfile78_NuGet;
 
 namespace WinFormsApp45_NuGet
 {
