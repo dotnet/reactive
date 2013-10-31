@@ -162,3 +162,5 @@ pip-log.txt
 # Mac crap
 .DS_Store
 Rx.NET/Source/Rx.sln.ide/
+Ix.NET/Source/Interactive Extensions.sln.ide/
+Rx.NET/tools/HomoIcon/HomoIcon.sln.ide/

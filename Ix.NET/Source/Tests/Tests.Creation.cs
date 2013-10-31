@@ -40,6 +40,25 @@ namespace Tests
             Assert.IsTrue(hot);
         }
 
+        [TestMethod]
+        public void CreateYield()
+        {
+            var xs = EnumerableEx.Create<int>(async yield => {
+                var i = 0;
+                while (i < 10) {
+                    await yield.Return(i++);
+                }
+            });
+
+            int j = 0;
+            foreach (int elem in xs) {
+                Assert.AreEqual(elem, j);
+                j++;
+            }
+
+            Assert.AreEqual(j, 10);
+        }
+
         private static IEnumerator<int> MyEnumerator()
         {
             yield return 1;
