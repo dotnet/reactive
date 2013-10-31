@@ -41,6 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Experimenta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Debugger", "System.Reactive.Debugger\System.Reactive.Debugger.csproj", "{FFB7A57C-BC22-4B71-88D4-2489B3FF10B6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{45E85DEB-BDCC-4684-A952-187A5524750B}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Rx.vsmdi
@@ -915,7 +922,6 @@ Global
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPL|x86.Build.0 = Debug|x86
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPLLITE|Any CPU.ActiveCfg = DebugXBLV|x86
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPLLITE|Mixed Platforms.ActiveCfg = DebugXBLV|x86
-		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPLLITE|Mixed Platforms.Build.0 = DebugXBLV|x86
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPLLITE|x86.ActiveCfg = DebugXBLV|x86
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugPLLITE|x86.Build.0 = DebugXBLV|x86
 		{8A062C6B-4441-49F3-B618-4238B6AB5290}.DebugSL3|Any CPU.ActiveCfg = Debug|x86
@@ -1405,9 +1411,11 @@ Global
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugCF35|x86.ActiveCfg = DebugSL3|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPL|Any CPU.ActiveCfg = DebugPL|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPL|Mixed Platforms.ActiveCfg = DebugPL|Any CPU
+		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPL|Mixed Platforms.Build.0 = DebugPL|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPL|x86.ActiveCfg = DebugPL|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPLLITE|Any CPU.ActiveCfg = DebugPLLITE|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPLLITE|Mixed Platforms.ActiveCfg = DebugPLLITE|Any CPU
+		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPLLITE|Mixed Platforms.Build.0 = DebugPLLITE|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugPLLITE|x86.ActiveCfg = DebugPLLITE|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugSL3|Any CPU.ActiveCfg = DebugSL3|Any CPU
 		{0CCCF009-763F-40D2-8655-7A94828023BF}.DebugSL3|Any CPU.Build.0 = DebugSL3|Any CPU
@@ -1538,6 +1546,7 @@ Global
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL3|x86.ActiveCfg = DebugSL3|Any CPU
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL4|Any CPU.ActiveCfg = DebugSL4|Any CPU
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL4|Mixed Platforms.ActiveCfg = DebugSL4|Any CPU
+		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL4|Mixed Platforms.Build.0 = DebugSL4|Any CPU
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL4|x86.ActiveCfg = DebugSL4|Any CPU
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL5|Any CPU.ActiveCfg = DebugSL5|Any CPU
 		{7A6EF49E-7946-4101-9C89-407B9C53A173}.DebugSL5|Mixed Platforms.ActiveCfg = DebugSL5|Any CPU

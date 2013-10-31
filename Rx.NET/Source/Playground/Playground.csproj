@@ -77,7 +77,7 @@
     </ProjectReference>
     <ProjectReference Include="..\System.Reactive.Linq\System.Reactive.Linq.csproj">
       <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
-      <Name>System.Reactive</Name>
+      <Name>System.Reactive.Linq</Name>
     </ProjectReference>
     <ProjectReference Include="..\System.Reactive.Providers\System.Reactive.Providers.csproj">
       <Project>{C7B9D7BE-F47F-466B-A6B0-E46F1069B171}</Project>
