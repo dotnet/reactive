@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using PortableLibraryProfile7;
+using PortableLibraryProfile78_NuGet;
 
 namespace WpfXbapApp45_NuGet
 {
