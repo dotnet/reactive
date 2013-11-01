@@ -53,4 +53,14 @@
         DestinationFolder="$(OutDir)\.."
         Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
   </Target>
+  
+	<!--  MICROSOFT BCL ASYNC CONFIGURATION -->
+	<!-- TODO: Add acondition to only load it when required? -->
+	
+	 <!-- Skip validation of packages.config since we are manageing the packages manuallt  --> 
+	 <PropertyGroup>
+			<SkipValidatePackageReferences>true</SkipValidatePackageReferences>
+	 </PropertyGroup>
+	<Import Project="packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets"   Condition=" '$(BuildTarget)' == 'PLLITE' Or '$(BuildTarget)' == '40' " />
+  
 </Project>

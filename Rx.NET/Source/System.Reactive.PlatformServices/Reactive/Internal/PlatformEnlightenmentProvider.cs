@@ -88,7 +88,7 @@ namespace System.Reactive.PlatformServices
 #if NETCF35
                     var name = "System.Reactive.Linq.QueryDebugger, System.Reactive.Debugger";
 #else
-#if CRIPPLED_REFLECTION
+#if (CRIPPLED_REFLECTION && HAS_WINRT)
                     var ifType = t.GetTypeInfo();
 #else
                     var ifType = t;
