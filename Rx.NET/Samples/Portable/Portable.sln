@@ -1,11 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortableClassLibrary", "PortableClassLibrary\PortableClassLibrary.csproj", "{24A63BF3-D9ED-4F4D-B576-E7A73AE00420}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net40ConsoleApplication", "Net40ConsoleApplication\Net40ConsoleApplication.csproj", "{CCCD13E5-63B9-43C7-93B7-71E6709CFDEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightApplication", "SilverlightApplication\SilverlightApplication.csproj", "{50100DB6-3657-444B-B308-42A9FD1B283E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortableClassLibrary_NuGet", "PortableClassLibrary_NuGet\PortableClassLibrary_NuGet.csproj", "{291DBA6E-5B96-4D97-8150-36B47053D978}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,16 @@ Global
 		{50100DB6-3657-444B-B308-42A9FD1B283E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{50100DB6-3657-444B-B308-42A9FD1B283E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{50100DB6-3657-444B-B308-42A9FD1B283E}.Release|x86.ActiveCfg = Release|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Release|Any CPU.Build.0 = Release|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{291DBA6E-5B96-4D97-8150-36B47053D978}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
