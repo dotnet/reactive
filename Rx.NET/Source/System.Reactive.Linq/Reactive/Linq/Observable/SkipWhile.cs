@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class SkipWhile<TSource> : Producer<TSource>
     {
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SkipWhileImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -86,13 +86,13 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class SkipWhileImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly SkipWhile<TSource> _parent;
             private bool _running;
             private int _index;
 
-            public τ(SkipWhile<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public SkipWhileImpl(SkipWhile<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

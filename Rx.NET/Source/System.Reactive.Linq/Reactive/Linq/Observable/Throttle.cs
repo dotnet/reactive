@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Throttle<TSource> : Producer<TSource>
     {
@@ -192,7 +192,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var d = new SingleAssignmentDisposable();
                 _cancelable.Disposable = d;
-                d.Disposable = throttle.SubscribeSafe(new δ(this, value, currentid, d));
+                d.Disposable = throttle.SubscribeSafe(new Delta(this, value, currentid, d));
             }
 
             public void OnError(Exception error)
@@ -226,14 +226,14 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class δ : IObserver<TThrottle>
+            class Delta : IObserver<TThrottle>
             {
                 private readonly _ _parent;
                 private readonly TSource _value;
                 private readonly ulong _currentid;
                 private readonly IDisposable _self;
 
-                public δ(_ parent, TSource value, ulong currentid, IDisposable self)
+                public Delta(_ parent, TSource value, ulong currentid, IDisposable self)
                 {
                     _parent = parent;
                     _value = value;

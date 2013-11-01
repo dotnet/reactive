@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Take<TSource> : Producer<TSource>
     {
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.Observαble
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Ω(int count)
+        public IObservable<TSource> Omega(int count)
         {
             //
             // Minimum semantics:
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.Observαble
                 return new Take<TSource>(_source, count);
         }
 
-        public IObservable<TSource> Ω(TimeSpan duration)
+        public IObservable<TSource> Omega(TimeSpan duration)
         {
             //
             // Minimum semantics:
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new TakeImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -115,11 +115,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class TakeImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly Take<TSource> _parent;
 
-            public τ(Take<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public TakeImpl(Take<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 

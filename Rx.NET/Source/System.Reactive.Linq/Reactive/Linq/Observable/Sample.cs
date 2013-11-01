@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Sample<TSource, TSample> : Producer<TSource>
     {
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.Observαble
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                var samplerSubscription = _parent._sampler.SubscribeSafe(new σ(this));
+                var samplerSubscription = _parent._sampler.SubscribeSafe(new SampleImpl(this));
 
                 return new CompositeDisposable(_sourceSubscription, samplerSubscription);
             }
@@ -83,11 +83,11 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class σ : IObserver<TSample>
+            class SampleImpl : IObserver<TSample>
             {
                 private readonly _ _parent;
 
-                public σ(_ parent)
+                public SampleImpl(_ parent)
                 {
                     _parent = parent;
                 }

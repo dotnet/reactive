@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Where<TSource> : Producer<TSource>
     {
@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.Observαble
             _predicateI = predicate;
         }
 
-        public IObservable<TSource> Ω(Func<TSource, bool> predicate)
+        public IObservable<TSource> Omega(Func<TSource, bool> predicate)
         {
             if (_predicate != null)
                 return new Where<TSource>(_source, x => _predicate(x) && predicate(x));
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new WhereImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -88,12 +88,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class WhereImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly Where<TSource> _parent;
             private int _index;
 
-            public τ(Where<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public WhereImpl(Where<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

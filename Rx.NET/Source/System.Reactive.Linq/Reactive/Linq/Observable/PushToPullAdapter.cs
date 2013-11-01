@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     abstract class PushToPullAdapter<TSource, TResult> : IEnumerable<TResult>
     {

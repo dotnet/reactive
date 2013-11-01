@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reactive.Threading;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Latest<TSource> : PushToPullAdapter<TSource, TSource>
     {

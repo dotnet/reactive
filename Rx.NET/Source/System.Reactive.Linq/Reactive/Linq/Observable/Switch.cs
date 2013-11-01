@@ -4,7 +4,7 @@
 using System;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Switch<TSource> : Producer<TSource>
     {
@@ -65,7 +65,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var d = new SingleAssignmentDisposable();
                 _innerSubscription.Disposable = d;
-                d.Disposable = value.SubscribeSafe(new ι(this, id, d));
+                d.Disposable = value.SubscribeSafe(new Iter(this, id, d));
             }
 
             public void OnError(Exception error)
@@ -91,13 +91,13 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class ι : IObserver<TSource>
+            class Iter : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly ulong _id;
                 private readonly IDisposable _self;
 
-                public ι(_ parent, ulong id, IDisposable self)
+                public Iter(_ parent, ulong id, IDisposable self)
                 {
                     _parent = parent;
                     _id = id;

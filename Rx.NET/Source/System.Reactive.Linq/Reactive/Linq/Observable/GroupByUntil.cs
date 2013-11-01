@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class GroupByUntil<TSource, TKey, TElement, TDuration> : Producer<IGroupedObservable<TKey, TElement>>
     {
@@ -129,7 +129,7 @@ namespace System.Reactive.Linq.Observαble
 
                     var md = new SingleAssignmentDisposable();
                     _parent._groupDisposable.Add(md);
-                    md.Disposable = duration.SubscribeSafe(new δ(this, key, writer, md));
+                    md.Disposable = duration.SubscribeSafe(new Delta(this, key, writer, md));
                 }
 
                 var element = default(TElement);
@@ -165,14 +165,14 @@ namespace System.Reactive.Linq.Observαble
                     writer.OnNext(element);
             }
 
-            class δ : IObserver<TDuration>
+            class Delta : IObserver<TDuration>
             {
                 private readonly _ _parent;
                 private readonly TKey _key;
                 private readonly ISubject<TElement> _writer;
                 private readonly IDisposable _self;
 
-                public δ(_ parent, TKey key, ISubject<TElement> writer, IDisposable self)
+                public Delta(_ parent, TKey key, ISubject<TElement> writer, IDisposable self)
                 {
                     _parent = parent;
                     _key = key;

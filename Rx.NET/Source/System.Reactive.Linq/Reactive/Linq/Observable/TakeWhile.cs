@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class TakeWhile<TSource> : Producer<TSource>
     {
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new TakeWhileImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -91,13 +91,13 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class TakeWhileImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly TakeWhile<TSource> _parent;
             private bool _running;
             private int _index;
 
-            public τ(TakeWhile<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public TakeWhileImpl(TakeWhile<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

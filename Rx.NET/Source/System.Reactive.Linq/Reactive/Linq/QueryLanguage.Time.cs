@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     internal partial class QueryLanguage
@@ -612,7 +612,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var skip = source as Skip<TSource>;
             if (skip != null && skip._scheduler == scheduler)
-                return skip.Ω(duration);
+                return skip.Omega(duration);
 
             return new Skip<TSource>(source, duration, scheduler);
 #else
@@ -703,7 +703,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var skipUntil = source as SkipUntil<TSource>;
             if (skipUntil != null && skipUntil._scheduler == scheduler)
-                return skipUntil.Ω(startTime);
+                return skipUntil.Omega(startTime);
 
             return new SkipUntil<TSource>(source, startTime, scheduler);
 #else
@@ -747,7 +747,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var take = source as Take<TSource>;
             if (take != null && take._scheduler == scheduler)
-                return take.Ω(duration);
+                return take.Omega(duration);
 
             return new Take<TSource>(source, duration, scheduler);
 #else
@@ -914,7 +914,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var takeUntil = source as TakeUntil<TSource>;
             if (takeUntil != null && takeUntil._scheduler == scheduler)
-                return takeUntil.Ω(endTime);
+                return takeUntil.Omega(endTime);
 
             return new TakeUntil<TSource>(source, endTime, scheduler);
 #else

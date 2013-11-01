@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class OfType<TSource, TResult> : Producer<TResult>
     {

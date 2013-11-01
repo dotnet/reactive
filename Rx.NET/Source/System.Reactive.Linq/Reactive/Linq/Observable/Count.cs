@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Count<TSource> : Producer<int>
     {
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new CountImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -77,12 +77,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<int>, IObserver<TSource>
+        class CountImpl : Sink<int>, IObserver<TSource>
         {
             private readonly Count<TSource> _parent;
             private int _count;
 
-            public π(Count<TSource> parent, IObserver<int> observer, IDisposable cancel)
+            public CountImpl(Count<TSource> parent, IObserver<int> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

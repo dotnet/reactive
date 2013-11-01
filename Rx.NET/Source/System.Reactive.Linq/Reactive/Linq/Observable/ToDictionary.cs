@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class ToDictionary<TSource, TKey, TElement> : Producer<IDictionary<TKey, TElement>>
     {

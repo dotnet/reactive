@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Catch<TSource> : Producer<TSource>
     {
@@ -136,7 +136,7 @@ namespace System.Reactive.Linq.Observαble
 
                     var d = new SingleAssignmentDisposable();
                     _subscription.Disposable = d;
-                    d.Disposable = result.SubscribeSafe(new ε(this));
+                    d.Disposable = result.SubscribeSafe(new Impl(this));
                 }
                 else
                 {
@@ -151,11 +151,11 @@ namespace System.Reactive.Linq.Observαble
                 base.Dispose();
             }
 
-            class ε : IObserver<TSource>
+            class Impl : IObserver<TSource>
             {
                 private readonly _ _parent;
 
-                public ε(_ parent)
+                public Impl(_ parent)
                 {
                     _parent = parent;
                 }

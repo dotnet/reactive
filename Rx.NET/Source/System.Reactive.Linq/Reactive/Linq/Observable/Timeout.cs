@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Timeout<TSource> : Producer<TSource>
     {
@@ -35,23 +35,23 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_dueTimeA.HasValue)
             {
-                var sink = new α(this, observer, cancel);
+                var sink = new TimeA(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
             else
             {
-                var sink = new ρ(this, observer, cancel);
+                var sink = new TimeR(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
         }
 
-        class α : Sink<TSource>, IObserver<TSource>
+        class TimeA : Sink<TSource>, IObserver<TSource>
         {
             private readonly Timeout<TSource> _parent;
 
-            public α(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public TimeA(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -136,11 +136,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class ρ : Sink<TSource>, IObserver<TSource>
+        class TimeR : Sink<TSource>, IObserver<TSource>
         {
             private readonly Timeout<TSource> _parent;
 
-            public ρ(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public TimeR(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -358,16 +358,16 @@ namespace System.Reactive.Linq.Observαble
 
                 var d = new SingleAssignmentDisposable();
                 _timer.Disposable = d;
-                d.Disposable = timeout.SubscribeSafe(new τ(this, myid, d));
+                d.Disposable = timeout.SubscribeSafe(new TimeoutImpl(this, myid, d));
             }
 
-            class τ : IObserver<TTimeout>
+            class TimeoutImpl : IObserver<TTimeout>
             {
                 private readonly _ _parent;
                 private readonly ulong _id;
                 private readonly IDisposable _self;
 
-                public τ(_ parent, ulong id, IDisposable self)
+                public TimeoutImpl(_ parent, ulong id, IDisposable self)
                 {
                     _parent = parent;
                     _id = id;

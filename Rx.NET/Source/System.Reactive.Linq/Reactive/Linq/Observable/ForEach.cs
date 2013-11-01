@@ -4,7 +4,7 @@
 using System;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class ForEach<TSource>
     {
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        public class τ : IObserver<TSource>
+        public class ForEachImpl : IObserver<TSource>
         {
             private readonly Action<TSource, int> _onNext;
             private readonly Action _done;
@@ -71,7 +71,7 @@ namespace System.Reactive.Linq.Observαble
             private Exception _exception;
             private int _stopped;
 
-            public τ(Action<TSource, int> onNext, Action done)
+            public ForEachImpl(Action<TSource, int> onNext, Action done)
             {
                 _onNext = onNext;
                 _done = done;

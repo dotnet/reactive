@@ -9,7 +9,7 @@ using System.Reactive.Subjects;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     internal partial class QueryLanguage
@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var asObservable = source as AsObservable<TSource>;
             if (asObservable != null)
-                return asObservable.Ω();
+                return asObservable.Omega();
 
             return new AsObservable<TSource>(source);
 #else
@@ -331,7 +331,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var ignoreElements = source as IgnoreElements<TSource>;
             if (ignoreElements != null)
-                return ignoreElements.Ω();
+                return ignoreElements.Omega();
 
             return new IgnoreElements<TSource>(source);
 #else

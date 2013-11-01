@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     internal partial class QueryLanguage

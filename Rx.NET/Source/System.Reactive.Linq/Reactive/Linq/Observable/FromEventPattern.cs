@@ -12,23 +12,23 @@ using System.Threading;
 //
 // See FromEvent.cs for more information.
 //
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class FromEventPattern
     {
-        public class τ<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
+        public class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
 #endif
         {
             private readonly Func<EventHandler<TEventArgs>, TDelegate> _conversion;
 
-            public τ(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+            public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
             {
             }
 
-            public τ(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+            public Impl(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
             {
                 _conversion = conversion;
@@ -52,12 +52,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        public class τ<TDelegate, TSender, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TSender, TEventArgs>>
+        public class Impl<TDelegate, TSender, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TSender, TEventArgs>>
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
 #endif
         {
-            public τ(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+            public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
             {
             }
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        public class ρ<TSender, TEventArgs, TResult> : EventProducer<Delegate, TResult>
+        public class Handler<TSender, TEventArgs, TResult> : EventProducer<Delegate, TResult>
         {
             private readonly object _target;
             private readonly Type _delegateType;
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq.Observαble
             private readonly bool _isWinRT;
 #endif
 
-            public ρ(object target, Type delegateType, MethodInfo addMethod, MethodInfo removeMethod, Func<TSender, TEventArgs, TResult> getResult, bool isWinRT, IScheduler scheduler)
+            public Handler(object target, Type delegateType, MethodInfo addMethod, MethodInfo removeMethod, Func<TSender, TEventArgs, TResult> getResult, bool isWinRT, IScheduler scheduler)
                 : base(scheduler)
             {
 #if HAS_WINRT

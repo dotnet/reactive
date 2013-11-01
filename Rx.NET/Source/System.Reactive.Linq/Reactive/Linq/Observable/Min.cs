@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Min<TSource> : Producer<TSource>
     {
@@ -28,19 +28,19 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new δ(this, observer, cancel);
+                var sink = new Delta(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
         }
 
-        class δ : Sink<TSource>, IObserver<TSource>
+        class Delta : Sink<TSource>, IObserver<TSource>
         {
             private readonly Min<TSource> _parent;
             private bool _hasValue;
             private TSource _lastValue;
 
-            public δ(Min<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public Delta(Min<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

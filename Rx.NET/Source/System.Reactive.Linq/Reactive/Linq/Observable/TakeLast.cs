@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class TakeLast<TSource> : Producer<TSource>
     {
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new TakeLastImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -131,12 +131,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class TakeLastImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly TakeLast<TSource> _parent;
             private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-            public τ(TakeLast<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public TakeLastImpl(TakeLast<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

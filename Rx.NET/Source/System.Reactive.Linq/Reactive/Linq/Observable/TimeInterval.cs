@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class TimeInterval<TSource> : Producer<System.Reactive.TimeInterval<TSource>>
     {

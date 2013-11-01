@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class RefCount<TSource> : Producer<TSource>
     {

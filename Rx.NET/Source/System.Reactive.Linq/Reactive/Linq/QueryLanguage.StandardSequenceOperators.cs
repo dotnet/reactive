@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     internal partial class QueryLanguage
@@ -813,7 +813,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var select = source as Select<TSource>;
             if (select != null)
-                return select.Ω(selector);
+                return select.Omega(selector);
 
             return new Select<TSource, TResult>(source, selector);
 #else
@@ -1139,7 +1139,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var skip = source as Skip<TSource>;
             if (skip != null && skip._scheduler == null)
-                return skip.Ω(count);
+                return skip.Omega(count);
 
             return new Skip<TSource>(source, count);
 #else
@@ -1236,7 +1236,7 @@ namespace System.Reactive.Linq
         {
             var take = source as Take<TSource>;
             if (take != null && take._scheduler == null)
-                return take.Ω(count);
+                return take.Omega(count);
 
             return new Take<TSource>(source, count);
         }
@@ -1366,7 +1366,7 @@ namespace System.Reactive.Linq
 #if !NO_PERF
             var where = source as Where<TSource>;
             if (where != null)
-                return where.Ω(predicate);
+                return where.Omega(predicate);
 
             return new Where<TSource>(source, predicate);
 #else

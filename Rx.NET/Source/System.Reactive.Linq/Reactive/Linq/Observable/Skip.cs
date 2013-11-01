@@ -5,7 +5,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Skip<TSource> : Producer<TSource>
     {
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.Observαble
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Ω(int count)
+        public IObservable<TSource> Omega(int count)
         {
             //
             // Sum semantics:
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.Observαble
             return new Skip<TSource>(_source, _count + count);
         }
 
-        public IObservable<TSource> Ω(TimeSpan duration)
+        public IObservable<TSource> Omega(TimeSpan duration)
         {
             //
             // Maximum semantics:
@@ -66,7 +66,7 @@ namespace System.Reactive.Linq.Observαble
             }
             else
             {
-                var sink = new τ(this, observer, cancel);
+                var sink = new SkipImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -105,12 +105,12 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class τ : Sink<TSource>, IObserver<TSource>
+        class SkipImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly Skip<TSource> _parent;
             private volatile bool _open;
 
-            public τ(Skip<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public SkipImpl(Skip<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

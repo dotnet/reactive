@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class ToLookup<TSource, TKey, TElement> : Producer<ILookup<TKey, TElement>>
     {

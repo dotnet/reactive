@@ -10,7 +10,7 @@ using System.Threading;
 using System.Reactive.Threading;
 #endif
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Delay<TSource> : Producer<TSource>
     {
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_scheduler.AsLongRunning() != null)
             {
-                var sink = new λ(this, observer, cancel);
+                var sink = new LongRunningImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
@@ -227,9 +227,9 @@ namespace System.Reactive.Linq.Observαble
                 // implementation, the loop below kept running while there was work for immediate dispatch,
                 // potentially causing a long running work item on the target scheduler. With the addition
                 // of long-running scheduling in Rx v2.0, we can check whether the scheduler supports this
-                // interface and perform different processing (see λ). To reduce the code churn in the old
-                // loop code here, we set the shouldYield flag to true after the first dispatch iteration,
-                // in order to break from the loop and enter the recursive scheduling path.
+                // interface and perform different processing (see LongRunningImpl). To reduce the code 
+                // churn in the old loop code here, we set the shouldYield flag to true after the first 
+                // dispatch iteration, in order to break from the loop and enter the recursive scheduling path.
                 //
                 var shouldYield = false;
 
@@ -322,11 +322,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class λ : Sink<TSource>, IObserver<TSource>
+        class LongRunningImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly Delay<TSource> _parent;
 
-            public λ(Delay<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public LongRunningImpl(Delay<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
@@ -629,7 +629,7 @@ namespace System.Reactive.Linq.Observαble
                 }
                 else
                 {
-                    _subscription.Disposable = _parent._subscriptionDelay.SubscribeSafe(new σ(this));
+                    _subscription.Disposable = _parent._subscriptionDelay.SubscribeSafe(new SubscriptionDelay(this));
                 }
 
                 return new CompositeDisposable(_subscription, _delays);
@@ -660,7 +660,7 @@ namespace System.Reactive.Linq.Observαble
 
                 var d = new SingleAssignmentDisposable();
                 _delays.Add(d);
-                d.Disposable = delay.SubscribeSafe(new δ(this, value, d));
+                d.Disposable = delay.SubscribeSafe(new Delta(this, value, d));
             }
 
             public void OnError(Exception error)
@@ -692,11 +692,11 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class σ : IObserver<TDelay>
+            class SubscriptionDelay : IObserver<TDelay>
             {
                 private readonly _ _parent;
 
-                public σ(_ parent)
+                public SubscriptionDelay(_ parent)
                 {
                     _parent = parent;
                 }
@@ -718,13 +718,13 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class δ : IObserver<TDelay>
+            class Delta : IObserver<TDelay>
             {
                 private readonly _ _parent;
                 private readonly TSource _value;
                 private readonly IDisposable _self;
 
-                public δ(_ parent, TSource value, IDisposable self)
+                public Delta(_ parent, TSource value, IDisposable self)
                 {
                     _parent = parent;
                     _value = value;

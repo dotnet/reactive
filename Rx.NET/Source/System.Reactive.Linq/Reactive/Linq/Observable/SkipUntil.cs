@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class SkipUntil<TSource, TOther> : Producer<TSource>
     {
@@ -140,7 +140,7 @@ namespace System.Reactive.Linq.Observαble
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Ω(DateTimeOffset startTime)
+        public IObservable<TSource> Omega(DateTimeOffset startTime)
         {
             //
             // Maximum semantics:

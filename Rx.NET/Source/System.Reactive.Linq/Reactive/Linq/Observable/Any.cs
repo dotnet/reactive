@@ -3,7 +3,7 @@
 #if !NO_PERF
 using System;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Any<TSource> : Producer<bool>
     {
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.Observαble
         {
             if (_predicate != null)
             {
-                var sink = new π(this, observer, cancel);
+                var sink = new AnyImpl(this, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
@@ -65,11 +65,11 @@ namespace System.Reactive.Linq.Observαble
             }
         }
 
-        class π : Sink<bool>, IObserver<TSource>
+        class AnyImpl : Sink<bool>, IObserver<TSource>
         {
             private readonly Any<TSource> _parent;
 
-            public π(Any<TSource> parent, IObserver<bool> observer, IDisposable cancel)
+            public AnyImpl(Any<TSource> parent, IObserver<bool> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;

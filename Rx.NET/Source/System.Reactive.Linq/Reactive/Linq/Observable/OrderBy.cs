@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class OrderBy<TSource, TKey> : OrderedProducer<TSource>, IOrderedObservable<TSource>
     {
@@ -46,9 +46,9 @@ namespace System.Reactive.Linq.Observαble
             _descending = descending;
         }
 
-        public IOrderedObservable<TSource> CreateOrderedObservable<TKey>(Func<TSource, TKey> keySelector, IComparer<TKey> comparer, bool descending)
+        public IOrderedObservable<TSource> CreateOrderedObservable<TTKey>(Func<TSource, TTKey> keySelector, IComparer<TTKey> comparer, bool descending)
         {
-            return new OrderBy<TSource, TKey>(base._source, keySelector, comparer, descending, previous: this);
+            return new OrderBy<TSource, TTKey>(base._source, keySelector, comparer, descending, previous: this);
         }
 
         public IOrderedObservable<TSource> CreateOrderedObservable<TOther>(Func<TSource, IObservable<TOther>> timeSelector, bool descending)

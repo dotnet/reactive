@@ -12,7 +12,7 @@ using System.Reactive.Threading;
 namespace System.Reactive.Linq
 {
 #if !NO_PERF
-    using Observαble;
+    using ObservableImpl;
 #endif
 
     internal partial class QueryLanguage
@@ -195,7 +195,7 @@ namespace System.Reactive.Linq
         {
 #if !NO_PERF
             var evt = new ManualResetEvent(false);
-            var sink = new ForEach<TSource>.τ(onNext, () => evt.Set());
+            var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
 
             using (source.SubscribeSafe(sink))
             {

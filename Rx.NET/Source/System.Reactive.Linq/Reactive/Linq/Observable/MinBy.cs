@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class MinBy<TSource, TKey> : Producer<IList<TSource>>
     {

@@ -4,7 +4,7 @@
 using System;
 using System.Reactive.Concurrency;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class DelaySubscription<TSource> : Producer<TSource>
     {

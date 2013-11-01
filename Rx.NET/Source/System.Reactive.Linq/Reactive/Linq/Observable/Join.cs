@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> : Producer<TResult>
     {
@@ -69,18 +69,18 @@ namespace System.Reactive.Linq.Observαble
                 _rightID = 0;
                 _rightMap = new Dictionary<int, TRight>();
 
-                leftSubscription.Disposable = _parent._left.SubscribeSafe(new λ(this, leftSubscription));
-                rightSubscription.Disposable = _parent._right.SubscribeSafe(new ρ(this, rightSubscription));
+                leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
+                rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
 
                 return _group;
             }
 
-            class λ : IObserver<TLeft>
+            class LeftObserver : IObserver<TLeft>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public λ(_ parent, IDisposable self)
+                public LeftObserver(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -124,7 +124,7 @@ namespace System.Reactive.Linq.Observαble
                         return;
                     }
 
-                    md.Disposable = duration.SubscribeSafe(new δ(this, id, md));
+                    md.Disposable = duration.SubscribeSafe(new Delta(this, id, md));
 
                     lock (_parent._gate)
                     {
@@ -147,13 +147,13 @@ namespace System.Reactive.Linq.Observαble
                     }
                 }
 
-                class δ : IObserver<TLeftDuration>
+                class Delta : IObserver<TLeftDuration>
                 {
-                    private readonly λ _parent;
+                    private readonly LeftObserver _parent;
                     private readonly int _id;
                     private readonly IDisposable _self;
 
-                    public δ(λ parent, int id, IDisposable self)
+                    public Delta(LeftObserver parent, int id, IDisposable self)
                     {
                         _parent = parent;
                         _id = id;
@@ -203,12 +203,12 @@ namespace System.Reactive.Linq.Observαble
                 }
             }
 
-            class ρ : IObserver<TRight>
+            class RightObserver : IObserver<TRight>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public ρ(_ parent, IDisposable self)
+                public RightObserver(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
@@ -252,7 +252,7 @@ namespace System.Reactive.Linq.Observαble
                         return;
                     }
 
-                    md.Disposable = duration.SubscribeSafe(new δ(this, id, md));
+                    md.Disposable = duration.SubscribeSafe(new Delta(this, id, md));
 
                     lock (_parent._gate)
                     {
@@ -275,13 +275,13 @@ namespace System.Reactive.Linq.Observαble
                     }
                 }
 
-                class δ : IObserver<TRightDuration>
+                class Delta : IObserver<TRightDuration>
                 {
-                    private readonly ρ _parent;
+                    private readonly RightObserver _parent;
                     private readonly int _id;
                     private readonly IDisposable _self;
 
-                    public δ(ρ parent, int id, IDisposable self)
+                    public Delta(RightObserver parent, int id, IDisposable self)
                     {
                         _parent = parent;
                         _id = id;

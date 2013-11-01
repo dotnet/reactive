@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class DoWhile<TSource> : Producer<TSource>, IConcatenatable<TSource>
     {

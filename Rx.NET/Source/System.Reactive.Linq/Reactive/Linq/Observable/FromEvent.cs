@@ -156,7 +156,7 @@ using System.Reactive.Subjects;
 // subject (which is opaque to the event producer). Not to mention that the subject would always be
 // rooted by the target event (even when the FromEvent[Pattern] observable wrapper is unreachable).
 //
-namespace System.Reactive.Linq.Observαble
+namespace System.Reactive.Linq.ObservableImpl
 {
     class FromEvent<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, TEventArgs>
     {
