@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- See readme.txt file in the References\$(BuildFlavor) folder for information on the test assemblies used here. -->
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" Condition=" '$(BuildPlatform)' == 'SILVERLIGHT' Or '$(BuildPlatform)' == 'XNA' " />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -173,7 +173,7 @@
       <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
       <Name>System.Reactive.Linq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj"  Condition=" '$(BuildPlatform)' != 'WINDOWS_PHONE' And '$(BuildTarget)' != 'WP7' ">
+    <ProjectReference Include="..\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj" Condition=" '$(BuildPlatform)' != 'WINDOWS_PHONE' And '$(BuildTarget)' != 'WP7' ">
       <Project>{7A6EF49E-7946-4101-9C89-407B9C53A173}</Project>
       <Name>System.Reactive.Runtime.Remoting</Name>
     </ProjectReference>
