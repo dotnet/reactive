@@ -14,13 +14,15 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
         private readonly Func<TSource, TElement> _elementSelector;
+        private readonly int? _capacity;
         private readonly IEqualityComparer<TKey> _comparer;
 
-        public GroupBy(IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+        public GroupBy(IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int? capacity, IEqualityComparer<TKey> comparer)
         {
             _source = source;
             _keySelector = keySelector;
             _elementSelector = elementSelector;
+            _capacity = capacity;
             _comparer = comparer;
         }
 
@@ -49,7 +51,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer, cancel)
             {
                 _parent = parent;
-                _map = new Dictionary<TKey, ISubject<TElement>>(_parent._comparer);
+
+                if (_parent._capacity.HasValue)
+                {
+                    _map = new Dictionary<TKey, ISubject<TElement>>(_parent._capacity.Value, _parent._comparer);
+                }
+                else
+                {
+                    _map = new Dictionary<TKey, ISubject<TElement>>(_parent._comparer);
+                }
             }
 
             public void OnNext(TSource value)
