@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NamespaceDocs.cs" />
+    <Compile Include="Reactive\Linq\Observable.Aliases.cs" />
     <Compile Include="Reactive\Concurrency\VirtualTimeScheduler.Extensions.cs" />
     <Compile Include="Reactive\Internal\ConcatSink.cs" />
     <Compile Include="Reactive\Internal\Constants.cs" />
