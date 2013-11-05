@@ -1403,8 +1403,10 @@ namespace System.Reactive.Linq
         #region + Switch +
 
         /// <summary>
-        /// Switches between the inner observable sequences such that the resulting sequence always produces elements from the most recently received inner observable sequence.
-        /// Each time a new inner observable sequence is received, the previous inner observable sequence is unsubscribed from.
+        /// Transforms an observable sequence of observable sequences into an observable sequence 
+        /// producing values only from the most recent observable sequence.
+        /// Each time a new inner observable sequence is received, unsubscribe from the 
+        /// previous inner observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence of inner observable sequences.</param>
@@ -1421,7 +1423,8 @@ namespace System.Reactive.Linq
 #if !NO_TPL
 
         /// <summary>
-        /// Switches between the tasks such that the resulting sequence always produces results from the most recently received task.
+        /// Transforms an observable sequence of tasks into an observable sequence 
+        /// producing values only from the most recent observable sequence.
         /// Each time a new task is received, the previous task's result is ignored.
         /// </summary>
         /// <typeparam name="TSource">The type of the results produced by the source tasks.</typeparam>
