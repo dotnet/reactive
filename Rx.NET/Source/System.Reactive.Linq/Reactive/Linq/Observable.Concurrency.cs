@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-	public static partial class Observable
+    public static partial class Observable
     {
         #region + ObserveOn +
 

@@ -76,7 +76,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region First
+        #region + First +
 
         /// <summary>
         /// Returns the first element of an observable sequence.
@@ -123,7 +123,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region FirstOrDefault
+        #region + FirstOrDefault +
 
         /// <summary>
         /// Returns the first element of an observable sequence, or a default value if no such element exists.
@@ -233,7 +233,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region Last
+        #region + Last +
 
         /// <summary>
         /// Returns the last element of an observable sequence.
@@ -280,7 +280,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region LastOrDefault
+        #region + LastOrDefault +
 
         /// <summary>
         /// Returns the last element of an observable sequence, or a default value if no such element exists.
@@ -385,7 +385,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region Single
+        #region + Single +
 
         /// <summary>
         /// Returns the only element of an observable sequence, and throws an exception if there is not exactly one element in the observable sequence.
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region SingleOrDefault
+        #region + SingleOrDefault +
 
         /// <summary>
         /// Returns the only element of an observable sequence, or a default value if the observable sequence is empty; this method throws an exception if there is more than one element in the observable sequence.
@@ -479,7 +479,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region Wait
+        #region + Wait +
 
         /// <summary>
         /// Waits for the observable sequence to complete and returns the last element of the sequence.

@@ -12,7 +12,7 @@ namespace System.Reactive.Linq
 {
     public static partial class Observable
     {
-        #region - Create -
+        #region + Create +
 
         /// <summary>
         /// Creates an observable sequence from a specified Subscribe method implementation.
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region - CreateAsync -
+        #region + CreateAsync +
 
 #if !NO_TPL
         /// <summary>
@@ -591,7 +591,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region - UsingAsync -
+        #region + UsingAsync +
 
 #if !NO_TPL
 

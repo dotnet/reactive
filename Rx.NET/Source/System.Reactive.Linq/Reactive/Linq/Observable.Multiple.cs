@@ -67,7 +67,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region Buffer
+        #region + Buffer +
 
         /// <summary>
         /// Projects each element of an observable sequence into consecutive non-overlapping buffers.
@@ -1467,7 +1467,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region Window
+        #region + Window +
 
         /// <summary>
         /// Projects each element of an observable sequence into consecutive non-overlapping windows.

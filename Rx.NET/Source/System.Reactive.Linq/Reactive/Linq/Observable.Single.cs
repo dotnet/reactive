@@ -339,7 +339,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region - Repeat -
+        #region + Repeat +
 
         /// <summary>
         /// Repeats the observable sequence indefinitely.
@@ -377,7 +377,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region - Retry -
+        #region + Retry +
 
         /// <summary>
         /// Repeats the source observable sequence until it successfully terminates.
@@ -486,7 +486,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-        #region - StartWith -
+        #region + StartWith +
 
         /// <summary>
         /// Prepends a sequence of values to an observable sequence.
