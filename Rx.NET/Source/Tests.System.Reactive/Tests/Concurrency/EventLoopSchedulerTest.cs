@@ -7,6 +7,9 @@ using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if STRESS
+using ReactiveTests.Stress.Schedulers;
+#endif
 
 namespace ReactiveTests.Tests
 {
@@ -370,5 +373,13 @@ namespace ReactiveTests.Tests
                 d.Dispose();
             }
         }
+
+#if STRESS
+        [TestMethod]
+        public void EventLoop_Stress()
+        {
+            EventLoop.NoSemaphoreFullException();
+        }
+#endif
     }
 }

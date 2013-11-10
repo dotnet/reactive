@@ -296,6 +296,16 @@ namespace System.Reactive.Concurrency
                 lock (_gate)
                 {
                     //
+                    // Bug fix that ensures the number of calls to Release never greatly exceeds the number of calls to Wait.
+                    // See work item #37: https://rx.codeplex.com/workitem/37
+                    //
+#if !NO_CDS
+                    while (_evt.CurrentCount > 0) _evt.Wait();
+#else
+                    while (_evt.WaitOne(TimeSpan.Zero)) { }
+#endif
+
+                    //
                     // The event could have been set by a call to Dispose. This takes priority over anything else. We quit the
                     // loop immediately. Subsequent calls to Schedule won't ever create a new thread.
                     //

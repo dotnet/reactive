@@ -63,6 +63,7 @@
     <Compile Include="Semaphore.cs" />
     <Compile Include="Stress\Core\Disposables\Composite.cs" />
     <Compile Include="Stress\Core\Disposables\Serial.cs" />
+    <Compile Include="Stress\Core\Schedulers\EventLoop.cs" />
     <Compile Include="Stress\Core\Disposables\SingleAssignment.cs" />
     <Compile Include="Stress\Core\Disposables\RefCount.cs" />
     <Compile Include="Stress\Linq\Delay.cs" />
