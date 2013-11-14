@@ -40,6 +40,7 @@ namespace Tests
             Assert.IsTrue(hot);
         }
 
+#if HAS_AWAIT
         [TestMethod]
         public void CreateYield()
         {
@@ -58,6 +59,7 @@ namespace Tests
 
             Assert.AreEqual(j, 10);
         }
+#endif 
 
         private static IEnumerator<int> MyEnumerator()
         {
