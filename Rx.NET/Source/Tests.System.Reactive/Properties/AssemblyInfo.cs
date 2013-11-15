@@ -16,8 +16,3 @@ using System.Runtime.InteropServices;
 [assembly: NeutralResourcesLanguage("en-US")]
 
 [assembly: ComVisible(false)]
-
-//
-// Note: Assembly (file) version numbers get inserted by the build system on the fly. Inspect the Team Build workflows
-//       and the custom activity in Source/Build/Activities/AppendVersionInfo.cs for more information.
-//

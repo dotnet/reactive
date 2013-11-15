@@ -27,13 +27,11 @@ using System.Security;
 [assembly: AllowPartiallyTrustedCallers]
 #endif
 
-#if XBOX_LAKEVIEW
-[assembly: SecurityTransparent]
-#endif
+// ===========================================================================
+//  DO NOT EDIT OR REMOVE ANYTHING BELOW THIS COMMENT.
+//  Version numbers are automatically generated in the msbuild files based on regular expressions 
+// ===========================================================================
 
-//
-// Starting with v2.0 RC, we're bumping this file's version number,
-// because MSI wouldn't pick it up as an update otherwise...
-//
-//[assembly: AssemblyVersion("2.0.0.0")]
-//[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyVersion("2.2.0.0")]
+[assembly: AssemblyFileVersion("2.2.0.0")]
+[assembly: AssemblyInformationalVersion("2.2.0.0")]
