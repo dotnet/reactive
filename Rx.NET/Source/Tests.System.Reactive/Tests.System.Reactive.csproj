@@ -71,6 +71,7 @@
     <Compile Include="Stress\Linq\Replay.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestLongRunningScheduler.cs" />
+    <Compile Include="Tests\Aliases.cs" />
     <Compile Include="Tests\AnonymousTest.cs" />
     <Compile Include="Tests\Concurrency\ConcurrencyTest.cs" />
     <Compile Include="Tests\Concurrency\ScheduledItemTest.cs" />
@@ -161,6 +162,10 @@
     <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
       <Project>{9E9B9C60-98B0-40FA-9C2B-1218D417CAA4}</Project>
       <Name>System.Reactive.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj">
+      <Project>{9ffac385-10a4-4ddd-b800-de67e8469cc0}</Project>
+      <Name>System.Reactive.Observable.Aliases</Name>
     </ProjectReference>
     <ProjectReference Include="..\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj">
       <Project>{0CCCF009-763F-40D2-8655-7A94828023BF}</Project>

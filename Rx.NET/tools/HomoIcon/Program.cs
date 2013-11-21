@@ -26,16 +26,34 @@ namespace HomoIconize
                 return;
             }
 
-            Process(root, "System.Reactive.Linq", "System.Reactive.Providers", @"Reactive\Linq\Qbservable.Generated.cs", "System.Reactive.Linq.Observable", "Qbservable", true);
+            Process(root, 
+                "System.Reactive.Linq", 
+                "System.Reactive.Providers", 
+                @"Reactive\Linq\Qbservable.Generated.cs", 
+                "System.Reactive.Linq.Observable", "Qbservable", true);
             Console.WriteLine();
 
-            Process(root, "System.Reactive.Experimental", "System.Reactive.Experimental", @"Reactive\Linq\QbservableEx.Generated.cs", "System.Reactive.Linq.ObservableEx", "QbservableEx");            
+            Process(root, 
+                "System.Reactive.Experimental", 
+                "System.Reactive.Experimental", 
+                @"Reactive\Linq\QbservableEx.Generated.cs", 
+                "System.Reactive.Linq.ObservableEx", "QbservableEx");            
             Console.WriteLine();
+
+            Process(root, 
+                "System.Reactive.Observable.Aliases", 
+                "System.Reactive.Observable.Aliases", 
+                "Qbservable.Aliases.Generated.cs", 
+                "System.Reactive.Observable.Aliases.Observable", "QbservableAliases",
+                includeAsync: false, createAliases: true);
+            Console.WriteLine();
+
+            Console.WriteLine("Processing complete, press enter to continue.");
+            Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false)
+        static void Process(string root, string sourceAssembly, string targetAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false)
         {
-
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
             {
@@ -71,7 +89,7 @@ namespace HomoIconize
                 return;
             }
 
-            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync);
+            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases);
         }
 
         // Prototype interface to break dependencies. Only used for ToString2 ultimately.
@@ -79,7 +97,7 @@ namespace HomoIconize
         {
         }
 
-        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync)
+        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases)
         {
             var docs = XDocument.Load(xml).Root.Element("members").Elements("member").ToDictionary(m => m.Attribute("name").Value, m => m);
 
@@ -127,14 +145,14 @@ namespace HomoIconize
             {
                 using (Out = new StreamWriter(fs))
                 {
-                    Generate(t, docs, targetTypeName, includeAsync);
+                    Generate(t, docs, targetTypeName, includeAsync, createAliases);
                 }
             }
         }
 
         static Type _qbs;
 
-        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync)
+        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases)
         {
             WriteLine(
 @"/*
@@ -236,6 +254,7 @@ using System.Runtime.Remoting.Lifetime;
 
                 var nulls = new List<string>();
                 var pars = new List<string>();
+                var parNames = new List<string>();
                 var ptps = new List<string>();
                 var args = new List<string>();
 
@@ -248,6 +267,7 @@ using System.Runtime.Remoting.Lifetime;
                 else
                     args.Add("Expression.Constant(provider, typeof(IQbservableProvider))");
                 nulls.Add(firstName);
+                parNames.Add(firstName);
 
                 var rem = hasProvider ? p : p.Skip(1);
                 var isCreateAsync = false;
@@ -279,6 +299,7 @@ using System.Runtime.Remoting.Lifetime;
                         par = "params " + par;
                     pars.Add(par);
                     ptps.Add(pts);
+                    parNames.Add(q.Name);
 
                     if (!q.ParameterType.IsValueType && !q.ParameterType.IsGenericParameter)
                         nulls.Add(q.Name);
@@ -404,6 +425,30 @@ using System.Runtime.Remoting.Lifetime;
                         }
                     }
 
+                    if (createAliases)
+                    {
+                        string underlying = "";
+
+                        switch (name)
+                        {
+                            case "Map": 
+                                underlying = "Select";
+                                break;
+                            case "FlatMap":
+                                underlying = "SelectMany";
+                                break;
+                            case "Filter": 
+                                underlying = "Where";
+                                break;
+                        }
+
+                        WriteLine("{");
+                        Indent();
+                        WriteLine("return Qbservable." + underlying + g + "(" + string.Join(", ", parNames) + ");");
+                        Outdent();
+                        WriteLine("}");
+                        continue;
+                    }
 
                     WriteLine("{");
                     Indent();

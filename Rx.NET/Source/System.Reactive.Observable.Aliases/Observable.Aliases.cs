@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+#pragma warning disable 1591
+
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Reactive;
 
 #if !NO_TPL
 using System.Reactive.Threading.Tasks; // needed for doc comments
@@ -10,7 +14,7 @@ using System.Threading.Tasks;
 #endif
 
 /*
- * Note: these methods are copied verbatim from Observable.StandardSequenceOperators.cs
+ * Note: these methods just call methods in Observable.StandardSequenceOperators.cs
  * in order to create the following method aliases:
  * 
  * Map     = Select
@@ -19,9 +23,9 @@ using System.Threading.Tasks;
  * 
  */
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Observable.Aliases
 {
-    public static partial class Observable
+    public static class QueryLanguage
     {
         #region + Map +
 
@@ -36,12 +40,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> Map<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.Select<TSource, TResult>(source, selector);
+            return source.Select<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -55,12 +54,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> Map<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, TResult> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.Select<TSource, TResult>(source, selector);
+            return source.Select<TSource, TResult>(selector);
         }
 
         #endregion
@@ -79,12 +73,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="other"/> is null.</exception>
         public static IObservable<TOther> FlatMap<TSource, TOther>(this IObservable<TSource> source, IObservable<TOther> other)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (other == null)
-                throw new ArgumentNullException("other");
-
-            return s_impl.SelectMany<TSource, TOther>(source, other);
+            return source.SelectMany<TSource, TOther>(other);
         }
 
         /// <summary>
@@ -99,12 +88,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -119,12 +103,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
 #if !NO_TPL
@@ -141,12 +120,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -162,12 +136,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -183,12 +152,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -204,12 +168,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 #endif
 
@@ -227,14 +186,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return source.SelectMany<TSource, TCollection, TResult>(collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -251,14 +203,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return source.SelectMany<TSource, TCollection, TResult>(collectionSelector, resultSelector);
         }
 
 #if !NO_TPL
@@ -277,14 +222,7 @@ namespace System.Reactive.Linq
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="TaskObservableExtensions.ToObservable&lt;TResult&gt;"/>.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return source.SelectMany<TSource, TTaskResult, TResult>(taskSelector, resultSelector);
         }
 
         /// <summary>
@@ -302,14 +240,7 @@ namespace System.Reactive.Linq
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="TaskObservableExtensions.ToObservable&lt;TResult&gt;"/>.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return source.SelectMany<TSource, TTaskResult, TResult>(taskSelector, resultSelector);
         }
 
         /// <summary>
@@ -327,14 +258,7 @@ namespace System.Reactive.Linq
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="TaskObservableExtensions.ToObservable&lt;TResult&gt;"/>.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return source.SelectMany<TSource, TTaskResult, TResult>(taskSelector, resultSelector);
         }
 
         /// <summary>
@@ -352,14 +276,7 @@ namespace System.Reactive.Linq
         /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="TaskObservableExtensions.ToObservable&lt;TResult&gt;"/>.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return source.SelectMany<TSource, TTaskResult, TResult>(taskSelector, resultSelector);
         }
 #endif
 
@@ -377,16 +294,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (onNext == null)
-                throw new ArgumentNullException("onNext");
-            if (onError == null)
-                throw new ArgumentNullException("onError");
-            if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
-
-            return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return source.SelectMany<TSource, TResult>(onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -403,16 +311,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (onNext == null)
-                throw new ArgumentNullException("onNext");
-            if (onError == null)
-                throw new ArgumentNullException("onError");
-            if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
-
-            return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return source.SelectMany<TSource, TResult>(onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -425,15 +324,10 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Linq.Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -446,15 +340,10 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Linq.Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return source.SelectMany<TSource, TResult>(selector);
         }
 
         /// <summary>
@@ -469,17 +358,10 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Linq.Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return source.SelectMany<TSource, TCollection, TResult>(collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -494,17 +376,10 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element and the fourth parameter represents the index of the intermediate element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Linq.Observable.ToObservable&lt;TSource&gt;(IEnumerable&lt;TSource&gt;)"/> conversion.</remarks>
         public static IObservable<TResult> FlatMap<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return source.SelectMany<TSource, TCollection, TResult>(collectionSelector, resultSelector);
         }
 
         #endregion
@@ -522,12 +397,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IObservable<TSource> Filter<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (predicate == null)
-                throw new ArgumentNullException("predicate");
-
-            return s_impl.Where<TSource>(source, predicate);
+            return source.Where<TSource>(predicate);
         }
 
         /// <summary>
@@ -541,15 +411,12 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IObservable<TSource> Filter<TSource>(this IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (predicate == null)
-                throw new ArgumentNullException("predicate");
-
-            return s_impl.Where<TSource>(source, predicate);
+            return source.Where<TSource>(predicate);
         }
 
         #endregion
     }
 
 }
+
+#pragma warning restore 1591
