@@ -14,6 +14,7 @@ namespace System.Reactive.Concurrency
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
         private static readonly ThreadPoolScheduler s_instance = new ThreadPoolScheduler();
+        private static readonly NewThreadScheduler s_newBackgroundThread = new NewThreadScheduler(action => new Thread(action) { IsBackground = true });
 
         /// <summary>
         /// Gets the singleton instance of the CLR thread pool scheduler.
@@ -88,7 +89,7 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException("action");
 
-            return NewThreadScheduler.Default.ScheduleLongRunning(state, action);
+            return s_newBackgroundThread.ScheduleLongRunning(state, action);
         }
 
 #if !NO_STOPWATCH
