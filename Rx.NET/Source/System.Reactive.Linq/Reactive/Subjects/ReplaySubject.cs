@@ -367,7 +367,6 @@ namespace System.Reactive.Subjects
 
                 var n = 0;
 
-                //var subscription = new Subscription(this, so);
                 var subscription = new RemovableDisposable(this, so);
                 lock (_gate)
                 {
@@ -416,18 +415,16 @@ namespace System.Reactive.Subjects
                 return subscription;
             }
 
-            //public void Unsubscribe(IObserver<T> observer)
-            public void Unsubscribe(ScheduledObserver<T> observer)
+            private void Unsubscribe(ScheduledObserver<T> observer)
             {
                 lock (_gate)
                 {
-                    //var so = (ScheduledObserver<T>)observer;
-                    //so.Dispose();
+                    observer.Dispose();
                     if (!_isDisposed)
                         _observers = _observers.Remove(observer);
                 }
             }
-            //public void Unsubscribe(IObserver<T> observer)
+
             void IReplaySubjectImplementation.Unsubscribe(IObserver<T> observer)
             {
                 var so = (ScheduledObserver<T>)observer;
@@ -464,7 +461,7 @@ namespace System.Reactive.Subjects
                 {
                     _isDisposed = true;
                     _observers = null;
-                    //_queue.Clear();
+                    _queue.Clear();
                 }
             }
         }
