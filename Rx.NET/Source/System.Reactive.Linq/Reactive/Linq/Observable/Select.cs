@@ -5,12 +5,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    abstract class Select<TResult> : Producer<TResult>
-    {
-        public abstract IObservable<TResult2> Omega<TResult2>(Func<TResult, TResult2> selector);
-    }
-
-    class Select<TSource, TResult> : Select<TResult>
+    class Select<TSource, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TResult> _selector;
@@ -26,14 +21,6 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             _source = source;
             _selectorI = selector;
-        }
-
-        public override IObservable<TResult2> Omega<TResult2>(Func<TResult, TResult2> selector)
-        {
-            if (_selector != null)
-                return new Select<TSource, TResult2>(_source, x => selector(_selector(x)));
-            else
-                return new Select<TResult, TResult2>(this, selector);
         }
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)

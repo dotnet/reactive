@@ -770,10 +770,6 @@ namespace System.Reactive.Linq
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector)
         {
 #if !NO_PERF
-            var select = source as Select<TSource>;
-            if (select != null)
-                return select.Omega(selector);
-
             return new Select<TSource, TResult>(source, selector);
 #else
             var s = source as SelectObservable<TSource>;
