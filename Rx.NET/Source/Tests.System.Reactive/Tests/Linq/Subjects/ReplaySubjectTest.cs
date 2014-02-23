@@ -100,6 +100,7 @@ namespace ReactiveTests.Tests
 
             scheduler.ScheduleAbsolute(600, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(700, () => subscription2.Dispose());
+            scheduler.ScheduleAbsolute(800, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(950, () => subscription3.Dispose());
 
             scheduler.Start();
@@ -170,6 +171,7 @@ namespace ReactiveTests.Tests
 
             scheduler.ScheduleAbsolute(600, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(700, () => subscription2.Dispose());
+            scheduler.ScheduleAbsolute(800, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(950, () => subscription3.Dispose());
 
             scheduler.Start();
@@ -239,6 +241,7 @@ namespace ReactiveTests.Tests
 
             scheduler.ScheduleAbsolute(600, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(700, () => subscription2.Dispose());
+            scheduler.ScheduleAbsolute(800, () => subscription1.Dispose());
             scheduler.ScheduleAbsolute(950, () => subscription3.Dispose());
 
             scheduler.Start();
