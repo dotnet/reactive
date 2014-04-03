@@ -50,6 +50,15 @@
     <BuildTarget>8</BuildTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug81|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>81</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release81|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>81</BuildTarget>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug40|AnyCPU' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>40</BuildTarget>
@@ -110,6 +119,17 @@
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>WINDOWS</BuildPlatform>
     <BuildFlavor>WINDOWS8</BuildFlavor>
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == '81' ">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;          NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;USE_TIMER_SELF_ROOT</DefineConstants>
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <BuildPlatform>WINDOWS</BuildPlatform>
+    <BuildFlavor>WINDOWS81</BuildFlavor>
+    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
     <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
 
@@ -318,6 +338,11 @@
 
   <ItemGroup Condition=" '$(BuildPlatform)' == 'NETCF' ">
     <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(BuildTarget)' == '81' ">
+    <TargetPlatform Include="Windows, Version=8.1" />
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
 
   <!-- Temporary flag to enable stress test builds. Should be refactored into a separate project and be written in a more platform-neutral manner. (TFS 484720) -->
