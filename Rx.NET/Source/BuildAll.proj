@@ -28,6 +28,12 @@
       <Configuration>Release8</Configuration>
     </Flavor>
     <Flavor Include="Rx.sln">
+      <Configuration>Debug81</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
+      <Configuration>Release81</Configuration>
+    </Flavor>
+    <Flavor Include="Rx.sln">
       <Configuration>DebugPL</Configuration>
     </Flavor>
     <Flavor Include="Rx.sln">
