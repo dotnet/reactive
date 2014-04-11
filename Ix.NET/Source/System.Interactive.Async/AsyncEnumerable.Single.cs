@@ -252,14 +252,16 @@ namespace System.Linq
 
                 var disposeIe = new Action(() =>
                 {
+                    IAsyncEnumerator<TResult> localIe;
+
                     lock (syncRoot)
                     {
-                        if (ie != null)
-                        {
-                            ie.Dispose();
-                            ie = null;
-                        }
+                        localIe = ie;
+                        ie = null;
                     }
+
+                    if (localIe != null)
+                        localIe.Dispose();
                 });
 
                 var cts = new CancellationTokenDisposable();
@@ -344,14 +346,16 @@ namespace System.Linq
 
                 var disposeIe = new Action(() =>
                 {
+                    IAsyncEnumerator<TResult> localIe;
+
                     lock (syncRoot)
                     {
-                        if (ie != null)
-                        {
-                            ie.Dispose();
-                            ie = null;
-                        }
+                        localIe = ie;
+                        ie = null;
                     }
+
+                    if (localIe != null)
+                        localIe.Dispose();
                 });
 
                 var index = 0;
