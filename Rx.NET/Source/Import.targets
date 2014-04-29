@@ -32,7 +32,7 @@
     <!-- Hack for Metro; for some reason the XAML build creates intermediary folders, so we flatten the hierarchy for consumption by the setup build at a later stage -->
  
     <!-- For some reason, using a plain <ItemGroup> does not fill in the list correctly, so we must use <CreateItem> -->
-    <CreateItem Include="$(OutDir)\*.sign;$(OutDir)\*.xml" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">
+    <CreateItem Include="$(OutDir)\*.sign;$(OutDir)\*.xml" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' Or '$(TargetFrameworkIdentifier)' == '.NETPortable'">
       <Output TaskParameter="Include" ItemName="CanaryFiles" />
     </CreateItem>
 
@@ -40,10 +40,10 @@
     <Move
         SourceFiles="@(CanaryFiles)"
         DestinationFolder="$(OutDir)\.."
-        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' Or '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
 
     <!-- For some reason, using a plain <ItemGroup> does not fill in the list correctly, so we must use <CreateItem> -->
-    <CreateItem Include="$(OutDir)\*.*" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' ">
+    <CreateItem Include="$(OutDir)\*.*" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' Or '$(TargetFrameworkIdentifier)' == '.NETPortable' ">
       <Output TaskParameter="Include" ItemName="BuiltFilesInOutDir" />
     </CreateItem>
 
@@ -51,16 +51,16 @@
     <Copy
         SourceFiles="@(BuiltFilesInOutDir)"
         DestinationFolder="$(OutDir)\.."
-        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' " />
+        Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' Or '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
   </Target>
   
-	<!--  MICROSOFT BCL ASYNC CONFIGURATION -->
-	<!-- TODO: Add acondition to only load it when required? -->
-	
-	 <!-- Skip validation of packages.config since we are manageing the packages manuallt  --> 
-	 <PropertyGroup>
-			<SkipValidatePackageReferences>true</SkipValidatePackageReferences>
-	 </PropertyGroup>
-	<Import Project="packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets"   Condition=" '$(BuildTarget)' == 'PLLITE' Or '$(BuildTarget)' == '40' " />
+  <!--  MICROSOFT BCL ASYNC CONFIGURATION -->
+  <!-- TODO: Add acondition to only load it when required? -->
+  
+   <!-- Skip validation of packages.config since we are manageing the packages manuallt  --> 
+   <PropertyGroup>
+      <SkipValidatePackageReferences>true</SkipValidatePackageReferences>
+   </PropertyGroup>
+  <Import Project="packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets"   Condition=" '$(BuildTarget)' == 'PLLITE' Or '$(BuildTarget)' == '40' " />
   
 </Project>
