@@ -491,6 +491,10 @@ namespace System.Linq
                             t.Handle(tcs, res =>
                             {
                                 --n;
+
+                                if (n == 0)
+                                    e.Dispose();
+
                                 tcs.TrySetResult(res);
                             });
                         });
