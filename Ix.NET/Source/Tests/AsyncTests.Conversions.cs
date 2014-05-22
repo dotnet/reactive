@@ -96,7 +96,6 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
-#if HAS_AWAIT
         [TestMethod]
         public async Task ToAsyncEnumerable_with_completed_task()
         {
@@ -134,7 +133,6 @@ namespace Tests
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }
-#endif
 
         class MyObservable<T> : IObservable<T>
         {
