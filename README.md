@@ -20,12 +20,12 @@ Rx complements and interoperates smoothly with both synchronous data streams (`I
    <tr>
       <td>Pull/Synchronous/Interactive</td>
       <td>T</td>
-      <td>IEnumerable<T></td>
+      <td>IEnumerable&lt;T&gt;</td>
    </tr>
    <tr>
       <td>Push/Asynchronous/Reactive</td>
-      <td>Task<T></td>
-      <td>IObservable<T></td>
+      <td>Task&lt;T&gt;</td>
+      <td>IObservable&lt;T&gt;</td>
    </tr>
 </table>
 
