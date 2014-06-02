@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 
@@ -93,6 +94,44 @@ namespace Tests
             Assert.IsTrue(subscribed);
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+        }
+
+        [TestMethod]
+        public async Task ToAsyncEnumerable_with_completed_task()
+        {
+            var task = Task.FromResult(36);
+
+            var xs = task.ToAsyncEnumerable();
+            var e = xs.GetEnumerator();
+
+            Assert.IsTrue(e.MoveNext().Result);
+            Assert.AreEqual(36, e.Current);
+            Assert.IsFalse(e.MoveNext().Result);
+        }
+
+        [TestMethod]
+        public async Task ToAsyncEnumerable_with_faulted_task()
+        {
+            var ex = new InvalidOperationException();
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetException(ex);
+
+            var xs = tcs.Task.ToAsyncEnumerable();
+            var e = xs.GetEnumerator();
+
+            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+        }
+
+        [TestMethod]
+        public async Task ToAsyncEnumerable_with_canceled_task()
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetCanceled();
+
+            var xs = tcs.Task.ToAsyncEnumerable();
+            var e = xs.GetEnumerator();
+
+            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }
 
         class MyObservable<T> : IObservable<T>

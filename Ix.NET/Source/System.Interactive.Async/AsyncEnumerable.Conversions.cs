@@ -63,6 +63,40 @@ namespace System.Linq
             }
         }
 
+        public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this Task<TSource> task)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            return Create(() =>
+            {
+                var called = 0;
+
+                return Create(
+                    (ct, tcs) =>
+                    {
+                        if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
+                        {
+                            task.ContinueWith(continuedTask =>
+                            {
+                                if (continuedTask.IsCanceled)
+                                    tcs.SetCanceled();
+                                else if (continuedTask.IsFaulted)
+                                    tcs.SetException(continuedTask.Exception.InnerException);
+                                else
+                                    tcs.SetResult(true);
+                            });
+                        }
+                        else
+                            tcs.SetResult(false);
+
+                        return tcs.Task;
+                    },
+                    () => task.Result,
+                    () => { });
+            });
+        }
+
 #if !NO_RXINTERFACES
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
