@@ -16,9 +16,7 @@
     <TargetFrameworkProfile />
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
-
   <Import Project="..\Common.targets" />
-  
   <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
     <SilverlightApplication>true</SilverlightApplication>
     <XapOutputs>true</XapOutputs>
@@ -29,13 +27,11 @@
     <TestPageFileName>TestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
   </PropertyGroup>
-  
   <!-- Temporary workaround to disable tests as part of automated builds (defeating the **\Tests*.dll the search pattern). -->
   <PropertyGroup Condition="'$(BuildPlatform)' != 'DESKTOPCLR'">
     <AssemblyName>_$(AssemblyName)</AssemblyName>
   </PropertyGroup>
-  
-  <ItemGroup> 
+  <ItemGroup>
     <!-- See readme.txt file in the References\$(BuildFlavor) folder for information on the test assemblies used here. -->
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
