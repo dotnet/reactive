@@ -13,10 +13,10 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
   
-  
-<!--   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildPlatform)' == 'XNA' "/>
- -->
-  
+  <!-- Windows Phone 8 -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And '$(BuildFlavor)' == 'WINDOWS_PHONE8' "/>
+ 
   <!-- Portable Library Build -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
   
@@ -29,4 +29,11 @@
         Lines="Auto-generated file, indicates the corresponding binary file needs to be signed." />
   </Target>
   
+   <!-- Skip validation of packages.config since we are manageing the packages manuallt  --> 
+   <PropertyGroup>
+      <SkipValidatePackageReferences>true</SkipValidatePackageReferences>
+   </PropertyGroup>
+  
+  <Import Project="packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets"   Condition=" '$(BuildTarget)' == 'PLLITE' Or '$(BuildTarget)' == '40' " />
+
 </Project>

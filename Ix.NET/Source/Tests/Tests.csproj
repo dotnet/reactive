@@ -16,6 +16,19 @@
     <TargetFrameworkProfile />
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWP8|AnyCPU'">
+    <OutputPath>bin\ReleaseWP8\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWP8|AnyCPU'">
+    <OutputPath>bin\DebugWP8\</OutputPath>
+    <DefineConstants>;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP;SILVERLIGHT;SILVERLIGHTM7;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
     <SilverlightApplication>true</SilverlightApplication>

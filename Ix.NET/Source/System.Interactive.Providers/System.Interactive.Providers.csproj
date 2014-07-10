@@ -16,6 +16,20 @@
     <NoWarn>1591</NoWarn>
     <TargetFrameworkProfile />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWP8|AnyCPU'">
+    <OutputPath>bin\ReleaseWP8\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugWP8|AnyCPU'">
+    <OutputPath>bin\DebugWP8\</OutputPath>
+    <DefineConstants>;WINDOWSPHONE7;NO_TLS;NO_VARIANCE;NO_SERIALIZABLE;NO_TPL;NO_HASHSET;NO_REMOTING;NO_SEMAPHORE;NO_LARGEARITY;NO_ZIP;SILVERLIGHT;SILVERLIGHTM7;TRACE</DefineConstants>
+    <DocumentationFile>..\bin\ReleaseWP7\System.Interactive.Providers.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
