@@ -29,7 +29,7 @@
         Lines="Auto-generated file, indicates the corresponding binary file needs to be signed." />
   </Target>
   
-   <!-- Skip validation of packages.config since we are manageing the packages manuallt  --> 
+   <!-- Skip validation of packages.config since we are managing the packages manually  --> 
    <PropertyGroup>
       <SkipValidatePackageReferences>true</SkipValidatePackageReferences>
    </PropertyGroup>

@@ -99,7 +99,7 @@ namespace Tests
         [TestMethod]
         public async Task ToAsyncEnumerable_with_completed_task()
         {
-            var task = Task.FromResult(36);
+            var task = Task.Factory.StartNew(() => 36);
 
             var xs = task.ToAsyncEnumerable();
             var e = xs.GetEnumerator();
