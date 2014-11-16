@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
 #if !NO_TPL
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Threading.Tasks
 {
@@ -40,15 +41,45 @@ namespace System.Reactive.Threading.Tasks
             return subject.AsObservable();
         }
 
-        private static void ToObservableSlow(Task task, AsyncSubject<Unit> subject)
+        /// <summary>
+        /// Returns an observable sequence that signals when the task completes.
+        /// </summary>
+        /// <param name="task">Task to convert to an observable sequence.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
+        /// <returns>An observable sequence that produces a unit value when the task completes, or propagates the exception produced by the task.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync(Func{CancellationToken, Task})"/> instead.</remarks>
+        public static IObservable<Unit> ToObservable(this Task task, IScheduler scheduler)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+
+            var subject = Subject.Synchronize(new AsyncSubject<Unit>(), scheduler);
+
+            if (task.IsCompleted)
+            {
+                ToObservableDone(task, subject);
+            }
+            else
+            {
+                ToObservableSlow(task, subject, synchronous: true);
+            }
+
+            return subject.AsObservable();
+        }
+
+        private static void ToObservableSlow(Task task, ISubject<Unit, Unit> subject, bool synchronous = false)
         {
             //
             // Separate method to avoid closure in synchronous completion case.
             //
-            task.ContinueWith(t => ToObservableDone(task, subject));
+            task.ContinueWith(t => ToObservableDone(task, subject), synchronous ? TaskContinuationOptions.ExecuteSynchronously : TaskContinuationOptions.None);
         }
 
-        private static void ToObservableDone(Task task, AsyncSubject<Unit> subject)
+        private static void ToObservableDone(Task task, ISubject<Unit, Unit> subject)
         {
             switch (task.Status)
             {
@@ -92,15 +123,46 @@ namespace System.Reactive.Threading.Tasks
             return subject.AsObservable();
         }
 
-        private static void ToObservableSlow<TResult>(Task<TResult> task, AsyncSubject<TResult> subject)
+        /// <summary>
+        /// Returns an observable sequence that propagates the result of the task.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result produced by the task.</typeparam>
+        /// <param name="task">Task to convert to an observable sequence.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
+        /// <returns>An observable sequence that produces the task's result, or propagates the exception produced by the task.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync{TResult}(Func{CancellationToken, Task{TResult}})"/> instead.</remarks>
+        public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, IScheduler scheduler)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+
+            var subject = Subject.Synchronize(new AsyncSubject<TResult>(), scheduler);
+
+            if (task.IsCompleted)
+            {
+                ToObservableDone<TResult>(task, subject);
+            }
+            else
+            {
+                ToObservableSlow<TResult>(task, subject, synchronous: true);
+            }
+
+            return subject.AsObservable();
+        }
+
+        private static void ToObservableSlow<TResult>(Task<TResult> task, ISubject<TResult, TResult> subject, bool synchronous = false)
         {
             //
             // Separate method to avoid closure in synchronous completion case.
             //
-            task.ContinueWith(t => ToObservableDone(t, subject));
+            task.ContinueWith(t => ToObservableDone(t, subject), synchronous ? TaskContinuationOptions.ExecuteSynchronously : TaskContinuationOptions.None);
         }
 
-        private static void ToObservableDone<TResult>(Task<TResult> task, AsyncSubject<TResult> subject)
+        private static void ToObservableDone<TResult>(Task<TResult> task, ISubject<TResult, TResult> subject)
         {
             switch (task.Status)
             {
