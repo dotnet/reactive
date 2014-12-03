@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+using System;
 using System.Threading;
 
 namespace System.Reactive.Disposables
@@ -9,6 +10,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class RefCountDisposable : ICancelable
     {
+        private readonly bool _throwWhenDisposed;
         private readonly object _gate = new object();
         private IDisposable _disposable;
         private bool _isPrimaryDisposed;
@@ -19,7 +21,18 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <param name="disposable">Underlying disposable.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposable"/> is null.</exception>
-        public RefCountDisposable(IDisposable disposable)
+        public RefCountDisposable(IDisposable disposable) : this(disposable, false)
+        {
+            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.RefCountDisposable"/> class with the specified disposable.
+        /// </summary>
+        /// <param name="disposable">Underlying disposable.</param>
+        /// <param name="throwWhenDisposed">Indicates whether subsequent calls to <see cref="GetDisposable"/> should throw when this instance is disposed.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="disposable"/> is null.</exception>
+        public RefCountDisposable(IDisposable disposable, bool throwWhenDisposed)
         {
             if (disposable == null)
                 throw new ArgumentNullException("disposable");
@@ -27,6 +40,7 @@ namespace System.Reactive.Disposables
             _disposable = disposable;
             _isPrimaryDisposed = false;
             _count = 0;
+            _throwWhenDisposed = throwWhenDisposed;
         }
 
         /// <summary>
@@ -41,6 +55,7 @@ namespace System.Reactive.Disposables
         /// Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.
         /// </summary>
         /// <returns>A dependent disposable contributing to the reference count that manages the underlying disposable's lifetime.</returns>
+        /// <exception cref="ObjectDisposedException">This instance has been disposed and is configured to throw in this case by <see cref="RefCountDisposable(IDisposable, bool)"/>.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Backward compat + non-trivial work for a property getter.")]
         public IDisposable GetDisposable()
         {
@@ -48,6 +63,9 @@ namespace System.Reactive.Disposables
             {
                 if (_disposable == null)
                 {
+                    if (_throwWhenDisposed)
+                        throw new ObjectDisposedException("RefCountDisposable");
+
                     return Disposable.Empty;
                 }
                 else
