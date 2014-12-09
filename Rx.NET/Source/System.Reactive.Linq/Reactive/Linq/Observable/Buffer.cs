@@ -404,9 +404,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     var res = _s;
                     _s = new List<TSource>();
                     base._observer.OnNext(res);
-                }
 
-                CreateTimer(newId);
+                    CreateTimer(newId);
+                }
 
                 return d;
             }
@@ -431,10 +431,10 @@ namespace System.Reactive.Linq.ObservableImpl
                         _s = new List<TSource>();
                         base._observer.OnNext(res);
                     }
-                }
 
-                if (newWindow)
-                    CreateTimer(newId);
+                    if (newWindow)
+                        CreateTimer(newId);
+                }
             }
 
             public void OnError(Exception error)
