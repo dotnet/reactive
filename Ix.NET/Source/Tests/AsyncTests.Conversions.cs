@@ -97,7 +97,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task ToAsyncEnumerable_with_completed_task()
+        public void ToAsyncEnumerable_With_Completed_Task()
         {
             var task = Task.Factory.StartNew(() => 36);
 
@@ -110,7 +110,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task ToAsyncEnumerable_with_faulted_task()
+        public void ToAsyncEnumerable_With_Faulted_Task()
         {
             var ex = new InvalidOperationException();
             var tcs = new TaskCompletionSource<int>();
@@ -123,7 +123,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public async Task ToAsyncEnumerable_with_canceled_task()
+        public void ToAsyncEnumerable_With_Canceled_Task()
         {
             var tcs = new TaskCompletionSource<int>();
             tcs.SetCanceled();
