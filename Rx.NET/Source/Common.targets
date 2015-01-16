@@ -23,7 +23,7 @@
     <BuildTarget>PL</BuildTarget>
   </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugPLLITE|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugPLLITE|AnyCPU' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>PLLITE</BuildTarget>
   </PropertyGroup>
@@ -113,7 +113,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;          NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;USE_TIMER_SELF_ROOT</DefineConstants>
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
@@ -123,13 +123,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '81' ">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;          NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;USE_TIMER_SELF_ROOT</DefineConstants>
-    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;USE_TIMER_SELF_ROOT</DefineConstants>
+    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>WINDOWS</BuildPlatform>
     <BuildFlavor>WINDOWS81</BuildFlavor>
-    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <!--<TargetFrameworkProfile>Profile32</TargetFrameworkProfile>-->
     <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
 

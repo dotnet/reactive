@@ -32,7 +32,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Observable" Condition=" '$(BuildFlavor)' == 'SILVERLIGHTM7' " />
   </ItemGroup>
-  <ItemGroup Condition=" '$(BuildFlavor)' == 'WINDOWS8' ">
+  <ItemGroup Condition=" '$(BuildFlavor)' == 'WINDOWS8' Or '$(BuildFlavor)' == 'WINDOWS81' ">
     <SDKReference Include="MSTestFramework, Version=11.0" />
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>

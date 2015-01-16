@@ -94,7 +94,7 @@ namespace System.Reactive.Concurrency
         private static readonly TimeSpan RETRYSHORT = TimeSpan.FromMilliseconds(50);
 
         /// <summary>
-        /// Longest interval supported by <see cref="System.Threading.Timer"/>.
+        /// Longest interval supported by timers in the BCL.
         /// </summary>
         private static readonly TimeSpan MAXSUPPORTEDTIMER = TimeSpan.FromMilliseconds((1L << 32) - 2);
 
