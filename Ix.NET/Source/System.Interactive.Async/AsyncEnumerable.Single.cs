@@ -257,7 +257,6 @@ namespace System.Linq
                     lock (syncRoot)
                     {
                         localIe = ie;
-                        ie = null;
                     }
 
                     if (localIe != null)
@@ -351,7 +350,6 @@ namespace System.Linq
                     lock (syncRoot)
                     {
                         localIe = ie;
-                        ie = null;
                     }
 
                     if (localIe != null)
