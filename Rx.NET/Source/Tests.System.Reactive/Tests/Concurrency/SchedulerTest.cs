@@ -330,47 +330,49 @@ namespace ReactiveTests.Tests
 
             var domain = AppDomain.CreateDomain("HLN", null, new AppDomainSetup { ApplicationBase = cur });
 
-            domain.DoCallBack(() =>
+            domain.DoCallBack(Scheduler_Periodic_HostLifecycleManagement_Callback);
+        }
+
+        private static void Scheduler_Periodic_HostLifecycleManagement_Callback()
+        {
+            var pep = PlatformEnlightenmentProvider.Current;
+
+            try
             {
-                var pep = PlatformEnlightenmentProvider.Current;
+                var hln = new HLN();
+                PlatformEnlightenmentProvider.Current = new PEP(hln);
 
-                try
+                var s = ThreadPoolScheduler.Instance.DisableOptimizations(typeof(ISchedulerPeriodic));
+
+                var n = 0;
+                var e = new ManualResetEvent(false);
+
+                var d = Observable.Interval(TimeSpan.FromMilliseconds(100), s).Subscribe(_ =>
                 {
-                    var hln = new HLN();
-                    PlatformEnlightenmentProvider.Current = new PEP(hln);
+                    if (n++ == 10)
+                        e.Set();
+                });
 
-                    var s = ThreadPoolScheduler.Instance.DisableOptimizations(typeof(ISchedulerPeriodic));
+                hln.OnSuspending();
+                hln.OnResuming();
 
-                    var n = 0;
-                    var e = new ManualResetEvent(false);
+                Thread.Sleep(250);
+                hln.OnSuspending();
 
-                    var d = Observable.Interval(TimeSpan.FromMilliseconds(100), s).Subscribe(_ =>
-                    {
-                        if (n++ == 10)
-                            e.Set();
-                    });
+                Thread.Sleep(150);
+                hln.OnResuming();
 
-                    hln.OnSuspending();
-                    hln.OnResuming();
+                Thread.Sleep(50);
+                hln.OnSuspending();
+                hln.OnResuming();
 
-                    Thread.Sleep(250);
-                    hln.OnSuspending();
-
-                    Thread.Sleep(150);
-                    hln.OnResuming();
-
-                    Thread.Sleep(50);
-                    hln.OnSuspending();
-                    hln.OnResuming();
-
-                    e.WaitOne();
-                    d.Dispose();
-                }
-                finally
-                {
-                    PlatformEnlightenmentProvider.Current = pep;
-                }
-            });
+                e.WaitOne();
+                d.Dispose();
+            }
+            finally
+            {
+                PlatformEnlightenmentProvider.Current = pep;
+            }
         }
 
         class PEP : IPlatformEnlightenmentProvider

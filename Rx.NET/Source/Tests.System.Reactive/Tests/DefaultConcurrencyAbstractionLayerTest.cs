@@ -103,13 +103,15 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartTimer_Cancel()
         {
-            Run(() =>
+            Run(StartTimer_Cancel_Callback);
+        }
+
+        private static void StartTimer_Cancel_Callback()
+        {
+            Scheduler.Default.Schedule(TimeSpan.FromSeconds(60), () =>
             {
-                Scheduler.Default.Schedule(TimeSpan.FromSeconds(60), () =>
-                {
-                    throw new InvalidOperationException("This shouldn't have happened!");
-                }).Dispose();
-            });
+                throw new InvalidOperationException("This shouldn't have happened!");
+            }).Dispose();
         }
 
         [TestMethod]
@@ -137,13 +139,15 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartPeriodicTimer_Cancel()
         {
-            Run(() =>
+            Run(StartPeriodicTimer_Cancel_Callback);
+        }
+
+        private static void StartPeriodicTimer_Cancel_Callback()
+        {
+            Scheduler.Default.SchedulePeriodic(TimeSpan.FromSeconds(60), () =>
             {
-                Scheduler.Default.SchedulePeriodic(TimeSpan.FromSeconds(60), () =>
-                {
-                    throw new InvalidOperationException("This shouldn't have happened!");
-                }).Dispose();
-            });
+                throw new InvalidOperationException("This shouldn't have happened!");
+            }).Dispose();
         }
 
         [TestMethod]
@@ -177,7 +181,7 @@ namespace ReactiveTests.Tests
             Run(() =>
             {
                 var n = 0;
-                
+
                 var schedule = Scheduler.Default.SchedulePeriodic(TimeSpan.Zero, () =>
                 {
                     _domain.SetData("value", n++);
@@ -195,17 +199,17 @@ namespace ReactiveTests.Tests
 
             var cancel = (MarshalByRefAction)_domain.GetData("cancel");
             cancel.Invoke();
-            
+
             Thread.Sleep(TimeSpan.FromMilliseconds(50));
-            
+
             var newValue = (int)_domain.GetData("value");
-            
+
             Assert.IsTrue(newValue >= value);
 
             Thread.Sleep(TimeSpan.FromMilliseconds(50));
 
             value = (int)_domain.GetData("value");
-            
+
             Assert.AreEqual(newValue, value);
         }
 

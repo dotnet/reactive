@@ -34,841 +34,873 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void PastWork()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(PastWork_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var due = now - TimeSpan.FromMinutes(1);
+        private static void PastWork_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var due = now - TimeSpan.FromMinutes(1);
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == now);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == now);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void ImmediateWork()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ImmediateWork_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var due = now;
+        private static void ImmediateWork_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var due = now;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void ShortTermWork()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ShortTermWork_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromSeconds(1) /* rel <= SHORTTERM */;
-                var due = now + rel;
+        private static void ShortTermWork_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromSeconds(1) /* rel <= SHORTTERM */;
+            var due = now + rel;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void ShortTermWork_Dispose()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ShortTermWork_Dispose_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromSeconds(1) /* rel <= SHORTTERM */;
-                var due = now + rel;
+        private static void ShortTermWork_Dispose_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromSeconds(1) /* rel <= SHORTTERM */;
+            var due = now + rel;
 
-                var done = false;
-                var d = s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var done = false;
+            var d = s.Schedule(due, () => { done = true; });
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                d.Dispose();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                s.SetTime(due);
-                next.Invoke();
+            d.Dispose();
 
-                Assert.IsFalse(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsFalse(done);
         }
 
         [TestMethod]
         public void ShortTermWork_InaccurateClock()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ShortTermWork_InaccurateClock_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromSeconds(1);
-                var due = now + rel;
+        private static void ShortTermWork_InaccurateClock_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromSeconds(1);
+            var due = now + rel;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var nxt1 = s._queue.Deq();
-                Assert.IsTrue(s.Now + nxt1.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due - TimeSpan.FromMilliseconds(500) /* > RETRYSHORT */);
-                nxt1.Invoke();
+            var nxt1 = s._queue.Deq();
+            Assert.IsTrue(s.Now + nxt1.DueTime == due);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(due - TimeSpan.FromMilliseconds(500) /* > RETRYSHORT */);
+            nxt1.Invoke();
 
-                var nxt2 = s._queue.Deq();
-                Assert.IsTrue(s.Now + nxt2.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                nxt2.Invoke();
+            var nxt2 = s._queue.Deq();
+            Assert.IsTrue(s.Now + nxt2.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            nxt2.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void LongTermWork1()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(LongTermWork1_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromMinutes(1) /* rel > SHORTTERM */;
-                var due = now + rel;
+        private static void LongTermWork1_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromMinutes(1) /* rel > SHORTTERM */;
+            var due = now + rel;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, cal._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var work = cal._queue.Deq();
-                Assert.IsTrue(work.Interval < rel);
+            Assert.AreEqual(1, cal._queue.Count);
 
-                s.SetTime(s.Now + work.Interval);
-                work.Value._action(work.Value._state);
+            var work = cal._queue.Deq();
+            Assert.IsTrue(work.Interval < rel);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(s.Now + work.Interval);
+            work.Value._action(work.Value._state);
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void LongTermWork2()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(LongTermWork2_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromDays(1) /* rel > SHORTTERM and rel * MAXERRORRATIO > SHORTTERM */;
-                var due = now + rel;
+        private static void LongTermWork2_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromDays(1) /* rel > SHORTTERM and rel * MAXERRORRATIO > SHORTTERM */;
+            var due = now + rel;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, cal._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                var wrk1 = cal._queue.Deq();
-                Assert.IsTrue(wrk1.Interval < rel);
+            Assert.AreEqual(1, cal._queue.Count);
 
-                s.SetTime(s.Now + wrk1.Interval);
-                wrk1.Value._action(wrk1.Value._state);
+            var wrk1 = cal._queue.Deq();
+            Assert.IsTrue(wrk1.Interval < rel);
 
-                // Begin of second long term scheduling
-                Assert.AreEqual(1, cal._queue.Count);
+            s.SetTime(s.Now + wrk1.Interval);
+            wrk1.Value._action(wrk1.Value._state);
 
-                var wrk2 = cal._queue.Deq();
-                Assert.IsTrue(wrk2.Interval < rel);
+            // Begin of second long term scheduling
+            Assert.AreEqual(1, cal._queue.Count);
 
-                s.SetTime(s.Now + wrk2.Interval);
-                wrk2.Value._action(wrk2.Value._state);
-                // End of second long term scheduling
+            var wrk2 = cal._queue.Deq();
+            Assert.IsTrue(wrk2.Interval < rel);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(s.Now + wrk2.Interval);
+            wrk2.Value._action(wrk2.Value._state);
+            // End of second long term scheduling
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void LongTerm_Multiple()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(LongTerm_Multiple_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+        private static void LongTerm_Multiple_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
 
-                var due1 = now + TimeSpan.FromMinutes(10);
-                var due2 = now + TimeSpan.FromMinutes(30);
-                var due3 = now + TimeSpan.FromMinutes(60);
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                var done1 = false;
-                var done2 = false;
-                var done3 = false;
+            var due1 = now + TimeSpan.FromMinutes(10);
+            var due2 = now + TimeSpan.FromMinutes(30);
+            var due3 = now + TimeSpan.FromMinutes(60);
 
-                s.Schedule(due2, () => { done2 = true; });
-                s.Schedule(due1, () => { done1 = true; });
-                s.Schedule(due3, () => { done3 = true; });
+            var done1 = false;
+            var done2 = false;
+            var done3 = false;
 
-                // First CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk1 = cal._queue.Deq();
-                var fst = s.Now + wrk1.Interval;
-                Assert.IsTrue(fst < due1);
+            s.Schedule(due2, () => { done2 = true; });
+            s.Schedule(due1, () => { done1 = true; });
+            s.Schedule(due3, () => { done3 = true; });
 
-                // First TRN
-                s.SetTime(fst);
-                wrk1.Value._action(wrk1.Value._state);
+            // First CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk1 = cal._queue.Deq();
+            var fst = s.Now + wrk1.Interval;
+            Assert.IsTrue(fst < due1);
 
-                // First SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh1 = s._queue.Deq();
+            // First TRN
+            s.SetTime(fst);
+            wrk1.Value._action(wrk1.Value._state);
 
-                // Second CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk2 = cal._queue.Deq();
-                var snd = s.Now + wrk2.Interval;
-                Assert.IsTrue(snd < due2);
+            // First SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh1 = s._queue.Deq();
 
-                // First RUN
-                s.SetTime(due1);
-                sh1.Invoke();
-                Assert.IsTrue(done1);
+            // Second CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk2 = cal._queue.Deq();
+            var snd = s.Now + wrk2.Interval;
+            Assert.IsTrue(snd < due2);
 
-                // Second TRN
-                s.SetTime(snd);
-                wrk2.Value._action(wrk2.Value._state);
+            // First RUN
+            s.SetTime(due1);
+            sh1.Invoke();
+            Assert.IsTrue(done1);
 
-                // Second SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh2 = s._queue.Deq();
+            // Second TRN
+            s.SetTime(snd);
+            wrk2.Value._action(wrk2.Value._state);
 
-                // Third CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk3 = cal._queue.Deq();
-                var trd = s.Now + wrk3.Interval;
-                Assert.IsTrue(trd < due3);
+            // Second SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh2 = s._queue.Deq();
 
-                // Second RUN
-                s.SetTime(due2);
-                sh2.Invoke();
-                Assert.IsTrue(done2);
+            // Third CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk3 = cal._queue.Deq();
+            var trd = s.Now + wrk3.Interval;
+            Assert.IsTrue(trd < due3);
 
-                // Third TRN
-                s.SetTime(trd);
-                wrk3.Value._action(wrk3.Value._state);
+            // Second RUN
+            s.SetTime(due2);
+            sh2.Invoke();
+            Assert.IsTrue(done2);
 
-                // Third SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh3 = s._queue.Deq();
+            // Third TRN
+            s.SetTime(trd);
+            wrk3.Value._action(wrk3.Value._state);
 
-                // Third RUN
-                s.SetTime(due3);
-                sh3.Invoke();
-                Assert.IsTrue(done3);
-            });
+            // Third SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh3 = s._queue.Deq();
+
+            // Third RUN
+            s.SetTime(due3);
+            sh3.Invoke();
+            Assert.IsTrue(done3);
         }
 
         [TestMethod]
         public void LongTerm_Multiple_Dispose()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(LongTerm_Multiple_Dispose_Callback);
+        }
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+        private static void LongTerm_Multiple_Dispose_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
 
-                var due1 = now + TimeSpan.FromMinutes(10);
-                var due2 = now + TimeSpan.FromMinutes(30);
-                var due3 = now + TimeSpan.FromMinutes(60);
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                var done1 = false;
-                var done2 = false;
-                var done3 = false;
+            var due1 = now + TimeSpan.FromMinutes(10);
+            var due2 = now + TimeSpan.FromMinutes(30);
+            var due3 = now + TimeSpan.FromMinutes(60);
 
-                var d2 = s.Schedule(due2, () => { done2 = true; });
-                var d1 = s.Schedule(due1, () => { done1 = true; });
-                var d3 = s.Schedule(due3, () => { done3 = true; });
+            var done1 = false;
+            var done2 = false;
+            var done3 = false;
 
-                // First CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk1 = cal._queue.Deq();
-                var fst = s.Now + wrk1.Interval;
-                Assert.IsTrue(fst < due1);
+            var d2 = s.Schedule(due2, () => { done2 = true; });
+            var d1 = s.Schedule(due1, () => { done1 = true; });
+            var d3 = s.Schedule(due3, () => { done3 = true; });
 
-                // First TRN
-                s.SetTime(fst);
-                wrk1.Value._action(wrk1.Value._state);
+            // First CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk1 = cal._queue.Deq();
+            var fst = s.Now + wrk1.Interval;
+            Assert.IsTrue(fst < due1);
 
-                // First DIS
-                d1.Dispose();
+            // First TRN
+            s.SetTime(fst);
+            wrk1.Value._action(wrk1.Value._state);
 
-                // First SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh1 = s._queue.Deq();
+            // First DIS
+            d1.Dispose();
 
-                // Second CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk2 = cal._queue.Deq();
-                var snd = s.Now + wrk2.Interval;
-                Assert.IsTrue(snd < due2);
+            // First SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh1 = s._queue.Deq();
 
-                // First RUN
-                s.SetTime(due1);
-                sh1.Invoke();
-                Assert.IsFalse(done1);
+            // Second CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk2 = cal._queue.Deq();
+            var snd = s.Now + wrk2.Interval;
+            Assert.IsTrue(snd < due2);
 
-                // Second DIS
-                // Third DIS
-                d2.Dispose();
-                d3.Dispose();
+            // First RUN
+            s.SetTime(due1);
+            sh1.Invoke();
+            Assert.IsFalse(done1);
 
-                // Second TRN
-                s.SetTime(snd);
-                wrk2.Value._action(wrk2.Value._state);
+            // Second DIS
+            // Third DIS
+            d2.Dispose();
+            d3.Dispose();
 
-                // Second SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh2 = s._queue.Deq();
+            // Second TRN
+            s.SetTime(snd);
+            wrk2.Value._action(wrk2.Value._state);
 
-                // Third CHK
-                Assert.AreEqual(1, cal._queue.Count);
-                var wrk3 = cal._queue.Deq();
-                var trd = s.Now + wrk3.Interval;
-                Assert.IsTrue(trd < due3);
+            // Second SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh2 = s._queue.Deq();
 
-                // Second RUN
-                s.SetTime(due2);
-                sh2.Invoke();
-                Assert.IsFalse(done2);
+            // Third CHK
+            Assert.AreEqual(1, cal._queue.Count);
+            var wrk3 = cal._queue.Deq();
+            var trd = s.Now + wrk3.Interval;
+            Assert.IsTrue(trd < due3);
 
-                // Third TRN
-                s.SetTime(trd);
-                wrk3.Value._action(wrk3.Value._state);
+            // Second RUN
+            s.SetTime(due2);
+            sh2.Invoke();
+            Assert.IsFalse(done2);
 
-                // Third SHT
-                Assert.AreEqual(1, s._queue.Count);
-                var sh3 = s._queue.Deq();
+            // Third TRN
+            s.SetTime(trd);
+            wrk3.Value._action(wrk3.Value._state);
 
-                // Third RUN
-                s.SetTime(due3);
-                sh3.Invoke();
-                Assert.IsFalse(done3);
-            });
+            // Third SHT
+            Assert.AreEqual(1, s._queue.Count);
+            var sh3 = s._queue.Deq();
+
+            // Third RUN
+            s.SetTime(due3);
+            sh3.Invoke();
+            Assert.IsFalse(done3);
         }
 
         [TestMethod]
         public void ClockChanged_FalsePositive()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ClockChanged_FalsePositive_Callback);
+        }
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+        private static void ClockChanged_FalsePositive_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromMinutes(1);
-                var due = now + rel;
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromMinutes(1);
+            var due = now + rel;
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, cal._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                s.SetTime(now);
-                scm.OnSystemClockChanged();
+            Assert.AreEqual(1, cal._queue.Count);
 
-                var work = cal._queue.Deq();
-                Assert.IsTrue(work.Interval < rel);
+            s.SetTime(now);
+            scm.OnSystemClockChanged();
 
-                s.SetTime(s.Now + work.Interval);
-                work.Value._action(work.Value._state);
+            var work = cal._queue.Deq();
+            Assert.IsTrue(work.Interval < rel);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(s.Now + work.Interval);
+            work.Value._action(work.Value._state);
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due);
-                next.Invoke();
+            var next = s._queue.Deq();
+            Assert.IsTrue(s.Now + next.DueTime == due);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            next.Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void ClockChanged_Forward1()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ClockChanged_Forward1_Callback);
+        }
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+        private static void ClockChanged_Forward1_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromMinutes(1);
-                var due = now + rel;
-                var err = TimeSpan.FromMinutes(1);
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromMinutes(1);
+            var due = now + rel;
+            var err = TimeSpan.FromMinutes(1);
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, cal._queue.Count);
-                Assert.AreEqual(0, s._queue.Count);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                s.SetTime(due + err);
-                scm.OnSystemClockChanged();
+            Assert.AreEqual(1, cal._queue.Count);
+            Assert.AreEqual(0, s._queue.Count);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(due + err);
+            scm.OnSystemClockChanged();
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(next.DueTime == TimeSpan.Zero);
-                next.Invoke();
-                Assert.IsTrue(done);
+            Assert.AreEqual(1, s._queue.Count);
 
-                var tmr = cal._queue.Deq();
-                tmr.Value._action(tmr.Value._state);
+            var next = s._queue.Deq();
+            Assert.IsTrue(next.DueTime == TimeSpan.Zero);
+            next.Invoke();
+            Assert.IsTrue(done);
 
-                Assert.AreEqual(0, cal._queue.Count);
-                Assert.AreEqual(0, s._queue.Count);
-            });
+            var tmr = cal._queue.Deq();
+            tmr.Value._action(tmr.Value._state);
+
+            Assert.AreEqual(0, cal._queue.Count);
+            Assert.AreEqual(0, s._queue.Count);
         }
 
         [TestMethod]
         public void ClockChanged_Forward2()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ClockChanged_Forward2_Callback);
+        }
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+        private static void ClockChanged_Forward2_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromSeconds(1);
-                var due = now + rel;
-                var err = TimeSpan.FromMinutes(1);
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromSeconds(1);
+            var due = now + rel;
+            var err = TimeSpan.FromMinutes(1);
 
-                var n = 0;
-                s.Schedule(due, () => { n++; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, s._queue.Count);
+            var n = 0;
+            s.Schedule(due, () => { n++; });
 
-                var wrk = s._queue.Deq();
-                Assert.IsTrue(wrk.DueTime == rel);
+            Assert.AreEqual(1, s._queue.Count);
 
-                s.SetTime(due + err);
-                scm.OnSystemClockChanged();
+            var wrk = s._queue.Deq();
+            Assert.IsTrue(wrk.DueTime == rel);
 
-                Assert.AreEqual(1, s._queue.Count);
+            s.SetTime(due + err);
+            scm.OnSystemClockChanged();
 
-                var next = s._queue.Deq();
-                Assert.IsTrue(next.DueTime == TimeSpan.Zero);
-                next.Invoke();
-                Assert.AreEqual(1, n);
+            Assert.AreEqual(1, s._queue.Count);
 
-                wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
-                Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
-            });
+            var next = s._queue.Deq();
+            Assert.IsTrue(next.DueTime == TimeSpan.Zero);
+            next.Invoke();
+            Assert.AreEqual(1, n);
+
+            wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
+            Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
         [TestMethod]
         public void ClockChanged_Backward1()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ClockChanged_Backward1_Callback);
+        }
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+        private static void ClockChanged_Backward1_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromMinutes(1);
-                var due = now + rel;
-                var err = TimeSpan.FromMinutes(-2);
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromMinutes(1);
+            var due = now + rel;
+            var err = TimeSpan.FromMinutes(-2);
 
-                var done = false;
-                s.Schedule(due, () => { done = true; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(1, cal._queue.Count);
-                Assert.IsTrue(cal._queue[0].Interval < rel);
+            var done = false;
+            s.Schedule(due, () => { done = true; });
 
-                Assert.AreEqual(0, s._queue.Count);
+            Assert.AreEqual(1, cal._queue.Count);
+            Assert.IsTrue(cal._queue[0].Interval < rel);
 
-                s.SetTime(due + err);
-                scm.OnSystemClockChanged();
+            Assert.AreEqual(0, s._queue.Count);
 
-                Assert.AreEqual(1, cal._queue.Count);
+            s.SetTime(due + err);
+            scm.OnSystemClockChanged();
 
-                var tmr = cal._queue.Deq();
-                Assert.IsTrue(tmr.Interval > rel);
-                Assert.IsTrue(tmr.Interval < -err);
+            Assert.AreEqual(1, cal._queue.Count);
 
-                s.SetTime(s.Now + tmr.Interval);
-                tmr.Value._action(tmr.Value._state);
+            var tmr = cal._queue.Deq();
+            Assert.IsTrue(tmr.Interval > rel);
+            Assert.IsTrue(tmr.Interval < -err);
 
-                Assert.IsFalse(done);
+            s.SetTime(s.Now + tmr.Interval);
+            tmr.Value._action(tmr.Value._state);
 
-                Assert.AreEqual(0, cal._queue.Count);
-                Assert.AreEqual(1, s._queue.Count);
+            Assert.IsFalse(done);
 
-                s.SetTime(due);
-                s._queue.Deq().Invoke();
+            Assert.AreEqual(0, cal._queue.Count);
+            Assert.AreEqual(1, s._queue.Count);
 
-                Assert.IsTrue(done);
-            });
+            s.SetTime(due);
+            s._queue.Deq().Invoke();
+
+            Assert.IsTrue(done);
         }
 
         [TestMethod]
         public void ClockChanged_Backward2()
         {
-            Run(() =>
-            {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+            Run(ClockChanged_Backward2_Callback);
+        }
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+        private static void ClockChanged_Backward2_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
-                var rel = TimeSpan.FromSeconds(1);
-                var due = now + rel;
-                var err = TimeSpan.FromMinutes(-1);
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var rel = TimeSpan.FromSeconds(1);
+            var due = now + rel;
+            var err = TimeSpan.FromMinutes(-1);
 
-                var n = 0;
-                s.Schedule(due, () => { n++; });
+            var s = new MyScheduler();
+            s.SetTime(now);
 
-                Assert.AreEqual(0, cal._queue.Count);
-                Assert.AreEqual(1, s._queue.Count);
-                var wrk = s._queue[0];
-                Assert.IsTrue(wrk.DueTime == rel);
+            var n = 0;
+            s.Schedule(due, () => { n++; });
 
-                s.SetTime(due + err);
-                scm.OnSystemClockChanged();
+            Assert.AreEqual(0, cal._queue.Count);
+            Assert.AreEqual(1, s._queue.Count);
+            var wrk = s._queue[0];
+            Assert.IsTrue(wrk.DueTime == rel);
 
-                Assert.AreEqual(1, cal._queue.Count);
+            s.SetTime(due + err);
+            scm.OnSystemClockChanged();
 
-                var tmr = cal._queue.Deq();
-                Assert.IsTrue(tmr.Interval > rel);
-                Assert.IsTrue(tmr.Interval < -err);
+            Assert.AreEqual(1, cal._queue.Count);
 
-                s.SetTime(s.Now + tmr.Interval);
-                tmr.Value._action(tmr.Value._state);
+            var tmr = cal._queue.Deq();
+            Assert.IsTrue(tmr.Interval > rel);
+            Assert.IsTrue(tmr.Interval < -err);
 
-                Assert.AreEqual(0, n);
+            s.SetTime(s.Now + tmr.Interval);
+            tmr.Value._action(tmr.Value._state);
 
-                Assert.AreEqual(0, cal._queue.Count);
-                Assert.AreEqual(1, s._queue.Count);
+            Assert.AreEqual(0, n);
 
-                s.SetTime(due);
-                s._queue.Deq().Invoke();
+            Assert.AreEqual(0, cal._queue.Count);
+            Assert.AreEqual(1, s._queue.Count);
 
-                Assert.AreEqual(1, n);
+            s.SetTime(due);
+            s._queue.Deq().Invoke();
 
-                wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
-                Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
-            });
+            Assert.AreEqual(1, n);
+
+            wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
+            Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
         [TestMethod]
         public void PeriodicSystemClockChangeMonitor()
         {
-            Run(() =>
+            Run(PeriodicSystemClockChangeMonitor_Callback);
+        }
+
+        private static void PeriodicSystemClockChangeMonitor_Callback()
+        {
+            var provider = new FakeClockPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
+
+            var clock = (FakeClock)provider.GetService<ISystemClock>();
+            clock._now = new DateTimeOffset(2012, 4, 26, 12, 0, 0, TimeSpan.Zero);
+
+            var cal = (FakeClockCAL)provider.GetService<IConcurrencyAbstractionLayer>();
+
+            var period = TimeSpan.FromSeconds(1);
+            var ptscm = new PeriodicTimerSystemClockMonitor(period);
+
+            var delta = TimeSpan.Zero;
+            var n = 0;
+            var h = new EventHandler<SystemClockChangedEventArgs>((o, e) =>
             {
-                var provider = new FakeClockPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
-
-                var clock = (FakeClock)provider.GetService<ISystemClock>();
-                clock._now = new DateTimeOffset(2012, 4, 26, 12, 0, 0, TimeSpan.Zero);
-
-                var cal = (FakeClockCAL)provider.GetService<IConcurrencyAbstractionLayer>();
-
-                var period = TimeSpan.FromSeconds(1);
-                var ptscm = new PeriodicTimerSystemClockMonitor(period);
-
-                var delta = TimeSpan.Zero;
-                var n = 0;
-                var h = new EventHandler<SystemClockChangedEventArgs>((o, e) =>
-                {
-                    delta = e.NewTime - e.OldTime;
-                    n++;
-                });
-
-                ptscm.SystemClockChanged += h;
-
-                Assert.IsNotNull(cal._action);
-                Assert.IsTrue(cal._period == period);
-                Assert.AreEqual(0, n);
-
-                clock._now += period;
-                cal._action();
-                Assert.AreEqual(0, n);
-
-                clock._now += period;
-                cal._action();
-                Assert.AreEqual(0, n);
-
-                var diff1 = TimeSpan.FromSeconds(3);
-                clock._now += period + diff1;
-                cal._action();
-                Assert.AreEqual(1, n);
-                Assert.IsTrue(delta == diff1);
-
-                clock._now += period;
-                cal._action();
-                Assert.AreEqual(1, n);
-
-                clock._now += period;
-                cal._action();
-                Assert.AreEqual(1, n);
-
-                var diff2 = TimeSpan.FromSeconds(-5);
-                clock._now += period + diff2;
-                cal._action();
-                Assert.AreEqual(2, n);
-                Assert.IsTrue(delta == diff2);
-
-                clock._now += period;
-                cal._action();
-                Assert.AreEqual(2, n);
-
-                ptscm.SystemClockChanged -= h;
-
-                Assert.IsNull(cal._action);
+                delta = e.NewTime - e.OldTime;
+                n++;
             });
+
+            ptscm.SystemClockChanged += h;
+
+            Assert.IsNotNull(cal._action);
+            Assert.IsTrue(cal._period == period);
+            Assert.AreEqual(0, n);
+
+            clock._now += period;
+            cal._action();
+            Assert.AreEqual(0, n);
+
+            clock._now += period;
+            cal._action();
+            Assert.AreEqual(0, n);
+
+            var diff1 = TimeSpan.FromSeconds(3);
+            clock._now += period + diff1;
+            cal._action();
+            Assert.AreEqual(1, n);
+            Assert.IsTrue(delta == diff1);
+
+            clock._now += period;
+            cal._action();
+            Assert.AreEqual(1, n);
+
+            clock._now += period;
+            cal._action();
+            Assert.AreEqual(1, n);
+
+            var diff2 = TimeSpan.FromSeconds(-5);
+            clock._now += period + diff2;
+            cal._action();
+            Assert.AreEqual(2, n);
+            Assert.IsTrue(delta == diff2);
+
+            clock._now += period;
+            cal._action();
+            Assert.AreEqual(2, n);
+
+            ptscm.SystemClockChanged -= h;
+
+            Assert.IsNull(cal._action);
         }
 
         [TestMethod]
         public void ClockChanged_RefCounting()
         {
-            Run(() =>
+            Run(ClockChanged_RefCounting_Callback);
+        }
+
+        private static void ClockChanged_RefCounting_Callback()
+        {
+            var provider = new MyPlatformEnlightenmentProvider();
+            PlatformEnlightenmentProvider.Current = provider;
+
+            var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+
+            var cal = provider._cal;
+            var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+
+            var s = new MyScheduler();
+            s.SetTime(now);
+
+            var due1 = now + TimeSpan.FromSeconds(5);
+            var due2 = now + TimeSpan.FromSeconds(8);
+            var due3 = now + TimeSpan.FromMinutes(1);
+            var due4 = now + TimeSpan.FromMinutes(2);
+            var due5 = now + TimeSpan.FromMinutes(3);
+            var due6 = now + TimeSpan.FromMinutes(3) + TimeSpan.FromSeconds(2);
+
+            var done1 = false;
+            var done2 = false;
+            var done3 = false;
+            var done4 = false;
+            var done5 = false;
+            var done6 = false;
+
+            var d1 = s.Schedule(due1, () => { done1 = true; });
+            var d5 = s.Schedule(due5, () => { done5 = true; });
+            var d3 = s.Schedule(due3, () => { done3 = true; throw new Exception(); });
+            var d2 = s.Schedule(due2, () => { done2 = true; });
+            var d4 = s.Schedule(due4, () => { done4 = true; });
+
+            d2.Dispose();
+            d4.Dispose();
+
+            Assert.AreEqual(1, scm.n);
+
+            s.SetTime(due1);
+            var i1 = s._queue.Deq();
+            i1.Invoke();
+            Assert.IsTrue(done1);
+
+            Assert.AreEqual(1, scm.n);
+
+            s.SetTime(due2);
+            var i2 = s._queue.Deq();
+            i2.Invoke();
+            Assert.IsFalse(done2);
+
+            Assert.AreEqual(1, scm.n);
+
+            var l1 = cal._queue.Deq();
+            var l1d = now + l1.Interval;
+            s.SetTime(l1d);
+            l1.Value._action(l1.Value._state);
+
+            s.SetTime(due3);
+            var i3 = s._queue.Deq();
+            try
             {
-                var provider = new MyPlatformEnlightenmentProvider();
-                PlatformEnlightenmentProvider.Current = provider;
+                i3.Invoke();
+                Assert.Fail();
+            }
+            catch { }
+            Assert.IsTrue(done3);
 
-                var scm = (ClockChanged)provider.GetService<INotifySystemClockChanged>();
+            Assert.AreEqual(1, scm.n);
 
-                var cal = provider._cal;
-                var now = new DateTimeOffset(2012, 4, 25, 12, 0, 0, TimeSpan.Zero);
+            var l2 = cal._queue.Deq();
+            var l2d = l1d + l2.Interval;
+            s.SetTime(l2d);
+            l2.Value._action(l2.Value._state);
 
-                var s = new MyScheduler();
-                s.SetTime(now);
+            s.SetTime(due4);
+            var i4 = s._queue.Deq();
+            i4.Invoke();
+            Assert.IsFalse(done4);
 
-                var due1 = now + TimeSpan.FromSeconds(5);
-                var due2 = now + TimeSpan.FromSeconds(8);
-                var due3 = now + TimeSpan.FromMinutes(1);
-                var due4 = now + TimeSpan.FromMinutes(2);
-                var due5 = now + TimeSpan.FromMinutes(3);
-                var due6 = now + TimeSpan.FromMinutes(3) + TimeSpan.FromSeconds(2);
+            Assert.AreEqual(1, scm.n);
 
-                var done1 = false;
-                var done2 = false;
-                var done3 = false;
-                var done4 = false;
-                var done5 = false;
-                var done6 = false;
+            var l3 = cal._queue.Deq();
+            var l3d = l2d + l3.Interval;
+            s.SetTime(l3d);
+            l3.Value._action(l3.Value._state);
 
-                var d1 = s.Schedule(due1, () => { done1 = true; });
-                var d5 = s.Schedule(due5, () => { done5 = true; });
-                var d3 = s.Schedule(due3, () => { done3 = true; throw new Exception(); });
-                var d2 = s.Schedule(due2, () => { done2 = true; });
-                var d4 = s.Schedule(due4, () => { done4 = true; });
+            s.SetTime(due5);
+            var i5 = s._queue.Deq();
+            i5.Invoke();
+            Assert.IsTrue(done5);
 
-                d2.Dispose();
-                d4.Dispose();
+            Assert.AreEqual(0, scm.n);
 
-                Assert.AreEqual(1, scm.n);
+            var d6 = s.Schedule(due6, () => { done6 = true; });
 
-                s.SetTime(due1);
-                var i1 = s._queue.Deq();
-                i1.Invoke();
-                Assert.IsTrue(done1);
+            Assert.AreEqual(1, scm.n);
 
-                Assert.AreEqual(1, scm.n);
+            s.SetTime(due6);
+            var i6 = s._queue.Deq();
+            i6.Invoke();
+            Assert.IsTrue(done6);
 
-                s.SetTime(due2);
-                var i2 = s._queue.Deq();
-                i2.Invoke();
-                Assert.IsFalse(done2);
-
-                Assert.AreEqual(1, scm.n);
-
-                var l1 = cal._queue.Deq();
-                var l1d = now + l1.Interval;
-                s.SetTime(l1d);
-                l1.Value._action(l1.Value._state);
-
-                s.SetTime(due3);
-                var i3 = s._queue.Deq();
-                try
-                {
-                    i3.Invoke();
-                    Assert.Fail();
-                }
-                catch { }
-                Assert.IsTrue(done3);
-
-                Assert.AreEqual(1, scm.n);
-
-                var l2 = cal._queue.Deq();
-                var l2d = l1d + l2.Interval;
-                s.SetTime(l2d);
-                l2.Value._action(l2.Value._state);
-
-                s.SetTime(due4);
-                var i4 = s._queue.Deq();
-                i4.Invoke();
-                Assert.IsFalse(done4);
-
-                Assert.AreEqual(1, scm.n);
-
-                var l3 = cal._queue.Deq();
-                var l3d = l2d + l3.Interval;
-                s.SetTime(l3d);
-                l3.Value._action(l3.Value._state);
-
-                s.SetTime(due5);
-                var i5 = s._queue.Deq();
-                i5.Invoke();
-                Assert.IsTrue(done5);
-
-                Assert.AreEqual(0, scm.n);
-
-                var d6 = s.Schedule(due6, () => { done6 = true; });
-
-                Assert.AreEqual(1, scm.n);
-
-                s.SetTime(due6);
-                var i6 = s._queue.Deq();
-                i6.Invoke();
-                Assert.IsTrue(done6);
-
-                Assert.AreEqual(0, scm.n);
-            });
+            Assert.AreEqual(0, scm.n);
         }
 
         class MyScheduler : LocalScheduler
