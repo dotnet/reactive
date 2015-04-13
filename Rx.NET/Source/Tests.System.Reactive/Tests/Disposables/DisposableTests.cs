@@ -230,13 +230,13 @@ namespace ReactiveTests.Tests
             IDisposable d1 = null;
             new CompositeDisposable(d1);
         }
+
         [TestMethod, ExpectedException(typeof(ArgumentException))]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
             IEnumerable<IDisposable> values = new IDisposable[] { null };
             new CompositeDisposable(values);
         }
-
 
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CompositeDisposable_AddNull()
