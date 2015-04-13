@@ -48,6 +48,8 @@ namespace System.Reactive.Disposables
         {
             if (disposables == null)
                 throw new ArgumentNullException("disposables");
+            if (disposables.Any(d => d == null))
+                throw new ArgumentException("disposables collection can not contain null values.", "disposables");
 
             _disposables = new List<IDisposable>(disposables);
             _count = _disposables.Count;
@@ -62,6 +64,8 @@ namespace System.Reactive.Disposables
         {
             if (disposables == null)
                 throw new ArgumentNullException("disposables");
+            if(disposables.Any(d=>d==null))
+                throw new ArgumentException("disposables collection can not contain null values.", "disposables");
 
             _disposables = new List<IDisposable>(disposables);
             _count = _disposables.Count;
