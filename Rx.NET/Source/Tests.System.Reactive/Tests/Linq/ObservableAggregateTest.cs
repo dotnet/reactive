@@ -14460,6 +14460,15 @@ namespace ReactiveTests.Tests
             }
         }
 
+        [TestMethod]
+        public void ToLookup_IndexerForInvalidKey()
+        {
+            var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
+
+            var values = d1["2"];
+            values.AssertEqual(Enumerable.Empty<int>());
+        }
+
         #endregion
     }
 }
