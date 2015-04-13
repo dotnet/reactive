@@ -44,6 +44,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
         public CompositeDisposable(params IDisposable[] disposables)
         {
             if (disposables == null)
@@ -60,6 +61,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
