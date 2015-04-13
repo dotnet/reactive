@@ -123,6 +123,9 @@
   <data name="COMPLETED_NO_VALUE" xml:space="preserve">
     <value>OnCompleted notification doesn't have a value.</value>
   </data>
+  <data name="DISPOSABLES_CANT_CONTAIN_NULL" xml:space="preserve">
+    <value>Disposables collection can not contain null values.</value>
+  </data>
   <data name="DISPOSABLE_ALREADY_ASSIGNED" xml:space="preserve">
     <value>Disposable has already been assigned.</value>
   </data>

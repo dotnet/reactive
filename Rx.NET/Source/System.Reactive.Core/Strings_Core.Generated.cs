@@ -168,5 +168,16 @@ namespace System.Reactive
                 return ResourceManager.GetString("SCHEDULER_OPERATION_ALREADY_AWAITED", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Disposables collection can not contain null values..
+        /// </summary>
+        internal static string DISPOSABLES_CANT_CONTAIN_NULL
+        {
+            get
+            {
+                return ResourceManager.GetString("DISPOSABLES_CANT_CONTAIN_NULL", resourceCulture);
+            }
+        }
     }
 }

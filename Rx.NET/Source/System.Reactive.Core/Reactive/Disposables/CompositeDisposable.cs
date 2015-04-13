@@ -67,7 +67,7 @@ namespace System.Reactive.Disposables
             // Doing this on the list to avoid duplicate enumeration of disposables.
             //
             if (_disposables.Contains(null))
-                throw new ArgumentException("Disposables collection can not contain null values.", "disposables");
+                throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, "disposables");
             
             _count = _disposables.Count;
         }
