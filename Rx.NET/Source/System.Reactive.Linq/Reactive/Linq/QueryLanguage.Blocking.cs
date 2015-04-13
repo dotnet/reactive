@@ -134,32 +134,34 @@ namespace System.Reactive.Linq
             var value = default(TSource);
             var seenValue = false;
             var ex = default(Exception);
-            var evt = new ManualResetEvent(false);
 
-            //
-            // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-            //
-            using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                v =>
-                {
-                    if (!seenValue)
-                    {
-                        value = v;
-                    }
-                    seenValue = true;
-                    evt.Set();
-                },
-                e =>
-                {
-                    ex = e;
-                    evt.Set();
-                },
-                () =>
-                {
-                    evt.Set();
-                })))
+            using (var evt = new ManualResetEvent(false))
             {
-                evt.WaitOne();
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        if (!seenValue)
+                        {
+                            value = v;
+                        }
+                        seenValue = true;
+                        evt.Set();
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
             }
 
             ex.ThrowIfNotNull();
@@ -177,15 +179,17 @@ namespace System.Reactive.Linq
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
 #if !NO_PERF
-            var evt = new ManualResetEvent(false);
-            var sink = new ForEach<TSource>._(onNext, () => evt.Set());
-
-            using (source.SubscribeSafe(sink))
+            using (var evt = new ManualResetEvent(false))
             {
-                evt.WaitOne();
-            }
+                var sink = new ForEach<TSource>._(onNext, () => evt.Set());
 
-            sink.Error.ThrowIfNotNull();
+                using (source.SubscribeSafe(sink))
+                {
+                    evt.WaitOne();
+                }
+
+                sink.Error.ThrowIfNotNull();
+            }
 #else
             ForEach_(source, onNext);
 #endif
@@ -194,15 +198,17 @@ namespace System.Reactive.Linq
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext)
         {
 #if !NO_PERF
-            var evt = new ManualResetEvent(false);
-            var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
-
-            using (source.SubscribeSafe(sink))
+            using (var evt = new ManualResetEvent(false))
             {
-                evt.WaitOne();
-            }
+                var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
 
-            sink.Error.ThrowIfNotNull();
+                using (source.SubscribeSafe(sink))
+                {
+                    evt.WaitOne();
+                }
+
+                sink.Error.ThrowIfNotNull();
+            }
 #else
             var i = 0;
             ForEach_(source, x => onNext(x, checked(i++)));
@@ -214,29 +220,31 @@ namespace System.Reactive.Linq
         {
             var exception = default(Exception);
 
-            var evt = new ManualResetEvent(false);
-            using (source.Subscribe(
-                x =>
-                {
-                    try
+            using (var evt = new ManualResetEvent(false))
+            {
+                using (source.Subscribe(
+                    x =>
                     {
-                        onNext(x);
-                    }
-                    catch (Exception ex)
+                        try
+                        {
+                            onNext(x);
+                        }
+                        catch (Exception ex)
+                        {
+                            exception = ex;
+                            evt.Set();
+                        }
+                    },
+                    ex =>
                     {
                         exception = ex;
                         evt.Set();
-                    }
-                },
-                ex =>
+                    },
+                    () => evt.Set()
+                ))
                 {
-                    exception = ex;
-                    evt.Set();
-                },
-                () => evt.Set()
-            ))
-            {
-                evt.WaitOne();
+                    evt.WaitOne();
+                }
             }
 
             if (exception != null)
@@ -306,28 +314,30 @@ namespace System.Reactive.Linq
             var value = default(TSource);
             var seenValue = false;
             var ex = default(Exception);
-            var evt = new ManualResetEvent(false);
 
-            //
-            // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-            //
-            using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                v =>
-                {
-                    seenValue = true;
-                    value = v;
-                },
-                e =>
-                {
-                    ex = e;
-                    evt.Set();
-                },
-                () =>
-                {
-                    evt.Set();
-                })))
+            using (var evt = new ManualResetEvent(false))
             {
-                evt.WaitOne();
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        seenValue = true;
+                        value = v;
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
             }
 
             ex.ThrowIfNotNull();
@@ -398,34 +408,36 @@ namespace System.Reactive.Linq
             var value = default(TSource);
             var seenValue = false;
             var ex = default(Exception);
-            var evt = new ManualResetEvent(false);
 
-            //
-            // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
-            //
-            using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
-                v =>
-                {
-                    if (seenValue)
-                    {
-                        ex = new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
-                        evt.Set();
-                    }
-
-                    value = v;
-                    seenValue = true;
-                },
-                e =>
-                {
-                    ex = e;
-                    evt.Set();
-                },
-                () =>
-                {
-                    evt.Set();
-                })))
+            using (var evt = new ManualResetEvent(false))
             {
-                evt.WaitOne();
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        if (seenValue)
+                        {
+                            ex = new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
+                            evt.Set();
+                        }
+
+                        value = v;
+                        seenValue = true;
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
             }
 
             ex.ThrowIfNotNull();
