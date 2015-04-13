@@ -46,14 +46,8 @@ namespace System.Reactive.Disposables
         /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
         /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
         public CompositeDisposable(params IDisposable[] disposables)
+            : this((IEnumerable<IDisposable>)disposables)
         {
-            if (disposables == null)
-                throw new ArgumentNullException("disposables");
-            if (disposables.Any(d => d == null))
-                throw new ArgumentException("Disposables collection can not contain null values.", "disposables");
-
-            _disposables = new List<IDisposable>(disposables);
-            _count = _disposables.Count;
         }
 
         /// <summary>
@@ -66,10 +60,15 @@ namespace System.Reactive.Disposables
         {
             if (disposables == null)
                 throw new ArgumentNullException("disposables");
-            if (disposables.Any(d => d == null))
-                throw new ArgumentException("Disposables collection can not contain null values.", "disposables");
 
             _disposables = new List<IDisposable>(disposables);
+            
+            //
+            // Doing this on the list to avoid duplicate enumeration of disposables.
+            //
+            if (_disposables.Contains(null))
+                throw new ArgumentException("Disposables collection can not contain null values.", "disposables");
+            
             _count = _disposables.Count;
         }
 
