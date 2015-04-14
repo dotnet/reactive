@@ -57,7 +57,7 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException("action");
 
-            return Enqueue(this, state, dueTime, action);
+            return Enqueue(state, dueTime, action);
         }
 
         /// <summary>
