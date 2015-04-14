@@ -701,7 +701,7 @@ namespace System.Reactive.Linq
                 // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
                 //
                 var subscription = result.Subscribe/*Unsafe*/(observer);
-                return new CompositeDisposable(cancellable, subscription);
+                return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
 #endif
@@ -758,7 +758,7 @@ namespace System.Reactive.Linq
                 // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
                 //
                 var subscription = result.Subscribe/*Unsafe*/(observer);
-                return new CompositeDisposable(cancellable, subscription);
+                return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
 #endif

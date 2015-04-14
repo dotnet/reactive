@@ -53,7 +53,7 @@ namespace System.Reactive.Linq
 
             if (cancellationToken.CanBeCanceled)
             {
-                RegisterCancelation(s, new CompositeDisposable(d, c), cancellationToken);
+                RegisterCancelation(s, StableCompositeDisposable.Create(d, c), cancellationToken);
             }
 
             return s;

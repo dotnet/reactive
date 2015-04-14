@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var samplerSubscription = _parent._sampler.SubscribeSafe(new SampleImpl(this));
 
-                return new CompositeDisposable(_sourceSubscription, samplerSubscription);
+                return StableCompositeDisposable.Create(_sourceSubscription, samplerSubscription);
             }
 
             public void OnNext(TSource value)
@@ -187,7 +187,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(
+                return StableCompositeDisposable.Create(
                     sourceSubscription,
                     _parent._scheduler.SchedulePeriodic(_parent._interval, Tick)
                 );

@@ -68,11 +68,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _ql = new Queue<TSource>();
                 _qr = new Queue<TSource>();
 
-                return new CompositeDisposable
-                {
+                return StableCompositeDisposable.Create
+                (
                     _parent._first.SubscribeSafe(new F(this)),
                     _parent._second.SubscribeSafe(new S(this))
-                };
+                );
             }
 
             class F : IObserver<TSource>
@@ -258,7 +258,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                return new CompositeDisposable(
+                return StableCompositeDisposable.Create(
                     _parent._first.SubscribeSafe(this),
                     _enumerator
                 );

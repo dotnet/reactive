@@ -199,7 +199,7 @@ namespace System.Reactive
             if (observer == null)
                 throw new ArgumentNullException("observer");
 
-            return new CompositeDisposable(subscription, subject.Subscribe(observer));
+            return StableCompositeDisposable.Create(subscription, subject.Subscribe(observer));
         }
     }
 }

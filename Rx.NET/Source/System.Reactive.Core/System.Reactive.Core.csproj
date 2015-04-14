@@ -69,6 +69,7 @@
     <Compile Include="Reactive\Concurrency\Synchronization.Synchronize.cs" />
     <Compile Include="Reactive\Concurrency\SynchronizationContextScheduler.cs" />
     <Compile Include="Reactive\Concurrency\DefaultScheduler.cs" />
+    <Compile Include="Reactive\Disposables\StableCompositeDisposable.cs" />
     <Compile Include="Reactive\Internal\AsyncLockObserver.cs" />
     <Compile Include="Reactive\Internal\CheckedObserver.cs" />
     <Compile Include="Reactive\Internal\ConcurrentDictionary.cs" />

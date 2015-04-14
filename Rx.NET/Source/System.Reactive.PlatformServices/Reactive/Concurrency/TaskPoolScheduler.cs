@@ -214,7 +214,7 @@ namespace System.Reactive.Concurrency
 
             moveNext();
 
-            return new CompositeDisposable(cancel, gate);
+            return StableCompositeDisposable.Create(cancel, gate);
 #else
             var state1 = state;
             var gate = new AsyncLock();
@@ -230,7 +230,7 @@ namespace System.Reactive.Concurrency
                 });
             }, period);
 
-            return new CompositeDisposable(timer, gate);
+            return ImmutableCompositeDisposable.Create(timer, gate);
 #endif
         }
     }

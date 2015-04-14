@@ -75,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 original.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_subscription, timer);
+                return StableCompositeDisposable.Create(_subscription, timer);
             }
 
             private void Timeout()
@@ -169,7 +169,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 original.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_subscription, _timer);
+                return StableCompositeDisposable.Create(_subscription, _timer);
             }
 
             private void CreateTimer()
@@ -309,7 +309,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 original.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_subscription, _timer);
+                return StableCompositeDisposable.Create(_subscription, _timer);
             }
 
             public void OnNext(TSource value)

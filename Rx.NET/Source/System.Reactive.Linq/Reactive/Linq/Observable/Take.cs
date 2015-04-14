@@ -133,7 +133,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var t = _parent._scheduler.Schedule(_parent._duration, Tick);
                 var d = _parent._source.SubscribeSafe(this);
-                return new CompositeDisposable(t, d);
+                return StableCompositeDisposable.Create(t, d);
             }
 
             private void Tick()

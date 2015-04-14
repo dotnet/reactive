@@ -42,7 +42,7 @@ namespace System.Reactive
                 _gate.Wait(MoveNext);
             });
 
-            return new CompositeDisposable(_subscription, cancelable, Disposable.Create(() => _gate.Wait(Dispose)));
+            return StableCompositeDisposable.Create(_subscription, cancelable, Disposable.Create(() => _gate.Wait(Dispose)));
         }
 
         protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);

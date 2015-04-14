@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
                 //
                 var release = _refCount.GetDisposable();
                 var subscription = _subject.Subscribe/*Unsafe*/(observer);
-                return new CompositeDisposable(release, subscription);
+                return StableCompositeDisposable.Create(release, subscription);
             }
             else
             {

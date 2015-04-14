@@ -47,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 sourceObserver.Disposable = sourceSubscription;
                 otherObserver.Disposable = otherSubscription;
 
-                return new CompositeDisposable(
+                return StableCompositeDisposable.Create(
                     sourceSubscription,
                     otherSubscription
                 );
@@ -179,7 +179,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var t = _parent._scheduler.Schedule(_parent._startTime, Tick);
                 var d = _parent._source.SubscribeSafe(this);
-                return new CompositeDisposable(t, d);
+                return StableCompositeDisposable.Create(t, d);
             }
 
             private void Tick()

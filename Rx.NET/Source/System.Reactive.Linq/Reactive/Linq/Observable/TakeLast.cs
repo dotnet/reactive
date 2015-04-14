@@ -69,7 +69,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _subscription.Disposable = _parent._source.SubscribeSafe(this);
                 
-                return new CompositeDisposable(_subscription, _loop);
+                return StableCompositeDisposable.Create(_subscription, _loop);
             }
 
             public void OnNext(TSource value)
@@ -155,7 +155,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _watch = _parent._scheduler.StartStopwatch();
                 _subscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_subscription, _loop);
+                return StableCompositeDisposable.Create(_subscription, _loop);
             }
 
             public void OnNext(TSource value)

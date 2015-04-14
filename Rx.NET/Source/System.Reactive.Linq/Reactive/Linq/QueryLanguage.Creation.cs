@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
                 var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
                 var subscription = taskObservable.Subscribe(taskCompletionObserver);
 
-                return new CompositeDisposable(cancellable, subscription);
+                return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
 
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
                 //
                 taskObservable.Subscribe(taskCompletionObserver);
 
-                return new CompositeDisposable(cancellable, subscription);
+                return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
 
@@ -100,7 +100,7 @@ namespace System.Reactive.Linq
                 //
                 taskObservable.Subscribe(taskCompletionObserver);
 
-                return new CompositeDisposable(cancellable, subscription);
+                return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
 

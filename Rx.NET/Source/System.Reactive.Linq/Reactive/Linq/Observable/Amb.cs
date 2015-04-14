@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var ls = new SingleAssignmentDisposable();
                 var rs = new SingleAssignmentDisposable();
-                var d = new CompositeDisposable(ls, rs);
+                var d = StableCompositeDisposable.Create(ls, rs);
 
                 var gate = new object();
 

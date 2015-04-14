@@ -48,10 +48,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    return new CompositeDisposable(Observable.Throw<TSource>(exception).SubscribeSafe(this), disposable);
+                    return StableCompositeDisposable.Create(Observable.Throw<TSource>(exception).SubscribeSafe(this), disposable);
                 }
 
-                return new CompositeDisposable(source.SubscribeSafe(this), disposable);
+                return StableCompositeDisposable.Create(source.SubscribeSafe(this), disposable);
             }
 
             public void OnNext(TSource value)

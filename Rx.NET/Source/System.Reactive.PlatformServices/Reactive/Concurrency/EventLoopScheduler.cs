@@ -226,7 +226,7 @@ namespace System.Reactive.Concurrency
 
             d.Disposable = Schedule(null, next - _stopwatch.Elapsed, tick);
 
-            return new CompositeDisposable(d, gate);
+            return StableCompositeDisposable.Create(d, gate);
         }
 
 #if !NO_STOPWATCH

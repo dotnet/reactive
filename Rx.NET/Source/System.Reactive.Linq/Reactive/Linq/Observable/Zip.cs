@@ -76,7 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 fstSubscription.Disposable = _parent._first.SubscribeSafe(fstO);
                 sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
 
-                return new CompositeDisposable(fstSubscription, sndSubscription, fstO, sndO);
+                return StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO);
             }
 
             class F : IObserver<TFirst>, IDisposable
@@ -292,7 +292,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var leftSubscription = _parent._first.SubscribeSafe(this);
 
-                return new CompositeDisposable(leftSubscription, _rightEnumerator);
+                return StableCompositeDisposable.Create(leftSubscription, _rightEnumerator);
             }
 
             public void OnNext(TFirst value)

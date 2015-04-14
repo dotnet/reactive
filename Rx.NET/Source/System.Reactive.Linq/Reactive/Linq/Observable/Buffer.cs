@@ -178,7 +178,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var subscription = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable { _timerD, subscription };
+                return StableCompositeDisposable.Create(_timerD, subscription);
             }
 
             private void CreateWindow()
@@ -304,7 +304,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var d = _parent._scheduler.SchedulePeriodic(_parent._timeSpan, Tick);
                 var s = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(d, s);
+                return StableCompositeDisposable.Create(d, s);
             }
 
             private void Tick()
@@ -377,7 +377,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var subscription = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable { _timerD, subscription };
+                return StableCompositeDisposable.Create(_timerD, subscription);
             }
 
             private void CreateTimer(int id)

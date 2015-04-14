@@ -436,7 +436,7 @@ namespace System.Reactive.Linq
                 leftSubscription.Disposable = leftSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateLeft(x)).Synchronize(gate).Subscribe(combiner);
                 rightSubscription.Disposable = rightSource.Materialize().Select(x => Either<Notification<TLeft>, Notification<TRight>>.CreateRight(x)).Synchronize(gate).Subscribe(combiner);
 
-                return new CompositeDisposable(leftSubscription, rightSubscription);
+                return StableCompositeDisposable.Create(leftSubscription, rightSubscription);
             });
         }
 

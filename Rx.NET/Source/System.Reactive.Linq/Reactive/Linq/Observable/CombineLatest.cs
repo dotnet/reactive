@@ -59,7 +59,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 fstSubscription.Disposable = _parent._first.SubscribeSafe(fstO);
                 sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
 
-                return new CompositeDisposable(fstSubscription, sndSubscription);
+                return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
             }
 
             class F : IObserver<TFirst>
@@ -280,7 +280,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[1].Disposable = _parent._source2.SubscribeSafe(_observer2);
                 subscriptions[2].Disposable = _parent._source3.SubscribeSafe(_observer3);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -345,7 +345,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[2].Disposable = _parent._source3.SubscribeSafe(_observer3);
                 subscriptions[3].Disposable = _parent._source4.SubscribeSafe(_observer4);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -417,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[3].Disposable = _parent._source4.SubscribeSafe(_observer4);
                 subscriptions[4].Disposable = _parent._source5.SubscribeSafe(_observer5);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -492,7 +492,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[4].Disposable = _parent._source5.SubscribeSafe(_observer5);
                 subscriptions[5].Disposable = _parent._source6.SubscribeSafe(_observer6);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -572,7 +572,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[5].Disposable = _parent._source6.SubscribeSafe(_observer6);
                 subscriptions[6].Disposable = _parent._source7.SubscribeSafe(_observer7);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -657,7 +657,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[6].Disposable = _parent._source7.SubscribeSafe(_observer7);
                 subscriptions[7].Disposable = _parent._source8.SubscribeSafe(_observer8);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -747,7 +747,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[7].Disposable = _parent._source8.SubscribeSafe(_observer8);
                 subscriptions[8].Disposable = _parent._source9.SubscribeSafe(_observer9);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -842,7 +842,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[8].Disposable = _parent._source9.SubscribeSafe(_observer9);
                 subscriptions[9].Disposable = _parent._source10.SubscribeSafe(_observer10);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -942,7 +942,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[9].Disposable = _parent._source10.SubscribeSafe(_observer10);
                 subscriptions[10].Disposable = _parent._source11.SubscribeSafe(_observer11);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1047,7 +1047,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[10].Disposable = _parent._source11.SubscribeSafe(_observer11);
                 subscriptions[11].Disposable = _parent._source12.SubscribeSafe(_observer12);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1157,7 +1157,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[11].Disposable = _parent._source12.SubscribeSafe(_observer12);
                 subscriptions[12].Disposable = _parent._source13.SubscribeSafe(_observer13);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1272,7 +1272,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[12].Disposable = _parent._source13.SubscribeSafe(_observer13);
                 subscriptions[13].Disposable = _parent._source14.SubscribeSafe(_observer14);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1392,7 +1392,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[13].Disposable = _parent._source14.SubscribeSafe(_observer14);
                 subscriptions[14].Disposable = _parent._source15.SubscribeSafe(_observer15);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1517,7 +1517,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 subscriptions[14].Disposable = _parent._source15.SubscribeSafe(_observer15);
                 subscriptions[15].Disposable = _parent._source16.SubscribeSafe(_observer16);
 
-                return new CompositeDisposable(subscriptions);
+                return StableCompositeDisposable.Create(subscriptions);
             }
 
             protected override TResult GetResult()
@@ -1765,7 +1765,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     d.Disposable = srcs[j].SubscribeSafe(o);
                 }
 
-                return new CompositeDisposable(_subscriptions);
+                return StableCompositeDisposable.Create(_subscriptions);
             }
 
             private void OnNext(int index, TSource value)
