@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -183,7 +184,6 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(gate.WaitOne(TimeSpan.FromSeconds(2)));
             results.AssertEqual(0, 1, 2);
         }
-
 
         [TestMethod]
         public void EventLoop_ScheduleTimeAndOrderedInFlightActions()
@@ -379,6 +379,46 @@ namespace ReactiveTests.Tests
         public void EventLoop_Stress()
         {
             EventLoop.NoSemaphoreFullException();
+        }
+#endif
+
+#if !NO_CDS && DESKTOPCLR
+        [TestMethod]
+        public void EventLoop_CorrectWorkStealing()
+        {
+            const int workItemCount = 100;
+
+            var failureCount = 0;
+            var countdown = new CountdownEvent(workItemCount);
+            var dueTime = DateTimeOffset.Now + TimeSpan.FromSeconds(1);
+
+            using (var d = new CompositeDisposable())
+            {
+                for (var i = 0; i < workItemCount; i++)
+                {
+                    var scheduler = new EventLoopScheduler();
+
+                    scheduler.Schedule(() =>
+                    {
+                        var schedulerThread = Thread.CurrentThread;
+
+                        scheduler.Schedule(dueTime, () =>
+                        {
+                            if (Thread.CurrentThread != schedulerThread)
+                            {
+                                Interlocked.Increment(ref failureCount);
+                            }
+                            countdown.Signal();
+                        });
+                    });
+
+                    d.Add(scheduler);
+                }
+
+                countdown.Wait();
+            }
+
+            Assert.AreEqual(0, failureCount);
         }
 #endif
     }
