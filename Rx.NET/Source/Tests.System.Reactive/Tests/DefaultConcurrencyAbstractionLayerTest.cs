@@ -257,7 +257,7 @@ namespace ReactiveTests.Tests
 
                 if (!success)
                 {
-                    res.Value = "Failed null check ScheduleLongRunnign.";
+                    res.Value = "Failed null check ScheduleLongRunning.";
                     state.Value.Set();
                     return;
                 }

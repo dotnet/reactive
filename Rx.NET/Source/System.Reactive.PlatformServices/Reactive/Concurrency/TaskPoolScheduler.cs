@@ -111,11 +111,7 @@ namespace System.Reactive.Concurrency
             var ct = new CancellationDisposable();
             d.Disposable = ct;
 
-#if USE_TASKEX
-            TaskEx.Delay(dueTime, ct.Token).ContinueWith(_ =>
-#else
-            Task.Delay(dueTime, ct.Token).ContinueWith(_ =>
-#endif
+            TaskHelpers.Delay(dueTime, ct.Token).ContinueWith(_ =>
             {
                 if (!d.IsDisposed)
                     d.Disposable = action(this, state);
@@ -194,11 +190,7 @@ namespace System.Reactive.Concurrency
             var moveNext = default(Action);
             moveNext = () =>
             {
-#if USE_TASKEX
-                TaskEx.Delay(period, cancel.Token).ContinueWith(
-#else
-                Task.Delay(period, cancel.Token).ContinueWith(
-#endif
+                TaskHelpers.Delay(period, cancel.Token).ContinueWith(
                     _ =>
                     {
                         moveNext();

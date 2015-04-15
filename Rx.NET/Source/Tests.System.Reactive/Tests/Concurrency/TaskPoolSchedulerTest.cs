@@ -160,6 +160,17 @@ namespace ReactiveTests.Tests
 
             Assert.IsFalse(fail);
         }
+
+        [TestMethod]
+        public void TaskPool_Delay_LargerThanIntMaxValue()
+        {
+            var dueTime = TimeSpan.FromMilliseconds((double)int.MaxValue + 1);
+
+            // Just ensuring the call to Schedule does not throw.
+            var d = TaskPoolScheduler.Default.Schedule(dueTime, () => { });
+
+            d.Dispose();
+        }
     }
 }
 #endif
