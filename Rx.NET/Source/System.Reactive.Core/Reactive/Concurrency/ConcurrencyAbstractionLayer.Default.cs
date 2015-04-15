@@ -371,7 +371,7 @@ namespace System.Reactive.Concurrency
         class FastPeriodicTimer : IDisposable
         {
             private readonly Action _action;
-            private bool disposed;
+            private volatile bool disposed;
 
             public FastPeriodicTimer(Action action)
             {

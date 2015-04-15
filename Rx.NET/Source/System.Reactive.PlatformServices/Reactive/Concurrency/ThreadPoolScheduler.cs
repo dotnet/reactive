@@ -117,21 +117,52 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than or equal to zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than zero.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
-            //
-            // MSDN documentation states the following:
-            //
-            //    "If period is zero (0) or negative one (-1) milliseconds and dueTime is positive, callback is invoked once;
-            //     the periodic behavior of the timer is disabled, but can be re-enabled using the Change method."
-            //
-            if (period <= TimeSpan.Zero)
+            if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException("period");
             if (action == null)
                 throw new ArgumentNullException("action");
 
-            return new PeriodicTimer<TState>(state, period, action);
+            if (period == TimeSpan.Zero)
+            {
+                return new FastPeriodicTimer<TState>(state, action);
+            }
+            else
+            {
+                return new PeriodicTimer<TState>(state, period, action);
+            }
+        }
+
+        sealed class FastPeriodicTimer<TState> : IDisposable
+        {
+            private TState _state;
+            private Func<TState, TState> _action;
+            private volatile bool _disposed;
+
+            public FastPeriodicTimer(TState state, Func<TState, TState> action)
+            {
+                _state = state;
+                _action = action;
+
+                ThreadPool.QueueUserWorkItem(Tick, null);
+            }
+
+            private void Tick(object state)
+            {
+                if (!_disposed)
+                {
+                    _state = _action(_state);
+                    ThreadPool.QueueUserWorkItem(Tick, null);
+                }
+            }
+
+            public void Dispose()
+            {
+                _disposed = true;
+                _action = Stubs<TState>.I;
+            }
         }
 
 #if USE_TIMER_SELF_ROOT
