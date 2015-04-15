@@ -373,14 +373,18 @@ namespace System.Reactive.Concurrency
         /// <returns>The next scheduled item.</returns>
         protected override IScheduledItem<TAbsolute> GetNext()
         {
-            while (queue.Count > 0)
+            lock (queue)
             {
-                var next = queue.Peek();
-                if (next.IsCanceled)
-                    queue.Dequeue();
-                else
-                    return next;
+                while (queue.Count > 0)
+                {
+                    var next = queue.Peek();
+                    if (next.IsCanceled)
+                        queue.Dequeue();
+                    else
+                        return next;
+                }
             }
+
             return null;
         }
 
@@ -402,12 +406,20 @@ namespace System.Reactive.Concurrency
 
             var run = new Func<IScheduler, TState, IDisposable>((scheduler, state1) =>
             {
-                queue.Remove(si);
+                lock (queue)
+                {
+                    queue.Remove(si);
+                }
+
                 return action(scheduler, state1);
             });
 
             si = new ScheduledItem<TAbsolute, TState>(this, state, run, dueTime, Comparer);
-            queue.Enqueue(si);
+
+            lock (queue)
+            {
+                queue.Enqueue(si);
+            }
 
             return Disposable.Create(si.Cancel);
         }
