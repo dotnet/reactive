@@ -384,7 +384,14 @@ namespace Tests
             var t = e.MoveNext(cts.Token);
             cts.Cancel();
 
-            t.Wait();
+            try
+            {
+                t.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                ex.Flatten().Handle(inner => inner is TaskCanceledException);
+            }
 
             Assert.IsTrue(disposed);
         }
