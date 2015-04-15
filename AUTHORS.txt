@@ -4,7 +4,7 @@ Rx and Ix.NET:
 Wes Dyer
 Jeffrey van Gogh	
 Matthew Podwysocki 
-Bart de Smet		
+Bart De Smet		
 Danny van Velzen
 Erik Meijer
 Brian Beckman
@@ -13,6 +13,7 @@ Georgi Chkodrov
 Arthur Watson
 Gert Drapers
 Mark Shields
+Eric Rozell
 
 Rx.js and Ix.js:
 Matthew Podwysocki
