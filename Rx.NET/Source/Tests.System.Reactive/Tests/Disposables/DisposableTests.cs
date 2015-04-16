@@ -378,7 +378,7 @@ namespace ReactiveTests.Tests
             new CompositeDisposable().Remove(null);
         }
 
-#if DESKTOPCLR40 || DESKTOPCLR45
+#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CancellationDisposable_Ctor_Null()
         {

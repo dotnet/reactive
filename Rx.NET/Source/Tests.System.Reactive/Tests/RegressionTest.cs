@@ -16,7 +16,7 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class RegressionTest : ReactiveTest
     {
-#if DESKTOPCLR40 || DESKTOPCLR45
+#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
         [TestMethod]
         public void Bug_ConcurrentMerge()
         {
@@ -156,6 +156,7 @@ namespace ReactiveTests.Tests
             sema.WaitOne();
         }
 #endif
+
         [TestMethod]
         public void Bug_1295_Completed()
         {

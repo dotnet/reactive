@@ -42,6 +42,15 @@
     <BuildTarget>45</BuildTarget>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug46|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>46</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release46|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>46</BuildTarget>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug8|AnyCPU' ">
     <BuildConfig>Debug</BuildConfig>
     <BuildTarget>8</BuildTarget>
@@ -126,6 +135,14 @@
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == '46' ">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR46</BuildFlavor>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
@@ -338,7 +355,7 @@
   </ItemGroup>
 
   <!-- Temporary flag to enable stress test builds. Should be refactored into a separate project and be written in a more platform-neutral manner. (TFS 484720) -->
-  <PropertyGroup Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' OR '$(BuildFlavor)' == 'DESKTOPCLR45' ">
+  <PropertyGroup Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' OR '$(BuildFlavor)' == 'DESKTOPCLR45' OR '$(BuildFlavor)' == 'DESKTOPCLR46' ">
     <DefineConstants>$(DefineConstants);STRESS</DefineConstants>
   </PropertyGroup>
   
