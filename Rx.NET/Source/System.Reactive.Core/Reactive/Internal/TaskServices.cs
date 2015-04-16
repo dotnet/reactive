@@ -36,12 +36,12 @@ namespace System.Reactive.PlatformServices
     public interface ITaskServices
     {
         /// <summary>
-        /// 
+        /// Attempts to transition the underlying Task{T} into the Canceled state.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="tcs"></param>
-        /// <param name="token"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">Type of the result of the underlying task.</typeparam>
+        /// <param name="tcs">Task completion source whose underlying task to transition into the Canceled state.</param>
+        /// <param name="token">Cancellation token that triggered the cancellation.</param>
+        /// <returns>True if the operation was successful; false if the operation was unsuccessful or the object has already been disposed.</returns>
         bool TrySetCanceled<T>(TaskCompletionSource<T> tcs, CancellationToken token);
     }
 }

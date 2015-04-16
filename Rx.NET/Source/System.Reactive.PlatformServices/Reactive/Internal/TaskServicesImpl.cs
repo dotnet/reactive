@@ -11,7 +11,7 @@ namespace System.Reactive.PlatformServices
     //          Another copy is kept in System.Reactive.PlatformServices to enlighten the default lowest common denominator
     //          behavior of Rx for PLIB when used on a more capable platform.
     //
-    internal class DefaultTaskServices/*Impl*/ : ITaskServices
+    internal class /*Default*/TaskServicesImpl : ITaskServices
     {
         public bool TrySetCanceled<T>(TaskCompletionSource<T> tcs, CancellationToken token)
         {
