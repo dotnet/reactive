@@ -11,6 +11,36 @@ namespace System.Reactive.Subjects
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
     public sealed class BehaviorSubject<T> : ISubject<T>, IDisposable
     {
+        private readonly object _gate = new object();
+
+        private ImmutableList<IObserver<T>> _observers;
+        private bool _isStopped;
+        private T _value;
+        private Exception _exception;
+        private bool _isDisposed;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/> class which creates a subject that caches its last value and starts with the specified value.
+        /// </summary>
+        /// <param name="value">Initial value sent to observers when no other value has been received by the subject yet.</param>
+        public BehaviorSubject(T value)
+        {
+            _value = value;
+            _observers = new ImmutableList<IObserver<T>>();
+        }
+
+        /// <summary>
+        /// Indicates whether the subject has observers subscribed to it.
+        /// </summary>
+        public bool HasObservers
+        {
+            get
+            {
+                var observers = _observers;
+                return observers != null && observers.Data.Length > 0;
+            }
+        }
+
         /// <summary>
         /// Gets the current value or throws an exception.
         /// </summary>
@@ -40,36 +70,6 @@ namespace System.Reactive.Subjects
 
                     return _value;
                 }
-            }
-        }
-
-        private readonly object _gate = new object();
-
-        private ImmutableList<IObserver<T>> _observers;
-        private bool _isStopped;
-        private T _value;
-        private Exception _exception;
-        private bool _isDisposed;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/> class which creates a subject that caches its last value and starts with the specified value.
-        /// </summary>
-        /// <param name="value">Initial value sent to observers when no other value has been received by the subject yet.</param>
-        public BehaviorSubject(T value)
-        {
-            _value = value;
-            _observers = new ImmutableList<IObserver<T>>();
-        }
-
-        /// <summary>
-        /// Indicates whether the subject has observers subscribed to it.
-        /// </summary>
-        public bool HasObservers
-        {
-            get
-            {
-                var observers = _observers;
-                return observers != null && observers.Data.Length > 0;
             }
         }
 
@@ -187,6 +187,26 @@ namespace System.Reactive.Subjects
             return Disposable.Empty;
         }
 
+        /// <summary>
+        /// Unsubscribe all observers and release resources.
+        /// </summary>
+        public void Dispose()
+        {
+            lock (_gate)
+            {
+                _isDisposed = true;
+                _observers = null;
+                _value = default(T);
+                _exception = null;
+            }
+        }
+
+        private void CheckDisposed()
+        {
+            if (_isDisposed)
+                throw new ObjectDisposedException(string.Empty);
+        }
+
         class Subscription : IDisposable
         {
             private readonly BehaviorSubject<T> _subject;
@@ -211,26 +231,6 @@ namespace System.Reactive.Subjects
                         }
                     }
                 }
-            }
-        }
-
-        void CheckDisposed()
-        {
-            if (_isDisposed)
-                throw new ObjectDisposedException(string.Empty);
-        }
-
-        /// <summary>
-        /// Unsubscribe all observers and release resources.
-        /// </summary>
-        public void Dispose()
-        {
-            lock (_gate)
-            {
-                _isDisposed = true;
-                _observers = null;
-                _value = default(T);
-                _exception = null;
             }
         }
     }
