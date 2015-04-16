@@ -69,6 +69,13 @@ namespace System.Reactive.PlatformServices
             }
 #endif
 
+#if HAS_TPL46
+            if (t == typeof(IExceptionServices))
+            {
+                return (T)(object)new ExceptionServicesImpl();
+            }
+#endif
+
             if (t == typeof(IQueryServices))
             {
                 //

@@ -36,6 +36,7 @@
     <Compile Include="Reactive\Concurrency\Thread.Stub.cs" />
     <Compile Include="Reactive\Concurrency\ThreadPoolScheduler.Windows.cs" />
     <Compile Include="Reactive\EnlightenmentProvider.cs" />
+    <Compile Include="Reactive\Internal\TaskServicesImpl.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleNotifications.WindowsPhone.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleNotifications.Windows.cs" />
     <Compile Include="Reactive\Internal\PhoneShellThunks.cs" />

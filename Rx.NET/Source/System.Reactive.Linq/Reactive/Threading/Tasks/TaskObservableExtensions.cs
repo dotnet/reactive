@@ -192,7 +192,7 @@ namespace System.Reactive.Threading.Tasks
                 ctr = cancellationToken.Register(() =>
                 {
                     disposable.Dispose();
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(cancellationToken);
                 });
             }
 

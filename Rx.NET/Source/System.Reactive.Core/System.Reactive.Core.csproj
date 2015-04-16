@@ -83,6 +83,8 @@
     <Compile Include="Reactive\Disposables\SerialDisposable.cs" />
     <Compile Include="Reactive\Disposables\SingleAssignmentDisposable.cs" />
     <Compile Include="Reactive\Internal\AutoDetachObserver.cs" />
+    <Compile Include="Reactive\Internal\TaskServices.Default.cs" />
+    <Compile Include="Reactive\Internal\TaskServices.cs" />
     <Compile Include="Reactive\Internal\ExceptionServices.Default.cs" />
     <Compile Include="Reactive\Internal\ExceptionServices.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleService.cs" />
