@@ -222,7 +222,7 @@ namespace System.Reactive.Concurrency
                 });
             }, period);
 
-            return ImmutableCompositeDisposable.Create(timer, gate);
+            return StableCompositeDisposable.Create(timer, gate);
 #endif
         }
     }
