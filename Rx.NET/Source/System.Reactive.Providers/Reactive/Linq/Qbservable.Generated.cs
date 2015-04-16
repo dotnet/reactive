@@ -3282,7 +3282,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
@@ -3316,7 +3316,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
@@ -3350,7 +3350,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
@@ -3384,7 +3384,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>

@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribeAsync"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribeAsync"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
@@ -132,7 +132,7 @@ namespace System.Reactive.Linq
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribeAsync"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
@@ -149,7 +149,7 @@ namespace System.Reactive.Linq
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <param name="subscribeAsync">Asynchronous method used to implemented the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
+        /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribeAsync"/> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
