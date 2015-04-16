@@ -13,12 +13,6 @@
     <ProductSignAssembly>true</ProductSignAssembly>
     <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
-    <OutputPath>bin\ReleaseXBLV\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
-    <OutputPath>bin\DebugXBLV\</OutputPath>
-  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
