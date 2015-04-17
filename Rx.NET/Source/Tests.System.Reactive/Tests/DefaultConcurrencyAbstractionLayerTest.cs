@@ -28,12 +28,41 @@ namespace ReactiveTests.Tests
                 if (!Directory.Exists(sub))
                 {
                     Directory.CreateDirectory(sub);
+                }
 
-                    foreach (var file in Directory.GetFiles(cur))
+                //
+                // We want to replace the files to make the debugging experience
+                // better. If the directory already exists, a recompilation does
+                // not get rid of it. At some point, we should revisit this whole
+                // directory creation during the test run and try to do away with
+                // it by making it part of the build process.
+                //
+
+                foreach (var file in Directory.GetFiles(cur))
+                {
+                    var fn = Path.GetFileName(file);
+                    if (!file.Contains("PlatformServices"))
                     {
-                        var fn = Path.GetFileName(file);
-                        if (!file.Contains("PlatformServices"))
+                        var dest = Path.Combine(sub, fn);
+
+                        if (File.Exists(dest))
+                        {
+                            try
+                            {
+                                File.Delete(dest);
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
+                                //
+                                // File in use; expected after first pass.
+                                //
+                            }
+                        }
+
+                        if (!File.Exists(dest))
+                        {
                             File.Copy(Path.Combine(cur, fn), Path.Combine(sub, fn));
+                        }
                     }
                 }
 
@@ -182,14 +211,20 @@ namespace ReactiveTests.Tests
             {
                 var n = 0;
 
+                var hasAtLeastOneValue = new ManualResetEvent(false);
+
                 var schedule = Scheduler.Default.SchedulePeriodic(TimeSpan.Zero, () =>
                 {
                     _domain.SetData("value", n++);
+                    hasAtLeastOneValue.Set();
                 });
 
                 _domain.SetData("cancel", new MarshalByRefAction(schedule.Dispose));
 
+                hasAtLeastOneValue.WaitOne();
+
                 var setCancel = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("set_cancel");
+
                 setCancel.Value.Set();
             });
 
