@@ -48,6 +48,10 @@
       <Project>{63252AE9-5186-45CA-BFCD-FA51C6B66A43}</Project>
       <Name>System.Reactive.Linq</Name>
     </ProjectReference>
+    <ProjectReference Include="..\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj">
+      <Project>{9ffac385-10a4-4ddd-b800-de67e8469cc0}</Project>
+      <Name>System.Reactive.Observable.Aliases</Name>
+    </ProjectReference>
     <ProjectReference Include="..\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj">
       <Project>{0cccf009-763f-40d2-8655-7a94828023bf}</Project>
       <Name>System.Reactive.PlatformServices</Name>
