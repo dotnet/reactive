@@ -1856,6 +1856,13 @@ namespace ReactiveTests.Tests
 
             Assert.Fail();
         }
+
+        [TestMethod]
+        public void Qbservable_HigherOrder()
+        {
+            var res = Qbservable.Return(Qbservable.Provider, 42).Select(_ => Qbservable.Return(Qbservable.Provider, 42)).Switch().Single();
+            Assert.AreEqual(42, res);
+        }
     }
 
     public static class MyExt

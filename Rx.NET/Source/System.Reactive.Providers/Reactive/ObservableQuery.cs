@@ -296,6 +296,11 @@ namespace System.Reactive
                 return base.VisitMethodCall(node);
             }
 
+            protected override Expression VisitLambda<T>(Expression<T> node)
+            {
+                return node;
+            }
+
             private IList<Expression> VisitQbservableOperatorArguments(MethodInfo method, IEnumerable<Expression> arguments)
             {
                 //
