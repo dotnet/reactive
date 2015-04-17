@@ -43,8 +43,8 @@ namespace HomoIconize
             Process(root, 
                 "System.Reactive.Observable.Aliases", 
                 "System.Reactive.Observable.Aliases", 
-                "Qbservable.Aliases.Generated.cs", 
-                "System.Reactive.Observable.Aliases.Observable", "QbservableAliases",
+                "Qbservable.Aliases.Generated.cs",
+                "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
                 includeAsync: false, createAliases: true);
             Console.WriteLine();
 
