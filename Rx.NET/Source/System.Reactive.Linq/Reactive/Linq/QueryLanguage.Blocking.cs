@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
             var seenValue = false;
             var ex = default(Exception);
 
-            using (var evt = new ManualResetEvent(false))
+            using (var evt = new WaitAndSetOnce())
             {
                 //
                 // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
@@ -179,7 +179,7 @@ namespace System.Reactive.Linq
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
 #if !NO_PERF
-            using (var evt = new ManualResetEvent(false))
+            using (var evt = new WaitAndSetOnce())
             {
                 var sink = new ForEach<TSource>._(onNext, () => evt.Set());
 
@@ -198,7 +198,7 @@ namespace System.Reactive.Linq
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext)
         {
 #if !NO_PERF
-            using (var evt = new ManualResetEvent(false))
+            using (var evt = new WaitAndSetOnce())
             {
                 var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
 
@@ -315,7 +315,7 @@ namespace System.Reactive.Linq
             var seenValue = false;
             var ex = default(Exception);
 
-            using (var evt = new ManualResetEvent(false))
+            using (var evt = new WaitAndSetOnce())
             {
                 //
                 // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
@@ -409,7 +409,7 @@ namespace System.Reactive.Linq
             var seenValue = false;
             var ex = default(Exception);
 
-            using (var evt = new ManualResetEvent(false))
+            using (var evt = new WaitAndSetOnce())
             {
                 //
                 // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
@@ -470,6 +470,35 @@ namespace System.Reactive.Linq
             return adapter;
         }
 #endif
+
+        class WaitAndSetOnce : IDisposable
+        {
+            private readonly ManualResetEvent _evt;
+            private int _hasSet;
+
+            public WaitAndSetOnce()
+            {
+                _evt = new ManualResetEvent(false);
+            }
+
+            public void Set()
+            {
+                if (Interlocked.Exchange(ref _hasSet, 1) == 0)
+                {
+                    _evt.Set();
+                }
+            }
+
+            public void WaitOne()
+            {
+                _evt.WaitOne();
+            }
+
+            public void Dispose()
+            {
+                _evt.Dispose();
+            }
+        }
 
         #endregion
     }
