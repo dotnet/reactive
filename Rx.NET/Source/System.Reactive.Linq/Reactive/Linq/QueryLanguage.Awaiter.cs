@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return Cancel(s);
+                return Cancel(s, cancellationToken);
             }
 
             var d = source.SubscribeSafe(s);
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
 
             if (cancellationToken.IsCancellationRequested)
             {
-                return Cancel(s);
+                return Cancel(s, cancellationToken);
             }
 
             var d = source.SubscribeSafe(s);
@@ -59,9 +59,9 @@ namespace System.Reactive.Linq
             return s;
         }
 
-        private static AsyncSubject<T> Cancel<T>(AsyncSubject<T> subject)
+        private static AsyncSubject<T> Cancel<T>(AsyncSubject<T> subject, CancellationToken cancellationToken)
         {
-            subject.OnError(new OperationCanceledException());
+            subject.OnError(new OperationCanceledException(cancellationToken));
             return subject;
         }
 
@@ -75,7 +75,7 @@ namespace System.Reactive.Linq
             var ctr = token.Register(() =>
             {
                 subscription.Dispose();
-                Cancel(subject);
+                Cancel(subject, token);
             });
 
             //
