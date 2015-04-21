@@ -45,7 +45,7 @@ namespace System.Reactive
             state.sink = new SingleAssignmentDisposable();
             state.subscription = new SingleAssignmentDisposable();
 
-            var d = new CompositeDisposable(2) { state.sink, state.subscription };
+            var d = StableCompositeDisposable.Create(state.sink, state.subscription);
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
