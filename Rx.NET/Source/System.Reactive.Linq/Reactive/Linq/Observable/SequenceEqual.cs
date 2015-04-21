@@ -122,8 +122,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    lock (_parent._gate)
+                    {
+                        _parent._observer.OnError(error);
+                        _parent.Dispose();
+                    }
                 }
 
                 public void OnCompleted()
@@ -197,8 +200,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    lock (_parent._gate)
+                    {
+                        _parent._observer.OnError(error);
+                        _parent.Dispose();
+                    }
                 }
 
                 public void OnCompleted()
