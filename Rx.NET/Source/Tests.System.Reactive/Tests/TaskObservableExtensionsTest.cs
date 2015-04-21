@@ -22,7 +22,13 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void TaskToObservable_NonVoid_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((System.Threading.Tasks.Task<int>)null));
+            var s = Scheduler.Immediate;
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(Task.FromResult(42), default(IScheduler)));
+
             var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
             var task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
@@ -346,10 +352,43 @@ namespace ReactiveTests.Tests
             );
         }
 
+#if DESKTOPCLR
+        [TestMethod]
+        public void TaskToObservable_NonVoid_Scheduler()
+        {
+            var e = new ManualResetEvent(false);
+            var x = default(int);
+            var t = default(int);
+
+            var cts = new TaskCompletionSource<int>();
+
+            var xs = cts.Task.ToObservable(Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                x = res;
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            cts.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(42, x);
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
+
         [TestMethod]
         public void TaskToObservable_Void_ArgumentChecking()
         {
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((System.Threading.Tasks.Task)null));
+            var s = Scheduler.Immediate;
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null, s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)Task.FromResult(42), default(IScheduler)));
+
             var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
             System.Threading.Tasks.Task task = tcs.Task;
             ReactiveAssert.Throws<ArgumentNullException>(() => task.ToObservable().Subscribe(null));
@@ -672,6 +711,30 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
             );
         }
+
+#if DESKTOPCLR
+        [TestMethod]
+        public void TaskToObservable_Void_Scheduler()
+        {
+            var e = new ManualResetEvent(false);
+            var t = default(int);
+
+            var tcs = new TaskCompletionSource<int>();
+
+            var xs = ((Task)tcs.Task).ToObservable(Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
 
         #endregion
 

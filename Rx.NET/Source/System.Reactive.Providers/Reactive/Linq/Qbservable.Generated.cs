@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (11/21/2013 11:07:25 AM)
+ * WARNING: Auto-generated file (4/16/2015 23:47:35)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -4825,6 +4825,41 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (actionAsync == null)
+                throw new ArgumentNullException("actionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync(default(IQbservableProvider), default(Expression<Func<Task>>), default(IScheduler))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod(),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
@@ -4850,6 +4885,43 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
+        /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="actionAsync">Asynchronous action to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (actionAsync == null)
+                throw new ArgumentNullException("actionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task>>), default(IScheduler))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod(),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -4916,6 +4988,80 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (functionAsync == null)
+                throw new ArgumentNullException("functionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
+        /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to convert.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
+        public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (functionAsync == null)
+                throw new ArgumentNullException("functionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.FromAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResult>>>), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -8864,68 +9010,6 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Double" /> value.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values to determine the maximum value of.</param>
-        /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Double" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static IQbservable<double> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<double>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Max<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, double>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Single" /> value.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values to determine the maximum value of.</param>
-        /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Single" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static IQbservable<float> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<float>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Max<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, float>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
         /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -9174,6 +9258,68 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Double" /> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values to determine the maximum value of.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Double" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static IQbservable<double> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<double>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Max<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, double>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    selector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Single" /> value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values to determine the maximum value of.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Single" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static IQbservable<float> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<float>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Max<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, float>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    selector
+                )
+            );
+        }
+        
+        /// <summary>
         /// Invokes a transform function on each element of a sequence and returns the maximum value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -9408,6 +9554,36 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
+        /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
+        /// <param name="sources">Enumerable sequence of observable sequences.</param>
+        /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="sources" /> is null.</exception>
+        public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (sources == null)
+                throw new ArgumentNullException("sources");
+            
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Merge<TSource>(default(IQbservableProvider), default(IEnumerable<IObservable<TSource>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    GetSourceExpression(sources)
+                )
+            );
+        }
+        
+        /// <summary>
         /// Merges elements from all inner observable sequences into a single observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
@@ -9483,36 +9659,6 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Merge<TSource>(default(IQbservableProvider), default(IObservable<TSource>[]))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    GetSourceExpression(sources)
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
-        /// <param name="sources">Enumerable sequence of observable sequences.</param>
-        /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="sources" /> is null.</exception>
-        public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
-        {
-            if (provider == null)
-                throw new ArgumentNullException("provider");
-            if (sources == null)
-                throw new ArgumentNullException("sources");
-            
-            return provider.CreateQuery<TSource>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Merge<TSource>(default(IQbservableProvider), default(IEnumerable<IObservable<TSource>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -12305,6 +12451,45 @@ namespace System.Reactive.Linq
         
 #if !NO_TPL
         /// <summary>
+        /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TTaskResult">The type of the results produced by the projected intermediate tasks.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate task results.</typeparam>
+        /// <param name="source">An observable sequence of elements to project.</param>
+        /// <param name="taskSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
+        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element.</param>
+        /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (taskSelector == null)
+                throw new ArgumentNullException("taskSelector");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, Task<TTaskResult>>>), default(Expression<Func<TSource, int, TTaskResult, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+#endif
+                    source.Expression,
+                    taskSelector,
+                    resultSelector
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -12409,45 +12594,6 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, Task<TTaskResult>>>), default(Expression<Func<TSource, TTaskResult, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
-#endif
-                    source.Expression,
-                    taskSelector,
-                    resultSelector
-                )
-            );
-        }
-#endif
-        
-#if !NO_TPL
-        /// <summary>
-        /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TTaskResult">The type of the results produced by the projected intermediate tasks.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate task results.</typeparam>
-        /// <param name="source">An observable sequence of elements to project.</param>
-        /// <param name="taskSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
-        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element.</param>
-        /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-            
-            return source.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, Task<TTaskResult>>>), default(Expression<Func<TSource, int, TTaskResult, TResult>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
 #endif
@@ -13297,6 +13443,51 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The action is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (actionAsync == null)
+                throw new ArgumentNullException("actionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync(default(IQbservableProvider), default(Expression<Func<Task>>), default(IScheduler))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod(),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
         /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
@@ -13340,6 +13531,61 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     actionAsync
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Invokes the asynchronous action, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="actionAsync">Asynchronous action to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The action is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the action's outcome.</description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (actionAsync == null)
+                throw new ArgumentNullException("actionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<Unit>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task>>), default(IScheduler))),
+#else
+                    (MethodInfo)MethodInfo.GetCurrentMethod(),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    actionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -13434,6 +13680,108 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     functionAsync
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (functionAsync == null)
+                throw new ArgumentNullException("functionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<Task<TResult>>>), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
+        /// Invokes the asynchronous function, surfacing the result through an observable sequence.
+        /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
+        /// <param name="functionAsync">Asynchronous function to run.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers.</param>
+        /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>The function is started immediately, not during the subscription of the resulting sequence.</description>
+        /// </item>
+        /// <item>
+        /// <description>Multiple subscriptions to the resulting sequence can observe the function's result.</description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// If any subscription to the resulting sequence is disposed, the CancellationToken is set. The observer associated to the disposed
+        /// subscription won't see the TaskCanceledException, but other observers will. You can protect against this using the Catch operator.
+        /// Be careful when handing out the resulting sequence because of this behavior. The most common use is to have a single subscription
+        /// to the resulting sequence, which controls the CancellationToken state. Alternatively, you can control subscription behavior using
+        /// multicast operators.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException("provider");
+            if (functionAsync == null)
+                throw new ArgumentNullException("functionAsync");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+            
+            return provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.StartAsync<TResult>(default(IQbservableProvider), default(Expression<Func<CancellationToken, Task<TResult>>>), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TResult)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    functionAsync,
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }
@@ -13904,6 +14252,100 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
+        /// Computes the sum of a sequence of nullable <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static IQbservable<double?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<double?>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, double?>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    selector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Computes the sum of a sequence of nullable <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static IQbservable<float?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<float?>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, float?>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    selector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Computes the sum of a sequence of nullable <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
+        /// <param name="selector">A transform function to apply to each element.</param>
+        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
+        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
+        public static IQbservable<decimal?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (selector == null)
+                throw new ArgumentNullException("selector");
+            
+            return source.Provider.CreateQuery<decimal?>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, decimal?>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    source.Expression,
+                    selector
+                )
+            );
+        }
+        
+        /// <summary>
         /// Computes the sum of a sequence of nullable <see cref="T:System.Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -14116,100 +14558,6 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, long>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static IQbservable<double?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<double?>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, double?>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static IQbservable<float?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<float?>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, float?>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
-#endif
-                    source.Expression,
-                    selector
-                )
-            );
-        }
-        
-        /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">A sequence of values that are used to calculate a sum.</param>
-        /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
-        /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        public static IQbservable<decimal?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (selector == null)
-                throw new ArgumentNullException("selector");
-            
-            return source.Provider.CreateQuery<decimal?>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Sum<TSource>(default(IQbservable<TSource>), default(Expression<Func<TSource, decimal?>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
 #endif
@@ -17144,42 +17492,6 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Merges an observable sequence and an enumerable sequence into one observable sequence by using the selector function.
-        /// </summary>
-        /// <typeparam name="TSource1">The type of the elements in the first observable source sequence.</typeparam>
-        /// <typeparam name="TSource2">The type of the elements in the second enumerable source sequence.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
-        /// <param name="first">First observable source.</param>
-        /// <param name="second">Second enumerable source.</param>
-        /// <param name="resultSelector">Function to invoke for each consecutive pair of elements from the first and second source.</param>
-        /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
-        public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IEnumerable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
-        {
-            if (first == null)
-                throw new ArgumentNullException("first");
-            if (second == null)
-                throw new ArgumentNullException("second");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-            
-            return first.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.Zip<TSource1, TSource2, TResult>(default(IQbservable<TSource1>), default(IEnumerable<TSource2>), default(Expression<Func<TSource1, TSource2, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
-#endif
-                    first.Expression,
-                    GetSourceExpression(second),
-                    resultSelector
-                )
-            );
-        }
-        
-        /// <summary>
         /// Merges two observable sequences into one observable sequence by combining their elements in a pairwise fashion.
         /// </summary>
         /// <typeparam name="TSource1">The type of the elements in the first source sequence.</typeparam>
@@ -17205,6 +17517,42 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.Zip<TSource1, TSource2, TResult>(default(IQbservable<TSource1>), default(IObservable<TSource2>), default(Expression<Func<TSource1, TSource2, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
+#endif
+                    first.Expression,
+                    GetSourceExpression(second),
+                    resultSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Merges an observable sequence and an enumerable sequence into one observable sequence by using the selector function.
+        /// </summary>
+        /// <typeparam name="TSource1">The type of the elements in the first observable source sequence.</typeparam>
+        /// <typeparam name="TSource2">The type of the elements in the second enumerable source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second enumerable source.</param>
+        /// <param name="resultSelector">Function to invoke for each consecutive pair of elements from the first and second source.</param>
+        /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
+        public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IEnumerable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
+        {
+            if (first == null)
+                throw new ArgumentNullException("first");
+            if (second == null)
+                throw new ArgumentNullException("second");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return first.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.Zip<TSource1, TSource2, TResult>(default(IQbservable<TSource1>), default(IEnumerable<TSource2>), default(Expression<Func<TSource1, TSource2, TResult>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource1), typeof(TSource2), typeof(TResult)),
 #endif

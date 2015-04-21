@@ -1291,8 +1291,16 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartAsync_Func_ArgumentChecking()
         {
+            var s = Scheduler.Immediate;
+
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>), s));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => Task.FromResult(1), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => Task.FromResult(1), default(IScheduler)));
         }
 
         [TestMethod]
@@ -1427,6 +1435,58 @@ namespace ReactiveTests.Tests
             }
         }
 
+#if DESKTOPCLR
+        [TestMethod]
+        public void StartAsync_Func_Scheduler1()
+        {
+            var tcs = new TaskCompletionSource<int>();
+
+            var e = new ManualResetEvent(false);
+            var x = default(int);
+            var t = default(int);
+
+            var xs = Observable.StartAsync(() => tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                x = res;
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(42, x);
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+
+        [TestMethod]
+        public void StartAsync_Func_Scheduler2()
+        {
+            var tcs = new TaskCompletionSource<int>();
+
+            var e = new ManualResetEvent(false);
+            var x = default(int);
+            var t = default(int);
+
+            var xs = Observable.StartAsync(ct => tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                x = res;
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(42, x);
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
+
         #endregion
 
         #region Action
@@ -1434,8 +1494,15 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartAsync_Action_ArgumentChecking()
         {
+            var s = Scheduler.Immediate;
+
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)Task.FromResult(1), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)Task.FromResult(1), default(IScheduler)));
         }
 
         [TestMethod]
@@ -1562,6 +1629,52 @@ namespace ReactiveTests.Tests
             }
         }
 
+#if DESKTOPCLR
+        [TestMethod]
+        public void StartAsync_Action_Scheduler1()
+        {
+            var tcs = new TaskCompletionSource<int>();
+
+            var e = new ManualResetEvent(false);
+            var t = default(int);
+
+            var xs = Observable.StartAsync(() => (Task)tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+
+        [TestMethod]
+        public void StartAsync_Action_Scheduler2()
+        {
+            var tcs = new TaskCompletionSource<int>();
+
+            var e = new ManualResetEvent(false);
+            var t = default(int);
+
+            var xs = Observable.StartAsync(ct => (Task)tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
+
         #endregion
 
 #endif
@@ -1573,6 +1686,20 @@ namespace ReactiveTests.Tests
 #if !NO_TPL
 
         #region Func
+
+        [TestMethod]
+        public void FromAsync_Func_ArgumentChecking()
+        {
+            var s = Scheduler.Immediate;
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => Task.FromResult(42), default(IScheduler)));
+        }
 
         [TestMethod]
         public void FromAsync_Func_Success()
@@ -1694,9 +1821,75 @@ namespace ReactiveTests.Tests
                 ;
         }
 
+#if DESKTOPCLR
+        [TestMethod]
+        public void FromAsync_Func_Scheduler1()
+        {
+            var e = new ManualResetEvent(false);
+            var x = default(int);
+            var t = default(int);
+
+            var tcs = new TaskCompletionSource<int>();
+
+            var xs = Observable.FromAsync(() => tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                x = res;
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(42, x);
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+
+        [TestMethod]
+        public void FromAsync_Func_Scheduler2()
+        {
+            var e = new ManualResetEvent(false);
+            var x = default(int);
+            var t = default(int);
+
+            var tcs = new TaskCompletionSource<int>();
+
+            var xs = Observable.FromAsync(ct => tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                x = res;
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(42, x);
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
+
         #endregion
 
         #region Action
+
+        [TestMethod]
+        public void FromAsync_Action_ArgumentChecking()
+        {
+            var s = Scheduler.Immediate;
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)Task.FromResult(42), default(IScheduler)));
+        }
 
         [TestMethod]
         public void FromAsync_Action_Success()
@@ -1813,6 +2006,52 @@ namespace ReactiveTests.Tests
             while (!t.IsCompleted)
                 ;
         }
+
+#if DESKTOPCLR
+        [TestMethod]
+        public void FromAsync_Action_Scheduler1()
+        {
+            var e = new ManualResetEvent(false);
+            var t = default(int);
+
+            var tcs = new TaskCompletionSource<int>();
+
+            var xs = Observable.FromAsync(() => (Task)tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+
+        [TestMethod]
+        public void FromAsync_Action_Scheduler2()
+        {
+            var e = new ManualResetEvent(false);
+            var t = default(int);
+
+            var tcs = new TaskCompletionSource<int>();
+
+            var xs = Observable.FromAsync(ct => (Task)tcs.Task, Scheduler.Immediate);
+            xs.Subscribe(res =>
+            {
+                t = Thread.CurrentThread.ManagedThreadId;
+                e.Set();
+            });
+
+            tcs.SetResult(42);
+
+            e.WaitOne();
+
+            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+        }
+#endif
 
         #endregion
 

@@ -206,6 +206,8 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync);
+        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler);
+        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler);
 #endif
 
         IObservable<Unit> Start(Action action);
@@ -214,6 +216,8 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         IObservable<Unit> StartAsync(Func<Task> actionAsync);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync);
+        IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler);
+        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
 #endif
 
 #if !NO_TPL
@@ -221,6 +225,10 @@ namespace System.Reactive.Linq
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync);
         IObservable<Unit> FromAsync(Func<Task> actionAsync);
         IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync);
+        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler);
+        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler);
+        IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler);
+        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
 #endif
 
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function);
