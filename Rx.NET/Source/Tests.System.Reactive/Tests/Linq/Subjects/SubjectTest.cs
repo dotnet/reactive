@@ -367,10 +367,13 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(null, Observable.Return(42)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(Observer.Create<int>(x => {}), null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(null, Observable.Return(42)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(Observer.Create<int>(x => { }), null));
         }
 
         [TestMethod]
-        public void Subject_Create()
+        public void Subject_Create1()
         {
             var _x = default(int);
             var _ex = default(Exception);
@@ -380,6 +383,34 @@ namespace ReactiveTests.Tests
             var o = Observable.Return(42);
 
             var s = Subject.Create<int, int>(v, o);
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => s.Subscribe(null));
+            s.Subscribe(x => _x = x);
+            Assert.AreEqual(42, _x);
+
+            s.OnNext(21);
+            Assert.AreEqual(21, _x);
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => s.OnError(null));
+            var e = new Exception();
+            s.OnError(e);
+            Assert.AreSame(e, _ex);
+
+            s.OnCompleted();
+            Assert.IsFalse(done); // already cut off
+        }
+
+        [TestMethod]
+        public void Subject_Create2()
+        {
+            var _x = default(int);
+            var _ex = default(Exception);
+            var done = false;
+
+            var v = Observer.Create<int>(x => _x = x, ex => _ex = ex, () => done = true);
+            var o = Observable.Return(42);
+
+            var s = Subject.Create<int>(v, o);
 
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Subscribe(null));
             s.Subscribe(x => _x = x);

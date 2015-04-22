@@ -30,6 +30,24 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
+        /// Creates a subject from the specified observer and observable.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements received by the observer and produced by the observable sequence.</typeparam>
+        /// <param name="observer">The observer used to send messages to the subject.</param>
+        /// <param name="observable">The observable used to subscribe to messages sent from the subject.</param>
+        /// <returns>Subject implemented using the given observer and observable.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="observable"/> is null.</exception>
+        public static ISubject<T> Create<T>(IObserver<T> observer, IObservable<T> observable)
+        {
+            if (observer == null)
+                throw new ArgumentNullException("observer");
+            if (observable == null)
+                throw new ArgumentNullException("observable");
+
+            return new AnonymousSubject<T>(observer, observable);
+        }
+
+        /// <summary>
         /// Synchronizes the messages sent to the subject.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements received by the subject.</typeparam>
@@ -102,6 +120,14 @@ namespace System.Reactive.Subjects
                 // [OK] Use of unsafe Subscribe: non-pretentious wrapping of an observable sequence.
                 //
                 return _observable.Subscribe/*Unsafe*/(observer);
+            }
+        }
+
+        class AnonymousSubject<T> : AnonymousSubject<T, T>, ISubject<T>
+        {
+            public AnonymousSubject(IObserver<T> observer, IObservable<T> observable)
+                : base(observer, observable)
+            {
             }
         }
     }
