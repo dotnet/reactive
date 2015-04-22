@@ -4860,11 +4860,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
             );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -5036,11 +5038,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
-               );
+            );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -6727,11 +6731,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
             );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -6903,11 +6909,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
-               );
+            );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
