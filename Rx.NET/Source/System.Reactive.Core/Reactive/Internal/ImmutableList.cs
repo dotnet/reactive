@@ -48,10 +48,10 @@ namespace System.Reactive
             return new ImmutableList<T>(newData);
         }
 
-        public int IndexOf(T value)
+        private int IndexOf(T value)
         {
             for (var i = 0; i < _data.Length; ++i)
-                if (_data[i].Equals(value))
+                if (object.Equals(_data[i], value))
                     return i;
 
             return -1;

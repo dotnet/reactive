@@ -88,6 +88,7 @@
     <Compile Include="Tests\Concurrency\ThreadPoolSchedulerTest.cs" />
     <Compile Include="Tests\Concurrency\VirtualSchedulerTest.cs" />
     <Compile Include="Tests\Disposables\DisposableTests.cs" />
+    <Compile Include="Tests\ImmutableListTest.cs" />
     <Compile Include="Tests\Linq\ObservableAggregateTest.cs" />
     <Compile Include="Tests\Linq\ObservableAsyncTest.cs" />
     <Compile Include="Tests\Linq\ObservableAwaiterTest.cs" />
