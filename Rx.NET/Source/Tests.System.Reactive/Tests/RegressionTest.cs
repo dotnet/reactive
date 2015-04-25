@@ -408,7 +408,27 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void Reentrant_Subject()
+        public void Reentrant_Subject1()
+        {
+            var s = Subject.Synchronize((ISubject<int, int>)new Subject<int>(), Scheduler.Immediate);
+            var list = new List<int>();
+
+            s.Subscribe(
+                x =>
+                {
+                    list.Add(x);
+                    if (x < 3)
+                        s.OnNext(x + 1);
+                    list.Add(-x);
+                });
+
+            s.OnNext(1);
+
+            list.AssertEqual(1, -1, 2, -2, 3, -3);
+        }
+
+        [TestMethod]
+        public void Reentrant_Subject2()
         {
             var s = Subject.Synchronize(new Subject<int>(), Scheduler.Immediate);
             var list = new List<int>();

@@ -435,17 +435,45 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(default(ISubject<int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(default(ISubject<int, int>), Scheduler.Immediate));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize((ISubject<int, int>)s, null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(default(ISubject<int>)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(default(ISubject<int>), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(s, null));
         }
 
         [TestMethod]
-        public void Subject_Synchronize()
+        public void Subject_Synchronize1()
         {
             var N = 10;
 
             var y = 0;
             var o = Observer.Create<int>(x => y += x);
             var s = Subject.Synchronize(Subject.Create(o, Observable.Empty<string>()));
+
+            var e = new ManualResetEvent(false);
+            var t = Enumerable.Range(0, N).Select(x => new Thread(() => { e.WaitOne(); s.OnNext(x); })).ToArray();
+
+            foreach (var u in t)
+                u.Start();
+
+            e.Set();
+
+            foreach (var u in t)
+                u.Join();
+
+            Assert.AreEqual(Enumerable.Range(0, N).Sum(), y);
+        }
+
+        [TestMethod]
+        public void Subject_Synchronize2()
+        {
+            var N = 10;
+
+            var s = Subject.Synchronize(new Subject<int>());
+
+            var y = 0;
+            var d = s.Subscribe(x => y += x);
 
             var e = new ManualResetEvent(false);
             var t = Enumerable.Range(0, N).Select(x => new Thread(() => { e.WaitOne(); s.OnNext(x); })).ToArray();
