@@ -196,7 +196,9 @@ namespace System.Reactive.Subjects
             }
         }
 
-        //Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
+        /// <summary>
+        /// Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
+        /// </summary>
         private sealed class ReplayByTime : IReplaySubjectImplementation
         {
             private const int InfiniteBufferSize = int.MaxValue;
@@ -466,21 +468,12 @@ namespace System.Reactive.Subjects
             }
         }
 
+        //
+        // Below are the non-time based implementations. 
+        // These removed the need for the scheduler indirection, SchedulerObservers, stopwatch, TimeInterval and ensuring the scheduled observers are active after each action.
+        // The ReplayOne implementation also removes the need to even have a queue.
+        //
 
-
-
-
-
-
-
-
-
-
-
-
-        //Below are the non-time based implementations. 
-        //These removed the need for the scheduler indirection, SchedulerObservers, stopwatch, TimeInterval and ensuring the scheduled observers are active after each action.
-        //The ReplayOne implementation also removes the need to even have a queue.
         private sealed class ReplayOne : ReplayBufferBase, IReplaySubjectImplementation
         {
             private bool _hasValue;
@@ -488,7 +481,9 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                //NoOp. No need to trim.
+                //
+                // No need to trim.
+                //
             }
 
             protected override void AddValueToBuffer(T value)
@@ -536,7 +531,9 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                //NoOp; i.e. Dont' trim, keep all values.
+                //
+                // Don't trim, keep all values.
+                //
             }
         }
 
@@ -633,8 +630,8 @@ namespace System.Reactive.Subjects
                 if (observer == null)
                     throw new ArgumentNullException("observer");
 
-
                 var subscription = new Subscription(this, observer);
+
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -680,7 +677,9 @@ namespace System.Reactive.Subjects
                 lock (_gate)
                 {
                     if (!_isDisposed)
+                    {
                         _observers = _observers.Remove(observer);
+                    }
                 }
             }
 
@@ -714,7 +713,13 @@ namespace System.Reactive.Subjects
                 _queue = new Queue<T>(queueSize);
             }
 
-            protected Queue<T> Queue { get { return _queue; } }
+            protected Queue<T> Queue
+            {
+                get
+                {
+                    return _queue;
+                }
+            }
 
             protected override void AddValueToBuffer(T value)
             {
