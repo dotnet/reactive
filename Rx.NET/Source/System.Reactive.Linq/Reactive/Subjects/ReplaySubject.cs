@@ -233,7 +233,7 @@ namespace System.Reactive.Subjects
                 _isStopped = false;
                 _error = null;
 
-                _observers = new ImmutableList<ScheduledObserver<T>>();
+                _observers = ImmutableList<ScheduledObserver<T>>.Empty;
             }
 
             public ReplayByTime(int bufferSize, TimeSpan window)
@@ -323,7 +323,7 @@ namespace System.Reactive.Subjects
                         foreach (var observer in o)
                             observer.OnError(error);
 
-                        _observers = new ImmutableList<ScheduledObserver<T>>();
+                        _observers = ImmutableList<ScheduledObserver<T>>.Empty;
                     }
                 }
 
@@ -349,7 +349,7 @@ namespace System.Reactive.Subjects
                         foreach (var observer in o)
                             observer.OnCompleted();
 
-                        _observers = new ImmutableList<ScheduledObserver<T>>();
+                        _observers = ImmutableList<ScheduledObserver<T>>.Empty;
                     }
                 }
 
@@ -550,7 +550,7 @@ namespace System.Reactive.Subjects
 
             protected ReplayBufferBase()
             {
-                _observers = new ImmutableList<IObserver<T>>();
+                _observers = ImmutableList<IObserver<T>>.Empty;
             }
 
             protected abstract void Trim();
@@ -603,7 +603,7 @@ namespace System.Reactive.Subjects
                         foreach (var observer in o)
                             observer.OnError(error);
 
-                        _observers = new ImmutableList<IObserver<T>>();
+                        _observers = ImmutableList<IObserver<T>>.Empty;
                     }
                 }
             }
@@ -623,7 +623,7 @@ namespace System.Reactive.Subjects
                         foreach (var observer in o)
                             observer.OnCompleted();
 
-                        _observers = new ImmutableList<IObserver<T>>();
+                        _observers = ImmutableList<IObserver<T>>.Empty;
                     }
                 }
             }

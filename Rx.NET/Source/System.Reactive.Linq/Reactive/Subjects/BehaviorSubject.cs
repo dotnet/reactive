@@ -26,7 +26,7 @@ namespace System.Reactive.Subjects
         public BehaviorSubject(T value)
         {
             _value = value;
-            _observers = new ImmutableList<IObserver<T>>();
+            _observers = ImmutableList<IObserver<T>>.Empty;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = new ImmutableList<IObserver<T>>();
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                 }
             }
@@ -116,7 +116,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = new ImmutableList<IObserver<T>>();
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }

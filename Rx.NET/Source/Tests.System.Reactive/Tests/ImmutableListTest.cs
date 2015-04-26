@@ -11,7 +11,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ImmutableList_Basics()
         {
-            var list = new ImmutableList<int>();
+            var list = ImmutableList<int>.Empty;
 
             Assert.IsTrue(list.Data.SequenceEqual(new int[] { }));
 
@@ -49,7 +49,7 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void ImmutableList_Nulls()
         {
-            var list = new ImmutableList<string>();
+            var list = ImmutableList<string>.Empty;
 
             Assert.IsTrue(list.Data.SequenceEqual(new string[] { }));
 

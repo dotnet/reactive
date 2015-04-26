@@ -31,7 +31,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public AsyncSubject()
         {
-            _observers = new ImmutableList<IObserver<T>>();
+            _observers = ImmutableList<IObserver<T>>.Empty;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = new ImmutableList<IObserver<T>>();
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     v = _value;
                     hv = _hasValue;
@@ -103,7 +103,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     os = _observers.Data;
-                    _observers = new ImmutableList<IObserver<T>>();
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }

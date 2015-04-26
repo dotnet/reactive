@@ -4,9 +4,11 @@ namespace System.Reactive
 {
     internal class ImmutableList<T>
     {
+        public static readonly ImmutableList<T> Empty = new ImmutableList<T>();
+
         private readonly T[] _data;
 
-        public ImmutableList()
+        private ImmutableList()
         {
             _data = new T[0];
         }
@@ -40,10 +42,14 @@ namespace System.Reactive
             if (i < 0)
                 return this;
 
-            var newData = new T[_data.Length - 1];
+            var length = _data.Length;
+            if (length == 1)
+                return Empty;
+
+            var newData = new T[length - 1];
 
             Array.Copy(_data, 0, newData, 0, i);
-            Array.Copy(_data, i + 1, newData, i, _data.Length - i - 1);
+            Array.Copy(_data, i + 1, newData, i, length - i - 1);
 
             return new ImmutableList<T>(newData);
         }
