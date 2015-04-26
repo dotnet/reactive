@@ -422,8 +422,11 @@ namespace System.Reactive.Subjects
                 lock (_gate)
                 {
                     observer.Dispose();
+
                     if (!_isDisposed)
+                    {
                         _observers = _observers.Remove(observer);
+                    }
                 }
             }
 
@@ -693,6 +696,7 @@ namespace System.Reactive.Subjects
             {
                 Dispose(true);
             }
+
             protected virtual void Dispose(bool disposing)
             {
                 lock (_gate)
