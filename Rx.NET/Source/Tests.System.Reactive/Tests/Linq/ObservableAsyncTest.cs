@@ -18,6 +18,15 @@ namespace ReactiveTests.Tests
     [TestClass]
     public partial class ObservableAsyncTest : ReactiveTest
     {
+        private Task<int> doneTask;
+
+        public ObservableAsyncTest()
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetResult(42);
+            doneTask = tcs.Task;
+        }
+
         #region FromAsyncPattern
 
         [TestMethod]
@@ -1299,8 +1308,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<Task<int>>), s));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(default(Func<CancellationToken, Task<int>>), s));
 
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => Task.FromResult(1), default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => Task.FromResult(1), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(() => doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => doneTask, default(IScheduler)));
         }
 
         [TestMethod]
@@ -1501,8 +1510,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<Task>), s));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)Task.FromResult(1), default(IScheduler)));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)Task.FromResult(1), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(() => (Task)doneTask, default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)doneTask, default(IScheduler)));
         }
 
         [TestMethod]
@@ -1696,9 +1705,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(() => doneTask, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(default(Func<CancellationToken, Task<int>>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => doneTask, default(IScheduler)));
         }
 
         [TestMethod]
@@ -1886,9 +1895,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>)));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(() => (Task)doneTask, default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(default(Func<CancellationToken, Task>), s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)doneTask, default(IScheduler)));
         }
 
         [TestMethod]

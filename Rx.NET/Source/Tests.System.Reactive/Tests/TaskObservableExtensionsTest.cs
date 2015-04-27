@@ -17,6 +17,15 @@ namespace ReactiveTests.Tests
     [TestClass]
     public class TaskObservableExtensionsTest : ReactiveTest
     {
+        private Task<int> doneTask;
+
+        public TaskObservableExtensionsTest()
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetResult(42);
+            doneTask = tcs.Task;
+        }
+
         #region ToObservable
 
         [TestMethod]
@@ -27,7 +36,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task<int>)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable(doneTask, default(IScheduler)));
 
             var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
             var task = tcs.Task;
@@ -387,7 +396,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)null, s));
-            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)Task.FromResult(42), default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => TaskObservableExtensions.ToObservable((Task)doneTask, default(IScheduler)));
 
             var tcs = new System.Threading.Tasks.TaskCompletionSource<int>();
             System.Threading.Tasks.Task task = tcs.Task;

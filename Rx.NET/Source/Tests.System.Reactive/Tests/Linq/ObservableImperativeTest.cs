@@ -506,18 +506,18 @@ namespace ReactiveTests.Tests
             // behavior, so we're merely asserting regressions here.
             //
 
-            var hasCaughtEscapingException = false;
+            var hasCaughtEscapingException = 0;
 
             var cts = new CancellationTokenSource();
             var ex = new Exception();
 
             var s = Scheduler.Default.Catch<Exception>(err =>
             {
-                Volatile.Write(ref hasCaughtEscapingException, true);
+                Thread.VolatileWrite(ref hasCaughtEscapingException, 1);
                 return ex == err;
             });
 
-            while (!Volatile.Read(ref hasCaughtEscapingException))
+            while (Thread.VolatileRead(ref hasCaughtEscapingException) == 0)
             {
                 var xs = Observable.Create<int>(observer =>
                 {
