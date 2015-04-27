@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reactive.Concurrency;
 using System.Threading;
 
 namespace System.Reactive.PlatformServices
@@ -17,6 +20,8 @@ namespace System.Reactive.PlatformServices
     {
         private static Lazy<ISystemClock> s_serviceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
         private static Lazy<INotifySystemClockChanged> s_serviceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
+        private static readonly HashSet<WeakReference<LocalScheduler>> s_systemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+        private static IDisposable s_systemClockChangedHandlerCollector;
 
         private static int _refCount;
 
@@ -27,11 +32,6 @@ namespace System.Reactive.PlatformServices
         {
             get { return s_serviceSystemClock.Value.UtcNow; }
         }
-
-        /// <summary>
-        /// Event that gets raised when a system clock change is detected, if there's any interest as indicated by AddRef calls.
-        /// </summary>
-        public static event EventHandler<SystemClockChangedEventArgs> SystemClockChanged;
 
         /// <summary>
         /// Adds a reference to the system clock monitor, causing it to be sending notifications.
@@ -59,9 +59,18 @@ namespace System.Reactive.PlatformServices
 
         private static void OnSystemClockChanged(object sender, SystemClockChangedEventArgs e)
         {
-            var scc = SystemClockChanged;
-            if (scc != null)
-                scc(sender, e);
+            lock (s_systemClockChanged)
+            {
+                foreach (var entry in s_systemClockChanged)
+                {
+                    var scheduler = default(LocalScheduler);
+
+                    if (entry.TryGetTarget(out scheduler))
+                    {
+                        scheduler.SystemClockChanged(sender, e);
+                    }
+                }
+            }
         }
 
         private static ISystemClock InitializeSystemClock()
@@ -72,6 +81,75 @@ namespace System.Reactive.PlatformServices
         private static INotifySystemClockChanged InitializeSystemClockChanged()
         {
             return PlatformEnlightenmentProvider.Current.GetService<INotifySystemClockChanged>() ?? new DefaultSystemClockMonitor();
+        }
+
+        internal static void Register(LocalScheduler scheduler)
+        {
+            //
+            // LocalScheduler maintains per-instance work queues that need revisiting
+            // upon system clock changes. We need to be careful to avoid keeping those
+            // scheduler instances alive by the system clock monitor, so we use weak
+            // references here. In particular, AsyncLockScheduler in ImmediateScheduler
+            // can have a lot of instances, so we need to collect spurious handlers
+            // at regular times.
+            //
+            lock (s_systemClockChanged)
+            {
+                s_systemClockChanged.Add(new WeakReference<LocalScheduler>(scheduler));
+
+                if (s_systemClockChanged.Count == 1)
+                {
+                    s_systemClockChangedHandlerCollector = ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(CollectHandlers, TimeSpan.FromSeconds(30));
+                }
+                else if (s_systemClockChanged.Count % 64 == 0)
+                {
+                    CollectHandlers();
+                }
+            }
+        }
+
+        private static void CollectHandlers()
+        {
+            //
+            // The handler collector merely collects the WeakReference<T> instances
+            // that are kept in the hash set. The underlying scheduler itself will
+            // be collected due to the weak reference. Unfortunately, we can't use
+            // the ConditionalWeakTable<TKey, TValue> type here because we need to
+            // be able to enumerate the keys.
+            //
+            lock (s_systemClockChanged)
+            {
+                var remove = default(HashSet<WeakReference<LocalScheduler>>);
+
+                foreach (var handler in s_systemClockChanged)
+                {
+                    var scheduler = default(LocalScheduler);
+
+                    if (!handler.TryGetTarget(out scheduler))
+                    {
+                        if (remove == null)
+                        {
+                            remove = new HashSet<WeakReference<LocalScheduler>>();
+                        }
+
+                        remove.Add(handler);
+                    }
+                }
+
+                if (remove != null)
+                {
+                    foreach (var handler in remove)
+                    {
+                        s_systemClockChanged.Remove(handler);
+                    }
+                }
+
+                if (s_systemClockChanged.Count == 0)
+                {
+                    s_systemClockChangedHandlerCollector.Dispose();
+                    s_systemClockChangedHandlerCollector = null;
+                }
+            }
         }
     }
 
@@ -146,4 +224,58 @@ namespace System.Reactive.PlatformServices
         /// </summary>
         public DateTimeOffset NewTime { get; private set; }
     }
+
+#if NO_WEAKREFOFT
+    class WeakReference<T>
+        where T : class
+    {
+        private readonly WeakReference _weakReference;
+
+        public WeakReference(T value)
+        {
+            _weakReference = new WeakReference(value);
+        }
+
+        public bool TryGetTarget(out T value)
+        {
+            value = (T)_weakReference.Target;
+            return value != null;
+        }
+    }
+#endif
+
+#if NO_HASHSET
+    class HashSet<T> : IEnumerable<T>
+    {
+        private readonly Dictionary<T, object> _dictionary = new Dictionary<T, object>();
+
+        public int Count
+        {
+            get
+            {
+                return _dictionary.Count;
+            }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return _dictionary.Keys.GetEnumerator();
+        }
+
+        public void Add(T value)
+        {
+            _dictionary.Add(value, null);
+        }
+
+        public void Remove(T value)
+        {
+            _dictionary.Remove(value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+#endif
 }

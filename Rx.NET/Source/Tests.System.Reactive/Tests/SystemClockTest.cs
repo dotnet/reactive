@@ -1002,7 +1002,7 @@ namespace ReactiveTests.Tests
 
             public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
             {
-                throw new NotImplementedException();
+                return Disposable.Empty;
             }
 
             public IDisposable QueueUserWorkItem(Action<object> action, object state)

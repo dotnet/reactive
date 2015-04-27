@@ -113,7 +113,7 @@ namespace System.Reactive.Concurrency
             // Hook up for system clock change notifications. This doesn't do anything until the
             // AddRef method is called (which can throw).
             //
-            SystemClock.SystemClockChanged += SystemClockChanged;
+            SystemClock.Register(this);
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="args">Currently not used.</param>
         /// <param name="sender">Currently not used.</param>
-        private void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
+        internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
             lock (_gate)
             {
