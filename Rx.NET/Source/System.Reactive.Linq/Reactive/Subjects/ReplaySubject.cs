@@ -658,6 +658,7 @@ namespace System.Reactive.Subjects
                     // To conclude, we're keeping the behavior as-is for compatibility
                     // reasons with v1.x.
                     //
+                    Trim();
                     _observers = _observers.Add(observer);
 
                     ReplayBuffer(observer);
