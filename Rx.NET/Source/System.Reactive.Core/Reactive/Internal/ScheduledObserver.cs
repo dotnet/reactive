@@ -36,11 +36,15 @@ namespace System.Reactive
             _longRunning = _scheduler.AsLongRunning();
 
             if (_longRunning != null)
+            {
                 _dispatcherEvent = new SemaphoreSlim(0);
+                _dispatcherEventRelease = Disposable.Create(() => _dispatcherEvent.Release());
+            }
         }
 
         private readonly object _dispatcherInitGate = new object();
-        private SemaphoreSlim _dispatcherEvent;
+        private readonly SemaphoreSlim _dispatcherEvent;
+        private readonly IDisposable _dispatcherEventRelease;
         private IDisposable _dispatcherJob;
 
         private void EnsureDispatcher()
@@ -53,11 +57,11 @@ namespace System.Reactive
                     {
                         _dispatcherJob = _longRunning.ScheduleLongRunning(Dispatch);
 
-                        _disposable.Disposable = new CompositeDisposable(2)
-                        {
+                        _disposable.Disposable = StableCompositeDisposable.Create
+                        (
                             _dispatcherJob,
-                            Disposable.Create(() => _dispatcherEvent.Release())
-                        };
+                            _dispatcherEventRelease
+                        );
                     }
                 }
             }
