@@ -291,13 +291,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(() => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(() => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
@@ -315,13 +318,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
@@ -339,13 +345,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
