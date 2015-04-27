@@ -219,93 +219,22 @@ namespace System.Reactive.Subjects
             void Unsubscribe(IObserver<T> observer);
         }
 
-        private class Subscription : IDisposable
+        private abstract class ReplayBase : IReplaySubjectImplementation
         {
-            private IReplaySubjectImplementation _subject;
-            private IObserver<T> _observer;
-
-            public Subscription(IReplaySubjectImplementation subject, IObserver<T> observer)
-            {
-                _subject = subject;
-                _observer = observer;
-            }
-
-            public void Dispose()
-            {
-                var observer = Interlocked.Exchange(ref _observer, null);
-                if (observer == null)
-                    return;
-
-                _subject.Unsubscribe(observer);
-                _subject = null;
-            }
-        }
-
-        /// <summary>
-        /// Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
-        /// </summary>
-        private sealed class ReplayByTime : IReplaySubjectImplementation
-        {
-            private const int InfiniteBufferSize = int.MaxValue;
-
-            private readonly int _bufferSize;
-            private readonly TimeSpan _window;
-            private readonly IScheduler _scheduler;
-            private readonly IStopwatch _stopwatch;
-
-            private readonly Queue<TimeInterval<T>> _queue;
-            private bool _isStopped;
-            private Exception _error;
-
-            private ImmutableList<IScheduledObserver<T>> _observers;
-            private bool _isDisposed;
-
             private readonly object _gate = new object();
 
-            public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
+            private ImmutableList<IScheduledObserver<T>> _observers;
+
+            private bool _isStopped;
+            private Exception _error;
+            private bool _isDisposed;
+
+            public ReplayBase()
             {
-                if (bufferSize < 0)
-                    throw new ArgumentOutOfRangeException("bufferSize");
-                if (window < TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException("window");
-                if (scheduler == null)
-                    throw new ArgumentNullException("scheduler");
+                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
 
-                _bufferSize = bufferSize;
-                _window = window;
-                _scheduler = scheduler;
-
-                _stopwatch = _scheduler.StartStopwatch();
-                _queue = new Queue<TimeInterval<T>>();
                 _isStopped = false;
                 _error = null;
-
-                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
-            }
-
-            public ReplayByTime(int bufferSize, TimeSpan window)
-                : this(bufferSize, window, SchedulerDefaults.Iteration)
-            {
-            }
-
-            public ReplayByTime(IScheduler scheduler)
-                : this(InfiniteBufferSize, TimeSpan.MaxValue, scheduler)
-            {
-            }
-
-            public ReplayByTime(int bufferSize, IScheduler scheduler)
-                : this(bufferSize, TimeSpan.MaxValue, scheduler)
-            {
-            }
-
-            public ReplayByTime(TimeSpan window, IScheduler scheduler)
-                : this(InfiniteBufferSize, window, scheduler)
-            {
-            }
-
-            public ReplayByTime(TimeSpan window)
-                : this(InfiniteBufferSize, window, SchedulerDefaults.Iteration)
-            {
             }
 
             public bool HasObservers
@@ -317,14 +246,6 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            private void Trim(TimeSpan now)
-            {
-                while (_queue.Count > _bufferSize)
-                    _queue.Dequeue();
-                while (_queue.Count > 0 && now.Subtract(_queue.Peek().Interval).CompareTo(_window) > 0)
-                    _queue.Dequeue();
-            }
-
             public void OnNext(T value)
             {
                 var o = default(IScheduledObserver<T>[]);
@@ -334,9 +255,8 @@ namespace System.Reactive.Subjects
 
                     if (!_isStopped)
                     {
-                        var now = _stopwatch.Elapsed;
-                        _queue.Enqueue(new TimeInterval<T>(value, now));
-                        Trim(now);
+                        Next(value);
+                        Trim();
 
                         o = _observers.Data;
                         foreach (var observer in o)
@@ -361,10 +281,9 @@ namespace System.Reactive.Subjects
 
                     if (!_isStopped)
                     {
-                        var now = _stopwatch.Elapsed;
                         _isStopped = true;
                         _error = error;
-                        Trim(now);
+                        Trim();
 
                         o = _observers.Data;
                         foreach (var observer in o)
@@ -388,9 +307,8 @@ namespace System.Reactive.Subjects
 
                     if (!_isStopped)
                     {
-                        var now = _stopwatch.Elapsed;
                         _isStopped = true;
-                        Trim(now);
+                        Trim();
 
                         o = _observers.Data;
                         foreach (var observer in o)
@@ -410,7 +328,7 @@ namespace System.Reactive.Subjects
                 if (observer == null)
                     throw new ArgumentNullException("observer");
 
-                var so = new ScheduledObserver<T>(_scheduler, observer);
+                var so = CreateScheduledObserver(observer);
 
                 var n = 0;
 
@@ -438,12 +356,10 @@ namespace System.Reactive.Subjects
                     // To conclude, we're keeping the behavior as-is for compatibility
                     // reasons with v1.x.
                     //
-                    Trim(_stopwatch.Elapsed);
+                    Trim();
                     _observers = _observers.Add(so);
 
-                    n = _queue.Count;
-                    foreach (var item in _queue)
-                        so.OnNext(item.Value);
+                    n = Replay(so);
 
                     if (_error != null)
                     {
@@ -460,6 +376,32 @@ namespace System.Reactive.Subjects
                 so.EnsureActive(n);
 
                 return subscription;
+            }
+
+            public void Dispose()
+            {
+                lock (_gate)
+                {
+                    _isDisposed = true;
+                    _observers = null;
+                    DisposeCore();
+                }
+            }
+
+            protected abstract void DisposeCore();
+
+            protected abstract void Next(T value);
+
+            protected abstract int Replay(IObserver<T> observer);
+
+            protected abstract void Trim();
+
+            protected abstract IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer);
+
+            private void CheckDisposed()
+            {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(string.Empty);
             }
 
             private void Unsubscribe(IScheduledObserver<T> observer)
@@ -481,12 +423,12 @@ namespace System.Reactive.Subjects
                 Unsubscribe(so);
             }
 
-            sealed class RemovableDisposable : IDisposable
+            private sealed class RemovableDisposable : IDisposable
             {
-                private readonly ReplayByTime _subject;
+                private readonly ReplayBase _subject;
                 private readonly IScheduledObserver<T> _observer;
 
-                public RemovableDisposable(ReplayByTime subject, IScheduledObserver<T> observer)
+                public RemovableDisposable(ReplayBase subject, IScheduledObserver<T> observer)
                 {
                     _subject = subject;
                     _observer = observer;
@@ -498,21 +440,99 @@ namespace System.Reactive.Subjects
                     _subject.Unsubscribe(_observer);
                 }
             }
+        }
 
-            private void CheckDisposed()
+        /// <summary>
+        /// Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
+        /// </summary>
+        private sealed class ReplayByTime : ReplayBase
+        {
+            private const int InfiniteBufferSize = int.MaxValue;
+
+            private readonly int _bufferSize;
+            private readonly TimeSpan _window;
+            private readonly IScheduler _scheduler;
+            private readonly IStopwatch _stopwatch;
+
+            private readonly Queue<TimeInterval<T>> _queue;
+
+            public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
             {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(string.Empty);
+                if (bufferSize < 0)
+                    throw new ArgumentOutOfRangeException("bufferSize");
+                if (window < TimeSpan.Zero)
+                    throw new ArgumentOutOfRangeException("window");
+                if (scheduler == null)
+                    throw new ArgumentNullException("scheduler");
+
+                _bufferSize = bufferSize;
+                _window = window;
+                _scheduler = scheduler;
+
+                _stopwatch = _scheduler.StartStopwatch();
+                _queue = new Queue<TimeInterval<T>>();
             }
 
-            public void Dispose()
+            public ReplayByTime(int bufferSize, TimeSpan window)
+                : this(bufferSize, window, SchedulerDefaults.Iteration)
             {
-                lock (_gate)
-                {
-                    _isDisposed = true;
-                    _observers = null;
-                    _queue.Clear();
-                }
+            }
+
+            public ReplayByTime(IScheduler scheduler)
+                : this(InfiniteBufferSize, TimeSpan.MaxValue, scheduler)
+            {
+            }
+
+            public ReplayByTime(int bufferSize, IScheduler scheduler)
+                : this(bufferSize, TimeSpan.MaxValue, scheduler)
+            {
+            }
+
+            public ReplayByTime(TimeSpan window, IScheduler scheduler)
+                : this(InfiniteBufferSize, window, scheduler)
+            {
+            }
+
+            public ReplayByTime(TimeSpan window)
+                : this(InfiniteBufferSize, window, SchedulerDefaults.Iteration)
+            {
+            }
+
+            protected override IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer)
+            {
+                return new ScheduledObserver<T>(_scheduler, observer);
+            }
+
+            protected override void DisposeCore()
+            {
+                _queue.Clear();
+            }
+
+            protected override void Next(T value)
+            {
+                var now = _stopwatch.Elapsed;
+
+                _queue.Enqueue(new TimeInterval<T>(value, now));
+            }
+
+            protected override int Replay(IObserver<T> observer)
+            {
+                var n = _queue.Count;
+
+                foreach (var item in _queue)
+                    observer.OnNext(item.Value);
+
+                return n;
+            }
+
+            protected override void Trim()
+            {
+                var now = _stopwatch.Elapsed;
+
+                while (_queue.Count > _bufferSize)
+                    _queue.Dequeue();
+                while (_queue.Count > 0 && now.Subtract(_queue.Peek().Interval).CompareTo(_window) > 0)
+                    _queue.Dequeue();
             }
         }
 
@@ -786,6 +806,28 @@ namespace System.Reactive.Subjects
             {
                 base.Dispose(disposing);
                 _queue.Clear();
+            }
+        }
+
+        private class Subscription : IDisposable
+        {
+            private IReplaySubjectImplementation _subject;
+            private IObserver<T> _observer;
+
+            public Subscription(IReplaySubjectImplementation subject, IObserver<T> observer)
+            {
+                _subject = subject;
+                _observer = observer;
+            }
+
+            public void Dispose()
+            {
+                var observer = Interlocked.Exchange(ref _observer, null);
+                if (observer == null)
+                    return;
+
+                _subject.Unsubscribe(observer);
+                _subject = null;
             }
         }
     }
