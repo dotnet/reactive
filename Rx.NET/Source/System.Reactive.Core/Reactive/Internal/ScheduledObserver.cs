@@ -11,7 +11,7 @@ namespace System.Reactive
     using System.Collections.Concurrent;
     using System.Diagnostics;
 
-    internal class ScheduledObserver<T> : ObserverBase<T>, IDisposable
+    internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
         private volatile int _state = 0;
         private const int STOPPED = 0;
@@ -441,5 +441,11 @@ namespace System.Reactive
                 }
             }
         }
+    }
+
+    interface IScheduledObserver<T> : IObserver<T>, IDisposable
+    {
+        void EnsureActive();
+        void EnsureActive(int count);
     }
 }
