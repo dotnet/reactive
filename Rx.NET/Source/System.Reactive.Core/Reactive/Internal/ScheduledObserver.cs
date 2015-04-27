@@ -300,7 +300,7 @@ namespace System.Reactive
         }
     }
 #else
-    class ScheduledObserver<T> : ObserverBase<T>, IDisposable
+    class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
         private bool _isAcquired = false;
         private bool _hasFaulted = false;
