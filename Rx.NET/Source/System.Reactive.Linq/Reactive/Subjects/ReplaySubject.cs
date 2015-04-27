@@ -13,31 +13,18 @@ namespace System.Reactive.Subjects
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
     public sealed class ReplaySubject<T> : ISubject<T>, IDisposable
     {
+        #region Fields
+
+        /// <summary>
+        /// Underlying optimized implementation of the replay subject.
+        /// </summary>
         private readonly IReplaySubjectImplementation _implementation;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size, window and scheduler.
-        /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        public ReplaySubject(int bufferSize, TimeSpan window, IScheduler scheduler)
-        {
-            _implementation = new ReplayByTime(bufferSize, window, scheduler);
-        }
+        #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and window.
-        /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        public ReplaySubject(int bufferSize, TimeSpan window)
-        {
-            _implementation = new ReplayByTime(bufferSize, window);
-        }
+        #region Constructors
+
+        #region All
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class.
@@ -57,19 +44,9 @@ namespace System.Reactive.Subjects
             _implementation = new ReplayByTime(scheduler);
         }
 
-        //TODO: Does this overload make any sense with the optimisations? Surely this now is just <c>new ReplaySubject<T>(bufferSize).SubscribeOn(scheduler)</c>?
-        //Potentially should be marked as obsolete
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and scheduler.
-        /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
-        public ReplaySubject(int bufferSize, IScheduler scheduler)
-        {
-            _implementation = new ReplayByTime(bufferSize, scheduler);
-        }
+        #endregion
+
+        #region Count
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size.
@@ -93,16 +70,20 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window and scheduler.
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and scheduler.
         /// </summary>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        public ReplaySubject(TimeSpan window, IScheduler scheduler)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
+        public ReplaySubject(int bufferSize, IScheduler scheduler)
         {
-            _implementation = new ReplayByTime(window, scheduler);
+            _implementation = new ReplayByTime(bufferSize, scheduler);
         }
+
+        #endregion
+
+        #region Time
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window.
@@ -115,12 +96,64 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window and scheduler.
+        /// </summary>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        public ReplaySubject(TimeSpan window, IScheduler scheduler)
+        {
+            _implementation = new ReplayByTime(window, scheduler);
+        }
+
+        #endregion
+
+        #region Count & Time
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and window.
+        /// </summary>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        public ReplaySubject(int bufferSize, TimeSpan window)
+        {
+            _implementation = new ReplayByTime(bufferSize, window);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size, window and scheduler.
+        /// </summary>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        public ReplaySubject(int bufferSize, TimeSpan window, IScheduler scheduler)
+        {
+            _implementation = new ReplayByTime(bufferSize, window, scheduler);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
         public bool HasObservers
         {
             get { return _implementation.HasObservers; }
         }
+
+        #endregion
+
+        #region Methods
+
+        #region Observer implementation
 
         /// <summary>
         /// Notifies all subscribed and future observers about the arrival of the specified element in the sequence.
@@ -149,6 +182,10 @@ namespace System.Reactive.Subjects
             _implementation.OnCompleted();
         }
 
+        #endregion
+
+        #region IObservable implementation
+
         /// <summary>
         /// Subscribes an observer to the subject.
         /// </summary>
@@ -160,6 +197,10 @@ namespace System.Reactive.Subjects
             return _implementation.Subscribe(observer);
         }
 
+        #endregion
+
+        #region IDisposable implementation
+
         /// <summary>
         /// Releases all resources used by the current instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/> class and unsubscribe all observers.
         /// </summary>
@@ -167,6 +208,10 @@ namespace System.Reactive.Subjects
         {
             _implementation.Dispose();
         }
+
+        #endregion
+
+        #endregion
 
         private interface IReplaySubjectImplementation : ISubject<T>, IDisposable
         {
