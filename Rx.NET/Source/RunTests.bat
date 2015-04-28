@@ -12,7 +12,7 @@ mkdir "%_build_rx_tmp%"
 
 set _runtest_list=Tests.System.Reactive.dll
 
-set _test_coverage_targets=System.Reactive.Core.dll System.Reactive.Linq.dll System.Reactive.PlatformServices.dll System.Reactive.Providers.dll
+set _test_coverage_targets=System.Reactive.Core.dll System.Reactive.Linq.dll System.Reactive.PlatformServices.dll
 
 if %_release_build%==1 (
   call msbuild /p:Configuration=Release45 /p:RunCodeAnalysis=false /p:OutputPath="%_build_rx_tmp%" Rx.sln
