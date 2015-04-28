@@ -16,6 +16,10 @@ using Microsoft.Reactive.Testing;
 using System.Windows.Forms;
 #endif
 
+#if HAS_AWAIT
+using System.Threading.Tasks;
+#endif
+
 namespace ReactiveTests.Tests
 {
     [TestClass]
@@ -1078,5 +1082,79 @@ namespace ReactiveTests.Tests
         }
 
         #endregion
+
+#if HAS_AWAIT
+
+        [TestMethod]
+        public void SchedulerAsync_Yield_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler), CancellationToken.None));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Sleep_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero, CancellationToken.None));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue, CancellationToken.None));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_ArgumentChecking()
+        {
+            var tcs = new TaskCompletionSource<IDisposable>();
+            var t = tcs.Task;
+
+            var d = default(IScheduler);
+            var s = Scheduler.Immediate;
+
+            var rt = TimeSpan.Zero;
+            var at = DateTimeOffset.MinValue;
+
+            var a1 = new Func<IScheduler, int, CancellationToken, Task>((_, __, ___) => t);
+            var d1 = default(Func<IScheduler, int, CancellationToken, Task>);
+
+            var a2 = new Func<IScheduler, int, CancellationToken, Task<IDisposable>>((_, __, ___) => t);
+            var d2 = default(Func<IScheduler, int, CancellationToken, Task<IDisposable>>);
+
+            var a3 = new Func<IScheduler, CancellationToken, Task>((_, __) => t);
+            var d3 = default(Func<IScheduler, CancellationToken, Task>);
+
+            var a4 = new Func<IScheduler, CancellationToken, Task<IDisposable>>((_, __) => t);
+            var d4 = default(Func<IScheduler, CancellationToken, Task<IDisposable>>);
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, d1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, rt, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, rt, d1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, at, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, at, d1));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, d2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, rt, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, rt, d2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, at, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, at, d2));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, d3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, rt, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, rt, d3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, at, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d3));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, d4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, rt, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, rt, d4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, at, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d4));
+        }
+
+#endif
     }
 }

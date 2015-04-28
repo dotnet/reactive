@@ -82,7 +82,16 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void TimeStamped_Ctor_Properties()
+        public void Timestamped_Create()
+        {
+            var o = DateTimeOffset.UtcNow;
+            var ti = Timestamped.Create(42, o);
+            Assert.AreEqual(42, ti.Value);
+            Assert.AreEqual(o, ti.Timestamp);
+        }
+
+        [TestMethod]
+        public void Timestamped_Ctor_Properties()
         {
             var o = new DateTimeOffset();
             var ti = new Timestamped<int>(42, o);
@@ -91,7 +100,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void TimeStamped_Equals()
+        public void Timestamped_Equals()
         {
             var ti = new Timestamped<int>(42, new DateTimeOffset());
             Assert.IsFalse(ti.Equals("x"));
@@ -113,7 +122,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void TimeStamped_GetHashCode()
+        public void Timestamped_GetHashCode()
         {
             var ti = new Timestamped<string>(null, new DateTimeOffset());
             Assert.IsTrue(ti.GetHashCode() != 0);
@@ -124,7 +133,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void TimeStamped_EqualsOperators()
+        public void Timestamped_EqualsOperators()
         {
             var o = new DateTimeOffset();
 
@@ -149,7 +158,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void TimeStamped_ToString()
+        public void Timestamped_ToString()
         {
             var o = new DateTimeOffset();
             var ti = new Timestamped<int>(42, o);
