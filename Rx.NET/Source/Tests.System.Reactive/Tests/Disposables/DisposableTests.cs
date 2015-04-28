@@ -682,7 +682,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void StableCompositeDisposable_Nary()
+        public void StableCompositeDisposable_Nary1()
         {
             var disp1 = false;
             var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
@@ -694,6 +694,40 @@ namespace ReactiveTests.Tests
             var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
 
             var d = StableCompositeDisposable.Create(d1, d2, d3);
+
+            Assert.IsFalse(disp1);
+            Assert.IsFalse(disp2);
+            Assert.IsFalse(disp3);
+            Assert.IsFalse(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
+        }
+
+        [TestMethod]
+        public void StableCompositeDisposable_Nary2()
+        {
+            var disp1 = false;
+            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+
+            var disp2 = false;
+            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+
+            var disp3 = false;
+            var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
+
+            var d = StableCompositeDisposable.Create(new List<IDisposable>(new[] { d1, d2, d3 }));
 
             Assert.IsFalse(disp1);
             Assert.IsFalse(disp2);
