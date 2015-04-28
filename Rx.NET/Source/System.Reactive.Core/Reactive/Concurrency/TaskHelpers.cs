@@ -10,11 +10,6 @@ namespace System.Reactive.Concurrency
     {
         private const int MAX_DELAY = int.MaxValue;
 
-        public static Task Delay(TimeSpan delay)
-        {
-            return Delay(delay, CancellationToken.None);
-        }
-
         public static Task Delay(TimeSpan delay, CancellationToken token)
         {
             var milliseconds = (long)delay.TotalMilliseconds;

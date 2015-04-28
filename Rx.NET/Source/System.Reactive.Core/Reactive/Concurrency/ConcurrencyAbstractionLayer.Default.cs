@@ -403,6 +403,7 @@ namespace System.Reactive.Concurrency
 #else
 using System;
 using System.Reactive.Disposables;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Concurrency
@@ -457,7 +458,7 @@ namespace System.Reactive.Concurrency
         
         public void Sleep(TimeSpan timeout)
         {
-            TaskHelpers.Delay(timeout).Wait();
+            TaskHelpers.Delay(timeout, CancellationToken.None).Wait();
         }
 
         public IStopwatch StartStopwatch()
