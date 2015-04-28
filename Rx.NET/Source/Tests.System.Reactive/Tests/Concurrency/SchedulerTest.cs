@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 namespace ReactiveTests.Tests
 {
     [TestClass]
-    public class SchedulerTest
+    public class SchedulerTest : ReactiveTest
     {
         #region IScheduler
 
@@ -1154,6 +1154,300 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, at, a4));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d4));
         }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads1()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync((_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync((_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(1, 43),
+                OnNext(1, 44),
+                OnNext(1, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads2()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(TimeSpan.FromTicks(50), (_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync(TimeSpan.FromTicks(60), (_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, TimeSpan.FromTicks(70), (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, TimeSpan.FromTicks(80), (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(50, 42),
+                OnNext(60, 43),
+                OnNext(70, 44),
+                OnNext(80, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads3()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(new DateTimeOffset(50, TimeSpan.Zero), (_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync(new DateTimeOffset(60, TimeSpan.Zero), (_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, new DateTimeOffset(70, TimeSpan.Zero), (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, new DateTimeOffset(80, TimeSpan.Zero), (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(50, 42),
+                OnNext(60, 43),
+                OnNext(70, 44),
+                OnNext(80, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_NoCancellation1()
+        {
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(async (_, ct) =>
+            {
+                o.OnNext(42);
+
+                await _.Yield();
+
+                o.OnNext(43);
+
+                await _.Sleep(TimeSpan.FromTicks(10));
+
+                o.OnNext(44);
+
+                await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero));
+
+                o.OnNext(45);
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(2, 43),
+                OnNext(12, 44),
+                OnNext(250, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_NoCancellation2()
+        {
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(async (_, ct) =>
+            {
+                o.OnNext(42);
+
+                await _.Yield(ct);
+
+                o.OnNext(43);
+
+                await _.Sleep(TimeSpan.FromTicks(10), ct);
+
+                o.OnNext(44);
+
+                await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero), ct);
+
+                o.OnNext(45);
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(2, 43),
+                OnNext(12, 44),
+                OnNext(250, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Awaiters()
+        {
+            var op = Scheduler.Immediate.Yield();
+            var aw = op.GetAwaiter();
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => aw.OnCompleted(null));
+
+            aw.OnCompleted(() => { });
+
+            ReactiveAssert.Throws<InvalidOperationException>(() => aw.OnCompleted(() => { }));
+        }
+
+#if !NO_SYNCCTX
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_SyncCtx()
+        {
+            var old = SynchronizationContext.Current;
+
+            try
+            {
+                var ctx = new MySyncCtx();
+                SynchronizationContext.SetSynchronizationContext(ctx);
+
+                var s = new TestScheduler();
+
+                var o = s.CreateObserver<int>();
+
+                s.ScheduleAsync(async (_, ct) =>
+                {
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(42);
+
+                    await _.Yield(ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(43);
+
+                    await _.Sleep(TimeSpan.FromTicks(10), ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(44);
+
+                    await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero), ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(45);
+                });
+
+                s.Start();
+
+                o.Messages.AssertEqual(
+                    OnNext(1, 42),
+                    OnNext(2, 43),
+                    OnNext(12, 44),
+                    OnNext(250, 45)
+                );
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(old);
+            }
+        }
+
+        class MySyncCtx : SynchronizationContext
+        {
+            public override void Post(SendOrPostCallback d, object state)
+            {
+                d(state);
+            }
+        }
+
+#endif
 
 #endif
     }
