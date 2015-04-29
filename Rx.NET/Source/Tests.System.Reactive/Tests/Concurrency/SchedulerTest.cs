@@ -1383,6 +1383,68 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => aw.OnCompleted(() => { }));
         }
 
+        [TestMethod]
+        public void SchedulerAsync_Yield_Cancel1()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Immediate.Yield(cts.Token);
+            var aw = op.GetAwaiter();
+
+            cts.Cancel();
+
+            Assert.IsTrue(aw.IsCompleted);
+
+            ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Yield_Cancel2()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Immediate.Yield(cts.Token);
+            var aw = op.GetAwaiter();
+
+            Assert.IsFalse(aw.IsCompleted);
+
+            aw.OnCompleted(() =>
+            {
+                //
+                // TODO: Not needed for await pattern, but maybe should be wired up?
+                //
+                // Assert.IsTrue(aw.IsCompleted);
+
+                cts.Cancel();
+
+                ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+            });
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Sleep_Cancel()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Default.Sleep(TimeSpan.FromHours(1), cts.Token);
+            var aw = op.GetAwaiter();
+
+            Assert.IsFalse(aw.IsCompleted);
+
+            var e = new ManualResetEvent(false);
+
+            aw.OnCompleted(() =>
+            {
+                ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+
+                e.Set();
+            });
+
+            cts.Cancel();
+
+            e.WaitOne();
+        }
+
 #if !NO_SYNCCTX
 
         [TestMethod]
