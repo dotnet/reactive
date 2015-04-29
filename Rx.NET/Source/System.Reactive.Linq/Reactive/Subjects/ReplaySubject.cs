@@ -30,8 +30,8 @@ namespace System.Reactive.Subjects
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class.
         /// </summary>
         public ReplaySubject()
+            : this(int.MaxValue)
         {
-            _implementation = new ReplayAll();
         }
 
         /// <summary>
@@ -216,7 +216,6 @@ namespace System.Reactive.Subjects
         private interface IReplaySubjectImplementation : ISubject<T>, IDisposable
         {
             bool HasObservers { get; }
-            void Unsubscribe(IObserver<T> observer);
         }
 
         private abstract class ReplayBase : IReplaySubjectImplementation
@@ -265,8 +264,10 @@ namespace System.Reactive.Subjects
                 }
 
                 if (o != null)
+                {
                     foreach (var observer in o)
                         observer.EnsureActive();
+                }
             }
 
             public void OnError(Exception error)
@@ -294,8 +295,10 @@ namespace System.Reactive.Subjects
                 }
 
                 if (o != null)
+                {
                     foreach (var observer in o)
                         observer.EnsureActive();
+                }
             }
 
             public void OnCompleted()
@@ -319,8 +322,10 @@ namespace System.Reactive.Subjects
                 }
 
                 if (o != null)
+                {
                     foreach (var observer in o)
                         observer.EnsureActive();
+                }
             }
 
             public IDisposable Subscribe(IObserver<T> observer)
@@ -332,7 +337,7 @@ namespace System.Reactive.Subjects
 
                 var n = 0;
 
-                var subscription = new RemovableDisposable(this, so);
+                var subscription = new Subscription(this, so);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -408,8 +413,6 @@ namespace System.Reactive.Subjects
             {
                 lock (_gate)
                 {
-                    observer.Dispose();
-
                     if (!_isDisposed)
                     {
                         _observers = _observers.Remove(observer);
@@ -417,18 +420,12 @@ namespace System.Reactive.Subjects
                 }
             }
 
-            void IReplaySubjectImplementation.Unsubscribe(IObserver<T> observer)
-            {
-                var so = (IScheduledObserver<T>)observer;
-                Unsubscribe(so);
-            }
-
-            private sealed class RemovableDisposable : IDisposable
+            private sealed class Subscription : IDisposable
             {
                 private readonly ReplayBase _subject;
                 private readonly IScheduledObserver<T> _observer;
 
-                public RemovableDisposable(ReplayBase subject, IScheduledObserver<T> observer)
+                public Subscription(ReplayBase subject, IScheduledObserver<T> observer)
                 {
                     _subject = subject;
                     _observer = observer;
@@ -554,21 +551,27 @@ namespace System.Reactive.Subjects
                 //
             }
 
-            protected override void AddValueToBuffer(T value)
+            protected override void Next(T value)
             {
                 _hasValue = true;
                 _value = value;
             }
 
-            protected override void ReplayBuffer(IObserver<T> observer)
+            protected override int Replay(IObserver<T> observer)
             {
+                var n = 0;
+
                 if (_hasValue)
+                {
+                    n = 1;
                     observer.OnNext(_value);
+                }
+
+                return n;
             }
 
-            protected override void Dispose(bool disposing)
+            protected override void DisposeCore()
             {
-                base.Dispose(disposing);
                 _value = default(T);
             }
         }
@@ -585,8 +588,8 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                while (Queue.Count > _bufferSize)
-                    Queue.Dequeue();
+                while (_queue.Count > _bufferSize)
+                    _queue.Dequeue();
             }
         }
 
@@ -605,230 +608,318 @@ namespace System.Reactive.Subjects
             }
         }
 
-        private abstract class ReplayBufferBase : IReplaySubjectImplementation
+        private abstract class ReplayBufferBase : ReplayBase
         {
-            private readonly object _gate = new object();
-            private bool _isDisposed;
-            private bool _isStopped;
-            private Exception _error;
-            private ImmutableList<IObserver<T>> _observers;
-
-            protected ReplayBufferBase()
+            protected override IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer)
             {
-                _observers = ImmutableList<IObserver<T>>.Empty;
+                return new FastImmediateObserver<T>(observer);
             }
 
-            protected abstract void Trim();
-            protected abstract void AddValueToBuffer(T value);
-            protected abstract void ReplayBuffer(IObserver<T> observer);
-
-            public bool HasObservers
+            protected override void DisposeCore()
             {
-                get
-                {
-                    var observers = _observers;
-                    return observers != null && observers.Data.Length > 0;
-                }
-            }
-
-            public void OnNext(T value)
-            {
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        AddValueToBuffer(value);
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnNext(value);
-                    }
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                if (error == null)
-                    throw new ArgumentNullException("error");
-
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        _isStopped = true;
-                        _error = error;
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnError(error);
-
-                        _observers = ImmutableList<IObserver<T>>.Empty;
-                    }
-                }
-            }
-
-            public void OnCompleted()
-            {
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        _isStopped = true;
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnCompleted();
-
-                        _observers = ImmutableList<IObserver<T>>.Empty;
-                    }
-                }
-            }
-
-            public IDisposable Subscribe(IObserver<T> observer)
-            {
-                if (observer == null)
-                    throw new ArgumentNullException("observer");
-
-                var subscription = new Subscription(this, observer);
-
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    //
-                    // Notice the v1.x behavior of always calling Trim is preserved here.
-                    //
-                    // This may be subject (pun intended) of debate: should this policy
-                    // only be applied while the sequence is active? With the current
-                    // behavior, a sequence will "die out" after it has terminated by
-                    // continuing to drop OnNext notifications from the queue.
-                    //
-                    // In v1.x, this behavior was due to trimming based on the clock value
-                    // returned by scheduler.Now, applied to all but the terminal message
-                    // in the queue. Using the IStopwatch has the same effect. Either way,
-                    // we guarantee the final notification will be observed, but there's
-                    // no way to retain the buffer directly. One approach is to use the
-                    // time-based TakeLast operator and apply an unbounded ReplaySubject
-                    // to it.
-                    //
-                    // To conclude, we're keeping the behavior as-is for compatibility
-                    // reasons with v1.x.
-                    //
-                    Trim();
-                    _observers = _observers.Add(observer);
-
-                    ReplayBuffer(observer);
-
-                    if (_error != null)
-                    {
-                        observer.OnError(_error);
-                    }
-                    else if (_isStopped)
-                    {
-                        observer.OnCompleted();
-                    }
-                }
-
-                return subscription;
-            }
-
-            public void Unsubscribe(IObserver<T> observer)
-            {
-                lock (_gate)
-                {
-                    if (!_isDisposed)
-                    {
-                        _observers = _observers.Remove(observer);
-                    }
-                }
-            }
-
-            private void CheckDisposed()
-            {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(string.Empty);
-            }
-
-            public void Dispose()
-            {
-                Dispose(true);
-            }
-
-            protected virtual void Dispose(bool disposing)
-            {
-                lock (_gate)
-                {
-                    _isDisposed = true;
-                    _observers = null;
-                }
             }
         }
 
         private abstract class ReplayManyBase : ReplayBufferBase, IReplaySubjectImplementation
         {
-            private readonly Queue<T> _queue;
+            protected readonly Queue<T> _queue;
 
             protected ReplayManyBase(int queueSize)
                 : base()
             {
-                _queue = new Queue<T>(queueSize);
+                _queue = new Queue<T>(Math.Min(queueSize, 64));
             }
 
-            protected Queue<T> Queue
-            {
-                get
-                {
-                    return _queue;
-                }
-            }
-
-            protected override void AddValueToBuffer(T value)
+            protected override void Next(T value)
             {
                 _queue.Enqueue(value);
             }
 
-            protected override void ReplayBuffer(IObserver<T> observer)
+            protected override int Replay(IObserver<T> observer)
             {
+                var n = _queue.Count;
+
                 foreach (var item in _queue)
                     observer.OnNext(item);
+
+                return n;
             }
 
-            protected override void Dispose(bool disposing)
+            protected override void DisposeCore()
             {
-                base.Dispose(disposing);
                 _queue.Clear();
             }
         }
+    }
 
-        private class Subscription : IDisposable
+    /// <summary>
+    /// Specialized scheduled observer similar to a scheduled observer for the immediate scheduler.
+    /// </summary>
+    /// <typeparam name="T">Type of the elements processed by the observer.</typeparam>
+    class FastImmediateObserver<T> : IScheduledObserver<T>
+    {
+        /// <summary>
+        /// Gate to control ownership transfer and protect data structures.
+        /// </summary>
+        private readonly object _gate = new object();
+
+        /// <summary>
+        /// Observer to forward notifications to.
+        /// </summary>
+        private volatile IObserver<T> _observer;
+
+        /// <summary>
+        /// Queue to enqueue OnNext notifications into.
+        /// </summary>
+        private Queue<T> _queue = new Queue<T>();
+
+        /// <summary>
+        /// Standby queue to swap out for _queue when transferring ownership. This allows to reuse
+        /// queues in case of busy subjects where the initial replay doesn't suffice to catch up.
+        /// </summary>
+        private Queue<T> _queue2;
+
+        /// <summary>
+        /// Exception passed to an OnError notification, if any.
+        /// </summary>
+        private Exception _error;
+
+        /// <summary>
+        /// Indicates whether an OnCompleted notification was received.
+        /// </summary>
+        private bool _done;
+
+        /// <summary>
+        /// Indicates whether the observer is busy, i.e. some thread is actively draining the
+        /// notifications that were queued up.
+        /// </summary>
+        private bool _busy;
+
+        /// <summary>
+        /// Indicates whether a failure occurred when the owner was draining the queue. This will
+        /// prevent future work to be processed.
+        /// </summary>
+        private bool _hasFaulted;
+
+        /// <summary>
+        /// Creates a new scheduled observer that proxies to the specified observer.
+        /// </summary>
+        /// <param name="observer">Observer to forward notifications to.</param>
+        public FastImmediateObserver(IObserver<T> observer)
         {
-            private IReplaySubjectImplementation _subject;
-            private IObserver<T> _observer;
+            _observer = observer;
+        }
 
-            public Subscription(IReplaySubjectImplementation subject, IObserver<T> observer)
+        /// <summary>
+        /// Disposes the observer.
+        /// </summary>
+        public void Dispose()
+        {
+            Done();
+        }
+
+        /// <summary>
+        /// Notifies the observer of pending work. This will either cause the current owner to
+        /// process the newly enqueued notifications, or it will cause the calling thread to
+        /// become the owner and start processing the notification queue.
+        /// </summary>
+        public void EnsureActive()
+        {
+            EnsureActive(1);
+        }
+
+        /// <summary>
+        /// Notifies the observer of pending work. This will either cause the current owner to
+        /// process the newly enqueued notifications, or it will cause the calling thread to
+        /// become the owner and start processing the notification queue.
+        /// </summary>
+        /// <param name="count">The number of enqueued notifications to process (ignored).</param>
+        public void EnsureActive(int count)
+        {
+            var isOwner = false;
+
+            lock (_gate)
             {
-                _subject = subject;
-                _observer = observer;
+                //
+                // If we failed to process work in the past, we'll simply drop it.
+                //
+                if (!_hasFaulted)
+                {
+                    //
+                    // If no-one is processing the notification queue, become the owner.
+                    //
+                    if (!_busy)
+                    {
+                        isOwner = true;
+                        _busy = true;
+                    }
+                }
             }
 
-            public void Dispose()
+            if (isOwner)
             {
-                var observer = Interlocked.Exchange(ref _observer, null);
-                if (observer == null)
-                    return;
+                while (true)
+                {
+                    var queue = default(Queue<T>);
+                    var error = default(Exception);
+                    var done = false;
 
-                _subject.Unsubscribe(observer);
-                _subject = null;
+                    //
+                    // Steal notifications from the producer side to drain them to the observer.
+                    //
+                    lock (_gate)
+                    {
+                        //
+                        // Do we have any OnNext notifications to process?
+                        //
+                        if (_queue.Count > 0)
+                        {
+                            if (_queue2 == null)
+                            {
+                                _queue2 = new Queue<T>();
+                            }
+
+                            //
+                            // Swap out the current queue for a fresh or recycled one. The standby
+                            // queue is set to null; when notifications are sent out the processed
+                            // queue will become the new standby.
+                            //
+                            queue = _queue;
+                            _queue = _queue2;
+                            _queue2 = null;
+                        }
+
+                        //
+                        // Do we have any terminal notifications to process?
+                        //
+                        if (_error != null)
+                        {
+                            error = _error;
+                        }
+                        else if (_done)
+                        {
+                            done = true;
+                        }
+                        else if (queue == null)
+                        {
+                            //
+                            // No work left; quit the loop and let another thread become the
+                            // owner in the future.
+                            //
+                            _busy = false;
+                            break;
+                        }
+                    }
+
+                    try
+                    {
+                        //
+                        // Process OnNext notifications, if any.
+                        //
+                        if (queue != null)
+                        {
+                            //
+                            // Drain the stolen OnNext notification queue.
+                            //
+                            while (queue.Count > 0)
+                            {
+                                _observer.OnNext(queue.Dequeue());
+                            }
+
+                            //
+                            // The queue is now empty, so we can reuse it by making it the standby
+                            // queue for a future swap.
+                            //
+                            lock (_gate)
+                            {
+                                _queue2 = queue;
+                            }
+                        }
+
+                        //
+                        // Process terminal notifications, if any. Notice we don't release ownership
+                        // after processing these notifications; we simply quit from the loop. This
+                        // will cause all processing of the scheduler observer to cease.
+                        //
+                        if (error != null)
+                        {
+                            var observer = Done();
+                            observer.OnError(error);
+                            break;
+                        }
+                        else if (done)
+                        {
+                            var observer = Done();
+                            observer.OnCompleted();
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        lock (_gate)
+                        {
+                            _hasFaulted = true;
+                            _queue.Clear();
+                        }
+
+                        throw;
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Enqueues an OnCompleted notification.
+        /// </summary>
+        public void OnCompleted()
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _done = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enqueues an OnError notification.
+        /// </summary>
+        /// <param name="error">Error of the notification.</param>
+        public void OnError(Exception error)
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _error = error;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enqueues an OnNext notification.
+        /// </summary>
+        /// <param name="value">Value of the notification.</param>
+        public void OnNext(T value)
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _queue.Enqueue(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Terminates the observer upon receiving terminal notifications, thus preventing
+        /// future notifications to go out.
+        /// </summary>
+        /// <returns>Observer to send terminal notifications to.</returns>
+        private IObserver<T> Done()
+        {
+            return Interlocked.Exchange(ref _observer, NopObserver<T>.Instance);
         }
     }
 }

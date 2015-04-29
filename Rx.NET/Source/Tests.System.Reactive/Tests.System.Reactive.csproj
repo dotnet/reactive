@@ -63,6 +63,7 @@
     <Compile Include="Stress\Linq\FromEvent.cs" />
     <Compile Include="Stress\Helpers.cs" />
     <Compile Include="Stress\Linq\Replay.cs" />
+    <Compile Include="Stress\Linq\ReplaySubject.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestLongRunningScheduler.cs" />
     <Compile Include="Tests\Aliases.cs" />
