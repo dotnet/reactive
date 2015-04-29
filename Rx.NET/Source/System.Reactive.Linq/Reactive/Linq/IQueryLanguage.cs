@@ -669,6 +669,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count);
         IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, params TSource[] values);
         IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values);
+        IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IEnumerable<TSource> values);
+        IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values);
         IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, int count);
         IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, int count, IScheduler scheduler);
         IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, int count);

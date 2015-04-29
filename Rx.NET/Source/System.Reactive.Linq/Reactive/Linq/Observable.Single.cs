@@ -521,13 +521,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            TSource[] valueArray = values as TSource[];
-            if (valueArray == null)
-            {
-                List<TSource> valueList = new List<TSource>(values);
-                valueArray = valueList.ToArray();
-            }
-            return s_impl.StartWith<TSource>(source, valueArray);
+            return s_impl.StartWith<TSource>(source, values);
         }
 
         /// <summary>
@@ -562,6 +556,11 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> or <paramref name="values"/> is null.</exception>
         public static IObservable<TSource> StartWith<TSource>(this IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
         {
+            //
+            // NOTE: For some reason, someone introduced this signature which is inconsistent with the Rx pattern of putting the IScheduler last.
+            //       We can't change it at this point because of compatibility.
+            //
+
             if (source == null)
                 throw new ArgumentNullException("source");
             if (scheduler == null)
@@ -569,13 +568,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException("values");
 
-            TSource[] valueArray = values as TSource[];
-            if (valueArray == null)
-            {
-                List<TSource> valueList = new List<TSource>(values);
-                valueArray = valueList.ToArray();
-            }
-            return s_impl.StartWith<TSource>(source, scheduler, valueArray);
+            return s_impl.StartWith<TSource>(source, scheduler, values);
         }
 
         #endregion
