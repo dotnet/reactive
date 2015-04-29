@@ -123,8 +123,10 @@ namespace System.Reactive.Subjects
             }
 
             if (os != null)
+            {
                 foreach (var o in os)
                     o.OnError(error);
+            }
         }
 
         /// <summary>
