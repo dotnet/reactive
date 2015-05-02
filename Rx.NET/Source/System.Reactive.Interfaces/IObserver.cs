@@ -30,6 +30,6 @@ namespace System
         void OnCompleted();
     }
 }
-#elif !WINDOWSPHONE7 // TypeForwardedTo is not presen on windows phone 7 so we can't really target
+#elif !WINDOWSPHONE7 // TypeForwardedTo is not present on Windows Phone 7 so we can't really target
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.IObserver<>))]
 #endif
