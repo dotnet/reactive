@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (4/16/2015 23:47:35)
+ * WARNING: Auto-generated file (5/1/2015 21:21:20)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -12451,6 +12451,45 @@ namespace System.Reactive.Linq
         
 #if !NO_TPL
         /// <summary>
+        /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TTaskResult">The type of the results produced by the projected intermediate tasks.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate task results.</typeparam>
+        /// <param name="source">An observable sequence of elements to project.</param>
+        /// <param name="taskSelector">A transform function to apply to each element.</param>
+        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
+        /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (taskSelector == null)
+                throw new ArgumentNullException("taskSelector");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return source.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, Task<TTaskResult>>>), default(Expression<Func<TSource, TTaskResult, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
+#endif
+                    source.Expression,
+                    taskSelector,
+                    resultSelector
+                )
+            );
+        }
+#endif
+        
+#if !NO_TPL
+        /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -12555,45 +12594,6 @@ namespace System.Reactive.Linq
                     null,
 #if CRIPPLED_REFLECTION
                     InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, int, CancellationToken, Task<TTaskResult>>>), default(Expression<Func<TSource, int, TTaskResult, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
-#endif
-                    source.Expression,
-                    taskSelector,
-                    resultSelector
-                )
-            );
-        }
-#endif
-        
-#if !NO_TPL
-        /// <summary>
-        /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <typeparam name="TTaskResult">The type of the results produced by the projected intermediate tasks.</typeparam>
-        /// <typeparam name="TResult">The type of the elements in the result sequence, obtained by using the selector to combine source sequence elements with their corresponding intermediate task results.</typeparam>
-        /// <param name="source">An observable sequence of elements to project.</param>
-        /// <param name="taskSelector">A transform function to apply to each element.</param>
-        /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
-        /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
-        {
-            if (source == null)
-                throw new ArgumentNullException("source");
-            if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-            
-            return source.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.SelectMany<TSource, TTaskResult, TResult>(default(IQbservable<TSource>), default(Expression<Func<TSource, Task<TTaskResult>>>), default(Expression<Func<TSource, TTaskResult, TResult>>))),
 #else
                     ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TTaskResult), typeof(TResult)),
 #endif
@@ -17392,6 +17392,42 @@ namespace System.Reactive.Linq
                     source.Expression,
                     GetSourceExpression(windowOpenings),
                     windowClosingSelector
+                )
+            );
+        }
+        
+        /// <summary>
+        /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="resultSelector">Function to invoke for each element from the first source combined with the latest element from the second source, if any.</param>
+        /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, using the specified result selector function.</returns>
+        /// <exception cref="T:System.ArgumentNullException">
+        /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
+        public static IQbservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IQbservable<TFirst> first, IObservable<TSecond> second, Expression<Func<TFirst, TSecond, TResult>> resultSelector)
+        {
+            if (first == null)
+                throw new ArgumentNullException("first");
+            if (second == null)
+                throw new ArgumentNullException("second");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+            
+            return first.Provider.CreateQuery<TResult>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.WithLatestFrom<TFirst, TSecond, TResult>(default(IQbservable<TFirst>), default(IObservable<TSecond>), default(Expression<Func<TFirst, TSecond, TResult>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TResult)),
+#endif
+                    first.Expression,
+                    GetSourceExpression(second),
+                    resultSelector
                 )
             );
         }

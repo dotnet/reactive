@@ -1354,6 +1354,15 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + WithLatestFrom +
+
+        public virtual IObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+        {
+            return new WithLatestFrom<TFirst, TSecond, TResult>(first, second, resultSelector);
+        }
+
+        #endregion
+
         #region + Zip +
 
         public virtual IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)

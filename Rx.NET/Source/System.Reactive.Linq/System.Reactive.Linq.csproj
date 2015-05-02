@@ -63,6 +63,7 @@
     <Compile Include="Reactive\Linq\Observable\RefCount.cs" />
     <Compile Include="Reactive\Linq\Observable\Multicast.cs" />
     <Compile Include="Reactive\Linq\Observable\GroupBy.cs" />
+    <Compile Include="Reactive\Linq\Observable\WithLatestFrom.cs" />
     <Compile Include="Reactive\Linq\Observable_.cs" />
     <Compile Include="Reactive\Linq\QueryLanguage_.cs" />
     <Compile Include="Reactive\Linq\QueryLanguage.Joins.cs" />

@@ -1500,6 +1500,20 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
+        public void WithLatestFrom_ArgumentNullChecks()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.WithLatestFrom(_qbNull, _qbMy, (a, b) => a + b));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.WithLatestFrom(_qbMy, _qbNull, (a, b) => a + b));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.WithLatestFrom(_qbMy, _qbMy, default(Expression<Func<int, int, int>>)));
+        }
+
+        [TestMethod]
+        public void WithLatestFrom()
+        {
+            _qbMy.WithLatestFrom(_qbMy, (a, b) => a + b);
+        }
+
+        [TestMethod]
         public void Zip_ArgumentNullChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Qbservable.Zip(_qbNull, _qbMy, (a, b) => a + b));

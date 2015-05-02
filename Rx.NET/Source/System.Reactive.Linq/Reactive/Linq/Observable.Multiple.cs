@@ -1532,6 +1532,33 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + WithLatestFrom +
+
+        /// <summary>
+        /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// </summary>
+        /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
+        /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
+        /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
+        /// <param name="first">First observable source.</param>
+        /// <param name="second">Second observable source.</param>
+        /// <param name="resultSelector">Function to invoke for each element from the first source combined with the latest element from the second source, if any.</param>
+        /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, using the specified result selector function.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> or <paramref name="resultSelector"/> is null.</exception>
+        public static IObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+        {
+            if (first == null)
+                throw new ArgumentNullException("first");
+            if (second == null)
+                throw new ArgumentNullException("second");
+            if (resultSelector == null)
+                throw new ArgumentNullException("resultSelector");
+
+            return s_impl.WithLatestFrom<TFirst, TSecond, TResult>(first, second, resultSelector);
+        }
+
+        #endregion
+
         #region + Zip +
 
         /// <summary>
