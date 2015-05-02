@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
-#if STRESS
+#if STRESS && !NO_TPL && !NO_TASK_DELAY
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,7 +30,7 @@ namespace ReactiveTests.Stress.Linq
             {
                 var rnd2 = new Random(rnd.Next());
 
-                ts.Add(Task.Run(async () =>
+                ts.Add(Task.Factory.StartNew(async () =>
                 {
                     var n = rnd2.Next(10, 1000);
 
