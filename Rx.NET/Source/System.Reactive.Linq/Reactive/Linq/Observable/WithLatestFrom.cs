@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private object _gate;
-            private bool _hasLatest;
+            private volatile bool _hasLatest;
             private TSecond _latest;
 
             public IDisposable Run()
@@ -84,23 +84,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TFirst value)
                 {
-                    lock (_parent._gate)
+                    if (_parent._hasLatest) // Volatile read
                     {
-                        if (_parent._hasLatest)
-                        {
-                            var res = default(TResult);
+                        var res = default(TResult);
 
-                            try
-                            {
-                                res = _parent._parent._resultSelector(value, _parent._latest);
-                            }
-                            catch (Exception ex)
+                        try
+                        {
+                            res = _parent._parent._resultSelector(value, _parent._latest);
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_parent._gate)
                             {
                                 _parent._observer.OnError(ex);
                                 _parent.Dispose();
-                                return;
                             }
 
+                            return;
+                        }
+
+                        lock (_parent._gate)
+                        {
                             _parent._observer.OnNext(res);
                         }
                     }
@@ -134,11 +138,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSecond value)
                 {
-                    lock (_parent._gate)
-                    {
-                        _parent._latest = value;
-                        _parent._hasLatest = true;
-                    }
+                    _parent._latest = value;
+                    _parent._hasLatest = true; // Volatile write
                 }
             }
         }
