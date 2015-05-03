@@ -1877,6 +1877,37 @@ namespace ReactiveTests.Tests
 
             Assert.IsTrue(lst.Last() - lst.First() < 10);
         }
+
+        [TestMethod]
+        public void Catch_TailRecursive3()
+        {
+            var ex = new Exception();
+
+            var res =
+                Observable.Catch(
+                    Observable.Defer(() =>
+                    {
+                        if (ex != null)
+                        {
+                            throw ex;
+                        }
+
+                        return Observable.Return(-2);
+                    }),
+                    Observable.Defer(() =>
+                    {
+                        if (ex != null)
+                        {
+                            throw ex;
+                        }
+
+                        return Observable.Return(-1);
+                    }),
+                    Observable.Return(42)
+                );
+
+            Assert.AreEqual(42, res.Wait());
+        }
 #endif
 
         #endregion
@@ -2068,7 +2099,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(new[] { e0, e1, e2 }, xs => xs.Sum())
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -2080,7 +2111,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_Never2()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1) });
 
@@ -2548,7 +2579,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(new[] { e0, e1, e2 }, xs => xs.Sum())
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(230)
             );
@@ -2569,7 +2600,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, (_0, _1) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(220)
             );
@@ -2591,7 +2622,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, (_0, _1, _2) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(230)
             );
@@ -2639,7 +2670,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(250)
             );
@@ -2664,7 +2695,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(260)
             );
@@ -2690,7 +2721,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(270)
             );
@@ -2717,7 +2748,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(280)
             );
@@ -2745,7 +2776,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(290)
             );
@@ -2804,7 +2835,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(310)
             );
@@ -3072,7 +3103,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 n.CombineLatest(o, (x, y) => x + y)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -3581,7 +3612,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 o2.CombineLatest(o1, (x, y) => x + y)
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(230, ex)
             );
@@ -3658,7 +3689,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 o2.CombineLatest(o1, (x, y) => x + y)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(220, 2 + 3),
                 OnNext(225, 3 + 4),
@@ -3837,14 +3868,14 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrowsN()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<IList<int>, int> f = xs => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(new[] { e0, e1, e2 }, f)
             );
@@ -3862,17 +3893,17 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows2()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, (_0, _1) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(220, ex)
             );
@@ -3886,14 +3917,14 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows3()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, (_0, _1, _2) => f())
             );
@@ -3911,19 +3942,19 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows4()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, (_0, _1, _2, _3) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(240, ex)
             );
@@ -3938,20 +3969,20 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows5()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(250, ex)
             );
@@ -3965,21 +3996,21 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows6()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(260, ex)
             );
@@ -3993,7 +4024,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows7()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4001,14 +4032,14 @@ namespace ReactiveTests.Tests
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(270, ex)
             );
@@ -4022,7 +4053,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows8()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4031,14 +4062,14 @@ namespace ReactiveTests.Tests
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(280, ex)
             );
@@ -4052,7 +4083,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows9()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4062,14 +4093,14 @@ namespace ReactiveTests.Tests
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(290, ex)
             );
@@ -4083,7 +4114,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows10()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4094,14 +4125,14 @@ namespace ReactiveTests.Tests
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(300, ex)
             );
@@ -4115,7 +4146,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows11()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4127,14 +4158,14 @@ namespace ReactiveTests.Tests
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(310, ex)
             );
@@ -4148,7 +4179,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows12()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4161,14 +4192,14 @@ namespace ReactiveTests.Tests
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(320, ex)
             );
@@ -4182,7 +4213,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows13()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4196,14 +4227,14 @@ namespace ReactiveTests.Tests
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(330, ex)
             );
@@ -4217,7 +4248,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows14()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4232,14 +4263,14 @@ namespace ReactiveTests.Tests
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(340, ex)
             );
@@ -4253,7 +4284,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows15()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4269,14 +4300,14 @@ namespace ReactiveTests.Tests
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
             var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(350, ex)
             );
@@ -4290,7 +4321,7 @@ namespace ReactiveTests.Tests
         public void CombineLatest_SelectorThrows16()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -4307,14 +4338,14 @@ namespace ReactiveTests.Tests
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
             var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
             var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(360, ex)
             );
@@ -4341,7 +4372,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(new[] { e0, e1, e2 }, xs => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4365,7 +4396,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, (_0, _1) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4390,7 +4421,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, (_0, _1, _2) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4416,7 +4447,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4444,7 +4475,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4472,7 +4503,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4501,7 +4532,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4531,7 +4562,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4562,7 +4593,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4594,7 +4625,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4627,7 +4658,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4661,7 +4692,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4696,7 +4727,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4732,7 +4763,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4769,7 +4800,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4807,7 +4838,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(500)
             );
@@ -4837,7 +4868,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(new[] { e0, e1, e2 }, xs => xs.Sum())
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(230, 6),
                 OnNext(410, 9),
@@ -4861,7 +4892,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, (_0, _1) => _0 + _1)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(220, 3),
                 OnNext(410, 5),
@@ -4885,7 +4916,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, (_0, _1, _2) => _0 + _1 + _2)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(230, 6),
                 OnNext(410, 9),
@@ -4911,7 +4942,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, (_0, _1, _2, _3) => _0 + _1 + _2 + _3)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(240, 10),
                 OnNext(410, 14),
@@ -4940,7 +4971,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(250, 15),
                 OnNext(410, 20),
@@ -4970,7 +5001,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => _0 + _1 + _2 + _3 + _4 + _5)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(260, 21),
                 OnNext(410, 27),
@@ -5002,7 +5033,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => _0 + _1 + _2 + _3 + _4 + _5 + _6)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(270, 28),
                 OnNext(410, 35),
@@ -5036,7 +5067,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(280, 36),
                 OnNext(410, 44),
@@ -5072,7 +5103,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(290, 45),
                 OnNext(410, 54),
@@ -5110,7 +5141,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(300, 55),
                 OnNext(410, 65),
@@ -5150,7 +5181,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(310, 66),
                 OnNext(410, 77),
@@ -5192,7 +5223,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(320, 78),
                 OnNext(410, 90),
@@ -5282,7 +5313,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(340, 105),
                 OnNext(410, 119),
@@ -5330,7 +5361,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(350, 120),
                 OnNext(410, 135),
@@ -5380,7 +5411,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(360, 136),
                 OnNext(410, 152),
@@ -5415,11 +5446,11 @@ namespace ReactiveTests.Tests
         public void CombineLatest_List_Regular()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnNext(240, 4), OnCompleted<int>(270) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnNext(250, 5), OnCompleted<int>(280) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnNext(260, 6), OnCompleted<int>(290) });
-            
+
             var res = scheduler.Start(() =>
                 Observable.CombineLatest<int>(new IObservable<int>[] { e0, e1, e2 }.AsEnumerable())
             );
@@ -5670,7 +5701,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.CombineLatest(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(230, ex)
             );
@@ -9231,6 +9262,39 @@ namespace ReactiveTests.Tests
 
             Assert.IsTrue(lst.Last() - lst.First() < 10);
         }
+
+        [TestMethod]
+        public void OnErrorResumeNext_TailRecursive3()
+        {
+            var ex = new Exception();
+
+            var res =
+                Observable.OnErrorResumeNext(
+                    Observable.Return(1),
+                    Observable.Defer(() =>
+                    {
+                        if (ex != null)
+                        {
+                            throw ex;
+                        }
+
+                        return Observable.Return(-2);
+                    }),
+                    Observable.Defer(() =>
+                    {
+                        if (ex != null)
+                        {
+                            throw ex;
+                        }
+
+                        return Observable.Return(-1);
+                    }),
+                    Observable.Return(2)
+                )
+                .SequenceEqual(new[] { 1, 2 });
+
+            Assert.IsTrue(res.Wait());
+        }
 #endif
 
         #endregion
@@ -9608,7 +9672,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 l.SkipUntil(r)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11659,7 +11723,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11679,7 +11743,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11700,7 +11764,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11723,7 +11787,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11746,7 +11810,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11770,7 +11834,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11795,7 +11859,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11821,7 +11885,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11848,7 +11912,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11876,7 +11940,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11905,7 +11969,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11935,7 +11999,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11966,7 +12030,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(
                 () => Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -11998,7 +12062,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -12031,7 +12095,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
             );
-            
+
             res.Messages.AssertEqual(
             );
 
@@ -12151,7 +12215,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(220)
             );
@@ -12173,7 +12237,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(230)
             );
@@ -12196,7 +12260,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(240)
             );
@@ -12221,7 +12285,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(250)
             );
@@ -12246,7 +12310,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(260)
             );
@@ -12272,7 +12336,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(270)
             );
@@ -12299,7 +12363,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(280)
             );
@@ -12327,7 +12391,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(290)
             );
@@ -12356,7 +12420,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(300)
             );
@@ -12386,7 +12450,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(310)
             );
@@ -12417,7 +12481,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(320)
             );
@@ -12449,7 +12513,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(330)
             );
@@ -12482,7 +12546,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(340)
             );
@@ -12516,7 +12580,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(350)
             );
@@ -12551,7 +12615,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnCompleted<int>(360)
             );
@@ -13149,7 +13213,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => _0 + _1)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(220, 3),
                 OnCompleted<int>(400)
@@ -13171,7 +13235,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => _0 + _1 + _2)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(230, 6),
                 OnCompleted<int>(400)
@@ -13194,7 +13258,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => _0 + _1 + _2 + _3)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(240, 10),
                 OnCompleted<int>(400)
@@ -13219,7 +13283,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(250, 15),
                 OnCompleted<int>(400)
@@ -13244,7 +13308,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => _0 + _1 + _2 + _3 + _4 + _5)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(260, 21),
                 OnCompleted<int>(400)
@@ -13270,7 +13334,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => _0 + _1 + _2 + _3 + _4 + _5 + _6)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(270, 28),
                 OnCompleted<int>(400)
@@ -13297,7 +13361,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(280, 36),
                 OnCompleted<int>(400)
@@ -13325,7 +13389,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(290, 45),
                 OnCompleted<int>(400)
@@ -13354,7 +13418,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(300, 55),
                 OnCompleted<int>(400)
@@ -13384,7 +13448,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(310, 66),
                 OnCompleted<int>(400)
@@ -13415,7 +13479,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(320, 78),
                 OnCompleted<int>(400)
@@ -13447,7 +13511,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(330, 91),
                 OnCompleted<int>(400)
@@ -13480,7 +13544,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(340, 105),
                 OnCompleted<int>(400)
@@ -13514,7 +13578,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(350, 120),
                 OnCompleted<int>(400)
@@ -13549,7 +13613,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext(360, 136),
                 OnCompleted<int>(400)
@@ -13705,7 +13769,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(220, ex)
             );
@@ -13719,18 +13783,18 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows3()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(230, ex)
             );
@@ -13744,19 +13808,19 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows4()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(240, ex)
             );
@@ -13771,20 +13835,20 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows5()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(250, ex)
             );
@@ -13798,21 +13862,21 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows6()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
             var e3 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(240, 4), OnCompleted<int>(400) });
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(260, ex)
             );
@@ -13826,7 +13890,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows7()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13834,14 +13898,14 @@ namespace ReactiveTests.Tests
             var e4 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(250, 5), OnCompleted<int>(400) });
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(270, ex)
             );
@@ -13855,7 +13919,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows8()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13864,14 +13928,14 @@ namespace ReactiveTests.Tests
             var e5 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(260, 6), OnCompleted<int>(400) });
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(280, ex)
             );
@@ -13885,7 +13949,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows9()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13895,14 +13959,14 @@ namespace ReactiveTests.Tests
             var e6 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(270, 7), OnCompleted<int>(400) });
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(290, ex)
             );
@@ -13916,7 +13980,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows10()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13927,14 +13991,14 @@ namespace ReactiveTests.Tests
             var e7 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(280, 8), OnCompleted<int>(400) });
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(300, ex)
             );
@@ -13948,7 +14012,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows11()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13960,14 +14024,14 @@ namespace ReactiveTests.Tests
             var e8 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(290, 9), OnCompleted<int>(400) });
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(310, ex)
             );
@@ -13981,7 +14045,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows12()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -13994,14 +14058,14 @@ namespace ReactiveTests.Tests
             var e9 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(300, 10), OnCompleted<int>(400) });
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(320, ex)
             );
@@ -14015,7 +14079,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows13()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -14029,14 +14093,14 @@ namespace ReactiveTests.Tests
             var e10 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(310, 11), OnCompleted<int>(400) });
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(330, ex)
             );
@@ -14050,7 +14114,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows14()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -14065,14 +14129,14 @@ namespace ReactiveTests.Tests
             var e11 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(320, 12), OnCompleted<int>(400) });
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(340, ex)
             );
@@ -14086,7 +14150,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows15()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -14102,14 +14166,14 @@ namespace ReactiveTests.Tests
             var e12 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(330, 13), OnCompleted<int>(400) });
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
             var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(350, ex)
             );
@@ -14123,7 +14187,7 @@ namespace ReactiveTests.Tests
         public void Zip_SelectorThrows16()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 1), OnCompleted<int>(400) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(220, 2), OnCompleted<int>(400) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(230, 3), OnCompleted<int>(400) });
@@ -14140,14 +14204,14 @@ namespace ReactiveTests.Tests
             var e13 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(340, 14), OnCompleted<int>(400) });
             var e14 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(350, 15), OnCompleted<int>(400) });
             var e15 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(360, 16), OnCompleted<int>(400) });
-            
+
             var ex = new Exception();
             Func<int> f = () => { throw ex; };
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => f())
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(360, ex)
             );
@@ -14197,14 +14261,14 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted2()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
 
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, (_0, _1) => _0 + _1)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 10),
                 OnCompleted<int>(220)
@@ -14225,7 +14289,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted3()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14233,7 +14297,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, (_0, _1, _2) => _0 + _1 + _2)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 15),
                 OnCompleted<int>(230)
@@ -14254,7 +14318,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted4()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14263,7 +14327,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => _0 + _1 + _2 + _3)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 20),
                 OnCompleted<int>(240)
@@ -14285,7 +14349,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted5()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14295,7 +14359,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 25),
                 OnCompleted<int>(250)
@@ -14316,7 +14380,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted6()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14327,7 +14391,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, (_0, _1, _2, _3, _4, _5) => _0 + _1 + _2 + _3 + _4 + _5)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 30),
                 OnCompleted<int>(260)
@@ -14348,7 +14412,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted7()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14360,7 +14424,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, (_0, _1, _2, _3, _4, _5, _6) => _0 + _1 + _2 + _3 + _4 + _5 + _6)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 35),
                 OnCompleted<int>(270)
@@ -14381,7 +14445,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted8()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14394,7 +14458,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, (_0, _1, _2, _3, _4, _5, _6, _7) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 40),
                 OnCompleted<int>(280)
@@ -14415,7 +14479,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted9()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14429,7 +14493,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, (_0, _1, _2, _3, _4, _5, _6, _7, _8) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 45),
                 OnCompleted<int>(290)
@@ -14450,7 +14514,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted10()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14465,7 +14529,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 50),
                 OnCompleted<int>(300)
@@ -14486,7 +14550,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted11()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14502,7 +14566,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 55),
                 OnCompleted<int>(310)
@@ -14523,7 +14587,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted12()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14540,7 +14604,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 60),
                 OnCompleted<int>(320)
@@ -14561,7 +14625,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted13()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14579,7 +14643,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 65),
                 OnCompleted<int>(330)
@@ -14600,7 +14664,7 @@ namespace ReactiveTests.Tests
         public void Zip_AllCompleted14()
         {
             var scheduler = new TestScheduler();
-            
+
             var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnCompleted<int>(220) });
             var e1 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnCompleted<int>(230) });
             var e2 = scheduler.CreateHotObservable(new[] { OnNext(150, 1), OnNext(210, 5), OnNext(220, 6), OnNext(230, 7), OnCompleted<int>(240) });
@@ -14619,7 +14683,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 70),
                 OnCompleted<int>(340)
@@ -14660,7 +14724,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 75),
                 OnCompleted<int>(350)
@@ -14702,7 +14766,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15)
             );
-            
+
             res.Messages.AssertEqual(
                 OnNext<int>(210, 80),
                 OnCompleted<int>(360)
@@ -14720,7 +14784,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
         #region ZipWithEnumerable
 
@@ -15728,7 +15792,7 @@ namespace ReactiveTests.Tests
             var res = scheduler.Start(() =>
                 Observable.Zip(e0, e1, e2, e3, (_0, _1, _2, _3) => 42)
             );
-            
+
             res.Messages.AssertEqual(
                 OnError<int>(230, ex)
             );

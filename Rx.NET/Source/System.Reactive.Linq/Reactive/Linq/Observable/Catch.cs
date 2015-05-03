@@ -3,7 +3,6 @@
 #if !NO_PERF
 using System;
 using System.Collections.Generic;
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
@@ -67,6 +66,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     base._observer.OnCompleted();
 
                 base.Dispose();
+            }
+
+            protected override bool Fail(Exception error)
+            {
+                //
+                // Note that the invocation of _recurse in OnError will
+                // cause the next MoveNext operation to be enqueued, so
+                // we will still return to the caller immediately.
+                //
+                OnError(error);
+                return true;
             }
         }
     }

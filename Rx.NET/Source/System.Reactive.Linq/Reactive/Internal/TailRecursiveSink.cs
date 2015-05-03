@@ -74,6 +74,12 @@ namespace System.Reactive
                 {
                     e.Dispose();
 
+                    //
+                    // Failure to enumerate the sequence cannot be handled, even by
+                    // operators like Catch, because it'd lead to another attempt at
+                    // enumerating to find the next observable sequence. Therefore,
+                    // we feed those errors directly to the observer.
+                    //
                     base._observer.OnError(ex);
                     base.Dispose();
                     return;
@@ -98,9 +104,18 @@ namespace System.Reactive
                     }
                     catch (Exception exception)
                     {
-                        e.Dispose();
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        //
+                        // Errors from unpacking may produce side-effects that normally
+                        // would occur during a SubscribeSafe operation. Those would feed
+                        // back into the observer and be subject to the operator's error
+                        // handling behavior. For example, Catch would allow to handle
+                        // the error using a handler function.
+                        //
+                        if (!Fail(exception))
+                        {
+                            e.Dispose();
+                        }
+
                         return;
                     }
 
@@ -110,6 +125,7 @@ namespace System.Reactive
                     if (r == 0)
                     {
                         e.Dispose();
+
                         _stack.Pop();
                         _length.Pop();
                     }
@@ -165,6 +181,12 @@ namespace System.Reactive
             }
             catch (Exception exception)
             {
+                //
+                // Failure to enumerate the sequence cannot be handled, even by
+                // operators like Catch, because it'd lead to another attempt at
+                // enumerating to find the next observable sequence. Therefore,
+                // we feed those errors directly to the observer.
+                //
                 base._observer.OnError(exception);
                 base.Dispose();
 
@@ -181,6 +203,14 @@ namespace System.Reactive
         {
             base._observer.OnCompleted();
             base.Dispose();
+        }
+
+        protected virtual bool Fail(Exception error)
+        {
+            base._observer.OnError(error);
+            base.Dispose();
+
+            return false;
         }
     }
 }
