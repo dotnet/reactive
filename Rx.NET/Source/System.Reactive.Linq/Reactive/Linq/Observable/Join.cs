@@ -46,11 +46,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private bool _leftDone;
             private int _leftID;
-            private Dictionary<int, TLeft> _leftMap;
+            private SortedDictionary<int, TLeft> _leftMap;
             
             private bool _rightDone;
             private int _rightID;
-            private Dictionary<int, TRight> _rightMap;
+            private SortedDictionary<int, TRight> _rightMap;
 
             public IDisposable Run()
             {
@@ -61,13 +61,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 _group.Add(leftSubscription);
                 _leftDone = false;
                 _leftID = 0;
-                _leftMap = new Dictionary<int, TLeft>();
+                _leftMap = new SortedDictionary<int, TLeft>();
 
                 var rightSubscription = new SingleAssignmentDisposable();
                 _group.Add(rightSubscription);
                 _rightDone = false;
                 _rightID = 0;
-                _rightMap = new Dictionary<int, TRight>();
+                _rightMap = new SortedDictionary<int, TRight>();
 
                 leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));

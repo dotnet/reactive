@@ -115,7 +115,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'PLLITE' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;PLIB;PLIB_LITE;NO_THREAD;USE_TASKEX;CRIPPLED_REFLECTION;NO_WEAKREFOFT</DefineConstants>    
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;PLIB;PLIB_LITE;NO_THREAD;USE_TASKEX;CRIPPLED_REFLECTION;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>    
     <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
       <!-- 
@@ -174,7 +174,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'SL5' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TASK_DELAY;NO_WEAKREFOFT</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TASK_DELAY;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -184,7 +184,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'WP7' ">
-    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7;NO_WEAKREFOFT</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>

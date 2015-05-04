@@ -47,10 +47,10 @@ namespace System.Reactive.Linq.ObservableImpl
             private RefCountDisposable _refCount;
 
             private int _leftID;
-            private Dictionary<int, IObserver<TRight>> _leftMap;
+            private SortedDictionary<int, IObserver<TRight>> _leftMap;
 
             private int _rightID;
-            private Dictionary<int, TRight> _rightMap;
+            private SortedDictionary<int, TRight> _rightMap;
 
             public IDisposable Run()
             {
@@ -61,12 +61,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
                 _leftID = 0;
-                _leftMap = new Dictionary<int, IObserver<TRight>>();
+                _leftMap = new SortedDictionary<int, IObserver<TRight>>();
 
                 var rightSubscription = new SingleAssignmentDisposable();
                 _group.Add(rightSubscription);
                 _rightID = 0;
-                _rightMap = new Dictionary<int, TRight>();
+                _rightMap = new SortedDictionary<int, TRight>();
 
                 leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));

@@ -38,6 +38,7 @@
     <Compile Include="Reactive\Internal\ReflectionUtils.cs" />
     <Compile Include="Reactive\Internal\HashSet.cs" />
     <Compile Include="Reactive\Internal\Lookup.cs" />
+    <Compile Include="Reactive\Internal\SortedDictionary.cs" />
     <Compile Include="Reactive\Linq\LocalQueryMethodImplementationTypeAttribute.cs" />
     <Compile Include="Reactive\Linq\Observable\Case.cs" />
     <Compile Include="Reactive\Linq\Observable\Collect.cs" />
