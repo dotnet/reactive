@@ -207,6 +207,18 @@ namespace Tests
             evt.WaitOne();
             yield return 42;
         }
+
+        [TestMethod]
+        public void TakeOneFromSelectMany()
+        {
+            var enumerable = AsyncEnumerable
+                .Return(0)
+                .SelectMany(_ => AsyncEnumerable.Return("Check"))
+                .Take(1)
+                .Do(_ => { });
+
+            Assert.AreEqual("Check", enumerable.First().Result);
+        }
     }
 
     static class MyExt

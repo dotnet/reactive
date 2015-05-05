@@ -252,12 +252,11 @@ namespace System.Linq
 
                 var disposeIe = new Action(() =>
                 {
-                    IAsyncEnumerator<TResult> localIe;
+                    var localIe = default(IAsyncEnumerator<TResult>);
 
                     lock (syncRoot)
                     {
                         localIe = ie;
-                        ie = null;
                     }
 
                     if (localIe != null)
@@ -346,12 +345,11 @@ namespace System.Linq
 
                 var disposeIe = new Action(() =>
                 {
-                    IAsyncEnumerator<TResult> localIe;
+                    var localIe = default(IAsyncEnumerator<TResult>);
 
                     lock (syncRoot)
                     {
                         localIe = ie;
-                        ie = null;
                     }
 
                     if (localIe != null)
