@@ -130,7 +130,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            return source.Aggregate(0, (c, _) => c + 1, cancellationToken);
+            return source.Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -140,7 +140,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException("predicate");
 
-            return source.Where(predicate).Aggregate(0, (c, _) => c + 1, cancellationToken);
+            return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -148,7 +148,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            return source.Aggregate(0L, (c, _) => c + 1, cancellationToken);
+            return source.Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
@@ -158,7 +158,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException("predicate");
 
-            return source.Where(predicate).Aggregate(0L, (c, _) => c + 1, cancellationToken);
+            return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)

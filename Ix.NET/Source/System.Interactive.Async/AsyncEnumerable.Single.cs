@@ -87,7 +87,7 @@ namespace System.Linq
                                 {
                                     try
                                     {
-                                        current = selector(e.Current, index++);
+                                        current = selector(e.Current, checked(index++));
                                     }
                                     catch (Exception ex)
                                     {
@@ -204,7 +204,7 @@ namespace System.Linq
                                 var b = false;
                                 try
                                 {
-                                    b = predicate(e.Current, index++);
+                                    b = predicate(e.Current, checked(index++));
                                 }
                                 catch (Exception ex)
                                 {
@@ -393,7 +393,7 @@ namespace System.Linq
                             {
                                 try
                                 {
-                                    ie = selector(e.Current, index++).GetEnumerator();
+                                    ie = selector(e.Current, checked(index++)).GetEnumerator();
                                     inner(tcs, ct);
                                 }
                                 catch (Exception ex)
@@ -586,7 +586,7 @@ namespace System.Linq
 
                                     try
                                     {
-                                        b = predicate(e.Current, index++);
+                                        b = predicate(e.Current, checked(index++));
                                     }
                                     catch (Exception ex)
                                     {
@@ -758,7 +758,7 @@ namespace System.Linq
                                     var result = false;
                                     try
                                     {
-                                        result = predicate(e.Current, index++);
+                                        result = predicate(e.Current, checked(index++));
                                     }
                                     catch (Exception ex)
                                     {
