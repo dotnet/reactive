@@ -7,14 +7,23 @@ namespace System.Threading.Tasks
 {
     static class TaskExt
     {
-        public static Task<T> Return<T>(T value, CancellationToken cancellationToken)
+        public static readonly Task<bool> True;
+        public static readonly Task<bool> False;
+
+        static TaskExt()
+        {
+            True = Return(true);
+            False = Return(false);
+        }
+
+        public static Task<T> Return<T>(T value)
         {
             var tcs = new TaskCompletionSource<T>();
             tcs.TrySetResult(value);
             return tcs.Task;
         }
 
-        public static Task<T> Throw<T>(Exception exception, CancellationToken cancellationToken)
+        public static Task<T> Throw<T>(Exception exception)
         {
             var tcs = new TaskCompletionSource<T>();
             tcs.TrySetException(exception);

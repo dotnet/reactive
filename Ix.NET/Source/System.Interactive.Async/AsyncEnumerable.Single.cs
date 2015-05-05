@@ -482,7 +482,7 @@ namespace System.Linq
                     (ct, tcs) =>
                     {
                         if (n == 0)
-                            return TaskExt.Return(false, cts.Token);
+                            return TaskExt.False;
 
                         e.MoveNext(cts.Token).Then(t =>
                         {

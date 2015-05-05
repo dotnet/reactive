@@ -101,11 +101,11 @@ namespace Tests
         [TestMethod]
         public void CorrectDispose()
         {
-            var disposed = false;
+            var disposed = new TaskCompletionSource<bool>();
 
             var xs = new[] { 1, 2, 3 }.WithDispose(() =>
             {
-                disposed = true;
+                disposed.TrySetResult(true);
             }).ToAsyncEnumerable();
 
             var ys = xs.Select(x => x + 1);
@@ -113,7 +113,7 @@ namespace Tests
             var e = ys.GetEnumerator();
             e.Dispose();
 
-            Assert.IsTrue(disposed);
+            Assert.IsTrue(disposed.Task.Result);
 
             Assert.IsFalse(e.MoveNext().Result);
         }
