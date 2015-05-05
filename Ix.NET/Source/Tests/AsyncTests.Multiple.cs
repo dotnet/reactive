@@ -13,6 +13,18 @@ namespace Tests
     public partial class AsyncTests
     {
         [TestMethod]
+        public void Take_one_from_SelectMany()
+        {
+            var enumerable = AsyncEnumerable
+                .Return(0)
+                .SelectMany(_ => AsyncEnumerable.Return("Check"))
+                .Take(1)
+                .Do(_ => {});
+
+            Assert.AreEqual("Check", enumerable.First().Result);
+        }
+
+        [TestMethod]
         public void Concat_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(null, AsyncEnumerable.Return(42)));
