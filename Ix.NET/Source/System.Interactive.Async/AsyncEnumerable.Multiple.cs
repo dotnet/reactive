@@ -26,7 +26,7 @@ namespace System.Linq
                 var d = Disposable.Create(cts, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) => e.MoveNext(ct).ContinueWith(t =>
+                f = (tcs, ct) => e.MoveNext(ct).Then(t =>
                 {
                     t.Handle(tcs, res =>
                     {
@@ -92,7 +92,7 @@ namespace System.Linq
                             if (result)
                                 current = selector(e1.Current, e2.Current);
                             return result;
-                        }).ContinueWith(t =>
+                        }).Then(t =>
                         {
                             t.Handle(tcs, x => tcs.TrySetResult(x));
                         });
@@ -132,7 +132,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ContinueWith(t =>
+                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -198,7 +198,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ContinueWith(t =>
+                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -310,7 +310,7 @@ namespace System.Linq
                         tcs.TrySetResult(true);
                         return false;
                     }
-                }).ContinueWith(t =>
+                }).Then(t =>
                 {
                     t.Handle(tcs, res =>
                     {
@@ -374,11 +374,11 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    getInnerMap(ct).ContinueWith(ti =>
+                    getInnerMap(ct).Then(ti =>
                     {
                         ti.Handle(tcs, map =>
                         {
-                            outerE.MoveNext(ct).ContinueWith(to =>
+                            outerE.MoveNext(ct).Then(to =>
                             {
                                 to.Handle(tcs, res =>
                                 {
@@ -524,7 +524,7 @@ namespace System.Linq
                     });
 
                     if (b)
-                        oe.MoveNext(ct).ContinueWith(t =>
+                        oe.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -576,7 +576,7 @@ namespace System.Linq
                             });
                         });
                     else
-                        ie.MoveNext(ct).ContinueWith(t =>
+                        ie.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -711,7 +711,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {

@@ -25,7 +25,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -89,7 +89,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -173,7 +173,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -215,7 +215,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -281,7 +281,7 @@ namespace System.Linq
 
             var e = source.GetEnumerator();
 
-            e.MoveNext(cancellationToken).ContinueWith(t =>
+            e.MoveNext(cancellationToken).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -314,7 +314,7 @@ namespace System.Linq
 
             var e = source.GetEnumerator();
 
-            e.MoveNext(cancellationToken).ContinueWith(t =>
+            e.MoveNext(cancellationToken).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -350,7 +350,7 @@ namespace System.Linq
             var hasLast = false;
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -397,7 +397,7 @@ namespace System.Linq
             var hasLast = false;
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -441,14 +441,14 @@ namespace System.Linq
 
             var e = source.GetEnumerator();
 
-            e.MoveNext(cancellationToken).ContinueWith(t =>
+            e.MoveNext(cancellationToken).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
                     if (res)
                     {
                         var result = e.Current;
-                        e.MoveNext(cancellationToken).ContinueWith(t1 =>
+                        e.MoveNext(cancellationToken).Then(t1 =>
                         {
                             t1.Handle(tcs, res1 =>
                             {
@@ -486,14 +486,14 @@ namespace System.Linq
 
             var e = source.GetEnumerator();
 
-            e.MoveNext(cancellationToken).ContinueWith(t =>
+            e.MoveNext(cancellationToken).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
                     if (res)
                     {
                         var result = e.Current;
-                        e.MoveNext(cancellationToken).ContinueWith(t1 =>
+                        e.MoveNext(cancellationToken).Then(t1 =>
                         {
                             t1.Handle(tcs, res1 =>
                             {
@@ -534,7 +534,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var next = default(Action<CancellationToken>);
-            next = ct => e.MoveNext(ct).ContinueWith(t =>
+            next = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -574,7 +574,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var next = default(Action<CancellationToken>);
-            next = ct => e.MoveNext(ct).ContinueWith(t =>
+            next = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -774,7 +774,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -812,7 +812,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -853,7 +853,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -891,7 +891,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -932,7 +932,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -970,7 +970,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -1011,7 +1011,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -1049,7 +1049,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -1090,7 +1090,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -1128,7 +1128,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {
@@ -1863,7 +1863,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            return source.Any(cancellationToken).ContinueWith(t => !t.Result);
+            return source.Any(cancellationToken).Then(t => !t.Result);
         }
 
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
@@ -1873,7 +1873,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
 
-            return MinBy(source, x => x, comparer, cancellationToken).ContinueWith(t => t.Result.First());
+            return MinBy(source, x => x, comparer, cancellationToken).Then(t => t.Result.First());
         }
 
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
@@ -1905,7 +1905,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
 
-            return MaxBy(source, x => x, comparer, cancellationToken).ContinueWith(t => t.Result.First());
+            return MaxBy(source, x => x, comparer, cancellationToken).Then(t => t.Result.First());
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
@@ -1943,7 +1943,7 @@ namespace System.Linq
             var e = source.GetEnumerator();
 
             var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).ContinueWith(t =>
+            f = ct => e.MoveNext(ct).Then(t =>
             {
                 t.Handle(tcs, res =>
                 {

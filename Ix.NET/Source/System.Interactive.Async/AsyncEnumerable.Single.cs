@@ -27,7 +27,7 @@ namespace System.Linq
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -79,7 +79,7 @@ namespace System.Linq
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -137,7 +137,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -195,7 +195,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -271,7 +271,7 @@ namespace System.Linq
 
                 inner = (tcs, ct) =>
                 {
-                    ie.MoveNext(ct).ContinueWith(t =>
+                    ie.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -290,7 +290,7 @@ namespace System.Linq
 
                 outer = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -366,7 +366,7 @@ namespace System.Linq
 
                 inner = (tcs, ct) =>
                 {
-                    ie.MoveNext(ct).ContinueWith(t =>
+                    ie.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -385,7 +385,7 @@ namespace System.Linq
 
                 outer = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -484,7 +484,7 @@ namespace System.Linq
                         if (n == 0)
                             return TaskExt.Return(false, cts.Token);
 
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -522,7 +522,7 @@ namespace System.Linq
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -576,7 +576,7 @@ namespace System.Linq
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -631,14 +631,14 @@ namespace System.Linq
                 f = (tcs, ct) =>
                 {
                     if (n == 0)
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, x => tcs.TrySetResult(x));
                         });
                     else
                     {
                         --n;
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -682,7 +682,7 @@ namespace System.Linq
                 f = (tcs, ct) =>
                 {
                     if (skipping)
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -711,7 +711,7 @@ namespace System.Linq
                             });
                         });
                     else
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, x => tcs.TrySetResult(x));
                         });
@@ -749,7 +749,7 @@ namespace System.Linq
                 f = (tcs, ct) =>
                 {
                     if (skipping)
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -778,7 +778,7 @@ namespace System.Linq
                             });
                         });
                     else
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, x => tcs.TrySetResult(x));
                         });
@@ -817,7 +817,7 @@ namespace System.Linq
                     if (done)
                         tcs.TrySetResult(false);
                     else
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -903,14 +903,14 @@ namespace System.Linq
                     {
                         if (stack == null)
                         {
-                            Create(() => e).Aggregate(new Stack<TSource>(), (s, x) => { s.Push(x); return s; }, cts.Token).ContinueWith(t =>
+                            Create(() => e).Aggregate(new Stack<TSource>(), (s, x) => { s.Push(x); return s; }, cts.Token).Then(t =>
                             {
                                 t.Handle(tcs, res =>
                                 {
                                     stack = res;
                                     tcs.TrySetResult(stack.Count > 0);
                                 });
-                            }, cts.Token);
+                            });
                         }
                         else
                         {
@@ -946,7 +946,7 @@ namespace System.Linq
                             var tcs = new TaskCompletionSource<bool>();
                             if (current == null)
                             {
-                                source.ToList(ct).ContinueWith(t =>
+                                source.ToList(ct).Then(t =>
                                 {
                                     t.Handle(tcs, res =>
                                     {
@@ -1097,7 +1097,7 @@ namespace System.Linq
 
                     f = (tcs, ct) =>
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -1246,7 +1246,7 @@ namespace System.Linq
                         return task;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs,
                             res =>
@@ -1308,7 +1308,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    iterateSource(ct).ContinueWith(t =>
+                    iterateSource(ct).Then(t =>
                     {
                         t.Handle(tcs,
                             res =>
@@ -1498,7 +1498,7 @@ namespace System.Linq
                     }
                     else
                     {
-                        iterateSource(ct).ContinueWith(t =>
+                        iterateSource(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -1600,7 +1600,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         if (!t.IsCanceled)
                         {
@@ -1692,7 +1692,7 @@ namespace System.Linq
             var f = default(Action<CancellationToken>);
             f = ct =>
             {
-                e.MoveNext(ct).ContinueWith(t =>
+                e.MoveNext(ct).Then(t =>
                 {
                     t.Handle(tcs, res =>
                     {
@@ -1762,7 +1762,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -1824,7 +1824,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -1869,7 +1869,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -1947,7 +1947,7 @@ namespace System.Linq
                 {
                     if (!stopped)
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -2088,7 +2088,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -2195,7 +2195,7 @@ namespace System.Linq
                     }
                     else
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -2260,7 +2260,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -2320,7 +2320,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -2391,7 +2391,7 @@ namespace System.Linq
                 {
                     if (!done)
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -2459,7 +2459,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {

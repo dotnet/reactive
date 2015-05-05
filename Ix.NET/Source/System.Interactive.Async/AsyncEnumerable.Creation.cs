@@ -248,7 +248,7 @@ namespace System.Linq
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs,
                                 res =>

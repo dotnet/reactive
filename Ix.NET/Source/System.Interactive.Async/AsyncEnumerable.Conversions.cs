@@ -77,7 +77,7 @@ namespace System.Linq
                     {
                         if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
                         {
-                            task.ContinueWith(continuedTask =>
+                            task.Then(continuedTask =>
                             {
                                 if (continuedTask.IsCanceled)
                                     tcs.SetCanceled();

@@ -31,7 +31,7 @@ namespace System.Linq
                 {
                     if (!done)
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs,
                                 res =>
@@ -76,7 +76,7 @@ namespace System.Linq
                     }
                     else
                     {
-                        e.MoveNext(ct).ContinueWith(t =>
+                        e.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -172,7 +172,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs,
                             res =>
@@ -221,7 +221,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -306,7 +306,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs,
                             res =>
