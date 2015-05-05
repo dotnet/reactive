@@ -14,27 +14,41 @@ namespace Tests
         public void AssertThrows<E>(Action a)
             where E : Exception
         {
+            var hasFailed = false;
+
             try
             {
                 a();
-                Assert.Fail();
             }
             catch (E)
             {
+                hasFailed = true;
+            }
+
+            if (!hasFailed)
+            {
+                Assert.Fail();
             }
         }
 
         public void AssertThrows<E>(Action a, Func<E, bool> assert)
             where E : Exception
         {
+            var hasFailed = false;
+
             try
             {
                 a();
-                Assert.Fail();
             }
             catch (E e)
             {
                 Assert.IsTrue(assert(e));
+                hasFailed = true;
+            }
+
+            if (!hasFailed)
+            {
+                Assert.Fail();
             }
         }
 
