@@ -23,7 +23,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable { Disposable = e };
-                var d = new CompositeDisposable(cts, a);
+                var d = Disposable.Create(cts, a);
                 var done = false;
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -133,7 +133,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable();
-                var d = new CompositeDisposable(cts, se, a);
+                var d = Disposable.Create(cts, se, a);
 
                 var error = default(Exception);
 
@@ -216,7 +216,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var r = new Disposable(finallyAction);
-                var d = new CompositeDisposable(cts, e, r);
+                var d = Disposable.Create(cts, e, r);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -277,7 +277,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable();
-                var d = new CompositeDisposable(cts, se, a);
+                var d = Disposable.Create(cts, se, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>

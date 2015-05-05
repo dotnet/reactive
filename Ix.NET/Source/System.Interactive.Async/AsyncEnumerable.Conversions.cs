@@ -299,7 +299,7 @@ namespace System.Linq
 
                 f();
 
-                return new CompositeDisposable(ctd, e);
+                return Disposable.Create(ctd, e);
             }
         }
 #endif

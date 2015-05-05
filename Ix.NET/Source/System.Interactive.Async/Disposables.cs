@@ -7,7 +7,7 @@ namespace System.Linq
 {
     class CancellationTokenDisposable : IDisposable
     {
-        private CancellationTokenSource cts = new CancellationTokenSource();
+        private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         public CancellationToken Token { get { return cts.Token; } }
 
@@ -36,7 +36,7 @@ namespace System.Linq
 
     class AssignableDisposable : IDisposable
     {
-        private object _gate = new object();
+        private readonly object _gate = new object();
         private IDisposable _disposable;
         private bool _disposed;
 
@@ -81,9 +81,37 @@ namespace System.Linq
             _dispose = dispose;
         }
 
+        public static IDisposable Create(IDisposable d1, IDisposable d2)
+        {
+            return new BinaryDisposable(d1, d2);
+        }
+
+        public static IDisposable Create(params IDisposable[] disposables)
+        {
+            return new CompositeDisposable(disposables);
+        }
+
         public void Dispose()
         {
             _dispose();
+        }
+    }
+
+    class BinaryDisposable : IDisposable
+    {
+        private readonly IDisposable _d1;
+        private readonly IDisposable _d2;
+
+        public BinaryDisposable(IDisposable d1, IDisposable d2)
+        {
+            _d1 = d1;
+            _d2 = d2;
+        }
+
+        public void Dispose()
+        {
+            _d1.Dispose();
+            _d2.Dispose();
         }
     }
 }

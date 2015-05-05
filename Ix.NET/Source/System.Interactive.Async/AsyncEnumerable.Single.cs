@@ -22,7 +22,7 @@ namespace System.Linq
                 var current = default(TResult);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -74,7 +74,7 @@ namespace System.Linq
                 var index = 0;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -132,7 +132,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -190,7 +190,7 @@ namespace System.Linq
                 var index = 0;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -264,7 +264,7 @@ namespace System.Linq
                 });
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, new Disposable(disposeIe), e);
+                var d = Disposable.Create(cts, new Disposable(disposeIe), e);
 
                 var outer = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 var inner = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -359,7 +359,7 @@ namespace System.Linq
                 var index = 0;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, new Disposable(disposeIe), e);
+                var d = Disposable.Create(cts, new Disposable(disposeIe), e);
 
                 var outer = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 var inner = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -476,7 +476,7 @@ namespace System.Linq
                 var n = count;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -517,7 +517,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -571,7 +571,7 @@ namespace System.Linq
                 var index = 0;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -625,7 +625,7 @@ namespace System.Linq
                 var n = count;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -676,7 +676,7 @@ namespace System.Linq
                 var skipping = true;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -743,7 +743,7 @@ namespace System.Linq
                 var index = 0;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -809,7 +809,7 @@ namespace System.Linq
                 var current = default(TSource);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -896,7 +896,7 @@ namespace System.Linq
                 var stack = default(Stack<TSource>);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 return Create(
                     (ct, tcs) =>
@@ -1090,7 +1090,7 @@ namespace System.Linq
 
                     var cts = new CancellationTokenDisposable();
                     var d1 = new AssignableDisposable();
-                    var d = new CompositeDisposable(cts, e, d1);
+                    var d = Disposable.Create(cts, e, d1);
 
                     var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                     var g = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -1221,7 +1221,7 @@ namespace System.Linq
                             e.Dispose();
                     }
                 );
-                var d = new CompositeDisposable(cts, refCount);
+                var d = Disposable.Create(cts, refCount);
 
                 var iterateSource = default(Func<CancellationToken, Task<bool>>);
                 iterateSource = ct =>
@@ -1476,7 +1476,7 @@ namespace System.Linq
                 var index = -1;
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, sourceDisposable);
+                var d = Disposable.Create(cts, sourceDisposable);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -1593,7 +1593,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var current = default(TSource);
 
@@ -1736,7 +1736,7 @@ namespace System.Linq
                 var current = default(TSource);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, a);
+                var d = Disposable.Create(cts, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -1804,7 +1804,7 @@ namespace System.Linq
                 var current = default(TSource);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, a);
+                var d = Disposable.Create(cts, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -1864,7 +1864,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -1933,7 +1933,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var buffers = new Queue<IList<TSource>>();
 
@@ -2079,7 +2079,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var currentKey = default(TKey);
                 var hasCurrentKey = false;
@@ -2159,7 +2159,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable();
-                var d = new CompositeDisposable(cts, a);
+                var d = Disposable.Create(cts, a);
 
                 var queue = new Queue<IAsyncEnumerable<TSource>>();
                 queue.Enqueue(source);
@@ -2252,7 +2252,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var acc = seed;
                 var current = default(TAccumulate);
@@ -2311,7 +2311,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var hasSeed = false;
                 var acc = default(TSource);
@@ -2380,7 +2380,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var q = new Queue<TSource>(count);
                 var done = false;
@@ -2451,7 +2451,7 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var q = new Queue<TSource>();
                 var current = default(TSource);

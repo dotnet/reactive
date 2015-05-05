@@ -241,7 +241,7 @@ namespace System.Linq
                 }
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, resource, e);
+                var d = Disposable.Create(cts, resource, e);
 
                 var current = default(TSource);
 
