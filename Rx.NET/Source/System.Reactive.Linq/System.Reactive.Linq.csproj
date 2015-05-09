@@ -204,6 +204,7 @@
     <Compile Include="Reactive\Linq\Observable.Time.cs" />
     <Compile Include="Reactive\Internal\PushPullAdapter.cs" />
     <Compile Include="Reactive\Subjects\ReplaySubject.cs" />
+    <Compile Include="Reactive\Subjects\SubjectBase.cs" />
     <Compile Include="Reactive\Threading\Tasks\NamespaceDoc.cs" />
     <Compile Include="Reactive\Threading\Tasks\TaskObservableExtensions.cs" />
     <Compile Include="Reactive\TimeInterval.cs" />
