@@ -51,7 +51,7 @@ namespace System.Linq
 
                     _disposable = value;
 
-                    if (_disposed)
+                    if ((_disposable != null) && (_disposed))
                         _disposable.Dispose();
                 }
             }
