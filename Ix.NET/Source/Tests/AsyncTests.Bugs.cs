@@ -16,6 +16,44 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+        private class DisposeCounter : IAsyncEnumerable<object>
+        {
+            public int DisposeCount { get; private set; }
+
+            public IAsyncEnumerator<object> GetEnumerator()
+            {
+                return new Enumerator(this);
+            }
+
+            private class Enumerator : IAsyncEnumerator<object>
+            {
+                private readonly DisposeCounter _disposeCounter;
+
+                public Enumerator(DisposeCounter disposeCounter)
+                {
+                    _disposeCounter = disposeCounter;
+                }
+
+                public void Dispose()
+                {
+                    _disposeCounter.DisposeCount++;
+                }
+
+                public Task<bool> MoveNext(CancellationToken _)
+                {
+                    return Task.FromResult(false);
+                }
+
+                public object Current
+                {
+                    get
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
+            }
+        }
+
         [TestInitialize]
         public void InitTests()
         {
@@ -218,6 +256,38 @@ namespace Tests
                 .Do(_ => { });
 
             Assert.AreEqual("Check", enumerable.First().Result);
+        }
+
+        [TestMethod]
+        public void SelectMany_Dispose_invoked_only_once()
+        {
+            var disposeCounter = new DisposeCounter();
+
+            var result = AsyncEnumerable
+                .Return(1)
+                .SelectMany(i => disposeCounter)
+                .Select(i => i)
+                .ToList()
+                .Result;
+
+            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(1, disposeCounter.DisposeCount);
+        }
+
+        [TestMethod]
+        public void SelectMany_with_index_Dispose_invoked_only_once()
+        {
+            var disposeCounter = new DisposeCounter();
+
+            var result = AsyncEnumerable
+                .Return(1)
+                .SelectMany((i, index) => disposeCounter)
+                .Select(i => i)
+                .ToList()
+                .Result;
+
+            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(1, disposeCounter.DisposeCount);
         }
     }
 
