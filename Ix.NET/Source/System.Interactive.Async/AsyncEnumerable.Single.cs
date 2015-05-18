@@ -2344,6 +2344,140 @@ namespace System.Linq
             });
         }
 
+        public static IAsyncEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, CancellationToken, Task<TAccumulate>> accumulator)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (accumulator == null)
+                throw new ArgumentNullException("accumulator");
+
+            return Create(() =>
+            {
+                var e = source.GetEnumerator();
+
+                var cts = new CancellationTokenDisposable();
+                var d = Disposable.Create(cts, e);
+
+                var acc = seed;
+                var current = default(TAccumulate);
+
+                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
+                f = (tcs, ct) =>
+                {
+                    e.MoveNext(ct).Then(t =>
+                    {
+                        t.Handle(tcs, res =>
+                        {
+                            if (!res)
+                            {
+                                tcs.TrySetResult(false);
+                                return;
+                            }
+
+                            var item = e.Current;
+                            try
+                            {
+                                accumulator(acc, item, ct).Then(t2 =>
+                                {
+                                    t2.Handle(tcs, res2 =>
+                                    {
+                                        current = acc = res2;
+                                        tcs.TrySetResult(true);
+                                    });
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                tcs.TrySetException(ex);
+                            }
+                        });
+                    });
+                };
+
+                return Create(
+                    (ct, tcs) =>
+                    {
+                        f(tcs, cts.Token);
+                        return tcs.Task.UsingEnumerator(e);
+                    },
+                    () => current,
+                    d.Dispose
+                );
+            });
+        }
+
+        public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, CancellationToken, Task<TSource>> accumulator)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            if (accumulator == null)
+                throw new ArgumentNullException("accumulator");
+
+            return Create(() =>
+            {
+                var e = source.GetEnumerator();
+
+                var cts = new CancellationTokenDisposable();
+                var d = Disposable.Create(cts, e);
+
+                var hasSeed = false;
+                var acc = default(TSource);
+                var current = default(TSource);
+
+                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
+                f = (tcs, ct) =>
+                {
+                    e.MoveNext(ct).Then(t =>
+                    {
+                        t.Handle(tcs, res =>
+                        {
+                            if (!res)
+                            {
+                                tcs.TrySetResult(false);
+                                return;
+                            }
+
+                            var item = e.Current;
+
+                            if (!hasSeed)
+                            {
+                                hasSeed = true;
+                                acc = item;
+                                f(tcs, ct);
+                                return;
+                            }
+
+                            try
+                            {
+                                accumulator(acc, item, ct).Then(t2 =>
+                                {
+                                    t2.Handle(tcs, res2 =>
+                                    {
+                                        current = acc = res2;
+                                        tcs.TrySetResult(true);
+                                    });
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                tcs.TrySetException(ex);
+                            }
+                        });
+                    });
+                };
+
+                return Create(
+                    (ct, tcs) =>
+                    {
+                        f(tcs, cts.Token);
+                        return tcs.Task.UsingEnumerator(e);
+                    },
+                    () => current,
+                    d.Dispose
+                );
+            });
+        }
+
         public static IAsyncEnumerable<TSource> TakeLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
