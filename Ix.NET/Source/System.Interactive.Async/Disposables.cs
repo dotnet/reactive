@@ -1,6 +1,4 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace System.Linq
@@ -9,18 +7,27 @@ namespace System.Linq
     {
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        public CancellationToken Token { get { return cts.Token; } }
+        public CancellationToken Token
+        {
+            get
+            {
+                return cts.Token;
+            }
+        }
 
         public void Dispose()
         {
             if (!cts.IsCancellationRequested)
+            {
                 cts.Cancel();
+            }
         }
     }
 
     class CompositeDisposable : IDisposable
     {
-        private readonly IDisposable[] _dispose;
+        private static IDisposable[] s_empty = new IDisposable[0];
+        private IDisposable[] _dispose;
 
         public CompositeDisposable(params IDisposable[] dispose)
         {
@@ -29,8 +36,12 @@ namespace System.Linq
 
         public void Dispose()
         {
-            foreach (var d in _dispose)
+            var dispose = Interlocked.Exchange(ref _dispose, s_empty);
+
+            foreach (var d in dispose)
+            {
                 d.Dispose();
+            }
         }
     }
 
@@ -46,13 +57,14 @@ namespace System.Linq
             {
                 lock (_gate)
                 {
-                    if (_disposable != null)
-                        _disposable.Dispose();
+                    DisposeInner();
 
                     _disposable = value;
 
                     if (_disposed)
-                        _disposable.Dispose();
+                    {
+                        DisposeInner();
+                    }
                 }
             }
         }
@@ -64,17 +76,25 @@ namespace System.Linq
                 if (!_disposed)
                 {
                     _disposed = true;
-
-                    if (_disposable != null)
-                        _disposable.Dispose();
+                    DisposeInner();
                 }
+            }
+        }
+
+        private void DisposeInner()
+        {
+            if (_disposable != null)
+            {
+                _disposable.Dispose();
+                _disposable = null;
             }
         }
     }
 
     class Disposable : IDisposable
     {
-        private readonly Action _dispose;
+        private static Action s_nop = () => { };
+        private Action _dispose;
 
         public Disposable(Action dispose)
         {
@@ -93,14 +113,15 @@ namespace System.Linq
 
         public void Dispose()
         {
-            _dispose();
+            var dispose = Interlocked.Exchange(ref _dispose, s_nop);
+            dispose();
         }
     }
 
     class BinaryDisposable : IDisposable
     {
-        private readonly IDisposable _d1;
-        private readonly IDisposable _d2;
+        private IDisposable _d1;
+        private IDisposable _d2;
 
         public BinaryDisposable(IDisposable d1, IDisposable d2)
         {
@@ -110,8 +131,17 @@ namespace System.Linq
 
         public void Dispose()
         {
-            _d1.Dispose();
-            _d2.Dispose();
+            var d1 = Interlocked.Exchange(ref _d1, null);
+            if (d1 != null)
+            {
+                d1.Dispose();
+
+                var d2 = Interlocked.Exchange(ref _d2, null);
+                if (d2 != null)
+                {
+                    d2.Dispose();
+                }
+            }
         }
     }
 }

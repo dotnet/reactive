@@ -244,27 +244,13 @@ namespace System.Linq
 
             return Create(() =>
             {
-                // A lock seems inevitable. Disposal of the outer enumerator and completion of
-                // MoveNext of the inner enumerator can happen concurrently.
-                var syncRoot = new object();
                 var e = source.GetEnumerator();
                 var ie = default(IAsyncEnumerator<TResult>);
 
-                var disposeIe = new Action(() =>
-                {
-                    var localIe = default(IAsyncEnumerator<TResult>);
-
-                    lock (syncRoot)
-                    {
-                        localIe = ie;
-                    }
-
-                    if (localIe != null)
-                        localIe.Dispose();
-                });
+                var innerDisposable = new AssignableDisposable();
 
                 var cts = new CancellationTokenDisposable();
-                var d = Disposable.Create(cts, new Disposable(disposeIe), e);
+                var d = Disposable.Create(cts, innerDisposable, e);
 
                 var outer = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 var inner = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -281,7 +267,7 @@ namespace System.Linq
                             }
                             else
                             {
-                                disposeIe();
+                                innerDisposable.Disposable = null;
                                 outer(tcs, ct);
                             }
                         });
@@ -299,6 +285,8 @@ namespace System.Linq
                                 try
                                 {
                                     ie = selector(e.Current).GetEnumerator();
+                                    innerDisposable.Disposable = ie;
+
                                     inner(tcs, ct);
                                 }
                                 catch (Exception ex)
@@ -337,29 +325,15 @@ namespace System.Linq
 
             return Create(() =>
             {
-                // A lock seems inevitable. Disposal of the outer enumerator and completion of
-                // MoveNext of the inner enumerator can happen concurrently.
-                var syncRoot = new object();
                 var e = source.GetEnumerator();
                 var ie = default(IAsyncEnumerator<TResult>);
 
-                var disposeIe = new Action(() =>
-                {
-                    var localIe = default(IAsyncEnumerator<TResult>);
-
-                    lock (syncRoot)
-                    {
-                        localIe = ie;
-                    }
-
-                    if (localIe != null)
-                        localIe.Dispose();
-                });
-
                 var index = 0;
 
+                var innerDisposable = new AssignableDisposable();
+
                 var cts = new CancellationTokenDisposable();
-                var d = Disposable.Create(cts, new Disposable(disposeIe), e);
+                var d = Disposable.Create(cts, innerDisposable, e);
 
                 var outer = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 var inner = default(Action<TaskCompletionSource<bool>, CancellationToken>);
@@ -376,7 +350,7 @@ namespace System.Linq
                             }
                             else
                             {
-                                disposeIe();
+                                innerDisposable.Disposable = null;
                                 outer(tcs, ct);
                             }
                         });
@@ -394,6 +368,8 @@ namespace System.Linq
                                 try
                                 {
                                     ie = selector(e.Current, checked(index++)).GetEnumerator();
+                                    innerDisposable.Disposable = ie;
+
                                     inner(tcs, ct);
                                 }
                                 catch (Exception ex)
