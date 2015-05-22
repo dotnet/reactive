@@ -28,5 +28,25 @@ namespace System.Reactive.Disposables
 
             return new AnonymousDisposable(dispose);
         }
+
+        /// <summary>
+        /// Creates a disposable object that disposes the specified disposables.
+        /// </summary>
+        /// <param name="disposables">Disposables that will be disposed together.</param>
+        /// <returns>The disposable object that disposes the specified disposables.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
+        public static IDisposable Compose(params IDisposable[] disposables)
+        {
+            if (disposables == null)
+                throw new ArgumentNullException("disposables");
+
+            return Disposable.Create(() => 
+                {
+                    foreach (var disposable in disposables) 
+                    { 
+                        disposable.Dispose(); 
+                    }
+                });
+        } 
     }
 }
