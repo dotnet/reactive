@@ -503,15 +503,19 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
         {
-            if (values == null)
-                throw new ArgumentNullException("values");
+            //
+            // NOTE: For some reason, someone introduced this signature in the Observable class, which is inconsistent with the Rx pattern
+            //       of putting the IScheduler last. It also wasn't wired up through IQueryLanguage. When introducing this method in the
+            //       IQueryLanguage interface, we went for consistency with the public API, hence the odd position of the IScheduler.
+            //
 
             var valueArray = values as TSource[];
             if (valueArray == null)
             {
-                List<TSource> valueList = new List<TSource>(values);
+                var valueList = new List<TSource>(values);
                 valueArray = valueList.ToArray();
             }
+
             return StartWith_<TSource>(source, scheduler, valueArray);
         }
 

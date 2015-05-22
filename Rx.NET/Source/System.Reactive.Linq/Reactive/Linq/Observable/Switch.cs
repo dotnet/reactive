@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _subscription = subscription;
                 subscription.Disposable = _parent._sources.SubscribeSafe(this);
 
-                return new CompositeDisposable(_subscription, _innerSubscription);
+                return StableCompositeDisposable.Create(_subscription, _innerSubscription);
             }
 
             public void OnNext(IObservable<TSource> value)

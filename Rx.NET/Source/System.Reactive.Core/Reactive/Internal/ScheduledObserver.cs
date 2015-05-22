@@ -11,7 +11,7 @@ namespace System.Reactive
     using System.Collections.Concurrent;
     using System.Diagnostics;
 
-    internal class ScheduledObserver<T> : ObserverBase<T>, IDisposable
+    internal class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
         private volatile int _state = 0;
         private const int STOPPED = 0;
@@ -36,11 +36,15 @@ namespace System.Reactive
             _longRunning = _scheduler.AsLongRunning();
 
             if (_longRunning != null)
+            {
                 _dispatcherEvent = new SemaphoreSlim(0);
+                _dispatcherEventRelease = Disposable.Create(() => _dispatcherEvent.Release());
+            }
         }
 
         private readonly object _dispatcherInitGate = new object();
-        private SemaphoreSlim _dispatcherEvent;
+        private readonly SemaphoreSlim _dispatcherEvent;
+        private readonly IDisposable _dispatcherEventRelease;
         private IDisposable _dispatcherJob;
 
         private void EnsureDispatcher()
@@ -53,11 +57,11 @@ namespace System.Reactive
                     {
                         _dispatcherJob = _longRunning.ScheduleLongRunning(Dispatch);
 
-                        _disposable.Disposable = new CompositeDisposable(2)
-                        {
+                        _disposable.Disposable = StableCompositeDisposable.Create
+                        (
                             _dispatcherJob,
-                            Disposable.Create(() => _dispatcherEvent.Release())
-                        };
+                            _dispatcherEventRelease
+                        );
                     }
                 }
             }
@@ -296,7 +300,7 @@ namespace System.Reactive
         }
     }
 #else
-    class ScheduledObserver<T> : ObserverBase<T>, IDisposable
+    class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
     {
         private bool _isAcquired = false;
         private bool _hasFaulted = false;
@@ -437,5 +441,11 @@ namespace System.Reactive
                 }
             }
         }
+    }
+
+    interface IScheduledObserver<T> : IObserver<T>, IDisposable
+    {
+        void EnsureActive();
+        void EnsureActive(int count);
     }
 }

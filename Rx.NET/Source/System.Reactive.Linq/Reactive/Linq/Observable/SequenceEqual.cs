@@ -68,11 +68,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _ql = new Queue<TSource>();
                 _qr = new Queue<TSource>();
 
-                return new CompositeDisposable
-                {
+                return StableCompositeDisposable.Create
+                (
                     _parent._first.SubscribeSafe(new F(this)),
                     _parent._second.SubscribeSafe(new S(this))
-                };
+                );
             }
 
             class F : IObserver<TSource>
@@ -122,8 +122,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    lock (_parent._gate)
+                    {
+                        _parent._observer.OnError(error);
+                        _parent.Dispose();
+                    }
                 }
 
                 public void OnCompleted()
@@ -197,8 +200,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    lock (_parent._gate)
+                    {
+                        _parent._observer.OnError(error);
+                        _parent.Dispose();
+                    }
                 }
 
                 public void OnCompleted()
@@ -258,7 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                return new CompositeDisposable(
+                return StableCompositeDisposable.Create(
                     _parent._first.SubscribeSafe(this),
                     _enumerator
                 );

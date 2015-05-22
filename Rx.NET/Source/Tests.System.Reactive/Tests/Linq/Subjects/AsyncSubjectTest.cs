@@ -461,15 +461,19 @@ namespace ReactiveTests.Tests
         {
             var s = new AsyncSubject<int>();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
             Assert.IsTrue(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
 
             d.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]
@@ -477,15 +481,19 @@ namespace ReactiveTests.Tests
         {
             var s = new AsyncSubject<int>();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
             Assert.IsTrue(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             d.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]
@@ -493,9 +501,11 @@ namespace ReactiveTests.Tests
         {
             var s = new AsyncSubject<int>();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]

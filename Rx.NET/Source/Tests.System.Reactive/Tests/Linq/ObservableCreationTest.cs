@@ -58,7 +58,7 @@ namespace ReactiveTests.Tests
             var d = xs.Subscribe(lst.Add);
             d.Dispose();
 
-            Assert.IsTrue(lst.SequenceEqual(new[] {42}));
+            Assert.IsTrue(lst.SequenceEqual(new[] { 42 }));
         }
 
         [TestMethod]
@@ -1308,7 +1308,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void Empty_Basic_Witness()
+        public void Empty_Basic_Witness1()
         {
             var scheduler = new TestScheduler();
 
@@ -1319,6 +1319,20 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnCompleted<int>(201)
             );
+        }
+
+        [TestMethod]
+        public void Empty_Basic_Witness2()
+        {
+            var e = new ManualResetEvent(false);
+
+            Observable.Empty<int>(42).Subscribe(
+                _ => { Assert.Fail(); },
+                _ => { Assert.Fail(); },
+                () => e.Set()
+            );
+
+            e.WaitOne();
         }
 
         #endregion
@@ -2111,7 +2125,7 @@ namespace ReactiveTests.Tests
         }
 
         [TestMethod]
-        public void Throw_Witness_Basic()
+        public void Throw_Witness_Basic1()
         {
             var scheduler = new TestScheduler();
 
@@ -2124,6 +2138,26 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(
                 OnError<int>(201, ex)
             );
+        }
+
+        [TestMethod]
+        public void Throw_Witness_Basic2()
+        {
+            var e = new ManualResetEvent(false);
+
+            var ex = new Exception();
+
+            var res = default(Exception);
+
+            Observable.Throw<int>(ex, 42).Subscribe(
+                _ => { Assert.Fail(); },
+                err => { res = err; e.Set(); },
+                () => { Assert.Fail(); }
+            );
+
+            e.WaitOne();
+
+            Assert.AreSame(ex, res);
         }
 
         #endregion

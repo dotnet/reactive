@@ -309,13 +309,13 @@ namespace Tests
         public void Using4()
         {
             var i = 0;
-            var disposed = false;
+            var disposed = new TaskCompletionSource<bool>();
 
             var xs = AsyncEnumerable.Using(
                 () =>
                 {
                     i++;
-                    return new MyD(() => { disposed = true; });
+                    return new MyD(() => { disposed.TrySetResult(true); });
                 },
                 _ => AsyncEnumerable.Return(42)
             );
@@ -328,7 +328,7 @@ namespace Tests
             HasNext(e, 42);
             NoNext(e);
 
-            Assert.IsTrue(disposed);
+            Assert.IsTrue(disposed.Task.Result);
         }
 
         [TestMethod]
@@ -336,13 +336,13 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var i = 0;
-            var disposed = false;
+            var disposed = new TaskCompletionSource<bool>();
 
             var xs = AsyncEnumerable.Using(
                 () =>
                 {
                     i++;
-                    return new MyD(() => { disposed = true; });
+                    return new MyD(() => { disposed.TrySetResult(true); });
                 },
                 _ => AsyncEnumerable.Throw<int>(ex)
             );
@@ -354,20 +354,20 @@ namespace Tests
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
-            Assert.IsTrue(disposed);
+            Assert.IsTrue(disposed.Task.Result);
         }
 
         [TestMethod]
         public void Using6()
         {
             var i = 0;
-            var disposed = false;
+            var disposed = new TaskCompletionSource<bool>();
 
             var xs = AsyncEnumerable.Using(
                 () =>
                 {
                     i++;
-                    return new MyD(() => { disposed = true; });
+                    return new MyD(() => { disposed.TrySetResult(true); });
                 },
                 _ => AsyncEnumerable.Range(0, 10)
             );
@@ -384,9 +384,16 @@ namespace Tests
             var t = e.MoveNext(cts.Token);
             cts.Cancel();
 
-            t.Wait();
+            try
+            {
+                t.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                ex.Flatten().Handle(inner => inner is TaskCanceledException);
+            }
 
-            Assert.IsTrue(disposed);
+            Assert.IsTrue(disposed.Task.Result);
         }
 
         class MyD : IDisposable

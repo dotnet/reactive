@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive.Threading.Tasks
 {
@@ -26,29 +28,71 @@ namespace System.Reactive.Threading.Tasks
             if (task == null)
                 throw new ArgumentNullException("task");
 
-            var subject = new AsyncSubject<Unit>();
+            return ToObservableImpl(task, null);
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that signals when the task completes.
+        /// </summary>
+        /// <param name="task">Task to convert to an observable sequence.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
+        /// <returns>An observable sequence that produces a unit value when the task completes, or propagates the exception produced by the task.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync(Func{CancellationToken, Task})"/> instead.</remarks>
+        public static IObservable<Unit> ToObservable(this Task task, IScheduler scheduler)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+
+            return ToObservableImpl(task, scheduler);
+        }
+
+        private static IObservable<Unit> ToObservableImpl(Task task, IScheduler scheduler)
+        {
+            var res = default(IObservable<Unit>);
 
             if (task.IsCompleted)
             {
-                ToObservableDone(task, subject);
+                scheduler = scheduler ?? ImmediateScheduler.Instance;
+
+                switch (task.Status)
+                {
+                    case TaskStatus.RanToCompletion:
+                        res = new Return<Unit>(Unit.Default, scheduler);
+                        break;
+                    case TaskStatus.Faulted:
+                        res = new Throw<Unit>(task.Exception.InnerException, scheduler);
+                        break;
+                    case TaskStatus.Canceled:
+                        res = new Throw<Unit>(new TaskCanceledException(task), scheduler);
+                        break;
+                }
             }
             else
             {
-                ToObservableSlow(task, subject);
+                //
+                // Separate method to avoid closure in synchronous completion case.
+                //
+                res = ToObservableSlow(task, scheduler);
             }
 
-            return subject.AsObservable();
+            return res;
         }
 
-        private static void ToObservableSlow(Task task, AsyncSubject<Unit> subject)
+        private static IObservable<Unit> ToObservableSlow(Task task, IScheduler scheduler)
         {
-            //
-            // Separate method to avoid closure in synchronous completion case.
-            //
-            task.ContinueWith(t => ToObservableDone(task, subject));
+            var subject = new AsyncSubject<Unit>();
+
+            var options = GetTaskContinuationOptions(scheduler);
+
+            task.ContinueWith(t => ToObservableDone(task, subject), options);
+
+            return ToObservableResult(subject, scheduler);
         }
 
-        private static void ToObservableDone(Task task, AsyncSubject<Unit> subject)
+        private static void ToObservableDone(Task task, IObserver<Unit> subject)
         {
             switch (task.Status)
             {
@@ -78,29 +122,72 @@ namespace System.Reactive.Threading.Tasks
             if (task == null)
                 throw new ArgumentNullException("task");
 
-            var subject = new AsyncSubject<TResult>();
+            return ToObservableImpl(task, null);
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that propagates the result of the task.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result produced by the task.</typeparam>
+        /// <param name="task">Task to convert to an observable sequence.</param>
+        /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
+        /// <returns>An observable sequence that produces the task's result, or propagates the exception produced by the task.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync{TResult}(Func{CancellationToken, Task{TResult}})"/> instead.</remarks>
+        public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, IScheduler scheduler)
+        {
+            if (task == null)
+                throw new ArgumentNullException("task");
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+
+            return ToObservableImpl(task, scheduler);
+        }
+
+        private static IObservable<TResult> ToObservableImpl<TResult>(Task<TResult> task, IScheduler scheduler)
+        {
+            var res = default(IObservable<TResult>);
 
             if (task.IsCompleted)
             {
-                ToObservableDone<TResult>(task, subject);
+                scheduler = scheduler ?? ImmediateScheduler.Instance;
+
+                switch (task.Status)
+                {
+                    case TaskStatus.RanToCompletion:
+                        res = new Return<TResult>(task.Result, scheduler);
+                        break;
+                    case TaskStatus.Faulted:
+                        res = new Throw<TResult>(task.Exception.InnerException, scheduler);
+                        break;
+                    case TaskStatus.Canceled:
+                        res = new Throw<TResult>(new TaskCanceledException(task), scheduler);
+                        break;
+                }
             }
             else
             {
-                ToObservableSlow<TResult>(task, subject);
+                //
+                // Separate method to avoid closure in synchronous completion case.
+                //
+                res = ToObservableSlow(task, scheduler);
             }
 
-            return subject.AsObservable();
+            return res;
         }
 
-        private static void ToObservableSlow<TResult>(Task<TResult> task, AsyncSubject<TResult> subject)
+        private static IObservable<TResult> ToObservableSlow<TResult>(Task<TResult> task, IScheduler scheduler)
         {
-            //
-            // Separate method to avoid closure in synchronous completion case.
-            //
-            task.ContinueWith(t => ToObservableDone(t, subject));
+            var subject = new AsyncSubject<TResult>();
+
+            var options = GetTaskContinuationOptions(scheduler);
+
+            task.ContinueWith(t => ToObservableDone(task, subject), options);
+
+            return ToObservableResult(subject, scheduler);
         }
 
-        private static void ToObservableDone<TResult>(Task<TResult> task, AsyncSubject<TResult> subject)
+        private static void ToObservableDone<TResult>(Task<TResult> task, IObserver<TResult> subject)
         {
             switch (task.Status)
             {
@@ -114,6 +201,40 @@ namespace System.Reactive.Threading.Tasks
                 case TaskStatus.Canceled:
                     subject.OnError(new TaskCanceledException(task));
                     break;
+            }
+        }
+
+        private static TaskContinuationOptions GetTaskContinuationOptions(IScheduler scheduler)
+        {
+            var options = TaskContinuationOptions.None;
+
+            if (scheduler != null)
+            {
+                //
+                // We explicitly don't special-case the immediate scheduler here. If the user asks for a
+                // synchronous completion, we'll try our best. However, there's no guarantee due to the
+                // internal stack probing in the TPL, which may cause asynchronous completion on a thread
+                // pool thread in order to avoid stack overflows. Therefore we can only attempt to be more
+                // efficient in the case where the user specified a scheduler, hence we know that the
+                // continuation will trigger a scheduling operation. In case of the immediate scheduler,
+                // it really becomes "immediate scheduling" wherever the TPL decided to run the continuation,
+                // i.e. not necessarily where the task was completed from.
+                //
+                options |= TaskContinuationOptions.ExecuteSynchronously;
+            }
+
+            return options;
+        }
+
+        private static IObservable<TResult> ToObservableResult<TResult>(AsyncSubject<TResult> subject, IScheduler scheduler)
+        {
+            if (scheduler != null)
+            {
+                return subject.ObserveOn(scheduler);
+            }
+            else
+            {
+                return subject.AsObservable();
             }
         }
 
@@ -192,7 +313,7 @@ namespace System.Reactive.Threading.Tasks
                 ctr = cancellationToken.Register(() =>
                 {
                     disposable.Dispose();
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(cancellationToken);
                 });
             }
 

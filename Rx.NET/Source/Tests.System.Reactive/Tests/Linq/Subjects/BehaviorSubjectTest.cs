@@ -363,15 +363,19 @@ namespace ReactiveTests.Tests
         {
             var s = new BehaviorSubject<int>(42);
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
             Assert.IsTrue(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
 
             d.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]
@@ -379,15 +383,19 @@ namespace ReactiveTests.Tests
         {
             var s = new BehaviorSubject<int>(42);
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
             Assert.IsTrue(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             d.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]
@@ -395,9 +403,11 @@ namespace ReactiveTests.Tests
         {
             var s = new BehaviorSubject<int>(42);
             Assert.IsFalse(s.HasObservers);
+            Assert.IsFalse(s.IsDisposed);
 
             s.Dispose();
             Assert.IsFalse(s.HasObservers);
+            Assert.IsTrue(s.IsDisposed);
         }
 
         [TestMethod]
@@ -437,6 +447,10 @@ namespace ReactiveTests.Tests
         {
             var s = new BehaviorSubject<int>(42);
             Assert.AreEqual(42, s.Value);
+
+            var x = default(int);
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(42, x);
         }
 
         [TestMethod]
@@ -445,8 +459,15 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.AreEqual(42, s.Value);
 
+            var x = default(int);
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(42, x);
+
             s.OnNext(43);
             Assert.AreEqual(43, s.Value);
+
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(43, x);
         }
 
         [TestMethod]
@@ -455,11 +476,21 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.AreEqual(42, s.Value);
 
+            var x = default(int);
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(42, x);
+
             s.OnNext(43);
             Assert.AreEqual(43, s.Value);
 
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(43, x);
+
             s.OnNext(44);
             Assert.AreEqual(44, s.Value);
+
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(44, x);
         }
 
         [TestMethod]
@@ -468,31 +499,56 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.AreEqual(42, s.Value);
 
+            var x = default(int);
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(42, x);
+
             s.OnNext(43);
             Assert.AreEqual(43, s.Value);
+
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(43, x);
 
             s.OnNext(44);
             Assert.AreEqual(44, s.Value);
 
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(44, x);
+
             s.OnCompleted();
             Assert.AreEqual(44, s.Value);
 
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(44, x);
+
             s.OnNext(1234);
             Assert.AreEqual(44, s.Value);
+
+            Assert.IsTrue(s.TryGetValue(out x));
+            Assert.AreEqual(44, x);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod]
         public void Value_ThrowsAfterOnError()
         {
             var s = new BehaviorSubject<int>(42);
             Assert.AreEqual(42, s.Value);
 
             s.OnError(new InvalidOperationException());
-            
-            Assert.Fail("Should not be able to read Value: {0}", s.Value);
+
+            ReactiveAssert.Throws<InvalidOperationException>(() =>
+            {
+                var ignored = s.Value;
+            });
+
+            ReactiveAssert.Throws<InvalidOperationException>(() =>
+            {
+                var x = default(int);
+                s.TryGetValue(out x);
+            });
         }
 
-        [TestMethod, ExpectedException(typeof(ObjectDisposedException))]
+        [TestMethod]
         public void Value_ThrowsOnDispose()
         {
             var s = new BehaviorSubject<int>(42);
@@ -500,7 +556,13 @@ namespace ReactiveTests.Tests
 
             s.Dispose();
 
-            Assert.Fail("Should not be able to read Value: {0}", s.Value);
+            ReactiveAssert.Throws<ObjectDisposedException>(() =>
+            {
+                var ignored = s.Value;
+            });
+
+            var x = default(int);
+            Assert.IsFalse(s.TryGetValue(out x));
         }
     }
 }

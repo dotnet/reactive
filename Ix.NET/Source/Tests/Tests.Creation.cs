@@ -46,20 +46,59 @@ namespace Tests
         {
             var xs = EnumerableEx.Create<int>(async yield => {
                 var i = 0;
-                while (i < 10) {
+                while (i < 10)
+                {
                     await yield.Return(i++);
                 }
             });
 
             int j = 0;
-            foreach (int elem in xs) {
+            foreach (int elem in xs)
+            {
                 Assert.AreEqual(elem, j);
                 j++;
             }
 
             Assert.AreEqual(j, 10);
         }
-#endif 
+
+        [TestMethod]
+        public void CreateYieldBreak()
+        {
+            var xs = EnumerableEx.Create<int>(async yield => {
+                var i = 0;
+                while (true)
+                {
+                    if (i == 10)
+                    {
+                        await yield.Break();
+                        return;
+                    }
+
+                    await yield.Return(i++);
+                }
+            });
+
+            int j = 0;
+            foreach (int elem in xs)
+            {
+                Assert.AreEqual(elem, j);
+                j++;
+            }
+
+            Assert.AreEqual(j, 10);
+        }
+
+        [TestMethod]
+        public void YielderNoReset()
+        {
+            var xs = EnumerableEx.Create<int>(async yield => {
+               await yield.Break();
+            });
+
+            AssertThrows<NotSupportedException>(() => xs.GetEnumerator().Reset());
+        }
+#endif
 
         private static IEnumerator<int> MyEnumerator()
         {

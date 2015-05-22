@@ -814,5 +814,91 @@ namespace ReactiveTests.Tests
                 ThreadPool.QueueUserWorkItem(_ => d(state), state);
             }
         }
+
+#if HAS_PROGRESS
+
+        [TestMethod]
+        public void Observer_ToProgress_ArgumentChecking()
+        {
+            var s = Scheduler.Immediate;
+            var o = Observer.Create<int>(_ => { });
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>)));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(default(IObserver<int>), s));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default(IScheduler)));
+        }
+
+        [TestMethod]
+        public void Observer_ToProgress()
+        {
+            var xs = new List<int>();
+
+            var p = Observer.Create<int>(xs.Add).ToProgress();
+
+            p.Report(42);
+            p.Report(43);
+
+            Assert.IsTrue(xs.SequenceEqual(new[] { 42, 43 }));
+        }
+
+        [TestMethod]
+        public void Observer_ToProgress_Scheduler()
+        {
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+            var p = o.ToProgress(s);
+
+            s.ScheduleAbsolute(200, () =>
+            {
+                p.Report(42);
+                p.Report(43);
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(201, 42),
+                OnNext(202, 43)
+            );
+        }
+
+        [TestMethod]
+        public void Progress_ToObserver_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver(default(IProgress<int>)));
+        }
+
+        [TestMethod]
+        public void Progress_ToObserver()
+        {
+            var xs = new List<int>();
+
+            var p = new MyProgress<int>(xs.Add);
+
+            var o = p.ToObserver();
+
+            o.OnNext(42);
+            o.OnNext(43);
+
+            Assert.IsTrue(xs.SequenceEqual(new[] { 42, 43 }));
+        }
+
+        class MyProgress<T> : IProgress<T>
+        {
+            private readonly Action<T> _report;
+
+            public MyProgress(Action<T> report)
+            {
+                _report = report;
+            }
+
+            public void Report(T value)
+            {
+                _report(value);
+            }
+        }
+#endif
     }
 }

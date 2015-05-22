@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive.Subjects
@@ -11,40 +12,27 @@ namespace System.Reactive.Subjects
     /// Each notification is broadcasted to all subscribed and future observers, subject to buffer trimming policies.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class ReplaySubject<T> : ISubject<T>, IDisposable
+    public sealed class ReplaySubject<T> : SubjectBase<T>, IDisposable
     {
-        private readonly IReplaySubjectImplementation _implementation;
+        #region Fields
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size, window and scheduler.
+        /// Underlying optimized implementation of the replay subject.
         /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        public ReplaySubject(int bufferSize, TimeSpan window, IScheduler scheduler)
-        {
-            _implementation = new ReplayByTime(bufferSize, window, scheduler);
-        }
+        private readonly SubjectBase<T> _implementation;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and window.
-        /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        public ReplaySubject(int bufferSize, TimeSpan window)
-        {
-            _implementation = new ReplayByTime(bufferSize, window);
-        }
+        #endregion
+
+        #region Constructors
+
+        #region All
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class.
         /// </summary>
         public ReplaySubject()
+            : this(int.MaxValue)
         {
-            _implementation = new ReplayAll();
         }
 
         /// <summary>
@@ -57,19 +45,9 @@ namespace System.Reactive.Subjects
             _implementation = new ReplayByTime(scheduler);
         }
 
-        //TODO: Does this overload make any sense with the optimisations? Surely this now is just <c>new ReplaySubject<T>(bufferSize).SubscribeOn(scheduler)</c>?
-        //Potentially should be marked as obsolete
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and scheduler.
-        /// </summary>
-        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
-        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
-        public ReplaySubject(int bufferSize, IScheduler scheduler)
-        {
-            _implementation = new ReplayByTime(bufferSize, scheduler);
-        }
+        #endregion
+
+        #region Count
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size.
@@ -93,16 +71,20 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window and scheduler.
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and scheduler.
         /// </summary>
-        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        public ReplaySubject(TimeSpan window, IScheduler scheduler)
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
+        public ReplaySubject(int bufferSize, IScheduler scheduler)
         {
-            _implementation = new ReplayByTime(window, scheduler);
+            _implementation = new ReplayByTime(bufferSize, scheduler);
         }
+
+        #endregion
+
+        #region Time
 
         /// <summary>
         /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window.
@@ -115,18 +97,78 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window and scheduler.
+        /// </summary>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        public ReplaySubject(TimeSpan window, IScheduler scheduler)
+        {
+            _implementation = new ReplayByTime(window, scheduler);
+        }
+
+        #endregion
+
+        #region Count & Time
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and window.
+        /// </summary>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        public ReplaySubject(int bufferSize, TimeSpan window)
+        {
+            _implementation = new ReplayByTime(bufferSize, window);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size, window and scheduler.
+        /// </summary>
+        /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
+        /// <param name="window">Maximum time length of the replay buffer.</param>
+        /// <param name="scheduler">Scheduler the observers are invoked on.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        public ReplaySubject(int bufferSize, TimeSpan window, IScheduler scheduler)
+        {
+            _implementation = new ReplayByTime(bufferSize, window, scheduler);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public bool HasObservers
+        public override bool HasObservers
         {
             get { return _implementation.HasObservers; }
         }
 
         /// <summary>
+        /// Indicates whether the subject has been disposed.
+        /// </summary>
+        public override bool IsDisposed
+        {
+            get { return _implementation.IsDisposed; }
+        }
+
+        #endregion
+
+        #region Methods
+
+        #region IObserver<T> implementation
+
+        /// <summary>
         /// Notifies all subscribed and future observers about the arrival of the specified element in the sequence.
         /// </summary>
         /// <param name="value">The value to send to all observers.</param>
-        public void OnNext(T value)
+        public override void OnNext(T value)
         {
             _implementation.OnNext(value);
         }
@@ -136,18 +178,25 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="error">The exception to send to all observers.</param>
         /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
-        public void OnError(Exception error)
+        public override void OnError(Exception error)
         {
+            if (error == null)
+                throw new ArgumentNullException("error");
+
             _implementation.OnError(error);
         }
 
         /// <summary>
         /// Notifies all subscribed and future observers about the end of the sequence.
         /// </summary>
-        public void OnCompleted()
+        public override void OnCompleted()
         {
             _implementation.OnCompleted();
         }
+
+        #endregion
+
+        #region IObservable<T> implementation
 
         /// <summary>
         /// Subscribes an observer to the subject.
@@ -155,49 +204,306 @@ namespace System.Reactive.Subjects
         /// <param name="observer">Observer to subscribe to the subject.</param>
         /// <returns>Disposable object that can be used to unsubscribe the observer from the subject.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
-        public IDisposable Subscribe(IObserver<T> observer)
+        public override IDisposable Subscribe(IObserver<T> observer)
         {
+            if (observer == null)
+                throw new ArgumentNullException("observer");
+
             return _implementation.Subscribe(observer);
         }
+
+        #endregion
+
+        #region IDisposable implementation
 
         /// <summary>
         /// Releases all resources used by the current instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/> class and unsubscribe all observers.
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
             _implementation.Dispose();
         }
 
-        private interface IReplaySubjectImplementation : ISubject<T>, IDisposable
-        {
-            bool HasObservers { get; }
-            void Unsubscribe(IObserver<T> observer);
-        }
+        #endregion
 
-        private class Subscription : IDisposable
-        {
-            private IReplaySubjectImplementation _subject;
-            private IObserver<T> _observer;
+        #endregion
 
-            public Subscription(IReplaySubjectImplementation subject, IObserver<T> observer)
+        private abstract class ReplayBase : SubjectBase<T>
+        {
+            private readonly object _gate = new object();
+
+            private ImmutableList<IScheduledObserver<T>> _observers;
+
+            private bool _isStopped;
+            private Exception _error;
+            private bool _isDisposed;
+
+            public ReplayBase()
             {
-                _subject = subject;
-                _observer = observer;
+                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+
+                _isStopped = false;
+                _error = null;
             }
 
-            public void Dispose()
+            public override bool HasObservers
             {
-                var observer = Interlocked.Exchange(ref _observer, null);
-                if (observer == null)
-                    return;
+                get
+                {
+                    var observers = _observers;
+                    return observers != null && observers.Data.Length > 0;
+                }
+            }
 
-                _subject.Unsubscribe(observer);
-                _subject = null;
+            public override bool IsDisposed
+            {
+                get
+                {
+                    lock (_gate)
+                    {
+                        return _isDisposed;
+                    }
+                }
+            }
+
+            public override void OnNext(T value)
+            {
+                var o = default(IScheduledObserver<T>[]);
+                lock (_gate)
+                {
+                    CheckDisposed();
+
+                    if (!_isStopped)
+                    {
+                        Next(value);
+                        Trim();
+
+                        o = _observers.Data;
+                        foreach (var observer in o)
+                            observer.OnNext(value);
+                    }
+                }
+
+                if (o != null)
+                {
+                    foreach (var observer in o)
+                        observer.EnsureActive();
+                }
+            }
+
+            public override void OnError(Exception error)
+            {
+                var o = default(IScheduledObserver<T>[]);
+                lock (_gate)
+                {
+                    CheckDisposed();
+
+                    if (!_isStopped)
+                    {
+                        _isStopped = true;
+                        _error = error;
+                        Trim();
+
+                        o = _observers.Data;
+                        foreach (var observer in o)
+                            observer.OnError(error);
+
+                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                    }
+                }
+
+                if (o != null)
+                {
+                    foreach (var observer in o)
+                        observer.EnsureActive();
+                }
+            }
+
+            public override void OnCompleted()
+            {
+                var o = default(IScheduledObserver<T>[]);
+                lock (_gate)
+                {
+                    CheckDisposed();
+
+                    if (!_isStopped)
+                    {
+                        _isStopped = true;
+                        Trim();
+
+                        o = _observers.Data;
+                        foreach (var observer in o)
+                            observer.OnCompleted();
+
+                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                    }
+                }
+
+                if (o != null)
+                {
+                    foreach (var observer in o)
+                        observer.EnsureActive();
+                }
+            }
+
+            public override IDisposable Subscribe(IObserver<T> observer)
+            {
+                var so = CreateScheduledObserver(observer);
+
+                var n = 0;
+
+                var subscription = Disposable.Empty;
+
+                lock (_gate)
+                {
+                    CheckDisposed();
+
+                    //
+                    // Notice the v1.x behavior of always calling Trim is preserved here.
+                    //
+                    // This may be subject (pun intended) of debate: should this policy
+                    // only be applied while the sequence is active? With the current
+                    // behavior, a sequence will "die out" after it has terminated by
+                    // continuing to drop OnNext notifications from the queue.
+                    //
+                    // In v1.x, this behavior was due to trimming based on the clock value
+                    // returned by scheduler.Now, applied to all but the terminal message
+                    // in the queue. Using the IStopwatch has the same effect. Either way,
+                    // we guarantee the final notification will be observed, but there's
+                    // no way to retain the buffer directly. One approach is to use the
+                    // time-based TakeLast operator and apply an unbounded ReplaySubject
+                    // to it.
+                    //
+                    // To conclude, we're keeping the behavior as-is for compatibility
+                    // reasons with v1.x.
+                    //
+                    Trim();
+
+                    n = Replay(so);
+
+                    if (_error != null)
+                    {
+                        n++;
+                        so.OnError(_error);
+                    }
+                    else if (_isStopped)
+                    {
+                        n++;
+                        so.OnCompleted();
+                    }
+
+                    if (!_isStopped)
+                    {
+                        subscription = new Subscription(this, so);
+                        _observers = _observers.Add(so);
+                    }
+                }
+
+                so.EnsureActive(n);
+
+                return subscription;
+            }
+
+            public override void Dispose()
+            {
+                lock (_gate)
+                {
+                    _isDisposed = true;
+                    _observers = null;
+                    DisposeCore();
+                }
+            }
+
+            protected abstract void DisposeCore();
+
+            protected abstract void Next(T value);
+
+            protected abstract int Replay(IObserver<T> observer);
+
+            protected abstract void Trim();
+
+            protected abstract IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer);
+
+            private void CheckDisposed()
+            {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(string.Empty);
+            }
+
+            private void Unsubscribe(IScheduledObserver<T> observer)
+            {
+                lock (_gate)
+                {
+                    if (!_isDisposed)
+                    {
+                        _observers = _observers.Remove(observer);
+                    }
+                }
+            }
+
+#if NOTYET // TODO: Expose internal notifications similar to BehaviorSubject<T>.TryGetValue?
+
+            public bool TryGetNotifications(out IList<Notification<T>> notifications)
+            {
+                lock (_gate)
+                {
+                    if (_isDisposed)
+                    {
+                        notifications = null;
+                        return false;
+                    }
+                    else
+                    {
+                        var res = new List<Notification<T>>();
+
+                        var materializer = Observer.Create<T>(
+                            x => res.Add(Notification.CreateOnNext(x)),
+                            ex => res.Add(Notification.CreateOnError<T>(ex)),
+                            () => res.Add(Notification.CreateOnCompleted<T>())
+                        );
+
+                        Replay(materializer);
+
+                        if (_error != null)
+                        {
+                            materializer.OnError(_error);
+                        }
+                        else if (_isStopped)
+                        {
+                            materializer.OnCompleted();
+                        }
+
+                        notifications = res;
+                        return true;
+                    }
+                }
+            }
+
+#endif
+
+            private sealed class Subscription : IDisposable
+            {
+                private readonly ReplayBase _subject;
+                private readonly IScheduledObserver<T> _observer;
+
+                public Subscription(ReplayBase subject, IScheduledObserver<T> observer)
+                {
+                    _subject = subject;
+                    _observer = observer;
+                }
+
+                public void Dispose()
+                {
+                    _observer.Dispose();
+                    _subject.Unsubscribe(_observer);
+                }
             }
         }
 
-        //Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
-        private sealed class ReplayByTime : IReplaySubjectImplementation
+        /// <summary>
+        /// Original implementation of the ReplaySubject with time based operations (Scheduling, Stopwatch, buffer-by-time).
+        /// </summary>
+        private sealed class ReplayByTime : ReplayBase
         {
             private const int InfiniteBufferSize = int.MaxValue;
 
@@ -207,13 +513,6 @@ namespace System.Reactive.Subjects
             private readonly IStopwatch _stopwatch;
 
             private readonly Queue<TimeInterval<T>> _queue;
-            private bool _isStopped;
-            private Exception _error;
-
-            private ImmutableList<ScheduledObserver<T>> _observers;
-            private bool _isDisposed;
-
-            private readonly object _gate = new object();
 
             public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
             {
@@ -230,10 +529,6 @@ namespace System.Reactive.Subjects
 
                 _stopwatch = _scheduler.StartStopwatch();
                 _queue = new Queue<TimeInterval<T>>();
-                _isStopped = false;
-                _error = null;
-
-                _observers = new ImmutableList<ScheduledObserver<T>>();
             }
 
             public ReplayByTime(int bufferSize, TimeSpan window)
@@ -261,256 +556,88 @@ namespace System.Reactive.Subjects
             {
             }
 
-            public bool HasObservers
+            protected override IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer)
             {
-                get
-                {
-                    var observers = _observers;
-                    return observers != null && observers.Data.Length > 0;
-                }
+                return new ScheduledObserver<T>(_scheduler, observer);
             }
 
-            private void Trim(TimeSpan now)
+            protected override void DisposeCore()
             {
+                _queue.Clear();
+            }
+
+            protected override void Next(T value)
+            {
+                var now = _stopwatch.Elapsed;
+
+                _queue.Enqueue(new TimeInterval<T>(value, now));
+            }
+
+            protected override int Replay(IObserver<T> observer)
+            {
+                var n = _queue.Count;
+
+                foreach (var item in _queue)
+                    observer.OnNext(item.Value);
+
+                return n;
+            }
+
+            protected override void Trim()
+            {
+                var now = _stopwatch.Elapsed;
+
                 while (_queue.Count > _bufferSize)
                     _queue.Dequeue();
                 while (_queue.Count > 0 && now.Subtract(_queue.Peek().Interval).CompareTo(_window) > 0)
                     _queue.Dequeue();
             }
-
-            public void OnNext(T value)
-            {
-                var o = default(ScheduledObserver<T>[]);
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        var now = _stopwatch.Elapsed;
-                        _queue.Enqueue(new TimeInterval<T>(value, now));
-                        Trim(now);
-
-                        o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnNext(value);
-                    }
-                }
-
-                if (o != null)
-                    foreach (var observer in o)
-                        observer.EnsureActive();
-            }
-
-            public void OnError(Exception error)
-            {
-                if (error == null)
-                    throw new ArgumentNullException("error");
-
-                var o = default(ScheduledObserver<T>[]);
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        var now = _stopwatch.Elapsed;
-                        _isStopped = true;
-                        _error = error;
-                        Trim(now);
-
-                        o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnError(error);
-
-                        _observers = new ImmutableList<ScheduledObserver<T>>();
-                    }
-                }
-
-                if (o != null)
-                    foreach (var observer in o)
-                        observer.EnsureActive();
-            }
-
-            public void OnCompleted()
-            {
-                var o = default(ScheduledObserver<T>[]);
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        var now = _stopwatch.Elapsed;
-                        _isStopped = true;
-                        Trim(now);
-
-                        o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnCompleted();
-
-                        _observers = new ImmutableList<ScheduledObserver<T>>();
-                    }
-                }
-
-                if (o != null)
-                    foreach (var observer in o)
-                        observer.EnsureActive();
-            }
-
-            public IDisposable Subscribe(IObserver<T> observer)
-            {
-                if (observer == null)
-                    throw new ArgumentNullException("observer");
-
-                var so = new ScheduledObserver<T>(_scheduler, observer);
-
-                var n = 0;
-
-                var subscription = new RemovableDisposable(this, so);
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    //
-                    // Notice the v1.x behavior of always calling Trim is preserved here.
-                    //
-                    // This may be subject (pun intended) of debate: should this policy
-                    // only be applied while the sequence is active? With the current
-                    // behavior, a sequence will "die out" after it has terminated by
-                    // continuing to drop OnNext notifications from the queue.
-                    //
-                    // In v1.x, this behavior was due to trimming based on the clock value
-                    // returned by scheduler.Now, applied to all but the terminal message
-                    // in the queue. Using the IStopwatch has the same effect. Either way,
-                    // we guarantee the final notification will be observed, but there's
-                    // no way to retain the buffer directly. One approach is to use the
-                    // time-based TakeLast operator and apply an unbounded ReplaySubject
-                    // to it.
-                    //
-                    // To conclude, we're keeping the behavior as-is for compatibility
-                    // reasons with v1.x.
-                    //
-                    Trim(_stopwatch.Elapsed);
-                    _observers = _observers.Add(so);
-
-                    n = _queue.Count;
-                    foreach (var item in _queue)
-                        so.OnNext(item.Value);
-
-                    if (_error != null)
-                    {
-                        n++;
-                        so.OnError(_error);
-                    }
-                    else if (_isStopped)
-                    {
-                        n++;
-                        so.OnCompleted();
-                    }
-                }
-
-                so.EnsureActive(n);
-
-                return subscription;
-            }
-
-            private void Unsubscribe(ScheduledObserver<T> observer)
-            {
-                lock (_gate)
-                {
-                    observer.Dispose();
-                    if (!_isDisposed)
-                        _observers = _observers.Remove(observer);
-                }
-            }
-
-            void IReplaySubjectImplementation.Unsubscribe(IObserver<T> observer)
-            {
-                var so = (ScheduledObserver<T>)observer;
-                Unsubscribe(so);
-            }
-
-            sealed class RemovableDisposable : IDisposable
-            {
-                private readonly ReplayByTime _subject;
-                private readonly ScheduledObserver<T> _observer;
-
-                public RemovableDisposable(ReplayByTime subject, ScheduledObserver<T> observer)
-                {
-                    _subject = subject;
-                    _observer = observer;
-                }
-
-                public void Dispose()
-                {
-                    _observer.Dispose();
-                    _subject.Unsubscribe(_observer);
-                }
-            }
-
-            private void CheckDisposed()
-            {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(string.Empty);
-            }
-
-            public void Dispose()
-            {
-                lock (_gate)
-                {
-                    _isDisposed = true;
-                    _observers = null;
-                    _queue.Clear();
-                }
-            }
         }
 
+        //
+        // Below are the non-time based implementations. 
+        // These removed the need for the scheduler indirection, SchedulerObservers, stopwatch, TimeInterval and ensuring the scheduled observers are active after each action.
+        // The ReplayOne implementation also removes the need to even have a queue.
+        //
 
-
-
-
-
-
-
-
-
-
-
-
-        //Below are the non-time based implementations. 
-        //These removed the need for the scheduler indirection, SchedulerObservers, stopwatch, TimeInterval and ensuring the scheduled observers are active after each action.
-        //The ReplayOne implementation also removes the need to even have a queue.
-        private sealed class ReplayOne : ReplayBufferBase, IReplaySubjectImplementation
+        private sealed class ReplayOne : ReplayBufferBase
         {
             private bool _hasValue;
             private T _value;
 
             protected override void Trim()
             {
-                //NoOp. No need to trim.
+                //
+                // No need to trim.
+                //
             }
 
-            protected override void AddValueToBuffer(T value)
+            protected override void Next(T value)
             {
                 _hasValue = true;
                 _value = value;
             }
 
-            protected override void ReplayBuffer(IObserver<T> observer)
+            protected override int Replay(IObserver<T> observer)
             {
+                var n = 0;
+
                 if (_hasValue)
+                {
+                    n = 1;
                     observer.OnNext(_value);
+                }
+
+                return n;
             }
 
-            protected override void Dispose(bool disposing)
+            protected override void DisposeCore()
             {
-                base.Dispose(disposing);
                 _value = default(T);
             }
         }
 
-        private sealed class ReplayMany : ReplayManyBase, IReplaySubjectImplementation
+        private sealed class ReplayMany : ReplayManyBase
         {
             private readonly int _bufferSize;
 
@@ -522,12 +649,12 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                while (Queue.Count > _bufferSize)
-                    Queue.Dequeue();
+                while (_queue.Count > _bufferSize)
+                    _queue.Dequeue();
             }
         }
 
-        private sealed class ReplayAll : ReplayManyBase, IReplaySubjectImplementation
+        private sealed class ReplayAll : ReplayManyBase
         {
             public ReplayAll()
                 : base(0)
@@ -536,202 +663,324 @@ namespace System.Reactive.Subjects
 
             protected override void Trim()
             {
-                //NoOp; i.e. Dont' trim, keep all values.
+                //
+                // Don't trim, keep all values.
+                //
             }
         }
 
-        private abstract class ReplayBufferBase : IReplaySubjectImplementation
+        private abstract class ReplayBufferBase : ReplayBase
         {
-            private readonly object _gate = new object();
-            private bool _isDisposed;
-            private bool _isStopped;
-            private Exception _error;
-            private ImmutableList<IObserver<T>> _observers;
-
-            protected ReplayBufferBase()
+            protected override IScheduledObserver<T> CreateScheduledObserver(IObserver<T> observer)
             {
-                _observers = new ImmutableList<IObserver<T>>();
+                return new FastImmediateObserver<T>(observer);
             }
 
-            protected abstract void Trim();
-            protected abstract void AddValueToBuffer(T value);
-            protected abstract void ReplayBuffer(IObserver<T> observer);
-
-            public bool HasObservers
+            protected override void DisposeCore()
             {
-                get
-                {
-                    var observers = _observers;
-                    return observers != null && observers.Data.Length > 0;
-                }
-            }
-
-            public void OnNext(T value)
-            {
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        AddValueToBuffer(value);
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnNext(value);
-                    }
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                if (error == null)
-                    throw new ArgumentNullException("error");
-
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        _isStopped = true;
-                        _error = error;
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnError(error);
-
-                        _observers = new ImmutableList<IObserver<T>>();
-                    }
-                }
-            }
-
-            public void OnCompleted()
-            {
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    if (!_isStopped)
-                    {
-                        _isStopped = true;
-                        Trim();
-
-                        var o = _observers.Data;
-                        foreach (var observer in o)
-                            observer.OnCompleted();
-
-                        _observers = new ImmutableList<IObserver<T>>();
-                    }
-                }
-            }
-
-            public IDisposable Subscribe(IObserver<T> observer)
-            {
-                if (observer == null)
-                    throw new ArgumentNullException("observer");
-
-
-                var subscription = new Subscription(this, observer);
-                lock (_gate)
-                {
-                    CheckDisposed();
-
-                    //
-                    // Notice the v1.x behavior of always calling Trim is preserved here.
-                    //
-                    // This may be subject (pun intended) of debate: should this policy
-                    // only be applied while the sequence is active? With the current
-                    // behavior, a sequence will "die out" after it has terminated by
-                    // continuing to drop OnNext notifications from the queue.
-                    //
-                    // In v1.x, this behavior was due to trimming based on the clock value
-                    // returned by scheduler.Now, applied to all but the terminal message
-                    // in the queue. Using the IStopwatch has the same effect. Either way,
-                    // we guarantee the final notification will be observed, but there's
-                    // no way to retain the buffer directly. One approach is to use the
-                    // time-based TakeLast operator and apply an unbounded ReplaySubject
-                    // to it.
-                    //
-                    // To conclude, we're keeping the behavior as-is for compatibility
-                    // reasons with v1.x.
-                    //
-                    _observers = _observers.Add(observer);
-
-                    ReplayBuffer(observer);
-
-                    if (_error != null)
-                    {
-                        observer.OnError(_error);
-                    }
-                    else if (_isStopped)
-                    {
-                        observer.OnCompleted();
-                    }
-                }
-
-                return subscription;
-            }
-
-            public void Unsubscribe(IObserver<T> observer)
-            {
-                lock (_gate)
-                {
-                    if (!_isDisposed)
-                        _observers = _observers.Remove(observer);
-                }
-            }
-
-            private void CheckDisposed()
-            {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(string.Empty);
-            }
-
-            public void Dispose()
-            {
-                Dispose(true);
-            }
-            protected virtual void Dispose(bool disposing)
-            {
-                lock (_gate)
-                {
-                    _isDisposed = true;
-                    _observers = null;
-                }
             }
         }
 
-        private abstract class ReplayManyBase : ReplayBufferBase, IReplaySubjectImplementation
+        private abstract class ReplayManyBase : ReplayBufferBase
         {
-            private readonly Queue<T> _queue;
+            protected readonly Queue<T> _queue;
 
             protected ReplayManyBase(int queueSize)
                 : base()
             {
-                _queue = new Queue<T>(queueSize);
+                _queue = new Queue<T>(Math.Min(queueSize, 64));
             }
 
-            protected Queue<T> Queue { get { return _queue; } }
-
-            protected override void AddValueToBuffer(T value)
+            protected override void Next(T value)
             {
                 _queue.Enqueue(value);
             }
 
-            protected override void ReplayBuffer(IObserver<T> observer)
+            protected override int Replay(IObserver<T> observer)
             {
+                var n = _queue.Count;
+
                 foreach (var item in _queue)
                     observer.OnNext(item);
+
+                return n;
             }
 
-            protected override void Dispose(bool disposing)
+            protected override void DisposeCore()
             {
-                base.Dispose(disposing);
                 _queue.Clear();
             }
+        }
+    }
+
+    /// <summary>
+    /// Specialized scheduled observer similar to a scheduled observer for the immediate scheduler.
+    /// </summary>
+    /// <typeparam name="T">Type of the elements processed by the observer.</typeparam>
+    class FastImmediateObserver<T> : IScheduledObserver<T>
+    {
+        /// <summary>
+        /// Gate to control ownership transfer and protect data structures.
+        /// </summary>
+        private readonly object _gate = new object();
+
+        /// <summary>
+        /// Observer to forward notifications to.
+        /// </summary>
+        private volatile IObserver<T> _observer;
+
+        /// <summary>
+        /// Queue to enqueue OnNext notifications into.
+        /// </summary>
+        private Queue<T> _queue = new Queue<T>();
+
+        /// <summary>
+        /// Standby queue to swap out for _queue when transferring ownership. This allows to reuse
+        /// queues in case of busy subjects where the initial replay doesn't suffice to catch up.
+        /// </summary>
+        private Queue<T> _queue2;
+
+        /// <summary>
+        /// Exception passed to an OnError notification, if any.
+        /// </summary>
+        private Exception _error;
+
+        /// <summary>
+        /// Indicates whether an OnCompleted notification was received.
+        /// </summary>
+        private bool _done;
+
+        /// <summary>
+        /// Indicates whether the observer is busy, i.e. some thread is actively draining the
+        /// notifications that were queued up.
+        /// </summary>
+        private bool _busy;
+
+        /// <summary>
+        /// Indicates whether a failure occurred when the owner was draining the queue. This will
+        /// prevent future work to be processed.
+        /// </summary>
+        private bool _hasFaulted;
+
+        /// <summary>
+        /// Creates a new scheduled observer that proxies to the specified observer.
+        /// </summary>
+        /// <param name="observer">Observer to forward notifications to.</param>
+        public FastImmediateObserver(IObserver<T> observer)
+        {
+            _observer = observer;
+        }
+
+        /// <summary>
+        /// Disposes the observer.
+        /// </summary>
+        public void Dispose()
+        {
+            Done();
+        }
+
+        /// <summary>
+        /// Notifies the observer of pending work. This will either cause the current owner to
+        /// process the newly enqueued notifications, or it will cause the calling thread to
+        /// become the owner and start processing the notification queue.
+        /// </summary>
+        public void EnsureActive()
+        {
+            EnsureActive(1);
+        }
+
+        /// <summary>
+        /// Notifies the observer of pending work. This will either cause the current owner to
+        /// process the newly enqueued notifications, or it will cause the calling thread to
+        /// become the owner and start processing the notification queue.
+        /// </summary>
+        /// <param name="count">The number of enqueued notifications to process (ignored).</param>
+        public void EnsureActive(int count)
+        {
+            var isOwner = false;
+
+            lock (_gate)
+            {
+                //
+                // If we failed to process work in the past, we'll simply drop it.
+                //
+                if (!_hasFaulted)
+                {
+                    //
+                    // If no-one is processing the notification queue, become the owner.
+                    //
+                    if (!_busy)
+                    {
+                        isOwner = true;
+                        _busy = true;
+                    }
+                }
+            }
+
+            if (isOwner)
+            {
+                while (true)
+                {
+                    var queue = default(Queue<T>);
+                    var error = default(Exception);
+                    var done = false;
+
+                    //
+                    // Steal notifications from the producer side to drain them to the observer.
+                    //
+                    lock (_gate)
+                    {
+                        //
+                        // Do we have any OnNext notifications to process?
+                        //
+                        if (_queue.Count > 0)
+                        {
+                            if (_queue2 == null)
+                            {
+                                _queue2 = new Queue<T>();
+                            }
+
+                            //
+                            // Swap out the current queue for a fresh or recycled one. The standby
+                            // queue is set to null; when notifications are sent out the processed
+                            // queue will become the new standby.
+                            //
+                            queue = _queue;
+                            _queue = _queue2;
+                            _queue2 = null;
+                        }
+
+                        //
+                        // Do we have any terminal notifications to process?
+                        //
+                        if (_error != null)
+                        {
+                            error = _error;
+                        }
+                        else if (_done)
+                        {
+                            done = true;
+                        }
+                        else if (queue == null)
+                        {
+                            //
+                            // No work left; quit the loop and let another thread become the
+                            // owner in the future.
+                            //
+                            _busy = false;
+                            break;
+                        }
+                    }
+
+                    try
+                    {
+                        //
+                        // Process OnNext notifications, if any.
+                        //
+                        if (queue != null)
+                        {
+                            //
+                            // Drain the stolen OnNext notification queue.
+                            //
+                            while (queue.Count > 0)
+                            {
+                                _observer.OnNext(queue.Dequeue());
+                            }
+
+                            //
+                            // The queue is now empty, so we can reuse it by making it the standby
+                            // queue for a future swap.
+                            //
+                            lock (_gate)
+                            {
+                                _queue2 = queue;
+                            }
+                        }
+
+                        //
+                        // Process terminal notifications, if any. Notice we don't release ownership
+                        // after processing these notifications; we simply quit from the loop. This
+                        // will cause all processing of the scheduler observer to cease.
+                        //
+                        if (error != null)
+                        {
+                            var observer = Done();
+                            observer.OnError(error);
+                            break;
+                        }
+                        else if (done)
+                        {
+                            var observer = Done();
+                            observer.OnCompleted();
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        lock (_gate)
+                        {
+                            _hasFaulted = true;
+                            _queue.Clear();
+                        }
+
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enqueues an OnCompleted notification.
+        /// </summary>
+        public void OnCompleted()
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _done = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enqueues an OnError notification.
+        /// </summary>
+        /// <param name="error">Error of the notification.</param>
+        public void OnError(Exception error)
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _error = error;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enqueues an OnNext notification.
+        /// </summary>
+        /// <param name="value">Value of the notification.</param>
+        public void OnNext(T value)
+        {
+            lock (_gate)
+            {
+                if (!_hasFaulted)
+                {
+                    _queue.Enqueue(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Terminates the observer upon receiving terminal notifications, thus preventing
+        /// future notifications to go out.
+        /// </summary>
+        /// <returns>Observer to send terminal notifications to.</returns>
+        private IObserver<T> Done()
+        {
+            return Interlocked.Exchange(ref _observer, NopObserver<T>.Instance);
         }
     }
 }

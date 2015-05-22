@@ -23,10 +23,10 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable { Disposable = e };
-                var d = new CompositeDisposable(cts, a);
+                var d = Disposable.Create(cts, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) => e.MoveNext(ct).ContinueWith(t =>
+                f = (tcs, ct) => e.MoveNext(ct).Then(t =>
                 {
                     t.Handle(tcs, res =>
                     {
@@ -81,7 +81,7 @@ namespace System.Linq
                 var current = default(TResult);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e1, e2);
+                var d = Disposable.Create(cts, e1, e2);
 
                 return Create(
                     (ct, tcs) =>
@@ -92,7 +92,7 @@ namespace System.Linq
                             if (result)
                                 current = selector(e1.Current, e2.Current);
                             return result;
-                        }).ContinueWith(t =>
+                        }).Then(t =>
                         {
                             t.Handle(tcs, x => tcs.TrySetResult(x));
                         });
@@ -119,7 +119,7 @@ namespace System.Linq
                 var e = first.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var mapTask = default(Task<Dictionary<TSource, TSource>>);
                 var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(ct =>
@@ -132,7 +132,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ContinueWith(t =>
+                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -185,7 +185,7 @@ namespace System.Linq
                 var e = first.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, e);
+                var d = Disposable.Create(cts, e);
 
                 var mapTask = default(Task<Dictionary<TSource, TSource>>);
                 var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(ct =>
@@ -198,7 +198,7 @@ namespace System.Linq
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ContinueWith(t =>
+                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {
@@ -310,7 +310,7 @@ namespace System.Linq
                         tcs.TrySetResult(true);
                         return false;
                     }
-                }).ContinueWith(t =>
+                }).Then(t =>
                 {
                     t.Handle(tcs, res =>
                     {
@@ -369,16 +369,16 @@ namespace System.Linq
                 var current = default(TResult);
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, outerE);
+                var d = Disposable.Create(cts, outerE);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
                 {
-                    getInnerMap(ct).ContinueWith(ti =>
+                    getInnerMap(ct).Then(ti =>
                     {
                         ti.Handle(tcs, map =>
                         {
-                            outerE.MoveNext(ct).ContinueWith(to =>
+                            outerE.MoveNext(ct).Then(to =>
                             {
                                 to.Handle(tcs, res =>
                                 {
@@ -474,7 +474,7 @@ namespace System.Linq
                 var ie = inner.GetEnumerator();
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, oe, ie);
+                var d = Disposable.Create(cts, oe, ie);
 
                 var current = default(TResult);
                 var useOuter = true;
@@ -524,7 +524,7 @@ namespace System.Linq
                     });
 
                     if (b)
-                        oe.MoveNext(ct).ContinueWith(t =>
+                        oe.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -576,7 +576,7 @@ namespace System.Linq
                             });
                         });
                     else
-                        ie.MoveNext(ct).ContinueWith(t =>
+                        ie.MoveNext(ct).Then(t =>
                         {
                             t.Handle(tcs, res =>
                             {
@@ -682,7 +682,7 @@ namespace System.Linq
 
                 var cts = new CancellationTokenDisposable();
                 var a = new AssignableDisposable();
-                var d = new CompositeDisposable(cts, se, a);
+                var d = Disposable.Create(cts, se, a);
 
                 var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
                 f = (tcs, ct) =>
@@ -711,7 +711,7 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).ContinueWith(t =>
+                    e.MoveNext(ct).Then(t =>
                     {
                         t.Handle(tcs, res =>
                         {

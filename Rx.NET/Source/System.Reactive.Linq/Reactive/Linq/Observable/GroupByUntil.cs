@@ -58,6 +58,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 _nullGate = new object();
             }
 
+            private ISubject<TElement> NewSubject()
+            {
+                var sub = new Subject<TElement>();
+
+                return Subject.Create<TElement>(new AsyncLockObserver<TElement>(sub, new Concurrency.AsyncLock()), sub);
+            }
+
             public void OnNext(TSource value)
             {
                 var key = default(TKey);
@@ -89,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (_null == null)
                             {
-                                _null = new Subject<TElement>();
+                                _null = NewSubject();
                                 fireNewMapEntry = true;
                             }
 
@@ -98,7 +105,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        writer = _map.GetOrAdd(key, () => new Subject<TElement>(), out fireNewMapEntry);
+                        writer = _map.GetOrAdd(key, NewSubject, out fireNewMapEntry);
                     }
                 }
                 catch (Exception exception)
@@ -161,8 +168,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 //        revisit the behavior for vNext. Nonetheless, we'll add synchronization
                 //        to ensure no concurrent calls to the subject are made.
                 //
-                lock (writer)
-                    writer.OnNext(element);
+                writer.OnNext(element);
             }
 
             class Delta : IObserver<TDuration>
@@ -202,15 +208,13 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent._null = null;
                         }
 
-                        lock (@null)
-                            @null.OnCompleted();
+                        @null.OnCompleted();
                     }
                     else
                     {
                         if (_parent._map.Remove(_key))
                         {
-                            lock (_writer)
-                                _writer.OnCompleted();
+                            _writer.OnCompleted();
                         }
                     }
 

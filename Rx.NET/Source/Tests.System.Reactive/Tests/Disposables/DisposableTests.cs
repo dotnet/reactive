@@ -224,6 +224,20 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(g.Contains(d2));
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void CompositeDisposable_AddNull_via_params_ctor()
+        {
+            IDisposable d1 = null;
+            new CompositeDisposable(d1);
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void CompositeDisposable_AddNull_via_IEnum_ctor()
+        {
+            IEnumerable<IDisposable> values = new IDisposable[] { null };
+            new CompositeDisposable(values);
+        }
+
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CompositeDisposable_AddNull()
         {
@@ -364,7 +378,7 @@ namespace ReactiveTests.Tests
             new CompositeDisposable().Remove(null);
         }
 
-#if DESKTOPCLR40 || DESKTOPCLR45
+#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void CancellationDisposable_Ctor_Null()
         {
@@ -621,6 +635,118 @@ namespace ReactiveTests.Tests
             //Assert.IsNull(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
             m.Disposable.Dispose();        // This should be a nop.
             Assert.IsTrue(m.IsDisposed);
+        }
+
+        [TestMethod]
+        public void StableCompositeDisposable_ArgumentChecking()
+        {
+            var d = Disposable.Empty;
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(null, d));
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(d, null));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IDisposable[])));
+            ReactiveAssert.Throws<ArgumentNullException>(() => StableCompositeDisposable.Create(default(IEnumerable<IDisposable>)));
+
+            ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(null, d, d));
+            ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(d, null, d));
+            ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(d, d, null));
+        }
+
+        [TestMethod]
+        public void StableCompositeDisposable_Binary()
+        {
+            var disp1 = false;
+            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+
+            var disp2 = false;
+            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+
+            var d = StableCompositeDisposable.Create(d1, d2);
+
+            Assert.IsFalse(disp1);
+            Assert.IsFalse(disp2);
+            Assert.IsFalse(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(d.IsDisposed);
+        }
+
+        [TestMethod]
+        public void StableCompositeDisposable_Nary1()
+        {
+            var disp1 = false;
+            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+
+            var disp2 = false;
+            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+
+            var disp3 = false;
+            var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
+
+            var d = StableCompositeDisposable.Create(d1, d2, d3);
+
+            Assert.IsFalse(disp1);
+            Assert.IsFalse(disp2);
+            Assert.IsFalse(disp3);
+            Assert.IsFalse(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
+        }
+
+        [TestMethod]
+        public void StableCompositeDisposable_Nary2()
+        {
+            var disp1 = false;
+            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+
+            var disp2 = false;
+            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+
+            var disp3 = false;
+            var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
+
+            var d = StableCompositeDisposable.Create(new List<IDisposable>(new[] { d1, d2, d3 }));
+
+            Assert.IsFalse(disp1);
+            Assert.IsFalse(disp2);
+            Assert.IsFalse(disp3);
+            Assert.IsFalse(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
+
+            d.Dispose();
+
+            Assert.IsTrue(disp1);
+            Assert.IsTrue(disp2);
+            Assert.IsTrue(disp3);
+            Assert.IsTrue(d.IsDisposed);
         }
     }
 }

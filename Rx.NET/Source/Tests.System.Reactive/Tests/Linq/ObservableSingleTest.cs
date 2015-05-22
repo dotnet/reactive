@@ -3511,15 +3511,24 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartWith_ArgumentChecking()
         {
+            var values = (IEnumerable<int>)new[] { 1, 2, 3 };
+
             var scheduler = new TestScheduler();
             var someObservable = Observable.Empty<int>();
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(int[])));
 
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), values));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IEnumerable<int>)));
+
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), scheduler, 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IScheduler), 1));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default(int[])));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(default(IObservable<int>), scheduler, values));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, default(IScheduler), values));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartWith(someObservable, scheduler, default(IEnumerable<int>)));
         }
 
         [TestMethod]

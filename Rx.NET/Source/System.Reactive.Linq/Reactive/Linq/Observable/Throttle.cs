@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var subscription = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(subscription, _cancelable);
+                return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
             public void OnNext(TSource value)
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var subscription = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(subscription, _cancelable);
+                return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
             public void OnNext(TSource value)

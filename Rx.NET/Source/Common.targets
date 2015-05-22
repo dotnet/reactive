@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -39,6 +40,15 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release45|AnyCPU' ">
     <BuildConfig>Release</BuildConfig>
     <BuildTarget>45</BuildTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug46|AnyCPU' ">
+    <BuildConfig>Debug</BuildConfig>
+    <BuildTarget>46</BuildTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release46|AnyCPU' ">
+    <BuildConfig>Release</BuildConfig>
+    <BuildTarget>46</BuildTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug8|AnyCPU' ">
@@ -104,12 +114,35 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(BuildTarget)' == 'PLLITE' ">
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;PLIB;PLIB_LITE;NO_THREAD;USE_TASKEX;CRIPPLED_REFLECTION;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>    
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+      <!-- 
+      Profile2   = .NET for Windows Store apps, .NET Framework 4,     Silverlight 4, Windows Phone 7
+      Profile36  = .NET for Windows Store apps, .NET Framework 4,     Silverlight 4, Windows Phone 8
+      Profile88  = .NET for Windows Store apps, .NET Framework 4,     Silverlight 4, Windows Phone 7.5
+      Profile96  = .NET for Windows Store apps, .NET Framework 4.0.3, Silverlight 4, Windows Phone 7.5
+      Profile136 = .NET for Windows Store apps, .NET Framework 4,     Silverlight 5, Windows Phone 8
+      -->
+    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(BuildTarget)' == '45' ">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;                                                              HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;USE_TIMER_SELF_ROOT</DefineConstants>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NoStdLib>true</NoStdLib>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR45</BuildFlavor>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(BuildTarget)' == '46' ">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;USE_TIMER_SELF_ROOT;HAS_TPL46</DefineConstants>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <NoStdLib>true</NoStdLib>
+    <BuildPlatform>DESKTOPCLR</BuildPlatform>
+    <BuildFlavor>DESKTOPCLR46</BuildFlavor>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '8' ">
@@ -135,14 +168,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '40' ">
-    <DefineConstants>$(DefineConstants);NO_TASK_DELAY;HAS_APTCA;HAS_WINFORMS;USE_TIMER_SELF_ROOT</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_TASK_DELAY;HAS_APTCA;HAS_WINFORMS;USE_TIMER_SELF_ROOT;NO_WEAKREFOFT</DefineConstants>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR40</BuildFlavor>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'SL5' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TASK_DELAY</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TASK_DELAY;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -150,26 +183,9 @@
     <BuildPlatform>SILVERLIGHT</BuildPlatform>
     <BuildFlavor>SILVERLIGHT5</BuildFlavor>
   </PropertyGroup>
-  
-  
-  
-  <PropertyGroup Condition=" '$(BuildTarget)' == 'PLLITE' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;PLIB;PLIB_LITE;NO_THREAD;USE_TASKEX;CRIPPLED_REFLECTION</DefineConstants>    
-    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-      <!-- 
-      Profile2   = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 7
-      Profile36  = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 8
-      Profile88  = .NET for Windows Store apps, .NET Framework 4, Silverlight 4, Windows Phone 7.5
-      Profile96  = .NET for Windows Store apps, .NET Framework 4.0.3, Silverlight 4, Windows Phone 7.5
-      Profile136 = .NET for Windows Store apps, .NET Framework 4, Silverlight 5, Windows Phone 8
-      -->
-    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'WP7' ">
-    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -190,13 +206,6 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition=" '$(BuildTarget)' == 'PortableWP7' ">
-    <DefineConstants>$(DefineConstants);NO_VARIANCE;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;PLIB;NO_CDS_COLLECTIONS;USE_TIMER_SELF_ROOT</DefineConstants>
-    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile4</TargetFrameworkProfile>
-    <NoStdLib>true</NoStdLib>
-  </PropertyGroup>-->
   
   <!--
        ********************
@@ -347,7 +356,7 @@
   </ItemGroup>
 
   <!-- Temporary flag to enable stress test builds. Should be refactored into a separate project and be written in a more platform-neutral manner. (TFS 484720) -->
-  <PropertyGroup Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' OR '$(BuildFlavor)' == 'DESKTOPCLR45' ">
+  <PropertyGroup Condition=" '$(BuildFlavor)' == 'DESKTOPCLR40' OR '$(BuildFlavor)' == 'DESKTOPCLR45' OR '$(BuildFlavor)' == 'DESKTOPCLR46' ">
     <DefineConstants>$(DefineConstants);STRESS</DefineConstants>
   </PropertyGroup>
   
@@ -373,13 +382,13 @@
     <ReferencePath>$(MSBuildProjectDirectory)\..\References\$(BuildFlavor)</ReferencePath>
   </PropertyGroup>
 
-<!--
+  <!--
        ************************************************
        * GENERAL REFERENCES - Microsoft.Bcl and Async *
        ************************************************
-   -->
+  -->
 
-   <ItemGroup Condition=" '$(BuildTarget)' == 'PLLITE' ">
+  <ItemGroup Condition=" '$(BuildTarget)' == 'PLLITE' ">
     <!--- Microsoft.Bcl References -->
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\portable-net40+sl5+win8+wp8\System.Runtime.dll</HintPath>
@@ -401,7 +410,6 @@
   </ItemGroup>
    
   <ItemGroup Condition=" '$(BuildTarget)' == '40' ">
-  
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
       <Private>False</Private>
@@ -423,6 +431,5 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-
   
 </Project>

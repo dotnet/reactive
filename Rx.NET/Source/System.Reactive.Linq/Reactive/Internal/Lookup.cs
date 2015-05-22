@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace System.Reactive
 {
     class Lookup<K, E> : ILookup<K, E>
     {
-        Dictionary<K, List<E>> d;
+        private readonly Dictionary<K, List<E>> d;
 
         public Lookup(IEqualityComparer<K> comparer)
         {
@@ -18,8 +18,10 @@ namespace System.Reactive
         public void Add(K key, E element)
         {
             var list = default(List<E>);
+
             if (!d.TryGetValue(key, out list))
                 d[key] = list = new List<E>();
+
             list.Add(element);
         }
 
@@ -35,7 +37,15 @@ namespace System.Reactive
 
         public IEnumerable<E> this[K key]
         {
-            get { return Hide(d[key]); }
+            get
+            {
+                var list = default(List<E>);
+
+                if (!d.TryGetValue(key, out list))
+                    return Enumerable.Empty<E>();
+
+                return Hide(list);
+            }
         }
 
         private IEnumerable<E> Hide(List<E> elements)
@@ -69,13 +79,13 @@ namespace System.Reactive
                 return kv.Value.GetEnumerator();
             }
 
-            Collections.IEnumerator Collections.IEnumerable.GetEnumerator()
+            IEnumerator IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();
             }
         }
 
-        Collections.IEnumerator Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }

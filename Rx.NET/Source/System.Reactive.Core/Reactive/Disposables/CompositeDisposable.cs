@@ -44,13 +44,10 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
         public CompositeDisposable(params IDisposable[] disposables)
+            : this((IEnumerable<IDisposable>)disposables)
         {
-            if (disposables == null)
-                throw new ArgumentNullException("disposables");
-
-            _disposables = new List<IDisposable>(disposables);
-            _count = _disposables.Count;
         }
 
         /// <summary>
@@ -58,12 +55,20 @@ namespace System.Reactive.Disposables
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
                 throw new ArgumentNullException("disposables");
 
             _disposables = new List<IDisposable>(disposables);
+            
+            //
+            // Doing this on the list to avoid duplicate enumeration of disposables.
+            //
+            if (_disposables.Contains(null))
+                throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, "disposables");
+            
             _count = _disposables.Count;
         }
 

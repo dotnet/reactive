@@ -21,6 +21,12 @@ namespace System.Linq
         }
 
 #if HAS_AWAIT
+        /// <summary>
+        /// Creates an enumerable sequence based on an asynchronous method that provides a yielder.
+        /// </summary>
+        /// <typeparam name="T">Result sequence element type.</typeparam>
+        /// <param name="create">Delegate implementing an asynchronous method that can use the specified yielder to yield return values.</param>
+        /// <returns>Sequence that will use the asynchronous method to obtain its elements.</returns>
         public static IEnumerable<T> Create<T>(Action<IYielder<T>> create)
         {
             if (create == null)

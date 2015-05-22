@@ -69,6 +69,13 @@ namespace System.Reactive.PlatformServices
             }
 #endif
 
+#if HAS_TPL46
+            if (t == typeof(ITaskServices))
+            {
+                return (T)(object)new TaskServicesImpl();
+            }
+#endif
+
             if (t == typeof(IQueryServices))
             {
                 //

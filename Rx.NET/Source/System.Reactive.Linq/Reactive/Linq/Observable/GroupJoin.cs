@@ -47,10 +47,10 @@ namespace System.Reactive.Linq.ObservableImpl
             private RefCountDisposable _refCount;
 
             private int _leftID;
-            private Dictionary<int, IObserver<TRight>> _leftMap;
+            private SortedDictionary<int, IObserver<TRight>> _leftMap;
 
             private int _rightID;
-            private Dictionary<int, TRight> _rightMap;
+            private SortedDictionary<int, TRight> _rightMap;
 
             public IDisposable Run()
             {
@@ -61,12 +61,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
                 _leftID = 0;
-                _leftMap = new Dictionary<int, IObserver<TRight>>();
+                _leftMap = new SortedDictionary<int, IObserver<TRight>>();
 
                 var rightSubscription = new SingleAssignmentDisposable();
                 _group.Add(rightSubscription);
                 _rightID = 0;
-                _rightMap = new Dictionary<int, TRight>();
+                _rightMap = new SortedDictionary<int, TRight>();
 
                 leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
@@ -88,8 +88,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Expire(int id, IObserver<TRight> group, IDisposable resource)
                 {
                     lock (_parent._gate)
+                    {
                         if (_parent._leftMap.Remove(id))
+                        {
                             group.OnCompleted();
+                        }
+                    }
 
                     _parent._group.Remove(resource);
                 }
@@ -98,9 +102,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var s = new Subject<TRight>();
                     var id = 0;
+                    var rightID = 0;
                     lock (_parent._gate)
                     {
                         id = _parent._leftID++;
+                        rightID = _parent._rightID;
                         _parent._leftMap.Add(id, s);
                     }
 
@@ -139,9 +145,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         _parent._observer.OnNext(result);
 
-                        foreach (var rightValue in _parent._rightMap.Values)
+                        foreach (var rightValue in _parent._rightMap)
                         {
-                            s.OnNext(rightValue);
+                            if (rightValue.Key < rightID)
+                            {
+                                s.OnNext(rightValue.Value);
+                            }
                         }
                     }
                 }
@@ -181,8 +190,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        foreach (var o in _parent._leftMap.Values)
-                            o.OnError(error);
+                        foreach (var o in _parent._leftMap)
+                        {
+                            o.Value.OnError(error);
+                        }
 
                         _parent._observer.OnError(error);
                         _parent.Dispose();
@@ -215,7 +226,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void Expire(int id, IDisposable resource)
                 {
                     lock (_parent._gate)
+                    {
                         _parent._rightMap.Remove(id);
+                    }
 
                     _parent._group.Remove(resource);
                 }
@@ -223,9 +236,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnNext(TRight value)
                 {
                     var id = 0;
+                    var leftID = 0;
                     lock (_parent._gate)
                     {
                         id = _parent._rightID++;
+                        leftID = _parent._leftID;
                         _parent._rightMap.Add(id, value);
                     }
 
@@ -242,12 +257,18 @@ namespace System.Reactive.Linq.ObservableImpl
                         OnError(exception);
                         return;
                     }
+
                     md.Disposable = duration.SubscribeSafe(new Delta(this, id, md));
 
                     lock (_parent._gate)
                     {
-                        foreach (var o in _parent._leftMap.Values)
-                            o.OnNext(value);
+                        foreach (var o in _parent._leftMap)
+                        {
+                            if (o.Key < leftID)
+                            {
+                                o.Value.OnNext(value);
+                            }
+                        }
                     }
                 }
 
@@ -284,8 +305,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        foreach (var o in _parent._leftMap.Values)
-                            o.OnError(error);
+                        foreach (var o in _parent._leftMap)
+                        {
+                            o.Value.OnError(error);
+                        }
+
                         _parent._observer.OnError(error);
                         _parent.Dispose();
                     }

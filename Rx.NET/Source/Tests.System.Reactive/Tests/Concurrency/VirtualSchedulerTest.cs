@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -121,6 +122,40 @@ namespace ReactiveTests.Tests
             scheduler.Start();
             Assert.IsTrue(ran, "ran");
             Assert.IsTrue(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+        }
+#endif
+
+#if DESKTOPCLR
+        [TestMethod]
+        public void Virtual_ThreadSafety()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                var scheduler = new TestScheduler();
+                var seq = Observable.Never<string>();
+
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    Thread.Sleep(50);
+                    seq.Timeout(TimeSpan.FromSeconds(10), scheduler).Subscribe(s => { });
+                });
+
+                var watch = scheduler.StartStopwatch();
+                try
+                {
+                    while (watch.Elapsed < TimeSpan.FromSeconds(20))
+                    {
+                        scheduler.AdvanceBy(10);
+                    }
+                }
+                catch (TimeoutException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail("Virtual time {0}, exception {1}", watch.Elapsed, ex);
+                }
+            }
         }
 #endif
     }

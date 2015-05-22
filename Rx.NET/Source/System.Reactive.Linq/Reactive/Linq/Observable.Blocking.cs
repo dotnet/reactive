@@ -483,7 +483,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Waits for the observable sequence to complete and returns the last element of the sequence.
-        /// If the sequence terminates with an OnError notification, the exception is throw.
+        /// If the sequence terminates with an OnError notification, the exception is thrown.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>

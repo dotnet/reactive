@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -184,7 +185,6 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1, 2);
         }
 
-
         [TestMethod]
         public void EventLoop_ScheduleTimeAndOrderedInFlightActions()
         {
@@ -291,13 +291,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(() => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(() => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
@@ -315,13 +318,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(100), () => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
@@ -339,13 +345,16 @@ namespace ReactiveTests.Tests
                 {
                     using (var e = new EventLoopScheduler())
                     {
-                        var cd = new CountdownEvent(j);
+                        using (var d = new CompositeDisposable())
+                        {
+                            var cd = new CountdownEvent(j);
 
-                        for (int k = 0; k < j; k++)
-                            e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal());
+                            for (int k = 0; k < j; k++)
+                                d.Add(e.Schedule(TimeSpan.FromMilliseconds(k), () => cd.Signal()));
 
-                        if (!cd.Wait(10000))
-                            Assert.Fail("j = " + j);
+                            if (!cd.Wait(10000))
+                                Assert.Fail("j = " + j);
+                        }
                     }
                 }
             }
@@ -379,6 +388,46 @@ namespace ReactiveTests.Tests
         public void EventLoop_Stress()
         {
             EventLoop.NoSemaphoreFullException();
+        }
+#endif
+
+#if !NO_CDS && DESKTOPCLR
+        [TestMethod]
+        public void EventLoop_CorrectWorkStealing()
+        {
+            const int workItemCount = 100;
+
+            var failureCount = 0;
+            var countdown = new CountdownEvent(workItemCount);
+            var dueTime = DateTimeOffset.Now + TimeSpan.FromSeconds(1);
+
+            using (var d = new CompositeDisposable())
+            {
+                for (var i = 0; i < workItemCount; i++)
+                {
+                    var scheduler = new EventLoopScheduler();
+
+                    scheduler.Schedule(() =>
+                    {
+                        var schedulerThread = Thread.CurrentThread;
+
+                        scheduler.Schedule(dueTime, () =>
+                        {
+                            if (Thread.CurrentThread != schedulerThread)
+                            {
+                                Interlocked.Increment(ref failureCount);
+                            }
+                            countdown.Signal();
+                        });
+                    });
+
+                    d.Add(scheduler);
+                }
+
+                countdown.Wait();
+            }
+
+            Assert.AreEqual(0, failureCount);
         }
 #endif
     }

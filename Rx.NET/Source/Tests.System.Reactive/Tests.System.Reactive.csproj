@@ -15,12 +15,6 @@
     <CodeAnalysisRuleSet>..\Test.ruleset</CodeAnalysisRuleSet>
     <NoWarn>618</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
-    <OutputPath>bin\ReleaseXBLV\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
-    <OutputPath>bin\DebugXBLV\</OutputPath>
-  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup Condition="'$(BuildPlatform)' == 'SILVERLIGHT' AND !('$(BuildFlavor)' == 'SILVERLIGHTM7')">
     <SilverlightApplication>true</SilverlightApplication>
@@ -69,6 +63,7 @@
     <Compile Include="Stress\Linq\FromEvent.cs" />
     <Compile Include="Stress\Helpers.cs" />
     <Compile Include="Stress\Linq\Replay.cs" />
+    <Compile Include="Stress\Linq\ReplaySubject.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestLongRunningScheduler.cs" />
     <Compile Include="Tests\Aliases.cs" />
@@ -94,6 +89,7 @@
     <Compile Include="Tests\Concurrency\ThreadPoolSchedulerTest.cs" />
     <Compile Include="Tests\Concurrency\VirtualSchedulerTest.cs" />
     <Compile Include="Tests\Disposables\DisposableTests.cs" />
+    <Compile Include="Tests\ImmutableListTest.cs" />
     <Compile Include="Tests\Linq\ObservableAggregateTest.cs" />
     <Compile Include="Tests\Linq\ObservableAsyncTest.cs" />
     <Compile Include="Tests\Linq\ObservableAwaiterTest.cs" />

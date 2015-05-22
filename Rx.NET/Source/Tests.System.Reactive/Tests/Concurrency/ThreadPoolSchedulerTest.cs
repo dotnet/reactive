@@ -209,12 +209,22 @@ namespace ReactiveTests.Tests
         public void Periodic_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(1), null));
-            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.Zero, _ => _));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(-1), _ => _));
         }
 
         [TestMethod]
         public void Periodic_Regular()
+        {
+            Periodic_Impl(TimeSpan.FromMilliseconds(25));
+        }
+
+        [TestMethod]
+        public void Periodic_Zero()
+        {
+            Periodic_Impl(TimeSpan.Zero);
+        }
+
+        private void Periodic_Impl(TimeSpan period)
         {
             var gate = new object();
             var n = 0;
@@ -222,7 +232,7 @@ namespace ReactiveTests.Tests
 
             var lst = new List<int>();
 
-            var d = ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromMilliseconds(25), x =>
+            var d = ThreadPoolScheduler.Instance.SchedulePeriodic(0, period, x =>
             {
                 lock (gate)
                 {

@@ -28,12 +28,41 @@ namespace ReactiveTests.Tests
                 if (!Directory.Exists(sub))
                 {
                     Directory.CreateDirectory(sub);
+                }
 
-                    foreach (var file in Directory.GetFiles(cur))
+                //
+                // We want to replace the files to make the debugging experience
+                // better. If the directory already exists, a recompilation does
+                // not get rid of it. At some point, we should revisit this whole
+                // directory creation during the test run and try to do away with
+                // it by making it part of the build process.
+                //
+
+                foreach (var file in Directory.GetFiles(cur))
+                {
+                    var fn = Path.GetFileName(file);
+                    if (!file.Contains("PlatformServices"))
                     {
-                        var fn = Path.GetFileName(file);
-                        if (!file.Contains("PlatformServices"))
+                        var dest = Path.Combine(sub, fn);
+
+                        if (File.Exists(dest))
+                        {
+                            try
+                            {
+                                File.Delete(dest);
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
+                                //
+                                // File in use; expected after first pass.
+                                //
+                            }
+                        }
+
+                        if (!File.Exists(dest))
+                        {
                             File.Copy(Path.Combine(cur, fn), Path.Combine(sub, fn));
+                        }
                     }
                 }
 
@@ -103,13 +132,15 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartTimer_Cancel()
         {
-            Run(() =>
+            Run(StartTimer_Cancel_Callback);
+        }
+
+        private static void StartTimer_Cancel_Callback()
+        {
+            Scheduler.Default.Schedule(TimeSpan.FromSeconds(60), () =>
             {
-                Scheduler.Default.Schedule(TimeSpan.FromSeconds(60), () =>
-                {
-                    throw new InvalidOperationException("This shouldn't have happened!");
-                }).Dispose();
-            });
+                throw new InvalidOperationException("This shouldn't have happened!");
+            }).Dispose();
         }
 
         [TestMethod]
@@ -137,13 +168,15 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void StartPeriodicTimer_Cancel()
         {
-            Run(() =>
+            Run(StartPeriodicTimer_Cancel_Callback);
+        }
+
+        private static void StartPeriodicTimer_Cancel_Callback()
+        {
+            Scheduler.Default.SchedulePeriodic(TimeSpan.FromSeconds(60), () =>
             {
-                Scheduler.Default.SchedulePeriodic(TimeSpan.FromSeconds(60), () =>
-                {
-                    throw new InvalidOperationException("This shouldn't have happened!");
-                }).Dispose();
-            });
+                throw new InvalidOperationException("This shouldn't have happened!");
+            }).Dispose();
         }
 
         [TestMethod]
@@ -177,15 +210,21 @@ namespace ReactiveTests.Tests
             Run(() =>
             {
                 var n = 0;
-                
+
+                var hasAtLeastOneValue = new ManualResetEvent(false);
+
                 var schedule = Scheduler.Default.SchedulePeriodic(TimeSpan.Zero, () =>
                 {
                     _domain.SetData("value", n++);
+                    hasAtLeastOneValue.Set();
                 });
 
                 _domain.SetData("cancel", new MarshalByRefAction(schedule.Dispose));
 
+                hasAtLeastOneValue.WaitOne();
+
                 var setCancel = (MarshalByRefCell<ManualResetEvent>)_domain.GetData("set_cancel");
+
                 setCancel.Value.Set();
             });
 
@@ -195,17 +234,17 @@ namespace ReactiveTests.Tests
 
             var cancel = (MarshalByRefAction)_domain.GetData("cancel");
             cancel.Invoke();
-            
+
             Thread.Sleep(TimeSpan.FromMilliseconds(50));
-            
+
             var newValue = (int)_domain.GetData("value");
-            
+
             Assert.IsTrue(newValue >= value);
 
             Thread.Sleep(TimeSpan.FromMilliseconds(50));
 
             value = (int)_domain.GetData("value");
-            
+
             Assert.AreEqual(newValue, value);
         }
 
@@ -253,7 +292,7 @@ namespace ReactiveTests.Tests
 
                 if (!success)
                 {
-                    res.Value = "Failed null check ScheduleLongRunnign.";
+                    res.Value = "Failed null check ScheduleLongRunning.";
                     state.Value.Set();
                     return;
                 }

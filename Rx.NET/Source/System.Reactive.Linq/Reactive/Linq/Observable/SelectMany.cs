@@ -606,7 +606,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancel = new CancellationDisposable();
                 _count = 1;
 
-                return new CompositeDisposable(_parent._source.SubscribeSafe(this), _cancel);
+                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
             }
 
             public void OnNext(TSource value)
@@ -741,7 +741,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancel = new CancellationDisposable();
                 _count = 1;
 
-                return new CompositeDisposable(_parent._source.SubscribeSafe(this), _cancel);
+                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
             }
 
             public void OnNext(TSource value)
@@ -1532,7 +1532,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancel = new CancellationDisposable();
                 _count = 1;
 
-                return new CompositeDisposable(_parent._source.SubscribeSafe(this), _cancel);
+                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
             }
 
             public void OnNext(TSource value)
@@ -1643,7 +1643,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancel = new CancellationDisposable();
                 _count = 1;
 
-                return new CompositeDisposable(_parent._source.SubscribeSafe(this), _cancel);
+                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
             }
 
             public void OnNext(TSource value)

@@ -76,7 +76,7 @@ namespace System.Reactive.Concurrency
                     _parent._context.OperationCompleted();
                 });
 
-                return new CompositeDisposable(d, c);
+                return StableCompositeDisposable.Create(d, c);
             }
 
             public void OnNext(TSource value)

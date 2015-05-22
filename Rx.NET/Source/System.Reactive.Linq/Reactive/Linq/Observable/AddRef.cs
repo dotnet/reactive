@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var d = new CompositeDisposable(_refCount.GetDisposable(), cancel);
+            var d = StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel);
 
             var sink = new _(observer, d);
             setSink(sink);

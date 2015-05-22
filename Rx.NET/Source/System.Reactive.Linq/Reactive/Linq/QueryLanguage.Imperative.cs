@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
             {
                 ctr = cancellationToken.Register(() =>
                 {
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(cancellationToken);
                     subscription.Dispose();
                 });
             }

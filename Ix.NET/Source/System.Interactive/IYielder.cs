@@ -1,15 +1,26 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+#if HAS_AWAIT
 using System.Security;
 
-#if HAS_AWAIT
 namespace System.Linq
 {
+    /// <summary>
+    /// Interface for yielding elements to enumerator.
+    /// </summary>
+    /// <typeparam name="T">Type of the elements yielded to an enumerator.</typeparam>
     public interface IYielder<in T>
     {
+        /// <summary>
+        /// Yields a value to the enumerator.
+        /// </summary>
+        /// <param name="value">Value to yield return.</param>
+        /// <returns>Awaitable object for use in an asynchronous method.</returns>
         IAwaitable Return(T value);
+
+        /// <summary>
+        /// Stops the enumeration.
+        /// </summary>
+        /// <returns>Awaitable object for use in an asynchronous method.</returns>
         IAwaitable Break();
     }
 

@@ -7,14 +7,23 @@ namespace System.Threading.Tasks
 {
     static class TaskExt
     {
-        public static Task<T> Return<T>(T value, CancellationToken cancellationToken)
+        public static readonly Task<bool> True;
+        public static readonly Task<bool> False;
+
+        static TaskExt()
+        {
+            True = Return(true);
+            False = Return(false);
+        }
+
+        public static Task<T> Return<T>(T value)
         {
             var tcs = new TaskCompletionSource<T>();
             tcs.TrySetResult(value);
             return tcs.Task;
         }
 
-        public static Task<T> Throw<T>(Exception exception, CancellationToken cancellationToken)
+        public static Task<T> Throw<T>(Exception exception)
         {
             var tcs = new TaskCompletionSource<T>();
             tcs.TrySetException(exception);
@@ -23,12 +32,22 @@ namespace System.Threading.Tasks
 
         public static void Handle<T, R>(this Task<T> task, TaskCompletionSource<R> tcs, Action<T> success)
         {
-            Handle(task, tcs, success, ex => tcs.TrySetException(ex), () => tcs.TrySetCanceled());
+            if (task.IsFaulted)
+                tcs.TrySetException(task.Exception);
+            else if (task.IsCanceled)
+                tcs.TrySetCanceled();
+            else if (task.IsCompleted)
+                success(task.Result);
         }
 
         public static void Handle<T, R>(this Task<T> task, TaskCompletionSource<R> tcs, Action<T> success, Action<AggregateException> error)
         {
-            Handle(task, tcs, success, error, () => tcs.TrySetCanceled());
+            if (task.IsFaulted)
+                error(task.Exception);
+            else if (task.IsCanceled)
+                tcs.TrySetCanceled();
+            else if (task.IsCompleted)
+                success(task.Result);
         }
 
         public static void Handle<T, R>(this Task<T> task, TaskCompletionSource<R> tcs, Action<T> success, Action<AggregateException> error, Action canceled)
@@ -55,6 +74,26 @@ namespace System.Threading.Tasks
             }, TaskContinuationOptions.ExecuteSynchronously);
 
             return task;
+        }
+
+        public static Task Then<T>(this Task<T> task, Action<Task<T>> continuation)
+        {
+            //
+            // Central location to deal with continuations; allows for experimentation with flags.
+            // Note that right now, we don't go for synchronous execution. Users can block on the
+            // task returned from MoveNext, which can cause deadlocks (e.g. typical uses of GroupBy
+            // involve some aggregate). We'd need deeper asynchrony to make this work with less
+            // spawning of tasks.
+            //
+            return task.ContinueWith(continuation);
+        }
+
+        public static Task<R> Then<T, R>(this Task<T> task, Func<Task<T>, R> continuation)
+        {
+            //
+            // See comment on Then<T> for rationale.
+            //
+            return task.ContinueWith(continuation);
         }
 
         public static Task<bool> UsingEnumeratorSync(this Task<bool> task, IDisposable disposable)

@@ -592,6 +592,67 @@ namespace ReactiveTests.Tests
             Assert.AreEqual(value, Observable.Range(value, 10).FirstOrDefault());
         }
 
+        [TestMethod]
+        public void FirstOrDefault_NoDoubleSet()
+        {
+            //
+            // Regression test for a possible race condition caused by Return style operators
+            // that could trigger two Set calls on a ManualResetEvent, causing it to get
+            // disposed in between those two calls (cf. FirstOrDefaultInternal). This led
+            // to an exception will the following stack trace:
+            //
+            //    System.ObjectDisposedException: Safe handle has been closed
+            //       at System.Runtime.InteropServices.SafeHandle.DangerousAddRef(Boolean& success)
+            //       at System.StubHelpers.StubHelpers.SafeHandleAddRef(SafeHandle pHandle, Boolean& success)
+            //       at Microsoft.Win32.Win32Native.SetEvent(SafeWaitHandle handle)
+            //       at System.Threading.EventWaitHandle.Set()
+            //       at System.Reactive.Linq.QueryLanguage.<>c__DisplayClass458_1`1.<FirstOrDefaultInternal>b__2()
+            //
+
+            var o = new O();
+
+            Scheduler.Default.Schedule(() =>
+            {
+                var x = o.FirstOrDefault();
+            });
+
+            o.Wait();
+
+            o.Next();
+
+            Thread.Sleep(100); // enough time to let the ManualResetEvent dispose
+
+            o.Done();
+        }
+
+        class O : IObservable<int>
+        {
+            private readonly ManualResetEvent _event = new ManualResetEvent(false);
+            private IObserver<int> _observer;
+
+            public void Wait()
+            {
+                _event.WaitOne();
+            }
+
+            public void Next()
+            {
+                _observer.OnNext(42);
+            }
+
+            public void Done()
+            {
+                _observer.OnCompleted();
+            }
+
+            public IDisposable Subscribe(IObserver<int> observer)
+            {
+                _observer = observer;
+                _event.Set();
+                return Disposable.Empty;
+            }
+        }
+
         #endregion
 
         #region + ForEach +

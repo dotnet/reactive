@@ -15,12 +15,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
-    <OutputPath>bin\ReleaseXBLV\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
-    <OutputPath>bin\DebugXBLV\</OutputPath>
-  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
@@ -69,6 +63,8 @@
     <Compile Include="Reactive\Concurrency\Synchronization.Synchronize.cs" />
     <Compile Include="Reactive\Concurrency\SynchronizationContextScheduler.cs" />
     <Compile Include="Reactive\Concurrency\DefaultScheduler.cs" />
+    <Compile Include="Reactive\Concurrency\TaskHelpers.cs" />
+    <Compile Include="Reactive\Disposables\StableCompositeDisposable.cs" />
     <Compile Include="Reactive\Internal\AsyncLockObserver.cs" />
     <Compile Include="Reactive\Internal\CheckedObserver.cs" />
     <Compile Include="Reactive\Internal\ConcurrentDictionary.cs" />
@@ -87,6 +83,8 @@
     <Compile Include="Reactive\Disposables\SerialDisposable.cs" />
     <Compile Include="Reactive\Disposables\SingleAssignmentDisposable.cs" />
     <Compile Include="Reactive\Internal\AutoDetachObserver.cs" />
+    <Compile Include="Reactive\Internal\TaskServices.Default.cs" />
+    <Compile Include="Reactive\Internal\TaskServices.cs" />
     <Compile Include="Reactive\Internal\ExceptionServices.Default.cs" />
     <Compile Include="Reactive\Internal\ExceptionServices.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleService.cs" />

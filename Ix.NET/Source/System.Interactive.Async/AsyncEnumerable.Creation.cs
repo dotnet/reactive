@@ -76,7 +76,7 @@ namespace System.Linq
             public Task<bool> MoveNext(CancellationToken cancellationToken)
             {
                 if (_disposed)
-                    return TaskExt.Return(false, CancellationToken.None);
+                    return TaskExt.False;
 
                 return _moveNext(cancellationToken);
             }
@@ -110,7 +110,7 @@ namespace System.Linq
                 throw new ArgumentNullException("exception");
 
             return Create(() => Create<TValue>(
-                ct => TaskExt.Throw<bool>(exception, ct),
+                ct => TaskExt.Throw<bool>(exception),
                 () => { throw new InvalidOperationException(); },
                 () => { })
             );
@@ -128,7 +128,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TValue> Empty<TValue>()
         {
             return Create(() => Create<TValue>(
-                ct => TaskExt.Return(false, ct),
+                ct => TaskExt.False,
                 () => { throw new InvalidOperationException(); },
                 () => { })
             );
@@ -155,7 +155,7 @@ namespace System.Linq
             return Create(() =>
             {
                 return Create(
-                    ct => TaskExt.Return(true, ct),
+                    ct => TaskExt.True,
                     () => element,
                     () => { }
                 );
@@ -201,16 +201,16 @@ namespace System.Linq
                         }
                         catch (Exception ex)
                         {
-                            return TaskExt.Throw<bool>(ex, ct);
+                            return TaskExt.Throw<bool>(ex);
                         }
 
                         if (!b)
-                            return TaskExt.Return(false, ct);
+                            return TaskExt.False;
 
                         if (!started)
                             started = true;
 
-                        return TaskExt.Return(true, ct);
+                        return TaskExt.True;
                     },
                     () => current,
                     () => { }
@@ -241,14 +241,14 @@ namespace System.Linq
                 }
 
                 var cts = new CancellationTokenDisposable();
-                var d = new CompositeDisposable(cts, resource, e);
+                var d = Disposable.Create(cts, resource, e);
 
                 var current = default(TSource);
 
                 return Create(
                     (ct, tcs) =>
                     {
-                        e.MoveNext(cts.Token).ContinueWith(t =>
+                        e.MoveNext(cts.Token).Then(t =>
                         {
                             t.Handle(tcs,
                                 res =>

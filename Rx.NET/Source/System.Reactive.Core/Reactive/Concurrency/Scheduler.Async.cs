@@ -376,7 +376,7 @@ namespace System.Reactive.Concurrency
                 d.Disposable = t.Result;
             }, TaskContinuationOptions.ExecuteSynchronously);
 
-            return new CompositeDisposable(c, d);
+            return StableCompositeDisposable.Create(c, d);
         }
 
         private static IDisposable InvokeAsync<TState>(IScheduler self, TState s, Func<IScheduler, TState, CancellationToken, Task> action)

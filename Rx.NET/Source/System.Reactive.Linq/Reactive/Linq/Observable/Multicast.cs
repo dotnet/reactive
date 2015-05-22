@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var subscription = observable.SubscribeSafe(this);
                 var connection = connectable.Connect();
 
-                return new CompositeDisposable(subscription, connection);
+                return StableCompositeDisposable.Create(subscription, connection);
             }
 
             public void OnNext(TResult value)

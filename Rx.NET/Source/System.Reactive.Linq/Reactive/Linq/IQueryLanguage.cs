@@ -206,6 +206,8 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync);
+        IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler);
+        IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler);
 #endif
 
         IObservable<Unit> Start(Action action);
@@ -214,6 +216,8 @@ namespace System.Reactive.Linq
 #if !NO_TPL
         IObservable<Unit> StartAsync(Func<Task> actionAsync);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync);
+        IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler);
+        IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
 #endif
 
 #if !NO_TPL
@@ -221,6 +225,10 @@ namespace System.Reactive.Linq
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync);
         IObservable<Unit> FromAsync(Func<Task> actionAsync);
         IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync);
+        IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync, IScheduler scheduler);
+        IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler);
+        IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler);
+        IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
 #endif
 
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function);
@@ -597,6 +605,7 @@ namespace System.Reactive.Linq
         IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector);
         IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries);
+        IObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector);
         IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector);
         IObservable<TResult> Zip<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector);
         IObservable<IList<TSource>> Zip<TSource>(IEnumerable<IObservable<TSource>> sources);
@@ -661,6 +670,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count);
         IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, params TSource[] values);
         IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values);
+        IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IEnumerable<TSource> values);
+        IObservable<TSource> StartWith<TSource>(IObservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values);
         IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, int count);
         IObservable<TSource> TakeLast<TSource>(IObservable<TSource> source, int count, IScheduler scheduler);
         IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, int count);

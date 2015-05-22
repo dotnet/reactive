@@ -16,10 +16,14 @@ using Microsoft.Reactive.Testing;
 using System.Windows.Forms;
 #endif
 
+#if HAS_AWAIT
+using System.Threading.Tasks;
+#endif
+
 namespace ReactiveTests.Tests
 {
     [TestClass]
-    public class SchedulerTest
+    public class SchedulerTest : ReactiveTest
     {
         #region IScheduler
 
@@ -330,47 +334,49 @@ namespace ReactiveTests.Tests
 
             var domain = AppDomain.CreateDomain("HLN", null, new AppDomainSetup { ApplicationBase = cur });
 
-            domain.DoCallBack(() =>
+            domain.DoCallBack(Scheduler_Periodic_HostLifecycleManagement_Callback);
+        }
+
+        private static void Scheduler_Periodic_HostLifecycleManagement_Callback()
+        {
+            var pep = PlatformEnlightenmentProvider.Current;
+
+            try
             {
-                var pep = PlatformEnlightenmentProvider.Current;
+                var hln = new HLN();
+                PlatformEnlightenmentProvider.Current = new PEP(hln);
 
-                try
+                var s = ThreadPoolScheduler.Instance.DisableOptimizations(typeof(ISchedulerPeriodic));
+
+                var n = 0;
+                var e = new ManualResetEvent(false);
+
+                var d = Observable.Interval(TimeSpan.FromMilliseconds(100), s).Subscribe(_ =>
                 {
-                    var hln = new HLN();
-                    PlatformEnlightenmentProvider.Current = new PEP(hln);
+                    if (n++ == 10)
+                        e.Set();
+                });
 
-                    var s = ThreadPoolScheduler.Instance.DisableOptimizations(typeof(ISchedulerPeriodic));
+                hln.OnSuspending();
+                hln.OnResuming();
 
-                    var n = 0;
-                    var e = new ManualResetEvent(false);
+                Thread.Sleep(250);
+                hln.OnSuspending();
 
-                    var d = Observable.Interval(TimeSpan.FromMilliseconds(100), s).Subscribe(_ =>
-                    {
-                        if (n++ == 10)
-                            e.Set();
-                    });
+                Thread.Sleep(150);
+                hln.OnResuming();
 
-                    hln.OnSuspending();
-                    hln.OnResuming();
+                Thread.Sleep(50);
+                hln.OnSuspending();
+                hln.OnResuming();
 
-                    Thread.Sleep(250);
-                    hln.OnSuspending();
-
-                    Thread.Sleep(150);
-                    hln.OnResuming();
-
-                    Thread.Sleep(50);
-                    hln.OnSuspending();
-                    hln.OnResuming();
-
-                    e.WaitOne();
-                    d.Dispose();
-                }
-                finally
-                {
-                    PlatformEnlightenmentProvider.Current = pep;
-                }
-            });
+                e.WaitOne();
+                d.Dispose();
+            }
+            finally
+            {
+                PlatformEnlightenmentProvider.Current = pep;
+            }
         }
 
         class PEP : IPlatformEnlightenmentProvider
@@ -1076,5 +1082,435 @@ namespace ReactiveTests.Tests
         }
 
         #endregion
+
+#if HAS_AWAIT
+
+        [TestMethod]
+        public void SchedulerAsync_Yield_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler)));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler), CancellationToken.None));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Sleep_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero, CancellationToken.None));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue, CancellationToken.None));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_ArgumentChecking()
+        {
+            var tcs = new TaskCompletionSource<IDisposable>();
+            var t = tcs.Task;
+
+            var d = default(IScheduler);
+            var s = Scheduler.Immediate;
+
+            var rt = TimeSpan.Zero;
+            var at = DateTimeOffset.MinValue;
+
+            var a1 = new Func<IScheduler, int, CancellationToken, Task>((_, __, ___) => t);
+            var d1 = default(Func<IScheduler, int, CancellationToken, Task>);
+
+            var a2 = new Func<IScheduler, int, CancellationToken, Task<IDisposable>>((_, __, ___) => t);
+            var d2 = default(Func<IScheduler, int, CancellationToken, Task<IDisposable>>);
+
+            var a3 = new Func<IScheduler, CancellationToken, Task>((_, __) => t);
+            var d3 = default(Func<IScheduler, CancellationToken, Task>);
+
+            var a4 = new Func<IScheduler, CancellationToken, Task<IDisposable>>((_, __) => t);
+            var d4 = default(Func<IScheduler, CancellationToken, Task<IDisposable>>);
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, d1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, rt, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, rt, d1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, at, a1));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, at, d1));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, d2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, rt, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, rt, d2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, 42, at, a2));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, 42, at, d2));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, d3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, rt, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, rt, d3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, at, a3));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d3));
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, d4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, rt, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, rt, d4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(d, at, a4));
+            ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d4));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads1()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync((_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync((_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(1, 43),
+                OnNext(1, 44),
+                OnNext(1, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads2()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(TimeSpan.FromTicks(50), (_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync(TimeSpan.FromTicks(60), (_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, TimeSpan.FromTicks(70), (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, TimeSpan.FromTicks(80), (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(50, 42),
+                OnNext(60, 43),
+                OnNext(70, 44),
+                OnNext(80, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_Overloads3()
+        {
+            var tcsI = new TaskCompletionSource<int>();
+            var t = tcsI.Task;
+            tcsI.SetResult(0);
+
+            var tcsD = new TaskCompletionSource<IDisposable>();
+            var d = tcsD.Task;
+            tcsD.SetResult(Disposable.Empty);
+
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(new DateTimeOffset(50, TimeSpan.Zero), (_, ct) =>
+            {
+                o.OnNext(42);
+                return t;
+            });
+
+            s.ScheduleAsync(new DateTimeOffset(60, TimeSpan.Zero), (_, ct) =>
+            {
+                o.OnNext(43);
+                return d;
+            });
+
+            s.ScheduleAsync(44, new DateTimeOffset(70, TimeSpan.Zero), (_, x, ct) =>
+            {
+                o.OnNext(x);
+                return t;
+            });
+
+            s.ScheduleAsync(45, new DateTimeOffset(80, TimeSpan.Zero), (_, x, ct) =>
+            {
+                o.OnNext(45);
+                return d;
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(50, 42),
+                OnNext(60, 43),
+                OnNext(70, 44),
+                OnNext(80, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_NoCancellation1()
+        {
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(async (_, ct) =>
+            {
+                o.OnNext(42);
+
+                await _.Yield();
+
+                o.OnNext(43);
+
+                await _.Sleep(TimeSpan.FromTicks(10));
+
+                o.OnNext(44);
+
+                await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero));
+
+                o.OnNext(45);
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(2, 43),
+                OnNext(12, 44),
+                OnNext(250, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_NoCancellation2()
+        {
+            var s = new TestScheduler();
+
+            var o = s.CreateObserver<int>();
+
+            s.ScheduleAsync(async (_, ct) =>
+            {
+                o.OnNext(42);
+
+                await _.Yield(ct);
+
+                o.OnNext(43);
+
+                await _.Sleep(TimeSpan.FromTicks(10), ct);
+
+                o.OnNext(44);
+
+                await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero), ct);
+
+                o.OnNext(45);
+            });
+
+            s.Start();
+
+            o.Messages.AssertEqual(
+                OnNext(1, 42),
+                OnNext(2, 43),
+                OnNext(12, 44),
+                OnNext(250, 45)
+            );
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Awaiters()
+        {
+            var op = Scheduler.Immediate.Yield();
+            var aw = op.GetAwaiter();
+
+            ReactiveAssert.Throws<ArgumentNullException>(() => aw.OnCompleted(null));
+
+            aw.OnCompleted(() => { });
+
+            ReactiveAssert.Throws<InvalidOperationException>(() => aw.OnCompleted(() => { }));
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Yield_Cancel1()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Immediate.Yield(cts.Token);
+            var aw = op.GetAwaiter();
+
+            cts.Cancel();
+
+            Assert.IsTrue(aw.IsCompleted);
+
+            ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Yield_Cancel2()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Immediate.Yield(cts.Token);
+            var aw = op.GetAwaiter();
+
+            Assert.IsFalse(aw.IsCompleted);
+
+            aw.OnCompleted(() =>
+            {
+                //
+                // TODO: Not needed for await pattern, but maybe should be wired up?
+                //
+                // Assert.IsTrue(aw.IsCompleted);
+
+                cts.Cancel();
+
+                ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+            });
+        }
+
+        [TestMethod]
+        public void SchedulerAsync_Sleep_Cancel()
+        {
+            var cts = new CancellationTokenSource();
+
+            var op = Scheduler.Default.Sleep(TimeSpan.FromHours(1), cts.Token);
+            var aw = op.GetAwaiter();
+
+            Assert.IsFalse(aw.IsCompleted);
+
+            var e = new ManualResetEvent(false);
+
+            aw.OnCompleted(() =>
+            {
+                ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
+
+                e.Set();
+            });
+
+            cts.Cancel();
+
+            e.WaitOne();
+        }
+
+#if !NO_SYNCCTX
+
+        [TestMethod]
+        public void SchedulerAsync_ScheduleAsync_SyncCtx()
+        {
+            var old = SynchronizationContext.Current;
+
+            try
+            {
+                var ctx = new MySyncCtx();
+                SynchronizationContext.SetSynchronizationContext(ctx);
+
+                var s = new TestScheduler();
+
+                var o = s.CreateObserver<int>();
+
+                s.ScheduleAsync(async (_, ct) =>
+                {
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(42);
+
+                    await _.Yield(ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(43);
+
+                    await _.Sleep(TimeSpan.FromTicks(10), ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(44);
+
+                    await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero), ct).ConfigureAwait(true);
+
+                    Assert.AreSame(ctx, SynchronizationContext.Current);
+
+                    o.OnNext(45);
+                });
+
+                s.Start();
+
+                o.Messages.AssertEqual(
+                    OnNext(1, 42),
+                    OnNext(2, 43),
+                    OnNext(12, 44),
+                    OnNext(250, 45)
+                );
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(old);
+            }
+        }
+
+        class MySyncCtx : SynchronizationContext
+        {
+            public override void Post(SendOrPostCallback d, object state)
+            {
+                d(state);
+            }
+        }
+
+#endif
+
+#endif
     }
 }

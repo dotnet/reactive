@@ -4860,11 +4860,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
             );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -5036,11 +5038,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
-               );
+            );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -6727,11 +6731,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
             );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -6903,11 +6909,13 @@ namespace ReactiveTests.Tests
 
             res["baR"].Messages.AssertEqual(
                 OnNext(390, "rab   "),
+                OnNext(420, "  RAB "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(420)
-               );
+            );
 
             res["Baz"].Messages.AssertEqual(
                 OnNext(480, "  zab"),
+                OnNext(510, " ZAb "), // Breaking change > v2.2 - prior to resolving a deadlock, the group would get closed prior to letting this message through
                 OnCompleted<string>(510)
             );
 
@@ -8036,12 +8044,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8124,12 +8132,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8206,12 +8214,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8294,12 +8302,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8375,12 +8383,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8457,12 +8465,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -8635,8 +8643,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
-                OnNext(712, "6man")
+                OnNext(712, "6man"),
+                OnNext(712, "7man")
             );
 
             AssertDurations(xs, xsd, 713);
@@ -8761,8 +8769,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
                 OnError<string>(722, ex)
@@ -8834,12 +8842,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnError<string>(725, ex)
             );
@@ -8910,8 +8918,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
                 OnError<string>(721, ex)
@@ -9228,12 +9236,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9310,12 +9318,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9392,12 +9400,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9474,12 +9482,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9549,12 +9557,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9631,12 +9639,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnNext(732, "7wig"),
                 OnNext(732, "8wig"),
@@ -9714,8 +9722,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
-                OnNext(712, "6man")
+                OnNext(712, "6man"),
+                OnNext(712, "7man")
             );
 
             xs.Subscriptions.AssertEqual(
@@ -9840,8 +9848,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
                 OnError<string>(722, ex)
@@ -9913,12 +9921,12 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
-                OnNext(722, "7rat"),
                 OnNext(722, "6rat"),
+                OnNext(722, "7rat"),
                 OnNext(722, "8rat"),
                 OnError<string>(725, ex)
             );
@@ -9989,8 +9997,8 @@ namespace ReactiveTests.Tests
                 OnNext(310, "4cup"),
                 OnNext(702, "6tin"),
                 OnNext(710, "7tin"),
-                OnNext(712, "7man"),
                 OnNext(712, "6man"),
+                OnNext(712, "7man"),
                 OnNext(720, "8tin"),
                 OnNext(720, "8man"),
                 OnError<string>(721, ex)

@@ -22,5 +22,6 @@ using System;
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("System.Reactive.Experimental")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("System.Reactive.Linq")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("System.Reactive.PlatformServices")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Tests.System.Reactive")]
 
 #endif

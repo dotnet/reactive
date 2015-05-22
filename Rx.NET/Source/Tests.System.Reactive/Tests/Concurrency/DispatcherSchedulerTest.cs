@@ -121,7 +121,7 @@ namespace ReactiveTests.Tests
             var evt = new ManualResetEvent(false);
             disp.UnhandledException += (o, e) =>
             {
-#if DESKTOPCLR40 || DESKTOPCLR45
+#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
                 Assert.AreSame(ex, e.Exception); // CHECK
 #else
                 Assert.AreSame(ex, e.Exception.InnerException); // CHECK

@@ -111,7 +111,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_sourceSubscription, _cancelable);
+                return StableCompositeDisposable.Create(_sourceSubscription, _cancelable);
             }
 
             private void Start()
@@ -386,7 +386,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                return new CompositeDisposable(_sourceSubscription, _cancelable);
+                return StableCompositeDisposable.Create(_sourceSubscription, _cancelable);
             }
 
             private void Start()
@@ -632,7 +632,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _subscription.Disposable = _parent._subscriptionDelay.SubscribeSafe(new SubscriptionDelay(this));
                 }
 
-                return new CompositeDisposable(_subscription, _delays);
+                return StableCompositeDisposable.Create(_subscription, _delays);
             }
 
             private void Start()

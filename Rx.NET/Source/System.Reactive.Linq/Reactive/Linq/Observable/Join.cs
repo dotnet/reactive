@@ -46,11 +46,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private bool _leftDone;
             private int _leftID;
-            private Dictionary<int, TLeft> _leftMap;
+            private SortedDictionary<int, TLeft> _leftMap;
             
             private bool _rightDone;
             private int _rightID;
-            private Dictionary<int, TRight> _rightMap;
+            private SortedDictionary<int, TRight> _rightMap;
 
             public IDisposable Run()
             {
@@ -61,13 +61,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 _group.Add(leftSubscription);
                 _leftDone = false;
                 _leftID = 0;
-                _leftMap = new Dictionary<int, TLeft>();
+                _leftMap = new SortedDictionary<int, TLeft>();
 
                 var rightSubscription = new SingleAssignmentDisposable();
                 _group.Add(rightSubscription);
                 _rightDone = false;
                 _rightID = 0;
-                _rightMap = new Dictionary<int, TRight>();
+                _rightMap = new SortedDictionary<int, TRight>();
 
                 leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
@@ -103,9 +103,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnNext(TLeft value)
                 {
                     var id = 0;
+                    var rightID = 0;
                     lock (_parent._gate)
                     {
                         id = _parent._leftID++;
+                        rightID = _parent._rightID;
                         _parent._leftMap.Add(id, value);
                     }
 
@@ -128,21 +130,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (_parent._gate)
                     {
-                        foreach (var rightValue in _parent._rightMap.Values)
+                        foreach (var rightValue in _parent._rightMap)
                         {
-                            var result = default(TResult);
-                            try
+                            if (rightValue.Key < rightID)
                             {
-                                result = _parent._parent._resultSelector(value, rightValue);
-                            }
-                            catch (Exception exception)
-                            {
-                                _parent._observer.OnError(exception);
-                                _parent.Dispose();
-                                return;
-                            }
+                                var result = default(TResult);
+                                try
+                                {
+                                    result = _parent._parent._resultSelector(value, rightValue.Value);
+                                }
+                                catch (Exception exception)
+                                {
+                                    _parent._observer.OnError(exception);
+                                    _parent.Dispose();
+                                    return;
+                                }
 
-                            _parent._observer.OnNext(result);
+                                _parent._observer.OnNext(result);
+                            }
                         }
                     }
                 }
@@ -231,9 +236,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnNext(TRight value)
                 {
                     var id = 0;
+                    var leftID = 0;
                     lock (_parent._gate)
                     {
                         id = _parent._rightID++;
+                        leftID = _parent._leftID;
                         _parent._rightMap.Add(id, value);
                     }
 
@@ -256,21 +263,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (_parent._gate)
                     {
-                        foreach (var leftValue in _parent._leftMap.Values)
+                        foreach (var leftValue in _parent._leftMap)
                         {
-                            var result = default(TResult);
-                            try
+                            if (leftValue.Key < leftID)
                             {
-                                result = _parent._parent._resultSelector(leftValue, value);
-                            }
-                            catch (Exception exception)
-                            {
-                                _parent._observer.OnError(exception);
-                                _parent.Dispose();
-                                return;
-                            }
+                                var result = default(TResult);
+                                try
+                                {
+                                    result = _parent._parent._resultSelector(leftValue.Value, value);
+                                }
+                                catch (Exception exception)
+                                {
+                                    _parent._observer.OnError(exception);
+                                    _parent.Dispose();
+                                    return;
+                                }
 
-                            _parent._observer.OnNext(result);
+                                _parent._observer.OnNext(result);
+                            }
                         }
                     }
                 }

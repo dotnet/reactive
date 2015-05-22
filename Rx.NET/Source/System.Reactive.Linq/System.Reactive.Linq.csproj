@@ -14,12 +14,6 @@
     <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
-    <OutputPath>bin\ReleaseXBLV\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
-    <OutputPath>bin\DebugXBLV\</OutputPath>
-  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
@@ -44,9 +38,20 @@
     <Compile Include="Reactive\Internal\ReflectionUtils.cs" />
     <Compile Include="Reactive\Internal\HashSet.cs" />
     <Compile Include="Reactive\Internal\Lookup.cs" />
+    <Compile Include="Reactive\Internal\SortedDictionary.cs" />
     <Compile Include="Reactive\Linq\LocalQueryMethodImplementationTypeAttribute.cs" />
     <Compile Include="Reactive\Linq\Observable\Case.cs" />
     <Compile Include="Reactive\Linq\Observable\Collect.cs" />
+    <Compile Include="Reactive\Linq\Observable\Zip.Generated.cs">
+      <DependentUpon>Zip.Generated.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reactive\Linq\Observable\CombineLatest.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Reactive\Linq\Observable\If.cs" />
     <Compile Include="Reactive\Linq\Observable\For.cs" />
     <Compile Include="Reactive\Linq\Observable\DoWhile.cs" />
@@ -59,6 +64,7 @@
     <Compile Include="Reactive\Linq\Observable\RefCount.cs" />
     <Compile Include="Reactive\Linq\Observable\Multicast.cs" />
     <Compile Include="Reactive\Linq\Observable\GroupBy.cs" />
+    <Compile Include="Reactive\Linq\Observable\WithLatestFrom.cs" />
     <Compile Include="Reactive\Linq\Observable_.cs" />
     <Compile Include="Reactive\Linq\QueryLanguage_.cs" />
     <Compile Include="Reactive\Linq\QueryLanguage.Joins.cs" />
@@ -198,6 +204,7 @@
     <Compile Include="Reactive\Linq\Observable.Time.cs" />
     <Compile Include="Reactive\Internal\PushPullAdapter.cs" />
     <Compile Include="Reactive\Subjects\ReplaySubject.cs" />
+    <Compile Include="Reactive\Subjects\SubjectBase.cs" />
     <Compile Include="Reactive\Threading\Tasks\NamespaceDoc.cs" />
     <Compile Include="Reactive\Threading\Tasks\TaskObservableExtensions.cs" />
     <Compile Include="Reactive\TimeInterval.cs" />
@@ -216,6 +223,19 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Strings_Linq.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reactive\Linq\Observable\Zip.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Zip.Generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Reactive\Linq\Observable\CombineLatest.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="..\Import.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

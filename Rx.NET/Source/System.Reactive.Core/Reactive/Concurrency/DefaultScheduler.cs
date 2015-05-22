@@ -51,7 +51,7 @@ namespace System.Reactive.Concurrency
                     d.Disposable = action(this, state);
             }, null);
 
-            return new CompositeDisposable(
+            return StableCompositeDisposable.Create(
                 d,
                 cancel
             );
@@ -83,7 +83,7 @@ namespace System.Reactive.Concurrency
                     d.Disposable = action(this, state);
             }, null, dt);
 
-            return new CompositeDisposable(
+            return StableCompositeDisposable.Create(
                 d,
                 cancel
             );

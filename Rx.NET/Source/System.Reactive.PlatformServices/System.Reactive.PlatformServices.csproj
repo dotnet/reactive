@@ -14,12 +14,6 @@
     <CodeAnalysisRuleSet>..\Rx.ruleset</CodeAnalysisRuleSet>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseXBLV|AnyCPU'">
-    <OutputPath>bin\ReleaseXBLV\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugXBLV|AnyCPU'">
-    <OutputPath>bin\DebugXBLV\</OutputPath>
-  </PropertyGroup>
   <Import Project="..\Common.targets" />
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).XML</DocumentationFile>
@@ -42,6 +36,7 @@
     <Compile Include="Reactive\Concurrency\Thread.Stub.cs" />
     <Compile Include="Reactive\Concurrency\ThreadPoolScheduler.Windows.cs" />
     <Compile Include="Reactive\EnlightenmentProvider.cs" />
+    <Compile Include="Reactive\Internal\TaskServicesImpl.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleNotifications.WindowsPhone.cs" />
     <Compile Include="Reactive\Internal\HostLifecycleNotifications.Windows.cs" />
     <Compile Include="Reactive\Internal\PhoneShellThunks.cs" />
