@@ -2714,12 +2714,13 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
             var observer = scheduler.CreateObserver<long>();
-            var completed = new ManualResetEventSlim();
 
-            Observable.Interval(TimeSpan.Zero).TakeWhile(i => i < 10).Subscribe(observer.OnNext, completed.Set);
+            var completed = new ManualResetEvent(false);
 
-            completed.Wait();
-            
+            Observable.Interval(TimeSpan.Zero).TakeWhile(i => i < 10).Subscribe(observer.OnNext, () => completed.Set());
+
+            completed.WaitOne();
+
             Assert.AreEqual(10, observer.Messages.Count);
         }
 
@@ -2754,9 +2755,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(Observable.Interval(TimeSpan.FromMilliseconds(1)).ToEnumerable().Take(3).SequenceEqual(new[] { 0L, 1L, 2L }));
         }
 
-        #endregion
+#endregion
 
-        #region + Sample +
+#region + Sample +
 
         [TestMethod]
         public void Sample_ArgumentChecking()
@@ -3295,9 +3296,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
-        #region + Skip +
+#region + Skip +
 
         [TestMethod]
         public void Skip_ArgumentChecking()
@@ -3519,9 +3520,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.Count == 0);
         }
 
-        #endregion
+#endregion
 
-        #region + SkipLast +
+#region + SkipLast +
 
         [TestMethod]
         public void SkipLast_ArgumentChecking()
@@ -3801,9 +3802,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        #endregion
+#endregion
 
-        #region + SkipUntil +
+#region + SkipUntil +
 
         [TestMethod]
         public void SkipUntil_ArgumentChecking()
@@ -4023,9 +4024,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.Count == 0);
         }
 
-        #endregion
+#endregion
 
-        #region + Take +
+#region + Take +
 
         [TestMethod]
         public void Take_ArgumentChecking()
@@ -4250,9 +4251,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        #endregion
+#endregion
 
-        #region + TakeLast +
+#region + TakeLast +
 
         [TestMethod]
         public void TakeLast_ArgumentChecking()
@@ -4835,9 +4836,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(lst));
         }
 
-        #endregion
+#endregion
 
-        #region + TakeLastBuffer +
+#region + TakeLastBuffer +
 
         [TestMethod]
         public void TakeLastBuffer_ArgumentChecking()
@@ -5167,9 +5168,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.Count == 0);
         }
 
-        #endregion
+#endregion
 
-        #region + TakeUntil +
+#region + TakeUntil +
 
         [TestMethod]
         public void TakeUntil_ArgumentChecking()
@@ -5392,9 +5393,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        #endregion
+#endregion
 
-        #region + Throttle +
+#region + Throttle +
 
         [TestMethod]
         public void Throttle_ArgumentChecking()
@@ -6028,9 +6029,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        #endregion
+#endregion
 
-        #region + TimeInterval +
+#region + TimeInterval +
 
         [TestMethod]
         public void TimeInterval_ArgumentChecking()
@@ -6253,9 +6254,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        #endregion
+#endregion
 
-        #region + Timeout +
+#region + Timeout +
 
         [TestMethod]
         public void Timeout_ArgumentChecking()
@@ -7411,9 +7412,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        #endregion
+#endregion
 
-        #region + Timer +
+#region + Timer +
 
         [TestMethod]
         public void OneShotTimer_TimeSpan_ArgumentChecking()
@@ -7465,11 +7466,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
             var observer = scheduler.CreateObserver<long>();
-            var completed = new ManualResetEventSlim();
+            var completed = new ManualResetEvent(false);
 
-            Observable.Timer(TimeSpan.Zero).Subscribe(observer.OnNext, completed.Set);
+            Observable.Timer(TimeSpan.Zero).Subscribe(observer.OnNext, () => completed.Set());
 
-            completed.Wait();
+            completed.WaitOne();
             
             Assert.AreEqual(1, observer.Messages.Count);
         }
@@ -7596,11 +7597,11 @@ namespace ReactiveTests.Tests
         {
             var scheduler = new TestScheduler();
             var observer = scheduler.CreateObserver<long>();
-            var completed = new ManualResetEventSlim();
+            var completed = new ManualResetEvent(false);
 
-            Observable.Timer(TimeSpan.Zero, TimeSpan.Zero).TakeWhile(i => i < 10).Subscribe(observer.OnNext, completed.Set);
+            Observable.Timer(TimeSpan.Zero, TimeSpan.Zero).TakeWhile(i => i < 10).Subscribe(observer.OnNext, () => completed.Set());
 
-            completed.Wait();
+            completed.WaitOne();
 
             Assert.AreEqual(10, observer.Messages.Count);
         }
@@ -8293,9 +8294,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-        #endregion
+#endregion
 
-        #region + Timestamp +
+#region + Timestamp +
 
         [TestMethod]
         public void Timestamp_ArgumentChecking()
@@ -8416,9 +8417,9 @@ namespace ReactiveTests.Tests
             Assert.IsTrue(Observable.Return(1).Timestamp().Count().First() == 1);
         }
 
-        #endregion
+#endregion
 
-        #region + Window +
+#region + Window +
 
         [TestMethod]
         public void Window_Time_Basic()
@@ -8973,6 +8974,6 @@ namespace ReactiveTests.Tests
             Observable.Range(1, 10).Window(TimeSpan.FromDays(1), 3).Skip(1).First().SequenceEqual(Observable.Range(4, 3));
         }
 
-        #endregion
+#endregion
     }
 }

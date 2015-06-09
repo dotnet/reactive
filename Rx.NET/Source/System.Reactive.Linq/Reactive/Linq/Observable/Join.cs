@@ -47,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _leftDone;
             private int _leftID;
             private SortedDictionary<int, TLeft> _leftMap;
-            
+                   
             private bool _rightDone;
             private int _rightID;
             private SortedDictionary<int, TRight> _rightMap;

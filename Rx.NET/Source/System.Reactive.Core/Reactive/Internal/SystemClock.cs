@@ -20,7 +20,11 @@ namespace System.Reactive.PlatformServices
     {
         private static Lazy<ISystemClock> s_serviceSystemClock = new Lazy<ISystemClock>(InitializeSystemClock);
         private static Lazy<INotifySystemClockChanged> s_serviceSystemClockChanged = new Lazy<INotifySystemClockChanged>(InitializeSystemClockChanged);
+#if NO_WEAKREFOFT
+        private static readonly HashSet<WeakReference> s_systemClockChanged = new HashSet<WeakReference>();
+#else
         private static readonly HashSet<WeakReference<LocalScheduler>> s_systemClockChanged = new HashSet<WeakReference<LocalScheduler>>();
+#endif
         private static IDisposable s_systemClockChangedHandlerCollector;
 
         private static int _refCount;
@@ -63,9 +67,13 @@ namespace System.Reactive.PlatformServices
             {
                 foreach (var entry in s_systemClockChanged)
                 {
+#if NO_WEAKREFOFT
+                    var scheduler = entry.Target as LocalScheduler;
+                    if (scheduler != null)
+#else
                     var scheduler = default(LocalScheduler);
-
                     if (entry.TryGetTarget(out scheduler))
+#endif
                     {
                         scheduler.SystemClockChanged(sender, e);
                     }
@@ -95,7 +103,11 @@ namespace System.Reactive.PlatformServices
             //
             lock (s_systemClockChanged)
             {
+#if NO_WEAKREFOFT
+                s_systemClockChanged.Add(new WeakReference(scheduler, false));
+#else
                 s_systemClockChanged.Add(new WeakReference<LocalScheduler>(scheduler));
+#endif
 
                 if (s_systemClockChanged.Count == 1)
                 {
@@ -119,17 +131,29 @@ namespace System.Reactive.PlatformServices
             //
             lock (s_systemClockChanged)
             {
+#if NO_WEAKREFOFT
+                var remove = default(HashSet<WeakReference>);
+#else
                 var remove = default(HashSet<WeakReference<LocalScheduler>>);
+#endif
 
                 foreach (var handler in s_systemClockChanged)
                 {
+#if NO_WEAKREFOFT
+                    var scheduler = handler.Target as LocalScheduler;
+                    if (scheduler == null)
+#else
                     var scheduler = default(LocalScheduler);
-
                     if (!handler.TryGetTarget(out scheduler))
+#endif
                     {
                         if (remove == null)
                         {
+#if NO_WEAKREFOFT
+                            remove = new HashSet<WeakReference>();
+#else
                             remove = new HashSet<WeakReference<LocalScheduler>>();
+#endif
                         }
 
                         remove.Add(handler);

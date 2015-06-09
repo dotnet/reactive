@@ -296,7 +296,11 @@ namespace System.Reactive
                 return base.VisitMethodCall(node);
             }
 
+#if NO_VISITLAMBDAOFT
+            protected override Expression VisitLambda(LambdaExpression node)
+#else
             protected override Expression VisitLambda<T>(Expression<T> node)
+#endif
             {
                 return node;
             }

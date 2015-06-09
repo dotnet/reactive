@@ -18,6 +18,7 @@ namespace ReactiveTests.Tests
     [TestClass]
     public partial class ObservableAsyncTest : ReactiveTest
     {
+#if !NO_TPL
         private Task<int> doneTask;
 
         public ObservableAsyncTest()
@@ -27,6 +28,7 @@ namespace ReactiveTests.Tests
             doneTask = tcs.Task;
         }
 
+#endif
         #region FromAsyncPattern
 
         [TestMethod]
@@ -1195,9 +1197,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-        #endregion
+#endregion
 
-        #region Start
+#region Start
 
         [TestMethod]
         public void Start_ArgumentChecking()
@@ -1289,13 +1291,13 @@ namespace ReactiveTests.Tests
             }));
         }
 
-        #endregion
+#endregion
 
-        #region StartAsync
+#region StartAsync
 
 #if !NO_TPL
 
-        #region Func
+#region Func
 
         [TestMethod]
         public void StartAsync_Func_ArgumentChecking()
@@ -1496,9 +1498,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
-        #region Action
+#region Action
 
         [TestMethod]
         public void StartAsync_Action_ArgumentChecking()
@@ -1684,17 +1686,17 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
 #endif
 
-        #endregion
+#endregion
 
-        #region FromAsync
+#region FromAsync
 
 #if !NO_TPL
 
-        #region Func
+#region Func
 
         [TestMethod]
         public void FromAsync_Func_ArgumentChecking()
@@ -1882,9 +1884,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
-        #region Action
+#region Action
 
         [TestMethod]
         public void FromAsync_Action_ArgumentChecking()
@@ -2062,13 +2064,13 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
 #endif
 
-        #endregion
+#endregion
 
-        #region ToAsync
+#region ToAsync
 
         [TestMethod]
         public void ToAsync_ArgumentChecking()
@@ -2703,6 +2705,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
     }
 }

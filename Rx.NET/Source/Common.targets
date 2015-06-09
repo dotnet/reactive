@@ -185,7 +185,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'WP7' ">
-    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
+    <DefineConstants>$(DefineConstants);USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_CDS;NO_TLS;NO_VARIANCE;NO_TPL;NO_HASHSET;NO_SEMAPHORE;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_LAZY;NO_WEAKTABLE;NO_INTERLOCKED_64;WINDOWSPHONE7;NO_WEAKREFOFT;NO_SORTEDDICTIONARY;NO_VISITLAMBDAOFT</DefineConstants>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -260,7 +260,7 @@
 
 
   <PropertyGroup Condition=" '$(BuildTarget)' == '35' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_CDS;NO_LAZY;NO_WEAKTABLE;HAS_APTCA</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;NO_VARIANCE;NO_TPL;NO_LARGEARITY;NO_EXPRESSIONVISITOR;NO_CDS;NO_LAZY;NO_WEAKTABLE;HAS_APTCA;NO_WEAKREFOFT;HAS_MREEXPLICITDISPOSABLE;NO_VISITLAMBDAOFT</DefineConstants>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <BuildPlatform>DESKTOPCLR</BuildPlatform>
     <BuildFlavor>DESKTOPCLR20</BuildFlavor>
@@ -277,7 +277,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(BuildTarget)' == 'SL4' ">
-    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TPL</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_RXINTERFACES;USE_SL_DISPATCHER;NO_SERIALIZABLE;NO_REMOTING;NO_SEMAPHORE;NO_STOPWATCH;NO_CDS;NO_TPL;NO_WEAKREFOFT;NO_SORTEDDICTIONARY</DefineConstants>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -360,8 +360,10 @@
     <DefineConstants>$(DefineConstants);STRESS</DefineConstants>
   </PropertyGroup>
   
+  <PropertyGroup Condition=" '$(Sign)' == 'Sign' ">
+    <DefineConstants>$(DefineConstants);SIGNED;NO_INTERNALSTEST</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(ProductSignAssembly)' == 'true' AND '$(Sign)' == 'Sign' ">
-    <DefineConstants>$(DefineConstants);SIGNED</DefineConstants>
     <SignAssembly>true</SignAssembly>
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>..\35MSSharedLib1024.snk</AssemblyOriginatorKeyFile>
