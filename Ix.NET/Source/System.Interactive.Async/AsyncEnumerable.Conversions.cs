@@ -287,7 +287,9 @@ namespace System.Linq
                         if (t.Result)
                         {
                             observer.OnNext(e.Current);
-                            f();
+
+                            if (!ctd.Token.IsCancellationRequested)
+                                f();
                         }
                         else
                         {
