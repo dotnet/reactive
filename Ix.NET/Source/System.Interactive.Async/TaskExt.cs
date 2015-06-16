@@ -111,19 +111,16 @@ namespace System.Threading.Tasks
             return tcs.Task;
         }
 
-        public static Task<R> Finally<R>(this Task<R> task, Action action)
+        public static async Task<R> Finally<R>(this Task<R> task, Action action)
         {
-            task.ContinueWith(t =>
+            try
             {
-                if (t.IsFaulted)
-                {
-                    var ignored = t.Exception; // don't remove!
-                }
-
+                return await task;
+            }
+            finally
+            {
                 action();
-            }, TaskContinuationOptions.ExecuteSynchronously);
-
-            return task;
+            }
         }
 
         public static Task<V> Zip<T, U, V>(this Task<T> t1, Task<U> t2, Func<T, U, V> f)
