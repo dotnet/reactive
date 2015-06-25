@@ -113,24 +113,39 @@ namespace System.Threading.Tasks
 
         public static Task<R> Finally<R>(this Task<R> task, Action action)
         {
+            var tcs = new TaskCompletionSource<R>();
+
             task.ContinueWith(t =>
             {
-                if (t.IsFaulted)
+                try
                 {
-                    var ignored = t.Exception; // don't remove!
+                    action();
                 }
-
-                action();
+                finally
+                {
+                    switch (t.Status)
+                    {
+                        case TaskStatus.Canceled:
+                            tcs.SetCanceled();
+                            break;
+                        case TaskStatus.Faulted:
+                            tcs.SetException(t.Exception.InnerException);
+                            break;
+                        case TaskStatus.RanToCompletion:
+                            tcs.SetResult(t.Result);
+                            break;
+                    }
+                }
             }, TaskContinuationOptions.ExecuteSynchronously);
 
-            return task;
+            return tcs.Task;
         }
 
         public static Task<V> Zip<T, U, V>(this Task<T> t1, Task<U> t2, Func<T, U, V> f)
         {
             var gate = new object();
             var tcs = new TaskCompletionSource<V>();
-            
+
             var i = 2;
             var complete = new Action<Task>(t =>
             {
