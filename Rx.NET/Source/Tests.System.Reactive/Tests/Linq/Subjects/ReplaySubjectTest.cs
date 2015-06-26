@@ -1846,6 +1846,7 @@ namespace ReactiveTests.Tests
             }));
         }
 
+#if !NO_INTERNALSTEST
         [TestMethod]
         public void FastImmediateObserver_Simple1()
         {
@@ -2039,5 +2040,6 @@ namespace ReactiveTests.Tests
 
             return ns;
         }
+#endif
     }
 }

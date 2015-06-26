@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+#if !NO_TPL
+
 using System.ComponentModel;
 using System.Reactive.PlatformServices;
 using System.Threading;
@@ -45,3 +47,5 @@ namespace System.Reactive.PlatformServices
         bool TrySetCanceled<T>(TaskCompletionSource<T> tcs, CancellationToken token);
     }
 }
+
+#endif

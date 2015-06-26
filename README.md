@@ -1,6 +1,8 @@
 Reactive Extensions
 ======================
 
+[![Join the chat at https://gitter.im/Reactive-Extensions/Rx.NET](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Reactive-Extensions/Rx.NET?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A Brief Intro
 -------------------
 

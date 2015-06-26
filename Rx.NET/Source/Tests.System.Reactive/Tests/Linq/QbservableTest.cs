@@ -1874,7 +1874,11 @@ namespace ReactiveTests.Tests
         [TestMethod]
         public void Qbservable_HigherOrder()
         {
+#if NO_VARIANCE
+            var res = Qbservable.Return(Qbservable.Provider, 42).Select(_ => (IObservable<int>)Qbservable.Return(Qbservable.Provider, 42)).Switch().Single();
+#else
             var res = Qbservable.Return(Qbservable.Provider, 42).Select(_ => Qbservable.Return(Qbservable.Provider, 42)).Switch().Single();
+#endif
             Assert.AreEqual(42, res);
         }
     }

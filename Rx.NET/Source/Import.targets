@@ -2,8 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <!-- Non-Portable Library build -->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v11.0\Microsoft.Windows.UI.Xaml.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' And '$(BuildFlavor)' == 'WINDOWS8' " />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v12.0\Microsoft.Windows.UI.Xaml.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' And '$(BuildFlavor)' == 'WINDOWS81' " />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v12.0\Microsoft.Windows.UI.Xaml.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' And ('$(BuildFlavor)' == 'WINDOWS81' Or '$(BuildFlavor)' == 'WINDOWS8') " />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition=" '$(TargetFrameworkIdentifier)' != '.NETPortable' And ('$(BuildPlatform)' == 'DESKTOPCLR' Or '$(BuildPlatform)' == 'XNA') " />
   
   <!-- Silverlight ONLY (i.e., not phone) -->
@@ -53,6 +52,7 @@
         SourceFiles="@(BuiltFilesInOutDir)"
         DestinationFolder="$(OutDir)\.."
         Condition=" '$(TargetFrameworkIdentifier)' == '.NETCore' Or '$(TargetFrameworkIdentifier)' == '.NETPortable' " />
+
   </Target>
   
   <!--  MICROSOFT BCL ASYNC CONFIGURATION -->
