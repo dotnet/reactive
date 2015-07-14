@@ -9,8 +9,6 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
-//using System.Reactive.Linq;
-//using System.Reactive.Concurrency;
 
 namespace Tests
 {
@@ -270,7 +268,7 @@ namespace Tests
                     return Task.FromResult(false);
                 }
 
-                public object Current { get; }
+                public object Current { get; private set; }
             }
         }
     }
