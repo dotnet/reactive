@@ -265,7 +265,7 @@ namespace Tests
 
                 public Task<bool> MoveNext(CancellationToken _)
                 {
-                    return Task.FromResult(false);
+                    return Task.Factory.StartNew(() => false);
                 }
 
                 public object Current { get; private set; }
