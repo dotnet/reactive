@@ -234,7 +234,7 @@ namespace System.Linq
                     (ct, tcs) =>
                     {
                         f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumeratorSync(r);
+                        return tcs.Task.UsingEnumerator(r);
                     },
                     () => e.Current,
                     d.Dispose
