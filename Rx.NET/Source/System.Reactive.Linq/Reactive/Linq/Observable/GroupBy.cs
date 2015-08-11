@@ -28,31 +28,30 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        private CompositeDisposable _groupDisposable;
-        private RefCountDisposable _refCountDisposable;
-
         protected override IDisposable Run(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            _groupDisposable = new CompositeDisposable();
-            _refCountDisposable = new RefCountDisposable(_groupDisposable);
+            var groupDisposable = new CompositeDisposable();
+            var refCountDisposable = new RefCountDisposable(groupDisposable);
 
-            var sink = new _(this, observer, cancel);
+            var sink = new _(this, observer, cancel, refCountDisposable);
             setSink(sink);
-            _groupDisposable.Add(_source.SubscribeSafe(sink));
+            groupDisposable.Add(_source.SubscribeSafe(sink));
 
-            return _refCountDisposable;
+            return refCountDisposable;
         }
 
         class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
         {
+            private RefCountDisposable _refCountDisposable;
             private readonly GroupBy<TSource, TKey, TElement> _parent;
             private readonly Dictionary<TKey, ISubject<TElement>> _map;
             private ISubject<TElement> _null;
 
-            public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel)
+            public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel, RefCountDisposable refCountDisposable)
                 : base(observer, cancel)
             {
                 _parent = parent;
+                _refCountDisposable = refCountDisposable;
 
                 if (_parent._capacity.HasValue)
                 {
@@ -127,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (fireNewMapEntry)
                 {
-                    var group = new GroupedObservable<TKey, TElement>(key, writer, _parent._refCountDisposable);
+                    var group = new GroupedObservable<TKey, TElement>(key, writer, _refCountDisposable);
                     _observer.OnNext(group);
                 }
 
