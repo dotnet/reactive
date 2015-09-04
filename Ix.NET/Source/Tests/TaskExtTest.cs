@@ -18,7 +18,23 @@ namespace Tests
             }
             catch (AggregateException)
             {
-                Assert.Fail();
+                Assert.Fail("AggregateException has been thrown instead of SpecificException");
+            }
+            catch (SpecificException)
+            {
+            }
+        }
+        [TestMethod]
+        public async Task ExceptionHandling_ShouldThrowUnwrappedException2()
+        {
+            try
+            {
+                var asyncEnumerable = AsyncEnumerable.Generate(10, (x) => { throw new SpecificException(); }, (x) => { return 1; }, (x) => { return 2; });
+                await asyncEnumerable.ToArray();
+            }
+            catch (AggregateException)
+            {
+                Assert.Fail("AggregateException has been thrown instead of SpecificException");
             }
             catch (SpecificException)
             {
