@@ -1,5 +1,5 @@
-﻿/*
- * WARNING: Auto-generated file (05/28/2018 22:20:18)
+/*
+ * WARNING: Auto-generated file (06/12/2018 13:00:48)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -10663,6 +10663,74 @@ namespace System.Reactive.Linq
 #endif
                     Expression.Constant(provider, typeof(IQbservableProvider)),
                     Expression.Constant(source, typeof(IConnectableObservable<TSource>))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, TimeSpan disconnectDelay)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RefCount<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(TimeSpan))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(disconnectDelay, typeof(TimeSpan))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <param name="scheduler">The scheduler to use for delayed unsubscription.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source" /> is null.</exception>
+        public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, TimeSpan disconnectDelay, IScheduler scheduler)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RefCount<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(TimeSpan), default(IScheduler))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(disconnectDelay, typeof(TimeSpan)),
+                    Expression.Constant(scheduler, typeof(IScheduler))
                 )
             );
         }

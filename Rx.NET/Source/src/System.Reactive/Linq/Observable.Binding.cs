@@ -203,6 +203,48 @@ namespace System.Reactive.Linq
             return s_impl.RefCount<TSource>(source);
         }
 
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> RefCount<TSource>(this IConnectableObservable<TSource> source, TimeSpan disconnectDelay)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            if (disconnectDelay < TimeSpan.Zero)
+                throw new ArgumentException("disconnectDelay");
+
+            return s_impl.RefCount<TSource>(source, disconnectDelay);
+        }
+
+        /// <summary>
+        /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="disconnectDelay">The time span that should be waited before possibly unsubscribing from the connectable observable.</param>
+        /// <param name="scheduler">The scheduler to use for delayed unsubscription.</param>
+        /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> RefCount<TSource>(this IConnectableObservable<TSource> source, TimeSpan disconnectDelay, IScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            if (scheduler == null)
+                throw new ArgumentNullException("scheduler");
+
+            if (disconnectDelay < TimeSpan.Zero)
+                throw new ArgumentException("disconnectDelay");
+
+            return s_impl.RefCount<TSource>(source, disconnectDelay, scheduler);
+        }
+
         #endregion
 
         #region + AutoConnect +
