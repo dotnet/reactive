@@ -69,6 +69,16 @@ namespace System.Reactive.Linq
             return new RefCount<TSource>(source);
         }
 
+        public virtual IObservable<TSource> LazyRefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectTime)
+        {
+            return LazyRefCount(source, disconnectTime, Scheduler.Default);
+        }
+
+        public virtual IObservable<TSource> LazyRefCount<TSource>(IConnectableObservable<TSource> source, TimeSpan disconnectTime, IScheduler scheduler)
+        {
+            return new LazyRefCount<TSource>(source, disconnectTime, scheduler);
+        }
+
         #endregion
 
         #region + Replay +

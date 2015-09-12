@@ -1764,7 +1764,7 @@ namespace ReactiveTests.Tests
             var obs = typeof(Observable).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
             var qbs = typeof(Qbservable).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
 
-            var onlyInObs = obs.Select(m => m.Name).Except(qbs.Select(m => m.Name)).Except(new[] { "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "ForEach", "Subscribe", "GetEnumerator", "ToEnumerable", "Multicast", "GetAwaiter", "ToEvent", "ToEventPattern", "ForEachAsync", "Wait", "RunAsync", "ToListObservable" }).ToList();
+            var onlyInObs = obs.Select(m => m.Name).Except(qbs.Select(m => m.Name)).Except(new[] { "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "ForEach", "Subscribe", "GetEnumerator", "ToEnumerable", "Multicast", "GetAwaiter", "ToEvent", "ToEventPattern", "ForEachAsync", "Wait", "RunAsync", "ToListObservable", "LazyRefCount" }).ToList();
             var onlyInQbs = qbs.Select(m => m.Name).Except(obs.Select(m => m.Name)).Except(new[] { "ToQueryable", "ToQbservable", "get_Provider", "AsQbservable" }).ToList();
 
             Assert.True(onlyInObs.Count == 0, "Missing Qbservable operator: " + string.Join(", ", onlyInObs.ToArray()));
