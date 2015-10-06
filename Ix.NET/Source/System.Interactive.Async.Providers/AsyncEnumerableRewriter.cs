@@ -127,7 +127,7 @@ namespace System.Linq
             }
 
             //
-            // TODO: non-generic interface needed?
+            // NB: Add if we ever decide to add the non-generic interface.
             //
             //if (typeof(IAsyncEnumerable).IsAssignableFrom(type))
             //{
