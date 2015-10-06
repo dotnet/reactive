@@ -1,4 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+#if !SILVERLIGHTM7 && !PORTABLE
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -3372,3 +3374,4 @@ namespace Tests
 
 	}
 }
+#endif
