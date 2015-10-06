@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22512.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Interactive", "System.Interactive\System.Interactive.csproj", "{8E4B04F0-915E-48F9-9796-76278C6094BD}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Interactive.Async", "System.Interactive.Async\System.Interactive.Async.csproj", "{7269A578-326A-4C3E-9874-A2D2600095BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{45817D7B-A707-497B-89D3-37794B6E46C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Interactive.Async.Providers", "System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj", "{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -190,6 +192,38 @@ Global
 		{45817D7B-A707-497B-89D3-37794B6E46C7}.ReleaseWP7|Any CPU.Build.0 = Release|Any CPU
 		{45817D7B-A707-497B-89D3-37794B6E46C7}.ReleaseWP8|Any CPU.ActiveCfg = Release|Any CPU
 		{45817D7B-A707-497B-89D3-37794B6E46C7}.ReleaseWP8|Any CPU.Build.0 = Release|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug|Any CPU.ActiveCfg = DebugWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug|Any CPU.Build.0 = DebugWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug35|Any CPU.ActiveCfg = Debug35|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug35|Any CPU.Build.0 = Debug35|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug40|Any CPU.ActiveCfg = Debug40|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug40|Any CPU.Build.0 = Debug40|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug45|Any CPU.ActiveCfg = Debug45|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Debug45|Any CPU.Build.0 = Debug45|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugPL|Any CPU.ActiveCfg = DebugPL|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugPL|Any CPU.Build.0 = DebugPL|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugSL5|Any CPU.ActiveCfg = DebugSL5|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugSL5|Any CPU.Build.0 = DebugSL5|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugWP7|Any CPU.ActiveCfg = DebugWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugWP7|Any CPU.Build.0 = DebugWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugWP8|Any CPU.ActiveCfg = DebugWP8|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.DebugWP8|Any CPU.Build.0 = DebugWP8|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release|Any CPU.ActiveCfg = ReleaseWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release|Any CPU.Build.0 = ReleaseWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release35|Any CPU.ActiveCfg = Release35|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release35|Any CPU.Build.0 = Release35|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release40|Any CPU.ActiveCfg = Release40|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release40|Any CPU.Build.0 = Release40|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release45|Any CPU.ActiveCfg = Release45|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.Release45|Any CPU.Build.0 = Release45|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleasePL|Any CPU.ActiveCfg = ReleasePL|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleasePL|Any CPU.Build.0 = ReleasePL|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseSL5|Any CPU.ActiveCfg = ReleaseSL5|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseSL5|Any CPU.Build.0 = ReleaseSL5|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseWP7|Any CPU.ActiveCfg = ReleaseWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseWP7|Any CPU.Build.0 = ReleaseWP7|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseWP8|Any CPU.ActiveCfg = ReleaseWP8|Any CPU
+		{B0350CD4-37F7-4508-B67F-D4BB3B9092AA}.ReleaseWP8|Any CPU.Build.0 = ReleaseWP8|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
