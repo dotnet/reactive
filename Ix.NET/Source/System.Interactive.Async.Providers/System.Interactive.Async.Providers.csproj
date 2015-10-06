@@ -46,6 +46,7 @@
     <Compile Include="IAsyncQueryProvider.cs" />
     <Compile Include="IOrderedAsyncQueryable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj">

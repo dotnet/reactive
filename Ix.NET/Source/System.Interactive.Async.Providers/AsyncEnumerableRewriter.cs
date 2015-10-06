@@ -109,14 +109,14 @@ namespace System.Linq
 
         private static Type GetPublicType(Type type)
         {
-            if (!type.IsNestedPrivate)
+            if (!type.IsNestedPrivate())
             {
                 return type;
             }
 
             foreach (var ifType in type.GetInterfaces())
             {
-                if (ifType.IsGenericType)
+                if (ifType.IsGenericType())
                 {
                     var def = ifType.GetGenericTypeDefinition();
                     if (def == typeof(IAsyncEnumerable<>) || def == typeof(IAsyncGrouping<,>))
@@ -455,7 +455,7 @@ namespace System.Linq
                 //
                 // If the current type matches the specified definition, return.
                 //
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == definition)
+                if (type.IsGenericType() && type.GetGenericTypeDefinition() == definition)
                 {
                     return type;
                 }
@@ -463,7 +463,7 @@ namespace System.Linq
                 //
                 // Probe all interfaces implemented by the current type.
                 //
-                if (definition.IsInterface)
+                if (definition.IsInterface())
                 {
                     foreach (var ifType in type.GetInterfaces())
                     {
@@ -478,7 +478,7 @@ namespace System.Linq
                 //
                 // Continue up the type hierarchy.
                 //
-                type = type.BaseType;
+                type = type.GetBaseType();
             }
 
             return null;

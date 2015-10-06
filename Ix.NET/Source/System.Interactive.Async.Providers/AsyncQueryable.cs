@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace System.Linq
 {
@@ -9,6 +10,7 @@ namespace System.Linq
     /// </summary>
     public static partial class AsyncQueryable
     {
+#if !CRIPPLED_REFLECTION
         /// <summary>
         /// Converts the specified asynchronous enumerable sequence to an expression representation.
         /// </summary>
@@ -28,6 +30,7 @@ namespace System.Linq
 
             return new AsyncEnumerableQuery<TElement>(source);
         }
+#endif
 
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
@@ -38,6 +41,11 @@ namespace System.Linq
             }
 
             return Expression.Constant(source, typeof(IAsyncEnumerable<TSource>));
+        }
+
+        internal static MethodInfo InfoOf<R>(Expression<Func<R>> f)
+        {
+            return ((MethodCallExpression)f.Body).Method;
         }
     }
 }
