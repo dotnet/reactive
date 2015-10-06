@@ -51,7 +51,7 @@ namespace System.Linq
                                 }
                             });
                         });
-                        
+
                         return tcs.Task.UsingEnumerator(e);
                     },
                     () => current,
@@ -1175,7 +1175,7 @@ namespace System.Linq
             return Create(() =>
             {
                 var gate = new object();
-                
+
                 var e = source.GetEnumerator();
                 var count = 1;
 
@@ -1332,7 +1332,7 @@ namespace System.Linq
                 throw new ArgumentNullException("keySelector");
             if (elementSelector == null)
                 throw new ArgumentNullException("elementSelector");
-            
+
             return source.GroupBy(keySelector, elementSelector, EqualityComparer<TKey>.Default);
         }
 
@@ -1354,7 +1354,7 @@ namespace System.Linq
                 throw new ArgumentNullException("source");
             if (keySelector == null)
                 throw new ArgumentNullException("keySelector");
-            
+
             return source.GroupBy(keySelector, x => x, EqualityComparer<TKey>.Default);
         }
 
@@ -1410,7 +1410,7 @@ namespace System.Linq
                 throw new ArgumentNullException("keySelector");
             if (resultSelector == null)
                 throw new ArgumentNullException("resultSelector");
-            
+
             return source.GroupBy(keySelector, x => x, EqualityComparer<TKey>.Default).Select(g => resultSelector(g.Key, g));
         }
 
@@ -2372,12 +2372,14 @@ namespace System.Linq
                             t.Handle(tcs, res =>
                             {
                                 if (res)
-                                {
-                                    var item = e.Current;
-
-                                    if (q.Count >= count)
-                                        q.Dequeue();
-                                    q.Enqueue(item);
+                                {                                    
+                                    if (count > 0)
+                                    {
+                                        var item = e.Current;
+                                        if (q.Count >= count)
+                                            q.Dequeue();
+                                        q.Enqueue(item);
+                                    }
                                 }
                                 else
                                 {

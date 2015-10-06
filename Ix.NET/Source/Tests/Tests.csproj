@@ -76,6 +76,7 @@
     <Compile Include="AsyncTests.Aggregates.cs" />
     <Compile Include="AsyncTests.Bugs.cs" />
     <Compile Include="AsyncTests.Exceptions.cs" />
+    <Compile Include="TaskExtTests.cs" />
     <Compile Include="Tests.Imperative.cs" />
     <Compile Include="Tests.Qbservable.cs" />
     <Compile Include="Tests.Single.cs" />

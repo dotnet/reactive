@@ -33,7 +33,7 @@ namespace System.Threading.Tasks
         public static void Handle<T, R>(this Task<T> task, TaskCompletionSource<R> tcs, Action<T> success)
         {
             if (task.IsFaulted)
-                tcs.TrySetException(task.Exception);
+                tcs.TrySetException(task.Exception.InnerExceptions);
             else if (task.IsCanceled)
                 tcs.TrySetCanceled();
             else if (task.IsCompleted)

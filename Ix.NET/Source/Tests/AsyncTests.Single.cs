@@ -2424,6 +2424,24 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TakeLast_BugFix_TakeLast_Zero_TakesForever()
+        {
+            bool isSet = false;
+            new int[] { 1, 2, 3, 4 }.ToAsyncEnumerable()
+                .TakeLast(0)
+                .ForEachAsync(_ => { isSet = true; })
+                .Wait();
+
+            Assert.IsFalse(isSet);
+
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(0);
+
+            var e = xs.GetEnumerator();
+            
+            NoNext(e);
+        }
+
+        [TestMethod]
         public void SkipLast_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipLast(default(IAsyncEnumerable<int>), 5));
