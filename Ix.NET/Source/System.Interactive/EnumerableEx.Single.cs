@@ -582,6 +582,11 @@ namespace System.Linq
 
         private static IEnumerable<TSource> TakeLast_<TSource>(this IEnumerable<TSource> source, int count)
         {
+            if (count == 0)
+            {
+                yield break;
+            }
+
             var q = new Queue<TSource>(count);
 
             foreach (var item in source)

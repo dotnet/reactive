@@ -351,6 +351,14 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TakeLast_TakeZero()
+        {
+            var e = Enumerable.Range(1, 5) ;
+            var r = e.TakeLast(0).ToList();
+            Assert.IsTrue(Enumerable.SequenceEqual(r, Enumerable.Empty<int>()));
+        }
+
+        [TestMethod]
         public void TakeLast_Empty()
         {
             var e = Enumerable.Empty<int>();
