@@ -54,6 +54,7 @@
     <Compile Include="IAsyncGrouping.cs" />
     <Compile Include="IOrderedAsyncEnumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strings.cs" />
     <Compile Include="TaskExt.cs" />
   </ItemGroup>
   <Import Project="..\Import.targets" />
