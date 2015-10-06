@@ -14,7 +14,7 @@ namespace System.Linq
         /// <summary>
         /// Gets the enumerable sequence obtained from evaluating the expression tree.
         /// </summary>
-        internal abstract object Enumerable { get; } // TODO: non-generic interface?
+        internal abstract object Enumerable { get; }
 
         /// <summary>
         /// Gets the expression tree representing the asynchronous enumerable sequence.
