@@ -29,7 +29,11 @@ namespace System.Linq
     /// Asynchronous enumerable sequence represented by an expression tree.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
-    public interface IAsyncQueryable<out T> : IAsyncEnumerable<T>, IAsyncQueryable
+    public interface IAsyncQueryable<
+#if !NO_VARIANCE
+out
+#endif
+        T> : IAsyncEnumerable<T>, IAsyncQueryable
     {
     }
 }
