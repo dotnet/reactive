@@ -10,7 +10,6 @@ namespace System.Linq
     /// </summary>
     public static partial class AsyncQueryable
     {
-#if !CRIPPLED_REFLECTION
         /// <summary>
         /// Converts the specified asynchronous enumerable sequence to an expression representation.
         /// </summary>
@@ -30,7 +29,6 @@ namespace System.Linq
 
             return new AsyncEnumerableQuery<TElement>(source);
         }
-#endif
 
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
