@@ -8,6 +8,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
+
 var failing = new[] { "TakeLast" };
 var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
 
@@ -98,6 +99,8 @@ var toQuoted = new Func<Type, int, string>((t, i) => toQuotedImpl(t, i, true));
 
 var index = new Dictionary<string, int>();
 #>
+#if !SILVERLIGHTM7 && !PORTABLE && !NO_RXINTERFACES 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -472,3 +475,4 @@ if (indexes.Count != 0)
 #>
 	}
 }
+#endif
