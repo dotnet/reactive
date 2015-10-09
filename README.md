@@ -60,3 +60,7 @@ Contributing Code
 Before submitting a feature or substantial code contribution please  discuss it with the team and ensure it follows the product roadmap. Note that all code submissions will be rigorously reviewed and tested by the Rx Team, and only those that meet an extremely high bar for both quality and design/roadmap appropriateness will be merged into the source. 
 
 You will need to submit a  Contributor License Agreement form before submitting your pull request. This needs to only be done once for any Microsoft OSS project. Download the Contributor License Agreement (CLA). Please fill in, sign, scan and email it to <msopentech-cla@microsoft.com>. 
+
+Books
+-------------
+* [Reactive Extensions in Action with Examples in C#](http://www.manning.com/dresher/) by Tamir Dresher for Manning Publications (Link to [Chapter 1](http://www.manning.com/dresher/ReactiveExtensioninA_MEAP%20ch1.pdf)) 
