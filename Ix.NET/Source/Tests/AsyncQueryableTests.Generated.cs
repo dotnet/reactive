@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-#if !SILVERLIGHTM7 && !PORTABLE
+#if !SILVERLIGHTM7 && !PORTABLE && !NO_RXINTERFACES
 
 using System;
 using System.Collections.Generic;

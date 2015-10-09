@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NO_RXINTERFACES
+using System;
 
 namespace Tests
 {
@@ -17,3 +18,4 @@ namespace Tests
         }
     }
 }
+#endif
