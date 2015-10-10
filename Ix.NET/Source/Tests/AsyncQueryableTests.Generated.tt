@@ -8,7 +8,6 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-
 var failing = new[] { "TakeLast" };
 var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
 
