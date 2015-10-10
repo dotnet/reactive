@@ -1,4 +1,5 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="$(ProjectDir)\..\packages\Ix-Async.1.2.5\lib\net45\System.Interactive.Async.dll" #>
 <#@ import namespace="System.Linq" #>
@@ -8,7 +9,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-var failing = new[] { "TakeLast" };
+var failing = new string[] {  };
 var exclude = new[] { "ForEach", "ForEachAsync", "ToEnumerable", "ToAsyncEnumerable", "ToObservable", "AsAsyncEnumerable" };
 
 var toQuotedImpl = default(Func<Type, int, bool, string>);

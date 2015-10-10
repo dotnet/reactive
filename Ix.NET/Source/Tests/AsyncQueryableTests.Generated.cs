@@ -1,4 +1,5 @@
-﻿#if !SILVERLIGHTM7 && !PORTABLE && !NO_RXINTERFACES 
+﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+#if !SILVERLIGHTM7 && !PORTABLE && !NO_RXINTERFACES 
 
 using System;
 using System.Collections.Generic;
@@ -3037,7 +3038,9 @@ namespace Tests
 		{
 			AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.TakeLast<int>(default(IAsyncQueryable<int>), 1), ane => ane.ParamName == "source");
 
-			var res = AsyncQueryable.TakeLast<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1);			
+			var res = AsyncQueryable.TakeLast<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1);
+			var task = res.ForEachAsync(_ => { });
+			AssertEx.SucceedOrFailProper(() => task.Wait());
 		}
 
 		[TestMethod]

@@ -44,11 +44,12 @@ namespace Tests
 
                 // TODO: proper assert; unfortunately there's not always a good call stack
             }
-#endif
+#else
             catch (Exception)
             {
                 // TODO: proper assert; unfortunately there's not always a good call stack
             }
+#endif
         }
     }
 }
