@@ -1,18 +1,20 @@
-﻿namespace Tests
-{
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+#if HAS_AWAIT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
+namespace Tests
+{
     public partial class AsyncTests
     {
         [TestMethod]
         public async Task ExceptionHandling_ShouldThrowUnwrappedException()
         {
             try
-            {
+            {                
                 var asyncEnumerable = AsyncEnumerable.ToAsyncEnumerable(GetEnumerableWithError());
                 await asyncEnumerable.ToArray();
             }
@@ -49,4 +51,4 @@
         }
     }
 }
-
+#endif

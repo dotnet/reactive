@@ -35,14 +35,21 @@ namespace Tests
         {
             try
             {
-                action();   
+                action();
             }
+#if !NO_TPL
             catch (AggregateException ex)
             {
                 var inner = ex.Flatten().InnerException;
 
                 // TODO: proper assert; unfortunately there's not always a good call stack
             }
+#else
+            catch (Exception)
+            {
+                // TODO: proper assert; unfortunately there's not always a good call stack
+            }
+#endif
         }
     }
 }
