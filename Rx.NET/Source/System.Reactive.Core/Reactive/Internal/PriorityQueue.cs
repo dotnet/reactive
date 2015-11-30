@@ -2,10 +2,14 @@
 
 using System.Threading;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace System.Reactive
 {
-    internal class PriorityQueue<T> where T : IComparable<T>
+    /// <summary>
+    /// Priority queue data structure implemented using a min-heap. 
+    /// </summary>
+    public class PriorityQueue<T> : IReadOnlyCollection<T> where T : IComparable<T>
     {
 #if !NO_INTERLOCKED_64
         private static long _count = long.MinValue;
@@ -15,11 +19,17 @@ namespace System.Reactive
         private IndexedItem[] _items;
         private int _size;
 
+        /// <summary>
+        /// Create an empty priority queue.
+        /// </summary>
         public PriorityQueue()
             : this(16)
         {
         }
 
+        /// <summary>
+        /// Create an empty priority queue with given initial capacity.
+        /// </summary>
         public PriorityQueue(int capacity)
         {
             _items = new IndexedItem[capacity];
@@ -75,8 +85,14 @@ namespace System.Reactive
             }
         }
 
+        /// <summary>
+        /// Number of elements in the priority queue.
+        /// </summary>
         public int Count { get { return _size; } }
 
+        /// <summary>
+        /// Find the minimum element in the priority queue. O(1)
+        /// </summary>
         public T Peek()
         {
             if (_size == 0)
@@ -98,6 +114,9 @@ namespace System.Reactive
             }
         }
 
+        /// <summary>
+        /// Remove and return the minimum element in the priority queue. O(log n)
+        /// </summary>
         public T Dequeue()
         {
             var result = Peek();
@@ -105,6 +124,9 @@ namespace System.Reactive
             return result;
         }
 
+        /// <summary>
+        /// Add an element to the priority queue. O(log n)
+        /// </summary>
         public void Enqueue(T item)
         {
             if (_size >= _items.Length)
@@ -119,6 +141,9 @@ namespace System.Reactive
             Percolate(index);
         }
 
+        /// <summary>
+        /// Remove the first matching element from the priority queue. O(n)
+        /// </summary>
         public bool Remove(T item)
         {
             for (var i = 0; i < _size; ++i)
@@ -131,6 +156,20 @@ namespace System.Reactive
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// List all the elements in the priority queue.
+        /// </summary>
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var item in _items)
+                yield return item.Value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         struct IndexedItem : IComparable<IndexedItem>
