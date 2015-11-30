@@ -1,0 +1,71 @@
+﻿{
+    "version": "3.0.0-*",
+    "title": "Reactive Extensions - Platform Services Library",
+    "description": "Reactive Extensions Platform Services Library used to access platform-specific functionality and enlightenment services.",
+    "authors": [ "Microsoft" ],
+    "copyright": "Copyright (C) Microsoft Corporation",
+    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+    "requireLicenseAcceptance": true,
+
+    "exclude": [ "Strings_PlatformServices.Designer.cs" ],
+
+    "dependencies": {
+        "System.Reactive.Linq": { "target": "project" }
+    },
+
+    "frameworks": {
+        "net40": {
+            "compilationOptions": {
+                "define": [
+                    "NO_TASK_DELAY",
+                    "HAS_APTCA",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT",
+                    "NO_WEAKREFOFT"
+                ]
+            }
+        },
+        "net45": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "HAS_DISPATCHER_PRIORITY",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            }
+        },
+        "dotnet5.4": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Diagnostics.Tools": "4.0.1-beta-23516",
+                "System.Diagnostics.Debug": "4.0.11-beta-23516"
+            }
+        }
+    }
+}
