@@ -1516,6 +1516,8 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// Starting from Rx.NET 4.0, this will subscribe to <paramref name="second"/> before subscribing to <paramref name="first" /> to have a latest element readily available
+        /// in case <paramref name="first" /> emits an element right away.
         /// </summary>
         /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
         /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>
