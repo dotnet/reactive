@@ -49,8 +49,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 var fstO = new F(this);
                 var sndO = new S(this, sndSubscription);
 
-                var fstSubscription = _parent._first.SubscribeSafe(fstO);
                 sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
+                var fstSubscription = _parent._first.SubscribeSafe(fstO);
 
                 return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
             }

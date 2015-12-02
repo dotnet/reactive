@@ -11392,6 +11392,24 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void WithLatestFrom_immediate()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = Observable.Return(1);
+            var ys = Observable.Return("bar");
+
+            var res = scheduler.Start(() =>
+                xs.WithLatestFrom(ys, (x, y) => x + y)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(200, "1bar"),
+                OnCompleted<string>(200)
+            );
+        }
+
+        [Fact]
         public void WithLatestFrom_Error1()
         {
             var scheduler = new TestScheduler();
