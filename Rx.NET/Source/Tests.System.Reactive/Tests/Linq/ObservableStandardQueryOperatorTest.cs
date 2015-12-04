@@ -2130,6 +2130,24 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void GroupBy_Outer_Multiple_Independence()
+        {
+            var outerDisposeCount = 0;
+            var source = new Subject<int>();
+            var outer = source
+                .Finally(() => outerDisposeCount++)
+                .GroupBy(x => x % 2)
+                .SelectMany(x => x);
+
+            var outerSubscription1 = outer.Subscribe();
+            var outerSubscription2 = outer.Subscribe();
+            source.OnNext(1);
+            outerSubscription2.Dispose();
+
+            Assert.AreEqual(1, outerDisposeCount);
+        }
+
+        [TestMethod]
         public void GroupBy_Inner_Independence()
         {
             var scheduler = new TestScheduler();
@@ -5569,6 +5587,24 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void GroupByUntil_Outer_Multiple_Independence()
+        {
+            var outerDisposeCount = 0;
+            var source = new Subject<int>();
+            var outer = source
+                .Finally(() => outerDisposeCount++)
+                .GroupByUntil(x => x % 2, group => Observable.Never<int>())
+                .SelectMany(x => x);
+
+            var outerSubscription1 = outer.Subscribe();
+            var outerSubscription2 = outer.Subscribe();
+            source.OnNext(1);
+            outerSubscription2.Dispose();
+
+            Assert.AreEqual(1, outerDisposeCount);
+        }
+
+        [TestMethod]
         public void GroupByUntil_Inner_Independence()
         {
             var scheduler = new TestScheduler();
