@@ -61,7 +61,7 @@ namespace System.Linq
 
             var i = 0;
             foreach (var item in source)
-                onNext(item, i++);
+                onNext(item, checked(i++));
         }
 
         /// <summary>
