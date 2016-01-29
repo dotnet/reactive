@@ -1,0 +1,1330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="6159b94e-57b1-4a72-99ae-c9da84dd0190" Title="Ix-Main Namespaces" Url="html/R_Project_Documentation.htm">
+    <HelpTOCNode Id="9f7fe414-fc78-44f9-b681-478b7da75fac" Title="System.Collections.Generic" Url="html/N_System_Collections_Generic.htm">
+      <HelpTOCNode Id="c4b65599-b142-411c-b8be-a0cb0dec98b5" Title="AsyncEnumerator Class" Url="html/T_System_Collections_Generic_AsyncEnumerator.htm">
+        <HelpTOCNode Id="a63ce870-8771-4626-b350-b52e941bdfd3" Title="AsyncEnumerator Methods" Url="html/Methods_T_System_Collections_Generic_AsyncEnumerator.htm">
+          <HelpTOCNode Title="MoveNext(T) Method " Url="html/M_System_Collections_Generic_AsyncEnumerator_MoveNext__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="6d799d5c-b63b-4855-8bf2-d4d1357b8e0e" Title="IAsyncEnumerable(T) Interface" Url="html/T_System_Collections_Generic_IAsyncEnumerable_1.htm">
+        <HelpTOCNode Id="b6a02f75-7947-424d-a878-4e2229d1109d" Title="IAsyncEnumerable(T) Methods" Url="html/Methods_T_System_Collections_Generic_IAsyncEnumerable_1.htm">
+          <HelpTOCNode Title="GetEnumerator Method " Url="html/M_System_Collections_Generic_IAsyncEnumerable_1_GetEnumerator.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="11523fac-86bf-4c79-a3b0-e75245da3756" Title="IAsyncEnumerator(T) Interface" Url="html/T_System_Collections_Generic_IAsyncEnumerator_1.htm">
+        <HelpTOCNode Id="c5995335-0099-450d-b9c1-149b3d7d3f4e" Title="IAsyncEnumerator(T) Properties" Url="html/Properties_T_System_Collections_Generic_IAsyncEnumerator_1.htm">
+          <HelpTOCNode Title="Current Property " Url="html/P_System_Collections_Generic_IAsyncEnumerator_1_Current.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="62dee420-d155-49ad-b7fb-e678b0436a76" Title="IAsyncEnumerator(T) Methods" Url="html/Methods_T_System_Collections_Generic_IAsyncEnumerator_1.htm">
+          <HelpTOCNode Title="MoveNext Method " Url="html/M_System_Collections_Generic_IAsyncEnumerator_1_MoveNext.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="5a791154-2e70-4b36-8c17-7e7d6eb0e6e6" Title="System.Linq" Url="html/N_System_Linq.htm">
+      <HelpTOCNode Id="fe530498-d5a6-42c9-a960-c3c461648a3d" Title="AsyncEnumerable Class" Url="html/T_System_Linq_AsyncEnumerable.htm">
+        <HelpTOCNode Id="4cc983bc-c81d-4f7b-8a99-f09f0b6e8ca5" Title="AsyncEnumerable Methods" Url="html/Methods_T_System_Linq_AsyncEnumerable.htm">
+          <HelpTOCNode Id="9bd28106-efa0-4c65-bbe6-4c1a0016f8ce" Title="Aggregate Method " Url="html/Overload_System_Linq_AsyncEnumerable_Aggregate.htm">
+            <HelpTOCNode Title="Aggregate(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, TSource, TSource))" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, TSource, TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__1_1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate) Method (IAsyncEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate))" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__2.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate, TResult) Method (IAsyncEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate), Func(TAccumulate, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__3.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate) Method (IAsyncEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__2_1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate, TResult) Method (IAsyncEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate), Func(TAccumulate, TResult), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Aggregate__3_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="dafd1553-4a1e-4c97-834d-4896911d68ba" Title="All Method " Url="html/Overload_System_Linq_AsyncEnumerable_All.htm">
+            <HelpTOCNode Title="All(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_All__1.htm" />
+            <HelpTOCNode Title="All(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_All__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="4a7e14d1-f70f-425b-832e-e05883705308" Title="Any Method " Url="html/Overload_System_Linq_AsyncEnumerable_Any.htm">
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Any__1.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Any__1_1.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Any__1_3.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Any__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="AsAsyncEnumerable(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_AsAsyncEnumerable__1.htm" />
+          <HelpTOCNode Id="86839612-486d-41e2-8644-abde78390392" Title="Average Method " Url="html/Overload_System_Linq_AsyncEnumerable_Average.htm">
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Average.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Double))" Url="html/M_System_Linq_AsyncEnumerable_Average_2.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Int32))" Url="html/M_System_Linq_AsyncEnumerable_Average_4.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Int64))" Url="html/M_System_Linq_AsyncEnumerable_Average_6.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Average_8.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Average_10.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Average_12.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Average_14.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Average_16.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Single))" Url="html/M_System_Linq_AsyncEnumerable_Average_18.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_1.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_3.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_5.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_7.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_9.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_11.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_13.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_15.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_17.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncEnumerable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average_19.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Average__1.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_2.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_4.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_6.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_8.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_10.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_12.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_14.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_16.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single))" Url="html/M_System_Linq_AsyncEnumerable_Average__1_18.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_1.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_3.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_5.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_7.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_9.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_11.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_13.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_15.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_17.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Average__1_19.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="139b01ca-0c68-4a00-b7d1-b9279722796d" Title="Buffer Method " Url="html/Overload_System_Linq_AsyncEnumerable_Buffer.htm">
+            <HelpTOCNode Title="Buffer(TSource) Method (IAsyncEnumerable(TSource), Int32)" Url="html/M_System_Linq_AsyncEnumerable_Buffer__1.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IAsyncEnumerable(TSource), Int32, Int32)" Url="html/M_System_Linq_AsyncEnumerable_Buffer__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Cast(TResult) Method " Url="html/M_System_Linq_AsyncEnumerable_Cast__1.htm" />
+          <HelpTOCNode Id="3e2a68aa-8c67-49c7-9a03-70e5dfca1f4c" Title="Catch Method " Url="html/Overload_System_Linq_AsyncEnumerable_Catch.htm">
+            <HelpTOCNode Title="Catch(TSource) Method (IAsyncEnumerable(TSource)[])" Url="html/M_System_Linq_AsyncEnumerable_Catch__1_1.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(IAsyncEnumerable(TSource)))" Url="html/M_System_Linq_AsyncEnumerable_Catch__1_2.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Catch__1.htm" />
+            <HelpTOCNode Title="Catch(TSource, TException) Method (IAsyncEnumerable(TSource), Func(TException, IAsyncEnumerable(TSource)))" Url="html/M_System_Linq_AsyncEnumerable_Catch__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="28833acc-70a9-41ed-8ebe-33330e8eaf8d" Title="Concat Method " Url="html/Overload_System_Linq_AsyncEnumerable_Concat.htm">
+            <HelpTOCNode Title="Concat(TSource) Method (IAsyncEnumerable(TSource)[])" Url="html/M_System_Linq_AsyncEnumerable_Concat__1_1.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IEnumerable(IAsyncEnumerable(TSource)))" Url="html/M_System_Linq_AsyncEnumerable_Concat__1_2.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Concat__1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d1d0bf80-b7ec-4553-a70b-a83d3c1d8438" Title="Contains Method " Url="html/Overload_System_Linq_AsyncEnumerable_Contains.htm">
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncEnumerable(TSource), TSource)" Url="html/M_System_Linq_AsyncEnumerable_Contains__1.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncEnumerable(TSource), TSource, IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Contains__1_1.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncEnumerable(TSource), TSource, CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Contains__1_3.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncEnumerable(TSource), TSource, IEqualityComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Contains__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="364d51c0-b194-4961-a5b1-35f6769fa74d" Title="Count Method " Url="html/Overload_System_Linq_AsyncEnumerable_Count.htm">
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Count__1.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Count__1_1.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Count__1_3.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Count__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0d88d84b-f44f-48b3-925c-c04d98ebb20a" Title="DefaultIfEmpty Method " Url="html/Overload_System_Linq_AsyncEnumerable_DefaultIfEmpty.htm">
+            <HelpTOCNode Title="DefaultIfEmpty(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_DefaultIfEmpty__1.htm" />
+            <HelpTOCNode Title="DefaultIfEmpty(TSource) Method (IAsyncEnumerable(TSource), TSource)" Url="html/M_System_Linq_AsyncEnumerable_DefaultIfEmpty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Defer(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Defer__1.htm" />
+          <HelpTOCNode Id="cfc8bfd0-d327-405a-893d-37aa3de70709" Title="Distinct Method " Url="html/Overload_System_Linq_AsyncEnumerable_Distinct.htm">
+            <HelpTOCNode Title="Distinct(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Distinct__1.htm" />
+            <HelpTOCNode Title="Distinct(TSource) Method (IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Distinct__1_1.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_Distinct__2.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_Distinct__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1016a1ba-c573-4107-903f-45ed09cf0ca8" Title="DistinctUntilChanged Method " Url="html/Overload_System_Linq_AsyncEnumerable_DistinctUntilChanged.htm">
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_DistinctUntilChanged__1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_DistinctUntilChanged__1_1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_DistinctUntilChanged__2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_DistinctUntilChanged__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9ec3628b-6e24-4a20-95de-34d68a943c51" Title="Do Method " Url="html/Overload_System_Linq_AsyncEnumerable_Do.htm">
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Do__1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncEnumerable(TSource), IObserver(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Do__1_4.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncEnumerable(TSource), Action(TSource), Action)" Url="html/M_System_Linq_AsyncEnumerable_Do__1_1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncEnumerable(TSource), Action(TSource), Action(Exception))" Url="html/M_System_Linq_AsyncEnumerable_Do__1_2.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncEnumerable(TSource), Action(TSource), Action(Exception), Action)" Url="html/M_System_Linq_AsyncEnumerable_Do__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="39bda8b8-0f25-4f0d-bf6b-c07b54bdf0a3" Title="ElementAt Method " Url="html/Overload_System_Linq_AsyncEnumerable_ElementAt.htm">
+            <HelpTOCNode Title="ElementAt(TSource) Method (IAsyncEnumerable(TSource), Int32)" Url="html/M_System_Linq_AsyncEnumerable_ElementAt__1.htm" />
+            <HelpTOCNode Title="ElementAt(TSource) Method (IAsyncEnumerable(TSource), Int32, CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ElementAt__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="6f8de579-11ba-4f1a-b7af-cb34de10c132" Title="ElementAtOrDefault Method " Url="html/Overload_System_Linq_AsyncEnumerable_ElementAtOrDefault.htm">
+            <HelpTOCNode Title="ElementAtOrDefault(TSource) Method (IAsyncEnumerable(TSource), Int32)" Url="html/M_System_Linq_AsyncEnumerable_ElementAtOrDefault__1.htm" />
+            <HelpTOCNode Title="ElementAtOrDefault(TSource) Method (IAsyncEnumerable(TSource), Int32, CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ElementAtOrDefault__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Empty(TValue) Method " Url="html/M_System_Linq_AsyncEnumerable_Empty__1.htm" />
+          <HelpTOCNode Id="07306f2b-cc93-49de-b96f-00d88c1688d5" Title="Except Method " Url="html/Overload_System_Linq_AsyncEnumerable_Except.htm">
+            <HelpTOCNode Title="Except(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Except__1.htm" />
+            <HelpTOCNode Title="Except(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Except__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Expand(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Expand__1.htm" />
+          <HelpTOCNode Title="Finally(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Finally__1.htm" />
+          <HelpTOCNode Id="82d2c8b9-d2f4-4cb8-bb0d-2dad20e1699d" Title="First Method " Url="html/Overload_System_Linq_AsyncEnumerable_First.htm">
+            <HelpTOCNode Title="First(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_First__1.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_First__1_1.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_First__1_3.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_First__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="c148c3fe-1286-4a7a-b595-99a37f1537fa" Title="FirstOrDefault Method " Url="html/Overload_System_Linq_AsyncEnumerable_FirstOrDefault.htm">
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_FirstOrDefault__1.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_FirstOrDefault__1_1.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_FirstOrDefault__1_3.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_FirstOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="afde7099-ad68-4934-ba6f-85a33378cf3a" Title="ForEach Method " Url="html/Overload_System_Linq_AsyncEnumerable_ForEach.htm">
+            <HelpTOCNode Title="ForEach(TSource) Method (IAsyncEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ForEach__1.htm" />
+            <HelpTOCNode Title="ForEach(TSource) Method (IAsyncEnumerable(TSource), Action(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_ForEach__1_2.htm" />
+            <HelpTOCNode Title="ForEach(TSource) Method (IAsyncEnumerable(TSource), Action(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ForEach__1_1.htm" />
+            <HelpTOCNode Title="ForEach(TSource) Method (IAsyncEnumerable(TSource), Action(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ForEach__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="998680b3-972f-4413-af43-e5ec0425b905" Title="ForEachAsync Method " Url="html/Overload_System_Linq_AsyncEnumerable_ForEachAsync.htm">
+            <HelpTOCNode Title="ForEachAsync(TSource) Method (IAsyncEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ForEachAsync__1.htm" />
+            <HelpTOCNode Title="ForEachAsync(TSource) Method (IAsyncEnumerable(TSource), Action(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_ForEachAsync__1_2.htm" />
+            <HelpTOCNode Title="ForEachAsync(TSource) Method (IAsyncEnumerable(TSource), Action(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ForEachAsync__1_1.htm" />
+            <HelpTOCNode Title="ForEachAsync(TSource) Method (IAsyncEnumerable(TSource), Action(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ForEachAsync__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Generate(TState, TResult) Method " Url="html/M_System_Linq_AsyncEnumerable_Generate__2.htm" />
+          <HelpTOCNode Id="0c02e110-171e-455b-b586-4517b68ff2a9" Title="GroupBy Method " Url="html/Overload_System_Linq_AsyncEnumerable_GroupBy.htm">
+            <HelpTOCNode Title="GroupBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__2.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__2_1.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__3.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TKey, IAsyncEnumerable(TSource), TResult))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__3_2.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__3_1.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), Func(TKey, IAsyncEnumerable(TElement), TResult))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__4.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TKey, IAsyncEnumerable(TSource), TResult), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__3_3.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), Func(TKey, IAsyncEnumerable(TElement), TResult), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupBy__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="42c22ecc-4fbc-4082-8e95-7cd73b5a47b2" Title="GroupJoin Method " Url="html/Overload_System_Linq_AsyncEnumerable_GroupJoin.htm">
+            <HelpTOCNode Title="GroupJoin(TOuter, TInner, TKey, TResult) Method (IAsyncEnumerable(TOuter), IAsyncEnumerable(TInner), Func(TOuter, TKey), Func(TInner, TKey), Func(TOuter, IAsyncEnumerable(TInner), TResult))" Url="html/M_System_Linq_AsyncEnumerable_GroupJoin__4.htm" />
+            <HelpTOCNode Title="GroupJoin(TOuter, TInner, TKey, TResult) Method (IAsyncEnumerable(TOuter), IAsyncEnumerable(TInner), Func(TOuter, TKey), Func(TInner, TKey), Func(TOuter, IAsyncEnumerable(TInner), TResult), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_GroupJoin__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="IgnoreElements(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_IgnoreElements__1.htm" />
+          <HelpTOCNode Id="815eea8e-5e9c-4ffc-90d4-7171b955627a" Title="Intersect Method " Url="html/Overload_System_Linq_AsyncEnumerable_Intersect.htm">
+            <HelpTOCNode Title="Intersect(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Intersect__1.htm" />
+            <HelpTOCNode Title="Intersect(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Intersect__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="ba64bbf5-83b0-4062-94bc-073347224690" Title="IsEmpty Method " Url="html/Overload_System_Linq_AsyncEnumerable_IsEmpty.htm">
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_IsEmpty__1.htm" />
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_IsEmpty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="83df3bc7-d442-40af-82a3-113902c37e60" Title="Join Method " Url="html/Overload_System_Linq_AsyncEnumerable_Join.htm">
+            <HelpTOCNode Title="Join(TOuter, TInner, TKey, TResult) Method (IAsyncEnumerable(TOuter), IAsyncEnumerable(TInner), Func(TOuter, TKey), Func(TInner, TKey), Func(TOuter, TInner, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Join__4.htm" />
+            <HelpTOCNode Title="Join(TOuter, TInner, TKey, TResult) Method (IAsyncEnumerable(TOuter), IAsyncEnumerable(TInner), Func(TOuter, TKey), Func(TInner, TKey), Func(TOuter, TInner, TResult), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_Join__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="ec90df49-9fc6-4620-8b6a-4e0a78ed3dcf" Title="Last Method " Url="html/Overload_System_Linq_AsyncEnumerable_Last.htm">
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Last__1.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Last__1_1.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Last__1_3.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Last__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="8342edd0-24ea-4396-b7ea-81856eebaa9c" Title="LastOrDefault Method " Url="html/Overload_System_Linq_AsyncEnumerable_LastOrDefault.htm">
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_LastOrDefault__1.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_LastOrDefault__1_1.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_LastOrDefault__1_3.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_LastOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="90334cd1-7244-431e-aa13-5ecd03976a70" Title="LongCount Method " Url="html/Overload_System_Linq_AsyncEnumerable_LongCount.htm">
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_LongCount__1.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_LongCount__1_1.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_LongCount__1_3.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_LongCount__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="120429fe-0851-4dac-ae58-474b2e57b744" Title="Max Method " Url="html/Overload_System_Linq_AsyncEnumerable_Max.htm">
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Max.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Double))" Url="html/M_System_Linq_AsyncEnumerable_Max_2.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Int32))" Url="html/M_System_Linq_AsyncEnumerable_Max_4.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Int64))" Url="html/M_System_Linq_AsyncEnumerable_Max_6.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Max_8.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Max_10.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Max_12.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Max_14.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Max_16.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Single))" Url="html/M_System_Linq_AsyncEnumerable_Max_18.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Max__1.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_1.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_3.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_5.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_7.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_9.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_11.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_13.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_15.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_17.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncEnumerable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max_19.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), IComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_1.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_3.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_5.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_7.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_9.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_11.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_13.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_15.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_17.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_19.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single))" Url="html/M_System_Linq_AsyncEnumerable_Max__1_21.htm" />
+            <HelpTOCNode Title="Max(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Max__2.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_23.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), IComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_2.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_4.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_6.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_8.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_10.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_12.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_14.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_16.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_18.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_20.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__1_22.htm" />
+            <HelpTOCNode Title="Max(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TResult), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Max__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d5ff42f3-cc2b-435a-9174-1accbaa644dd" Title="MaxBy Method " Url="html/Overload_System_Linq_AsyncEnumerable_MaxBy.htm">
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_MaxBy__2.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_MaxBy__2_1.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_MaxBy__2_3.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_MaxBy__2_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="093dc13b-2018-4590-b4ad-a7903a8ac2a6" Title="Min Method " Url="html/Overload_System_Linq_AsyncEnumerable_Min.htm">
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Min.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Double))" Url="html/M_System_Linq_AsyncEnumerable_Min_2.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Int32))" Url="html/M_System_Linq_AsyncEnumerable_Min_4.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Int64))" Url="html/M_System_Linq_AsyncEnumerable_Min_6.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Min_8.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Min_10.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Min_12.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Min_14.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Min_16.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Single))" Url="html/M_System_Linq_AsyncEnumerable_Min_18.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Min__1.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_1.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_3.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_5.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_7.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_9.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_11.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_13.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_15.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_17.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncEnumerable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min_19.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), IComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_1.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_3.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_5.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_7.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_9.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_11.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_13.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_15.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_17.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_19.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single))" Url="html/M_System_Linq_AsyncEnumerable_Min__1_21.htm" />
+            <HelpTOCNode Title="Min(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Min__2.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_23.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), IComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_2.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_4.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_6.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_8.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_10.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_12.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_14.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_16.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_18.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_20.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__1_22.htm" />
+            <HelpTOCNode Title="Min(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TResult), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Min__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="c44e8f36-0cb6-45dd-a5ab-6fde6a64a841" Title="MinBy Method " Url="html/Overload_System_Linq_AsyncEnumerable_MinBy.htm">
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_MinBy__2.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_MinBy__2_1.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_MinBy__2_3.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_MinBy__2_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Never(TValue) Method " Url="html/M_System_Linq_AsyncEnumerable_Never__1.htm" />
+          <HelpTOCNode Title="OfType(TType) Method " Url="html/M_System_Linq_AsyncEnumerable_OfType__1.htm" />
+          <HelpTOCNode Id="9e7b6033-4a16-4329-9484-aacaa498af20" Title="OnErrorResumeNext Method " Url="html/Overload_System_Linq_AsyncEnumerable_OnErrorResumeNext.htm">
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IAsyncEnumerable(TSource)[])" Url="html/M_System_Linq_AsyncEnumerable_OnErrorResumeNext__1_1.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(IAsyncEnumerable(TSource)))" Url="html/M_System_Linq_AsyncEnumerable_OnErrorResumeNext__1_2.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_OnErrorResumeNext__1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="204ef682-4336-4483-a65f-4f84b3d29a30" Title="OrderBy Method " Url="html/Overload_System_Linq_AsyncEnumerable_OrderBy.htm">
+            <HelpTOCNode Title="OrderBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_OrderBy__2.htm" />
+            <HelpTOCNode Title="OrderBy(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_OrderBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cf196dcc-c633-497f-845c-3b6ff68edf9f" Title="OrderByDescending Method " Url="html/Overload_System_Linq_AsyncEnumerable_OrderByDescending.htm">
+            <HelpTOCNode Title="OrderByDescending(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_OrderByDescending__2.htm" />
+            <HelpTOCNode Title="OrderByDescending(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_OrderByDescending__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Range Method " Url="html/M_System_Linq_AsyncEnumerable_Range.htm" />
+          <HelpTOCNode Id="4e70876b-0ee9-48a3-85b7-d62c1b3c50a7" Title="Repeat Method " Url="html/Overload_System_Linq_AsyncEnumerable_Repeat.htm">
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult)" Url="html/M_System_Linq_AsyncEnumerable_Repeat__1_2.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Repeat__1.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult, Int32)" Url="html/M_System_Linq_AsyncEnumerable_Repeat__1_3.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IAsyncEnumerable(TSource), Int32)" Url="html/M_System_Linq_AsyncEnumerable_Repeat__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="6a223260-30fc-45d8-92fc-26801b0dcf24" Title="Retry Method " Url="html/Overload_System_Linq_AsyncEnumerable_Retry.htm">
+            <HelpTOCNode Title="Retry(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Retry__1.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IAsyncEnumerable(TSource), Int32)" Url="html/M_System_Linq_AsyncEnumerable_Retry__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Return(TValue) Method " Url="html/M_System_Linq_AsyncEnumerable_Return__1.htm" />
+          <HelpTOCNode Title="Reverse(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Reverse__1.htm" />
+          <HelpTOCNode Id="e78721e5-ac71-434e-aeb9-3439e82a4ea9" Title="Scan Method " Url="html/Overload_System_Linq_AsyncEnumerable_Scan.htm">
+            <HelpTOCNode Title="Scan(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, TSource, TSource))" Url="html/M_System_Linq_AsyncEnumerable_Scan__1.htm" />
+            <HelpTOCNode Title="Scan(TSource, TAccumulate) Method (IAsyncEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate))" Url="html/M_System_Linq_AsyncEnumerable_Scan__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="88244670-2934-4356-8465-71ee4c1427d2" Title="Select Method " Url="html/Overload_System_Linq_AsyncEnumerable_Select.htm">
+            <HelpTOCNode Title="Select(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Select__2.htm" />
+            <HelpTOCNode Title="Select(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, TResult))" Url="html/M_System_Linq_AsyncEnumerable_Select__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="5f4e0307-ceb0-42f3-b983-87f8d0f21af1" Title="SelectMany Method " Url="html/Overload_System_Linq_AsyncEnumerable_SelectMany.htm">
+            <HelpTOCNode Title="SelectMany(TSource, TOther) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TOther))" Url="html/M_System_Linq_AsyncEnumerable_SelectMany__2.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, IAsyncEnumerable(TResult)))" Url="html/M_System_Linq_AsyncEnumerable_SelectMany__2_1.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, IAsyncEnumerable(TResult)))" Url="html/M_System_Linq_AsyncEnumerable_SelectMany__2_2.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TCollection, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, IAsyncEnumerable(TCollection)), Func(TSource, TCollection, TResult))" Url="html/M_System_Linq_AsyncEnumerable_SelectMany__3.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TCollection, TResult) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, IAsyncEnumerable(TCollection)), Func(TSource, TCollection, TResult))" Url="html/M_System_Linq_AsyncEnumerable_SelectMany__3_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a46a4634-5ff0-4270-9c25-6abe6ad071ad" Title="SequenceEqual Method " Url="html/Overload_System_Linq_AsyncEnumerable_SequenceEqual.htm">
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_SequenceEqual__1.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_SequenceEqual__1_1.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_SequenceEqual__1_3.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_SequenceEqual__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="c5099033-46ac-459e-b44c-acb7e3218846" Title="Single Method " Url="html/Overload_System_Linq_AsyncEnumerable_Single.htm">
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Single__1.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Single__1_1.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Single__1_3.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Single__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="59c19cf7-74fb-428d-ab84-b0245c572ee2" Title="SingleOrDefault Method " Url="html/Overload_System_Linq_AsyncEnumerable_SingleOrDefault.htm">
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_SingleOrDefault__1.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_SingleOrDefault__1_1.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_SingleOrDefault__1_3.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_SingleOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Skip(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Skip__1.htm" />
+          <HelpTOCNode Title="SkipLast(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_SkipLast__1.htm" />
+          <HelpTOCNode Id="8104ac38-ac6f-42a8-ba45-7e83b625ca0a" Title="SkipWhile Method " Url="html/Overload_System_Linq_AsyncEnumerable_SkipWhile.htm">
+            <HelpTOCNode Title="SkipWhile(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_SkipWhile__1.htm" />
+            <HelpTOCNode Title="SkipWhile(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_SkipWhile__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="StartWith(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_StartWith__1.htm" />
+          <HelpTOCNode Id="88e635e0-f31d-4b95-a110-21bac768fce0" Title="Sum Method " Url="html/Overload_System_Linq_AsyncEnumerable_Sum.htm">
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Sum.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Double))" Url="html/M_System_Linq_AsyncEnumerable_Sum_2.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Int32))" Url="html/M_System_Linq_AsyncEnumerable_Sum_4.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Int64))" Url="html/M_System_Linq_AsyncEnumerable_Sum_6.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Sum_8.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Sum_10.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Sum_12.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Sum_14.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Sum_16.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Single))" Url="html/M_System_Linq_AsyncEnumerable_Sum_18.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_1.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_3.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_5.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_7.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_9.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_11.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_13.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_15.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_17.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncEnumerable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum_19.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_2.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_4.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_6.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_8.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_10.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_12.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_14.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_16.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single))" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_18.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_1.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Double), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_3.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_5.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int64), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_7.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_9.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_11.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_13.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_15.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_17.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Single), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_Sum__1_19.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Take(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_Take__1.htm" />
+          <HelpTOCNode Title="TakeLast(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_TakeLast__1.htm" />
+          <HelpTOCNode Id="3a657799-263e-47ac-8dfe-ea100b7c7afa" Title="TakeWhile Method " Url="html/Overload_System_Linq_AsyncEnumerable_TakeWhile.htm">
+            <HelpTOCNode Title="TakeWhile(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_TakeWhile__1.htm" />
+            <HelpTOCNode Title="TakeWhile(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_TakeWhile__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="eb55128a-06d0-43cb-8197-30ef5144522f" Title="ThenBy Method " Url="html/Overload_System_Linq_AsyncEnumerable_ThenBy.htm">
+            <HelpTOCNode Title="ThenBy(TSource, TKey) Method (IOrderedAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_ThenBy__2.htm" />
+            <HelpTOCNode Title="ThenBy(TSource, TKey) Method (IOrderedAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ThenBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="098ac58e-ffa6-4972-9379-5f132f341fd6" Title="ThenByDescending Method " Url="html/Overload_System_Linq_AsyncEnumerable_ThenByDescending.htm">
+            <HelpTOCNode Title="ThenByDescending(TSource, TKey) Method (IOrderedAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_ThenByDescending__2.htm" />
+            <HelpTOCNode Title="ThenByDescending(TSource, TKey) Method (IOrderedAsyncEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ThenByDescending__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Throw(TValue) Method " Url="html/M_System_Linq_AsyncEnumerable_Throw__1.htm" />
+          <HelpTOCNode Id="c60e6f4d-740e-4cf3-88df-aad3bc11910b" Title="ToArray Method " Url="html/Overload_System_Linq_AsyncEnumerable_ToArray.htm">
+            <HelpTOCNode Title="ToArray(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ToArray__1.htm" />
+            <HelpTOCNode Title="ToArray(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToArray__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="ccc535ee-cb4d-492f-b530-a740ef31391d" Title="ToAsyncEnumerable Method " Url="html/Overload_System_Linq_AsyncEnumerable_ToAsyncEnumerable.htm">
+            <HelpTOCNode Title="ToAsyncEnumerable(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ToAsyncEnumerable__1.htm" />
+            <HelpTOCNode Title="ToAsyncEnumerable(TSource) Method (IObservable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ToAsyncEnumerable__1_1.htm" />
+            <HelpTOCNode Title="ToAsyncEnumerable(TSource) Method (Task(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ToAsyncEnumerable__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0d65836e-d016-4c5c-9c19-6047cc685c1c" Title="ToDictionary Method " Url="html/Overload_System_Linq_AsyncEnumerable_ToDictionary.htm">
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__2.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__2_1.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement))" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__2_3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__2_2.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__3_1.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__3_3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToDictionary__3_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="ToEnumerable(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_ToEnumerable__1.htm" />
+          <HelpTOCNode Id="b38120b5-4eb1-4119-b465-9e3f6824cbce" Title="ToList Method " Url="html/Overload_System_Linq_AsyncEnumerable_ToList.htm">
+            <HelpTOCNode Title="ToList(TSource) Method (IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_ToList__1.htm" />
+            <HelpTOCNode Title="ToList(TSource) Method (IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToList__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="397ae74b-7acf-4916-ab05-670db7b8a7ef" Title="ToLookup Method " Url="html/Overload_System_Linq_AsyncEnumerable_ToLookup.htm">
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__2.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__2_1.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement))" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__2_3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__2_2.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__3_1.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__3_3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncEnumerable(TSource), Func(TSource, TKey), Func(TSource, TElement), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncEnumerable_ToLookup__3_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="ToObservable(TSource) Method " Url="html/M_System_Linq_AsyncEnumerable_ToObservable__1.htm" />
+          <HelpTOCNode Id="5b0c979c-b263-473b-92a6-e3ddd35b33e4" Title="Union Method " Url="html/Overload_System_Linq_AsyncEnumerable_Union.htm">
+            <HelpTOCNode Title="Union(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Union__1.htm" />
+            <HelpTOCNode Title="Union(TSource) Method (IAsyncEnumerable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncEnumerable_Union__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Using(TSource, TResource) Method " Url="html/M_System_Linq_AsyncEnumerable_Using__2.htm" />
+          <HelpTOCNode Id="1a512155-51a8-41b9-a17e-3e70eb02b54c" Title="Where Method " Url="html/Overload_System_Linq_AsyncEnumerable_Where.htm">
+            <HelpTOCNode Title="Where(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Where__1.htm" />
+            <HelpTOCNode Title="Where(TSource) Method (IAsyncEnumerable(TSource), Func(TSource, Int32, Boolean))" Url="html/M_System_Linq_AsyncEnumerable_Where__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Zip(TFirst, TSecond, TResult) Method " Url="html/M_System_Linq_AsyncEnumerable_Zip__3.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="67dce5ee-a393-44e2-ad73-08f84fef8aaf" Title="AsyncQueryable Class" Url="html/T_System_Linq_AsyncQueryable.htm">
+        <HelpTOCNode Id="792f544e-2506-42a6-99d9-176d440924fb" Title="AsyncQueryable Methods" Url="html/Methods_T_System_Linq_AsyncQueryable.htm">
+          <HelpTOCNode Id="5d3ce1e2-a866-4bf6-bfe9-9ad409be51d7" Title="Aggregate Method " Url="html/Overload_System_Linq_AsyncQueryable_Aggregate.htm">
+            <HelpTOCNode Title="Aggregate(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TSource, TSource)))" Url="html/M_System_Linq_AsyncQueryable_Aggregate__1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TSource, TSource)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Aggregate__1_1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate) Method (IAsyncQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)))" Url="html/M_System_Linq_AsyncQueryable_Aggregate__2.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate, TResult) Method (IAsyncQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)), Expression(Func(TAccumulate, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Aggregate__3.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate) Method (IAsyncQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Aggregate__2_1.htm" />
+            <HelpTOCNode Title="Aggregate(TSource, TAccumulate, TResult) Method (IAsyncQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)), Expression(Func(TAccumulate, TResult)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Aggregate__3_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="486618aa-2321-4ee7-b15a-d68b585a6227" Title="All Method " Url="html/Overload_System_Linq_AsyncQueryable_All.htm">
+            <HelpTOCNode Title="All(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_All__1.htm" />
+            <HelpTOCNode Title="All(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_All__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="c0a4f79e-f80d-40e2-aa16-88ccc6289c89" Title="Any Method " Url="html/Overload_System_Linq_AsyncQueryable_Any.htm">
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Any__1.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Any__1_1.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Any__1_3.htm" />
+            <HelpTOCNode Title="Any(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Any__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="AsAsyncQueryable(TElement) Method " Url="html/M_System_Linq_AsyncQueryable_AsAsyncQueryable__1.htm" />
+          <HelpTOCNode Id="abda5cc9-00f8-4f25-a13f-ada89ef163f0" Title="Average Method " Url="html/Overload_System_Linq_AsyncQueryable_Average.htm">
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Decimal))" Url="html/M_System_Linq_AsyncQueryable_Average.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Double))" Url="html/M_System_Linq_AsyncQueryable_Average_2.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Int32))" Url="html/M_System_Linq_AsyncQueryable_Average_4.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Int64))" Url="html/M_System_Linq_AsyncQueryable_Average_6.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Average_8.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Double)))" Url="html/M_System_Linq_AsyncQueryable_Average_10.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncQueryable_Average_12.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncQueryable_Average_14.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Single)))" Url="html/M_System_Linq_AsyncQueryable_Average_16.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Single))" Url="html/M_System_Linq_AsyncQueryable_Average_18.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_1.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_3.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_5.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_7.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_9.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_11.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_13.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_15.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_17.htm" />
+            <HelpTOCNode Title="Average Method (IAsyncQueryable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average_19.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Average__1.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)))" Url="html/M_System_Linq_AsyncQueryable_Average__1_2.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)))" Url="html/M_System_Linq_AsyncQueryable_Average__1_4.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)))" Url="html/M_System_Linq_AsyncQueryable_Average__1_6.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))))" Url="html/M_System_Linq_AsyncQueryable_Average__1_8.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))))" Url="html/M_System_Linq_AsyncQueryable_Average__1_10.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))))" Url="html/M_System_Linq_AsyncQueryable_Average__1_12.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))))" Url="html/M_System_Linq_AsyncQueryable_Average__1_14.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))))" Url="html/M_System_Linq_AsyncQueryable_Average__1_16.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)))" Url="html/M_System_Linq_AsyncQueryable_Average__1_18.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_1.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_3.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_5.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_7.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_9.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_11.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_13.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_15.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_17.htm" />
+            <HelpTOCNode Title="Average(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Average__1_19.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="58a37afb-79f3-4b62-9c1d-041335dfc630" Title="Buffer Method " Url="html/Overload_System_Linq_AsyncQueryable_Buffer.htm">
+            <HelpTOCNode Title="Buffer(TSource) Method (IAsyncQueryable(TSource), Int32)" Url="html/M_System_Linq_AsyncQueryable_Buffer__1.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IAsyncQueryable(TSource), Int32, Int32)" Url="html/M_System_Linq_AsyncQueryable_Buffer__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Cast(TResult) Method " Url="html/M_System_Linq_AsyncQueryable_Cast__1.htm" />
+          <HelpTOCNode Id="c918f273-9563-40f9-a421-664ed0b4358a" Title="Catch Method " Url="html/Overload_System_Linq_AsyncQueryable_Catch.htm">
+            <HelpTOCNode Title="Catch(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Catch__1.htm" />
+            <HelpTOCNode Title="Catch(TSource, TException) Method (IAsyncQueryable(TSource), Expression(Func(TException, IAsyncEnumerable(TSource))))" Url="html/M_System_Linq_AsyncQueryable_Catch__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Concat(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Concat__1.htm" />
+          <HelpTOCNode Id="42c49b77-6f06-4a3d-ab01-0af3458a4757" Title="Contains Method " Url="html/Overload_System_Linq_AsyncQueryable_Contains.htm">
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncQueryable(TSource), TSource)" Url="html/M_System_Linq_AsyncQueryable_Contains__1.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncQueryable(TSource), TSource, IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Contains__1_1.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncQueryable(TSource), TSource, CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Contains__1_3.htm" />
+            <HelpTOCNode Title="Contains(TSource) Method (IAsyncQueryable(TSource), TSource, IEqualityComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Contains__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="07b0e0b4-c00c-4258-b2a8-d76ef8998ff0" Title="Count Method " Url="html/Overload_System_Linq_AsyncQueryable_Count.htm">
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Count__1.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Count__1_1.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Count__1_3.htm" />
+            <HelpTOCNode Title="Count(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Count__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="3fea3fbb-6d00-42bd-bcc5-5ee299c4c0d3" Title="DefaultIfEmpty Method " Url="html/Overload_System_Linq_AsyncQueryable_DefaultIfEmpty.htm">
+            <HelpTOCNode Title="DefaultIfEmpty(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_DefaultIfEmpty__1.htm" />
+            <HelpTOCNode Title="DefaultIfEmpty(TSource) Method (IAsyncQueryable(TSource), TSource)" Url="html/M_System_Linq_AsyncQueryable_DefaultIfEmpty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0b6711a2-7eb9-4468-a33b-3fed64090850" Title="Distinct Method " Url="html/Overload_System_Linq_AsyncQueryable_Distinct.htm">
+            <HelpTOCNode Title="Distinct(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Distinct__1.htm" />
+            <HelpTOCNode Title="Distinct(TSource) Method (IAsyncQueryable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Distinct__1_1.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_Distinct__2.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_Distinct__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="c8d1849f-1ee7-4afc-85b3-66821562ca57" Title="DistinctUntilChanged Method " Url="html/Overload_System_Linq_AsyncQueryable_DistinctUntilChanged.htm">
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_DistinctUntilChanged__1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IAsyncQueryable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_DistinctUntilChanged__1_1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_DistinctUntilChanged__2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_DistinctUntilChanged__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="32c374f1-c739-4657-8618-272f69a4a005" Title="Do Method " Url="html/Overload_System_Linq_AsyncQueryable_Do.htm">
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncQueryable(TSource), IObserver(TSource))" Url="html/M_System_Linq_AsyncQueryable_Do__1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncQueryable(TSource), Expression(Action(TSource)))" Url="html/M_System_Linq_AsyncQueryable_Do__1_1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncQueryable(TSource), Expression(Action(TSource)), Action)" Url="html/M_System_Linq_AsyncQueryable_Do__1_2.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncQueryable(TSource), Expression(Action(TSource)), Expression(Action(Exception)))" Url="html/M_System_Linq_AsyncQueryable_Do__1_3.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IAsyncQueryable(TSource), Expression(Action(TSource)), Expression(Action(Exception)), Action)" Url="html/M_System_Linq_AsyncQueryable_Do__1_4.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="20cf1540-cdd8-4189-81cb-346fa1251163" Title="ElementAt Method " Url="html/Overload_System_Linq_AsyncQueryable_ElementAt.htm">
+            <HelpTOCNode Title="ElementAt(TSource) Method (IAsyncQueryable(TSource), Int32)" Url="html/M_System_Linq_AsyncQueryable_ElementAt__1.htm" />
+            <HelpTOCNode Title="ElementAt(TSource) Method (IAsyncQueryable(TSource), Int32, CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ElementAt__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="07ce2b94-f207-49ae-9c87-a9c5958cadfc" Title="ElementAtOrDefault Method " Url="html/Overload_System_Linq_AsyncQueryable_ElementAtOrDefault.htm">
+            <HelpTOCNode Title="ElementAtOrDefault(TSource) Method (IAsyncQueryable(TSource), Int32)" Url="html/M_System_Linq_AsyncQueryable_ElementAtOrDefault__1.htm" />
+            <HelpTOCNode Title="ElementAtOrDefault(TSource) Method (IAsyncQueryable(TSource), Int32, CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ElementAtOrDefault__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="f3b72e76-72fb-40a3-83f3-3b3f1f9967e9" Title="Except Method " Url="html/Overload_System_Linq_AsyncQueryable_Except.htm">
+            <HelpTOCNode Title="Except(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Except__1.htm" />
+            <HelpTOCNode Title="Except(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Except__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Expand(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Expand__1.htm" />
+          <HelpTOCNode Title="Finally(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Finally__1.htm" />
+          <HelpTOCNode Id="4693989f-fa14-4c26-94e2-8438a3f7acc3" Title="First Method " Url="html/Overload_System_Linq_AsyncQueryable_First.htm">
+            <HelpTOCNode Title="First(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_First__1.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_First__1_1.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_First__1_3.htm" />
+            <HelpTOCNode Title="First(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_First__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="36310c9e-3283-4f84-ac5d-c9fd74bb4fc1" Title="FirstOrDefault Method " Url="html/Overload_System_Linq_AsyncQueryable_FirstOrDefault.htm">
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_FirstOrDefault__1.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_FirstOrDefault__1_1.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_FirstOrDefault__1_3.htm" />
+            <HelpTOCNode Title="FirstOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_FirstOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="75c85183-fc97-4977-bbc0-269b0f2cdc7b" Title="GroupBy Method " Url="html/Overload_System_Linq_AsyncQueryable_GroupBy.htm">
+            <HelpTOCNode Title="GroupBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__2.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__2_1.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__3.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TKey, IAsyncEnumerable(TSource), TResult)))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__3_2.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__3_1.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), Expression(Func(TKey, IAsyncEnumerable(TElement), TResult)))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__4.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TKey, IAsyncEnumerable(TSource), TResult)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__3_3.htm" />
+            <HelpTOCNode Title="GroupBy(TSource, TKey, TElement, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), Expression(Func(TKey, IAsyncEnumerable(TElement), TResult)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_GroupBy__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a2565d18-27bd-4b41-8461-239aaba24f00" Title="GroupJoin Method " Url="html/Overload_System_Linq_AsyncQueryable_GroupJoin.htm">
+            <HelpTOCNode Title="GroupJoin(TOuter, TInner, TKey, TResult) Method (IAsyncQueryable(TOuter), IAsyncEnumerable(TInner), Expression(Func(TOuter, TKey)), Expression(Func(TInner, TKey)), Expression(Func(TOuter, IAsyncEnumerable(TInner), TResult)))" Url="html/M_System_Linq_AsyncQueryable_GroupJoin__4.htm" />
+            <HelpTOCNode Title="GroupJoin(TOuter, TInner, TKey, TResult) Method (IAsyncQueryable(TOuter), IAsyncEnumerable(TInner), Expression(Func(TOuter, TKey)), Expression(Func(TInner, TKey)), Expression(Func(TOuter, IAsyncEnumerable(TInner), TResult)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_GroupJoin__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="IgnoreElements(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_IgnoreElements__1.htm" />
+          <HelpTOCNode Id="12e37b2d-65d0-4aaf-8696-59e696ca8160" Title="Intersect Method " Url="html/Overload_System_Linq_AsyncQueryable_Intersect.htm">
+            <HelpTOCNode Title="Intersect(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Intersect__1.htm" />
+            <HelpTOCNode Title="Intersect(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Intersect__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9768b38a-a5dc-4a21-8626-1a4660497bcd" Title="IsEmpty Method " Url="html/Overload_System_Linq_AsyncQueryable_IsEmpty.htm">
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_IsEmpty__1.htm" />
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_IsEmpty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="e13b6fd8-1b95-448e-8405-5564ad550717" Title="Join Method " Url="html/Overload_System_Linq_AsyncQueryable_Join.htm">
+            <HelpTOCNode Title="Join(TOuter, TInner, TKey, TResult) Method (IAsyncQueryable(TOuter), IAsyncEnumerable(TInner), Expression(Func(TOuter, TKey)), Expression(Func(TInner, TKey)), Expression(Func(TOuter, TInner, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Join__4.htm" />
+            <HelpTOCNode Title="Join(TOuter, TInner, TKey, TResult) Method (IAsyncQueryable(TOuter), IAsyncEnumerable(TInner), Expression(Func(TOuter, TKey)), Expression(Func(TInner, TKey)), Expression(Func(TOuter, TInner, TResult)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_Join__4_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="6801b97f-39ce-4416-9bab-f13d832674dc" Title="Last Method " Url="html/Overload_System_Linq_AsyncQueryable_Last.htm">
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Last__1.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Last__1_1.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Last__1_3.htm" />
+            <HelpTOCNode Title="Last(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Last__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="5579c8d2-17ba-4046-9c75-33ba1fd5ff02" Title="LastOrDefault Method " Url="html/Overload_System_Linq_AsyncQueryable_LastOrDefault.htm">
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_LastOrDefault__1.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_LastOrDefault__1_1.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_LastOrDefault__1_3.htm" />
+            <HelpTOCNode Title="LastOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_LastOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="e5002e4e-c139-436c-8e0a-e0ab0dba08f1" Title="LongCount Method " Url="html/Overload_System_Linq_AsyncQueryable_LongCount.htm">
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_LongCount__1.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_LongCount__1_1.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_LongCount__1_3.htm" />
+            <HelpTOCNode Title="LongCount(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_LongCount__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1d6a5d03-ea0c-40a8-ab66-77815adee225" Title="Max Method " Url="html/Overload_System_Linq_AsyncQueryable_Max.htm">
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Decimal))" Url="html/M_System_Linq_AsyncQueryable_Max.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Double))" Url="html/M_System_Linq_AsyncQueryable_Max_2.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Int32))" Url="html/M_System_Linq_AsyncQueryable_Max_4.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Int64))" Url="html/M_System_Linq_AsyncQueryable_Max_6.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Max_8.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Double)))" Url="html/M_System_Linq_AsyncQueryable_Max_10.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncQueryable_Max_12.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncQueryable_Max_14.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Single)))" Url="html/M_System_Linq_AsyncQueryable_Max_16.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Single))" Url="html/M_System_Linq_AsyncQueryable_Max_18.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Max__1.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_1.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_3.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_5.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_7.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_9.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_11.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_13.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_15.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_17.htm" />
+            <HelpTOCNode Title="Max Method (IAsyncQueryable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max_19.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), IComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Max__1_1.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Max__1_3.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)))" Url="html/M_System_Linq_AsyncQueryable_Max__1_5.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)))" Url="html/M_System_Linq_AsyncQueryable_Max__1_7.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)))" Url="html/M_System_Linq_AsyncQueryable_Max__1_9.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))))" Url="html/M_System_Linq_AsyncQueryable_Max__1_11.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))))" Url="html/M_System_Linq_AsyncQueryable_Max__1_13.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))))" Url="html/M_System_Linq_AsyncQueryable_Max__1_15.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))))" Url="html/M_System_Linq_AsyncQueryable_Max__1_17.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))))" Url="html/M_System_Linq_AsyncQueryable_Max__1_19.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)))" Url="html/M_System_Linq_AsyncQueryable_Max__1_21.htm" />
+            <HelpTOCNode Title="Max(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Max__2.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_23.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), IComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_2.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_4.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_6.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_8.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_10.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_12.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_14.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_16.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_18.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_20.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__1_22.htm" />
+            <HelpTOCNode Title="Max(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TResult)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Max__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="b285e5d9-ae87-4635-9be2-a657593aefef" Title="MaxBy Method " Url="html/Overload_System_Linq_AsyncQueryable_MaxBy.htm">
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_MaxBy__2.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_MaxBy__2_1.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_MaxBy__2_3.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_MaxBy__2_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a4d7c756-a5dd-4efe-8cf4-a3c61911faa6" Title="Min Method " Url="html/Overload_System_Linq_AsyncQueryable_Min.htm">
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Decimal))" Url="html/M_System_Linq_AsyncQueryable_Min.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Double))" Url="html/M_System_Linq_AsyncQueryable_Min_2.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Int32))" Url="html/M_System_Linq_AsyncQueryable_Min_4.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Int64))" Url="html/M_System_Linq_AsyncQueryable_Min_6.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Min_8.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Double)))" Url="html/M_System_Linq_AsyncQueryable_Min_10.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncQueryable_Min_12.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncQueryable_Min_14.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Single)))" Url="html/M_System_Linq_AsyncQueryable_Min_16.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Single))" Url="html/M_System_Linq_AsyncQueryable_Min_18.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Min__1.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_1.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_3.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_5.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_7.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_9.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_11.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_13.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_15.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_17.htm" />
+            <HelpTOCNode Title="Min Method (IAsyncQueryable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min_19.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), IComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Min__1_1.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Min__1_3.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)))" Url="html/M_System_Linq_AsyncQueryable_Min__1_5.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)))" Url="html/M_System_Linq_AsyncQueryable_Min__1_7.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)))" Url="html/M_System_Linq_AsyncQueryable_Min__1_9.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))))" Url="html/M_System_Linq_AsyncQueryable_Min__1_11.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))))" Url="html/M_System_Linq_AsyncQueryable_Min__1_13.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))))" Url="html/M_System_Linq_AsyncQueryable_Min__1_15.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))))" Url="html/M_System_Linq_AsyncQueryable_Min__1_17.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))))" Url="html/M_System_Linq_AsyncQueryable_Min__1_19.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)))" Url="html/M_System_Linq_AsyncQueryable_Min__1_21.htm" />
+            <HelpTOCNode Title="Min(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Min__2.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_23.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), IComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_2.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_4.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_6.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_8.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_10.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_12.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_14.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_16.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_18.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_20.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__1_22.htm" />
+            <HelpTOCNode Title="Min(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TResult)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Min__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="e4c36cb1-cca3-4b9d-b816-c5f4845df18f" Title="MinBy Method " Url="html/Overload_System_Linq_AsyncQueryable_MinBy.htm">
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_MinBy__2.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_MinBy__2_1.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_MinBy__2_3.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_MinBy__2_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="OfType(TType) Method " Url="html/M_System_Linq_AsyncQueryable_OfType__1.htm" />
+          <HelpTOCNode Title="OnErrorResumeNext(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_OnErrorResumeNext__1.htm" />
+          <HelpTOCNode Id="4212fe7e-de0a-4c08-970d-02a7087d2d04" Title="OrderBy Method " Url="html/Overload_System_Linq_AsyncQueryable_OrderBy.htm">
+            <HelpTOCNode Title="OrderBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_OrderBy__2.htm" />
+            <HelpTOCNode Title="OrderBy(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_OrderBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2220456c-ed08-4295-bfc3-fc59e3679111" Title="OrderByDescending Method " Url="html/Overload_System_Linq_AsyncQueryable_OrderByDescending.htm">
+            <HelpTOCNode Title="OrderByDescending(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_OrderByDescending__2.htm" />
+            <HelpTOCNode Title="OrderByDescending(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_OrderByDescending__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9a1dcb3b-a355-498b-8841-7b9c826e154e" Title="Repeat Method " Url="html/Overload_System_Linq_AsyncQueryable_Repeat.htm">
+            <HelpTOCNode Title="Repeat(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Repeat__1.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IAsyncQueryable(TSource), Int32)" Url="html/M_System_Linq_AsyncQueryable_Repeat__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="170d5957-500a-4c85-be71-75e8121c09fb" Title="Retry Method " Url="html/Overload_System_Linq_AsyncQueryable_Retry.htm">
+            <HelpTOCNode Title="Retry(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Retry__1.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IAsyncQueryable(TSource), Int32)" Url="html/M_System_Linq_AsyncQueryable_Retry__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Reverse(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Reverse__1.htm" />
+          <HelpTOCNode Id="58bb879c-453d-4f50-98e3-346cf63a2cc4" Title="Scan Method " Url="html/Overload_System_Linq_AsyncQueryable_Scan.htm">
+            <HelpTOCNode Title="Scan(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TSource, TSource)))" Url="html/M_System_Linq_AsyncQueryable_Scan__1.htm" />
+            <HelpTOCNode Title="Scan(TSource, TAccumulate) Method (IAsyncQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)))" Url="html/M_System_Linq_AsyncQueryable_Scan__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="df6d0392-dd79-4d5d-9da9-0b735361ca8b" Title="Select Method " Url="html/Overload_System_Linq_AsyncQueryable_Select.htm">
+            <HelpTOCNode Title="Select(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Select__2.htm" />
+            <HelpTOCNode Title="Select(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, TResult)))" Url="html/M_System_Linq_AsyncQueryable_Select__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="edf8aaaf-6ad9-498c-b095-78e186cc4374" Title="SelectMany Method " Url="html/Overload_System_Linq_AsyncQueryable_SelectMany.htm">
+            <HelpTOCNode Title="SelectMany(TSource, TOther) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TOther))" Url="html/M_System_Linq_AsyncQueryable_SelectMany__2.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, IAsyncEnumerable(TResult))))" Url="html/M_System_Linq_AsyncQueryable_SelectMany__2_1.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, IAsyncEnumerable(TResult))))" Url="html/M_System_Linq_AsyncQueryable_SelectMany__2_2.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TCollection, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, IAsyncEnumerable(TCollection))), Expression(Func(TSource, TCollection, TResult)))" Url="html/M_System_Linq_AsyncQueryable_SelectMany__3.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TCollection, TResult) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, IAsyncEnumerable(TCollection))), Expression(Func(TSource, TCollection, TResult)))" Url="html/M_System_Linq_AsyncQueryable_SelectMany__3_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a3662db0-b7bd-457c-bbe6-ba9e21866fd9" Title="SequenceEqual Method " Url="html/Overload_System_Linq_AsyncQueryable_SequenceEqual.htm">
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncQueryable_SequenceEqual__1.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_SequenceEqual__1_1.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_SequenceEqual__1_3.htm" />
+            <HelpTOCNode Title="SequenceEqual(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_SequenceEqual__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0996a714-5437-4617-8f80-8641eb65554a" Title="Single Method " Url="html/Overload_System_Linq_AsyncQueryable_Single.htm">
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Single__1.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Single__1_1.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Single__1_3.htm" />
+            <HelpTOCNode Title="Single(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Single__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="b7f5abb0-36e7-48ba-a954-2951abbde03a" Title="SingleOrDefault Method " Url="html/Overload_System_Linq_AsyncQueryable_SingleOrDefault.htm">
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_SingleOrDefault__1.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_SingleOrDefault__1_1.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_SingleOrDefault__1_3.htm" />
+            <HelpTOCNode Title="SingleOrDefault(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_SingleOrDefault__1_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Skip(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Skip__1.htm" />
+          <HelpTOCNode Title="SkipLast(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_SkipLast__1.htm" />
+          <HelpTOCNode Id="74b18063-7c24-40bd-a7fc-c9dd8ad273c2" Title="SkipWhile Method " Url="html/Overload_System_Linq_AsyncQueryable_SkipWhile.htm">
+            <HelpTOCNode Title="SkipWhile(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_SkipWhile__1.htm" />
+            <HelpTOCNode Title="SkipWhile(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_SkipWhile__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="StartWith(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_StartWith__1.htm" />
+          <HelpTOCNode Id="e433045f-b0a1-41af-a8da-97e91e57a8ae" Title="Sum Method " Url="html/Overload_System_Linq_AsyncQueryable_Sum.htm">
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Decimal))" Url="html/M_System_Linq_AsyncQueryable_Sum.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Double))" Url="html/M_System_Linq_AsyncQueryable_Sum_2.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Int32))" Url="html/M_System_Linq_AsyncQueryable_Sum_4.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Int64))" Url="html/M_System_Linq_AsyncQueryable_Sum_6.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Sum_8.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Double)))" Url="html/M_System_Linq_AsyncQueryable_Sum_10.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Int32)))" Url="html/M_System_Linq_AsyncQueryable_Sum_12.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Int64)))" Url="html/M_System_Linq_AsyncQueryable_Sum_14.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Single)))" Url="html/M_System_Linq_AsyncQueryable_Sum_16.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Single))" Url="html/M_System_Linq_AsyncQueryable_Sum_18.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Decimal), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_1.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Double), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_3.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Int32), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_5.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Int64), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_7.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_9.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_11.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_13.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_15.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Nullable(Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_17.htm" />
+            <HelpTOCNode Title="Sum Method (IAsyncQueryable(Single), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum_19.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)))" Url="html/M_System_Linq_AsyncQueryable_Sum__1.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_2.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_4.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_6.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_8.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_10.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_12.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_14.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_16.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)))" Url="html/M_System_Linq_AsyncQueryable_Sum__1_18.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Decimal)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_1.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Double)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_3.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_5.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int64)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_7.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Decimal))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_9.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Double))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_11.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int32))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_13.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Int64))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_15.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Nullable(Single))), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_17.htm" />
+            <HelpTOCNode Title="Sum(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Single)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_Sum__1_19.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Take(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_Take__1.htm" />
+          <HelpTOCNode Title="TakeLast(TSource) Method " Url="html/M_System_Linq_AsyncQueryable_TakeLast__1.htm" />
+          <HelpTOCNode Id="c4f02c40-d6b8-45a1-9490-8013f93b26aa" Title="TakeWhile Method " Url="html/Overload_System_Linq_AsyncQueryable_TakeWhile.htm">
+            <HelpTOCNode Title="TakeWhile(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_TakeWhile__1.htm" />
+            <HelpTOCNode Title="TakeWhile(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_TakeWhile__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="06cbfd48-a3e7-49ac-9cf6-598b757695fb" Title="ThenBy Method " Url="html/Overload_System_Linq_AsyncQueryable_ThenBy.htm">
+            <HelpTOCNode Title="ThenBy(TSource, TKey) Method (IOrderedAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_ThenBy__2.htm" />
+            <HelpTOCNode Title="ThenBy(TSource, TKey) Method (IOrderedAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ThenBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cc9c480e-0c54-42ec-860f-d6e4efe96e4c" Title="ThenByDescending Method " Url="html/Overload_System_Linq_AsyncQueryable_ThenByDescending.htm">
+            <HelpTOCNode Title="ThenByDescending(TSource, TKey) Method (IOrderedAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_ThenByDescending__2.htm" />
+            <HelpTOCNode Title="ThenByDescending(TSource, TKey) Method (IOrderedAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ThenByDescending__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cd64d33c-f29e-4629-bafb-d124c860e0d1" Title="ToArray Method " Url="html/Overload_System_Linq_AsyncQueryable_ToArray.htm">
+            <HelpTOCNode Title="ToArray(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_ToArray__1.htm" />
+            <HelpTOCNode Title="ToArray(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToArray__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="abeca854-604c-44aa-91d1-4b7ce7874a71" Title="ToDictionary Method " Url="html/Overload_System_Linq_AsyncQueryable_ToDictionary.htm">
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__2.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__2_1.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)))" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__2_3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__2_2.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__3_1.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__3_3.htm" />
+            <HelpTOCNode Title="ToDictionary(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToDictionary__3_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d71b129a-4ba1-463a-851b-60cf940dbef6" Title="ToList Method " Url="html/Overload_System_Linq_AsyncQueryable_ToList.htm">
+            <HelpTOCNode Title="ToList(TSource) Method (IAsyncQueryable(TSource))" Url="html/M_System_Linq_AsyncQueryable_ToList__1.htm" />
+            <HelpTOCNode Title="ToList(TSource) Method (IAsyncQueryable(TSource), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToList__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a5a202e6-0a0f-402e-8ca6-fe03cbf13c83" Title="ToLookup Method " Url="html/Overload_System_Linq_AsyncQueryable_ToLookup.htm">
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_AsyncQueryable_ToLookup__2.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ToLookup__2_1.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)))" Url="html/M_System_Linq_AsyncQueryable_ToLookup__3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToLookup__2_3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToLookup__2_2.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), IEqualityComparer(TKey))" Url="html/M_System_Linq_AsyncQueryable_ToLookup__3_1.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToLookup__3_3.htm" />
+            <HelpTOCNode Title="ToLookup(TSource, TKey, TElement) Method (IAsyncQueryable(TSource), Expression(Func(TSource, TKey)), Expression(Func(TSource, TElement)), IEqualityComparer(TKey), CancellationToken)" Url="html/M_System_Linq_AsyncQueryable_ToLookup__3_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="37769972-73f2-43db-874b-2fac1f904bb8" Title="Union Method " Url="html/Overload_System_Linq_AsyncQueryable_Union.htm">
+            <HelpTOCNode Title="Union(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource))" Url="html/M_System_Linq_AsyncQueryable_Union__1.htm" />
+            <HelpTOCNode Title="Union(TSource) Method (IAsyncQueryable(TSource), IAsyncEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_AsyncQueryable_Union__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="3690f9b2-340f-4270-88e9-94a2859e701b" Title="Where Method " Url="html/Overload_System_Linq_AsyncQueryable_Where.htm">
+            <HelpTOCNode Title="Where(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Where__1.htm" />
+            <HelpTOCNode Title="Where(TSource) Method (IAsyncQueryable(TSource), Expression(Func(TSource, Int32, Boolean)))" Url="html/M_System_Linq_AsyncQueryable_Where__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Zip(TFirst, TSecond, TResult) Method " Url="html/M_System_Linq_AsyncQueryable_Zip__3.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="b3afcc1b-48cc-4552-b541-c3a00243aec4" Title="EnumerableEx Class" Url="html/T_System_Linq_EnumerableEx.htm">
+        <HelpTOCNode Id="f88c1354-442d-4f69-b4f3-0c55069555b9" Title="EnumerableEx Methods" Url="html/Methods_T_System_Linq_EnumerableEx.htm">
+          <HelpTOCNode Id="33faf605-96da-437f-93cb-85d4ec894aca" Title="Buffer Method " Url="html/Overload_System_Linq_EnumerableEx_Buffer.htm">
+            <HelpTOCNode Title="Buffer(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_EnumerableEx_Buffer__1.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IEnumerable(TSource), Int32, Int32)" Url="html/M_System_Linq_EnumerableEx_Buffer__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cc55b4d1-359d-4ad7-8958-65ee840ebe97" Title="Case Method " Url="html/Overload_System_Linq_EnumerableEx_Case.htm">
+            <HelpTOCNode Title="Case(TValue, TResult) Method (Func(TValue), IDictionary(TValue, IEnumerable(TResult)))" Url="html/M_System_Linq_EnumerableEx_Case__2.htm" />
+            <HelpTOCNode Title="Case(TValue, TResult) Method (Func(TValue), IDictionary(TValue, IEnumerable(TResult)), IEnumerable(TResult))" Url="html/M_System_Linq_EnumerableEx_Case__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="9875a3e7-be86-4e5e-970e-d91425654344" Title="Catch Method " Url="html/Overload_System_Linq_EnumerableEx_Catch.htm">
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_EnumerableEx_Catch__1.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_EnumerableEx_Catch__1_2.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Catch__1_1.htm" />
+            <HelpTOCNode Title="Catch(TSource, TException) Method (IEnumerable(TSource), Func(TException, IEnumerable(TSource)))" Url="html/M_System_Linq_EnumerableEx_Catch__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="b80f0cc8-2e5e-4cfa-a416-80b679b820f8" Title="Concat Method " Url="html/Overload_System_Linq_EnumerableEx_Concat.htm">
+            <HelpTOCNode Title="Concat(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_EnumerableEx_Concat__1.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_EnumerableEx_Concat__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="5f0a50cb-d0e0-4b63-a3b2-606aa97a7d53" Title="Create Method " Url="html/Overload_System_Linq_EnumerableEx_Create.htm">
+            <HelpTOCNode Title="Create(TResult) Method (Func(IEnumerator(TResult)))" Url="html/M_System_Linq_EnumerableEx_Create__1_1.htm" />
+            <HelpTOCNode Title="Create(T) Method (Action(IYielder(T)))" Url="html/M_System_Linq_EnumerableEx_Create__1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Defer(TResult) Method " Url="html/M_System_Linq_EnumerableEx_Defer__1.htm" />
+          <HelpTOCNode Id="6f6efaba-1b39-42d4-9ffb-9b7fda7b5c45" Title="Distinct Method " Url="html/Overload_System_Linq_EnumerableEx_Distinct.htm">
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_EnumerableEx_Distinct__2.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_EnumerableEx_Distinct__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="eb490413-9e4d-42dd-adc9-fb4254276606" Title="DistinctUntilChanged Method " Url="html/Overload_System_Linq_EnumerableEx_DistinctUntilChanged.htm">
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_DistinctUntilChanged__1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_EnumerableEx_DistinctUntilChanged__1_1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_EnumerableEx_DistinctUntilChanged__2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_EnumerableEx_DistinctUntilChanged__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="252d33ff-993d-48e7-bf77-03572de6f74c" Title="Do Method " Url="html/Overload_System_Linq_EnumerableEx_Do.htm">
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_EnumerableEx_Do__1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), IObserver(TSource))" Url="html/M_System_Linq_EnumerableEx_Do__1_4.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action)" Url="html/M_System_Linq_EnumerableEx_Do__1_1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action(Exception))" Url="html/M_System_Linq_EnumerableEx_Do__1_2.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action(Exception), Action)" Url="html/M_System_Linq_EnumerableEx_Do__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="DoWhile(TResult) Method " Url="html/M_System_Linq_EnumerableEx_DoWhile__1.htm" />
+          <HelpTOCNode Title="Expand(TSource) Method " Url="html/M_System_Linq_EnumerableEx_Expand__1.htm" />
+          <HelpTOCNode Title="Finally(TSource) Method " Url="html/M_System_Linq_EnumerableEx_Finally__1.htm" />
+          <HelpTOCNode Title="For(TSource, TResult) Method " Url="html/M_System_Linq_EnumerableEx_For__2.htm" />
+          <HelpTOCNode Id="7ee0b185-ec4e-497a-8845-8510528e3026" Title="ForEach Method " Url="html/Overload_System_Linq_EnumerableEx_ForEach.htm">
+            <HelpTOCNode Title="ForEach(TSource) Method (IEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_EnumerableEx_ForEach__1.htm" />
+            <HelpTOCNode Title="ForEach(TSource) Method (IEnumerable(TSource), Action(TSource, Int32))" Url="html/M_System_Linq_EnumerableEx_ForEach__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Generate(TState, TResult) Method " Url="html/M_System_Linq_EnumerableEx_Generate__2.htm" />
+          <HelpTOCNode Title="Hide(TSource) Method " Url="html/M_System_Linq_EnumerableEx_Hide__1.htm" />
+          <HelpTOCNode Id="68337fc1-7d6f-4203-a890-d409356806af" Title="If Method " Url="html/Overload_System_Linq_EnumerableEx_If.htm">
+            <HelpTOCNode Title="If(TResult) Method (Func(Boolean), IEnumerable(TResult))" Url="html/M_System_Linq_EnumerableEx_If__1.htm" />
+            <HelpTOCNode Title="If(TResult) Method (Func(Boolean), IEnumerable(TResult), IEnumerable(TResult))" Url="html/M_System_Linq_EnumerableEx_If__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="IgnoreElements(TSource) Method " Url="html/M_System_Linq_EnumerableEx_IgnoreElements__1.htm" />
+          <HelpTOCNode Title="IsEmpty(TSource) Method " Url="html/M_System_Linq_EnumerableEx_IsEmpty__1.htm" />
+          <HelpTOCNode Title="Max(TSource) Method " Url="html/M_System_Linq_EnumerableEx_Max__1.htm" />
+          <HelpTOCNode Id="24a4defc-508d-4bec-99e8-3d2087e70fd3" Title="MaxBy Method " Url="html/Overload_System_Linq_EnumerableEx_MaxBy.htm">
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_EnumerableEx_MaxBy__2.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_EnumerableEx_MaxBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="fa62211e-afb1-4881-ba7d-a93ad3c958fd" Title="Memoize Method " Url="html/Overload_System_Linq_EnumerableEx_Memoize.htm">
+            <HelpTOCNode Title="Memoize(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Memoize__1.htm" />
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_EnumerableEx_Memoize__2.htm" />
+            <HelpTOCNode Title="Memoize(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_EnumerableEx_Memoize__1_1.htm" />
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IEnumerable(TSource), Int32, Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_EnumerableEx_Memoize__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Min(TSource) Method " Url="html/M_System_Linq_EnumerableEx_Min__1.htm" />
+          <HelpTOCNode Id="9f998adf-d96e-4f20-8da4-226b495b2498" Title="MinBy Method " Url="html/Overload_System_Linq_EnumerableEx_MinBy.htm">
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_EnumerableEx_MinBy__2.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_EnumerableEx_MinBy__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="148939ed-55fe-4ebe-9fca-99ded9c00fe2" Title="OnErrorResumeNext Method " Url="html/Overload_System_Linq_EnumerableEx_OnErrorResumeNext.htm">
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_EnumerableEx_OnErrorResumeNext__1.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_EnumerableEx_OnErrorResumeNext__1_2.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_OnErrorResumeNext__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="bd5b0770-0f62-4ebd-bb09-30aafae1260f" Title="Publish Method " Url="html/Overload_System_Linq_EnumerableEx_Publish.htm">
+            <HelpTOCNode Title="Publish(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Publish__1.htm" />
+            <HelpTOCNode Title="Publish(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_EnumerableEx_Publish__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d5b05034-d8bd-4ea4-8fb6-43932ff2e787" Title="Repeat Method " Url="html/Overload_System_Linq_EnumerableEx_Repeat.htm">
+            <HelpTOCNode Title="Repeat(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Repeat__1.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult)" Url="html/M_System_Linq_EnumerableEx_Repeat__1_2.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_EnumerableEx_Repeat__1_1.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult, Int32)" Url="html/M_System_Linq_EnumerableEx_Repeat__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="61b5b60e-de2b-492f-861d-0ffbc4838ff8" Title="Retry Method " Url="html/Overload_System_Linq_EnumerableEx_Retry.htm">
+            <HelpTOCNode Title="Retry(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Retry__1.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_EnumerableEx_Retry__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="Return(TResult) Method " Url="html/M_System_Linq_EnumerableEx_Return__1.htm" />
+          <HelpTOCNode Id="d4f73259-0cf0-4a8a-8ef9-3119181c0332" Title="Scan Method " Url="html/Overload_System_Linq_EnumerableEx_Scan.htm">
+            <HelpTOCNode Title="Scan(TSource) Method (IEnumerable(TSource), Func(TSource, TSource, TSource))" Url="html/M_System_Linq_EnumerableEx_Scan__1.htm" />
+            <HelpTOCNode Title="Scan(TSource, TAccumulate) Method (IEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate))" Url="html/M_System_Linq_EnumerableEx_Scan__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="SelectMany(TSource, TOther) Method " Url="html/M_System_Linq_EnumerableEx_SelectMany__2.htm" />
+          <HelpTOCNode Id="4ff0ffac-5887-4d22-85ee-bde1b46e036e" Title="Share Method " Url="html/Overload_System_Linq_EnumerableEx_Share.htm">
+            <HelpTOCNode Title="Share(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_EnumerableEx_Share__1.htm" />
+            <HelpTOCNode Title="Share(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_EnumerableEx_Share__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Title="SkipLast(TSource) Method " Url="html/M_System_Linq_EnumerableEx_SkipLast__1.htm" />
+          <HelpTOCNode Title="StartWith(TSource) Method " Url="html/M_System_Linq_EnumerableEx_StartWith__1.htm" />
+          <HelpTOCNode Title="TakeLast(TSource) Method " Url="html/M_System_Linq_EnumerableEx_TakeLast__1.htm" />
+          <HelpTOCNode Title="Throw(TResult) Method " Url="html/M_System_Linq_EnumerableEx_Throw__1.htm" />
+          <HelpTOCNode Title="Using(TSource, TResource) Method " Url="html/M_System_Linq_EnumerableEx_Using__2.htm" />
+          <HelpTOCNode Title="While(TResult) Method " Url="html/M_System_Linq_EnumerableEx_While__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="1011c7b9-7c49-4aa8-b0df-78421a6c4d50" Title="IAsyncGrouping(TKey, TElement) Interface" Url="html/T_System_Linq_IAsyncGrouping_2.htm">
+        <HelpTOCNode Id="858f5ddf-20e0-406c-9aec-82baf2c8d527" Title="IAsyncGrouping(TKey, TElement) Properties" Url="html/Properties_T_System_Linq_IAsyncGrouping_2.htm">
+          <HelpTOCNode Title="Key Property " Url="html/P_System_Linq_IAsyncGrouping_2_Key.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="IAsyncGrouping(TKey, TElement) Methods" Url="html/Methods_T_System_Linq_IAsyncGrouping_2.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="fc328be3-a432-41cc-802a-6bd55427bbc1" Title="IAsyncQueryable Interface" Url="html/T_System_Linq_IAsyncQueryable.htm">
+        <HelpTOCNode Id="1f312f05-4f7e-4e01-9cee-62689e133581" Title="IAsyncQueryable Properties" Url="html/Properties_T_System_Linq_IAsyncQueryable.htm">
+          <HelpTOCNode Title="ElementType Property " Url="html/P_System_Linq_IAsyncQueryable_ElementType.htm" />
+          <HelpTOCNode Title="Expression Property " Url="html/P_System_Linq_IAsyncQueryable_Expression.htm" />
+          <HelpTOCNode Title="Provider Property " Url="html/P_System_Linq_IAsyncQueryable_Provider.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="e28bcde7-f431-4b85-ac19-eddb1c46ceca" Title="IAsyncQueryable(T) Interface" Url="html/T_System_Linq_IAsyncQueryable_1.htm">
+        <HelpTOCNode Title="IAsyncQueryable(T) Properties" Url="html/Properties_T_System_Linq_IAsyncQueryable_1.htm" />
+        <HelpTOCNode Title="IAsyncQueryable(T) Methods" Url="html/Methods_T_System_Linq_IAsyncQueryable_1.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="ca0b70b7-c5ff-4cd9-a6a7-9fad6a180077" Title="IAsyncQueryProvider Interface" Url="html/T_System_Linq_IAsyncQueryProvider.htm">
+        <HelpTOCNode Id="6eb816c4-4811-4581-8876-bcd12fe81f21" Title="IAsyncQueryProvider Methods" Url="html/Methods_T_System_Linq_IAsyncQueryProvider.htm">
+          <HelpTOCNode Title="CreateQuery(TElement) Method " Url="html/M_System_Linq_IAsyncQueryProvider_CreateQuery__1.htm" />
+          <HelpTOCNode Title="ExecuteAsync(TResult) Method " Url="html/M_System_Linq_IAsyncQueryProvider_ExecuteAsync__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="48c2e76f-7f74-469f-b45f-0bdbe3e6e3d1" Title="IAwaitable Interface" Url="html/T_System_Linq_IAwaitable.htm">
+        <HelpTOCNode Id="b8fca061-f6c2-4bfb-8939-2a2f68720c00" Title="IAwaitable Methods" Url="html/Methods_T_System_Linq_IAwaitable.htm">
+          <HelpTOCNode Title="GetAwaiter Method " Url="html/M_System_Linq_IAwaitable_GetAwaiter.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="71f5b900-ee12-4e0e-a72f-fe5f6b5e7bc6" Title="IAwaiter Interface" Url="html/T_System_Linq_IAwaiter.htm">
+        <HelpTOCNode Id="37abbfa8-f1f5-4813-8a91-7ed686809339" Title="IAwaiter Properties" Url="html/Properties_T_System_Linq_IAwaiter.htm">
+          <HelpTOCNode Title="IsCompleted Property " Url="html/P_System_Linq_IAwaiter_IsCompleted.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="b9c29024-914f-4c7f-967b-e267afa824b9" Title="IAwaiter Methods" Url="html/Methods_T_System_Linq_IAwaiter.htm">
+          <HelpTOCNode Title="GetResult Method " Url="html/M_System_Linq_IAwaiter_GetResult.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="0a3329f0-9f35-448f-8145-e6d9388a2449" Title="IBuffer(T) Interface" Url="html/T_System_Linq_IBuffer_1.htm">
+        <HelpTOCNode Title="IBuffer(T) Methods" Url="html/Methods_T_System_Linq_IBuffer_1.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="0a5d00b9-3474-491f-af84-923eb191b13a" Title="IOrderedAsyncEnumerable(TElement) Interface" Url="html/T_System_Linq_IOrderedAsyncEnumerable_1.htm">
+        <HelpTOCNode Id="04b1f48a-21c9-4220-80d4-839cd510b443" Title="IOrderedAsyncEnumerable(TElement) Methods" Url="html/Methods_T_System_Linq_IOrderedAsyncEnumerable_1.htm">
+          <HelpTOCNode Title="CreateOrderedEnumerable(TKey) Method " Url="html/M_System_Linq_IOrderedAsyncEnumerable_1_CreateOrderedEnumerable__1.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="776f24b0-2613-4ca5-8ea9-a5d56e0bb639" Title="IOrderedAsyncQueryable Interface" Url="html/T_System_Linq_IOrderedAsyncQueryable.htm">
+        <HelpTOCNode Title="IOrderedAsyncQueryable Properties" Url="html/Properties_T_System_Linq_IOrderedAsyncQueryable.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="2e48ad92-f424-47f8-a47d-8653e6a993de" Title="IOrderedAsyncQueryable(T) Interface" Url="html/T_System_Linq_IOrderedAsyncQueryable_1.htm">
+        <HelpTOCNode Title="IOrderedAsyncQueryable(T) Properties" Url="html/Properties_T_System_Linq_IOrderedAsyncQueryable_1.htm" />
+        <HelpTOCNode Title="IOrderedAsyncQueryable(T) Methods" Url="html/Methods_T_System_Linq_IOrderedAsyncQueryable_1.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="3ce20969-1e6e-4b5c-b222-e6b31a0cde76" Title="IYielder(T) Interface" Url="html/T_System_Linq_IYielder_1.htm">
+        <HelpTOCNode Id="44406452-1765-4088-b605-22552d5e22fd" Title="IYielder(T) Methods" Url="html/Methods_T_System_Linq_IYielder_1.htm">
+          <HelpTOCNode Title="Break Method " Url="html/M_System_Linq_IYielder_1_Break.htm" />
+          <HelpTOCNode Title="Return Method " Url="html/M_System_Linq_IYielder_1_Return.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="c79fc813-644e-402e-8fef-19ff288542ed" Title="QueryableEx Class" Url="html/T_System_Linq_QueryableEx.htm">
+        <HelpTOCNode Id="da2279af-8d8c-453e-a30d-9c223ae19108" Title="QueryableEx Properties" Url="html/Properties_T_System_Linq_QueryableEx.htm">
+          <HelpTOCNode Title="Provider Property " Url="html/P_System_Linq_QueryableEx_Provider.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="ed864a1e-b9d4-4b99-afeb-3b4f77d6779a" Title="QueryableEx Methods" Url="html/Methods_T_System_Linq_QueryableEx.htm">
+          <HelpTOCNode Id="c40c438c-0599-466e-9383-3d165a473c39" Title="Buffer Method " Url="html/Overload_System_Linq_QueryableEx_Buffer.htm">
+            <HelpTOCNode Title="Buffer(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Buffer__1.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IQueryable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Buffer__1_2.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IEnumerable(TSource), Int32, Int32)" Url="html/M_System_Linq_QueryableEx_Buffer__1_1.htm" />
+            <HelpTOCNode Title="Buffer(TSource) Method (IQueryable(TSource), Int32, Int32)" Url="html/M_System_Linq_QueryableEx_Buffer__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d2b905a7-fd66-4287-a079-85d47666c3bc" Title="Case Method " Url="html/Overload_System_Linq_QueryableEx_Case.htm">
+            <HelpTOCNode Title="Case(TValue, TResult) Method (Func(TValue), IDictionary(TValue, IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Case__2.htm" />
+            <HelpTOCNode Title="Case(TValue, TResult) Method (Func(TValue), IDictionary(TValue, IEnumerable(TResult)), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_Case__2_1.htm" />
+            <HelpTOCNode Title="Case(TValue, TResult) Method (IQueryProvider, Expression(Func(TValue)), IDictionary(TValue, IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Case__2_2.htm" />
+            <HelpTOCNode Title="Case(TValue, TResult) Method (IQueryProvider, Expression(Func(TValue)), IDictionary(TValue, IEnumerable(TResult)), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_Case__2_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="84a04004-70d2-4743-b561-17216026b496" Title="Catch Method " Url="html/Overload_System_Linq_QueryableEx_Catch.htm">
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Catch__1.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_Catch__1_2.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IQueryable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Catch__1_3.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IEnumerable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_Catch__1_1.htm" />
+            <HelpTOCNode Title="Catch(TSource, TException) Method (IEnumerable(TSource), Func(TException, IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Catch__2.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IQueryable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_Catch__1_4.htm" />
+            <HelpTOCNode Title="Catch(TSource, TException) Method (IQueryable(TSource), Expression(Func(TException, IEnumerable(TSource))))" Url="html/M_System_Linq_QueryableEx_Catch__2_1.htm" />
+            <HelpTOCNode Title="Catch(TSource) Method (IQueryProvider, IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_Catch__1_5.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="26a2934a-7e5a-427b-b06b-693086cf976a" Title="Concat Method " Url="html/Overload_System_Linq_QueryableEx_Concat.htm">
+            <HelpTOCNode Title="Concat(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Concat__1.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_Concat__1_1.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IQueryable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Concat__1_2.htm" />
+            <HelpTOCNode Title="Concat(TSource) Method (IQueryProvider, IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_Concat__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="39fe8eef-d2ea-4eba-bf21-80f030bb809a" Title="Create Method " Url="html/Overload_System_Linq_QueryableEx_Create.htm">
+            <HelpTOCNode Title="Create(TResult) Method (Func(IEnumerator(TResult)))" Url="html/M_System_Linq_QueryableEx_Create__1.htm" />
+            <HelpTOCNode Title="Create(TResult) Method (IQueryProvider, Expression(Func(IEnumerator(TResult))))" Url="html/M_System_Linq_QueryableEx_Create__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="3e360b0e-94ec-4725-83c8-61abcaa22304" Title="Defer Method " Url="html/Overload_System_Linq_QueryableEx_Defer.htm">
+            <HelpTOCNode Title="Defer(TResult) Method (Func(IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Defer__1.htm" />
+            <HelpTOCNode Title="Defer(TResult) Method (IQueryProvider, Expression(Func(IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_Defer__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="aeaf4807-279b-4800-8a58-aba4c85cc1d8" Title="Distinct Method " Url="html/Overload_System_Linq_QueryableEx_Distinct.htm">
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_QueryableEx_Distinct__2.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_QueryableEx_Distinct__2_2.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_QueryableEx_Distinct__2_1.htm" />
+            <HelpTOCNode Title="Distinct(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_QueryableEx_Distinct__2_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="181be7d8-da72-4878-89cf-bf93e4542a10" Title="DistinctUntilChanged Method " Url="html/Overload_System_Linq_QueryableEx_DistinctUntilChanged.htm">
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__1_2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IEnumerable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__1_1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource) Method (IQueryable(TSource), IEqualityComparer(TSource))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__1_3.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__2_2.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IEqualityComparer(TKey))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__2_1.htm" />
+            <HelpTOCNode Title="DistinctUntilChanged(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)), IEqualityComparer(TKey))" Url="html/M_System_Linq_QueryableEx_DistinctUntilChanged__2_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="ce5fadfb-3015-4666-ace5-4d2a58fc1074" Title="Do Method " Url="html/Overload_System_Linq_QueryableEx_Do.htm">
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource))" Url="html/M_System_Linq_QueryableEx_Do__1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), IObserver(TSource))" Url="html/M_System_Linq_QueryableEx_Do__1_4.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IQueryable(TSource), IObserver(TSource))" Url="html/M_System_Linq_QueryableEx_Do__1_5.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IQueryable(TSource), Expression(Action(TSource)))" Url="html/M_System_Linq_QueryableEx_Do__1_6.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action)" Url="html/M_System_Linq_QueryableEx_Do__1_1.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action(Exception))" Url="html/M_System_Linq_QueryableEx_Do__1_2.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IQueryable(TSource), Expression(Action(TSource)), Expression(Action(Exception)))" Url="html/M_System_Linq_QueryableEx_Do__1_7.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IQueryable(TSource), Expression(Action(TSource)), Expression(Action))" Url="html/M_System_Linq_QueryableEx_Do__1_9.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IEnumerable(TSource), Action(TSource), Action(Exception), Action)" Url="html/M_System_Linq_QueryableEx_Do__1_3.htm" />
+            <HelpTOCNode Title="Do(TSource) Method (IQueryable(TSource), Expression(Action(TSource)), Expression(Action(Exception)), Expression(Action))" Url="html/M_System_Linq_QueryableEx_Do__1_8.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0a831bd6-e033-40bd-8b7e-5900c6e26bb0" Title="DoWhile Method " Url="html/Overload_System_Linq_QueryableEx_DoWhile.htm">
+            <HelpTOCNode Title="DoWhile(TResult) Method (IEnumerable(TResult), Func(Boolean))" Url="html/M_System_Linq_QueryableEx_DoWhile__1.htm" />
+            <HelpTOCNode Title="DoWhile(TResult) Method (IQueryable(TResult), Expression(Func(Boolean)))" Url="html/M_System_Linq_QueryableEx_DoWhile__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="4fb936e1-2590-4843-b868-a8a46a3fd681" Title="Empty Method " Url="html/Overload_System_Linq_QueryableEx_Empty.htm">
+            <HelpTOCNode Title="Empty(TResult) Method " Url="html/M_System_Linq_QueryableEx_Empty__1.htm" />
+            <HelpTOCNode Title="Empty(TResult) Method (IQueryProvider)" Url="html/M_System_Linq_QueryableEx_Empty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="14a536f0-0c14-4fd7-b936-e3adf9fb44ec" Title="Expand Method " Url="html/Overload_System_Linq_QueryableEx_Expand.htm">
+            <HelpTOCNode Title="Expand(TSource) Method (IEnumerable(TSource), Func(TSource, IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Expand__1.htm" />
+            <HelpTOCNode Title="Expand(TSource) Method (IQueryable(TSource), Expression(Func(TSource, IEnumerable(TSource))))" Url="html/M_System_Linq_QueryableEx_Expand__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="7238819f-b5c4-4c94-83e7-08d7a80c400b" Title="Finally Method " Url="html/Overload_System_Linq_QueryableEx_Finally.htm">
+            <HelpTOCNode Title="Finally(TSource) Method (IEnumerable(TSource), Action)" Url="html/M_System_Linq_QueryableEx_Finally__1.htm" />
+            <HelpTOCNode Title="Finally(TSource) Method (IQueryable(TSource), Expression(Action))" Url="html/M_System_Linq_QueryableEx_Finally__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="65a343d5-217b-4290-bdce-8bebfb82cefa" Title="For Method " Url="html/Overload_System_Linq_QueryableEx_For.htm">
+            <HelpTOCNode Title="For(TSource, TResult) Method (IEnumerable(TSource), Func(TSource, IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_For__2.htm" />
+            <HelpTOCNode Title="For(TSource, TResult) Method (IQueryProvider, IEnumerable(TSource), Expression(Func(TSource, IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_For__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="96bc8658-911e-42c4-9b56-44074bf0826b" Title="Generate Method " Url="html/Overload_System_Linq_QueryableEx_Generate.htm">
+            <HelpTOCNode Title="Generate(TState, TResult) Method (TState, Func(TState, Boolean), Func(TState, TState), Func(TState, TResult))" Url="html/M_System_Linq_QueryableEx_Generate__2_1.htm" />
+            <HelpTOCNode Title="Generate(TState, TResult) Method (IQueryProvider, TState, Expression(Func(TState, Boolean)), Expression(Func(TState, TState)), Expression(Func(TState, TResult)))" Url="html/M_System_Linq_QueryableEx_Generate__2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="b2176fc2-caa3-4f94-8eab-2e1938ae2a0d" Title="Hide Method " Url="html/Overload_System_Linq_QueryableEx_Hide.htm">
+            <HelpTOCNode Title="Hide(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_Hide__1.htm" />
+            <HelpTOCNode Title="Hide(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_Hide__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="b9b1a6b8-d6b2-4746-8cc5-d7fe7f506f96" Title="If Method " Url="html/Overload_System_Linq_QueryableEx_If.htm">
+            <HelpTOCNode Title="If(TResult) Method (Func(Boolean), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_If__1.htm" />
+            <HelpTOCNode Title="If(TResult) Method (Func(Boolean), IEnumerable(TResult), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_If__1_1.htm" />
+            <HelpTOCNode Title="If(TResult) Method (IQueryProvider, Expression(Func(Boolean)), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_If__1_2.htm" />
+            <HelpTOCNode Title="If(TResult) Method (IQueryProvider, Expression(Func(Boolean)), IEnumerable(TResult), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_If__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d11a3b19-c922-4cef-a5e3-4edd105f7981" Title="IgnoreElements Method " Url="html/Overload_System_Linq_QueryableEx_IgnoreElements.htm">
+            <HelpTOCNode Title="IgnoreElements(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_IgnoreElements__1.htm" />
+            <HelpTOCNode Title="IgnoreElements(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_IgnoreElements__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="24bbe2d6-37bd-46fc-ad33-79be390c0953" Title="IsEmpty Method " Url="html/Overload_System_Linq_QueryableEx_IsEmpty.htm">
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_IsEmpty__1.htm" />
+            <HelpTOCNode Title="IsEmpty(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_IsEmpty__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="d5c94244-0080-486b-a1f8-171d60e3162a" Title="Max Method " Url="html/Overload_System_Linq_QueryableEx_Max.htm">
+            <HelpTOCNode Title="Max(TSource) Method (IEnumerable(TSource), IComparer(TSource))" Url="html/M_System_Linq_QueryableEx_Max__1.htm" />
+            <HelpTOCNode Title="Max(TSource) Method (IQueryable(TSource), IComparer(TSource))" Url="html/M_System_Linq_QueryableEx_Max__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="41855855-3562-409c-9e26-a47ce6841446" Title="MaxBy Method " Url="html/Overload_System_Linq_QueryableEx_MaxBy.htm">
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_QueryableEx_MaxBy__2.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_QueryableEx_MaxBy__2_2.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_QueryableEx_MaxBy__2_1.htm" />
+            <HelpTOCNode Title="MaxBy(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_QueryableEx_MaxBy__2_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a41fa698-ab2e-4454-8ab4-1995b48cf815" Title="Memoize Method " Url="html/Overload_System_Linq_QueryableEx_Memoize.htm">
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Memoize__2.htm" />
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IQueryable(TSource), Expression(Func(IEnumerable(TSource), IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_Memoize__2_3.htm" />
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IEnumerable(TSource), Int32, Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Memoize__2_1.htm" />
+            <HelpTOCNode Title="Memoize(TSource, TResult) Method (IQueryable(TSource), Int32, Expression(Func(IEnumerable(TSource), IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_Memoize__2_2.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="bcfd8b4b-ddc4-49c1-8d1d-ba2ec8b56f14" Title="Min Method " Url="html/Overload_System_Linq_QueryableEx_Min.htm">
+            <HelpTOCNode Title="Min(TSource) Method (IEnumerable(TSource), IComparer(TSource))" Url="html/M_System_Linq_QueryableEx_Min__1.htm" />
+            <HelpTOCNode Title="Min(TSource) Method (IQueryable(TSource), IComparer(TSource))" Url="html/M_System_Linq_QueryableEx_Min__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="94083274-dd92-4948-ad30-978e0f9a095b" Title="MinBy Method " Url="html/Overload_System_Linq_QueryableEx_MinBy.htm">
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey))" Url="html/M_System_Linq_QueryableEx_MinBy__2.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)))" Url="html/M_System_Linq_QueryableEx_MinBy__2_2.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IEnumerable(TSource), Func(TSource, TKey), IComparer(TKey))" Url="html/M_System_Linq_QueryableEx_MinBy__2_1.htm" />
+            <HelpTOCNode Title="MinBy(TSource, TKey) Method (IQueryable(TSource), Expression(Func(TSource, TKey)), IComparer(TKey))" Url="html/M_System_Linq_QueryableEx_MinBy__2_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="cdffb741-ec35-4a3b-832c-292f263097dc" Title="OnErrorResumeNext Method " Url="html/Overload_System_Linq_QueryableEx_OnErrorResumeNext.htm">
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1_2.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IQueryable(IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1_3.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IEnumerable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1_1.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IQueryable(TSource), IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1_4.htm" />
+            <HelpTOCNode Title="OnErrorResumeNext(TSource) Method (IQueryProvider, IEnumerable(TSource)[])" Url="html/M_System_Linq_QueryableEx_OnErrorResumeNext__1_5.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="a5cf9e70-0012-49e8-b345-7ce897d0db11" Title="Publish Method " Url="html/Overload_System_Linq_QueryableEx_Publish.htm">
+            <HelpTOCNode Title="Publish(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Publish__2.htm" />
+            <HelpTOCNode Title="Publish(TSource, TResult) Method (IQueryable(TSource), Expression(Func(IEnumerable(TSource), IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_Publish__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="f9ce91fd-b3f9-4b41-a9cd-8fba71d78da1" Title="Range Method " Url="html/Overload_System_Linq_QueryableEx_Range.htm">
+            <HelpTOCNode Title="Range Method (Int32, Int32)" Url="html/M_System_Linq_QueryableEx_Range.htm" />
+            <HelpTOCNode Title="Range Method (IQueryProvider, Int32, Int32)" Url="html/M_System_Linq_QueryableEx_Range_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="700ca0b8-69ea-4f26-9117-35264817e362" Title="Repeat Method " Url="html/Overload_System_Linq_QueryableEx_Repeat.htm">
+            <HelpTOCNode Title="Repeat(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_Repeat__1.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_Repeat__1_2.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult)" Url="html/M_System_Linq_QueryableEx_Repeat__1_6.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Repeat__1_1.htm" />
+            <HelpTOCNode Title="Repeat(TSource) Method (IQueryable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Repeat__1_3.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (IQueryProvider, TResult)" Url="html/M_System_Linq_QueryableEx_Repeat__1_4.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (TResult, Int32)" Url="html/M_System_Linq_QueryableEx_Repeat__1_7.htm" />
+            <HelpTOCNode Title="Repeat(TResult) Method (IQueryProvider, TResult, Int32)" Url="html/M_System_Linq_QueryableEx_Repeat__1_5.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="1fbbdcc7-3b7c-450f-936d-5d3784c3cdcc" Title="Retry Method " Url="html/Overload_System_Linq_QueryableEx_Retry.htm">
+            <HelpTOCNode Title="Retry(TSource) Method (IEnumerable(TSource))" Url="html/M_System_Linq_QueryableEx_Retry__1.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IQueryable(TSource))" Url="html/M_System_Linq_QueryableEx_Retry__1_2.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Retry__1_1.htm" />
+            <HelpTOCNode Title="Retry(TSource) Method (IQueryable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_Retry__1_3.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="74c621ae-3562-41f1-90e5-b4c34136338f" Title="Return Method " Url="html/Overload_System_Linq_QueryableEx_Return.htm">
+            <HelpTOCNode Title="Return(TResult) Method (TResult)" Url="html/M_System_Linq_QueryableEx_Return__1_1.htm" />
+            <HelpTOCNode Title="Return(TResult) Method (IQueryProvider, TResult)" Url="html/M_System_Linq_QueryableEx_Return__1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="87280be4-f558-49e7-9f1e-d3daf81ed027" Title="Scan Method " Url="html/Overload_System_Linq_QueryableEx_Scan.htm">
+            <HelpTOCNode Title="Scan(TSource) Method (IEnumerable(TSource), Func(TSource, TSource, TSource))" Url="html/M_System_Linq_QueryableEx_Scan__1.htm" />
+            <HelpTOCNode Title="Scan(TSource) Method (IQueryable(TSource), Expression(Func(TSource, TSource, TSource)))" Url="html/M_System_Linq_QueryableEx_Scan__1_1.htm" />
+            <HelpTOCNode Title="Scan(TSource, TAccumulate) Method (IEnumerable(TSource), TAccumulate, Func(TAccumulate, TSource, TAccumulate))" Url="html/M_System_Linq_QueryableEx_Scan__2.htm" />
+            <HelpTOCNode Title="Scan(TSource, TAccumulate) Method (IQueryable(TSource), TAccumulate, Expression(Func(TAccumulate, TSource, TAccumulate)))" Url="html/M_System_Linq_QueryableEx_Scan__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="7484397b-9ff0-43b9-9fac-fc5bc7b2bd36" Title="SelectMany Method " Url="html/Overload_System_Linq_QueryableEx_SelectMany.htm">
+            <HelpTOCNode Title="SelectMany(TSource, TOther) Method (IEnumerable(TSource), IEnumerable(TOther))" Url="html/M_System_Linq_QueryableEx_SelectMany__2.htm" />
+            <HelpTOCNode Title="SelectMany(TSource, TOther) Method (IQueryable(TSource), IEnumerable(TOther))" Url="html/M_System_Linq_QueryableEx_SelectMany__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="61a94ce4-e02a-49a8-9c84-35a2447c7052" Title="Share Method " Url="html/Overload_System_Linq_QueryableEx_Share.htm">
+            <HelpTOCNode Title="Share(TSource, TResult) Method (IEnumerable(TSource), Func(IEnumerable(TSource), IEnumerable(TResult)))" Url="html/M_System_Linq_QueryableEx_Share__2.htm" />
+            <HelpTOCNode Title="Share(TSource, TResult) Method (IQueryable(TSource), Expression(Func(IEnumerable(TSource), IEnumerable(TResult))))" Url="html/M_System_Linq_QueryableEx_Share__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="37f2c116-2f1e-435b-ac42-42d000c4d6ac" Title="SkipLast Method " Url="html/Overload_System_Linq_QueryableEx_SkipLast.htm">
+            <HelpTOCNode Title="SkipLast(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_SkipLast__1.htm" />
+            <HelpTOCNode Title="SkipLast(TSource) Method (IQueryable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_SkipLast__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="5d471694-d1dd-4949-aea4-b37588b6d199" Title="StartWith Method " Url="html/Overload_System_Linq_QueryableEx_StartWith.htm">
+            <HelpTOCNode Title="StartWith(TSource) Method (IEnumerable(TSource), TSource[])" Url="html/M_System_Linq_QueryableEx_StartWith__1.htm" />
+            <HelpTOCNode Title="StartWith(TSource) Method (IQueryable(TSource), TSource[])" Url="html/M_System_Linq_QueryableEx_StartWith__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="0337a7f0-85a0-4e09-a4a2-1136774e1dbf" Title="TakeLast Method " Url="html/Overload_System_Linq_QueryableEx_TakeLast.htm">
+            <HelpTOCNode Title="TakeLast(TSource) Method (IEnumerable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_TakeLast__1.htm" />
+            <HelpTOCNode Title="TakeLast(TSource) Method (IQueryable(TSource), Int32)" Url="html/M_System_Linq_QueryableEx_TakeLast__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="27a383f7-fe80-43b7-9c06-326bba5447fe" Title="Throw Method " Url="html/Overload_System_Linq_QueryableEx_Throw.htm">
+            <HelpTOCNode Title="Throw(TResult) Method (Exception)" Url="html/M_System_Linq_QueryableEx_Throw__1.htm" />
+            <HelpTOCNode Title="Throw(TResult) Method (IQueryProvider, Exception)" Url="html/M_System_Linq_QueryableEx_Throw__1_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="ecc19032-ee18-4190-b374-a579e7f0c268" Title="Using Method " Url="html/Overload_System_Linq_QueryableEx_Using.htm">
+            <HelpTOCNode Title="Using(TSource, TResource) Method (Func(TResource), Func(TResource, IEnumerable(TSource)))" Url="html/M_System_Linq_QueryableEx_Using__2.htm" />
+            <HelpTOCNode Title="Using(TSource, TResource) Method (IQueryProvider, Expression(Func(TResource)), Expression(Func(TResource, IEnumerable(TSource))))" Url="html/M_System_Linq_QueryableEx_Using__2_1.htm" />
+          </HelpTOCNode>
+          <HelpTOCNode Id="2de223f3-c4bf-4089-b9d0-fed74638bea2" Title="While Method " Url="html/Overload_System_Linq_QueryableEx_While.htm">
+            <HelpTOCNode Title="While(TResult) Method (Func(Boolean), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_While__1.htm" />
+            <HelpTOCNode Title="While(TResult) Method (IQueryProvider, Expression(Func(Boolean)), IEnumerable(TResult))" Url="html/M_System_Linq_QueryableEx_While__1_1.htm" />
+          </HelpTOCNode>
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>
