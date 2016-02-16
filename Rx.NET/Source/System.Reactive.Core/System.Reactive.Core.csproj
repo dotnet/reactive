@@ -64,6 +64,7 @@
     <Compile Include="Reactive\Concurrency\SynchronizationContextScheduler.cs" />
     <Compile Include="Reactive\Concurrency\DefaultScheduler.cs" />
     <Compile Include="Reactive\Concurrency\TaskHelpers.cs" />
+    <Compile Include="Reactive\Disposables\SafeDisposable.cs" />
     <Compile Include="Reactive\Disposables\StableCompositeDisposable.cs" />
     <Compile Include="Reactive\Internal\AsyncLockObserver.cs" />
     <Compile Include="Reactive\Internal\CheckedObserver.cs" />
