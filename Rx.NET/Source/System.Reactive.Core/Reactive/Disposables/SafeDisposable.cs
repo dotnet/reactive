@@ -11,8 +11,6 @@ namespace System.Reactive.Disposables
     {
         private IDisposable disposable;
 
-        private bool disposed;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SafeDisposable"/> class.
         /// </summary>
