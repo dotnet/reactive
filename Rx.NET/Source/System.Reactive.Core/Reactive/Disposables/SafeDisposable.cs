@@ -7,9 +7,11 @@ namespace System.Reactive.Disposables
     /// <summary>
     /// Represents a resource that could be safely disposed in thread safe manner if that resource is a disposable one.
     /// </summary>
-    public sealed class SafeDisposable : IDisposable
+    public sealed class SafeDisposable : ICancelable
     {
         private IDisposable disposable;
+
+        private bool disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SafeDisposable"/> class.
@@ -43,7 +45,14 @@ namespace System.Reactive.Disposables
                 {
                     // ignored
                 }
+
+                this.IsDisposed = true;
             }
         }
+
+        /// <summary>
+        /// Gets a value that indicates whether the object is disposed.
+        /// </summary>
+        public bool IsDisposed { get; private set; }
     }
 }
