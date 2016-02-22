@@ -1,7 +1,7 @@
 ﻿{
     "version": "3.0.0-*",
-    "title": "Reactive Extensions - Query Library",
-    "description": "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
+    "title": "Reactive Extensions - Experimental Library",
+    "description": "Reactive Extensions Experimental Library containing unstable and infrequently used functionality.",
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
     "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
@@ -10,15 +10,10 @@
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
 
-  "exclude": [
-    "*/**/ImmutableList.cs",
-    "Reactive/Observer.Extensions.cs",
-    "Reactive/Internal/Observers.cs",
-    "Reactive/Internal/Producer.cs"
-  ],
-
     "dependencies": {
-        "System.Reactive.Core": { "target": "project" }
+        "System.Reactive.Interfaces": { "target": "project" },
+        "System.Reactive.Core": { "target": "project" },
+        "System.Reactive.Linq": { "target": "project" }
     },
 
     "frameworks": {
@@ -69,8 +64,12 @@
             },
             "dependencies": {
                 "System.Collections.Concurrent": "4.0.11-beta-23516",
-                "System.Reflection.TypeExtensions": "4.1.0-beta-23516",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-beta-23516"
+                "System.ComponentModel": "4.0.1-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Threading": "4.0.11-beta-23516",
+                "System.Threading.Thread": "4.0.0-beta-23516",
+                "System.Threading.ThreadPool": "4.0.10-beta-23516",
+                "System.Threading.Timer": "4.0.1-beta-23516"
             }
         }
     }
