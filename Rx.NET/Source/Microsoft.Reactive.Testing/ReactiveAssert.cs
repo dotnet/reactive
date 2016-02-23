@@ -7,12 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-
-#if WINDOWS8 || WINDOWS81
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-#else
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-#endif
+using Xunit;
 
 namespace Microsoft.Reactive.Testing
 {
@@ -51,7 +46,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException("actual");
 
             if (!expected.SequenceEqual(actual))
-                Assert.Fail(Message(actual, expected));
+                Assert.True(false, Message(actual, expected));
         }
 
         /// <summary>
@@ -70,7 +65,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException("actual");
 
             if (!expected.SequenceEqual(actual))
-                Assert.Fail(message);
+                Assert.True(false, message);
         }
 
         /// <summary>
@@ -130,11 +125,11 @@ namespace Microsoft.Reactive.Testing
             }
             catch (Exception ex)
             {
-                Assert.Fail(string.Format(CultureInfo.CurrentCulture, "Expected {0} threw {1}.\r\n\r\nStack trace:\r\n{2}", typeof(TException).Name, ex.GetType().Name, ex.StackTrace));
+                Assert.True(false, string.Format(CultureInfo.CurrentCulture, "Expected {0} threw {1}.\r\n\r\nStack trace:\r\n{2}", typeof(TException).Name, ex.GetType().Name, ex.StackTrace));
             }
 
             if (failed)
-                Assert.Fail(string.Format(CultureInfo.CurrentCulture, "Expected {0}.", typeof(TException).Name));
+                Assert.True(false, string.Format(CultureInfo.CurrentCulture, "Expected {0}.", typeof(TException).Name));
         }
 
         /// <summary>
@@ -160,11 +155,11 @@ namespace Microsoft.Reactive.Testing
             }
             catch
             {
-                Assert.Fail(message);
+                Assert.True(false, message);
             }
 
             if (failed)
-                Assert.Fail(message);
+                Assert.True(false, message);
         }
 
         /// <summary>
@@ -187,15 +182,15 @@ namespace Microsoft.Reactive.Testing
             }
             catch (TException ex)
             {
-                Assert.AreSame(exception, ex);
+                Assert.Same(exception, ex);
             }
             catch (Exception ex)
             {
-                Assert.Fail(string.Format(CultureInfo.CurrentCulture, "Expected {0} threw {1}.\r\n\r\nStack trace:\r\n{2}", typeof(TException).Name, ex.GetType().Name, ex.StackTrace));
+                Assert.True(false, string.Format(CultureInfo.CurrentCulture, "Expected {0} threw {1}.\r\n\r\nStack trace:\r\n{2}", typeof(TException).Name, ex.GetType().Name, ex.StackTrace));
             }
 
             if (failed)
-                Assert.Fail(string.Format(CultureInfo.CurrentCulture, "Expected {0}.", typeof(TException).Name));
+                Assert.True(false, string.Format(CultureInfo.CurrentCulture, "Expected {0}.", typeof(TException).Name));
         }
 
         /// <summary>
@@ -219,15 +214,15 @@ namespace Microsoft.Reactive.Testing
             }
             catch (TException ex)
             {
-                Assert.AreSame(exception, ex);
+                Assert.Same(exception, ex);
             }
             catch
             {
-                Assert.Fail(message);
+                Assert.True(false, message);
             }
 
             if (failed)
-                Assert.Fail(message);
+                Assert.True(false, message);
         }
 
         /// <summary>
