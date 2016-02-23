@@ -4,6 +4,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -300,6 +301,7 @@ namespace ReactiveTests.Tests
         }
 
 #if HAS_AWAIT
+#if !NO_THREAD
         [Fact]
         public void Await_Blocking()
         {
@@ -314,6 +316,7 @@ namespace ReactiveTests.Tests
             GetResult_Blocking_Throw(s.GetAwaiter());
         }
 #endif
+#endif
 
         [Fact]
         public void GetResult_Empty()
@@ -323,6 +326,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => s.GetResult());
         }
 
+#if !NO_THREAD
         [Fact]
         public void GetResult_Blocking()
         {
@@ -390,6 +394,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex, y);
             Assert.True(s.IsCompleted);
         }
+#endif
 
 #if HAS_AWAIT
         [Fact]
@@ -400,7 +405,7 @@ namespace ReactiveTests.Tests
             var ctx = new MyContext();
             var e = new ManualResetEvent(false);
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 SynchronizationContext.SetSynchronizationContext(ctx);
 
@@ -409,7 +414,7 @@ namespace ReactiveTests.Tests
                 {
                     e.Set();
                 });
-            }).Start();
+            });
 
             x.OnNext(42);
             x.OnCompleted();

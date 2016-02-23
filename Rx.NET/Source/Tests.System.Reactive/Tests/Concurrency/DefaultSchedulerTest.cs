@@ -28,7 +28,7 @@ namespace ReactiveTests.Tests
             var res = DefaultScheduler.Instance.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-
+#if !NO_THREAD
         [Fact]
         public void ScheduleAction()
         {
@@ -91,7 +91,7 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
-
+#endif
 #if DESKTOPCLR
         [Fact]
         public void No_ThreadPool_Starvation_Dispose()

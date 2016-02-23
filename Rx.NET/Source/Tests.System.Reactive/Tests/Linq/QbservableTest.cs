@@ -1802,6 +1802,7 @@ namespace ReactiveTests.Tests
             var gens = m.IsGenericMethod ? string.Format("<{0}>", string.Join(", ", m.GetGenericArguments().Select(a => GetTypeName(a, correct)).ToArray())) : "";
 
             var pars = string.Join(", ", pss.Select(p => (Attribute.IsDefined(p, typeof(ParamArrayAttribute)) ? "params " : "") + GetTypeName(p.ParameterType, correct) + " " + p.Name).ToArray());
+            Attribute.
             if (Attribute.IsDefined(m, typeof(ExtensionAttribute)))
             {
                 if (pars.StartsWith("IQbservable") || pars.StartsWith("IQueryable"))

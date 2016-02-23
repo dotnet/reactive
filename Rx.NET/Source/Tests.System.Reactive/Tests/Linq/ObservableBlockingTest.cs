@@ -592,6 +592,7 @@ namespace ReactiveTests.Tests
             Assert.Equal(value, Observable.Range(value, 10).FirstOrDefault());
         }
 
+#if !NO_THREAD
         [Fact]
         public void FirstOrDefault_NoDoubleSet()
         {
@@ -624,6 +625,7 @@ namespace ReactiveTests.Tests
 
             o.Done();
         }
+#endif
 
         class O : IObservable<int>
         {
@@ -653,9 +655,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-        #endregion
+#endregion
 
-        #region + ForEach +
+#region + ForEach +
 
         [Fact]
         public void ForEach_ArgumentChecking()
@@ -761,9 +763,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.ForEach((x, i) => { throw ex; }));
         }
 
-        #endregion
+#endregion
 
-        #region + GetEnumerator +
+#region + GetEnumerator +
 
         [Fact]
         public void GetEnumerator_ArgumentChecking()
@@ -926,9 +928,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
-        #region Last
+#region Last
 
         [Fact]
         public void Last_ArgumentChecking()
@@ -981,9 +983,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(50, Observable.Range(value, 10).Last(i => i % 2 == 0));
         }
 
-        #endregion
+#endregion
 
-        #region LastOrDefault
+#region LastOrDefault
 
         [Fact]
         public void LastOrDefault_ArgumentChecking()
@@ -1036,9 +1038,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(50, Observable.Range(value, 10).LastOrDefault(i => i % 2 == 0));
         }
 
-        #endregion
+#endregion
 
-        #region + Latest +
+#region + Latest +
 
         [Fact]
         public void Latest_ArgumentChecking()
@@ -1053,7 +1055,7 @@ namespace ReactiveTests.Tests
             var evt = new AutoResetEvent(false);
             var src = Observable.Create<int>(obs =>
             {
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     evt.WaitOne();
                     obs.OnNext(1);
@@ -1061,18 +1063,18 @@ namespace ReactiveTests.Tests
                     obs.OnNext(2);
                     evt.WaitOne();
                     obs.OnCompleted();
-                }).Start();
+                });
 
                 return () => { disposed = true; };
             });
 
             var res = src.Latest().GetEnumerator();
 
-            new Thread(() =>
+            Task.Run(async () =>
             {
-                Thread.Sleep(250);
+                await Task.Delay(250);
                 evt.Set();
-            }).Start();
+            });
 
             Assert.True(res.MoveNext());
             Assert.Equal(1, res.Current);
@@ -1168,7 +1170,7 @@ namespace ReactiveTests.Tests
             var evt = new AutoResetEvent(false);
             var src = Observable.Create<int>(obs =>
             {
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     evt.WaitOne();
                     obs.OnNext(1);
@@ -1181,11 +1183,11 @@ namespace ReactiveTests.Tests
 
             var res = src.Latest().GetEnumerator();
 
-            new Thread(() =>
+            Task.Run(async () =>
             {
-                Thread.Sleep(250);
+                await Task.Delay(250);
                 evt.Set();
-            }).Start();
+            });
 
             Assert.True(res.MoveNext());
             Assert.Equal(1, res.Current);
@@ -1195,9 +1197,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 
-        #endregion
+#endregion
 
-        #region + MostRecent +
+#region + MostRecent +
 
         [Fact]
         public void MostRecent_ArgumentChecking()
@@ -1212,7 +1214,7 @@ namespace ReactiveTests.Tests
             var nxt = new AutoResetEvent(false);
             var src = Observable.Create<int>(obs =>
             {
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     evt.WaitOne();
                     obs.OnNext(1);
@@ -1223,7 +1225,7 @@ namespace ReactiveTests.Tests
                     evt.WaitOne();
                     obs.OnCompleted();
                     nxt.Set();
-                }).Start();
+                });
 
                 return () => { };
             });
@@ -1348,7 +1350,7 @@ namespace ReactiveTests.Tests
             var nxt = new AutoResetEvent(false);
             var src = Observable.Create<int>(obs =>
             {
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     evt.WaitOne();
                     obs.OnNext(1);
@@ -1356,7 +1358,7 @@ namespace ReactiveTests.Tests
                     evt.WaitOne();
                     obs.OnError(ex);
                     nxt.Set();
-                }).Start();
+                });
 
                 return () => { };
             });
@@ -1381,9 +1383,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 
-        #endregion
+#endregion
 
-        #region + Next +
+#region + Next +
 
         [Fact]
         public void Next_ArgumentChecking()
@@ -1397,7 +1399,7 @@ namespace ReactiveTests.Tests
             var evt = new AutoResetEvent(false);
             var src = Observable.Create<int>(obs =>
             {
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     evt.WaitOne();
                     obs.OnNext(1);
@@ -1405,18 +1407,18 @@ namespace ReactiveTests.Tests
                     obs.OnNext(2);
                     evt.WaitOne();
                     obs.OnCompleted();
-                }).Start();
+                });
 
                 return () => { };
             });
 
             var res = src.Next().GetEnumerator();
 
-            Action release = () => new Thread(() =>
+            Action release = () => Task.Run(async () =>
             {
-                Thread.Sleep(250);
+                await Task.Delay(250);
                 evt.Set();
-            }).Start();
+            });
 
             release();
             Assert.True(res.MoveNext());
@@ -1429,6 +1431,7 @@ namespace ReactiveTests.Tests
             release();
             Assert.False(res.MoveNext());
         }
+
 
         [Fact]
         public void Next2()
@@ -1497,6 +1500,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.Count == res.Distinct().Count());
         }
 
+#if !NO_THREAD
         [Fact]
         public void Next_Error()
         {
@@ -1532,10 +1536,10 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
+#endif
+#endregion
 
-        #endregion
-
-        #region Single
+#region Single
 
         [Fact]
         public void Single_ArgumentChecking()
@@ -1595,9 +1599,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(45, Observable.Range(value, 10).Single(i => i == 45));
         }
 
-        #endregion
+#endregion
 
-        #region SingleOrDefault
+#region SingleOrDefault
 
         [Fact]
         public void SingleOrDefault_ArgumentChecking()
@@ -1664,9 +1668,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, Observable.Range(value, 10).SingleOrDefault(i => i > 100));
         }
 
-        #endregion
+#endregion
 
-        #region Wait
+#region Wait
 
         [Fact]
         public void Wait_ArgumentChecking()
@@ -1708,6 +1712,6 @@ namespace ReactiveTests.Tests
             Assert.Equal(n, res);
         }
 
-        #endregion
+#endregion
     }
 }

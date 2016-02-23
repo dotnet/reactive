@@ -845,7 +845,7 @@ namespace ReactiveTests.Tests
             Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
             Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
         }
-
+#if !NO_THREAD
         [Fact]
         public void FromEvent_SynchronizationContext()
         {
@@ -942,6 +942,7 @@ namespace ReactiveTests.Tests
             t.Start();
             t.Join();
         }
+#endif
 
         [Fact]
         public void FromEvent_Scheduler1()
@@ -1184,9 +1185,9 @@ namespace ReactiveTests.Tests
         }
 
 
-        #endregion
+#endregion
 
-        #region <| Helpers |>
+#region <| Helpers |>
 
         class FromEventPattern_ArgCheck
         {
@@ -1355,6 +1356,6 @@ namespace ReactiveTests.Tests
             }
         }
 
-        #endregion
+#endregion
     }
 }

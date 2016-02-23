@@ -44,7 +44,7 @@ namespace ReactiveTests
         {
             throw new NotImplementedException();
         }
-
+#if !NO_THREAD
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             var d = new BooleanDisposable();
@@ -77,7 +77,7 @@ namespace ReactiveTests
 
             return d;
         }
-
+#endif
         object IServiceProvider.GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerLongRunning))

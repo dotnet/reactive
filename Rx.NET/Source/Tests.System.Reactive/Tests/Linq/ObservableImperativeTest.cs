@@ -489,6 +489,7 @@ namespace ReactiveTests.Tests
             }
         }
 
+#if !NO_THREAD
         [Fact]
         public void ForEachAsync_DisposeThrows()
         {
@@ -541,6 +542,7 @@ namespace ReactiveTests.Tests
                 }
             }
         }
+#endif
 
         [Fact]
         public void ForEachAsync_SubscribeThrows()
@@ -570,7 +572,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
         #region + Case +
 

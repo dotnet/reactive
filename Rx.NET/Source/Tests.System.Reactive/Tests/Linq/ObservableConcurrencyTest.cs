@@ -439,6 +439,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Synchronize<int>(someObservable, null));
         }
 
+#if !NO_THREAD
         [Fact]
         public void Synchronize_Range()
         {
@@ -535,7 +536,7 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(Enumerable.Range(0, 200).Sum(), sum);
         }
-
+#endif
 #endregion
     }
 
@@ -802,6 +803,7 @@ namespace ReactiveTests.Tests
             Assert.Same(ex_, err);
         }
 
+#if !NO_THREAD
         [Fact]
         public void ObserveOn_LongRunning_TimeVariance()
         {
@@ -831,6 +833,7 @@ namespace ReactiveTests.Tests
 
             end.WaitOne();
         }
+#endif
 
         [Fact]
         public void ObserveOn_LongRunning_HoldUpDuringDispatchAndFail()

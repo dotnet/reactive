@@ -731,6 +731,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
+#if !NO_THREAD
         [Fact]
         public void NotifyOn_Scheduler_OnCompleted()
         {
@@ -789,6 +790,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
             Assert.Equal(N, c);
         }
+#endif
 
         [Fact]
         public void NotifyOn_SyncCtx()

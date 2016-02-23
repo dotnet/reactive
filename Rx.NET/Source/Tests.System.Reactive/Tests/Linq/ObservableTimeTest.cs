@@ -13,6 +13,7 @@ using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
+using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
@@ -892,13 +893,13 @@ namespace ReactiveTests.Tests
             var e = new ManualResetEvent(false);
             res.Subscribe(lst.Add, () => e.Set());
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 s.OnNext(1);
                 s.OnNext(2);
                 s.OnNext(3);
                 s.OnCompleted();
-            }).Start();
+            });
 
             e.WaitOne();
             Assert.True(new[] { 1, 2, 3 }.SequenceEqual(lst));
@@ -928,13 +929,13 @@ namespace ReactiveTests.Tests
             var err = default(Exception);
             res.Subscribe(_ => { }, ex_ => { err = ex_; e.Set(); });
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 s.OnNext(1);
                 s.OnNext(2);
                 s.OnNext(3);
                 s.OnError(ex);
-            }).Start();
+            });
 
             e.WaitOne();
             Assert.Same(ex, err);
@@ -965,13 +966,13 @@ namespace ReactiveTests.Tests
             var err = default(Exception);
             res.Subscribe(_ => { next.Set(); }, ex_ => { err = ex_; e.Set(); });
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 s.OnNext(1);
                 next.WaitOne();
 
                 s.OnError(ex);
-            }).Start();
+            });
 
             e.WaitOne();
             Assert.Same(ex, err);
@@ -1004,14 +1005,14 @@ namespace ReactiveTests.Tests
             var err = default(Exception);
             res.Subscribe(_ => { next.Set(); ack.WaitOne(); }, ex_ => { err = ex_; e.Set(); });
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 s.OnNext(1);
                 next.WaitOne();
 
                 s.OnError(ex);
                 ack.Set();
-            }).Start();
+            });
 
             e.WaitOne();
             Assert.Same(ex, err);
@@ -2191,12 +2192,12 @@ namespace ReactiveTests.Tests
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
                 var b = new BooleanDisposable();
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     _start.Set();
                     action(state, b);
                     _stop.Set();
-                }).Start();
+                });
                 return b;
             }
 
@@ -2237,11 +2238,11 @@ namespace ReactiveTests.Tests
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
                 var b = new BooleanDisposable();
-                new Thread(() =>
+                Task.Run(() =>
                 {
                     action(state, b);
                     _stop.Set();
-                }).Start();
+                });
                 return b;
             }
 
@@ -8059,6 +8060,7 @@ namespace ReactiveTests.Tests
             );
         }
 
+#if !NO_THREAD
         [Fact]
         public void RepeatingTimer_Start_CatchUp()
         {
@@ -8112,6 +8114,7 @@ namespace ReactiveTests.Tests
 
             Assert.Same(err, ex);
         }
+#endif
 
         class SchedulerWithCatch : IServiceProvider, IScheduler
         {

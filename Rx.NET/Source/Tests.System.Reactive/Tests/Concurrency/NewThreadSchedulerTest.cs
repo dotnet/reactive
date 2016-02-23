@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
             var res = NewThreadScheduler.Default.Now - DateTime.Now;
             Assert.True(res.Seconds < 1);
         }
-
+#if !NO_THREAD
         [Fact]
         public void NewThread_ScheduleAction()
         {
@@ -55,6 +55,7 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
+#endif
 #endif
 
 #if !NO_PERF
@@ -85,6 +86,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
+#if !NO_THREAD
         [Fact]
         public void NewThread_Periodic_NonReentrant()
         {
@@ -113,5 +115,6 @@ namespace ReactiveTests.Tests
 
             Assert.False(fail);
         }
+#endif
     }
 }

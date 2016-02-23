@@ -22,7 +22,9 @@ namespace ReactiveTests.Tests
         {
             var el = new EventLoopScheduler();
 
+#if !NO_THREAD
             ReactiveAssert.Throws<ArgumentNullException>(() => new EventLoopScheduler(null));
+#endif
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => el.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
@@ -49,6 +51,7 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
+#if !NO_THREAD
         [Fact]
         public void EventLoop_DifferentThread()
         {
@@ -63,6 +66,7 @@ namespace ReactiveTests.Tests
             Assert.True(gate.WaitOne(TimeSpan.FromSeconds(2)));
             Assert.NotEqual(Thread.CurrentThread.ManagedThreadId, id);
         }
+#endif
 
         [Fact]
         public void EventLoop_ScheduleOrderedActions()

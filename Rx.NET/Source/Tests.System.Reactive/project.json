@@ -15,7 +15,8 @@
     "System.Reactive.Linq": { "target": "project" },
     "System.Reactive.PlatformServices": { "target": "project" },
     "Microsoft.Reactive.Testing": { "target": "project" },
-    "System.Reactive.Experimental": {"target": "project"},
+    "System.Reactive.Experimental": { "target": "project" },
+    "System.Reactive.Providers": {"target": "project"}, 
     "xunit": "2.1.0"
   },
   
@@ -23,24 +24,23 @@
     "net45": {
       "compilationOptions": {
         "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "HAS_DISPATCHER",
-          "HAS_DISPATCHER_PRIORITY",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT"
+            "NO_EVENTARGS_CONSTRAINT",
+            "HAS_EDI",
+            "HAS_WINRT",
+            "HAS_PROGRESS",
+            "PREFER_ASYNC",
+            "HAS_AWAIT",
+            "HAS_APTCA",
+            "HAS_DISPATCHER",
+            "HAS_DISPATCHER_PRIORITY",
+            "HAS_WINFORMS",
+            "USE_TIMER_SELF_ROOT"
         ]
       },
       "dependencies": {
         "System.Reactive.Windows.Threading": { "target": "project" },
         "System.Reactive.Windows.Forms": { "target": "project" },
         "System.Reactive.Runtime.Remoting": { "target": "project" },
-        "System.Reactive.Providers": {"target": "project"}, 
         "System.Threading.Timer": "4.0.0"
       },
       "frameworkAssemblies": {
@@ -52,29 +52,29 @@
     "dotnet5.1": {
       "compilationOptions": {
         "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "NO_REMOTING",
-          "NO_SERIALIZABLE",
-          "NO_THREAD",
-          "CRIPPLED_REFLECTION",
-          "PLIB",
-          "USE_TIMER_SELF_ROOT"
+            "NO_EVENTARGS_CONSTRAINT",
+            "HAS_EDI",
+            "HAS_WINRT",
+            "HAS_PROGRESS",
+            "PREFER_ASYNC",
+            "HAS_AWAIT",
+            "HAS_APTCA",
+            "NO_DISPATCHER",
+            "NO_REMOTING",
+            "NO_SERIALIZABLE",
+            "NO_THREAD",
+            "CRIPPLED_REFLECTION",
+            "PLIB",
+            "USE_TIMER_SELF_ROOT"
         ]
       },
       "dependencies": {
-        "System.Console": "4.0.0-beta-23516",
         "System.Collections.Concurrent": "4.0.0",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Threading": "4.0.11-beta-23516",
-        "System.Threading.Thread": "4.0.0-beta-23516",
+        "System.Linq": "4.0.0",
+        "System.Threading": "4.0.0",
         "System.Threading.Timer": "4.0.0",
-        "System.Runtime": "4.0.21-beta-23516"
+        "System.Runtime": "4.0.0",
+        "System.Runtime.Extensions": "4.0.0"
       }
     }
   }
