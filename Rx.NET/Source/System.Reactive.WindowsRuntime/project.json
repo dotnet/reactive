@@ -11,13 +11,11 @@
   "requireLicenseAcceptance": true,
 
   "dependencies": {
-    "System.Reactive.Interfaces": { "target": "project" },
-    "System.Reactive.Core": { "target": "project" },
     "System.Reactive.Linq": { "target": "project" }
   },
 
   "frameworks": {
-    "uap10.0": {
+    "dotnet5.1": {
         "compilationOptions": {
             "define": [
                 "NO_EVENTARGS_CONSTRAINT",
@@ -34,11 +32,19 @@
             ]
         },
         "dependencies": {
-            "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-            "Microsoft.TargetingPack.Private.WinRT": "1.0.1",
-            "System.Runtime": "4.0.20",
-            "System.Threading.Tasks": "4.0.10"
+            "Microsoft.NETCore.Portable.Compatibility": {
+                "version": "1.0.0",
+                "type": "build"
+            },
+            "Microsoft.TargetingPack.Private.WinRT": {
+                "version": "1.0.1",
+                "type": "build"
+            },
+            "System.Runtime": "4.0.0",
+            "System.Threading.Tasks": "4.0.0",
+            "System.Runtime.WindowsRuntime": "4.0.10"
         }
+
     }
   }
 }

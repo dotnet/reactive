@@ -68,9 +68,11 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.10",
+                "System.Collections.Concurrent": "4.0.0",
                 "System.Reflection.TypeExtensions": "4.0.0",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.0"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
             }
         },
         "dotnet5.4": {

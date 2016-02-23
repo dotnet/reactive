@@ -55,6 +55,7 @@
                     "NO_REMOTING",
                     "NO_SERIALIZABLE",
                     "NO_THREAD",
+                    "NO_WEAKTABLE",
                     "CRIPPLED_REFLECTION",
                     "PLIB",
                     "USE_TIMER_SELF_ROOT"
@@ -62,10 +63,12 @@
             },
             "dependencies": {
                 "System.Linq": "4.0.0",
-                "System.Collections.Concurrent": "4.0.10",
+                "System.Collections.Concurrent": "4.0.0",
                 "System.ComponentModel": "4.0.0",
-                "System.Threading": "4.0.10",
-                "System.Threading.Timer": "4.0.0"
+                "System.Threading": "4.0.0",
+                "System.Threading.Timer": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
             }
             
         },
