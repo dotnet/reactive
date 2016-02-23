@@ -1,0 +1,50 @@
+﻿{
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - Windows Forms Helpers",
+  "description": "Windows Forms extensions library for Rx. Contains scheduler functionality for the Windows Forms UI loop.",
+  "authors": [ "Microsoft" ],
+  "copyright": "Copyright (C) Microsoft Corporation",
+  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+  "requireLicenseAcceptance": true,
+
+  "dependencies": {
+    "System.Reactive.Linq": { "target": "project" }
+  },
+
+  "frameworks": {
+    "dotnet5.1": {
+        "compilationOptions": {
+            "define": [
+                "NO_EVENTARGS_CONSTRAINT",
+                "HAS_EDI",
+                "HAS_WINRT",
+                "HAS_PROGRESS",
+                "PREFER_ASYNC",
+                "HAS_AWAIT",
+                "NO_REMOTING",
+                "NO_SERIALIZABLE",
+                "NO_THREAD",
+                "CRIPPLED_REFLECTION",
+                "USE_TIMER_SELF_ROOT"
+            ]
+        },
+        "dependencies": {
+            "Microsoft.NETCore.Portable.Compatibility": {
+                "version": "1.0.0",
+                "type": "build"
+            },
+            "Microsoft.TargetingPack.Private.WinRT": {
+                "version": "1.0.1",
+                "type": "build"
+            },
+            "System.Runtime": "4.0.0",
+            "System.Threading.Tasks": "4.0.0",
+            "System.Runtime.WindowsRuntime": "4.0.10"
+        }
+
+    }
+  }
+}

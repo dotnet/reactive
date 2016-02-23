@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>a5508ff0-93b9-4241-b666-07b05189c435</ProjectGuid>
+    <ProjectGuid>4b697be9-1d48-4855-9070-c9c5c3bd341c</ProjectGuid>
     <RootNamespace>System.Reactive</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">..\..\..\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">..\..\..\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
@@ -14,6 +14,9 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <ProduceOutputsOnBuild>True</ProduceOutputsOnBuild>
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>

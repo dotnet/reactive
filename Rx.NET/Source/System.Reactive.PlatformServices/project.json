@@ -44,6 +44,29 @@
                 ]
             }
         },
+        "dotnet5.1": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Diagnostics.Tools": "4.0.0",
+                "System.Diagnostics.Debug": "4.0.10"
+            }
+        },
         "dotnet5.4": {
             "compilationOptions": {
                 "define": [

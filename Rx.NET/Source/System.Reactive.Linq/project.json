@@ -49,6 +49,32 @@
                 ]
             }
         },
+        "dotnet5.1": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Collections.Concurrent": "4.0.0",
+                "System.Reflection.TypeExtensions": "4.0.0",
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
+            }
+        },
         "dotnet5.4": {
             "compilationOptions": {
                 "define": [
