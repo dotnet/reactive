@@ -9,15 +9,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class RegressionTest : ReactiveTest
     {
 #if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
-        [TestMethod]
+        [Fact]
         public void Bug_ConcurrentMerge()
         {
             const int reps = 1000;
@@ -38,11 +38,11 @@ namespace ReactiveTests.Tests
                 return () => { };
             })).Merge(3).ForEach(_ => { });
 
-            Assert.IsTrue(Enumerable.Range(0, reps).ToList().SequenceEqual(resultQueue.ToList()));
+            Assert.True(Enumerable.Range(0, reps).ToList().SequenceEqual(resultQueue.ToList()));
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void Bug_1283()
         {
             var scheduler = new TestScheduler();
@@ -71,7 +71,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1261()
         {
             var scheduler = new TestScheduler();
@@ -103,14 +103,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1130()
         {
             var xs = Observable.Start(() => 5);
-            Assert.IsNull(xs as ISubject<int, int>);
+            Assert.Null(xs as ISubject<int, int>);
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1286()
         {
             var infinite = Observable.Return(new { Name = "test", Value = 0d }, DefaultScheduler.Instance).Repeat();
@@ -125,13 +125,13 @@ namespace ReactiveTests.Tests
             disp.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1287()
         {
             var flag = false;
             var x = Observable.Return(1, Scheduler.CurrentThread).Concat(Observable.Never<int>()).Finally(() => flag = true).First();
-            Assert.AreEqual(1, x);
-            Assert.IsTrue(flag);
+            Assert.Equal(1, x);
+            Assert.True(flag);
         }
 
 #if !SILVERLIGHTM7
@@ -144,7 +144,7 @@ namespace ReactiveTests.Tests
             yield return 1;
         }
 
-        [TestMethod]
+        [Fact]
         [Timeout(1000)]
         public void Bug_1333()
         {
@@ -157,7 +157,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void Bug_1295_Completed()
         {
             var scheduler = new TestScheduler();
@@ -184,7 +184,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1295_Error()
         {
             var scheduler = new TestScheduler();
@@ -212,7 +212,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_Catch_None()
         {
             var scheduler = new TestScheduler();
@@ -226,7 +226,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_OnErrorResumeNext_None()
         {
             var scheduler = new TestScheduler();
@@ -240,7 +240,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_Catch_Single()
         {
             var scheduler = new TestScheduler();
@@ -258,7 +258,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_OnErrorResumeNext_Single()
         {
             var scheduler = new TestScheduler();
@@ -274,7 +274,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_Catch_Multi()
         {
             var scheduler = new TestScheduler();
@@ -296,7 +296,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1297_OnErrorResumeNext_Multi()
         {
             var scheduler = new TestScheduler();
@@ -318,7 +318,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1380()
         {
             var scheduler = new TestScheduler();
@@ -353,15 +353,15 @@ namespace ReactiveTests.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Bug_1356()
         {
             var run = false;
             Observable.Range(0, 10).Finally(() => run = true).Take(5).ForEach(_ => { });
-            Assert.IsTrue(run);
+            Assert.True(run);
         }
 
-        [TestMethod]
+        [Fact]
         public void Bug_1381()
         {
             var scheduler = new TestScheduler();
@@ -407,7 +407,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Reentrant_Subject1()
         {
             var s = Subject.Synchronize((ISubject<int, int>)new Subject<int>(), Scheduler.Immediate);
@@ -427,7 +427,7 @@ namespace ReactiveTests.Tests
             list.AssertEqual(1, -1, 2, -2, 3, -3);
         }
 
-        [TestMethod]
+        [Fact]
         public void Reentrant_Subject2()
         {
             var s = Subject.Synchronize(new Subject<int>(), Scheduler.Immediate);
@@ -447,7 +447,7 @@ namespace ReactiveTests.Tests
             list.AssertEqual(1, -1, 2, -2, 3, -3);
         }
 
-        [TestMethod]
+        [Fact]
         public void Merge_Trampoline1()
         {
             var ys = new[] { 1, 2, 3 }.ToObservable().Publish(xs => xs.Merge(xs));
@@ -458,7 +458,7 @@ namespace ReactiveTests.Tests
             list.AssertEqual(1, 1, 2, 2, 3, 3);
         }
 
-        [TestMethod]
+        [Fact]
         public void Merge_Trampoline2()
         {
             var ys = new[] { 1, 2, 3 }.ToObservable().Publish(xs => Observable.Merge(xs, xs, xs, xs));

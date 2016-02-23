@@ -8,26 +8,26 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class SubjectTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new Subject<int>().Subscribe(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new Subject<int>().OnError(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Infinite()
         {
             var scheduler = new TestScheduler();
@@ -91,7 +91,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Finite()
         {
             var scheduler = new TestScheduler();
@@ -154,7 +154,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Error()
         {
             var scheduler = new TestScheduler();
@@ -219,7 +219,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Canceled()
         {
             var scheduler = new TestScheduler();
@@ -270,7 +270,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Dispose()
         {
             var scheduler = new TestScheduler();
@@ -291,7 +291,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PreComplete()
         {
             var scheduler = new TestScheduler();
@@ -307,7 +307,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -362,7 +362,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Create_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int, int>(null, Observable.Return(42)));
@@ -372,7 +372,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Create<int>(Observer.Create<int>(x => { }), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Create1()
         {
             var _x = default(int);
@@ -386,21 +386,21 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Subscribe(null));
             s.Subscribe(x => _x = x);
-            Assert.AreEqual(42, _x);
+            Assert.Equal(42, _x);
 
             s.OnNext(21);
-            Assert.AreEqual(21, _x);
+            Assert.Equal(21, _x);
 
             ReactiveAssert.Throws<ArgumentNullException>(() => s.OnError(null));
             var e = new Exception();
             s.OnError(e);
-            Assert.AreSame(e, _ex);
+            Assert.Same(e, _ex);
 
             s.OnCompleted();
-            Assert.IsFalse(done); // already cut off
+            Assert.False(done); // already cut off
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Create2()
         {
             var _x = default(int);
@@ -414,21 +414,21 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Subscribe(null));
             s.Subscribe(x => _x = x);
-            Assert.AreEqual(42, _x);
+            Assert.Equal(42, _x);
 
             s.OnNext(21);
-            Assert.AreEqual(21, _x);
+            Assert.Equal(21, _x);
 
             ReactiveAssert.Throws<ArgumentNullException>(() => s.OnError(null));
             var e = new Exception();
             s.OnError(e);
-            Assert.AreSame(e, _ex);
+            Assert.Same(e, _ex);
 
             s.OnCompleted();
-            Assert.IsFalse(done); // already cut off
+            Assert.False(done); // already cut off
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Synchronize_ArgumentChecking()
         {
             var s = new Subject<int>();
@@ -442,7 +442,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Subject.Synchronize(s, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Synchronize1()
         {
             var N = 10;
@@ -462,10 +462,10 @@ namespace ReactiveTests.Tests
             foreach (var u in t)
                 u.Join();
 
-            Assert.AreEqual(Enumerable.Range(0, N).Sum(), y);
+            Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }
 
-        [TestMethod]
+        [Fact]
         public void Subject_Synchronize2()
         {
             var N = 10;
@@ -486,116 +486,116 @@ namespace ReactiveTests.Tests
             foreach (var u in t)
                 u.Join();
 
-            Assert.AreEqual(Enumerable.Range(0, N).Sum(), y);
+            Assert.Equal(Enumerable.Range(0, N).Sum(), y);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d1 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d1.Dispose();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d2 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             var d3 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d2.Dispose();
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d3.Dispose();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose1()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.True(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
 
             d.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose2()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.True(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             d.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose3()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_OnCompleted()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnNext(42);
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnCompleted();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_OnError()
         {
             var s = new Subject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d = s.Subscribe(_ => { }, ex => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnNext(42);
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnError(new Exception());
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
     }
 }

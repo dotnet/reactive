@@ -6,14 +6,14 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class SynchronizationContextSchedulerTest
     {
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_ArgumentChecking()
         {
             var ms = new MySync();
@@ -26,17 +26,17 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_Now()
         {
             var ms = new MySync();
             var s = new SynchronizationContextScheduler(ms);
 
             var res = s.Now - DateTime.Now;
-            Assert.IsTrue(res.Seconds < 1);
+            Assert.True(res.Seconds < 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_ScheduleAction()
         {
             var ms = new MySync();
@@ -44,11 +44,11 @@ namespace ReactiveTests.Tests
 
             var ran = false;
             s.Schedule(() => { ran = true; });
-            Assert.IsTrue(ms.Count == 1);
-            Assert.IsTrue(ran);
+            Assert.True(ms.Count == 1);
+            Assert.True(ran);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_ScheduleAction_TimeSpan()
         {
             var ms = new MySync();
@@ -58,10 +58,10 @@ namespace ReactiveTests.Tests
             s.Schedule(TimeSpan.FromMilliseconds(1), () => { e.Set(); });
 
             e.WaitOne();
-            Assert.IsTrue(ms.Count == 1);
+            Assert.True(ms.Count == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_ScheduleAction_DateTimeOffset()
         {
             var ms = new MySync();
@@ -71,10 +71,10 @@ namespace ReactiveTests.Tests
             s.Schedule(DateTimeOffset.Now.AddMilliseconds(100), () => { e.Set(); });
 
             e.WaitOne();
-            Assert.IsTrue(ms.Count >= 1); // Can be > 1 in case of timer queue retry operations.
+            Assert.True(ms.Count >= 1); // Can be > 1 in case of timer queue retry operations.
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_ScheduleActionError()
         {
             var ms = new MySync();
@@ -85,18 +85,18 @@ namespace ReactiveTests.Tests
             try
             {
                 s.Schedule(() => { throw ex; });
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception e)
             {
-                Assert.AreSame(e, ex);
+                Assert.Same(e, ex);
             }
 
-            Assert.IsTrue(ms.Count == 1);
+            Assert.True(ms.Count == 1);
         }
 
 #if !SILVERLIGHT
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SynchronizationContext_ScheduleActionDue()
         {
@@ -108,8 +108,8 @@ namespace ReactiveTests.Tests
             sw.Start();
             s.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); evt.Set(); });
             evt.WaitOne();
-            Assert.IsTrue(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
-            Assert.IsTrue(ms.Count == 1);
+            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+            Assert.True(ms.Count == 1);
         }
 #endif
 
@@ -145,7 +145,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_StartedCompleted()
         {
             var ms = new MySync();
@@ -154,12 +154,12 @@ namespace ReactiveTests.Tests
             var started = 0;
             s.Schedule<int>(42, TimeSpan.Zero, (self, x) => { started = ms.Started; return Disposable.Empty; });
 
-            Assert.IsTrue(started == 1);
-            Assert.IsTrue(ms.Count == 1);
-            Assert.IsTrue(ms.Completed == 1);
+            Assert.True(started == 1);
+            Assert.True(ms.Count == 1);
+            Assert.True(ms.Completed == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_DontPost_Different()
         {
             var ms = new MySync();
@@ -167,11 +167,11 @@ namespace ReactiveTests.Tests
 
             var ran = false;
             s.Schedule(() => { ran = true; });
-            Assert.IsTrue(ms.Count == 1);
-            Assert.IsTrue(ran);
+            Assert.True(ms.Count == 1);
+            Assert.True(ran);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_DontPost_Same()
         {
             var count = 0;
@@ -191,11 +191,11 @@ namespace ReactiveTests.Tests
             t.Start();
             t.Join();
 
-            Assert.IsTrue(count == 0 /* no post */);
-            Assert.IsTrue(ran);
+            Assert.True(count == 0 /* no post */);
+            Assert.True(ran);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_AlwaysPost_Different()
         {
             var ms = new MySync();
@@ -203,11 +203,11 @@ namespace ReactiveTests.Tests
 
             var ran = false;
             s.Schedule(() => { ran = true; });
-            Assert.IsTrue(ms.Count == 1);
-            Assert.IsTrue(ran);
+            Assert.True(ms.Count == 1);
+            Assert.True(ran);
         }
 
-        [TestMethod]
+        [Fact]
         public void SynchronizationContext_AlwaysPost_Same()
         {
             var count = 0;
@@ -227,8 +227,8 @@ namespace ReactiveTests.Tests
             t.Start();
             t.Join();
 
-            Assert.IsTrue(count == 1 /* post */);
-            Assert.IsTrue(ran);
+            Assert.True(count == 1 /* post */);
+            Assert.True(ran);
         }
     }
 }

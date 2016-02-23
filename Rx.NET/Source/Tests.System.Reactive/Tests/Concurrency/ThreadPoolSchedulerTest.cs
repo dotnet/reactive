@@ -8,14 +8,14 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class ThreadPoolSchedulerTest
     {
-        [TestMethod]
+        [Fact]
         public void Schedule_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, default(Func<IScheduler, int, IDisposable>)));
@@ -23,25 +23,25 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.Schedule<int>(42, TimeSpan.Zero, default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Get_Now()
         {
             var res = ThreadPoolScheduler.Instance.Now - DateTime.Now;
-            Assert.IsTrue(res.Seconds < 1);
+            Assert.True(res.Seconds < 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
 #if !NO_CDS
-        [TestMethod]
+        [Fact]
         public void ProperRooting_NoGC_SingleShot()
         {
             var cts = new CancellationTokenSource();
@@ -64,11 +64,11 @@ namespace ReactiveTests.Tests
                 tp.Schedule(TimeSpan.FromMilliseconds(100 + i), () => { cd.Signal(); });
             }
 
-            Assert.IsTrue(cd.Wait(TimeSpan.FromMinutes(1)));
+            Assert.True(cd.Wait(TimeSpan.FromMinutes(1)));
             cts.Cancel();
         }
 
-        [TestMethod]
+        [Fact]
         public void ProperRooting_NoGC_Periodic()
         {
             var cts = new CancellationTokenSource();
@@ -89,7 +89,7 @@ namespace ReactiveTests.Tests
             var n = 0;
             var d = tp.SchedulePeriodic(TimeSpan.FromMilliseconds(80), () => { if (Interlocked.Increment(ref n) == N) e.Set(); });
 
-            Assert.IsTrue(e.WaitOne(TimeSpan.FromMinutes(1)));
+            Assert.True(e.WaitOne(TimeSpan.FromMinutes(1)));
 
             d.Dispose();
 
@@ -98,68 +98,68 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !SILVERLIGHT
-        [TestMethod]
+        [Fact]
         public void ScheduleActionDueRelative()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduleActionDue0()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(TimeSpan.FromTicks(0), () => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromTicks(0), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduleActionDueAbsolute()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(0.2), () => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void ScheduleActionCancel()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var set = false;
-            var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.Fail(); set = true; });
+            var d = nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.True(false); set = true; });
             d.Dispose();
             Thread.Sleep(400);
-            Assert.IsFalse(set);
+            Assert.False(set);
         }
 
 #if !NO_PERF
 
-        [TestMethod]
+        [Fact]
         public void ScheduleLongRunning_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.ScheduleLongRunning<int>(42, default(Action<int, ICancelable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduleLongRunning()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = ThreadPoolScheduler.Instance;
             var evt = new ManualResetEvent(false);
-            nt.ScheduleLongRunning(42, (x, cancel) => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.ScheduleLongRunning(42, (x, cancel) => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduleLongRunningCancel()
         {
             var nt = ThreadPoolScheduler.Instance;
@@ -184,12 +184,12 @@ namespace ReactiveTests.Tests
             d.Dispose();
 
             stopped.WaitOne();
-            Assert.IsTrue(n >= 10);
+            Assert.True(n >= 10);
         }
 
 #if !NO_STOPWATCH
 
-        [TestMethod]
+        [Fact]
         public void Stopwatch()
         {
             var nt = ThreadPoolScheduler.Instance;
@@ -200,25 +200,25 @@ namespace ReactiveTests.Tests
             Thread.Sleep(10);
             var s1 = sw.Elapsed.Ticks;
 
-            Assert.IsTrue(s1 > s0);
+            Assert.True(s1 > s0);
         }
 
 #endif
 
-        [TestMethod]
+        [Fact]
         public void Periodic_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(1), null));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => ThreadPoolScheduler.Instance.SchedulePeriodic(0, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [TestMethod]
+        [Fact]
         public void Periodic_Regular()
         {
             Periodic_Impl(TimeSpan.FromMilliseconds(25));
         }
 
-        [TestMethod]
+        [Fact]
         public void Periodic_Zero()
         {
             Periodic_Impl(TimeSpan.Zero);
@@ -262,14 +262,14 @@ namespace ReactiveTests.Tests
                     k = n;
             } while (m != k && i++ < 10); // Wait for Dispose to reach the timer; should be almost instantaneous due to nop'ing out of the action.
 
-            Assert.AreNotEqual(10, i);
+            Assert.NotEqual(10, i);
 
             var res = lst.ToArray();
-            Assert.IsTrue(res.Length >= 10);
-            Assert.IsTrue(res.Take(10).SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(res.Length >= 10);
+            Assert.True(res.Take(10).SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Periodic_NonReentrant()
         {
             var n = 0;
@@ -295,13 +295,13 @@ namespace ReactiveTests.Tests
             Thread.Sleep(500);
             d.Dispose();
 
-            Assert.IsFalse(fail);
+            Assert.False(fail);
         }
 
 #endif
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void No_ThreadPool_Starvation_Dispose()
         {
             var bwt = default(int);
@@ -324,7 +324,7 @@ namespace ReactiveTests.Tests
             var eio = default(int);
             ThreadPool.GetAvailableThreads(out ewt, out eio);
 
-            Assert.IsFalse(bwt - ewt >= N);
+            Assert.False(bwt - ewt >= N);
         }
 #endif
     }

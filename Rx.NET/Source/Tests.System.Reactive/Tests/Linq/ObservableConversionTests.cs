@@ -11,17 +11,17 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class ObservableConversionTests : ReactiveTest
     {
         #region + Subscribe +
 
-        [TestMethod]
+        [Fact]
         public void SubscribeToEnumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Subscribe<int>((IEnumerable<int>)null, DummyObserver<int>.Instance));
@@ -33,7 +33,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<NullReferenceException>(() => NullEnumeratorEnumerable<int>.Instance.Subscribe(Observer.Create<int>(x => { }), Scheduler.CurrentThread));
         }
 
-        [TestMethod]
+        [Fact]
         public void SubscribeToEnumerable_Finite()
         {
             var scheduler = new TestScheduler();
@@ -62,7 +62,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SubscribeToEnumerable_Infinite()
         {
             var scheduler = new TestScheduler();
@@ -94,7 +94,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SubscribeToEnumerable_Error()
         {
             var scheduler = new TestScheduler();
@@ -123,7 +123,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !SILVERLIGHTM7
-        [TestMethod]
+        [Fact]
         public void SubscribeToEnumerable_DefaultScheduler()
         {
             for (int i = 0; i < 100; i++)
@@ -154,51 +154,51 @@ namespace ReactiveTests.Tests
 
         #region ToEnumerable
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEnumerable(default(IObservable<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_Generic()
         {
-            Assert.IsTrue(Observable.Range(0, 10).ToEnumerable().SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(Observable.Range(0, 10).ToEnumerable().SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_NonGeneric()
         {
-            Assert.IsTrue(((IEnumerable)Observable.Range(0, 10).ToEnumerable()).Cast<int>().SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(((IEnumerable)Observable.Range(0, 10).ToEnumerable()).Cast<int>().SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_ManualGeneric()
         {
             var res = Observable.Range(0, 10).ToEnumerable();
             var ieg = res.GetEnumerator();
             for (int i = 0; i < 10; i++)
             {
-                Assert.IsTrue(ieg.MoveNext());
-                Assert.AreEqual(i, ieg.Current);
+                Assert.True(ieg.MoveNext());
+                Assert.Equal(i, ieg.Current);
             }
-            Assert.IsFalse(ieg.MoveNext());
+            Assert.False(ieg.MoveNext());
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_ManualNonGeneric()
         {
             var res = (IEnumerable)Observable.Range(0, 10).ToEnumerable();
             var ien = res.GetEnumerator();
             for (int i = 0; i < 10; i++)
             {
-                Assert.IsTrue(ien.MoveNext());
-                Assert.AreEqual(i, ien.Current);
+                Assert.True(ien.MoveNext());
+                Assert.Equal(i, ien.Current);
             }
-            Assert.IsFalse(ien.MoveNext());
+            Assert.False(ien.MoveNext());
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEnumerable_ResetNotSupported()
         {
             ReactiveAssert.Throws<NotSupportedException>(() => Observable.Range(0, 10).ToEnumerable().GetEnumerator().Reset());
@@ -208,7 +208,7 @@ namespace ReactiveTests.Tests
 
         #region ToEvent
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_ArgumentChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEvent(default(IObservable<Unit>)));
@@ -216,7 +216,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEvent(default(IObservable<EventPattern<EventArgs>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_Unit()
         {
             var src = new Subject<Unit>();
@@ -230,21 +230,21 @@ namespace ReactiveTests.Tests
 
             evt.OnNext += hnd;
 
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(1, num);
+            Assert.Equal(1, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
             evt.OnNext -= hnd;
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_NonUnit()
         {
             var src = new Subject<int>();
@@ -265,10 +265,10 @@ namespace ReactiveTests.Tests
 
             src.OnNext(3);
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(lst.SequenceEqual(new[] { 1, 2 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_FromEvent()
         {
             var src = new Subject<int>();
@@ -277,7 +277,7 @@ namespace ReactiveTests.Tests
             var res = Observable.FromEvent<int>(h => evt.OnNext += h, h => evt.OnNext -= h);
 
             var lst = new List<int>();
-            using (res.Subscribe(e => lst.Add(e), () => Assert.Fail()))
+            using (res.Subscribe(e => lst.Add(e), () => Assert.True(false)))
             {
                 src.OnNext(1);
                 src.OnNext(2);
@@ -285,20 +285,20 @@ namespace ReactiveTests.Tests
 
             src.OnNext(3);
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { 1, 2 }));
+            Assert.True(lst.SequenceEqual(new[] { 1, 2 }));
         }
 
         #endregion
 
         #region ToEventPattern
 
-        [TestMethod]
+        [Fact]
         public void ToEventPattern_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToEventPattern<EventArgs>(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEventPattern_IEvent()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -309,7 +309,7 @@ namespace ReactiveTests.Tests
             var lst = new List<int>();
             var hnd = new EventHandler<EventArgs<int>>((s, e) =>
             {
-                Assert.AreSame(snd, s);
+                Assert.Same(snd, s);
                 lst.Add(e.Value);
             });
 
@@ -322,10 +322,10 @@ namespace ReactiveTests.Tests
 
             src.OnNext(new EventPattern<EventArgs<int>>(snd, new EventArgs<int>(44)));
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEventPattern_IEvent_Fails()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -336,7 +336,7 @@ namespace ReactiveTests.Tests
             var lst = new List<int>();
             var hnd = new EventHandler<EventArgs<int>>((s, e) =>
             {
-                Assert.AreSame(snd, s);
+                Assert.Same(snd, s);
                 lst.Add(e.Value);
             });
 
@@ -349,10 +349,10 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => src.OnError(ex));
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEventPattern_IEvent_Completes()
         {
             var src = new Subject<EventPattern<EventArgs<int>>>();
@@ -363,7 +363,7 @@ namespace ReactiveTests.Tests
             var lst = new List<int>();
             var hnd = new EventHandler<EventArgs<int>>((s, e) =>
             {
-                Assert.AreSame(snd, s);
+                Assert.Same(snd, s);
                 lst.Add(e.Value);
             });
 
@@ -374,7 +374,7 @@ namespace ReactiveTests.Tests
 
             src.OnCompleted();
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(lst.SequenceEqual(new[] { 42, 43 }));
         }
 
         class EventSrc
@@ -399,7 +399,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_ToEventPattern()
         {
             var src = new EventSrc();
@@ -410,7 +410,7 @@ namespace ReactiveTests.Tests
             var lst = new List<string>();
             var hnd = new EventHandler<EventArgs<string>>((s, e) =>
             {
-                Assert.AreSame(src, s);
+                Assert.Same(src, s);
                 lst.Add(e.Value);
             });
 
@@ -425,10 +425,10 @@ namespace ReactiveTests.Tests
 
             src.On("qux");
 
-            Assert.IsTrue(lst.SequenceEqual(new[] { "foo", "baz" }));
+            Assert.True(lst.SequenceEqual(new[] { "foo", "baz" }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_DuplicateHandlers()
         {
             var src = new Subject<Unit>();
@@ -439,28 +439,28 @@ namespace ReactiveTests.Tests
 
             evt.OnNext += hnd;
 
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(1, num);
+            Assert.Equal(1, num);
 
             evt.OnNext += hnd;
 
             src.OnNext(new Unit());
-            Assert.AreEqual(3, num);
+            Assert.Equal(3, num);
 
             evt.OnNext -= hnd;
 
             src.OnNext(new Unit());
-            Assert.AreEqual(4, num);
+            Assert.Equal(4, num);
 
             evt.OnNext -= hnd;
 
             src.OnNext(new Unit());
-            Assert.AreEqual(4, num);
+            Assert.Equal(4, num);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_SourceCompletes()
         {
             var src = new Subject<Unit>();
@@ -471,24 +471,24 @@ namespace ReactiveTests.Tests
 
             evt.OnNext += hnd;
 
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(1, num);
+            Assert.Equal(1, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
             src.OnCompleted();
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
 #if !SILVERLIGHT // FieldAccessException
             var tbl = GetSubscriptionTable(evt);
-            Assert.IsTrue(tbl.Count == 0);
+            Assert.True(tbl.Count == 0);
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_SourceFails()
         {
             var src = new Subject<Unit>();
@@ -499,13 +499,13 @@ namespace ReactiveTests.Tests
 
             evt.OnNext += hnd;
 
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(1, num);
+            Assert.Equal(1, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
             var ex = new Exception();
 
@@ -513,11 +513,11 @@ namespace ReactiveTests.Tests
 
 #if !SILVERLIGHT // FieldAccessException
             var tbl = GetSubscriptionTable(evt);
-            Assert.IsTrue(tbl.Count == 0);
+            Assert.True(tbl.Count == 0);
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_DoneImmediately()
         {
             var src = Observable.Empty<Unit>();
@@ -530,16 +530,16 @@ namespace ReactiveTests.Tests
             {
                 evt.OnNext += hnd;
 
-                Assert.AreEqual(0, num);
+                Assert.Equal(0, num);
 
 #if !SILVERLIGHT // FieldAccessException
                 var tbl = GetSubscriptionTable(evt);
-                Assert.IsTrue(tbl.Count == 0);
+                Assert.True(tbl.Count == 0);
 #endif
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ToEvent_UnbalancedHandlers()
         {
             var src = new Subject<Unit>();
@@ -549,28 +549,28 @@ namespace ReactiveTests.Tests
             var hnd = new Action<Unit>(e => num++);
 
             evt.OnNext += hnd;
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             evt.OnNext -= hnd;
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             evt.OnNext -= hnd;
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             evt.OnNext += hnd;
-            Assert.AreEqual(0, num);
+            Assert.Equal(0, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(1, num);
+            Assert.Equal(1, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
             evt.OnNext -= hnd;
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
 
             src.OnNext(new Unit());
-            Assert.AreEqual(2, num);
+            Assert.Equal(2, num);
         }
 
         private static Dictionary<Delegate, Stack<IDisposable>> GetSubscriptionTable(object evt)
@@ -578,25 +578,25 @@ namespace ReactiveTests.Tests
             return (Dictionary<Delegate, Stack<IDisposable>>)evt.GetType().GetField("_subscriptions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(evt);
         }
 
-        [TestMethod]
+        [Fact]
         public void EventPattern_Equality()
         {
             var e1 = new EventPattern<string, EventArgs>("Bart", EventArgs.Empty);
             var e2 = new EventPattern<string, EventArgs>("Bart", EventArgs.Empty);
 
-            Assert.IsTrue(e1.Equals(e1));
-            Assert.IsTrue(e1.Equals(e2));
-            Assert.IsTrue(e2.Equals(e1));
-            Assert.IsTrue(e1 == e2);
-            Assert.IsTrue(!(e1 != e2));
-            Assert.IsTrue(e1.GetHashCode() == e2.GetHashCode());
+            Assert.True(e1.Equals(e1));
+            Assert.True(e1.Equals(e2));
+            Assert.True(e2.Equals(e1));
+            Assert.True(e1 == e2);
+            Assert.True(!(e1 != e2));
+            Assert.True(e1.GetHashCode() == e2.GetHashCode());
 
-            Assert.IsFalse(e1.Equals(null));
-            Assert.IsFalse(e1.Equals("xy"));
-            Assert.IsFalse(e1 == null);
+            Assert.False(e1.Equals(null));
+            Assert.False(e1.Equals("xy"));
+            Assert.False(e1 == null);
         }
 
-        [TestMethod]
+        [Fact]
         public void EventPattern_Inequality()
         {
             var a1 = new MyEventArgs();
@@ -606,17 +606,17 @@ namespace ReactiveTests.Tests
             var e2 = new EventPattern<string, MyEventArgs>("John", a1);
             var e3 = new EventPattern<string, MyEventArgs>("Bart", a2);
 
-            Assert.IsTrue(!e1.Equals(e2));
-            Assert.IsTrue(!e2.Equals(e1));
-            Assert.IsTrue(!(e1 == e2));
-            Assert.IsTrue(e1 != e2);
-            Assert.IsTrue(e1.GetHashCode() != e2.GetHashCode());
+            Assert.True(!e1.Equals(e2));
+            Assert.True(!e2.Equals(e1));
+            Assert.True(!(e1 == e2));
+            Assert.True(e1 != e2);
+            Assert.True(e1.GetHashCode() != e2.GetHashCode());
 
-            Assert.IsTrue(!e1.Equals(e3));
-            Assert.IsTrue(!e3.Equals(e1));
-            Assert.IsTrue(!(e1 == e3));
-            Assert.IsTrue(e1 != e3);
-            Assert.IsTrue(e1.GetHashCode() != e3.GetHashCode());
+            Assert.True(!e1.Equals(e3));
+            Assert.True(!e3.Equals(e1));
+            Assert.True(!(e1 == e3));
+            Assert.True(e1 != e3);
+            Assert.True(e1.GetHashCode() != e3.GetHashCode());
         }
 
         class MyEventArgs : EventArgs
@@ -627,7 +627,7 @@ namespace ReactiveTests.Tests
 
         #region + ToObservable +
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable((IEnumerable<int>)null, DummyScheduler.Instance));
@@ -636,7 +636,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<NullReferenceException>(() => Observable.ToObservable(NullEnumeratorEnumerable<int>.Instance, Scheduler.CurrentThread).Subscribe());
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_Complete()
         {
             var scheduler = new TestScheduler();
@@ -662,7 +662,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -686,7 +686,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_Error()
         {
             var scheduler = new TestScheduler();
@@ -712,14 +712,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_Default_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable((IEnumerable<int>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToObservable(DummyEnumerable<int>.Instance).Subscribe(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_Default()
         {
             var xs = new[] { 4, 3, 1, 5, 9, 2 };
@@ -728,7 +728,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_LongRunning_Complete()
         {
             var start = default(ManualResetEvent);
@@ -745,10 +745,10 @@ namespace ReactiveTests.Tests
             start.WaitOne();
             end.WaitOne();
 
-            Assert.IsTrue(e.SequenceEqual(lst));
+            Assert.True(e.SequenceEqual(lst));
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_LongRunning_Dispose()
         {
             var start = default(ManualResetEvent);
@@ -770,10 +770,10 @@ namespace ReactiveTests.Tests
             d.Dispose();
             end.WaitOne();
 
-            Assert.IsTrue(e.Take(100).SequenceEqual(lst.Take(100)));
+            Assert.True(e.Take(100).SequenceEqual(lst.Take(100)));
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_LongRunning_Error()
         {
             var start = default(ManualResetEvent);
@@ -792,8 +792,8 @@ namespace ReactiveTests.Tests
             start.WaitOne();
             end.WaitOne();
 
-            Assert.IsTrue(new[] { 1, 2 }.SequenceEqual(lst));
-            Assert.AreSame(ex, err);
+            Assert.True(new[] { 1, 2 }.SequenceEqual(lst));
+            Assert.Same(ex, err);
         }
 #endif
 
@@ -804,7 +804,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [TestMethod]
+        [Fact]
         public void EnumerableToObservable_GetEnumeratorThrows()
         {
             var ex = new Exception();

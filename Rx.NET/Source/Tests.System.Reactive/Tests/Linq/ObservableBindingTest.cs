@@ -7,17 +7,17 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObservableBindingTest : ReactiveTest
     {
         #region Multicast
 
-        [TestMethod]
+        [Fact]
         public void Multicast_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int>(null, new Subject<int>()));
@@ -27,7 +27,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Multicast<int, int, int>(DummyObservable<int>.Instance, () => new Subject<int>(), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_1()
         {
             var scheduler = new TestScheduler();
@@ -69,7 +69,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_2()
         {
             var scheduler = new TestScheduler();
@@ -111,7 +111,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_3()
         {
             var scheduler = new TestScheduler();
@@ -157,7 +157,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_4()
         {
             var scheduler = new TestScheduler();
@@ -205,7 +205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_5()
         {
             var scheduler = new TestScheduler();
@@ -246,7 +246,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Hot_6()
         {
             var scheduler = new TestScheduler();
@@ -285,7 +285,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Cold_Completed()
         {
             var scheduler = new TestScheduler();
@@ -320,7 +320,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Cold_Error()
         {
             var scheduler = new TestScheduler();
@@ -357,7 +357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Cold_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -390,7 +390,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_Cold_Zip()
         {
             var scheduler = new TestScheduler();
@@ -425,7 +425,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_SubjectSelectorThrows()
         {
             var ex = new Exception();
@@ -450,7 +450,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Multicast_SelectorThrows()
         {
             var ex = new Exception();
@@ -479,7 +479,7 @@ namespace ReactiveTests.Tests
 
         #region Publish
 
-        [TestMethod]
+        [Fact]
         public void Publish_Cold_Zip()
         {
             var scheduler = new TestScheduler();
@@ -514,7 +514,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -524,7 +524,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Publish<int, int>(someObservable, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_Basic()
         {
             var scheduler = new TestScheduler();
@@ -581,7 +581,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_Error()
         {
             var scheduler = new TestScheduler();
@@ -638,7 +638,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_Complete()
         {
             var scheduler = new TestScheduler();
@@ -693,7 +693,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -746,7 +746,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Publish_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -755,7 +755,7 @@ namespace ReactiveTests.Tests
             var connection1 = ys.Connect();
             var connection2 = ys.Connect();
 
-            Assert.AreSame(connection1, connection2);
+            Assert.Same(connection1, connection2);
 
             connection1.Dispose();
             connection2.Dispose();
@@ -767,7 +767,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -813,7 +813,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -861,7 +861,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -905,7 +905,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -915,7 +915,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Publish(someObservable, default(Func<IObservable<int>, IObservable<int>>), 1));
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_SanityCheck()
         {
             var someObservable = Observable.Empty<int>();
@@ -923,7 +923,7 @@ namespace ReactiveTests.Tests
             Observable.Publish(Observable.Range(1, 10), x => x, 0).AssertEqual(Observable.Range(0, 11));
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_Basic()
         {
             var scheduler = new TestScheduler();
@@ -981,7 +981,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_Error()
         {
             var scheduler = new TestScheduler();
@@ -1039,7 +1039,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1095,7 +1095,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1149,7 +1149,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValue_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -1158,7 +1158,7 @@ namespace ReactiveTests.Tests
             var connection1 = ys.Connect();
             var connection2 = ys.Connect();
 
-            Assert.AreSame(connection1, connection2);
+            Assert.Same(connection1, connection2);
 
             connection1.Dispose();
             connection2.Dispose();
@@ -1170,7 +1170,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValueLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1217,7 +1217,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValueLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -1266,7 +1266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishWithInitialValueLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1315,7 +1315,7 @@ namespace ReactiveTests.Tests
 
         #region PublishLast
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -1326,7 +1326,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.PublishLast<int, int>(someObservable, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1378,7 +1378,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_Error()
         {
             var scheduler = new TestScheduler();
@@ -1429,7 +1429,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1479,7 +1479,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1531,7 +1531,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLast_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -1540,7 +1540,7 @@ namespace ReactiveTests.Tests
             var connection1 = ys.Connect();
             var connection2 = ys.Connect();
 
-            Assert.AreSame(connection1, connection2);
+            Assert.Same(connection1, connection2);
 
             connection1.Dispose();
             connection2.Dispose();
@@ -1552,7 +1552,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLastLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -1588,7 +1588,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLastLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -1625,7 +1625,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void PublishLastLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -1664,13 +1664,13 @@ namespace ReactiveTests.Tests
 
         #region RefCount
 
-        [TestMethod]
+        [Fact]
         public void RefCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.RefCount<int>(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCount_ConnectsOnFirst()
         {
             var scheduler = new TestScheduler();
@@ -1699,10 +1699,10 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(250)
             );
 
-            Assert.IsTrue(subject.Disposed);
+            Assert.True(subject.Disposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCount_NotConnected()
         {
             var disconnected = false;
@@ -1722,31 +1722,31 @@ namespace ReactiveTests.Tests
             var refd = conn.RefCount();
 
             var dis1 = refd.Subscribe();
-            Assert.AreEqual(1, count);
-            Assert.AreEqual(1, subject.SubscribeCount);
-            Assert.IsFalse(disconnected);
+            Assert.Equal(1, count);
+            Assert.Equal(1, subject.SubscribeCount);
+            Assert.False(disconnected);
 
             var dis2 = refd.Subscribe();
-            Assert.AreEqual(1, count);
-            Assert.AreEqual(2, subject.SubscribeCount);
-            Assert.IsFalse(disconnected);
+            Assert.Equal(1, count);
+            Assert.Equal(2, subject.SubscribeCount);
+            Assert.False(disconnected);
 
             dis1.Dispose();
-            Assert.IsFalse(disconnected);
+            Assert.False(disconnected);
             dis2.Dispose();
-            Assert.IsTrue(disconnected);
+            Assert.True(disconnected);
             disconnected = false;
 
             var dis3 = refd.Subscribe();
-            Assert.AreEqual(2, count);
-            Assert.AreEqual(3, subject.SubscribeCount);
-            Assert.IsFalse(disconnected);
+            Assert.Equal(2, count);
+            Assert.Equal(3, subject.SubscribeCount);
+            Assert.False(disconnected);
 
             dis3.Dispose();
-            Assert.IsTrue(disconnected);
+            Assert.True(disconnected);
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCount_OnError()
         {
             var ex = new Exception();
@@ -1754,11 +1754,11 @@ namespace ReactiveTests.Tests
 
             var res = xs.Publish().RefCount();
 
-            res.Subscribe(_ => { Assert.Fail(); }, ex_ => { Assert.AreSame(ex, ex_); }, () => { Assert.Fail(); });
-            res.Subscribe(_ => { Assert.Fail(); }, ex_ => { Assert.AreSame(ex, ex_); }, () => { Assert.Fail(); });
+            res.Subscribe(_ => { Assert.True(false); }, ex_ => { Assert.Same(ex, ex_); }, () => { Assert.True(false); });
+            res.Subscribe(_ => { Assert.True(false); }, ex_ => { Assert.Same(ex, ex_); }, () => { Assert.True(false); });
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCount_Publish()
         {
             var scheduler = new TestScheduler();
@@ -1832,7 +1832,7 @@ namespace ReactiveTests.Tests
 
         #region Replay
 
-        [TestMethod]
+        [Fact]
         public void Replay_ArgumentChecking()
         {
             var someObservable = Observable.Empty<int>();
@@ -1888,7 +1888,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Replay(someObservable, x => x, 1, TimeSpan.FromSeconds(1), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCount_Basic()
         {
             var scheduler = new TestScheduler();
@@ -1944,7 +1944,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCount_Error()
         {
             var scheduler = new TestScheduler();
@@ -2000,7 +2000,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCount_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2054,7 +2054,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCount_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2109,7 +2109,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCount_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -2118,7 +2118,7 @@ namespace ReactiveTests.Tests
             var connection1 = ys.Connect();
             var connection2 = ys.Connect();
 
-            Assert.AreSame(connection1, connection2);
+            Assert.Same(connection1, connection2);
 
             connection1.Dispose();
             connection2.Dispose();
@@ -2130,7 +2130,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCountLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2192,7 +2192,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCountLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -2250,7 +2250,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayCountLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2301,7 +2301,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTime_Basic()
         {
             var scheduler = new TestScheduler();
@@ -2358,7 +2358,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTime_Error()
         {
             var scheduler = new TestScheduler();
@@ -2412,7 +2412,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTime_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2465,7 +2465,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTime_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2520,7 +2520,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTime_MultipleConnections()
         {
             var xs = Observable.Never<int>();
@@ -2529,7 +2529,7 @@ namespace ReactiveTests.Tests
             var connection1 = ys.Connect();
             var connection2 = ys.Connect();
 
-            Assert.AreSame(connection1, connection2);
+            Assert.Same(connection1, connection2);
 
             connection1.Dispose();
             connection2.Dispose();
@@ -2541,7 +2541,7 @@ namespace ReactiveTests.Tests
             connection3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTimeLambda_Zip_Complete()
         {
             var scheduler = new TestScheduler();
@@ -2600,7 +2600,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTimeLambda_Zip_Error()
         {
             var scheduler = new TestScheduler();
@@ -2657,7 +2657,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayTimeLambda_Zip_Dispose()
         {
             var scheduler = new TestScheduler();
@@ -2708,7 +2708,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Replay_Default1()
         {
             var s = new Subject<int>();
@@ -2725,7 +2725,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void Replay_Default2()
         {
             var s = new Subject<int>();
@@ -2742,7 +2742,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void Replay_Default3()
         {
             var s = new Subject<int>();
@@ -2759,7 +2759,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void Replay_Default4()
         {
             var s = new Subject<int>();
@@ -2776,7 +2776,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayLambda_Default1()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, 100, DefaultScheduler.Instance);
@@ -2785,7 +2785,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayLambda_Default2()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, TimeSpan.FromHours(1), DefaultScheduler.Instance);
@@ -2794,7 +2794,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayLambda_Default3()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, 100, TimeSpan.FromHours(1), DefaultScheduler.Instance);
@@ -2803,7 +2803,7 @@ namespace ReactiveTests.Tests
             xs.AssertEqual(ys);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplayLambda_Default4()
         {
             var xs = Observable.Range(1, 10).Replay(_xs => _xs, DefaultScheduler.Instance);

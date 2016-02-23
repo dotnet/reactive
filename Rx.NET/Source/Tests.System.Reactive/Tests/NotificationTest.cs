@@ -4,22 +4,22 @@ using System;
 using System.Reactive;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class NotificationTest : ReactiveTest
     {
         #region ToObservable
 
-        [TestMethod]
+        [Fact]
         public void ToObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Notification.CreateOnNext<int>(1).ToObservable(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObservable_Empty()
         {
             var scheduler = new TestScheduler();
@@ -33,7 +33,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObservable_Return()
         {
             var scheduler = new TestScheduler();
@@ -48,7 +48,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObservable_Throw()
         {
             var ex = new Exception();
@@ -64,7 +64,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObservable_CurrentThread()
         {
             var evt = new ManualResetEvent(false);
@@ -79,7 +79,7 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-        [TestMethod]
+        [Fact]
         public void Notifications_Equality()
         {
             var n = Notification.CreateOnNext(42);
@@ -90,26 +90,26 @@ namespace ReactiveTests.Tests
             var e1 = e; var e2 = e;
             var c1 = c; var c2 = c;
 
-            Assert.IsTrue(n1 == n2);
-            Assert.IsTrue(e1 == e2);
-            Assert.IsTrue(c1 == c2);
+            Assert.True(n1 == n2);
+            Assert.True(e1 == e2);
+            Assert.True(c1 == c2);
 
-            Assert.IsTrue(n1.Equals(n2));
-            Assert.IsTrue(e1.Equals(e2));
-            Assert.IsTrue(c1.Equals(c2));
+            Assert.True(n1.Equals(n2));
+            Assert.True(e1.Equals(e2));
+            Assert.True(c1.Equals(c2));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_CtorAndProps()
         {
             var n = Notification.CreateOnNext<int>(42);
-            Assert.AreEqual(NotificationKind.OnNext, n.Kind);
-            Assert.IsTrue(n.HasValue);
-            Assert.AreEqual(42, n.Value);
-            Assert.IsNull(n.Exception);
+            Assert.Equal(NotificationKind.OnNext, n.Kind);
+            Assert.True(n.HasValue);
+            Assert.Equal(42, n.Value);
+            Assert.Null(n.Exception);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_Equality()
         {
             var n1 = Notification.CreateOnNext<int>(42);
@@ -117,54 +117,54 @@ namespace ReactiveTests.Tests
             var n3 = Notification.CreateOnNext<int>(24);
             var n4 = Notification.CreateOnCompleted<int>();
 
-            Assert.IsTrue(n1.Equals(n1));
-            Assert.IsTrue(n1.Equals(n2));
-            Assert.IsTrue(n2.Equals(n1));
+            Assert.True(n1.Equals(n1));
+            Assert.True(n1.Equals(n2));
+            Assert.True(n2.Equals(n1));
 
-            Assert.IsFalse(n1.Equals(null));
-            Assert.IsFalse(n1.Equals(""));
+            Assert.False(n1.Equals(null));
+            Assert.False(n1.Equals(""));
 
-            Assert.IsFalse(n1.Equals(n3));
-            Assert.IsFalse(n3.Equals(n1));
-            Assert.IsFalse(n1.Equals(n4));
-            Assert.IsFalse(n4.Equals(n1));
+            Assert.False(n1.Equals(n3));
+            Assert.False(n3.Equals(n1));
+            Assert.False(n1.Equals(n4));
+            Assert.False(n4.Equals(n1));
 
-            Assert.IsTrue(n1 == n2);
-            Assert.IsTrue(n2 == n1);
-            Assert.IsFalse(n1 == null);
-            Assert.IsFalse(null == n1);
-            Assert.IsTrue(!(n1 != n2));
-            Assert.IsTrue(!(n2 != n1));
-            Assert.IsFalse(!(n1 != null));
-            Assert.IsFalse(!(null != n1));
+            Assert.True(n1 == n2);
+            Assert.True(n2 == n1);
+            Assert.False(n1 == null);
+            Assert.False(null == n1);
+            Assert.True(!(n1 != n2));
+            Assert.True(!(n2 != n1));
+            Assert.False(!(n1 != null));
+            Assert.False(!(null != n1));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_GetHashCode()
         {
             var n1 = Notification.CreateOnNext<int>(42);
             var n2 = Notification.CreateOnNext<int>(42);
 
-            Assert.AreNotEqual(0, n1.GetHashCode());
-            Assert.AreEqual(n1.GetHashCode(), n2.GetHashCode());
+            Assert.NotEqual(0, n1.GetHashCode());
+            Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_ToString()
         {
             var n1 = Notification.CreateOnNext<int>(42);
-            Assert.IsTrue(n1.ToString().Contains("OnNext"));
-            Assert.IsTrue(n1.ToString().Contains(42.ToString()));
+            Assert.True(n1.ToString().Contains("OnNext"));
+            Assert.True(n1.ToString().Contains(42.ToString()));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_AcceptObserver()
         {
             var con = new CheckOnNextObserver();
             var n1 = Notification.CreateOnNext<int>(42);
             n1.Accept(con);
 
-            Assert.AreEqual(42, con.Value);
+            Assert.Equal(42, con.Value);
         }
 
         class CheckOnNextObserver : IObserver<int>
@@ -187,34 +187,34 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_AcceptObserverWithResult()
         {
             var n1 = Notification.CreateOnNext<int>(42);
-            var res = n1.Accept(new AcceptObserver(x => "OK", _ => { Assert.Fail(); return null; }, () => { Assert.Fail(); return null; }));
+            var res = n1.Accept(new AcceptObserver(x => "OK", _ => { Assert.True(false); return null; }, () => { Assert.True(false); return null; }));
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnNext<int>(42);
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_AcceptAction()
         {
             var obs = false;
 
             var n1 = Notification.CreateOnNext<int>(42);
-            n1.Accept(x => { obs = true; }, _ => { Assert.Fail(); }, () => { Assert.Fail(); });
+            n1.Accept(x => { obs = true; }, _ => { Assert.True(false); }, () => { Assert.True(false); });
 
-            Assert.IsTrue(obs);
+            Assert.True(obs);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnNext<int>(42);
@@ -230,22 +230,22 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnNext_AcceptActionWithResult()
         {
             var n1 = Notification.CreateOnNext<int>(42);
-            var res = n1.Accept(x => "OK", _ => { Assert.Fail(); return null; }, () => { Assert.Fail(); return null; });
+            var res = n1.Accept(x => "OK", _ => { Assert.True(false); return null; }, () => { Assert.True(false); return null; });
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void OnError_CtorNull()
         {
             Notification.CreateOnError<int>(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnError<int>(new Exception());
@@ -261,27 +261,27 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_CtorAndProps()
         {
             var e = new Exception();
             var n = Notification.CreateOnError<int>(e);
-            Assert.AreEqual(NotificationKind.OnError, n.Kind);
-            Assert.IsFalse(n.HasValue);
-            Assert.AreSame(e, n.Exception);
+            Assert.Equal(NotificationKind.OnError, n.Kind);
+            Assert.False(n.HasValue);
+            Assert.Same(e, n.Exception);
 
             try
             {
                 var x = n.Value;
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception _e)
             {
-                Assert.AreSame(e, _e);
+                Assert.Same(e, _e);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_Equality()
         {
             var ex1 = new Exception();
@@ -292,29 +292,29 @@ namespace ReactiveTests.Tests
             var n3 = Notification.CreateOnError<int>(ex2);
             var n4 = Notification.CreateOnCompleted<int>();
 
-            Assert.IsTrue(n1.Equals(n1));
-            Assert.IsTrue(n1.Equals(n2));
-            Assert.IsTrue(n2.Equals(n1));
+            Assert.True(n1.Equals(n1));
+            Assert.True(n1.Equals(n2));
+            Assert.True(n2.Equals(n1));
 
-            Assert.IsFalse(n1.Equals(null));
-            Assert.IsFalse(n1.Equals(""));
+            Assert.False(n1.Equals(null));
+            Assert.False(n1.Equals(""));
 
-            Assert.IsFalse(n1.Equals(n3));
-            Assert.IsFalse(n3.Equals(n1));
-            Assert.IsFalse(n1.Equals(n4));
-            Assert.IsFalse(n4.Equals(n1));
+            Assert.False(n1.Equals(n3));
+            Assert.False(n3.Equals(n1));
+            Assert.False(n1.Equals(n4));
+            Assert.False(n4.Equals(n1));
 
-            Assert.IsTrue(n1 == n2);
-            Assert.IsTrue(n2 == n1);
-            Assert.IsFalse(n1 == null);
-            Assert.IsFalse(null == n1);
-            Assert.IsTrue(!(n1 != n2));
-            Assert.IsTrue(!(n2 != n1));
-            Assert.IsFalse(!(n1 != null));
-            Assert.IsFalse(!(null != n1));
+            Assert.True(n1 == n2);
+            Assert.True(n2 == n1);
+            Assert.False(n1 == null);
+            Assert.False(null == n1);
+            Assert.True(!(n1 != n2));
+            Assert.True(!(n2 != n1));
+            Assert.False(!(n1 != null));
+            Assert.False(!(null != n1));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_GetHashCode()
         {
             var ex = new Exception();
@@ -322,21 +322,21 @@ namespace ReactiveTests.Tests
             var n1 = Notification.CreateOnError<int>(ex);
             var n2 = Notification.CreateOnError<int>(ex);
 
-            Assert.AreNotEqual(0, n1.GetHashCode());
-            Assert.AreEqual(n1.GetHashCode(), n2.GetHashCode());
+            Assert.NotEqual(0, n1.GetHashCode());
+            Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_ToString()
         {
             var ex = new Exception();
 
             var n1 = Notification.CreateOnError<int>(ex);
-            Assert.IsTrue(n1.ToString().Contains("OnError"));
-            Assert.IsTrue(n1.ToString().Contains(ex.GetType().Name)); // CHECK, no message?
+            Assert.True(n1.ToString().Contains("OnError"));
+            Assert.True(n1.ToString().Contains(ex.GetType().Name)); // CHECK, no message?
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_AcceptObserver()
         {
             var ex = new Exception();
@@ -346,7 +346,7 @@ namespace ReactiveTests.Tests
             var n1 = Notification.CreateOnError<int>(ex);
             n1.Accept(obs);
 
-            Assert.AreSame(ex, obs.Error);
+            Assert.Same(ex, obs.Error);
         }
 
         class CheckOnErrorObserver : IObserver<int>
@@ -369,25 +369,25 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_AcceptObserverWithResult()
         {
             var ex = new Exception();
 
             var n1 = Notification.CreateOnError<int>(ex);
-            var res = n1.Accept(new AcceptObserver(x => { Assert.Fail(); return null; }, _ => { Assert.AreSame(ex, _); return "OK"; }, () => { Assert.Fail(); return null; }));
+            var res = n1.Accept(new AcceptObserver(x => { Assert.True(false); return null; }, _ => { Assert.Same(ex, _); return "OK"; }, () => { Assert.True(false); return null; }));
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnError<int>(new Exception());
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_AcceptAction()
         {
             var ex = new Exception();
@@ -395,45 +395,45 @@ namespace ReactiveTests.Tests
             var obs = false;
 
             var n1 = Notification.CreateOnError<int>(ex);
-            n1.Accept(x => { Assert.Fail(); }, _ => { obs = true; }, () => { Assert.Fail(); });
+            n1.Accept(x => { Assert.True(false); }, _ => { obs = true; }, () => { Assert.True(false); });
 
-            Assert.IsTrue(obs);
+            Assert.True(obs);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_AcceptActionWithResult()
         {
             var ex = new Exception();
 
             var n1 = Notification.CreateOnError<int>(ex);
-            var res = n1.Accept(x => { Assert.Fail(); return null; }, x => "OK", () => { Assert.Fail(); return null; });
+            var res = n1.Accept(x => { Assert.True(false); return null; }, x => "OK", () => { Assert.True(false); return null; });
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_CtorAndProps()
         {
             var n = Notification.CreateOnCompleted<int>();
-            Assert.AreEqual(NotificationKind.OnCompleted, n.Kind);
-            Assert.IsFalse(n.HasValue);
-            Assert.IsNull(n.Exception);
+            Assert.Equal(NotificationKind.OnCompleted, n.Kind);
+            Assert.False(n.HasValue);
+            Assert.Null(n.Exception);
 
             var ok = false;
             try
             {
                 var x = n.Value;
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (InvalidOperationException)
             {
                 ok = true;
             }
 
-            Assert.IsTrue(ok);
+            Assert.True(ok);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_Accept_ArgumentChecking()
         {
             var n = Notification.CreateOnCompleted<int>();
@@ -449,51 +449,51 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => n.Accept<string>(x => "", ex => "", default(Func<string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_Equality()
         {
             var n1 = Notification.CreateOnCompleted<int>();
             var n2 = Notification.CreateOnCompleted<int>();
             var n3 = Notification.CreateOnNext<int>(2);
 
-            Assert.IsTrue(n1.Equals(n1));
-            Assert.IsTrue(n1.Equals(n2));
-            Assert.IsTrue(n2.Equals(n1));
+            Assert.True(n1.Equals(n1));
+            Assert.True(n1.Equals(n2));
+            Assert.True(n2.Equals(n1));
 
-            Assert.IsFalse(n1.Equals(null));
-            Assert.IsFalse(n1.Equals(""));
+            Assert.False(n1.Equals(null));
+            Assert.False(n1.Equals(""));
 
-            Assert.IsFalse(n1.Equals(n3));
-            Assert.IsFalse(n3.Equals(n1));
+            Assert.False(n1.Equals(n3));
+            Assert.False(n3.Equals(n1));
 
-            Assert.IsTrue(n1 == n2);
-            Assert.IsTrue(n2 == n1);
-            Assert.IsFalse(n1 == null);
-            Assert.IsFalse(null == n1);
-            Assert.IsTrue(!(n1 != n2));
-            Assert.IsTrue(!(n2 != n1));
-            Assert.IsFalse(!(n1 != null));
-            Assert.IsFalse(!(null != n1));
+            Assert.True(n1 == n2);
+            Assert.True(n2 == n1);
+            Assert.False(n1 == null);
+            Assert.False(null == n1);
+            Assert.True(!(n1 != n2));
+            Assert.True(!(n2 != n1));
+            Assert.False(!(n1 != null));
+            Assert.False(!(null != n1));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_GetHashCode()
         {
             var n1 = Notification.CreateOnCompleted<int>();
             var n2 = Notification.CreateOnCompleted<int>();
 
-            Assert.AreNotEqual(0, n1.GetHashCode());
-            Assert.AreEqual(n1.GetHashCode(), n2.GetHashCode());
+            Assert.NotEqual(0, n1.GetHashCode());
+            Assert.Equal(n1.GetHashCode(), n2.GetHashCode());
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_ToString()
         {
             var n1 = Notification.CreateOnCompleted<int>();
-            Assert.IsTrue(n1.ToString().Contains("OnCompleted"));
+            Assert.True(n1.ToString().Contains("OnCompleted"));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_AcceptObserver()
         {
             var obs = new CheckOnCompletedObserver();
@@ -501,7 +501,7 @@ namespace ReactiveTests.Tests
             var n1 = Notification.CreateOnCompleted<int>();
             n1.Accept(obs);
 
-            Assert.IsTrue(obs.Completed);
+            Assert.True(obs.Completed);
         }
 
         class CheckOnCompletedObserver : IObserver<int>
@@ -524,40 +524,40 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_AcceptObserverWithResult()
         {
             var n1 = Notification.CreateOnCompleted<int>();
-            var res = n1.Accept(new AcceptObserver(x => { Assert.Fail(); return null; }, _ => { Assert.Fail(); return null; }, () => "OK"));
+            var res = n1.Accept(new AcceptObserver(x => { Assert.True(false); return null; }, _ => { Assert.True(false); return null; }, () => "OK"));
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_AcceptObserverWithResult_Null()
         {
             var n1 = Notification.CreateOnCompleted<int>();
             ReactiveAssert.Throws<ArgumentNullException>(() => n1.Accept(default(IObserver<int, string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_AcceptAction()
         {
             var obs = false;
 
             var n1 = Notification.CreateOnCompleted<int>();
-            n1.Accept(x => { Assert.Fail(); }, _ => { Assert.Fail(); }, () => { obs = true; });
+            n1.Accept(x => { Assert.True(false); }, _ => { Assert.True(false); }, () => { obs = true; });
 
-            Assert.IsTrue(obs);
+            Assert.True(obs);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnCompleted_AcceptActionWithResult()
         {
             var n1 = Notification.CreateOnCompleted<int>();
-            var res = n1.Accept(x => { Assert.Fail(); return null; }, _ => { Assert.Fail(); return null; }, () => "OK");
+            var res = n1.Accept(x => { Assert.True(false); return null; }, _ => { Assert.True(false); return null; }, () => "OK");
 
-            Assert.AreEqual("OK", res);
+            Assert.Equal("OK", res);
         }
 
         class AcceptObserver : IObserver<int, string>

@@ -11,18 +11,18 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObservableEventsTest : ReactiveTest
     {
         #region + FromEventPattern +
 
         #region Strongly typed
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Conversion_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern(null, h => { }));
@@ -42,7 +42,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, EventArgs>(h => new EventHandler(h), h => { }, h => { }, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_E2()
         {
             var scheduler = new TestScheduler();
@@ -69,7 +69,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Conversion_E4()
         {
             var scheduler = new TestScheduler();
@@ -97,7 +97,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Conversion_E5()
         {
             var scheduler = new TestScheduler();
@@ -124,7 +124,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_ConversionThrows()
         {
             var ex = new Exception();
@@ -139,12 +139,12 @@ namespace ReactiveTests.Tests
                 );
 
             var err = default(Exception);
-            res.Subscribe(_ => { Assert.Fail(); }, ex_ => err = ex_, () => { Assert.Fail(); });
+            res.Subscribe(_ => { Assert.True(false); }, ex_ => err = ex_, () => { Assert.True(false); });
 
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_E2_WithSender()
         {
             var scheduler = new TestScheduler();
@@ -171,7 +171,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_AddRemove_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventArgs>(null, h => { }));
@@ -196,7 +196,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEventPattern<EventHandler, object, EventArgs>(h => { }, h => { }, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_AddRemove_E4()
         {
             var scheduler = new TestScheduler();
@@ -229,7 +229,7 @@ namespace ReactiveTests.Tests
 
         #region Instance events
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_ArgumentChecking()
         {
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default(object), "foo"));
@@ -274,13 +274,13 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<FromEventPattern_ArgCheck, EventArgs>(new FromEventPattern_ArgCheck(), "foo"));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_InvalidVariance()
         {
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<CancelEventArgs>(new FromEventPattern_VarianceCheck(), "E1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_VarianceArgs()
         {
             var src = new FromEventPattern_VarianceCheck();
@@ -299,12 +299,12 @@ namespace ReactiveTests.Tests
 
             src.OnE2(new CancelEventArgs());
 
-            Assert.IsTrue(lst.Count == 2, "Count");
-            Assert.AreSame(e1, lst[0].EventArgs, "First");
-            Assert.AreSame(e2, lst[1].EventArgs, "Second");
+            Assert.True(lst.Count == 2, "Count");
+            Assert.Same(e1, lst[0].EventArgs, "First");
+            Assert.Same(e2, lst[1].EventArgs, "Second");
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_VarianceSender()
         {
             var src = new FromEventPattern_VarianceCheck();
@@ -323,12 +323,12 @@ namespace ReactiveTests.Tests
 
             src.OnE3("Fail!");
 
-            Assert.IsTrue(lst.Count == 2, "Count");
-            Assert.AreSame(s1, lst[0].Sender, "First");
-            Assert.AreSame(s2, lst[1].Sender, "Second");
+            Assert.True(lst.Count == 2, "Count");
+            Assert.Same(s1, lst[0].Sender, "First");
+            Assert.Same(s2, lst[1].Sender, "Second");
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_NonGeneric()
         {
             var src = new FromEventPattern_VarianceCheck();
@@ -351,12 +351,12 @@ namespace ReactiveTests.Tests
 
             src.OnE2(new CancelEventArgs());
 
-            Assert.IsTrue(lst.Count == 2, "Count");
-            Assert.AreSame(e1, lst[0].EventArgs, "First");
-            Assert.AreSame(e2, lst[1].EventArgs, "Second");
+            Assert.True(lst.Count == 2, "Count");
+            Assert.Same(e1, lst[0].EventArgs, "First");
+            Assert.Same(e2, lst[1].EventArgs, "Second");
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_Throws()
         {
             //
@@ -366,8 +366,8 @@ namespace ReactiveTests.Tests
             //
             var exAdd = default(Exception);
             var xs = Observable.FromEventPattern<FromEventPattern.TestEventArgs>(new FromEventPattern(), "AddThrows");
-            xs.Subscribe(_ => { Assert.Fail(); }, ex => exAdd = ex, () => { Assert.Fail(); });
-            Assert.IsTrue(exAdd is InvalidOperationException);
+            xs.Subscribe(_ => { Assert.True(false); }, ex => exAdd = ex, () => { Assert.True(false); });
+            Assert.True(exAdd is InvalidOperationException);
 
             //
             // Notice the exception propgation behavior is asymmetric by design. Below, the Dispose
@@ -379,11 +379,11 @@ namespace ReactiveTests.Tests
             //
             var exRem = default(Exception);
             var ys = Observable.FromEventPattern<FromEventPattern.TestEventArgs>(new FromEventPattern(), "RemoveThrows");
-            var d = ys.Subscribe(_ => { Assert.Fail(); }, ex => exRem = ex, () => { Assert.Fail(); });
+            var d = ys.Subscribe(_ => { Assert.True(false); }, ex => exRem = ex, () => { Assert.True(false); });
             ReactiveAssert.Throws<InvalidOperationException>(d.Dispose);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_E1()
         {
             var scheduler = new TestScheduler();
@@ -408,7 +408,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_E2()
         {
             var scheduler = new TestScheduler();
@@ -433,7 +433,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_E2_WithSender()
         {
             var scheduler = new TestScheduler();
@@ -458,7 +458,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_E3()
         {
             var scheduler = new TestScheduler();
@@ -484,7 +484,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Instance_MissingAccessors()
         {
             var asm = AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName("EventsTest"), System.Reflection.Emit.AssemblyBuilderAccess.RunAndSave);
@@ -520,7 +520,7 @@ namespace ReactiveTests.Tests
 
         #region Static events
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Static_ArgumentChecking()
         {
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(default(Type), "foo"));
@@ -545,7 +545,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern<object, EventArgs>(typeof(FromEventPattern_ArgCheck), "foo"));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Static_E6()
         {
             var scheduler = new TestScheduler();
@@ -568,7 +568,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Static_E6_WithSender()
         {
             var scheduler = new TestScheduler();
@@ -591,7 +591,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Reflection_Static_NonGeneric_E6()
         {
             var scheduler = new TestScheduler();
@@ -622,7 +622,7 @@ namespace ReactiveTests.Tests
 
         #region + FromEvent +
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent<Action<int>, int>(default(Func<Action<int>, Action<int>>), h => { }, h => { }));
@@ -656,7 +656,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromEvent(h => { }, h => { }, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_Action()
         {
             var fe = new FromEvent();
@@ -675,10 +675,10 @@ namespace ReactiveTests.Tests
 
             fe.OnA();
 
-            Assert.AreEqual(2, n);
+            Assert.Equal(2, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_ActionOfInt()
         {
             var fe = new FromEvent();
@@ -697,10 +697,10 @@ namespace ReactiveTests.Tests
 
             fe.OnB(4);
 
-            Assert.AreEqual(2 + 3, n);
+            Assert.Equal(2 + 3, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_ActionOfInt_SpecifiedExplicitly()
         {
             var fe = new FromEvent();
@@ -719,10 +719,10 @@ namespace ReactiveTests.Tests
 
             fe.OnB(4);
 
-            Assert.AreEqual(2 + 3, n);
+            Assert.Equal(2 + 3, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_ActionOfInt_SpecifiedExplicitly_TrivialConversion()
         {
             var fe = new FromEvent();
@@ -741,10 +741,10 @@ namespace ReactiveTests.Tests
 
             fe.OnB(4);
 
-            Assert.AreEqual(2 + 3, n);
+            Assert.Equal(2 + 3, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_MyAction()
         {
             var fe = new FromEvent();
@@ -763,14 +763,14 @@ namespace ReactiveTests.Tests
 
             fe.OnC(4);
 
-            Assert.AreEqual(2 + 3, n);
+            Assert.Equal(2 + 3, n);
         }
 
         #endregion
 
         #region Rx v2.0 behavior
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_ImplicitPublish()
         {
             var src = new MyEventSource();
@@ -780,73 +780,73 @@ namespace ReactiveTests.Tests
 
             var xs = Observable.FromEventPattern<MyEventArgs>(h => { addCount++; src.Bar += h; }, h => { src.Bar -= h; remCount++; }, Scheduler.Immediate);
 
-            Assert.AreEqual(0, addCount);
-            Assert.AreEqual(0, remCount);
+            Assert.Equal(0, addCount);
+            Assert.Equal(0, remCount);
 
             src.OnBar(41);
 
             var fst = new List<int>();
             var d1 = xs.Subscribe(e => fst.Add(e.EventArgs.Value));
 
-            Assert.AreEqual(1, addCount);
-            Assert.AreEqual(0, remCount);
+            Assert.Equal(1, addCount);
+            Assert.Equal(0, remCount);
 
             src.OnBar(42);
 
-            Assert.IsTrue(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(fst.SequenceEqual(new[] { 42 }));
 
             d1.Dispose();
 
-            Assert.AreEqual(1, addCount);
-            Assert.AreEqual(1, remCount);
+            Assert.Equal(1, addCount);
+            Assert.Equal(1, remCount);
 
             var snd = new List<int>();
             var d2 = xs.Subscribe(e => snd.Add(e.EventArgs.Value));
 
-            Assert.AreEqual(2, addCount);
-            Assert.AreEqual(1, remCount);
+            Assert.Equal(2, addCount);
+            Assert.Equal(1, remCount);
 
             src.OnBar(43);
 
-            Assert.IsTrue(fst.SequenceEqual(new[] { 42 }));
-            Assert.IsTrue(snd.SequenceEqual(new[] { 43 }));
+            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(snd.SequenceEqual(new[] { 43 }));
 
             var thd = new List<int>();
             var d3 = xs.Subscribe(e => thd.Add(e.EventArgs.Value));
 
-            Assert.AreEqual(2, addCount);
-            Assert.AreEqual(1, remCount);
+            Assert.Equal(2, addCount);
+            Assert.Equal(1, remCount);
 
             src.OnBar(44);
 
-            Assert.IsTrue(fst.SequenceEqual(new[] { 42 }));
-            Assert.IsTrue(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.IsTrue(thd.SequenceEqual(new[] { 44 }));
+            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
+            Assert.True(thd.SequenceEqual(new[] { 44 }));
 
             d2.Dispose();
 
-            Assert.AreEqual(2, addCount);
-            Assert.AreEqual(1, remCount);
+            Assert.Equal(2, addCount);
+            Assert.Equal(1, remCount);
 
             src.OnBar(45);
 
-            Assert.IsTrue(fst.SequenceEqual(new[] { 42 }));
-            Assert.IsTrue(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.IsTrue(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
+            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
 
             d3.Dispose();
 
-            Assert.AreEqual(2, addCount);
-            Assert.AreEqual(2, remCount);
+            Assert.Equal(2, addCount);
+            Assert.Equal(2, remCount);
 
             src.OnBar(46);
 
-            Assert.IsTrue(fst.SequenceEqual(new[] { 42 }));
-            Assert.IsTrue(snd.SequenceEqual(new[] { 43, 44 }));
-            Assert.IsTrue(thd.SequenceEqual(new[] { 44, 45 }));
+            Assert.True(fst.SequenceEqual(new[] { 42 }));
+            Assert.True(snd.SequenceEqual(new[] { 43, 44 }));
+            Assert.True(thd.SequenceEqual(new[] { 44, 45 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_SynchronizationContext()
         {
             var beforeSubscribeNull = false;
@@ -873,8 +873,8 @@ namespace ReactiveTests.Tests
 
                 var xs = Observable.FromEventPattern<MyEventArgs>(h => { addCtx = SynchronizationContext.Current; src.Bar += h; addEvt.Set(); }, h => { remCtx = SynchronizationContext.Current; src.Bar -= h; remEvt.Set(); });
 
-                Assert.IsNull(addCtx);
-                Assert.IsNull(remCtx);
+                Assert.Null(addCtx);
+                Assert.Null(remCtx);
 
                 var d = default(IDisposable);
                 var res = new List<int>();
@@ -917,17 +917,17 @@ namespace ReactiveTests.Tests
                 thdNext = res.SequenceEqual(new[] { 42, 43 });
             });
 
-            Assert.IsTrue(beforeSubscribeNull);
-            Assert.IsTrue(subscribeOnCtx);
-            Assert.IsTrue(afterSubscribeNull);
+            Assert.True(beforeSubscribeNull);
+            Assert.True(subscribeOnCtx);
+            Assert.True(afterSubscribeNull);
 
-            Assert.IsTrue(fstNext);
-            Assert.IsTrue(sndNext);
-            Assert.IsTrue(thdNext);
+            Assert.True(fstNext);
+            Assert.True(sndNext);
+            Assert.True(thdNext);
 
-            Assert.IsTrue(beforeDisposeNull);
-            Assert.IsTrue(disposeOnCtx);
-            Assert.IsTrue(afterDisposeNull);
+            Assert.True(beforeDisposeNull);
+            Assert.True(disposeOnCtx);
+            Assert.True(afterDisposeNull);
         }
 
         private void RunWithContext<T>(T ctx, Action<T> run)
@@ -943,37 +943,37 @@ namespace ReactiveTests.Tests
             t.Join();
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_Scheduler1()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_Scheduler2()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_Scheduler3()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<Action<MyEventArgs>, MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEvent_Scheduler4()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEvent<Action, MyEventArgs>(h => () => { }, h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler1()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEventPattern<MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler2()
         {
             RunWithScheduler((s, add, remove) =>
@@ -984,7 +984,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler3()
         {
             RunWithScheduler((s, add, remove) =>
@@ -995,13 +995,13 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler4()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEventPattern(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler5()
         {
             RunWithScheduler((s, add, remove) =>
@@ -1012,7 +1012,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler6()
         {
             RunWithScheduler((s, add, remove) =>
@@ -1023,19 +1023,19 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler7()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEventPattern<EventHandler<MyEventArgs>, MyEventArgs>(h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler8()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEventPattern<EventHandler<MyEventArgs>, MyEventArgs>(h => h, h => { add(); }, h => { remove(); }, s));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler9()
         {
             RunWithScheduler((s, add, remove) =>
@@ -1046,7 +1046,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler10()
         {
             RunWithScheduler((s, add, remove) =>
@@ -1057,7 +1057,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void FromEventPattern_Scheduler11()
         {
             RunWithScheduler((s, add, remove) => Observable.FromEventPattern<EventHandler<MyEventArgs>, object, MyEventArgs>(h => { add(); }, h => { remove(); }, s));
@@ -1094,29 +1094,29 @@ namespace ReactiveTests.Tests
 
             var xs = run(s, add, rem);
 
-            Assert.AreEqual(0, n);
-            Assert.AreEqual(0, a);
-            Assert.AreEqual(0, r);
+            Assert.Equal(0, n);
+            Assert.Equal(0, a);
+            Assert.Equal(0, r);
 
             var d1 = xs.Subscribe();
-            Assert.AreEqual(1, n);
-            Assert.AreEqual(1, a);
-            Assert.AreEqual(0, r);
+            Assert.Equal(1, n);
+            Assert.Equal(1, a);
+            Assert.Equal(0, r);
 
             var d2 = xs.Subscribe();
-            Assert.AreEqual(1, n);
-            Assert.AreEqual(1, a);
-            Assert.AreEqual(0, r);
+            Assert.Equal(1, n);
+            Assert.Equal(1, a);
+            Assert.Equal(0, r);
 
             d1.Dispose();
-            Assert.AreEqual(1, n);
-            Assert.AreEqual(1, a);
-            Assert.AreEqual(0, r);
+            Assert.Equal(1, n);
+            Assert.Equal(1, a);
+            Assert.Equal(0, r);
 
             d2.Dispose();
-            Assert.AreEqual(2, n);
-            Assert.AreEqual(1, a);
-            Assert.AreEqual(1, r);
+            Assert.Equal(2, n);
+            Assert.Equal(1, a);
+            Assert.Equal(1, r);
         }
 
         class MyEventSource

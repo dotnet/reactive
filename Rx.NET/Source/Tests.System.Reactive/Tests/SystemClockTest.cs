@@ -7,7 +7,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.PlatformServices;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
@@ -21,7 +21,7 @@ namespace ReactiveTests.Tests
         }
     }
 
-    [TestClass]
+    
     public class SystemClockTest
     {
         private void Run(CrossAppDomainDelegate a)
@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
             AppDomain.Unload(domain);
         }
 
-        [TestMethod]
+        [Fact]
         public void PastWork()
         {
             Run(PastWork_Callback);
@@ -52,18 +52,18 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == now);
+            Assert.True(s.Now + next.DueTime == now);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ImmediateWork()
         {
             Run(ImmediateWork_Callback);
@@ -84,18 +84,18 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ShortTermWork()
         {
             Run(ShortTermWork_Callback);
@@ -117,18 +117,18 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ShortTermWork_Dispose()
         {
             Run(ShortTermWork_Dispose_Callback);
@@ -150,20 +150,20 @@ namespace ReactiveTests.Tests
             var done = false;
             var d = s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             d.Dispose();
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsFalse(done);
+            Assert.False(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ShortTermWork_InaccurateClock()
         {
             Run(ShortTermWork_InaccurateClock_Callback);
@@ -185,26 +185,26 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var nxt1 = s._queue.Deq();
-            Assert.IsTrue(s.Now + nxt1.DueTime == due);
+            Assert.True(s.Now + nxt1.DueTime == due);
 
             s.SetTime(due - TimeSpan.FromMilliseconds(500) /* > RETRYSHORT */);
             nxt1.Invoke();
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var nxt2 = s._queue.Deq();
-            Assert.IsTrue(s.Now + nxt2.DueTime == due);
+            Assert.True(s.Now + nxt2.DueTime == due);
 
             s.SetTime(due);
             nxt2.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void LongTermWork1()
         {
             Run(LongTermWork1_Callback);
@@ -226,26 +226,26 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             var work = cal._queue.Deq();
-            Assert.IsTrue(work.Interval < rel);
+            Assert.True(work.Interval < rel);
 
             s.SetTime(s.Now + work.Interval);
             work.Value._action(work.Value._state);
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void LongTermWork2()
         {
             Run(LongTermWork2_Callback);
@@ -267,36 +267,36 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             var wrk1 = cal._queue.Deq();
-            Assert.IsTrue(wrk1.Interval < rel);
+            Assert.True(wrk1.Interval < rel);
 
             s.SetTime(s.Now + wrk1.Interval);
             wrk1.Value._action(wrk1.Value._state);
 
             // Begin of second long term scheduling
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             var wrk2 = cal._queue.Deq();
-            Assert.IsTrue(wrk2.Interval < rel);
+            Assert.True(wrk2.Interval < rel);
 
             s.SetTime(s.Now + wrk2.Interval);
             wrk2.Value._action(wrk2.Value._state);
             // End of second long term scheduling
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void LongTerm_Multiple()
         {
             Run(LongTerm_Multiple_Callback);
@@ -326,64 +326,64 @@ namespace ReactiveTests.Tests
             s.Schedule(due3, () => { done3 = true; });
 
             // First CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk1 = cal._queue.Deq();
             var fst = s.Now + wrk1.Interval;
-            Assert.IsTrue(fst < due1);
+            Assert.True(fst < due1);
 
             // First TRN
             s.SetTime(fst);
             wrk1.Value._action(wrk1.Value._state);
 
             // First SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh1 = s._queue.Deq();
 
             // Second CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk2 = cal._queue.Deq();
             var snd = s.Now + wrk2.Interval;
-            Assert.IsTrue(snd < due2);
+            Assert.True(snd < due2);
 
             // First RUN
             s.SetTime(due1);
             sh1.Invoke();
-            Assert.IsTrue(done1);
+            Assert.True(done1);
 
             // Second TRN
             s.SetTime(snd);
             wrk2.Value._action(wrk2.Value._state);
 
             // Second SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh2 = s._queue.Deq();
 
             // Third CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk3 = cal._queue.Deq();
             var trd = s.Now + wrk3.Interval;
-            Assert.IsTrue(trd < due3);
+            Assert.True(trd < due3);
 
             // Second RUN
             s.SetTime(due2);
             sh2.Invoke();
-            Assert.IsTrue(done2);
+            Assert.True(done2);
 
             // Third TRN
             s.SetTime(trd);
             wrk3.Value._action(wrk3.Value._state);
 
             // Third SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh3 = s._queue.Deq();
 
             // Third RUN
             s.SetTime(due3);
             sh3.Invoke();
-            Assert.IsTrue(done3);
+            Assert.True(done3);
         }
 
-        [TestMethod]
+        [Fact]
         public void LongTerm_Multiple_Dispose()
         {
             Run(LongTerm_Multiple_Dispose_Callback);
@@ -413,10 +413,10 @@ namespace ReactiveTests.Tests
             var d3 = s.Schedule(due3, () => { done3 = true; });
 
             // First CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk1 = cal._queue.Deq();
             var fst = s.Now + wrk1.Interval;
-            Assert.IsTrue(fst < due1);
+            Assert.True(fst < due1);
 
             // First TRN
             s.SetTime(fst);
@@ -426,19 +426,19 @@ namespace ReactiveTests.Tests
             d1.Dispose();
 
             // First SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh1 = s._queue.Deq();
 
             // Second CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk2 = cal._queue.Deq();
             var snd = s.Now + wrk2.Interval;
-            Assert.IsTrue(snd < due2);
+            Assert.True(snd < due2);
 
             // First RUN
             s.SetTime(due1);
             sh1.Invoke();
-            Assert.IsFalse(done1);
+            Assert.False(done1);
 
             // Second DIS
             // Third DIS
@@ -450,35 +450,35 @@ namespace ReactiveTests.Tests
             wrk2.Value._action(wrk2.Value._state);
 
             // Second SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh2 = s._queue.Deq();
 
             // Third CHK
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
             var wrk3 = cal._queue.Deq();
             var trd = s.Now + wrk3.Interval;
-            Assert.IsTrue(trd < due3);
+            Assert.True(trd < due3);
 
             // Second RUN
             s.SetTime(due2);
             sh2.Invoke();
-            Assert.IsFalse(done2);
+            Assert.False(done2);
 
             // Third TRN
             s.SetTime(trd);
             wrk3.Value._action(wrk3.Value._state);
 
             // Third SHT
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var sh3 = s._queue.Deq();
 
             // Third RUN
             s.SetTime(due3);
             sh3.Invoke();
-            Assert.IsFalse(done3);
+            Assert.False(done3);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_FalsePositive()
         {
             Run(ClockChanged_FalsePositive_Callback);
@@ -502,29 +502,29 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             s.SetTime(now);
             scm.OnSystemClockChanged();
 
             var work = cal._queue.Deq();
-            Assert.IsTrue(work.Interval < rel);
+            Assert.True(work.Interval < rel);
 
             s.SetTime(s.Now + work.Interval);
             work.Value._action(work.Value._state);
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(s.Now + next.DueTime == due);
+            Assert.True(s.Now + next.DueTime == due);
 
             s.SetTime(due);
             next.Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_Forward1()
         {
             Run(ClockChanged_Forward1_Callback);
@@ -549,27 +549,27 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, cal._queue.Count);
-            Assert.AreEqual(0, s._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
+            Assert.Equal(0, s._queue.Count);
 
             s.SetTime(due + err);
             scm.OnSystemClockChanged();
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(next.DueTime == TimeSpan.Zero);
+            Assert.True(next.DueTime == TimeSpan.Zero);
             next.Invoke();
-            Assert.IsTrue(done);
+            Assert.True(done);
 
             var tmr = cal._queue.Deq();
             tmr.Value._action(tmr.Value._state);
 
-            Assert.AreEqual(0, cal._queue.Count);
-            Assert.AreEqual(0, s._queue.Count);
+            Assert.Equal(0, cal._queue.Count);
+            Assert.Equal(0, s._queue.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_Forward2()
         {
             Run(ClockChanged_Forward2_Callback);
@@ -594,26 +594,26 @@ namespace ReactiveTests.Tests
             var n = 0;
             s.Schedule(due, () => { n++; });
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var wrk = s._queue.Deq();
-            Assert.IsTrue(wrk.DueTime == rel);
+            Assert.True(wrk.DueTime == rel);
 
             s.SetTime(due + err);
             scm.OnSystemClockChanged();
 
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             var next = s._queue.Deq();
-            Assert.IsTrue(next.DueTime == TimeSpan.Zero);
+            Assert.True(next.DueTime == TimeSpan.Zero);
             next.Invoke();
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
 
             wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
-            Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
+            Assert.Equal(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_Backward1()
         {
             Run(ClockChanged_Backward1_Callback);
@@ -638,35 +638,35 @@ namespace ReactiveTests.Tests
             var done = false;
             s.Schedule(due, () => { done = true; });
 
-            Assert.AreEqual(1, cal._queue.Count);
-            Assert.IsTrue(cal._queue[0].Interval < rel);
+            Assert.Equal(1, cal._queue.Count);
+            Assert.True(cal._queue[0].Interval < rel);
 
-            Assert.AreEqual(0, s._queue.Count);
+            Assert.Equal(0, s._queue.Count);
 
             s.SetTime(due + err);
             scm.OnSystemClockChanged();
 
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             var tmr = cal._queue.Deq();
-            Assert.IsTrue(tmr.Interval > rel);
-            Assert.IsTrue(tmr.Interval < -err);
+            Assert.True(tmr.Interval > rel);
+            Assert.True(tmr.Interval < -err);
 
             s.SetTime(s.Now + tmr.Interval);
             tmr.Value._action(tmr.Value._state);
 
-            Assert.IsFalse(done);
+            Assert.False(done);
 
-            Assert.AreEqual(0, cal._queue.Count);
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(0, cal._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             s.SetTime(due);
             s._queue.Deq().Invoke();
 
-            Assert.IsTrue(done);
+            Assert.True(done);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_Backward2()
         {
             Run(ClockChanged_Backward2_Callback);
@@ -691,38 +691,38 @@ namespace ReactiveTests.Tests
             var n = 0;
             s.Schedule(due, () => { n++; });
 
-            Assert.AreEqual(0, cal._queue.Count);
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(0, cal._queue.Count);
+            Assert.Equal(1, s._queue.Count);
             var wrk = s._queue[0];
-            Assert.IsTrue(wrk.DueTime == rel);
+            Assert.True(wrk.DueTime == rel);
 
             s.SetTime(due + err);
             scm.OnSystemClockChanged();
 
-            Assert.AreEqual(1, cal._queue.Count);
+            Assert.Equal(1, cal._queue.Count);
 
             var tmr = cal._queue.Deq();
-            Assert.IsTrue(tmr.Interval > rel);
-            Assert.IsTrue(tmr.Interval < -err);
+            Assert.True(tmr.Interval > rel);
+            Assert.True(tmr.Interval < -err);
 
             s.SetTime(s.Now + tmr.Interval);
             tmr.Value._action(tmr.Value._state);
 
-            Assert.AreEqual(0, n);
+            Assert.Equal(0, n);
 
-            Assert.AreEqual(0, cal._queue.Count);
-            Assert.AreEqual(1, s._queue.Count);
+            Assert.Equal(0, cal._queue.Count);
+            Assert.Equal(1, s._queue.Count);
 
             s.SetTime(due);
             s._queue.Deq().Invoke();
 
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
 
             wrk.Invoke(); // Bad schedulers may not grant cancellation immediately.
-            Assert.AreEqual(1, n); // Invoke shouldn't cause double execution of the work.
+            Assert.Equal(1, n); // Invoke shouldn't cause double execution of the work.
         }
 
-        [TestMethod]
+        [Fact]
         public void PeriodicSystemClockChangeMonitor()
         {
             Run(PeriodicSystemClockChangeMonitor_Callback);
@@ -751,48 +751,48 @@ namespace ReactiveTests.Tests
 
             ptscm.SystemClockChanged += h;
 
-            Assert.IsNotNull(cal._action);
-            Assert.IsTrue(cal._period == period);
-            Assert.AreEqual(0, n);
+            Assert.NotNull(cal._action);
+            Assert.True(cal._period == period);
+            Assert.Equal(0, n);
 
             clock._now += period;
             cal._action();
-            Assert.AreEqual(0, n);
+            Assert.Equal(0, n);
 
             clock._now += period;
             cal._action();
-            Assert.AreEqual(0, n);
+            Assert.Equal(0, n);
 
             var diff1 = TimeSpan.FromSeconds(3);
             clock._now += period + diff1;
             cal._action();
-            Assert.AreEqual(1, n);
-            Assert.IsTrue(delta == diff1);
+            Assert.Equal(1, n);
+            Assert.True(delta == diff1);
 
             clock._now += period;
             cal._action();
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
 
             clock._now += period;
             cal._action();
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
 
             var diff2 = TimeSpan.FromSeconds(-5);
             clock._now += period + diff2;
             cal._action();
-            Assert.AreEqual(2, n);
-            Assert.IsTrue(delta == diff2);
+            Assert.Equal(2, n);
+            Assert.True(delta == diff2);
 
             clock._now += period;
             cal._action();
-            Assert.AreEqual(2, n);
+            Assert.Equal(2, n);
 
             ptscm.SystemClockChanged -= h;
 
-            Assert.IsNull(cal._action);
+            Assert.Null(cal._action);
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockChanged_RefCounting()
         {
             Run(ClockChanged_RefCounting_Callback);
@@ -834,21 +834,21 @@ namespace ReactiveTests.Tests
             d2.Dispose();
             d4.Dispose();
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             s.SetTime(due1);
             var i1 = s._queue.Deq();
             i1.Invoke();
-            Assert.IsTrue(done1);
+            Assert.True(done1);
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             s.SetTime(due2);
             var i2 = s._queue.Deq();
             i2.Invoke();
-            Assert.IsFalse(done2);
+            Assert.False(done2);
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             var l1 = cal._queue.Deq();
             var l1d = now + l1.Interval;
@@ -860,12 +860,12 @@ namespace ReactiveTests.Tests
             try
             {
                 i3.Invoke();
-                Assert.Fail();
+                Assert.True(false);
             }
             catch { }
-            Assert.IsTrue(done3);
+            Assert.True(done3);
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             var l2 = cal._queue.Deq();
             var l2d = l1d + l2.Interval;
@@ -875,9 +875,9 @@ namespace ReactiveTests.Tests
             s.SetTime(due4);
             var i4 = s._queue.Deq();
             i4.Invoke();
-            Assert.IsFalse(done4);
+            Assert.False(done4);
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             var l3 = cal._queue.Deq();
             var l3d = l2d + l3.Interval;
@@ -887,20 +887,20 @@ namespace ReactiveTests.Tests
             s.SetTime(due5);
             var i5 = s._queue.Deq();
             i5.Invoke();
-            Assert.IsTrue(done5);
+            Assert.True(done5);
 
-            Assert.AreEqual(0, scm.n);
+            Assert.Equal(0, scm.n);
 
             var d6 = s.Schedule(due6, () => { done6 = true; });
 
-            Assert.AreEqual(1, scm.n);
+            Assert.Equal(1, scm.n);
 
             s.SetTime(due6);
             var i6 = s._queue.Deq();
             i6.Invoke();
-            Assert.IsTrue(done6);
+            Assert.True(done6);
 
-            Assert.AreEqual(0, scm.n);
+            Assert.Equal(0, scm.n);
         }
 
         class MyScheduler : LocalScheduler

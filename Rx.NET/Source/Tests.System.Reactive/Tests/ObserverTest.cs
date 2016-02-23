@@ -7,87 +7,87 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObserverTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void ToObserver_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver<int>(default(Action<Notification<int>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObserver_NotificationOnNext()
         {
             int i = 0;
             Action<Notification<int>> next = n =>
             {
-                Assert.AreEqual(i++, 0);
-                Assert.AreEqual(n.Kind, NotificationKind.OnNext);
-                Assert.AreEqual(n.Value, 42);
-                Assert.AreEqual(n.Exception, null);
-                Assert.IsTrue(n.HasValue);
+                Assert.Equal(i++, 0);
+                Assert.Equal(n.Kind, NotificationKind.OnNext);
+                Assert.Equal(n.Value, 42);
+                Assert.Equal(n.Exception, null);
+                Assert.True(n.HasValue);
             };
             next.ToObserver().OnNext(42);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObserver_NotificationOnError()
         {
             var ex = new Exception();
             int i = 0;
             Action<Notification<int>> next = n =>
             {
-                Assert.AreEqual(i++, 0);
-                Assert.AreEqual(n.Kind, NotificationKind.OnError);
-                Assert.AreSame(n.Exception, ex);
-                Assert.IsFalse(n.HasValue);
+                Assert.Equal(i++, 0);
+                Assert.Equal(n.Kind, NotificationKind.OnError);
+                Assert.Same(n.Exception, ex);
+                Assert.False(n.HasValue);
             };
             next.ToObserver().OnError(ex);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToObserver_NotificationOnCompleted()
         {
             var ex = new Exception();
             int i = 0;
             Action<Notification<int>> next = n =>
             {
-                Assert.AreEqual(i++, 0);
-                Assert.AreEqual(n.Kind, NotificationKind.OnCompleted);
-                Assert.IsFalse(n.HasValue);
+                Assert.Equal(i++, 0);
+                Assert.Equal(n.Kind, NotificationKind.OnCompleted);
+                Assert.False(n.HasValue);
             };
             next.ToObserver().OnCompleted();
         }
 
-        [TestMethod]
+        [Fact]
         public void ToNotifier_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToNotifier<int>(default(IObserver<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToNotifier_Forwards()
         {
             var obsn = new MyObserver();
             obsn.ToNotifier()(Notification.CreateOnNext<int>(42));
-            Assert.AreEqual(obsn.HasOnNext, 42);
+            Assert.Equal(obsn.HasOnNext, 42);
 
             var ex = new Exception();
             var obse = new MyObserver();
             obse.ToNotifier()(Notification.CreateOnError<int>(ex));
-            Assert.AreSame(ex, obse.HasOnError);
+            Assert.Same(ex, obse.HasOnError);
 
             var obsc = new MyObserver();
             obsc.ToNotifier()(Notification.CreateOnCompleted<int>());
-            Assert.IsTrue(obsc.HasOnCompleted);
+            Assert.True(obsc.HasOnCompleted);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(default(Action<int>)));
@@ -100,53 +100,53 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Create<int>(_ => { }, (Exception _) => { }, default(Action)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNext()
         {
             bool next = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
+            Assert.True(next);
             res.OnCompleted();
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNext_HasError()
         {
             var ex = new Exception();
             var e_ = default(Exception);
 
             bool next = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
+            Assert.True(next);
 
             try
             {
                 res.OnError(ex);
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception e)
             {
                 e_ = e;
             }
-            Assert.AreSame(ex, e_);
+            Assert.Same(ex, e_);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnCompleted()
         {
             bool next = false;
             bool completed = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, () => { completed = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, () => { completed = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(completed);
+            Assert.True(next);
+            Assert.False(completed);
             res.OnCompleted();
-            Assert.IsTrue(completed);
+            Assert.True(completed);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnCompleted_HasError()
         {
             var ex = new Exception();
@@ -154,115 +154,115 @@ namespace ReactiveTests.Tests
 
             bool next = false;
             bool completed = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, () => { completed = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, () => { completed = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(completed);
+            Assert.True(next);
+            Assert.False(completed);
             try
             {
                 res.OnError(ex);
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception e)
             {
                 e_ = e;
             }
-            Assert.AreSame(ex, e_);
-            Assert.IsFalse(completed);
+            Assert.Same(ex, e_);
+            Assert.False(completed);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnError()
         {
             var ex = new Exception();
             bool next = true;
             bool error = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, e => { Assert.AreSame(ex, e); error = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(error);
+            Assert.True(next);
+            Assert.False(error);
             res.OnError(ex);
-            Assert.IsTrue(error);
+            Assert.True(error);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnError_HitCompleted()
         {
             var ex = new Exception();
             bool next = true;
             bool error = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, e => { Assert.AreSame(ex, e); error = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(error);
+            Assert.True(next);
+            Assert.False(error);
             res.OnCompleted();
-            Assert.IsFalse(error);
+            Assert.False(error);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnErrorOnCompleted1()
         {
             var ex = new Exception();
             bool next = true;
             bool error = false;
             bool completed = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, e => { Assert.AreSame(ex, e); error = true; }, () => { completed = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; }, () => { completed = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(error);
-            Assert.IsFalse(completed);
+            Assert.True(next);
+            Assert.False(error);
+            Assert.False(completed);
             res.OnCompleted();
-            Assert.IsTrue(completed);
-            Assert.IsFalse(error);
+            Assert.True(completed);
+            Assert.False(error);
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_OnNextOnErrorOnCompleted2()
         {
             var ex = new Exception();
             bool next = true;
             bool error = false;
             bool completed = false;
-            var res = Observer.Create<int>(x => { Assert.AreEqual(42, x); next = true; }, e => { Assert.AreSame(ex, e); error = true; }, () => { completed = true; });
+            var res = Observer.Create<int>(x => { Assert.Equal(42, x); next = true; }, e => { Assert.Same(ex, e); error = true; }, () => { completed = true; });
             res.OnNext(42);
-            Assert.IsTrue(next);
-            Assert.IsFalse(error);
-            Assert.IsFalse(completed);
+            Assert.True(next);
+            Assert.False(error);
+            Assert.False(completed);
             res.OnError(ex);
-            Assert.IsTrue(error);
-            Assert.IsFalse(completed);
+            Assert.True(error);
+            Assert.False(completed);
         }
 
-        [TestMethod]
+        [Fact]
         public void AsObserver_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.AsObserver<int>(default(IObserver<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AsObserver_Hides()
         {
             var obs = new MyObserver();
             var res = obs.AsObserver();
 
-            Assert.IsFalse(object.ReferenceEquals(obs, res));
+            Assert.False(object.ReferenceEquals(obs, res));
         }
 
-        [TestMethod]
+        [Fact]
         public void AsObserver_Forwards()
         {
             var obsn = new MyObserver();
             obsn.AsObserver().OnNext(42);
-            Assert.AreEqual(obsn.HasOnNext, 42);
+            Assert.Equal(obsn.HasOnNext, 42);
 
             var ex = new Exception();
             var obse = new MyObserver();
             obse.AsObserver().OnError(ex);
-            Assert.AreSame(ex, obse.HasOnError);
+            Assert.Same(ex, obse.HasOnError);
 
             var obsc = new MyObserver();
             obsc.AsObserver().OnCompleted();
-            Assert.IsTrue(obsc.HasOnCompleted);
+            Assert.True(obsc.HasOnCompleted);
         }
 
         class MyObserver : IObserver<int>
@@ -287,19 +287,19 @@ namespace ReactiveTests.Tests
             public bool HasOnCompleted { get; set; }
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Checked(default(IObserver<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_AlreadyTerminated_Completed()
         {
             var m = 0;
             var n = 0;
 
-            var o = Observer.Create<int>(_ => { m++; }, ex => { Assert.Fail(); }, () => { n++; }).Checked();
+            var o = Observer.Create<int>(_ => { m++; }, ex => { Assert.True(false); }, () => { n++; }).Checked();
 
             o.OnNext(1);
             o.OnNext(2);
@@ -308,17 +308,17 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => o.OnCompleted());
             ReactiveAssert.Throws<InvalidOperationException>(() => o.OnError(new Exception()));
 
-            Assert.AreEqual(2, m);
-            Assert.AreEqual(1, n);
+            Assert.Equal(2, m);
+            Assert.Equal(1, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_AlreadyTerminated_Error()
         {
             var m = 0;
             var n = 0;
 
-            var o = Observer.Create<int>(_ => { m++; }, ex => { n++; }, () => { Assert.Fail(); }).Checked();
+            var o = Observer.Create<int>(_ => { m++; }, ex => { n++; }, () => { Assert.True(false); }).Checked();
 
             o.OnNext(1);
             o.OnNext(2);
@@ -327,11 +327,11 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => o.OnCompleted());
             ReactiveAssert.Throws<InvalidOperationException>(() => o.OnError(new Exception()));
 
-            Assert.AreEqual(2, m);
-            Assert.AreEqual(1, n);
+            Assert.Equal(2, m);
+            Assert.Equal(1, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_Reentrant_Next()
         {
             var n = 0;
@@ -348,20 +348,20 @@ namespace ReactiveTests.Tests
                 },
                 ex =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 },
                 () =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 })
                 .Checked();
 
             o.OnNext(1);
 
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_Reentrant_Error()
         {
             var n = 0;
@@ -370,7 +370,7 @@ namespace ReactiveTests.Tests
             o = Observer.Create<int>(
                 _ =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 },
                 ex =>
                 {
@@ -382,16 +382,16 @@ namespace ReactiveTests.Tests
                 },
                 () =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 })
                 .Checked();
 
             o.OnError(new Exception());
 
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Checked_Reentrant_Completed()
         {
             var n = 0;
@@ -400,11 +400,11 @@ namespace ReactiveTests.Tests
             o = Observer.Create<int>(
                 _ =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 },
                 ex =>
                 {
-                    Assert.Fail();
+                    Assert.True(false);
                 },
                 () =>
                 {
@@ -418,10 +418,10 @@ namespace ReactiveTests.Tests
 
             o.OnCompleted();
 
-            Assert.AreEqual(1, n);
+            Assert.Equal(1, n);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Synchronize(default(IObserver<int>)));
@@ -435,7 +435,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.Synchronize(new MyObserver(), default(AsyncLock)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_Monitor_Reentrant1()
         {
             var res = false;
@@ -461,10 +461,10 @@ namespace ReactiveTests.Tests
 
             s.OnNext(1);
 
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_Monitor_Reentrant2()
         {
             var res = false;
@@ -490,10 +490,10 @@ namespace ReactiveTests.Tests
 
             s.OnNext(1);
 
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_Monitor_Reentrant3()
         {
             var res = false;
@@ -519,10 +519,10 @@ namespace ReactiveTests.Tests
 
             s.OnNext(1);
 
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_AsyncLock_NonReentrant1()
         {
             var res = false;
@@ -548,10 +548,10 @@ namespace ReactiveTests.Tests
 
             s.OnNext(1);
 
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_AsyncLock_NonReentrant2()
         {
             var res = false;
@@ -577,10 +577,10 @@ namespace ReactiveTests.Tests
 
             s.OnNext(1);
 
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_AsyncLock()
         {
             {
@@ -590,15 +590,15 @@ namespace ReactiveTests.Tests
 
                 var o = Observer.Create<int>(
                     x => { res = x == 1; },
-                    ex => { Assert.Fail(); },
-                    () => { Assert.Fail(); }
+                    ex => { Assert.True(false); },
+                    () => { Assert.True(false); }
                 );
 
                 s = Observer.Synchronize(o, true);
 
                 s.OnNext(1);
 
-                Assert.IsTrue(res);
+                Assert.True(res);
             }
 
             {
@@ -609,16 +609,16 @@ namespace ReactiveTests.Tests
                 var s = default(IObserver<int>);
 
                 var o = Observer.Create<int>(
-                    x => { Assert.Fail(); },
+                    x => { Assert.True(false); },
                     ex => { res = ex; },
-                    () => { Assert.Fail(); }
+                    () => { Assert.True(false); }
                 );
 
                 s = Observer.Synchronize(o, true);
 
                 s.OnError(err);
 
-                Assert.AreSame(err, res);
+                Assert.Same(err, res);
             }
 
             {
@@ -627,8 +627,8 @@ namespace ReactiveTests.Tests
                 var s = default(IObserver<int>);
 
                 var o = Observer.Create<int>(
-                    x => { Assert.Fail(); },
-                    ex => { Assert.Fail(); },
+                    x => { Assert.True(false); },
+                    ex => { Assert.True(false); },
                     () => { res = true; }
                 );
 
@@ -636,18 +636,18 @@ namespace ReactiveTests.Tests
 
                 s.OnCompleted();
 
-                Assert.IsTrue(res);
+                Assert.True(res);
             }
         }
 
 #if !NO_CDS
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_OnCompleted()
         {
             Observer_Synchronize(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_Synchronize_OnError()
         {
             Observer_Synchronize(false);
@@ -664,21 +664,21 @@ namespace ReactiveTests.Tests
             var o = Observer.Create<int>(
                 _ =>
                 {
-                    Assert.IsFalse(busy);
+                    Assert.False(busy);
                     busy = true;
                     n++;
                     busy = false;
                 },
                 _ =>
                 {
-                    Assert.IsFalse(busy);
+                    Assert.False(busy);
                     busy = true;
                     ex = _;
                     busy = false;
                 },
                 () =>
                 {
-                    Assert.IsFalse(busy);
+                    Assert.False(busy);
                     busy = true;
                     done = true;
                     busy = false;
@@ -706,20 +706,20 @@ namespace ReactiveTests.Tests
             if (success)
             {
                 s.OnCompleted();
-                Assert.IsTrue(done);
+                Assert.True(done);
             }
             else
             {
                 var err = new Exception();
                 s.OnError(err);
-                Assert.AreSame(err, ex);
+                Assert.Same(err, ex);
             }
 
-            Assert.AreEqual(n, N * M);
+            Assert.Equal(n, N * M);
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void NotifyOn_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(default(IObserver<int>), Scheduler.Immediate));
@@ -731,13 +731,13 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void NotifyOn_Scheduler_OnCompleted()
         {
             NotifyOn_Scheduler(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void NotifyOn_Scheduler_OnError()
         {
             NotifyOn_Scheduler(false);
@@ -755,18 +755,18 @@ namespace ReactiveTests.Tests
                 {
                     c++;
 #if DESKTOPCLR
-                    Assert.IsTrue(Thread.CurrentThread.IsThreadPoolThread);
+                    Assert.True(Thread.CurrentThread.IsThreadPoolThread);
 #endif
                 },
                 ex =>
                 {
-                    Assert.AreSame(err, ex);
+                    Assert.Same(err, ex);
                     e.Set();
                 },
                 () =>
                 {
 #if DESKTOPCLR
-                    Assert.IsTrue(Thread.CurrentThread.IsThreadPoolThread);
+                    Assert.True(Thread.CurrentThread.IsThreadPoolThread);
 #endif
                     e.Set();
                 }
@@ -787,15 +787,15 @@ namespace ReactiveTests.Tests
             }).Start();
 
             e.WaitOne();
-            Assert.AreEqual(N, c);
+            Assert.Equal(N, c);
         }
 
-        [TestMethod]
+        [Fact]
         public void NotifyOn_SyncCtx()
         {
             var lst = new List<int>();
             var don = new ManualResetEvent(false);
-            var obs = Observer.Create<int>(x => { lst.Add(x); }, ex => { Assert.Fail(); }, () => { don.Set(); });
+            var obs = Observer.Create<int>(x => { lst.Add(x); }, ex => { Assert.True(false); }, () => { don.Set(); });
             var ctx = new MySyncCtx();
             var res = obs.NotifyOn(ctx);
 
@@ -804,7 +804,7 @@ namespace ReactiveTests.Tests
             obs.OnCompleted();
 
             don.WaitOne();
-            Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 100)));
+            Assert.True(lst.SequenceEqual(Enumerable.Range(0, 100)));
         }
 
         class MySyncCtx : SynchronizationContext
@@ -817,7 +817,7 @@ namespace ReactiveTests.Tests
 
 #if HAS_PROGRESS
 
-        [TestMethod]
+        [Fact]
         public void Observer_ToProgress_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -829,7 +829,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToProgress<int>(o, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_ToProgress()
         {
             var xs = new List<int>();
@@ -839,10 +839,10 @@ namespace ReactiveTests.Tests
             p.Report(42);
             p.Report(43);
 
-            Assert.IsTrue(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Observer_ToProgress_Scheduler()
         {
             var s = new TestScheduler();
@@ -864,13 +864,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Progress_ToObserver_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.ToObserver(default(IProgress<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Progress_ToObserver()
         {
             var xs = new List<int>();
@@ -882,7 +882,7 @@ namespace ReactiveTests.Tests
             o.OnNext(42);
             o.OnNext(43);
 
-            Assert.IsTrue(xs.SequenceEqual(new[] { 42, 43 }));
+            Assert.True(xs.SequenceEqual(new[] { 42, 43 }));
         }
 
         class MyProgress<T> : IProgress<T>
