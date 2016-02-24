@@ -1864,13 +1864,14 @@ namespace ReactiveTests.Tests
             Assert.Equal("***", res2);
         }
 
+#if !CRIPPLED_REFLECTION
         [Fact]
         public void Qbservable_Extensibility_Constructor()
         {
             var res1 = Qbservable.Provider.Qux(42).AsObservable().Single();
             Assert.Equal(42, res1);
         }
-
+        
         [Fact]
         public void Qbservable_Extensibility_Missing()
         {
@@ -1885,6 +1886,7 @@ namespace ReactiveTests.Tests
 
             Assert.True(false);
         }
+#endif
 
         [Fact]
         public void Qbservable_HigherOrder()

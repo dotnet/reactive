@@ -149,7 +149,7 @@ namespace ReactiveTests.Tests
 #endif
 #if !NO_THREAD
         [Fact]
-        [Timeout(1000)]
+        //[Timeout(1000)]
         public void Bug_1333()
         {
             var sema = new Semaphore(0, 1);

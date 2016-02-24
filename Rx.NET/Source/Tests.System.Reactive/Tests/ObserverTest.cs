@@ -814,7 +814,7 @@ namespace ReactiveTests.Tests
         {
             public override void Post(SendOrPostCallback d, object state)
             {
-                Task.Run(_ => d(state), state);
+                Task.Run(() => d(state));
             }
         }
 

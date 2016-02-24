@@ -7338,7 +7338,7 @@ namespace ReactiveTests.Tests
                 xss.Merge(scheduler)
             );
 
-            Assert.Equal(resOnNext.Count + 1, res.Messages.Count, "length");
+            Assert.True(resOnNext.Count + 1 == res.Messages.Count, "length");
             for (int i = 0; i < resOnNext.Count; i++)
             {
                 var msg = res.Messages[i];
@@ -13651,7 +13651,7 @@ namespace ReactiveTests.Tests
                 o1.Zip(o2, (x, y) => x + y)
             );
 
-            Assert.Equal(len, res.Messages.Count, "length");
+            Assert.True(len == res.Messages.Count, "length");
             for (int i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
@@ -13680,7 +13680,7 @@ namespace ReactiveTests.Tests
                 o1.Zip(o2, (x, y) => x + y)
             );
 
-            Assert.Equal(len, res.Messages.Count, "length");
+            Assert.True(len == res.Messages.Count, "length");
             for (int i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
@@ -13709,7 +13709,7 @@ namespace ReactiveTests.Tests
                 o1.Zip(o2, (x, y) => x + y)
             );
 
-            Assert.Equal(len, res.Messages.Count, "length");
+            Assert.True(len == res.Messages.Count, "length");
             for (int i = 0; i < len; i++)
             {
                 var sum = msgs1[i].Value.Value + msgs2[i].Value.Value;
