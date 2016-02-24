@@ -61,7 +61,6 @@
             "PREFER_ASYNC",
             "HAS_AWAIT",
             "HAS_APTCA",
-            "NO_DISPATCHER",
             "NO_REMOTING",
             "NO_SERIALIZABLE",
             "NO_THREAD",

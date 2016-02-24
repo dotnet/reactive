@@ -9,7 +9,7 @@ using System.Windows.Threading;
 
 namespace ReactiveTests
 {
-#if !NO_DISPATCHER
+#if HAS_DISPATCHER
     static class DispatcherHelpers
     {
         public static DispatcherWrapper EnsureDispatcher()
