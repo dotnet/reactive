@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    
+#if !NO_THREAD
     public class NewThreadSchedulerTest
     {
         [Fact]
@@ -117,4 +117,5 @@ namespace ReactiveTests.Tests
         }
 #endif
     }
+#endif
 }

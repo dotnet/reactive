@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-
+#define DEBUG // For debug.writeline
 using System;
+using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+
 
 namespace ReactiveTests.Stress.Linq
 {
@@ -17,7 +19,7 @@ namespace ReactiveTests.Stress.Linq
             {
                 foreach (var N in new[] { 1, 10, 100, 1000, 10000, 100000 })
                 {
-                    Console.WriteLine("N = {0}", N);
+                    Debug.WriteLine("N = {0}", N);
                     foreach (var d in new[] { 1, 10, 20, 50, 100, 200, 250, 500 })
                     {
                         try
@@ -27,13 +29,13 @@ namespace ReactiveTests.Stress.Linq
                         }
                         catch (Exception)
                         {
-                            Console.Write(".");
+                            Debug.Write(".");
                             continue;
                         }
 
                         throw new InvalidOperationException("Didn't throw!");
                     }
-                    Console.WriteLine();
+                    Debug.WriteLine("");
                 }
             }
         }
@@ -47,16 +49,16 @@ namespace ReactiveTests.Stress.Linq
             {
                 foreach (var N in new[] { 1, 10, 100, 1000, 10000, 100000 })
                 {
-                    Console.WriteLine("N = {0}", N);
+                    Debug.WriteLine("N = {0}", N);
                     foreach (var d in new[] { 1, 10, 20, 50, 100, 200, 250, 500 })
                     {
                         var n = Observable.Range(0, N, NewThreadScheduler.Default).Delay(TimeSpan.FromMilliseconds(d), NewThreadScheduler.Default).Count().Wait();
                         if (n != N)
                             throw new InvalidOperationException("Lost OnNext message!");
 
-                        Console.Write(".");
+                        Debug.Write(".");
                     }
-                    Console.WriteLine();
+                    Debug.WriteLine("");
                 }
             }
         }

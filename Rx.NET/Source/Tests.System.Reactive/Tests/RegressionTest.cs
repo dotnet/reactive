@@ -147,7 +147,7 @@ namespace ReactiveTests.Tests
             yield return 1;
         }
 #endif
-
+#if !NO_THREAD
         [Fact]
         [Timeout(1000)]
         public void Bug_1333()
@@ -159,6 +159,7 @@ namespace ReactiveTests.Tests
             d.OnCompleted();
             sema.WaitOne();
         }
+#endif
 #endif
 
         [Fact]

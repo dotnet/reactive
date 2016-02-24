@@ -110,8 +110,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !SILVERLIGHT && !NO_THREAD
-        [Fact]
-        [Ignore]
+        [Fact(Skip = "Ignored")]
         public void Virtual_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;

@@ -1790,7 +1790,7 @@ namespace ReactiveTests.Tests
         #endregion
 
         #region General tests for loops
-
+#if HAS_STACKTRACE
         [Fact]
         public void LoopTest1()
         {
@@ -1846,7 +1846,7 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(Enumerable.Repeat(42, 10)));
             Assert.True(std.Distinct().Count() == 1);
         }
-
-        #endregion
+#endif
+#endregion
     }
 }

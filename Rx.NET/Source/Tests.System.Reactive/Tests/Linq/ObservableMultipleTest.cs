@@ -1866,6 +1866,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
+#if HAS_STACKTRACE && !NO_THREAD
         [Fact]
         public void Catch_TailRecursive2()
         {
@@ -1877,6 +1878,7 @@ namespace ReactiveTests.Tests
 
             Assert.True(lst.Last() - lst.First() < 10);
         }
+#endif
 
         [Fact]
         public void Catch_TailRecursive3()
@@ -1910,7 +1912,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
         #region + CombineLatest +
 
@@ -6619,6 +6621,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
+#if !NO_THREAD
         [Fact]
         public void Concat_TailRecursive2()
         {
@@ -6630,6 +6633,7 @@ namespace ReactiveTests.Tests
 
             Assert.True(lst.Last() - lst.First() < 10);
         }
+#endif
 #endif
 
 #if !NO_TPL
@@ -9251,6 +9255,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
+#if HAS_STACKTRACE && !NO_THREAD
         [Fact]
         public void OnErrorResumeNext_TailRecursive2()
         {
@@ -9262,6 +9267,7 @@ namespace ReactiveTests.Tests
 
             Assert.True(lst.Last() - lst.First() < 10);
         }
+#endif
 
         [Fact]
         public void OnErrorResumeNext_TailRecursive3()
@@ -9297,7 +9303,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        #endregion
+#endregion
 
         #region + SkipUntil +
 

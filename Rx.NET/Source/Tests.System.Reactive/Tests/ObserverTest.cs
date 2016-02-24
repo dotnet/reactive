@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -813,7 +814,7 @@ namespace ReactiveTests.Tests
         {
             public override void Post(SendOrPostCallback d, object state)
             {
-                ThreadPool.QueueUserWorkItem(_ => d(state), state);
+                Task.Run(_ => d(state), state);
             }
         }
 

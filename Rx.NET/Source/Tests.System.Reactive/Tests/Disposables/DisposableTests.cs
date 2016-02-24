@@ -22,10 +22,10 @@ namespace ReactiveTests.Tests
             Assert.NotNull(d);
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void AnonymousDisposable_CreateNull()
         {
-            Disposable.Create(null);
+            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));            
         }
 
         [Fact]
@@ -147,22 +147,22 @@ namespace ReactiveTests.Tests
             Assert.False(new CompositeDisposable().IsReadOnly);
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_Null()
         {
-            new CompositeDisposable().CopyTo(null, 0);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().CopyTo(null, 0));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_Negative()
         {
-            new CompositeDisposable().CopyTo(new IDisposable[2], -1);
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], -1));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_BeyondEnd()
         {
-            new CompositeDisposable().CopyTo(new IDisposable[2], 2);
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], 2));
         }
 
         [Fact]
@@ -224,24 +224,24 @@ namespace ReactiveTests.Tests
             Assert.True(g.Contains(d2));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void CompositeDisposable_AddNull_via_params_ctor()
         {
             IDisposable d1 = null;
-            new CompositeDisposable(d1);
+            ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(d1));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
             IEnumerable<IDisposable> values = new IDisposable[] { null };
-            new CompositeDisposable(values);
+            ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(values));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_AddNull()
         {
-            new CompositeDisposable().Add(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Add(null));
         }
 
         [Fact]
@@ -372,10 +372,10 @@ namespace ReactiveTests.Tests
             Assert.True(z.SequenceEqual(Enumerable.Range(0, N).Where(i => !(i % 2 == 0 || i % 3 == 0 || i % 5 == 0))));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_RemoveNull()
         {
-            new CompositeDisposable().Remove(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
 #if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
@@ -410,16 +410,16 @@ namespace ReactiveTests.Tests
             Assert.True(c.Token.IsCancellationRequested);
         }
 #endif
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void ContextDisposable_CreateNullContext()
         {
-            new ContextDisposable(null, Disposable.Empty);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(null, Disposable.Empty));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void ContextDisposable_CreateNullDisposable()
         {
-            new ContextDisposable(new SynchronizationContext(), null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(new SynchronizationContext(), null));
         }
 
         [Fact]
@@ -512,10 +512,10 @@ namespace ReactiveTests.Tests
             //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void RefCountDisposable_Ctor_Null()
         {
-            new RefCountDisposable(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new RefCountDisposable(null));
         }
 
         [Fact]

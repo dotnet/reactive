@@ -239,10 +239,10 @@ namespace ReactiveTests.Tests
             Assert.Equal("OK", res);
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void OnError_CtorNull()
         {
-            Notification.CreateOnError<int>(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => Notification.CreateOnError<int>(null));
         }
 
         [Fact]

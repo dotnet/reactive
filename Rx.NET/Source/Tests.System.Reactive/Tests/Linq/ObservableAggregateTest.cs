@@ -2356,6 +2356,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
+#if !NO_THREAD
         [Fact]
         public void Average_InjectOverflow_Int32()
         {
@@ -2455,7 +2456,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
-
+#endif
+#if !CRIPPLED_REFLECTION
         class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
@@ -2475,6 +2477,7 @@ namespace ReactiveTests.Tests
                 return _source.Subscribe(observer);
             }
         }
+#endif
 #endif
 
         [Fact]
@@ -3148,7 +3151,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
+#if !NO_PERF && !NO_THREAD
         [Fact]
         public void Count_InjectOverflow()
         {
@@ -3443,7 +3446,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
+#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
+
         [Fact]
         public void Count_Predicate_InjectOverflow()
         {
@@ -4811,7 +4815,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
+#if !NO_PERF && !NO_THREAD
         [Fact]
         public void LongCount_InjectOverflow()
         {
@@ -5106,7 +5110,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
+#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
         [Fact]
         public void LongCount_Predicate_InjectOverflow()
         {
@@ -7461,7 +7465,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Max(x => new string(x.Reverse().ToArray())));
+            var res = scheduler.Start(() => xs.Max(x => new string(x.ToCharArray().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
                 OnNext(240, "xuq"),
@@ -7485,7 +7489,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Max(x => new string(x.Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
+            var res = scheduler.Start(() => xs.Max(x => new string(x.ToCharArray().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
                 OnNext(240, "oof"),
@@ -10198,7 +10202,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.Reverse().ToArray())));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
                 OnNext(240, "oof"),
@@ -10222,7 +10226,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
                 OnNext(240, "xuq"),
