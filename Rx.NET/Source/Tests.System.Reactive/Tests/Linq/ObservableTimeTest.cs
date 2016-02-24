@@ -871,6 +871,7 @@ namespace ReactiveTests.Tests
             );
         }
 
+#if !NO_THREAD
         [Fact]
         public void Delay_TimeSpan_Real_Simple1()
         {
@@ -882,6 +883,7 @@ namespace ReactiveTests.Tests
         {
             Delay_TimeSpan_Real_Simple1_Impl(ThreadPoolScheduler.Instance);
         }
+#endif
 
         private void Delay_TimeSpan_Real_Simple1_Impl(IScheduler scheduler)
         {
@@ -2253,9 +2255,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-        #endregion
+#endregion
 
-        #region + DelaySubscription +
+#region + DelaySubscription +
 
         [Fact]
         public void DelaySubscription_ArgumentChecking()
@@ -2396,9 +2398,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-        #endregion
+#endregion
 
-        #region + Generate +
+#region + Generate +
 
         [Fact]
         public void Generate_TimeSpan_ArgumentChecking()
@@ -2654,9 +2656,9 @@ namespace ReactiveTests.Tests
             Observable.Generate(0, x => x < 10, x => x + 1, x => x, x => DateTimeOffset.Now.AddMilliseconds(x)).AssertEqual(Observable.Generate(0, x => x < 10, x => x + 1, x => x, x => DateTimeOffset.Now.AddMilliseconds(x), DefaultScheduler.Instance));
         }
 
-        #endregion
+#endregion
 
-        #region + Interval +
+#region + Interval +
 
         [Fact]
         public void Interval_TimeSpan_ArgumentChecking()

@@ -16,7 +16,8 @@
     "System.Reactive.PlatformServices": { "target": "project" },
     "Microsoft.Reactive.Testing": { "target": "project" },
     "System.Reactive.Experimental": { "target": "project" },
-    "System.Reactive.Providers": {"target": "project"}, 
+    "System.Reactive.Providers": { "target": "project" }, 
+    "System.Reactive.Observable.Aliases": {"target": "project"}, 
     "xunit": "2.1.0"
   },
   
@@ -72,9 +73,12 @@
         "System.Collections.Concurrent": "4.0.0",
         "System.Linq": "4.0.0",
         "System.Threading": "4.0.0",
+        "System.Threading.Tasks": "4.0.0",
         "System.Threading.Timer": "4.0.0",
         "System.Runtime": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0"
+        "System.Runtime.Extensions": "4.0.0",
+        "System.Reflection": "4.0.0",        
+        "System.Reflection.Extensions": "4.0.0"
       }
     }
   }

@@ -4,6 +4,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ReactiveTests
 {
@@ -44,7 +45,7 @@ namespace ReactiveTests
         {
             throw new NotImplementedException();
         }
-#if !NO_THREAD
+
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             var d = new BooleanDisposable();
@@ -55,7 +56,7 @@ namespace ReactiveTests
             var ee = new ManualResetEvent(false);
             _setEnd(ee);
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 eb.Set();
                 try
@@ -73,11 +74,11 @@ namespace ReactiveTests
                 {
                     ee.Set();
                 }
-            }).Start();
+            });
 
             return d;
         }
-#endif
+
         object IServiceProvider.GetService(Type serviceType)
         {
             if (serviceType == typeof(ISchedulerLongRunning))

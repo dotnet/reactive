@@ -762,7 +762,7 @@ namespace ReactiveTests.Tests
 
             var connection3 = ys.Connect();
 
-            Assert.AreNotSame(connection1, connection3);
+            Assert.NotSame(connection1, connection3);
 
             connection3.Dispose();
         }
@@ -1165,7 +1165,7 @@ namespace ReactiveTests.Tests
 
             var connection3 = ys.Connect();
 
-            Assert.AreNotSame(connection1, connection3);
+            Assert.NotSame(connection1, connection3);
 
             connection3.Dispose();
         }
@@ -1547,7 +1547,7 @@ namespace ReactiveTests.Tests
 
             var connection3 = ys.Connect();
 
-            Assert.AreNotSame(connection1, connection3);
+            Assert.NotSame(connection1, connection3);
 
             connection3.Dispose();
         }
@@ -2125,7 +2125,7 @@ namespace ReactiveTests.Tests
 
             var connection3 = ys.Connect();
 
-            Assert.AreNotSame(connection1, connection3);
+            Assert.NotSame(connection1, connection3);
 
             connection3.Dispose();
         }
@@ -2536,7 +2536,7 @@ namespace ReactiveTests.Tests
 
             var connection3 = ys.Connect();
 
-            Assert.AreNotSame(connection1, connection3);
+            Assert.NotSame(connection1, connection3);
 
             connection3.Dispose();
         }

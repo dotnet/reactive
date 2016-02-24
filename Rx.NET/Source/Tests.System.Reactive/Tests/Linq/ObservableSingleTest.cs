@@ -36,7 +36,7 @@ namespace ReactiveTests.Tests
 
             var ys = xs.AsObservable().AsObservable();
 
-            Assert.AreNotSame(xs, ys);
+            Assert.NotSame(xs, ys);
 
             var res = scheduler.Start(() =>
                 ys
@@ -59,7 +59,7 @@ namespace ReactiveTests.Tests
 
             var res = xs.AsObservable();
 
-            Assert.AreNotSame(xs, res);
+            Assert.NotSame(xs, res);
         }
 
         [Fact]

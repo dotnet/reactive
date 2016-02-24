@@ -300,8 +300,8 @@ namespace ReactiveTests.Tests
             src.OnE2(new CancelEventArgs());
 
             Assert.True(lst.Count == 2, "Count");
-            Assert.Same(e1, lst[0].EventArgs, "First");
-            Assert.Same(e2, lst[1].EventArgs, "Second");
+            Assert.True(ReferenceEquals(e1, lst[0].EventArgs), "First");
+            Assert.True(ReferenceEquals(e2, lst[1].EventArgs), "Second");
         }
 
         [Fact]
@@ -324,8 +324,8 @@ namespace ReactiveTests.Tests
             src.OnE3("Fail!");
 
             Assert.True(lst.Count == 2, "Count");
-            Assert.Same(s1, lst[0].Sender, "First");
-            Assert.Same(s2, lst[1].Sender, "Second");
+            Assert.True(ReferenceEquals(s1, lst[0].Sender), "First");
+            Assert.True(ReferenceEquals(s2, lst[1].Sender), "Second");
         }
 
         [Fact]
@@ -352,8 +352,8 @@ namespace ReactiveTests.Tests
             src.OnE2(new CancelEventArgs());
 
             Assert.True(lst.Count == 2, "Count");
-            Assert.Same(e1, lst[0].EventArgs, "First");
-            Assert.Same(e2, lst[1].EventArgs, "Second");
+            Assert.True(ReferenceEquals(e1, lst[0].EventArgs), "First");
+            Assert.True(ReferenceEquals(e2, lst[1].EventArgs), "Second");
         }
 
         [Fact]
