@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 
 namespace Tests
@@ -23,12 +23,12 @@ namespace Tests
             }
             catch (T ex)
             {
-                Assert.IsTrue(assert(ex));
+                Assert.True(assert(ex));
 
                 failed = true;
             }
 
-            Assert.IsTrue(failed);
+            Assert.True(failed);
         }
 
         internal static void SucceedOrFailProper(Action action)

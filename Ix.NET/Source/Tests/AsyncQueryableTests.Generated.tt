@@ -103,11 +103,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Tests
 {
-	[TestClass]
+	
 	public class AsyncQueryableTests
 	{
 <#
@@ -252,7 +252,7 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
 
 	testName += (num + 1);
 #>
-		[TestMethod]
+		[Fact]
 		public void <#=testName#>()
 		{
 <#

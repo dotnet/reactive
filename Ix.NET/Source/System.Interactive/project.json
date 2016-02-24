@@ -58,7 +58,9 @@
             },
             "dependencies": {
                 "System.Linq": "4.0.0",
-                "System.Threading" : "4.0.0" 
+                "System.Threading": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
             }
 
         },

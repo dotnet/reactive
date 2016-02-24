@@ -11,20 +11,13 @@
     "requireLicenseAcceptance": true,
     "dependencies": {
         "System.Interactive.Providers": { "target": "project" },
-        "System.Interactive.Async.Providers": { "target": "project" }
+        "System.Interactive.Async.Providers": { "target": "project" },
+        "xunit": "2.1.0"
     },
+    "exclude": [
+        "App.cs"
+    ],
     "frameworks": {
-        "net40": {
-            "compilationOptions": {
-                "define": [
-                    "NO_TASK_DELAY",
-                    "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT"
-                ]
-            }
-        },
         "net45": {
             "compilationOptions": {
                 "define": [
@@ -39,6 +32,10 @@
                     "HAS_WINFORMS",
                     "USE_TIMER_SELF_ROOT"
                 ]
+            },
+            "frameworkAssemblies": {
+                "System.Runtime": "4.0.0.0",
+                "System.Threading.Tasks": "4.0.0.0"
             }
         },
         "dotnet5.1": {

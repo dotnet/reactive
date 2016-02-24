@@ -3,59 +3,59 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Tests
 {
     public partial class Tests
     {
-        [TestMethod]
+        [Fact]
         public void While_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.While<int>(null, new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.While<int>(() => true, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void While1()
         {
             var x = 5;
             var res = EnumerableEx.While(() => x > 0, EnumerableEx.Defer(() => new[] { x }).Do(_ => x--)).ToList();
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 5, 4, 3, 2, 1 }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 5, 4, 3, 2, 1 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void While2()
         {
             var x = 0;
             var res = EnumerableEx.While(() => x > 0, EnumerableEx.Defer(() => new[] { x }).Do(_ => x--)).ToList();
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new int[0]));
+            Assert.True(Enumerable.SequenceEqual(res, new int[0]));
         }
 
-        [TestMethod]
+        [Fact]
         public void DoWhile_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.DoWhile<int>(new[] { 1 }, null));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.DoWhile<int>(null, () => true));
         }
 
-        [TestMethod]
+        [Fact]
         public void DoWhile1()
         {
             var x = 5;
             var res = EnumerableEx.DoWhile(EnumerableEx.Defer(() => new[] { x }).Do(_ => x--), () => x > 0).ToList();
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 5, 4, 3, 2, 1 }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 5, 4, 3, 2, 1 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void DoWhile2()
         {
             var x = 0;
             var res = EnumerableEx.DoWhile(EnumerableEx.Defer(() => new[] { x }).Do(_ => x--), () => x > 0).ToList();
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 0 }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 0 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void If_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(null, new[] { 1 }));
@@ -65,31 +65,31 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.If<int>(() => true, new[] { 1 }, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void If1()
         {
             var x = 5;
             var res = EnumerableEx.If(() => x > 0, new[] { +1 }, new[] { -1 });
 
-            Assert.AreEqual(+1, res.Single());
+            Assert.Equal(+1, res.Single());
 
             x = -x;
-            Assert.AreEqual(-1, res.Single());
+            Assert.Equal(-1, res.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void If2()
         {
             var x = 5;
             var res = EnumerableEx.If(() => x > 0, new[] { +1 });
 
-            Assert.AreEqual(+1, res.Single());
+            Assert.Equal(+1, res.Single());
 
             x = -x;
-            Assert.IsTrue(res.IsEmpty());
+            Assert.True(res.IsEmpty());
         }
 
-        [TestMethod]
+        [Fact]
         public void Case_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(null, new Dictionary<int, IEnumerable<int>>()));
@@ -99,7 +99,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Case<int, int>(() => 1, new Dictionary<int, IEnumerable<int>>(), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Case1()
         {
             var x = 1;
@@ -112,26 +112,26 @@ namespace Tests
                 { 3, EnumerableEx.Defer(() => new[] { d }) },
             });
 
-            Assert.AreEqual('b', res.Single());
-            Assert.AreEqual('b', res.Single());
+            Assert.Equal('b', res.Single());
+            Assert.Equal('b', res.Single());
 
             x = 0;
-            Assert.AreEqual('a', res.Single());
+            Assert.Equal('a', res.Single());
 
             x = 2;
-            Assert.AreEqual('c', res.Single());
+            Assert.Equal('c', res.Single());
 
             x = 3;
-            Assert.AreEqual('d', res.Single());
+            Assert.Equal('d', res.Single());
 
             d = 'e';
-            Assert.AreEqual('e', res.Single());
+            Assert.Equal('e', res.Single());
 
             x = 4;
-            Assert.IsTrue(res.IsEmpty());
+            Assert.True(res.IsEmpty());
         }
 
-        [TestMethod]
+        [Fact]
         public void Case2()
         {
             var x = 1;
@@ -144,37 +144,37 @@ namespace Tests
                 { 3, EnumerableEx.Defer(() => new[] { d }) },
             }, new[] { 'z' });
 
-            Assert.AreEqual('b', res.Single());
-            Assert.AreEqual('b', res.Single());
+            Assert.Equal('b', res.Single());
+            Assert.Equal('b', res.Single());
 
             x = 0;
-            Assert.AreEqual('a', res.Single());
+            Assert.Equal('a', res.Single());
 
             x = 2;
-            Assert.AreEqual('c', res.Single());
+            Assert.Equal('c', res.Single());
 
             x = 3;
-            Assert.AreEqual('d', res.Single());
+            Assert.Equal('d', res.Single());
 
             d = 'e';
-            Assert.AreEqual('e', res.Single());
+            Assert.Equal('e', res.Single());
 
             x = 4;
-            Assert.AreEqual('z', res.Single());
+            Assert.Equal('z', res.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void For_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>(null, x => new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.For<int, int>(new[] { 1 }, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void For()
         {
             var res = EnumerableEx.For(new[] { 1, 2, 3 }, x => Enumerable.Range(0, x)).ToList();
-            Assert.IsTrue(res.SequenceEqual(new[] { 0, 0, 1, 0, 1, 2 }));
+            Assert.True(res.SequenceEqual(new[] { 0, 0, 1, 0, 1, 2 }));
         }
     }
 }
