@@ -17,12 +17,17 @@
     "Microsoft.Reactive.Testing": { "target": "project" },
     "System.Reactive.Experimental": { "target": "project" },
     "System.Reactive.Providers": { "target": "project" }, 
-    "System.Reactive.Observable.Aliases": {"target": "project"}, 
-    "xunit": "2.1.0"
+    "System.Reactive.Observable.Aliases": {"target": "project"},
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
+    "xunit.runner.visualstudio": "2.1.0"
   },
-  
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+
   "frameworks": {
-    "net45": {
+    "dnx451": {
       "compilationOptions": {
         "define": [
             "NO_EVENTARGS_CONSTRAINT",
@@ -51,7 +56,7 @@
         "System.Threading.Tasks": "4.0.0.0"
       }
     },
-    "dotnet5.1": {
+    "dnx51": {
       "compilationOptions": {
         "define": [
             "NO_EVENTARGS_CONSTRAINT",
