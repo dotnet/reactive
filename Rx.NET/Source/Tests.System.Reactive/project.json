@@ -37,8 +37,6 @@
             "PREFER_ASYNC",
             "HAS_AWAIT",
             "HAS_APTCA",
-            "HAS_DISPATCHER",
-            "HAS_DISPATCHER_PRIORITY",
             "HAS_STACKTRACE",
             "HAS_WINFORMS",
             "USE_TIMER_SELF_ROOT"
