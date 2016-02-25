@@ -4,27 +4,28 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class AsyncSubjectTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void Subscribe_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new AsyncSubject<int>().Subscribe(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnError_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new AsyncSubject<int>().OnError(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Infinite()
         {
             var scheduler = new TestScheduler();
@@ -81,7 +82,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Finite()
         {
             var scheduler = new TestScheduler();
@@ -141,7 +142,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Error()
         {
             var scheduler = new TestScheduler();
@@ -201,7 +202,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Canceled()
         {
             var scheduler = new TestScheduler();
@@ -252,7 +253,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SubjectDisposed()
         {
             var scheduler = new TestScheduler();
@@ -300,22 +301,24 @@ namespace ReactiveTests.Tests
         }
 
 #if HAS_AWAIT
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void Await_Blocking()
         {
             var s = new AsyncSubject<int>();
             GetResult_Blocking(s.GetAwaiter());
         }
 
-        [TestMethod]
+        [Fact]
         public void Await_Throw()
         {
             var s = new AsyncSubject<int>();
             GetResult_Blocking_Throw(s.GetAwaiter());
         }
 #endif
+#endif
 
-        [TestMethod]
+        [Fact]
         public void GetResult_Empty()
         {
             var s = new AsyncSubject<int>();
@@ -323,7 +326,8 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => s.GetResult());
         }
 
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void GetResult_Blocking()
         {
             GetResult_Blocking(new AsyncSubject<int>());
@@ -331,7 +335,7 @@ namespace ReactiveTests.Tests
 
         private void GetResult_Blocking(AsyncSubject<int> s)
         {
-            Assert.IsFalse(s.IsCompleted);
+            Assert.False(s.IsCompleted);
 
             var e = new ManualResetEvent(false);
 
@@ -347,11 +351,11 @@ namespace ReactiveTests.Tests
             e.Set();
             t.Join();
 
-            Assert.AreEqual(42, y);
-            Assert.IsTrue(s.IsCompleted);
+            Assert.Equal(42, y);
+            Assert.True(s.IsCompleted);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetResult_Blocking_Throw()
         {
             GetResult_Blocking_Throw(new AsyncSubject<int>());
@@ -359,7 +363,7 @@ namespace ReactiveTests.Tests
 
         private void GetResult_Blocking_Throw(AsyncSubject<int> s)
         {
-            Assert.IsFalse(s.IsCompleted);
+            Assert.False(s.IsCompleted);
 
             var e = new ManualResetEvent(false);
 
@@ -387,12 +391,13 @@ namespace ReactiveTests.Tests
             e.Set();
             t.Join();
 
-            Assert.AreSame(ex, y);
-            Assert.IsTrue(s.IsCompleted);
+            Assert.Same(ex, y);
+            Assert.True(s.IsCompleted);
         }
+#endif
 
 #if HAS_AWAIT
-        [TestMethod]
+        [Fact]
         public void GetResult_Context()
         {
             var x = new AsyncSubject<int>();
@@ -400,7 +405,7 @@ namespace ReactiveTests.Tests
             var ctx = new MyContext();
             var e = new ManualResetEvent(false);
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 SynchronizationContext.SetSynchronizationContext(ctx);
 
@@ -409,14 +414,14 @@ namespace ReactiveTests.Tests
                 {
                     e.Set();
                 });
-            }).Start();
+            });
 
             x.OnNext(42);
             x.OnCompleted();
 
             e.WaitOne();
 
-            Assert.IsTrue(ctx.ran);
+            Assert.True(ctx.ran);
         }
 
         class MyContext : SynchronizationContext
@@ -431,113 +436,113 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void HasObservers()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d1 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d1.Dispose();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d2 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             var d3 = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d2.Dispose();
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             d3.Dispose();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose1()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.True(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
 
             d.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose2()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.True(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             d.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_Dispose3()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsFalse(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.False(s.IsDisposed);
 
             s.Dispose();
-            Assert.IsFalse(s.HasObservers);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.False(s.HasObservers);
+            Assert.True(s.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_OnCompleted()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d = s.Subscribe(_ => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnNext(42);
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnCompleted();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasObservers_OnError()
         {
             var s = new AsyncSubject<int>();
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
 
             var d = s.Subscribe(_ => { }, ex => { });
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnNext(42);
-            Assert.IsTrue(s.HasObservers);
+            Assert.True(s.HasObservers);
 
             s.OnError(new Exception());
-            Assert.IsFalse(s.HasObservers);
+            Assert.False(s.HasObservers);
         }
     }
 }

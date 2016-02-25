@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 #if !NO_TPL
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObservableAsyncTest : ReactiveTest
     {
 #if !NO_TPL
@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
 #endif
         #region FromAsyncPattern
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern(null, iar => { }));
@@ -101,1076 +101,1076 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern0()
         {
             var x = new Result();
 
             Func<AsyncCallback, object, IAsyncResult> begin = (cb, _) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)().Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction0()
         {
             var x = new Result();
 
             Func<AsyncCallback, object, IAsyncResult> begin = (cb, _) => { cb(x); return x; };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern0_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<AsyncCallback, object, IAsyncResult> begin = (cb, _) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)().Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern0_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<AsyncCallback, object, IAsyncResult> begin = (cb, _) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)().Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern1()
         {
             var x = new Result();
 
             Func<int, AsyncCallback, object, IAsyncResult> begin = (a, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
+                Assert.Equal(a, 2);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction1()
         {
             var x = new Result();
 
             Func<int, AsyncCallback, object, IAsyncResult> begin = (a, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
+                Assert.Equal(a, 2);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern1_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, AsyncCallback, object, IAsyncResult> begin = (a, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern1_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, AsyncCallback, object, IAsyncResult> begin = (a, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern2()
         {
             var x = new Result();
 
             Func<int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction2()
         {
             var x = new Result();
 
             Func<int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern2_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern2_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
 #if !NO_LARGEARITY
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern3()
         {
             var x = new Result();
 
             Func<int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction3()
         {
             var x = new Result();
 
             Func<int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern3_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern3_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern4()
         {
             var x = new Result();
 
             Func<int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction4()
         {
             var x = new Result();
 
             Func<int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern4_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern4_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern5()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction5()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern5_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern5_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern6()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction6()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern6_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern6_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern7()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction7()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern7_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern7_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern8()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction8()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern8_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern8_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern9()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction9()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern9_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern9_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern10()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction10()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern10_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern10_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern11()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction11()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern11_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern11_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern12()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction12()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern12_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern12_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern13()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
-                Assert.AreEqual(m, 14);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
+                Assert.Equal(m, 14);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction13()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
-                Assert.AreEqual(m, 14);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
+                Assert.Equal(m, 14);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern13_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern13_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern14()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
-                Assert.AreEqual(m, 14);
-                Assert.AreEqual(n, 15);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
+                Assert.Equal(m, 14);
+                Assert.Equal(n, 15);
                 cb(x);
                 return x;
             };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 1; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 1; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnNext<int>(1), Notification.CreateOnCompleted<int>() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPatternAction14()
         {
             var x = new Result();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, _) =>
             {
-                Assert.AreEqual(a, 2);
-                Assert.AreEqual(b, 3);
-                Assert.AreEqual(c, 4);
-                Assert.AreEqual(d, 5);
-                Assert.AreEqual(e, 6);
-                Assert.AreEqual(f, 7);
-                Assert.AreEqual(g, 8);
-                Assert.AreEqual(h, 9);
-                Assert.AreEqual(i, 10);
-                Assert.AreEqual(j, 11);
-                Assert.AreEqual(k, 12);
-                Assert.AreEqual(l, 13);
-                Assert.AreEqual(m, 14);
-                Assert.AreEqual(n, 15);
+                Assert.Equal(a, 2);
+                Assert.Equal(b, 3);
+                Assert.Equal(c, 4);
+                Assert.Equal(d, 5);
+                Assert.Equal(e, 6);
+                Assert.Equal(f, 7);
+                Assert.Equal(g, 8);
+                Assert.Equal(h, 9);
+                Assert.Equal(i, 10);
+                Assert.Equal(j, 11);
+                Assert.Equal(k, 12);
+                Assert.Equal(l, 13);
+                Assert.Equal(m, 14);
+                Assert.Equal(n, 15);
                 cb(x);
                 return x;
             };
-            Action<IAsyncResult> end = iar => { Assert.AreSame(x, iar); };
+            Action<IAsyncResult> end = iar => { Assert.Same(x, iar); };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new[] { new Unit() }));
+            Assert.True(res.SequenceEqual(new[] { new Unit() }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern14_Error()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, o) => { cb(x); return x; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); throw ex; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); throw ex; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsyncPattern14_ErrorBegin()
         {
             var x = new Result();
             var ex = new Exception();
 
             Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, AsyncCallback, object, IAsyncResult> begin = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, o) => { cb(x); throw ex; };
-            Func<IAsyncResult, int> end = iar => { Assert.AreSame(x, iar); return 0; };
+            Func<IAsyncResult, int> end = iar => { Assert.Same(x, iar); return 0; };
 
             var res = Observable.FromAsyncPattern(begin, end)(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().ToArray();
-            Assert.IsTrue(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
 #endif
@@ -1201,7 +1201,7 @@ namespace ReactiveTests.Tests
 
 #region Start
 
-        [TestMethod]
+        [Fact]
         public void Start_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Start(null));
@@ -1215,15 +1215,15 @@ namespace ReactiveTests.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Start_Action()
         {
             bool done = false;
-            Assert.IsTrue(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(done, "done");
+            Assert.True(Observable.Start(() => { done = true; }).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(done, "done");
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_Action2()
         {
             var scheduler = new TestScheduler();
@@ -1239,32 +1239,32 @@ namespace ReactiveTests.Tests
                 OnCompleted<Unit>(200)
             );
 
-            Assert.IsTrue(done, "done");
+            Assert.True(done, "done");
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_ActionError()
         {
             var ex = new Exception();
 
             var res = Observable.Start(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.IsTrue(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual(new[] {
                 Notification.CreateOnError<Unit>(ex)
             }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_Func()
         {
             var res = Observable.Start(() => 1).ToEnumerable();
 
-            Assert.IsTrue(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual(new[] {
                 1
             }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_Func2()
         {
             var scheduler = new TestScheduler();
@@ -1279,14 +1279,14 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_FuncError()
         {
             var ex = new Exception();
 
             var res = Observable.Start<int>(() => { throw ex; }).Materialize().ToEnumerable();
 
-            Assert.IsTrue(res.SequenceEqual(new[] {
+            Assert.True(res.SequenceEqual(new[] {
                 Notification.CreateOnError<int>(ex)
             }));
         }
@@ -1299,7 +1299,7 @@ namespace ReactiveTests.Tests
 
 #region Func
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -1314,7 +1314,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync<int>(ct => doneTask, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_Success()
         {
             var n = 42;
@@ -1327,14 +1327,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => n);
             });
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1347,7 +1347,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1362,7 +1362,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_FuncWithCancel_Success()
         {
             var n = 42;
@@ -1374,14 +1374,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => n);
             });
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_FuncWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1394,7 +1394,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_FuncWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1406,7 +1406,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_FuncWithCancel_Cancel()
         {
             var N = 10;
@@ -1447,7 +1447,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_Scheduler1()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -1468,11 +1468,11 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(42, x);
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(42, x);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Func_Scheduler2()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -1493,8 +1493,8 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(42, x);
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(42, x);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 #endif
 
@@ -1502,7 +1502,7 @@ namespace ReactiveTests.Tests
 
 #region Action
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -1516,7 +1516,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.StartAsync(ct => (Task)doneTask, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_Success()
         {
             var i = 0;
@@ -1526,14 +1526,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => { });
             });
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1546,7 +1546,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1558,7 +1558,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_ActionWithCancel_Success()
         {
             var i = 0;
@@ -1568,14 +1568,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => { });
             });
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_ActionWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1588,7 +1588,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_ActionWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1600,7 +1600,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_ActionWithCancel_Cancel()
         {
             var N = 10;
@@ -1641,7 +1641,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_Scheduler1()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -1660,10 +1660,10 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartAsync_Action_Scheduler2()
         {
             var tcs = new TaskCompletionSource<int>();
@@ -1682,7 +1682,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 #endif
 
@@ -1698,7 +1698,7 @@ namespace ReactiveTests.Tests
 
 #region Func
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -1712,7 +1712,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync<int>(ct => doneTask, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_Success()
         {
             var n = 42;
@@ -1724,14 +1724,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => n);
             });
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(2, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(2, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1744,7 +1744,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1756,7 +1756,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_FuncWithCancel_Success()
         {
             var n = 42;
@@ -1768,14 +1768,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => n);
             });
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(n, xs.Single());
-            Assert.AreEqual(2, i);
+            Assert.Equal(n, xs.Single());
+            Assert.Equal(2, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_FuncWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1788,7 +1788,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_FuncWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1800,7 +1800,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_FuncWithCancel_Cancel()
         {
             var e = new ManualResetEvent(false);
@@ -1833,7 +1833,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_Scheduler1()
         {
             var e = new ManualResetEvent(false);
@@ -1854,11 +1854,11 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(42, x);
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(42, x);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Func_Scheduler2()
         {
             var e = new ManualResetEvent(false);
@@ -1879,8 +1879,8 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(42, x);
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(42, x);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 #endif
 
@@ -1888,7 +1888,7 @@ namespace ReactiveTests.Tests
 
 #region Action
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_ArgumentChecking()
         {
             var s = Scheduler.Immediate;
@@ -1902,7 +1902,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsync(ct => (Task)doneTask, default(IScheduler)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_Success()
         {
             var i = 0;
@@ -1912,14 +1912,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => { });
             });
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(2, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(2, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1932,7 +1932,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1944,7 +1944,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_ActionWithCancel_Success()
         {
             var i = 0;
@@ -1954,14 +1954,14 @@ namespace ReactiveTests.Tests
                 return Task.Factory.StartNew(() => { });
             });
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(1, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(1, i);
 
-            Assert.AreEqual(Unit.Default, xs.Single());
-            Assert.AreEqual(2, i);
+            Assert.Equal(Unit.Default, xs.Single());
+            Assert.Equal(2, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_ActionWithCancel_Throw_Synchronous()
         {
             var ex = new Exception();
@@ -1974,7 +1974,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_ActionWithCancel_Throw_Asynchronous()
         {
             var ex = new Exception();
@@ -1986,7 +1986,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_ActionWithCancel_Cancel()
         {
             var e = new ManualResetEvent(false);
@@ -2019,7 +2019,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_Scheduler1()
         {
             var e = new ManualResetEvent(false);
@@ -2038,10 +2038,10 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 
-        [TestMethod]
+        [Fact]
         public void FromAsync_Action_Scheduler2()
         {
             var e = new ManualResetEvent(false);
@@ -2060,7 +2060,7 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
 
-            Assert.AreEqual(Thread.CurrentThread.ManagedThreadId, t);
+            Assert.Equal(Thread.CurrentThread.ManagedThreadId, t);
         }
 #endif
 
@@ -2072,7 +2072,7 @@ namespace ReactiveTests.Tests
 
 #region ToAsync
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action)));
@@ -2186,522 +2186,522 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync0()
         {
-            Assert.IsTrue(Observable.ToAsync<int>(() => 0)().ToEnumerable().SequenceEqual(new[] { 0 }));
-            Assert.IsTrue(Observable.ToAsync<int>(() => 0, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { 0 }));
+            Assert.True(Observable.ToAsync<int>(() => 0)().ToEnumerable().SequenceEqual(new[] { 0 }));
+            Assert.True(Observable.ToAsync<int>(() => 0, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { 0 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync1()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int>(a => a)(1).ToEnumerable().SequenceEqual(new[] { 1 }));
-            Assert.IsTrue(Observable.ToAsync<int, int>(a => a, Scheduler.Default)(1).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.ToAsync<int, int>(a => a)(1).ToEnumerable().SequenceEqual(new[] { 1 }));
+            Assert.True(Observable.ToAsync<int, int>(a => a, Scheduler.Default)(1).ToEnumerable().SequenceEqual(new[] { 1 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync2()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b) => a + b)(1, 2).ToEnumerable().SequenceEqual(new[] { 1 + 2 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b) => a + b, Scheduler.Default)(1, 2).ToEnumerable().SequenceEqual(new[] { 1 + 2 }));
+            Assert.True(Observable.ToAsync<int, int, int>((a, b) => a + b)(1, 2).ToEnumerable().SequenceEqual(new[] { 1 + 2 }));
+            Assert.True(Observable.ToAsync<int, int, int>((a, b) => a + b, Scheduler.Default)(1, 2).ToEnumerable().SequenceEqual(new[] { 1 + 2 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync3()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c) => a + b + c)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c) => a + b + c, Scheduler.Default)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 }));
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c) => a + b + c)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 }));
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c) => a + b + c, Scheduler.Default)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync4()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
         }
 
 #if !NO_LARGEARITY
 
-        [TestMethod]
+        [Fact]
         public void ToAsync5()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => a + b + c + d + e)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => a + b + c + d + e, Scheduler.Default)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => a + b + c + d + e)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => a + b + c + d + e, Scheduler.Default)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync6()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => a + b + c + d + e + f)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => a + b + c + d + e + f, Scheduler.Default)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => a + b + c + d + e + f)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => a + b + c + d + e + f, Scheduler.Default)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync7()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => a + b + c + d + e + f + g)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => a + b + c + d + e + f + g, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => a + b + c + d + e + f + g)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => a + b + c + d + e + f + g, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync8()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => a + b + c + d + e + f + g + h)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => a + b + c + d + e + f + g + h, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => a + b + c + d + e + f + g + h)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => a + b + c + d + e + f + g + h, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync9()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => a + b + c + d + e + f + g + h + i)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => a + b + c + d + e + f + g + h + i, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => a + b + c + d + e + f + g + h + i)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => a + b + c + d + e + f + g + h + i, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync10()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => a + b + c + d + e + f + g + h + i + j, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync11()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => a + b + c + d + e + f + g + h + i + j + k)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => a + b + c + d + e + f + g + h + i + j + k, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => a + b + c + d + e + f + g + h + i + j + k)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => a + b + c + d + e + f + g + h + i + j + k, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync12()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => a + b + c + d + e + f + g + h + i + j + k + l)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => a + b + c + d + e + f + g + h + i + j + k + l, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => a + b + c + d + e + f + g + h + i + j + k + l)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => a + b + c + d + e + f + g + h + i + j + k + l, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync13()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => a + b + c + d + e + f + g + h + i + j + k + l + m)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => a + b + c + d + e + f + g + h + i + j + k + l + m, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => a + b + c + d + e + f + g + h + i + j + k + l + m)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => a + b + c + d + e + f + g + h + i + j + k + l + m, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync14()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => a + b + c + d + e + f + g + h + i + j + k + l + m + n)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => a + b + c + d + e + f + g + h + i + j + k + l + m + n, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => a + b + c + d + e + f + g + h + i + j + k + l + m + n)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => a + b + c + d + e + f + g + h + i + j + k + l + m + n, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync15()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync16()
         {
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error0()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int>(() => { throw ex; })().Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int>(() => { throw ex; })().Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error1()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int>(a => { throw ex; })(1).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int>(a => { throw ex; })(1).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error2()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b) => { throw ex; })(1, 2).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int>((a, b) => { throw ex; })(1, 2).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error3()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c) => { throw ex; })(1, 2, 3).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c) => { throw ex; })(1, 2, 3).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error4()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => { throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => { throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
 #if !NO_LARGEARITY
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error5()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => { throw ex; })(1, 2, 3, 4, 5).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => { throw ex; })(1, 2, 3, 4, 5).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error6()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => { throw ex; })(1, 2, 3, 4, 5, 6).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f) => { throw ex; })(1, 2, 3, 4, 5, 6).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error7()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { throw ex; })(1, 2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { throw ex; })(1, 2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error8()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error9()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error10()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error11()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error12()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error13()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error14()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error15()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsync_Error16()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction0()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync(() => { hasRun = true; })().ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync(() => { hasRun = true; }, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync(() => { hasRun = true; })().ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync(() => { hasRun = true; }, Scheduler.Default)().ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError0()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync(() => { throw ex; })().Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync(() => { throw ex; })().Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction1()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int>(a => { Assert.AreEqual(1, a); hasRun = true; })(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int>(a => { Assert.AreEqual(1, a); hasRun = true; }, Scheduler.Default)(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int>(a => { Assert.Equal(1, a); hasRun = true; })(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int>(a => { Assert.Equal(1, a); hasRun = true; }, Scheduler.Default)(1).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError1()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int>(a => { Assert.AreEqual(1, a); throw ex; })(1).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int>(a => { Assert.Equal(1, a); throw ex; })(1).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction2()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int>((a, b) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); hasRun = true; })(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int>((a, b) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); hasRun = true; }, Scheduler.Default)(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int>((a, b) => { Assert.Equal(1, a); Assert.Equal(2, b); hasRun = true; })(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int>((a, b) => { Assert.Equal(1, a); Assert.Equal(2, b); hasRun = true; }, Scheduler.Default)(1, 2).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError2()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int>((a, b) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); throw ex; })(1, 2).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int>((a, b) => { Assert.Equal(1, a); Assert.Equal(2, b); throw ex; })(1, 2).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction3()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); hasRun = true; })(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); hasRun = true; }, Scheduler.Default)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); hasRun = true; })(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); hasRun = true; }, Scheduler.Default)(1, 2, 3).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError3()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); throw ex; })(1, 2, 3).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int>((a, b, c) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); throw ex; })(1, 2, 3).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction4()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); hasRun = true; })(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); hasRun = true; })(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError4()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
 #if !NO_LARGEARITY
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction5()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); hasRun = true; })(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); hasRun = true; })(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError5()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); throw ex; })(1, 2, 3, 4, 5).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); throw ex; })(1, 2, 3, 4, 5).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction6()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); hasRun = true; })(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); hasRun = true; })(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError6()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); throw ex; })(1, 2, 3, 4, 5, 6).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); throw ex; })(1, 2, 3, 4, 5, 6).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction7()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); hasRun = true; })(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); hasRun = true; })(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError7()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); throw ex; })(1, 2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int>((a, b, c, d, e, f, g) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); throw ex; })(1, 2, 3, 4, 5, 6, 7).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction8()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError8()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction9()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError9()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction10()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError10()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction11()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError11()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction12()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError12()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction13()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError13()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction14()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError14()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction15()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError15()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncAction16()
         {
             bool hasRun = false;
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); Assert.AreEqual(16, p); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); Assert.AreEqual(16, p); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
-            Assert.IsTrue(hasRun, "has run");
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); hasRun = true; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); hasRun = true; }, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { new Unit() }));
+            Assert.True(hasRun, "has run");
         }
 
-        [TestMethod]
+        [Fact]
         public void ToAsyncActionError16()
         {
             var ex = new Exception();
-            Assert.IsTrue(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.AreEqual(1, a); Assert.AreEqual(2, b); Assert.AreEqual(3, c); Assert.AreEqual(4, d); Assert.AreEqual(5, e); Assert.AreEqual(6, f); Assert.AreEqual(7, g); Assert.AreEqual(8, h); Assert.AreEqual(9, i); Assert.AreEqual(10, j); Assert.AreEqual(11, k); Assert.AreEqual(12, l); Assert.AreEqual(13, m); Assert.AreEqual(14, n); Assert.AreEqual(15, o); Assert.AreEqual(16, p); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
+            Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
 #endif
 

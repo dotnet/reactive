@@ -4,15 +4,15 @@ using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.Reactive.Testing;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class CurrentThreadSchedulerTest
     {
-        [TestMethod]
+        [Fact]
         public void CurrentThread_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(Func<IScheduler, int, IDisposable>)));
@@ -20,23 +20,25 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(42, default(DateTimeOffset), default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_Now()
         {
             var res = Scheduler.CurrentThread.Now - DateTime.Now;
-            Assert.IsTrue(res.Seconds < 1);
+            Assert.True(res.Seconds < 1);
         }
 
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void CurrentThread_ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
-            Scheduler.CurrentThread.Schedule(() => { Assert.AreEqual(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
-            Assert.IsTrue(ran);
+            Scheduler.CurrentThread.Schedule(() => { Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Assert.True(ran);
         }
+#endif
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_ScheduleActionError()
         {
             var ex = new Exception();
@@ -44,56 +46,54 @@ namespace ReactiveTests.Tests
             try
             {
                 Scheduler.CurrentThread.Schedule(() => { throw ex; });
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception e)
             {
-                Assert.AreSame(e, ex);
+                Assert.Same(e, ex);
             }
         }
-
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void CurrentThread_ScheduleActionNested()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
             Scheduler.CurrentThread.Schedule(() => {
-                Assert.AreEqual(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
                 Scheduler.CurrentThread.Schedule(() => { ran = true; });
             });
-            Assert.IsTrue(ran);
+            Assert.True(ran);
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_ScheduleActionNested_TimeSpan()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
             Scheduler.CurrentThread.Schedule(() =>
             {
-                Assert.AreEqual(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
                 Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(1), () => { ran = true; });
             });
-            Assert.IsTrue(ran);
+            Assert.True(ran);
         }
 
 #if !SILVERLIGHT
 
-        [TestMethod]
-        [Ignore]
+        [Fact(Skip ="")]
         public void CurrentThread_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var ran = false;
             var sw = new Stopwatch();
             sw.Start();
-            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.AreEqual(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
-            Assert.IsTrue(ran, "ran");
-            Assert.IsTrue(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+            Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); ran = true; });
+            Assert.True(ran, "ran");
+            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
 
-        [TestMethod]
-        [Ignore]
+        [Fact(Skip = "")]
         public void CurrentThread_ScheduleActionDueNested()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -102,18 +102,19 @@ namespace ReactiveTests.Tests
             sw.Start();
             Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => {
                 sw.Stop();
-                Assert.AreEqual(id, Thread.CurrentThread.ManagedThreadId);
+                Assert.Equal(id, Thread.CurrentThread.ManagedThreadId);
                 sw.Start();
                 Scheduler.CurrentThread.Schedule(TimeSpan.FromSeconds(0.2), () => {
                     sw.Stop();
                     ran = true;
                 });
             });
-            Assert.IsTrue(ran, "ran");
-            Assert.IsTrue(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
+            Assert.True(ran, "ran");
+            Assert.True(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
         }
 #endif
-        [TestMethod]
+#endif
+        [Fact]
         public void CurrentThread_EnsureTrampoline()
         {
             var ran1 = false;
@@ -122,11 +123,11 @@ namespace ReactiveTests.Tests
                 Scheduler.CurrentThread.Schedule(() => { ran1 = true; });
                 Scheduler.CurrentThread.Schedule(() => { ran2 = true; });
             });
-            Assert.IsTrue(ran1);
-            Assert.IsTrue(ran2);
+            Assert.True(ran1);
+            Assert.True(ran2);
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_EnsureTrampoline_Nested()
         {
             var ran1 = false;
@@ -136,11 +137,11 @@ namespace ReactiveTests.Tests
                 Scheduler.CurrentThread.EnsureTrampoline(() => { ran1 = true; });
                 Scheduler.CurrentThread.EnsureTrampoline(() => { ran2 = true; });
             });
-            Assert.IsTrue(ran1);
-            Assert.IsTrue(ran2);
+            Assert.True(ran1);
+            Assert.True(ran2);
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_EnsureTrampolineAndCancel()
         {
             var ran1 = false;
@@ -153,11 +154,11 @@ namespace ReactiveTests.Tests
                     d.Dispose();
                 });
             });
-            Assert.IsTrue(ran1);
-            Assert.IsFalse(ran2);
+            Assert.True(ran1);
+            Assert.False(ran2);
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentThread_EnsureTrampolineAndCancelTimed()
         {
             var ran1 = false;
@@ -171,8 +172,8 @@ namespace ReactiveTests.Tests
                     d.Dispose();
                 });
             });
-            Assert.IsTrue(ran1);
-            Assert.IsFalse(ran2);
+            Assert.True(ran1);
+            Assert.False(ran2);
         }
     }
 }

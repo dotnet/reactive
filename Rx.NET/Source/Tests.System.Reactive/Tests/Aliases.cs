@@ -7,24 +7,24 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Reactive.Linq;
 using System.Reactive.Observable.Aliases;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class AliasesTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void Qbservable_Aliases()
         {
             var xs = Observable.Return(1).AsQbservable();
 
-            Assert.IsTrue(xs.Filter(x => true).ToEnumerable().SequenceEqual(new[] { 1 }), "Filter");
-            Assert.IsTrue(xs.Filter(x => true).Concat(xs.Filter(x => false)).ToEnumerable().SequenceEqual(new[] { 1 }), "Concat/Filter");
-            Assert.IsTrue(xs.Map(x => x.ToString()).ToEnumerable().SequenceEqual(new[] { "1" }), "Map");
-            Assert.IsTrue(xs.FlatMap(x => xs).ToEnumerable().SequenceEqual(new[] { 1 }), "FlatMap");
+            Assert.True(xs.Filter(x => true).ToEnumerable().SequenceEqual(new[] { 1 }), "Filter");
+            Assert.True(xs.Filter(x => true).Concat(xs.Filter(x => false)).ToEnumerable().SequenceEqual(new[] { 1 }), "Concat/Filter");
+            Assert.True(xs.Map(x => x.ToString()).ToEnumerable().SequenceEqual(new[] { "1" }), "Map");
+            Assert.True(xs.FlatMap(x => xs).ToEnumerable().SequenceEqual(new[] { 1 }), "FlatMap");
         }
     }
 }

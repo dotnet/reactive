@@ -4,15 +4,15 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class SynchronizationTests
     {
-        [TestMethod]
+        [Fact]
         public void Synchronization_SubscribeOn_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.SubscribeOn(default(IObservable<int>), Scheduler.Immediate));
@@ -24,7 +24,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void Synchronization_ObserveOn_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.ObserveOn(default(IObservable<int>), Scheduler.Immediate));
@@ -36,7 +36,7 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-        [TestMethod]
+        [Fact]
         public void Synchronization_Synchronize_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Synchronization.Synchronize(default(IObservable<int>)));

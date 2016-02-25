@@ -6,14 +6,14 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+#if !NO_THREAD
     public class NewThreadSchedulerTest
     {
-        [TestMethod]
+        [Fact]
         public void NewThread_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new NewThreadScheduler(null));
@@ -25,26 +25,25 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => NewThreadScheduler.Default.SchedulePeriodic<int>(42, TimeSpan.FromSeconds(-1), _ => _));
         }
 
-        [TestMethod]
+        [Fact]
         public void NewThread_Now()
         {
             var res = NewThreadScheduler.Default.Now - DateTime.Now;
-            Assert.IsTrue(res.Seconds < 1);
+            Assert.True(res.Seconds < 1);
         }
-
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void NewThread_ScheduleAction()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
             var nt = NewThreadScheduler.Default;
             var evt = new ManualResetEvent(false);
-            nt.Schedule(() => { Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(() => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
 
 #if !SILVERLIGHT
-        [TestMethod]
-        [Ignore]
+        [Fact(Skip = "")]
         public void NewThread_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;
@@ -52,15 +51,16 @@ namespace ReactiveTests.Tests
             var evt = new ManualResetEvent(false);
             var sw = new Stopwatch();
             sw.Start();
-            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.AreNotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
+            nt.Schedule(TimeSpan.FromSeconds(0.2), () => { sw.Stop(); Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
-            Assert.IsTrue(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
+            Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
+#endif
 #endif
 
 #if !NO_PERF
 #if !NO_STOPWATCH
-        [TestMethod]
+        [Fact]
         public void Stopwatch()
         {
             StopwatchTest.Run(NewThreadScheduler.Default);
@@ -68,7 +68,7 @@ namespace ReactiveTests.Tests
 #endif
 #endif
 
-        [TestMethod]
+        [Fact]
         public void NewThread_Periodic()
         {
             var n = 0;
@@ -81,12 +81,13 @@ namespace ReactiveTests.Tests
             });
 
             if (!e.WaitOne(10000))
-                Assert.Fail();
+                Assert.True(false);
 
             d.Dispose();
         }
 
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void NewThread_Periodic_NonReentrant()
         {
             var n = 0;
@@ -112,7 +113,9 @@ namespace ReactiveTests.Tests
             Thread.Sleep(500);
             d.Dispose();
 
-            Assert.IsFalse(fail);
+            Assert.False(fail);
         }
+#endif
     }
+#endif
 }

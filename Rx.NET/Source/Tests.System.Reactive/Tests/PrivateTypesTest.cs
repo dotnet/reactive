@@ -3,124 +3,125 @@
 #if !SILVERLIGHT // Reflection security restrictions
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.Reactive.Testing;
 using System.Reactive.Linq;
+using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class PrivateTypesTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void EitherValueRoundtrip()
         {
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
-                Assert.AreEqual(value, left.Value);
+                Assert.Equal(value, left.Value);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
-                Assert.AreEqual(value, right.Value);
+                Assert.Equal(value, right.Value);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherEqualsEquatable()
         {
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
 
-                Assert.IsTrue(left.Equals(left));
-                Assert.IsFalse(left.Equals((Either<int, string>.Left)null));
+                Assert.True(left.Equals(left));
+                Assert.False(left.Equals((Either<int, string>.Left)null));
 
                 var other = (Either<int, string>.Left)Either<int, string>.CreateLeft(value + 1);
-                Assert.IsFalse(left.Equals(other));
+                Assert.False(left.Equals(other));
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
 
-                Assert.IsTrue(right.Equals(right));
-                Assert.IsFalse(right.Equals((Either<int, string>.Right)null));
+                Assert.True(right.Equals(right));
+                Assert.False(right.Equals((Either<int, string>.Right)null));
 
                 var other = (Either<int, string>.Right)Either<int, string>.CreateRight(value + "1");
-                Assert.IsFalse(right.Equals(other));
+                Assert.False(right.Equals(other));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherEqualsObject()
         {
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
 
-                Assert.IsTrue(left.Equals((object)left));
-                Assert.IsFalse(left.Equals((object)null));
+                Assert.True(left.Equals((object)left));
+                Assert.False(left.Equals((object)null));
 
                 var other = (Either<int, string>.Left)Either<int, string>.CreateLeft(value + 1);
-                Assert.IsFalse(left.Equals((object)other));
+                Assert.False(left.Equals((object)other));
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
 
-                Assert.IsTrue(right.Equals((object)right));
-                Assert.IsFalse(right.Equals((object)null));
+                Assert.True(right.Equals((object)right));
+                Assert.False(right.Equals((object)null));
 
                 var other = (Either<int, string>.Right)Either<int, string>.CreateRight(value + "1");
-                Assert.IsFalse(right.Equals((object)other));
+                Assert.False(right.Equals((object)other));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherGetHashCode()
         {
             {
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(42);
                 var other = (Either<int, string>.Left)Either<int, string>.CreateLeft(43);
-                Assert.AreNotEqual(left.GetHashCode(), other.GetHashCode());
+                Assert.NotEqual(left.GetHashCode(), other.GetHashCode());
             }
             {
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight("42");
                 var other = (Either<int, string>.Right)Either<int, string>.CreateRight("43");
-                Assert.AreNotEqual(right.GetHashCode(), other.GetHashCode());
+                Assert.NotEqual(right.GetHashCode(), other.GetHashCode());
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherToString()
         {
             {
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(42);
-                Assert.IsTrue(left.ToString() == "Left(42)");
+                Assert.True(left.ToString() == "Left(42)");
             }
             {
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight("42");
-                Assert.IsTrue(right.ToString() == "Right(42)");
+                Assert.True(right.ToString() == "Right(42)");
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherSwitchFunc()
         {
             {
                 var value = 42;
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
-                Assert.AreEqual(left.Switch<int>(l => l, r => r.Length), value);
+                Assert.Equal(left.Switch<int>(l => l, r => r.Length), value);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
-                Assert.AreEqual(right.Switch<int>(l => l, r => r.Length), value.Length);
+                Assert.Equal(right.Switch<int>(l => l, r => r.Length), value.Length);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EitherSwitchAction()
         {
             {
@@ -128,14 +129,14 @@ namespace ReactiveTests.Tests
                 var left = (Either<int, string>.Left)Either<int, string>.CreateLeft(value);
                 int res = 0;
                 left.Switch(l => { res = 1; }, r => { res = 2;});
-                Assert.AreEqual(1, res);
+                Assert.Equal(1, res);
             }
             {
                 var value = "42";
                 var right = (Either<int, string>.Right)Either<int, string>.CreateRight(value);
                 int res = 0;
                 right.Switch(l => { res = 1; }, r => { res = 2; });
-                Assert.AreEqual(2, res);
+                Assert.Equal(2, res);
             }
         }
     }
@@ -165,7 +166,7 @@ namespace ReactiveTests.Tests
     {
         public static Either<TLeft, TRight> CreateLeft(TLeft value)
         {
-            var tpe = typeof(Observable).Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
+            var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod("CreateLeft");
             var res = mth.Invoke(null, new object[] { value });
             return new Either<TLeft, TRight>.Left(res);
@@ -173,7 +174,7 @@ namespace ReactiveTests.Tests
 
         public static Either<TLeft, TRight> CreateRight(TRight value)
         {
-            var tpe = typeof(Observable).Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
+            var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
             var mth = tpe.GetMethod("CreateRight");
             var res = mth.Invoke(null, new object[] { value });
             return new Either<TLeft, TRight>.Right(res);

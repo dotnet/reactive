@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+#if NET45
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Reactive.Linq;
 using System.Reactive.PlatformServices;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.Reactive.Testing;
 
 #if HAS_WINFORMS
@@ -22,12 +23,12 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class SchedulerTest : ReactiveTest
     {
         #region IScheduler
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ArgumentChecks()
         {
             var ms = new MyScheduler();
@@ -48,7 +49,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Schedule(ms, 1, TimeSpan.Zero, default(Action<int, Action<int, TimeSpan>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedulers_ArgumentChecks()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(default(Action)));
@@ -85,69 +86,69 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new SynchronizationContextScheduler(ctx).Schedule(DateTimeOffset.MaxValue, default(Action)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleNonRecursive()
         {
             var ms = new MyScheduler();
             var res = false;
             Scheduler.Schedule(ms, a => { res = true; });
-            Assert.IsTrue(res);
+            Assert.True(res);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleRecursive()
         {
             var ms = new MyScheduler();
             var i = 0;
             Scheduler.Schedule(ms, a => { if (++i < 10) a(); });
-            Assert.AreEqual(10, i);
+            Assert.Equal(10, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleWithTimeNonRecursive()
         {
             var now = DateTimeOffset.Now;
-            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.IsTrue(t == TimeSpan.Zero); } };
+            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t == TimeSpan.Zero); } };
             var res = false;
             Scheduler.Schedule(ms, now, a => { res = true; });
-            Assert.IsTrue(res);
-            Assert.IsTrue(ms.WaitCycles == 0);
+            Assert.True(res);
+            Assert.True(ms.WaitCycles == 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleWithTimeRecursive()
         {
             var now = DateTimeOffset.Now;
             var i = 0;
-            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.IsTrue(t == TimeSpan.Zero); } };
+            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t == TimeSpan.Zero); } };
             Scheduler.Schedule(ms, now, a => { if (++i < 10) a(now); });
-            Assert.IsTrue(ms.WaitCycles == 0);
-            Assert.AreEqual(10, i);
+            Assert.True(ms.WaitCycles == 0);
+            Assert.Equal(10, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleWithTimeSpanNonRecursive()
         {
             var now = DateTimeOffset.Now;
-            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.IsTrue(t == TimeSpan.Zero); } };
+            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t == TimeSpan.Zero); } };
             var res = false;
             Scheduler.Schedule(ms, TimeSpan.Zero, a => { res = true; });
-            Assert.IsTrue(res);
-            Assert.IsTrue(ms.WaitCycles == 0);
+            Assert.True(res);
+            Assert.True(ms.WaitCycles == 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_ScheduleWithTimeSpanRecursive()
         {
             var now = DateTimeOffset.Now;
-            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.IsTrue(t < TimeSpan.FromTicks(10)); } };
+            var ms = new MyScheduler(now) { Check = (a, s, t) => { Assert.True(t < TimeSpan.FromTicks(10)); } };
             var i = 0;
             Scheduler.Schedule(ms, TimeSpan.Zero, a => { if (++i < 10) a(TimeSpan.FromTicks(i)); });
-            Assert.IsTrue(ms.WaitCycles == Enumerable.Range(1, 9).Sum());
-            Assert.AreEqual(10, i);
+            Assert.True(ms.WaitCycles == Enumerable.Range(1, 9).Sum());
+            Assert.Equal(10, i);
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_StateThreading()
         {
             var lst = new List<int>();
@@ -158,10 +159,10 @@ namespace ReactiveTests.Tests
                     a(i + 1);
             });
 
-            Assert.IsTrue(lst.SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(lst.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_Builtins()
         {
             // Default
@@ -213,14 +214,14 @@ namespace ReactiveTests.Tests
         #region ISchedulerLongRunning
 
 #if !NO_PERF
-        [TestMethod]
+        [Fact]
         public void Scheduler_LongRunning_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(null, c => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleLongRunning(ThreadPoolScheduler.Instance, default(Action<ICancelable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_Periodic_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic(null, TimeSpan.FromSeconds(1), () => { }));
@@ -236,14 +237,14 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_Stopwatch_Emulation()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.StartStopwatch(null));
         }
 
 #if !NO_TPL
-        [TestMethod]
+        [Fact]
         public void Scheduler_LongRunning1()
         {
             var s = TaskPoolScheduler.Default;
@@ -264,7 +265,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_LongRunning2()
         {
             var s = TaskPoolScheduler.Default;
@@ -292,7 +293,7 @@ namespace ReactiveTests.Tests
         #region ISchedulerPeriodic
 
 #if !NO_PERF
-        [TestMethod]
+        [Fact]
         public void Scheduler_Periodic1()
         {
             var n = 0;
@@ -308,7 +309,7 @@ namespace ReactiveTests.Tests
             d.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void Scheduler_Periodic2()
         {
             var n = 0;
@@ -316,7 +317,7 @@ namespace ReactiveTests.Tests
 
             var d = ThreadPoolScheduler.Instance.SchedulePeriodic(42, TimeSpan.FromMilliseconds(50), x =>
             {
-                Assert.AreEqual(42, x);
+                Assert.Equal(42, x);
 
                 if (n++ == 10)
                     e.Set();
@@ -327,7 +328,7 @@ namespace ReactiveTests.Tests
         }
 
 #if DESKTOPCLR
-        [TestMethod]
+        [Fact]
         public void Scheduler_Periodic_HostLifecycleManagement()
         {
             var cur = AppDomain.CurrentDomain.BaseDirectory;
@@ -429,7 +430,7 @@ namespace ReactiveTests.Tests
         #region DisableOptimizations
 
 #if !NO_PERF
-        [TestMethod]
+        [Fact]
         public void DisableOptimizations_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default(IScheduler)));
@@ -442,16 +443,16 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_TPL
-        [TestMethod]
+        [Fact]
         public void DisableOptimizations1()
         {
             var s = TaskPoolScheduler.Default;
-            Assert.IsTrue(s is IServiceProvider);
+            Assert.True(s is IServiceProvider);
 
             var t = s.DisableOptimizations();
 
             var d = t.Now - s.Now;
-            Assert.IsTrue(d.TotalSeconds < 1);
+            Assert.True(d.TotalSeconds < 1);
 
             var e1 = new ManualResetEvent(false);
             t.Schedule(42, (self, state) =>
@@ -478,22 +479,22 @@ namespace ReactiveTests.Tests
             e3.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void DisableOptimizations2()
         {
             var s = TaskPoolScheduler.Default;
-            Assert.IsTrue(s is IServiceProvider);
+            Assert.True(s is IServiceProvider);
 
             var lr1 = ((IServiceProvider)s).GetService(typeof(ISchedulerLongRunning));
-            Assert.IsNotNull(lr1);
+            Assert.NotNull(lr1);
 
             var e1 = new ManualResetEvent(false);
             s.Schedule(42, (self, state) =>
             {
-                Assert.IsTrue(self is IServiceProvider);
+                Assert.True(self is IServiceProvider);
 
                 var lrr1 = ((IServiceProvider)self).GetService(typeof(ISchedulerLongRunning));
-                Assert.IsNotNull(lrr1);
+                Assert.NotNull(lrr1);
 
                 e1.Set();
                 return Disposable.Empty;
@@ -501,18 +502,18 @@ namespace ReactiveTests.Tests
             e1.WaitOne();
 
             var t = s.DisableOptimizations();
-            Assert.IsTrue(t is IServiceProvider);
+            Assert.True(t is IServiceProvider);
 
             var lr2 = ((IServiceProvider)t).GetService(typeof(ISchedulerLongRunning));
-            Assert.IsNull(lr2);
+            Assert.Null(lr2);
 
             var e2 = new ManualResetEvent(false);
             t.Schedule(42, (self, state) =>
             {
-                Assert.IsTrue(self is IServiceProvider);
+                Assert.True(self is IServiceProvider);
 
                 var lrr2 = ((IServiceProvider)self).GetService(typeof(ISchedulerLongRunning));
-                Assert.IsNull(lrr2);
+                Assert.Null(lrr2);
 
                 e2.Set();
                 return Disposable.Empty;
@@ -520,28 +521,28 @@ namespace ReactiveTests.Tests
             e2.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void DisableOptimizations3()
         {
             var s = TaskPoolScheduler.Default;
-            Assert.IsTrue(s is IServiceProvider);
+            Assert.True(s is IServiceProvider);
 
             var lr1 = ((IServiceProvider)s).GetService(typeof(ISchedulerLongRunning));
-            Assert.IsNotNull(lr1);
+            Assert.NotNull(lr1);
 
             var p1 = ((IServiceProvider)s).GetService(typeof(ISchedulerPeriodic));
-            Assert.IsNotNull(p1);
+            Assert.NotNull(p1);
 
             var e1 = new ManualResetEvent(false);
             s.Schedule(42, (self, state) =>
             {
-                Assert.IsTrue(self is IServiceProvider);
+                Assert.True(self is IServiceProvider);
 
                 var lrr1 = ((IServiceProvider)self).GetService(typeof(ISchedulerLongRunning));
-                Assert.IsNotNull(lrr1);
+                Assert.NotNull(lrr1);
 
                 var pr1 = ((IServiceProvider)self).GetService(typeof(ISchedulerPeriodic));
-                Assert.IsNotNull(pr1);
+                Assert.NotNull(pr1);
 
                 e1.Set();
                 return Disposable.Empty;
@@ -549,24 +550,24 @@ namespace ReactiveTests.Tests
             e1.WaitOne();
 
             var t = s.DisableOptimizations(typeof(ISchedulerLongRunning));
-            Assert.IsTrue(t is IServiceProvider);
+            Assert.True(t is IServiceProvider);
 
             var lr2 = ((IServiceProvider)t).GetService(typeof(ISchedulerLongRunning));
-            Assert.IsNull(lr2);
+            Assert.Null(lr2);
 
             var p2 = ((IServiceProvider)t).GetService(typeof(ISchedulerPeriodic));
-            Assert.IsNotNull(p2);
+            Assert.NotNull(p2);
 
             var e2 = new ManualResetEvent(false);
             t.Schedule(42, (self, state) =>
             {
-                Assert.IsTrue(self is IServiceProvider);
+                Assert.True(self is IServiceProvider);
 
                 var lrr2 = ((IServiceProvider)self).GetService(typeof(ISchedulerLongRunning));
-                Assert.IsNull(lrr2);
+                Assert.Null(lrr2);
 
                 var pr2 = ((IServiceProvider)self).GetService(typeof(ISchedulerPeriodic));
-                Assert.IsNotNull(pr2);
+                Assert.NotNull(pr2);
 
                 e2.Set();
                 return Disposable.Empty;
@@ -576,15 +577,15 @@ namespace ReactiveTests.Tests
 #endif
 #endif
 
-        [TestMethod]
+        [Fact]
         public void DisableOptimizations_UnknownService()
         {
             var s = new MyScheduler();
-            Assert.IsFalse(s is IServiceProvider);
+            Assert.False(s is IServiceProvider);
 
             var d = s.DisableOptimizations();
-            Assert.IsTrue(d is IServiceProvider);
-            Assert.IsNull(((IServiceProvider)d).GetService(typeof(bool)));
+            Assert.True(d is IServiceProvider);
+            Assert.Null(((IServiceProvider)d).GetService(typeof(bool)));
         }
 
         class MyScheduler : IScheduler
@@ -630,7 +631,7 @@ namespace ReactiveTests.Tests
 
         #region Catch
 
-        [TestMethod]
+        [Fact]
         public void Catch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(default(IScheduler), _ => true));
@@ -641,7 +642,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Catch<Exception>(Scheduler.Default, _ => true).Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Builtin_Swallow_Shallow()
         {
             var done = new ManualResetEvent(false);
@@ -656,7 +657,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Builtin_Swallow_Recursive()
         {
             var done = new ManualResetEvent(false);
@@ -674,7 +675,7 @@ namespace ReactiveTests.Tests
             done.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Unhandled()
         {
             var err = default(Exception);
@@ -684,17 +685,17 @@ namespace ReactiveTests.Tests
             {
                 throw new InvalidOperationException();
             });
-            Assert.IsNull(err);
+            Assert.Null(err);
 
             var ex = new ArgumentException();
             scheduler.Catch<InvalidOperationException>(_ => true).Schedule(() =>
             {
                 throw ex;
             });
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Rethrow()
         {
             var err = default(Exception);
@@ -705,10 +706,10 @@ namespace ReactiveTests.Tests
             {
                 throw ex;
             });
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_LongRunning_Caught()
         {
             var err = default(Exception);
@@ -722,18 +723,18 @@ namespace ReactiveTests.Tests
             {
                 throw new InvalidOperationException();
             });
-            Assert.IsTrue(caught);
-            Assert.IsNull(err);
+            Assert.True(caught);
+            Assert.Null(err);
 
             var ex = new ArgumentException();
             slr.ScheduleLongRunning(cancel =>
             {
                 throw ex;
             });
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_LongRunning_Rethrow()
         {
             var err = default(Exception);
@@ -747,17 +748,17 @@ namespace ReactiveTests.Tests
             {
                 done = true;
             });
-            Assert.IsTrue(done);
+            Assert.True(done);
 
             var ex = new InvalidOperationException();
             slr.ScheduleLongRunning(cancel =>
             {
                 throw ex;
             });
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Periodic_Regular()
         {
             var scheduler = new MyExceptionScheduler(_ => { });
@@ -780,7 +781,7 @@ namespace ReactiveTests.Tests
             scheduler.PeriodicStopped.WaitOne();
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Periodic_Uncaught1()
         {
             var err = default(Exception);
@@ -799,10 +800,10 @@ namespace ReactiveTests.Tests
 
             scheduler.PeriodicStopped.WaitOne();
             done.WaitOne();
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Periodic_Uncaught2()
         {
             var err = default(Exception);
@@ -821,10 +822,10 @@ namespace ReactiveTests.Tests
 
             scheduler.PeriodicStopped.WaitOne();
             done.WaitOne();
-            Assert.AreSame(ex, err);
+            Assert.Same(ex, err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch_Custom_Periodic_Caught()
         {
             var err = default(Exception);
@@ -842,7 +843,7 @@ namespace ReactiveTests.Tests
 
             scheduler.PeriodicStopped.WaitOne();
             caught.WaitOne();
-            Assert.IsNull(err);
+            Assert.Null(err);
         }
 
         class MyExceptionScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
@@ -925,11 +926,11 @@ namespace ReactiveTests.Tests
 
         #region Services
 
-        [TestMethod]
+        [Fact]
         public void InvalidService_Null()
         {
             var s = new MySchedulerWithoutServices();
-            Assert.IsNull(((IServiceProvider)s).GetService(typeof(IAsyncResult)));
+            Assert.Null(((IServiceProvider)s).GetService(typeof(IAsyncResult)));
         }
 
         class MySchedulerWithoutServices : LocalScheduler
@@ -940,13 +941,13 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DetectServices_Null_1()
         {
             var s = new MyDumbScheduler1();
-            Assert.IsNull(Scheduler.AsLongRunning(s));
-            Assert.IsNull(Scheduler.AsPeriodic(s));
-            Assert.IsNull(Scheduler.AsStopwatchProvider(s));
+            Assert.Null(Scheduler.AsLongRunning(s));
+            Assert.Null(Scheduler.AsPeriodic(s));
+            Assert.Null(Scheduler.AsStopwatchProvider(s));
         }
 
         class MyDumbScheduler1 : IScheduler
@@ -972,16 +973,16 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DetectServices_Null_2()
         {
             var s = new MyDumbScheduler2(new Dictionary<Type, object>());
-            Assert.IsNull(Scheduler.AsLongRunning(s));
-            Assert.IsNull(Scheduler.AsPeriodic(s));
-            Assert.IsNull(Scheduler.AsStopwatchProvider(s));
+            Assert.Null(Scheduler.AsLongRunning(s));
+            Assert.Null(Scheduler.AsPeriodic(s));
+            Assert.Null(Scheduler.AsStopwatchProvider(s));
         }
 
-        [TestMethod]
+        [Fact]
         public void DetectServices_Found()
         {
             {
@@ -992,7 +993,7 @@ namespace ReactiveTests.Tests
                     { typeof(ISchedulerLongRunning), x }
                 });
 
-                Assert.AreEqual(x, Scheduler.AsLongRunning(s));
+                Assert.Equal(x, Scheduler.AsLongRunning(s));
             }
 
             {
@@ -1003,7 +1004,7 @@ namespace ReactiveTests.Tests
                     { typeof(IStopwatchProvider), x }
                 });
 
-                Assert.AreEqual(x, Scheduler.AsStopwatchProvider(s));
+                Assert.Equal(x, Scheduler.AsStopwatchProvider(s));
             }
 
             {
@@ -1014,7 +1015,7 @@ namespace ReactiveTests.Tests
                     { typeof(ISchedulerPeriodic), x }
                 });
 
-                Assert.AreEqual(x, Scheduler.AsPeriodic(s));
+                Assert.Equal(x, Scheduler.AsPeriodic(s));
             }
         }
 
@@ -1085,14 +1086,14 @@ namespace ReactiveTests.Tests
 
 #if HAS_AWAIT
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Yield_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Yield(default(IScheduler), CancellationToken.None));
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Sleep_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), TimeSpan.Zero));
@@ -1102,7 +1103,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Sleep(default(IScheduler), DateTimeOffset.MinValue, CancellationToken.None));
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_ArgumentChecking()
         {
             var tcs = new TaskCompletionSource<IDisposable>();
@@ -1155,7 +1156,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.ScheduleAsync(s, at, d4));
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_Overloads1()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1204,7 +1205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_Overloads2()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1253,7 +1254,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_Overloads3()
         {
             var tcsI = new TaskCompletionSource<int>();
@@ -1302,7 +1303,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_NoCancellation1()
         {
             var s = new TestScheduler();
@@ -1336,7 +1337,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_NoCancellation2()
         {
             var s = new TestScheduler();
@@ -1370,7 +1371,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Awaiters()
         {
             var op = Scheduler.Immediate.Yield();
@@ -1383,7 +1384,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => aw.OnCompleted(() => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Yield_Cancel1()
         {
             var cts = new CancellationTokenSource();
@@ -1393,12 +1394,12 @@ namespace ReactiveTests.Tests
 
             cts.Cancel();
 
-            Assert.IsTrue(aw.IsCompleted);
+            Assert.True(aw.IsCompleted);
 
             ReactiveAssert.Throws<OperationCanceledException>(() => aw.GetResult());
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Yield_Cancel2()
         {
             var cts = new CancellationTokenSource();
@@ -1406,14 +1407,14 @@ namespace ReactiveTests.Tests
             var op = Scheduler.Immediate.Yield(cts.Token);
             var aw = op.GetAwaiter();
 
-            Assert.IsFalse(aw.IsCompleted);
+            Assert.False(aw.IsCompleted);
 
             aw.OnCompleted(() =>
             {
                 //
                 // TODO: Not needed for await pattern, but maybe should be wired up?
                 //
-                // Assert.IsTrue(aw.IsCompleted);
+                // Assert.True(aw.IsCompleted);
 
                 cts.Cancel();
 
@@ -1421,7 +1422,7 @@ namespace ReactiveTests.Tests
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_Sleep_Cancel()
         {
             var cts = new CancellationTokenSource();
@@ -1429,7 +1430,7 @@ namespace ReactiveTests.Tests
             var op = Scheduler.Default.Sleep(TimeSpan.FromHours(1), cts.Token);
             var aw = op.GetAwaiter();
 
-            Assert.IsFalse(aw.IsCompleted);
+            Assert.False(aw.IsCompleted);
 
             var e = new ManualResetEvent(false);
 
@@ -1447,7 +1448,7 @@ namespace ReactiveTests.Tests
 
 #if !NO_SYNCCTX
 
-        [TestMethod]
+        [Fact]
         public void SchedulerAsync_ScheduleAsync_SyncCtx()
         {
             var old = SynchronizationContext.Current;
@@ -1463,25 +1464,25 @@ namespace ReactiveTests.Tests
 
                 s.ScheduleAsync(async (_, ct) =>
                 {
-                    Assert.AreSame(ctx, SynchronizationContext.Current);
+                    Assert.Same(ctx, SynchronizationContext.Current);
 
                     o.OnNext(42);
 
                     await _.Yield(ct).ConfigureAwait(true);
 
-                    Assert.AreSame(ctx, SynchronizationContext.Current);
+                    Assert.Same(ctx, SynchronizationContext.Current);
 
                     o.OnNext(43);
 
                     await _.Sleep(TimeSpan.FromTicks(10), ct).ConfigureAwait(true);
 
-                    Assert.AreSame(ctx, SynchronizationContext.Current);
+                    Assert.Same(ctx, SynchronizationContext.Current);
 
                     o.OnNext(44);
 
                     await _.Sleep(new DateTimeOffset(250, TimeSpan.Zero), ct).ConfigureAwait(true);
 
-                    Assert.AreSame(ctx, SynchronizationContext.Current);
+                    Assert.Same(ctx, SynchronizationContext.Current);
 
                     o.OnNext(45);
                 });
@@ -1514,3 +1515,4 @@ namespace ReactiveTests.Tests
 #endif
     }
 }
+#endif

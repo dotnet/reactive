@@ -8,14 +8,14 @@ using System.Reflection;
 using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObservableRemotingTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void Remotable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => RemotingObservable.Remotable(default(IObservable<int>)));
@@ -100,47 +100,47 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Remotable_Empty()
         {
             var evt = new ManualResetEvent(false);
 
             var e = GetRemoteObservable(t => t.Empty());
-            using (e.Subscribe(_ => { Assert.Fail(); }, _ => { Assert.Fail(); }, () => { evt.Set(); }))
+            using (e.Subscribe(_ => { Assert.True(false); }, _ => { Assert.True(false); }, () => { evt.Set(); }))
             {
                 evt.WaitOne();
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Remotable_Return()
         {
             var evt = new ManualResetEvent(false);
 
             bool next = false;
             var e = GetRemoteObservable(t => t.Return(42));
-            using (e.Subscribe(value => { next = true; Assert.AreEqual(42, value); }, _ => { Assert.Fail(); }, () => { evt.Set(); }))
+            using (e.Subscribe(value => { next = true; Assert.Equal(42, value); }, _ => { Assert.True(false); }, () => { evt.Set(); }))
             {
                 evt.WaitOne();
-                Assert.IsTrue(next);
+                Assert.True(next);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Remotable_Return_LongLease()
         {
             var evt = new ManualResetEvent(false);
 
             bool next = false;
             var e = GetRemoteObservable(t => t.ReturnLongLease(42));
-            using (e.Subscribe(value => { next = true; Assert.AreEqual(42, value); }, _ => { Assert.Fail(); }, () => { evt.Set(); }))
+            using (e.Subscribe(value => { next = true; Assert.Equal(42, value); }, _ => { Assert.True(false); }, () => { evt.Set(); }))
             {
                 evt.WaitOne();
-                Assert.IsTrue(next);
+                Assert.True(next);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Remotable_Throw()
         {
             var ex = new InvalidOperationException("Oops!");
@@ -149,19 +149,19 @@ namespace ReactiveTests.Tests
 
             bool error = false;
             var e = GetRemoteObservable(t => t.Throw(ex));
-            using (e.Subscribe(value => { Assert.Fail(); }, err => { error = true; Assert.IsTrue(err is InvalidOperationException && err.Message == ex.Message); evt.Set(); }, () => { Assert.Fail(); }))
+            using (e.Subscribe(value => { Assert.True(false); }, err => { error = true; Assert.True(err is InvalidOperationException && err.Message == ex.Message); evt.Set(); }, () => { Assert.True(false); }))
             {
                 evt.WaitOne();
-                Assert.IsTrue(error);
+                Assert.True(error);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Remotable_Disposal()
         {
             var test = GetRemoteTestObject();
             test.Disposal().Subscribe().Dispose();
-            Assert.IsTrue(test.Disposed);
+            Assert.True(test.Disposed);
         }
 
         private IObservable<int> GetRemoteObservable(Func<RemotingTest, IObservable<int>> f)

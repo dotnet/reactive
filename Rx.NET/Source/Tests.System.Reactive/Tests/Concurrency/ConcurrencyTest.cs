@@ -3,14 +3,14 @@
 using System;
 using System.Reactive.Concurrency;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class ConcurrencyTest
     {
-        [TestMethod]
+        [Fact]
         public void CurrentScheduler_EnsureTrampoline()
         {
             const int concurrency = 100;
@@ -46,10 +46,10 @@ namespace ReactiveTests.Tests
             for (var i = 0; i < concurrency; ++i)
                 s.WaitOne();
 
-            Assert.IsTrue(passed);
+            Assert.True(passed);
         }
 
-        [TestMethod]
+        [Fact]
         public void CurrentScheduler_Schedule()
         {
             const int concurrency = 100;
@@ -85,7 +85,7 @@ namespace ReactiveTests.Tests
             for (var i = 0; i < concurrency; ++i)
                 s.WaitOne();
 
-            Assert.IsTrue(passed);
+            Assert.True(passed);
         }
     }
 }

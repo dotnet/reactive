@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 using System.Runtime.Versioning;
 
 namespace ReactiveTests
@@ -14,7 +15,7 @@ namespace ReactiveTests
             return false;
 #else
 
-            var a = typeof(ISubject<int>).Assembly.GetCustomAttributes(typeof(TargetFrameworkAttribute), false).Cast<TargetFrameworkAttribute>().SingleOrDefault();
+            var a = typeof(ISubject<int>).GetTypeInfo().Assembly.GetCustomAttributes<TargetFrameworkAttribute>().SingleOrDefault();
             return a != null && a.FrameworkDisplayName == ".NET Portable Subset";
 #endif
         }

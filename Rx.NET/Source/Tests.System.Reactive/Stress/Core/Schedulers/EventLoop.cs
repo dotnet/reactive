@@ -9,7 +9,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Stress.Schedulers
 {
@@ -26,7 +26,7 @@ namespace ReactiveTests.Stress.Schedulers
 
             using (var scheduler = new EventLoopScheduler())
             {
-                Assert.AreEqual(0, scheduler.CurrentCount());
+                Assert.Equal(0, scheduler.CurrentCount());
 
                 var maxCount = Environment.ProcessorCount;
 

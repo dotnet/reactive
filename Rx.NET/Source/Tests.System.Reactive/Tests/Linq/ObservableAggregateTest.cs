@@ -7,17 +7,17 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ObservableAggregateTest : ReactiveTest
     {
         #region + Aggregate +
 
-        [TestMethod]
+        [Fact]
         public void Aggregate_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int>(default(IObservable<int>), 1, (x, y) => x + y));
@@ -31,7 +31,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Aggregate<int, int, int>(DummyObservable<int>.Instance, 1, (x, y) => x + y, default(Func<int, int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -55,7 +55,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_Return()
         {
             var scheduler = new TestScheduler();
@@ -80,7 +80,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_Throw()
         {
             var ex = new Exception();
@@ -105,7 +105,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_Never()
         {
             var ex = new Exception();
@@ -128,7 +128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_Range()
         {
             var ex = new Exception();
@@ -159,7 +159,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeed_AccumulatorThrows()
         {
             var ex = new Exception();
@@ -189,7 +189,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_Empty()
         {
             var scheduler = new TestScheduler();
@@ -213,7 +213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_Return()
         {
             var scheduler = new TestScheduler();
@@ -238,7 +238,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_Throw()
         {
             var ex = new Exception();
@@ -263,7 +263,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_Never()
         {
             var ex = new Exception();
@@ -286,7 +286,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_Range()
         {
             var ex = new Exception();
@@ -317,7 +317,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_AccumulatorThrows()
         {
             var ex = new Exception();
@@ -347,7 +347,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithSeedAndResult_ResultSelectorThrows()
         {
             var ex = new Exception();
@@ -377,7 +377,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_Empty()
         {
             var scheduler = new TestScheduler();
@@ -400,7 +400,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_Return()
         {
             var scheduler = new TestScheduler();
@@ -425,7 +425,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_Throw()
         {
             var ex = new Exception();
@@ -450,7 +450,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_Never()
         {
             var scheduler = new TestScheduler();
@@ -467,7 +467,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_Range()
         {
             var scheduler = new TestScheduler();
@@ -496,7 +496,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void AggregateWithoutSeed_AccumulatorThrows()
         {
             var ex = new Exception();
@@ -530,14 +530,14 @@ namespace ReactiveTests.Tests
 
         #region + All +
 
-        [TestMethod]
+        [Fact]
         public void All_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(DummyObservable<int>.Instance, default(Func<int, bool>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.All(default(IObservable<int>), x => true));
         }
 
-        [TestMethod]
+        [Fact]
         public void All_Empty()
         {
             var scheduler = new TestScheduler();
@@ -561,7 +561,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_Return()
         {
             var scheduler = new TestScheduler();
@@ -586,7 +586,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_ReturnNotMatch()
         {
             var scheduler = new TestScheduler();
@@ -611,7 +611,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_SomeNoneMatch()
         {
             var scheduler = new TestScheduler();
@@ -638,7 +638,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_SomeMatch()
         {
             var scheduler = new TestScheduler();
@@ -665,7 +665,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_SomeAllMatch()
         {
             var scheduler = new TestScheduler();
@@ -692,7 +692,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_Throw()
         {
             var ex = new Exception();
@@ -717,7 +717,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_Never()
         {
             var ex = new Exception();
@@ -740,7 +740,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void All_PredicateThrows()
         {
             var ex = new Exception();
@@ -772,7 +772,7 @@ namespace ReactiveTests.Tests
 
         #region + Any +
 
-        [TestMethod]
+        [Fact]
         public void Any_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Any(default(IObservable<int>)));
@@ -780,7 +780,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Any(default(IObservable<int>), x => true));
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Empty()
         {
             var scheduler = new TestScheduler();
@@ -804,7 +804,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Return()
         {
             var scheduler = new TestScheduler();
@@ -829,7 +829,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Throw()
         {
             var ex = new Exception();
@@ -854,7 +854,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Never()
         {
             var ex = new Exception();
@@ -877,7 +877,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_Empty()
         {
             var scheduler = new TestScheduler();
@@ -901,7 +901,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_Return()
         {
             var scheduler = new TestScheduler();
@@ -926,7 +926,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_ReturnNotMatch()
         {
             var scheduler = new TestScheduler();
@@ -951,7 +951,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_SomeNoneMatch()
         {
             var scheduler = new TestScheduler();
@@ -978,7 +978,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_SomeMatch()
         {
             var scheduler = new TestScheduler();
@@ -1005,7 +1005,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_Throw()
         {
             var ex = new Exception();
@@ -1030,7 +1030,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_Never()
         {
             var scheduler = new TestScheduler();
@@ -1051,7 +1051,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Any_Predicate_PredicateThrows()
         {
             var ex = new Exception();
@@ -1083,7 +1083,7 @@ namespace ReactiveTests.Tests
 
         #region + Average +
 
-        [TestMethod]
+        [Fact]
         public void Average_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(default(IObservable<int>)));
@@ -1120,7 +1120,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Average(Observable.Empty<DateTime>(), default(Func<DateTime, long?>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1143,7 +1143,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -1168,7 +1168,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -1195,7 +1195,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int32_Throw()
         {
             var ex = new Exception();
@@ -1220,7 +1220,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int32_Never()
         {
             var ex = new Exception();
@@ -1243,7 +1243,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1266,7 +1266,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -1291,7 +1291,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -1318,7 +1318,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int64_Throw()
         {
             var ex = new Exception();
@@ -1343,7 +1343,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Int64_Never()
         {
             var ex = new Exception();
@@ -1366,7 +1366,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1389,7 +1389,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -1414,7 +1414,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -1441,7 +1441,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Double_Throw()
         {
             var ex = new Exception();
@@ -1466,7 +1466,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Double_Never()
         {
             var ex = new Exception();
@@ -1489,7 +1489,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1512,7 +1512,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -1537,7 +1537,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -1564,7 +1564,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Float_Throw()
         {
             var ex = new Exception();
@@ -1589,7 +1589,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Float_Never()
         {
             var ex = new Exception();
@@ -1612,7 +1612,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1635,7 +1635,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -1660,7 +1660,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -1687,7 +1687,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Decimal_Throw()
         {
             var ex = new Exception();
@@ -1712,7 +1712,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Decimal_Never()
         {
             var ex = new Exception();
@@ -1735,7 +1735,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1759,7 +1759,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -1784,7 +1784,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -1811,7 +1811,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -1836,7 +1836,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -1859,7 +1859,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -1883,7 +1883,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -1908,7 +1908,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -1935,7 +1935,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -1960,7 +1960,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -1983,7 +1983,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -2007,7 +2007,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -2032,7 +2032,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -2059,7 +2059,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -2084,7 +2084,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -2107,7 +2107,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -2131,7 +2131,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -2156,7 +2156,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -2183,7 +2183,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -2208,7 +2208,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -2231,7 +2231,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -2255,7 +2255,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -2280,7 +2280,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -2307,7 +2307,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -2332,7 +2332,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -2356,7 +2356,8 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_PERF
-        [TestMethod]
+#if !NO_THREAD
+        [Fact]
         public void Average_InjectOverflow_Int32()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -2366,7 +2367,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Int64()
         {
             var xs = Observable.Return(42L, ThreadPoolScheduler.Instance);
@@ -2376,7 +2377,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Double()
         {
             var xs = Observable.Return(42.0, ThreadPoolScheduler.Instance);
@@ -2386,7 +2387,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Single()
         {
             var xs = Observable.Return(42.0f, ThreadPoolScheduler.Instance);
@@ -2396,7 +2397,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Decimal()
         {
             var xs = Observable.Return(42.0m, ThreadPoolScheduler.Instance);
@@ -2406,7 +2407,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Int32_Nullable()
         {
             var xs = Observable.Return((int?)42, ThreadPoolScheduler.Instance);
@@ -2416,7 +2417,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Int64_Nullable()
         {
             var xs = Observable.Return((long?)42L, ThreadPoolScheduler.Instance);
@@ -2426,7 +2427,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Double_Nullable()
         {
             var xs = Observable.Return((double?)42.0, ThreadPoolScheduler.Instance);
@@ -2436,7 +2437,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Single_Nullable()
         {
             var xs = Observable.Return((float?)42.0f, ThreadPoolScheduler.Instance);
@@ -2446,7 +2447,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_InjectOverflow_Decimal_Nullable()
         {
             var xs = Observable.Return((decimal?)42.0m, ThreadPoolScheduler.Instance);
@@ -2455,7 +2456,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
-
+#endif
+#if !CRIPPLED_REFLECTION
         class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
@@ -2476,8 +2478,9 @@ namespace ReactiveTests.Tests
             }
         }
 #endif
+#endif
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -2501,7 +2504,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -2525,7 +2528,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -2549,7 +2552,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -2573,7 +2576,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -2597,7 +2600,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2621,7 +2624,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2645,7 +2648,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2669,7 +2672,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2693,7 +2696,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Average_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -2721,7 +2724,7 @@ namespace ReactiveTests.Tests
 
         #region + Contains +
 
-        [TestMethod]
+        [Fact]
         public void Contains_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(default(IObservable<int>), 42));
@@ -2729,7 +2732,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Contains(DummyObservable<int>.Instance, 42, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_Empty()
         {
             var scheduler = new TestScheduler();
@@ -2753,7 +2756,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_ReturnPositive()
         {
             var scheduler = new TestScheduler();
@@ -2778,7 +2781,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_ReturnNegative()
         {
             var scheduler = new TestScheduler();
@@ -2803,7 +2806,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_SomePositive()
         {
             var scheduler = new TestScheduler();
@@ -2830,7 +2833,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_SomeNegative()
         {
             var scheduler = new TestScheduler();
@@ -2857,7 +2860,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_Throw()
         {
             var ex = new Exception();
@@ -2882,7 +2885,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_Never()
         {
             var ex = new Exception();
@@ -2905,7 +2908,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_ComparerThrows()
         {
             var ex = new Exception();
@@ -2943,7 +2946,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_ComparerContainsValue()
         {
             var ex = new Exception();
@@ -2972,7 +2975,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Contains_ComparerDoesNotContainValue()
         {
             var ex = new Exception();
@@ -3018,7 +3021,7 @@ namespace ReactiveTests.Tests
 
         #region + Count +
 
-        [TestMethod]
+        [Fact]
         public void Count_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Count(default(IObservable<int>)));
@@ -3026,7 +3029,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Count(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Empty()
         {
             var scheduler = new TestScheduler();
@@ -3050,7 +3053,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Return()
         {
             var scheduler = new TestScheduler();
@@ -3075,7 +3078,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Some()
         {
             var scheduler = new TestScheduler();
@@ -3102,7 +3105,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Throw()
         {
             var ex = new Exception();
@@ -3127,7 +3130,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Never()
         {
             var scheduler = new TestScheduler();
@@ -3148,8 +3151,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
-        [TestMethod]
+#if !NO_PERF && !NO_THREAD
+        [Fact]
         public void Count_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -3160,7 +3163,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Empty_True()
         {
             var scheduler = new TestScheduler();
@@ -3184,7 +3187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Empty_False()
         {
             var scheduler = new TestScheduler();
@@ -3208,7 +3211,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Return_True()
         {
             var scheduler = new TestScheduler();
@@ -3233,7 +3236,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Return_False()
         {
             var scheduler = new TestScheduler();
@@ -3258,7 +3261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Some_All()
         {
             var scheduler = new TestScheduler();
@@ -3285,7 +3288,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Some_None()
         {
             var scheduler = new TestScheduler();
@@ -3312,7 +3315,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Some_Even()
         {
             var scheduler = new TestScheduler();
@@ -3339,7 +3342,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Throw_True()
         {
             var ex = new Exception();
@@ -3364,7 +3367,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Throw_False()
         {
             var ex = new Exception();
@@ -3389,7 +3392,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_Never()
         {
             var scheduler = new TestScheduler();
@@ -3410,7 +3413,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Count_Predicate_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -3443,8 +3446,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
-        [TestMethod]
+#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
+
+        [Fact]
         public void Count_Predicate_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -3459,14 +3463,14 @@ namespace ReactiveTests.Tests
 
         #region + ElementAt +
 
-        [TestMethod]
+        [Fact]
         public void ElementAt_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ElementAt(default(IObservable<int>), 2));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.ElementAt(DummyObservable<int>.Instance, -1));
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAt_First()
         {
             var scheduler = new TestScheduler();
@@ -3492,7 +3496,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAt_Other()
         {
             var scheduler = new TestScheduler();
@@ -3518,7 +3522,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAt_OutOfRange()
         {
             var scheduler = new TestScheduler();
@@ -3539,7 +3543,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAt_Error()
         {
             var scheduler = new TestScheduler();
@@ -3569,14 +3573,14 @@ namespace ReactiveTests.Tests
 
         #region + ElementAtOrDefault +
 
-        [TestMethod]
+        [Fact]
         public void ElementAtOrDefault_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ElementAtOrDefault(default(IObservable<int>), 2));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.ElementAtOrDefault(DummyObservable<int>.Instance, -1));
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAtOrDefault_First()
         {
             var scheduler = new TestScheduler();
@@ -3602,7 +3606,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAtOrDefault_Other()
         {
             var scheduler = new TestScheduler();
@@ -3628,7 +3632,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAtOrDefault_OutOfRange()
         {
             var scheduler = new TestScheduler();
@@ -3654,7 +3658,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ElementAtOrDefault_Error()
         {
             var scheduler = new TestScheduler();
@@ -3684,7 +3688,7 @@ namespace ReactiveTests.Tests
 
         #region + FirstAsync +
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(default(IObservable<int>)));
@@ -3692,7 +3696,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -3715,7 +3719,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -3740,7 +3744,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -3766,7 +3770,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -3791,7 +3795,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -3819,7 +3823,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -3846,7 +3850,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -3872,7 +3876,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -3905,7 +3909,7 @@ namespace ReactiveTests.Tests
 
         #region + FirstOrDefaultAsync +
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefaultAsync(default(IObservable<int>)));
@@ -3913,7 +3917,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FirstOrDefaultAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -3937,7 +3941,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -3962,7 +3966,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -3988,7 +3992,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -4013,7 +4017,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -4043,7 +4047,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -4073,7 +4077,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -4099,7 +4103,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void FirstOrDefaultAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -4132,13 +4136,13 @@ namespace ReactiveTests.Tests
 
         #region + IsEmpty +
 
-        [TestMethod]
+        [Fact]
         public void IsEmpty_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.IsEmpty(default(IObservable<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEmpty_Empty()
         {
             var scheduler = new TestScheduler();
@@ -4162,7 +4166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEmpty_Return()
         {
             var scheduler = new TestScheduler();
@@ -4187,7 +4191,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEmpty_Throw()
         {
             var ex = new Exception();
@@ -4212,7 +4216,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void IsEmpty_Never()
         {
             var ex = new Exception();
@@ -4239,7 +4243,7 @@ namespace ReactiveTests.Tests
 
         #region + LastAsync +
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LastAsync(default(IObservable<int>)));
@@ -4247,7 +4251,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LastAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -4270,7 +4274,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -4295,7 +4299,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -4321,7 +4325,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -4346,7 +4350,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -4374,7 +4378,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -4401,7 +4405,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -4426,7 +4430,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -4459,7 +4463,7 @@ namespace ReactiveTests.Tests
 
         #region + LastOrDefaultAsync +
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LastOrDefaultAsync(default(IObservable<int>)));
@@ -4467,7 +4471,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LastOrDefaultAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -4491,7 +4495,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -4516,7 +4520,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -4542,7 +4546,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -4567,7 +4571,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -4595,7 +4599,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -4623,7 +4627,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -4648,7 +4652,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LastOrDefaultAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -4681,7 +4685,7 @@ namespace ReactiveTests.Tests
 
         #region + LongCount +
 
-        [TestMethod]
+        [Fact]
         public void LongCount_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LongCount(default(IObservable<int>)));
@@ -4689,7 +4693,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.LongCount(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Empty()
         {
             var scheduler = new TestScheduler();
@@ -4713,7 +4717,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Return()
         {
             var scheduler = new TestScheduler();
@@ -4738,7 +4742,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Some()
         {
             var scheduler = new TestScheduler();
@@ -4765,7 +4769,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Throw()
         {
             var ex = new Exception();
@@ -4790,7 +4794,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Never()
         {
             var scheduler = new TestScheduler();
@@ -4811,8 +4815,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
-        [TestMethod]
+#if !NO_PERF && !NO_THREAD
+        [Fact]
         public void LongCount_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -4823,7 +4827,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Empty_True()
         {
             var scheduler = new TestScheduler();
@@ -4847,7 +4851,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Empty_False()
         {
             var scheduler = new TestScheduler();
@@ -4871,7 +4875,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Return_True()
         {
             var scheduler = new TestScheduler();
@@ -4896,7 +4900,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Return_False()
         {
             var scheduler = new TestScheduler();
@@ -4921,7 +4925,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Some_All()
         {
             var scheduler = new TestScheduler();
@@ -4948,7 +4952,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Some_None()
         {
             var scheduler = new TestScheduler();
@@ -4975,7 +4979,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Some_Even()
         {
             var scheduler = new TestScheduler();
@@ -5002,7 +5006,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Throw_True()
         {
             var ex = new Exception();
@@ -5027,7 +5031,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Throw_False()
         {
             var ex = new Exception();
@@ -5052,7 +5056,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_Never()
         {
             var scheduler = new TestScheduler();
@@ -5073,7 +5077,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void LongCount_Predicate_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -5106,8 +5110,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_PERF
-        [TestMethod]
+#if !NO_PERF && !NO_THREAD && !CRIPPLED_REFLECTION
+        [Fact]
         public void LongCount_Predicate_InjectOverflow()
         {
             var xs = Observable.Return(42, ThreadPoolScheduler.Instance);
@@ -5122,7 +5126,7 @@ namespace ReactiveTests.Tests
 
         #region + Max +
 
-        [TestMethod]
+        [Fact]
         public void Max_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Max(default(IObservable<int>)));
@@ -5171,7 +5175,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Max(Observable.Empty<DateTime>(), _ => "", default(IComparer<string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5194,7 +5198,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -5219,7 +5223,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -5246,7 +5250,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int32_Throw()
         {
             var ex = new Exception();
@@ -5271,7 +5275,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int32_Never()
         {
             var ex = new Exception();
@@ -5294,7 +5298,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5317,7 +5321,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -5342,7 +5346,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -5369,7 +5373,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int64_Throw()
         {
             var ex = new Exception();
@@ -5394,7 +5398,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Int64_Never()
         {
             var ex = new Exception();
@@ -5417,7 +5421,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5440,7 +5444,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -5465,7 +5469,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -5492,7 +5496,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Float_Throw()
         {
             var ex = new Exception();
@@ -5517,7 +5521,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Float_Never()
         {
             var ex = new Exception();
@@ -5540,7 +5544,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5563,7 +5567,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -5588,7 +5592,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -5615,7 +5619,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Double_Throw()
         {
             var ex = new Exception();
@@ -5640,7 +5644,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Double_Never()
         {
             var ex = new Exception();
@@ -5663,7 +5667,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5686,7 +5690,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -5711,7 +5715,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -5738,7 +5742,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Decimal_Throw()
         {
             var ex = new Exception();
@@ -5763,7 +5767,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Decimal_Never()
         {
             var ex = new Exception();
@@ -5786,7 +5790,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -5810,7 +5814,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -5835,7 +5839,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Some1()
         {
             var scheduler = new TestScheduler();
@@ -5862,7 +5866,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Some2()
         {
             var scheduler = new TestScheduler();
@@ -5889,8 +5893,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
-        public void Max_Nullable_GeneralNullableMaxTest_LhsIsNull()
+        [Fact]
+        public void Max_Nullable_GeneralNullableMaxTest_LhsNull()
         {
             var scheduler = new TestScheduler();
 
@@ -5915,8 +5919,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
-        public void Max_Nullable_GeneralNullableMaxTest_RhsIsNull()
+        [Fact]
+        public void Max_Nullable_GeneralNullableMaxTest_RhsNull()
         {
             var scheduler = new TestScheduler();
 
@@ -5941,7 +5945,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_GeneralNullableMaxTest_Less()
         {
             var scheduler = new TestScheduler();
@@ -5967,7 +5971,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_GeneralNullableMaxTest_Greater()
         {
             var scheduler = new TestScheduler();
@@ -5993,7 +5997,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -6018,7 +6022,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -6041,7 +6045,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6065,7 +6069,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -6090,7 +6094,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Some1()
         {
             var scheduler = new TestScheduler();
@@ -6117,7 +6121,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Some2()
         {
             var scheduler = new TestScheduler();
@@ -6144,7 +6148,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -6169,7 +6173,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -6192,7 +6196,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6216,7 +6220,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -6241,7 +6245,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Some1()
         {
             var scheduler = new TestScheduler();
@@ -6268,7 +6272,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Some2()
         {
             var scheduler = new TestScheduler();
@@ -6295,7 +6299,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -6320,7 +6324,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -6343,7 +6347,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6367,7 +6371,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -6392,7 +6396,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Some1()
         {
             var scheduler = new TestScheduler();
@@ -6419,7 +6423,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Some2()
         {
             var scheduler = new TestScheduler();
@@ -6446,7 +6450,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -6471,7 +6475,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -6494,7 +6498,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6518,7 +6522,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -6543,7 +6547,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Some1()
         {
             var scheduler = new TestScheduler();
@@ -6570,7 +6574,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Some2()
         {
             var scheduler = new TestScheduler();
@@ -6597,7 +6601,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -6622,7 +6626,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -6645,7 +6649,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6676,7 +6680,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6699,7 +6703,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Return()
         {
             var scheduler = new TestScheduler();
@@ -6724,7 +6728,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Return()
         {
             var scheduler = new TestScheduler();
@@ -6749,7 +6753,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Some()
         {
             var scheduler = new TestScheduler();
@@ -6776,7 +6780,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Some()
         {
             var scheduler = new TestScheduler();
@@ -6803,7 +6807,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Throw()
         {
             var ex = new Exception();
@@ -6828,7 +6832,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Throw()
         {
             var ex = new Exception();
@@ -6853,7 +6857,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Never()
         {
             var ex = new Exception();
@@ -6876,7 +6880,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Never()
         {
             var ex = new Exception();
@@ -6899,7 +6903,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6930,7 +6934,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -6953,7 +6957,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -6978,7 +6982,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -7003,7 +7007,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -7030,7 +7034,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -7057,7 +7061,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Comparer_Throw()
         {
             var ex = new Exception();
@@ -7082,7 +7086,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Comparer_Throw()
         {
             var ex = new Exception();
@@ -7107,7 +7111,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_Comparer_Never()
         {
             var ex = new Exception();
@@ -7130,7 +7134,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_Comparer_Never()
         {
             var ex = new Exception();
@@ -7153,7 +7157,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Reference_ComparerThrows()
         {
             var ex = new Exception();
@@ -7181,7 +7185,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Value_ComparerThrows()
         {
             var ex = new Exception();
@@ -7209,7 +7213,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -7233,7 +7237,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -7257,7 +7261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -7281,7 +7285,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -7305,7 +7309,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -7329,7 +7333,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -7353,7 +7357,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -7377,7 +7381,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -7401,7 +7405,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -7425,7 +7429,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Max_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -7449,7 +7453,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Selector_Regular()
         {
             var scheduler = new TestScheduler();
@@ -7461,7 +7465,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Max(x => new string(x.Reverse().ToArray())));
+            var res = scheduler.Start(() => xs.Max(x => new string(x.ToCharArray().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
                 OnNext(240, "xuq"),
@@ -7473,7 +7477,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxOfT_Selector_Regular_Comparer()
         {
             var scheduler = new TestScheduler();
@@ -7485,7 +7489,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Max(x => new string(x.Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
+            var res = scheduler.Start(() => xs.Max(x => new string(x.ToCharArray().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
                 OnNext(240, "oof"),
@@ -7501,7 +7505,7 @@ namespace ReactiveTests.Tests
 
         #region + MaxBy +
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MaxBy(default(IObservable<int>), x => x));
@@ -7511,7 +7515,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MaxBy(DummyObservable<int>.Instance, x => x, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Empty()
         {
             var scheduler = new TestScheduler();
@@ -7535,7 +7539,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Return()
         {
             var scheduler = new TestScheduler();
@@ -7562,7 +7566,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Some()
         {
             var scheduler = new TestScheduler();
@@ -7591,7 +7595,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Multiple()
         {
             var scheduler = new TestScheduler();
@@ -7623,7 +7627,7 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 250)
             );
         }
-        [TestMethod]
+        [Fact]
         public void MaxBy_Throw()
         {
             var ex = new Exception();
@@ -7648,7 +7652,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Never()
         {
             var ex = new Exception();
@@ -7671,7 +7675,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -7695,7 +7699,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -7722,7 +7726,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -7751,7 +7755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Comparer_Throw()
         {
             var ex = new Exception();
@@ -7776,7 +7780,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_Comparer_Never()
         {
             var ex = new Exception();
@@ -7799,7 +7803,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_SelectorThrows()
         {
             var ex = new Exception();
@@ -7827,7 +7831,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MaxBy_ComparerThrows()
         {
             var ex = new Exception();
@@ -7859,7 +7863,7 @@ namespace ReactiveTests.Tests
 
         #region + Min +
 
-        [TestMethod]
+        [Fact]
         public void Min_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(default(IObservable<int>)));
@@ -7908,7 +7912,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Min(Observable.Empty<DateTime>(), _ => "", default(IComparer<string>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -7931,7 +7935,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -7956,7 +7960,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -7983,7 +7987,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int32_Throw()
         {
             var ex = new Exception();
@@ -8008,7 +8012,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int32_Never()
         {
             var ex = new Exception();
@@ -8031,7 +8035,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8054,7 +8058,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -8079,7 +8083,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -8106,7 +8110,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int64_Throw()
         {
             var ex = new Exception();
@@ -8131,7 +8135,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Int64_Never()
         {
             var ex = new Exception();
@@ -8154,7 +8158,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8177,7 +8181,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -8202,7 +8206,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -8229,7 +8233,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Float_Throw()
         {
             var ex = new Exception();
@@ -8254,7 +8258,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Float_Never()
         {
             var ex = new Exception();
@@ -8277,7 +8281,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8300,7 +8304,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -8325,7 +8329,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -8352,7 +8356,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Double_Throw()
         {
             var ex = new Exception();
@@ -8377,7 +8381,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Double_Never()
         {
             var ex = new Exception();
@@ -8400,7 +8404,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8423,7 +8427,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -8448,7 +8452,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -8475,7 +8479,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Decimal_Throw()
         {
             var ex = new Exception();
@@ -8500,7 +8504,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Decimal_Never()
         {
             var ex = new Exception();
@@ -8523,7 +8527,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8547,7 +8551,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -8572,7 +8576,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Some1()
         {
             var scheduler = new TestScheduler();
@@ -8599,7 +8603,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Some2()
         {
             var scheduler = new TestScheduler();
@@ -8626,8 +8630,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
-        public void Min_Nullable_GeneralNullableMinTest_LhsIsNull()
+        [Fact]
+        public void Min_Nullable_GeneralNullableMinTest_LhsNull()
         {
             var scheduler = new TestScheduler();
 
@@ -8652,8 +8656,8 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
-        public void Min_Nullable_GeneralNullableMinTest_RhsIsNull()
+        [Fact]
+        public void Min_Nullable_GeneralNullableMinTest_RhsNull()
         {
             var scheduler = new TestScheduler();
 
@@ -8678,7 +8682,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_GeneralNullableMinTest_Less()
         {
             var scheduler = new TestScheduler();
@@ -8704,7 +8708,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_GeneralNullableMinTest_Greater()
         {
             var scheduler = new TestScheduler();
@@ -8730,7 +8734,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -8755,7 +8759,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -8778,7 +8782,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8802,7 +8806,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -8827,7 +8831,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Some1()
         {
             var scheduler = new TestScheduler();
@@ -8854,7 +8858,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Some2()
         {
             var scheduler = new TestScheduler();
@@ -8881,7 +8885,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -8906,7 +8910,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -8929,7 +8933,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -8953,7 +8957,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -8978,7 +8982,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Some1()
         {
             var scheduler = new TestScheduler();
@@ -9005,7 +9009,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Some2()
         {
             var scheduler = new TestScheduler();
@@ -9032,7 +9036,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -9057,7 +9061,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -9080,7 +9084,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9104,7 +9108,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -9129,7 +9133,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Some1()
         {
             var scheduler = new TestScheduler();
@@ -9156,7 +9160,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Some2()
         {
             var scheduler = new TestScheduler();
@@ -9183,7 +9187,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -9208,7 +9212,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -9231,7 +9235,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9255,7 +9259,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -9280,7 +9284,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Some1()
         {
             var scheduler = new TestScheduler();
@@ -9307,7 +9311,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Some2()
         {
             var scheduler = new TestScheduler();
@@ -9334,7 +9338,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -9359,7 +9363,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -9382,7 +9386,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9413,7 +9417,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9436,7 +9440,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Return()
         {
             var scheduler = new TestScheduler();
@@ -9461,7 +9465,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Return()
         {
             var scheduler = new TestScheduler();
@@ -9486,7 +9490,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Some()
         {
             var scheduler = new TestScheduler();
@@ -9513,7 +9517,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Some()
         {
             var scheduler = new TestScheduler();
@@ -9540,7 +9544,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Throw()
         {
             var ex = new Exception();
@@ -9565,7 +9569,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Throw()
         {
             var ex = new Exception();
@@ -9590,7 +9594,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Never()
         {
             var ex = new Exception();
@@ -9613,7 +9617,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Never()
         {
             var ex = new Exception();
@@ -9636,7 +9640,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9667,7 +9671,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -9690,7 +9694,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -9715,7 +9719,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -9740,7 +9744,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -9767,7 +9771,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -9794,7 +9798,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Comparer_Throw()
         {
             var ex = new Exception();
@@ -9819,7 +9823,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Comparer_Throw()
         {
             var ex = new Exception();
@@ -9844,7 +9848,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_Comparer_Never()
         {
             var ex = new Exception();
@@ -9867,7 +9871,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_Comparer_Never()
         {
             var ex = new Exception();
@@ -9890,7 +9894,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Reference_ComparerThrows()
         {
             var ex = new Exception();
@@ -9918,7 +9922,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Value_ComparerThrows()
         {
             var ex = new Exception();
@@ -9946,7 +9950,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -9970,7 +9974,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -9994,7 +9998,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -10018,7 +10022,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -10042,7 +10046,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -10066,7 +10070,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -10090,7 +10094,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -10114,7 +10118,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -10138,7 +10142,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -10162,7 +10166,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Min_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -10186,7 +10190,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Selector_Regular()
         {
             var scheduler = new TestScheduler();
@@ -10198,7 +10202,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.Reverse().ToArray())));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray())));
 
             res.Messages.AssertEqual(
                 OnNext(240, "oof"),
@@ -10210,7 +10214,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinOfT_Selector_Regular_Comparer()
         {
             var scheduler = new TestScheduler();
@@ -10222,7 +10226,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<string>(240)
             );
 
-            var res = scheduler.Start(() => xs.Min(x => new string(x.Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
+            var res = scheduler.Start(() => xs.Min(x => new string(x.ToCharArray().Reverse().ToArray()), new ReverseComparer<string>(Comparer<string>.Default)));
 
             res.Messages.AssertEqual(
                 OnNext(240, "xuq"),
@@ -10238,7 +10242,7 @@ namespace ReactiveTests.Tests
 
         #region + MinBy +
 
-        [TestMethod]
+        [Fact]
         public void MinBy_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(default(IObservable<int>), x => x));
@@ -10248,7 +10252,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.MinBy(DummyObservable<int>.Instance, x => x, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Empty()
         {
             var scheduler = new TestScheduler();
@@ -10272,7 +10276,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Return()
         {
             var scheduler = new TestScheduler();
@@ -10299,7 +10303,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Some()
         {
             var scheduler = new TestScheduler();
@@ -10328,7 +10332,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Multiple()
         {
             var scheduler = new TestScheduler();
@@ -10361,7 +10365,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Throw()
         {
             var ex = new Exception();
@@ -10386,7 +10390,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Never()
         {
             var ex = new Exception();
@@ -10409,7 +10413,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Comparer_Empty()
         {
             var scheduler = new TestScheduler();
@@ -10433,7 +10437,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Comparer_Return()
         {
             var scheduler = new TestScheduler();
@@ -10460,7 +10464,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Comparer_Some()
         {
             var scheduler = new TestScheduler();
@@ -10489,7 +10493,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Comparer_Throw()
         {
             var ex = new Exception();
@@ -10514,7 +10518,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_Comparer_Never()
         {
             var ex = new Exception();
@@ -10537,7 +10541,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_SelectorThrows()
         {
             var ex = new Exception();
@@ -10565,7 +10569,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void MinBy_ComparerThrows()
         {
             var ex = new Exception();
@@ -10627,7 +10631,7 @@ namespace ReactiveTests.Tests
 
         #region + SequenceEqual +
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(default(IObservable<int>), DummyObservable<int>.Instance));
@@ -10643,7 +10647,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SequenceEqual<int>(DummyObservable<int>.Instance, new[] { 42 }, default(IEqualityComparer<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_Equal()
         {
             var scheduler = new TestScheduler();
@@ -10687,7 +10691,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_Equal_Sym()
         {
             var scheduler = new TestScheduler();
@@ -10731,7 +10735,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_Left()
         {
             var scheduler = new TestScheduler();
@@ -10775,7 +10779,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_Left_Sym()
         {
             var scheduler = new TestScheduler();
@@ -10819,7 +10823,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_Right()
         {
             var scheduler = new TestScheduler();
@@ -10863,7 +10867,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_Right_Sym()
         {
             var scheduler = new TestScheduler();
@@ -10907,7 +10911,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_2()
         {
             var scheduler = new TestScheduler();
@@ -10959,7 +10963,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_2_Sym()
         {
             var scheduler = new TestScheduler();
@@ -11011,7 +11015,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_3()
         {
             var scheduler = new TestScheduler();
@@ -11050,7 +11054,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_3_Sym()
         {
             var scheduler = new TestScheduler();
@@ -11089,7 +11093,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_ComparerThrows()
         {
             var scheduler = new TestScheduler();
@@ -11129,7 +11133,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_ComparerThrows_Sym()
         {
             var scheduler = new TestScheduler();
@@ -11189,7 +11193,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_4()
         {
             var scheduler = new TestScheduler();
@@ -11223,7 +11227,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_NotEqual_4_Sym()
         {
             var scheduler = new TestScheduler();
@@ -11257,7 +11261,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_Left_Throw()
         {
             var scheduler = new TestScheduler();
@@ -11292,7 +11296,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Observable_Right_Throw()
         {
             var scheduler = new TestScheduler();
@@ -11327,7 +11331,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_Equal()
         {
             var scheduler = new TestScheduler();
@@ -11357,7 +11361,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_NotEqual_Elements()
         {
             var scheduler = new TestScheduler();
@@ -11387,7 +11391,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_Comparer_Equal()
         {
             var scheduler = new TestScheduler();
@@ -11417,7 +11421,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_Comparer_NotEqual()
         {
             var scheduler = new TestScheduler();
@@ -11460,7 +11464,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_Comparer_Throws()
         {
             var scheduler = new TestScheduler();
@@ -11516,7 +11520,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_NotEqual_TooLong()
         {
             var scheduler = new TestScheduler();
@@ -11546,7 +11550,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_NotEqual_TooShort()
         {
             var scheduler = new TestScheduler();
@@ -11576,7 +11580,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_OnError()
         {
             var ex = new Exception();
@@ -11604,7 +11608,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_IteratorThrows1()
         {
             var ex = new Exception();
@@ -11632,7 +11636,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_IteratorThrows2()
         {
             var ex = new Exception();
@@ -11665,7 +11669,7 @@ namespace ReactiveTests.Tests
             throw ex;
         }
 
-        [TestMethod]
+        [Fact]
         public void SequenceEqual_Enumerable_GetEnumeratorThrows()
         {
             var ex = new Exception();
@@ -11695,7 +11699,7 @@ namespace ReactiveTests.Tests
 
         #region + SingleAsync +
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleAsync(default(IObservable<int>)));
@@ -11703,7 +11707,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -11726,7 +11730,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -11751,7 +11755,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -11776,7 +11780,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -11801,7 +11805,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -11828,7 +11832,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Predicate_Empty()
         {
             var scheduler = new TestScheduler();
@@ -11853,7 +11857,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Predicate_One()
         {
             var scheduler = new TestScheduler();
@@ -11881,7 +11885,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -11906,7 +11910,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -11939,7 +11943,7 @@ namespace ReactiveTests.Tests
 
         #region + SingleOrDefaultAsync +
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefaultAsync(default(IObservable<int>)));
@@ -11947,7 +11951,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.SingleOrDefaultAsync(DummyObservable<int>.Instance, default(Func<int, bool>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Empty()
         {
             var scheduler = new TestScheduler();
@@ -11971,7 +11975,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_One()
         {
             var scheduler = new TestScheduler();
@@ -11996,7 +12000,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Many()
         {
             var scheduler = new TestScheduler();
@@ -12021,7 +12025,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Error()
         {
             var scheduler = new TestScheduler();
@@ -12046,7 +12050,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Predicate()
         {
             var scheduler = new TestScheduler();
@@ -12075,7 +12079,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Predicate_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12101,7 +12105,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Predicate_One()
         {
             var scheduler = new TestScheduler();
@@ -12131,7 +12135,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Predicate_None()
         {
             var scheduler = new TestScheduler();
@@ -12161,7 +12165,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_Predicate_Throw()
         {
             var scheduler = new TestScheduler();
@@ -12186,7 +12190,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleOrDefaultAsync_PredicateThrows()
         {
             var scheduler = new TestScheduler();
@@ -12219,7 +12223,7 @@ namespace ReactiveTests.Tests
 
         #region + Sum +
 
-        [TestMethod]
+        [Fact]
         public void Sum_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(default(IObservable<int>)));
@@ -12256,7 +12260,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Sum(Observable.Empty<DateTime>(), default(Func<DateTime, long?>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12280,7 +12284,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -12305,7 +12309,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -12332,7 +12336,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -12357,7 +12361,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Throw()
         {
             var ex = new Exception();
@@ -12382,7 +12386,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int32_Never()
         {
             var ex = new Exception();
@@ -12405,7 +12409,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12429,7 +12433,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -12454,7 +12458,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -12481,7 +12485,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -12506,7 +12510,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Throw()
         {
             var ex = new Exception();
@@ -12531,7 +12535,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Int64_Never()
         {
             var ex = new Exception();
@@ -12554,7 +12558,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12578,7 +12582,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -12603,7 +12607,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -12630,7 +12634,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Float_Throw()
         {
             var ex = new Exception();
@@ -12655,7 +12659,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Float_Never()
         {
             var ex = new Exception();
@@ -12678,7 +12682,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12702,7 +12706,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -12727,7 +12731,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -12754,7 +12758,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Double_Throw()
         {
             var ex = new Exception();
@@ -12779,7 +12783,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Double_Never()
         {
             var ex = new Exception();
@@ -12802,7 +12806,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12826,7 +12830,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -12851,7 +12855,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -12878,7 +12882,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Decimal_Throw()
         {
             var ex = new Exception();
@@ -12903,7 +12907,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Decimal_Never()
         {
             var ex = new Exception();
@@ -12926,7 +12930,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Empty()
         {
             var scheduler = new TestScheduler();
@@ -12950,7 +12954,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Return()
         {
             var scheduler = new TestScheduler();
@@ -12975,7 +12979,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Some()
         {
             var scheduler = new TestScheduler();
@@ -13002,7 +13006,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -13027,7 +13031,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Throw()
         {
             var ex = new Exception();
@@ -13052,7 +13056,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int32_Never()
         {
             var ex = new Exception();
@@ -13075,7 +13079,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Empty()
         {
             var scheduler = new TestScheduler();
@@ -13099,7 +13103,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Return()
         {
             var scheduler = new TestScheduler();
@@ -13124,7 +13128,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Some()
         {
             var scheduler = new TestScheduler();
@@ -13151,7 +13155,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Overflow()
         {
             var scheduler = new TestScheduler();
@@ -13176,7 +13180,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Throw()
         {
             var ex = new Exception();
@@ -13201,7 +13205,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Int64_Never()
         {
             var ex = new Exception();
@@ -13224,7 +13228,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Float_Empty()
         {
             var scheduler = new TestScheduler();
@@ -13248,7 +13252,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Float_Return()
         {
             var scheduler = new TestScheduler();
@@ -13273,7 +13277,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Float_Some()
         {
             var scheduler = new TestScheduler();
@@ -13300,7 +13304,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Float_Throw()
         {
             var ex = new Exception();
@@ -13325,7 +13329,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Float_Never()
         {
             var ex = new Exception();
@@ -13348,7 +13352,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Double_Empty()
         {
             var scheduler = new TestScheduler();
@@ -13372,7 +13376,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Double_Return()
         {
             var scheduler = new TestScheduler();
@@ -13397,7 +13401,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Double_Some()
         {
             var scheduler = new TestScheduler();
@@ -13424,7 +13428,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Double_Throw()
         {
             var ex = new Exception();
@@ -13449,7 +13453,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Double_Never()
         {
             var ex = new Exception();
@@ -13472,7 +13476,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Decimal_Empty()
         {
             var scheduler = new TestScheduler();
@@ -13496,7 +13500,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Decimal_Return()
         {
             var scheduler = new TestScheduler();
@@ -13521,7 +13525,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Decimal_Some()
         {
             var scheduler = new TestScheduler();
@@ -13548,7 +13552,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Decimal_Throw()
         {
             var ex = new Exception();
@@ -13573,7 +13577,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Nullable_Decimal_Never()
         {
             var ex = new Exception();
@@ -13596,7 +13600,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Int32()
         {
             var scheduler = new TestScheduler();
@@ -13620,7 +13624,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Int64()
         {
             var scheduler = new TestScheduler();
@@ -13644,7 +13648,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Single()
         {
             var scheduler = new TestScheduler();
@@ -13668,7 +13672,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Double()
         {
             var scheduler = new TestScheduler();
@@ -13692,7 +13696,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Decimal()
         {
             var scheduler = new TestScheduler();
@@ -13716,7 +13720,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Int32_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -13740,7 +13744,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Int64_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -13764,7 +13768,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Single_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -13788,7 +13792,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Double_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -13812,7 +13816,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Sum_Selector_Regular_Decimal_Nullable()
         {
             var scheduler = new TestScheduler();
@@ -13840,13 +13844,13 @@ namespace ReactiveTests.Tests
 
         #region + ToArray +
 
-        [TestMethod]
+        [Fact]
         public void ToArray_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToArray<int>(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToArray_Completed()
         {
             var scheduler = new TestScheduler();
@@ -13874,7 +13878,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToArray_Error()
         {
             var scheduler = new TestScheduler();
@@ -13903,7 +13907,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToArray_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -13932,7 +13936,7 @@ namespace ReactiveTests.Tests
 
         #region + ToDictionary +
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int>(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
@@ -13949,7 +13953,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToDictionary<int, int, int>(DummyObservable<int>.Instance, DummyFunc<int, int>.Instance, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_Completed()
         {
             var scheduler = new TestScheduler();
@@ -13984,7 +13988,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_Error()
         {
             var scheduler = new TestScheduler();
@@ -14013,7 +14017,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_KeySelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -14042,7 +14046,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_ElementSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -14071,7 +14075,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -14096,7 +14100,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_MultipleAdd()
         {
             var scheduler = new TestScheduler();
@@ -14123,30 +14127,30 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToDictionary_Default()
         {
             var d1 = Observable.Range(1, 10).ToDictionary(x => x.ToString()).First();
-            Assert.AreEqual(7, d1["7"]);
+            Assert.Equal(7, d1["7"]);
 
             var d2 = Observable.Range(1, 10).ToDictionary(x => x.ToString(), x => x * 2).First();
-            Assert.AreEqual(18, d2["9"]);
+            Assert.Equal(18, d2["9"]);
 
             var d3 = Observable.Range(1, 10).ToDictionary(x => x.ToString(), EqualityComparer<string>.Default).First();
-            Assert.AreEqual(7, d3["7"]);
+            Assert.Equal(7, d3["7"]);
         }
 
         #endregion
 
         #region + ToList +
 
-        [TestMethod]
+        [Fact]
         public void ToList_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToList<int>(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToList_Completed()
         {
             var scheduler = new TestScheduler();
@@ -14174,7 +14178,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToList_Error()
         {
             var scheduler = new TestScheduler();
@@ -14203,7 +14207,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToList_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -14232,7 +14236,7 @@ namespace ReactiveTests.Tests
 
         #region + ToLookup +
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToLookup<int, int>(null, DummyFunc<int, int>.Instance, EqualityComparer<int>.Default));
@@ -14250,7 +14254,7 @@ namespace ReactiveTests.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Completed()
         {
             var scheduler = new TestScheduler();
@@ -14283,7 +14287,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Error()
         {
             var scheduler = new TestScheduler();
@@ -14312,7 +14316,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_KeySelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -14341,7 +14345,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_ElementSelectorThrows()
         {
             var scheduler = new TestScheduler();
@@ -14370,7 +14374,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Disposed()
         {
             var scheduler = new TestScheduler();
@@ -14395,7 +14399,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Default()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -14408,15 +14412,15 @@ namespace ReactiveTests.Tests
             d3["0"].AssertEqual(2, 4, 6, 8, 10);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Contains()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
-            Assert.IsTrue(d1.Contains("1"));
-            Assert.IsFalse(d1.Contains("2"));
+            Assert.True(d1.Contains("1"));
+            Assert.False(d1.Contains("2"));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Groups()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -14432,11 +14436,11 @@ namespace ReactiveTests.Tests
                     g.AssertEqual(1, 3, 5, 7, 9);
                 }
                 else
-                    Assert.Fail("Unknown group.");
+                    Assert.True(false, "Unknown group.");
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_Groups_2()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();
@@ -14456,11 +14460,11 @@ namespace ReactiveTests.Tests
                     l.AssertEqual(1, 3, 5, 7, 9);
                 }
                 else
-                    Assert.Fail("Unknown group.");
+                    Assert.True(false, "Unknown group.");
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ToLookup_IndexerForInvalidKey()
         {
             var d1 = Observable.Range(1, 10).ToLookup(x => (x % 2).ToString()).First();

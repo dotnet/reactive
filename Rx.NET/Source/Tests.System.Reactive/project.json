@@ -1,0 +1,85 @@
+{
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - Core Library",
+  "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
+  "authors": [ "Microsoft" ],
+  "copyright": "Copyright (C) Microsoft Corporation",
+  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+  "requireLicenseAcceptance": true,
+  
+  "dependencies": {
+    "System.Reactive.Interfaces": { "target": "project" },
+    "System.Reactive.Linq": { "target": "project" },
+    "System.Reactive.PlatformServices": { "target": "project" },
+    "Microsoft.Reactive.Testing": { "target": "project" },
+    "System.Reactive.Experimental": { "target": "project" },
+    "System.Reactive.Providers": { "target": "project" }, 
+    "System.Reactive.Observable.Aliases": {"target": "project"}, 
+    "xunit": "2.1.0"
+  },
+  
+  "frameworks": {
+    "net45": {
+      "compilationOptions": {
+        "define": [
+            "NO_EVENTARGS_CONSTRAINT",
+            "HAS_EDI",
+            "HAS_WINRT",
+            "HAS_PROGRESS",
+            "PREFER_ASYNC",
+            "HAS_AWAIT",
+            "HAS_APTCA",
+            "HAS_DISPATCHER",
+            "HAS_DISPATCHER_PRIORITY",
+            "HAS_STACKTRACE",
+            "HAS_WINFORMS",
+            "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "System.Reactive.Windows.Threading": { "target": "project" },
+        "System.Reactive.Windows.Forms": { "target": "project" },
+        "System.Reactive.Runtime.Remoting": { "target": "project" }        
+      },
+      "frameworkAssemblies": {
+        "System.Windows": "4.0.0.0",
+        "WindowsBase": "4.0.0.0",
+        "System.Runtime": "4.0.0.0",
+        "System.Threading.Tasks": "4.0.0.0"
+      }
+    },
+    "dotnet5.1": {
+      "compilationOptions": {
+        "define": [
+            "NO_EVENTARGS_CONSTRAINT",
+            "HAS_EDI",
+            "HAS_WINRT",
+            "HAS_PROGRESS",
+            "PREFER_ASYNC",
+            "HAS_AWAIT",
+            "HAS_APTCA",
+            "NO_REMOTING",
+            "NO_SERIALIZABLE",
+            "NO_THREAD",
+            "CRIPPLED_REFLECTION",
+            "PLIB",
+            "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "System.Collections.Concurrent": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Threading": "4.0.0",
+        "System.Threading.Tasks": "4.0.0",
+        "System.Threading.Timer": "4.0.0",
+        "System.Runtime": "4.0.0",
+        "System.Runtime.Extensions": "4.0.0",
+        "System.Reflection": "4.0.0",        
+        "System.Reflection.Extensions": "4.0.0"
+      }
+    }
+  }
+}

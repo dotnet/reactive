@@ -2,168 +2,168 @@
 
 using System;
 using System.Reactive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class TimeTests
     {
-        [TestMethod]
+        [Fact]
         public void TimeInterval_Ctor_Properties()
         {
             var ti = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
-            Assert.AreEqual(42, ti.Value);
-            Assert.AreEqual(TimeSpan.FromSeconds(123.45), ti.Interval);
+            Assert.Equal(42, ti.Value);
+            Assert.Equal(TimeSpan.FromSeconds(123.45), ti.Interval);
         }
 
-        [TestMethod]
+        [Fact]
         public void TimeInterval_Equals()
         {
             var ti = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
-            Assert.IsFalse(ti.Equals("x"));
-            Assert.IsFalse(((object)ti).Equals("x"));
-            Assert.IsTrue(ti.Equals(ti));
-            Assert.IsTrue(((object)ti).Equals(ti));
+            Assert.False(ti.Equals("x"));
+            Assert.False(((object)ti).Equals("x"));
+            Assert.True(ti.Equals(ti));
+            Assert.True(((object)ti).Equals(ti));
 
             var t2 = new TimeInterval<int>(43, TimeSpan.FromSeconds(123.45));
-            Assert.IsFalse(ti.Equals(t2));
-            Assert.IsFalse(((object)ti).Equals(t2));
+            Assert.False(ti.Equals(t2));
+            Assert.False(((object)ti).Equals(t2));
 
             var t3 = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.56));
-            Assert.IsFalse(ti.Equals(t3));
-            Assert.IsFalse(((object)ti).Equals(t3));
+            Assert.False(ti.Equals(t3));
+            Assert.False(((object)ti).Equals(t3));
 
             var t4 = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
-            Assert.IsTrue(ti.Equals(t4));
-            Assert.IsTrue(((object)ti).Equals(t4));
+            Assert.True(ti.Equals(t4));
+            Assert.True(((object)ti).Equals(t4));
         }
 
-        [TestMethod]
+        [Fact]
         public void TimeInterval_GetHashCode()
         {
             var ti = new TimeInterval<string>(null, TimeSpan.FromSeconds(123.45));
-            Assert.IsTrue(ti.GetHashCode() != 0);
-            Assert.AreEqual(ti.GetHashCode(), ti.GetHashCode());
+            Assert.True(ti.GetHashCode() != 0);
+            Assert.Equal(ti.GetHashCode(), ti.GetHashCode());
 
             var t2 = new TimeInterval<string>("", TimeSpan.FromSeconds(123.45));
-            Assert.AreNotEqual(ti.GetHashCode(), t2.GetHashCode());
+            Assert.NotEqual(ti.GetHashCode(), t2.GetHashCode());
         }
 
-        [TestMethod]
+        [Fact]
         public void TimeInterval_EqualsOperators()
         {
             var ti = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
             var t2 = new TimeInterval<int>(43, TimeSpan.FromSeconds(123.45));
-            Assert.IsFalse(ti == t2);
-            Assert.IsFalse(t2 == ti);
-            Assert.IsTrue(ti != t2);
-            Assert.IsTrue(t2 != ti);
+            Assert.False(ti == t2);
+            Assert.False(t2 == ti);
+            Assert.True(ti != t2);
+            Assert.True(t2 != ti);
 
             var t3 = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.56));
-            Assert.IsFalse(ti == t3);
-            Assert.IsFalse(t3 == ti);
-            Assert.IsTrue(ti != t3);
-            Assert.IsTrue(t3 != ti);
+            Assert.False(ti == t3);
+            Assert.False(t3 == ti);
+            Assert.True(ti != t3);
+            Assert.True(t3 != ti);
 
             var t4 = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
-            Assert.IsTrue(ti == t4);
-            Assert.IsTrue(t4 == ti);
-            Assert.IsFalse(ti != t4);
-            Assert.IsFalse(t4 != ti);
+            Assert.True(ti == t4);
+            Assert.True(t4 == ti);
+            Assert.False(ti != t4);
+            Assert.False(t4 != ti);
         }
 
-        [TestMethod]
+        [Fact]
         public void TimeInterval_ToString()
         {
             var ti = new TimeInterval<int>(42, TimeSpan.FromSeconds(123.45));
-            Assert.IsTrue(ti.ToString().Contains(42.ToString()));
-            Assert.IsTrue(ti.ToString().Contains(TimeSpan.FromSeconds(123.45).ToString()));
+            Assert.True(ti.ToString().Contains(42.ToString()));
+            Assert.True(ti.ToString().Contains(TimeSpan.FromSeconds(123.45).ToString()));
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_Create()
         {
             var o = DateTimeOffset.UtcNow;
             var ti = Timestamped.Create(42, o);
-            Assert.AreEqual(42, ti.Value);
-            Assert.AreEqual(o, ti.Timestamp);
+            Assert.Equal(42, ti.Value);
+            Assert.Equal(o, ti.Timestamp);
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_Ctor_Properties()
         {
             var o = new DateTimeOffset();
             var ti = new Timestamped<int>(42, o);
-            Assert.AreEqual(42, ti.Value);
-            Assert.AreEqual(o, ti.Timestamp);
+            Assert.Equal(42, ti.Value);
+            Assert.Equal(o, ti.Timestamp);
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_Equals()
         {
             var ti = new Timestamped<int>(42, new DateTimeOffset());
-            Assert.IsFalse(ti.Equals("x"));
-            Assert.IsFalse(((object)ti).Equals("x"));
-            Assert.IsTrue(ti.Equals(ti));
-            Assert.IsTrue(((object)ti).Equals(ti));
+            Assert.False(ti.Equals("x"));
+            Assert.False(((object)ti).Equals("x"));
+            Assert.True(ti.Equals(ti));
+            Assert.True(((object)ti).Equals(ti));
 
             var t2 = new Timestamped<int>(43, new DateTimeOffset());
-            Assert.IsFalse(ti.Equals(t2));
-            Assert.IsFalse(((object)ti).Equals(t2));
+            Assert.False(ti.Equals(t2));
+            Assert.False(((object)ti).Equals(t2));
 
             var t3 = new Timestamped<int>(42, new DateTimeOffset().AddDays(1));
-            Assert.IsFalse(ti.Equals(t3));
-            Assert.IsFalse(((object)ti).Equals(t3));
+            Assert.False(ti.Equals(t3));
+            Assert.False(((object)ti).Equals(t3));
 
             var t4 = new Timestamped<int>(42, new DateTimeOffset());
-            Assert.IsTrue(ti.Equals(t4));
-            Assert.IsTrue(((object)ti).Equals(t4));
+            Assert.True(ti.Equals(t4));
+            Assert.True(((object)ti).Equals(t4));
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_GetHashCode()
         {
             var ti = new Timestamped<string>(null, new DateTimeOffset());
-            Assert.IsTrue(ti.GetHashCode() != 0);
-            Assert.AreEqual(ti.GetHashCode(), ti.GetHashCode());
+            Assert.True(ti.GetHashCode() != 0);
+            Assert.Equal(ti.GetHashCode(), ti.GetHashCode());
 
             var t2 = new Timestamped<string>("", new DateTimeOffset());
-            Assert.AreNotEqual(ti.GetHashCode(), t2.GetHashCode());
+            Assert.NotEqual(ti.GetHashCode(), t2.GetHashCode());
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_EqualsOperators()
         {
             var o = new DateTimeOffset();
 
             var ti = new Timestamped<int>(42, o);
             var t2 = new Timestamped<int>(43, o);
-            Assert.IsFalse(ti == t2);
-            Assert.IsFalse(t2 == ti);
-            Assert.IsTrue(ti != t2);
-            Assert.IsTrue(t2 != ti);
+            Assert.False(ti == t2);
+            Assert.False(t2 == ti);
+            Assert.True(ti != t2);
+            Assert.True(t2 != ti);
 
             var t3 = new Timestamped<int>(42, o.AddDays(1));
-            Assert.IsFalse(ti == t3);
-            Assert.IsFalse(t3 == ti);
-            Assert.IsTrue(ti != t3);
-            Assert.IsTrue(t3 != ti);
+            Assert.False(ti == t3);
+            Assert.False(t3 == ti);
+            Assert.True(ti != t3);
+            Assert.True(t3 != ti);
 
             var t4 = new Timestamped<int>(42, o);
-            Assert.IsTrue(ti == t4);
-            Assert.IsTrue(t4 == ti);
-            Assert.IsFalse(ti != t4);
-            Assert.IsFalse(t4 != ti);
+            Assert.True(ti == t4);
+            Assert.True(t4 == ti);
+            Assert.False(ti != t4);
+            Assert.False(t4 != ti);
         }
 
-        [TestMethod]
+        [Fact]
         public void Timestamped_ToString()
         {
             var o = new DateTimeOffset();
             var ti = new Timestamped<int>(42, o);
-            Assert.IsTrue(ti.ToString().Contains(42.ToString()));
-            Assert.IsTrue(ti.ToString().Contains(o.ToString()));
+            Assert.True(ti.ToString().Contains(42.ToString()));
+            Assert.True(ti.ToString().Contains(o.ToString()));
         }
     }
 }

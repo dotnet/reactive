@@ -5,15 +5,15 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public partial class ConnectableObservableTest : ReactiveTest
     {
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_Creation()
         {
             var y = 0;
@@ -22,13 +22,13 @@ namespace ReactiveTests.Tests
             var co2 = new ConnectableObservable<int>(Observable.Return<int>(1), s2);
 
             co2.Subscribe(x => y = x);
-            Assert.AreNotEqual(1, y);
+            Assert.NotEqual(1, y);
             
             co2.Connect();
-            Assert.AreEqual(1, y);
+            Assert.Equal(1, y);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_Connected()
         {
             var scheduler = new TestScheduler();
@@ -57,7 +57,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_NotConnected()
         {
             var scheduler = new TestScheduler();
@@ -80,7 +80,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_Disconnected()
         {
             var scheduler = new TestScheduler();
@@ -105,7 +105,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_DisconnectFuture()
         {
             var scheduler = new TestScheduler();
@@ -132,13 +132,13 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.Publish().Subscribe(default(IObserver<int>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void ConnectableObservable_MultipleNonOverlappedConnections()
         {
             var scheduler = new TestScheduler();

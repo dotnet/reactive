@@ -8,67 +8,67 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class DisposableTests
     {
-        [TestMethod]
+        [Fact]
         public void AnonymousDisposable_Create()
         {
             var d = Disposable.Create(() => { });
-            Assert.IsNotNull(d);
+            Assert.NotNull(d);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void AnonymousDisposable_CreateNull()
         {
-            Disposable.Create(null);
+            Assert.Throws(typeof(ArgumentNullException), () => Disposable.Create(null));            
         }
 
-        [TestMethod]
+        [Fact]
         public void AnonymousDisposable_Dispose()
         {
             var disposed = false;
             var d = Disposable.Create(() => { disposed = true; });
-            Assert.IsFalse(disposed);
+            Assert.False(disposed);
             d.Dispose();
-            Assert.IsTrue(disposed);
+            Assert.True(disposed);
 
             var c = d as ICancelable;
-            Assert.IsNotNull(c);
-            Assert.IsTrue(c.IsDisposed);
+            Assert.NotNull(c);
+            Assert.True(c.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void EmptyDisposable()
         {
             var d = Disposable.Empty;
-            Assert.IsNotNull(d);
+            Assert.NotNull(d);
             d.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void BooleanDisposable()
         {
             var d = new BooleanDisposable();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
             d.Dispose();
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
             d.Dispose();
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAssignmentDisposable_SetNull()
         {
             var d = new SingleAssignmentDisposable();
             d.Disposable = null;
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAssignmentDisposable_DisposeAfterSet()
         {
             var disposed = false;
@@ -77,18 +77,18 @@ namespace ReactiveTests.Tests
             var dd = Disposable.Create(() => { disposed = true; });
             d.Disposable = dd;
 
-            Assert.AreSame(dd, d.Disposable);
+            Assert.Same(dd, d.Disposable);
 
-            Assert.IsFalse(disposed);
+            Assert.False(disposed);
             d.Dispose();
-            Assert.IsTrue(disposed);
+            Assert.True(disposed);
             d.Dispose();
-            Assert.IsTrue(disposed);
+            Assert.True(disposed);
 
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAssignmentDisposable_DisposeBeforeSet()
         {
             var disposed = false;
@@ -96,21 +96,21 @@ namespace ReactiveTests.Tests
             var d = new SingleAssignmentDisposable();
             var dd = Disposable.Create(() => { disposed = true; });
 
-            Assert.IsFalse(disposed);
+            Assert.False(disposed);
             d.Dispose();
-            Assert.IsFalse(disposed);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.False(disposed);
+            Assert.True(d.IsDisposed);
 
             d.Disposable = dd;
-            Assert.IsTrue(disposed);
-            //Assert.IsNull(d.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.True(disposed);
+            //Assert.Null(d.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
             d.Disposable.Dispose();        // This should be a nop.
 
             d.Dispose();
-            Assert.IsTrue(disposed);
+            Assert.True(disposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void SingleAssignmentDisposable_SetMultipleTimes()
         {
             var d = new SingleAssignmentDisposable();
@@ -119,7 +119,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<InvalidOperationException>(() => { d.Disposable = Disposable.Empty; });
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable(default(IDisposable[])));
@@ -127,45 +127,45 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable(-1));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_Contains()
         {
             var d1 = Disposable.Create(() => {} );
             var d2 = Disposable.Create(() => { });
 
             var g = new CompositeDisposable(d1, d2);
-            Assert.AreEqual(2, g.Count);
-            Assert.IsTrue(g.Contains(d1));
-            Assert.IsTrue(g.Contains(d2));
+            Assert.Equal(2, g.Count);
+            Assert.True(g.Contains(d1));
+            Assert.True(g.Contains(d2));
 
             ReactiveAssert.Throws<ArgumentNullException>(() => g.Contains(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_IsReadOnly()
         {
-            Assert.IsFalse(new CompositeDisposable().IsReadOnly);
+            Assert.False(new CompositeDisposable().IsReadOnly);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_Null()
         {
-            new CompositeDisposable().CopyTo(null, 0);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().CopyTo(null, 0));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_Negative()
         {
-            new CompositeDisposable().CopyTo(new IDisposable[2], -1);
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], -1));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void CompositeDisposable_CopyTo_BeyondEnd()
         {
-            new CompositeDisposable().CopyTo(new IDisposable[2], 2);
+            ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => new CompositeDisposable().CopyTo(new IDisposable[2], 2));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_CopyTo()
         {
             var d1 = Disposable.Create(() => { });
@@ -174,22 +174,22 @@ namespace ReactiveTests.Tests
 
             var d = new IDisposable[3];
             g.CopyTo(d, 1);
-            Assert.AreSame(d1, d[1]);
-            Assert.AreSame(d2, d[2]);
+            Assert.Same(d1, d[1]);
+            Assert.Same(d2, d[2]);
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_ToArray()
         {
             var d1 = Disposable.Create(() => { });
             var d2 = Disposable.Create(() => { });
             var g = new CompositeDisposable(d1, d2);
-            Assert.AreEqual(2, g.Count);
+            Assert.Equal(2, g.Count);
             var x = Enumerable.ToArray(g);
-            Assert.IsTrue(g.ToArray().SequenceEqual(new[] { d1, d2 }));
+            Assert.True(g.ToArray().SequenceEqual(new[] { d1, d2 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_GetEnumerator()
         {
             var d1 = Disposable.Create(() => { });
@@ -198,10 +198,10 @@ namespace ReactiveTests.Tests
             var lst = new List<IDisposable>();
             foreach (var x in g)
                 lst.Add(x);
-            Assert.IsTrue(lst.SequenceEqual(new[] { d1, d2 }));
+            Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_GetEnumeratorNonGeneric()
         {
             var d1 = Disposable.Create(() => { });
@@ -210,54 +210,54 @@ namespace ReactiveTests.Tests
             var lst = new List<IDisposable>();
             foreach (IDisposable x in (IEnumerable)g)
                 lst.Add(x);
-            Assert.IsTrue(lst.SequenceEqual(new[] { d1, d2 }));
+            Assert.True(lst.SequenceEqual(new[] { d1, d2 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_CollectionInitializer()
         {
             var d1 = Disposable.Create(() => { });
             var d2 = Disposable.Create(() => { });
             var g = new CompositeDisposable { d1, d2 };
-            Assert.AreEqual(2, g.Count);
-            Assert.IsTrue(g.Contains(d1));
-            Assert.IsTrue(g.Contains(d2));
+            Assert.Equal(2, g.Count);
+            Assert.True(g.Contains(d1));
+            Assert.True(g.Contains(d2));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void CompositeDisposable_AddNull_via_params_ctor()
         {
             IDisposable d1 = null;
-            new CompositeDisposable(d1);
+            ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(d1));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void CompositeDisposable_AddNull_via_IEnum_ctor()
         {
             IEnumerable<IDisposable> values = new IDisposable[] { null };
-            new CompositeDisposable(values);
+            ReactiveAssert.Throws<ArgumentException>(() => new CompositeDisposable(values));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_AddNull()
         {
-            new CompositeDisposable().Add(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Add(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_Add()
         {
             var d1 = Disposable.Create(() => { });
             var d2 = Disposable.Create(() => { });
             var g = new CompositeDisposable(d1);
-            Assert.AreEqual(1, g.Count);
-            Assert.IsTrue(g.Contains(d1));
+            Assert.Equal(1, g.Count);
+            Assert.True(g.Contains(d1));
             g.Add(d2);
-            Assert.AreEqual(2, g.Count);
-            Assert.IsTrue(g.Contains(d2));
+            Assert.Equal(2, g.Count);
+            Assert.True(g.Contains(d2));
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_AddAfterDispose()
         {
             var disp1 = false;
@@ -266,20 +266,20 @@ namespace ReactiveTests.Tests
             var d1 = Disposable.Create(() => { disp1 = true; });
             var d2 = Disposable.Create(() => { disp2 = true; });
             var g = new CompositeDisposable(d1);
-            Assert.AreEqual(1, g.Count);
+            Assert.Equal(1, g.Count);
 
             g.Dispose();
-            Assert.IsTrue(disp1);
-            Assert.AreEqual(0, g.Count); // CHECK
+            Assert.True(disp1);
+            Assert.Equal(0, g.Count); // CHECK
 
             g.Add(d2);
-            Assert.IsTrue(disp2);
-            Assert.AreEqual(0, g.Count); // CHECK
+            Assert.True(disp2);
+            Assert.Equal(0, g.Count); // CHECK
 
-            Assert.IsTrue(g.IsDisposed);
+            Assert.True(g.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_Remove()
         {
             var disp1 = false;
@@ -289,28 +289,28 @@ namespace ReactiveTests.Tests
             var d2 = Disposable.Create(() => { disp2 = true; });
             var g = new CompositeDisposable(d1, d2);
 
-            Assert.AreEqual(2, g.Count);
-            Assert.IsTrue(g.Contains(d1));
-            Assert.IsTrue(g.Contains(d2));
+            Assert.Equal(2, g.Count);
+            Assert.True(g.Contains(d1));
+            Assert.True(g.Contains(d2));
 
-            Assert.IsTrue(g.Remove(d1));
-            Assert.AreEqual(1, g.Count);
-            Assert.IsFalse(g.Contains(d1));
-            Assert.IsTrue(g.Contains(d2));
-            Assert.IsTrue(disp1);
+            Assert.True(g.Remove(d1));
+            Assert.Equal(1, g.Count);
+            Assert.False(g.Contains(d1));
+            Assert.True(g.Contains(d2));
+            Assert.True(disp1);
 
-            Assert.IsTrue(g.Remove(d2));
-            Assert.IsFalse(g.Contains(d1));
-            Assert.IsFalse(g.Contains(d2));
-            Assert.IsTrue(disp2);
+            Assert.True(g.Remove(d2));
+            Assert.False(g.Contains(d1));
+            Assert.False(g.Contains(d2));
+            Assert.True(disp2);
 
             var disp3 = false;
             var d3 = Disposable.Create(() => { disp3 = true; });
-            Assert.IsFalse(g.Remove(d3));
-            Assert.IsFalse(disp3);
+            Assert.False(g.Remove(d3));
+            Assert.False(disp3);
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_Clear()
         {
             var disp1 = false;
@@ -319,21 +319,21 @@ namespace ReactiveTests.Tests
             var d1 = Disposable.Create(() => { disp1 = true; });
             var d2 = Disposable.Create(() => { disp2 = true; });
             var g = new CompositeDisposable(d1, d2);
-            Assert.AreEqual(2, g.Count);
+            Assert.Equal(2, g.Count);
 
             g.Clear();
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.AreEqual(0, g.Count);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.Equal(0, g.Count);
 
             var disp3 = false;
             var d3 = Disposable.Create(() => { disp3 = true; });
             g.Add(d3);
-            Assert.IsFalse(disp3);
-            Assert.AreEqual(1, g.Count);
+            Assert.False(disp3);
+            Assert.Equal(1, g.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void CompositeDisposable_RemoveOptimizationBehavior()
         {
             var g = new CompositeDisposable();
@@ -354,87 +354,87 @@ namespace ReactiveTests.Tests
             var d1 = Enumerable.Range(0, N).Where(i => i % 2 == 0).ToArray();
             foreach (var i in d1)
                 g.Remove(m[i]);
-            Assert.IsTrue(r.SequenceEqual(d1));
+            Assert.True(r.SequenceEqual(d1));
 
             var d2 = Enumerable.Range(0, N).Where(i => i % 3 == 0).ToArray();
             foreach (var i in d2)
                 g.Remove(m[i]);
-            Assert.IsTrue(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y)))));
+            Assert.True(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y)))));
 
             var d3 = Enumerable.Range(0, N).Where(i => i % 5 == 0).ToArray();
             foreach (var i in d3)
                 g.Remove(m[i]);
-            Assert.IsTrue(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y))).Concat(d3.Where(x => !d1.Any(y => x == y) && !d2.Any(y => x == y)))));
+            Assert.True(r.SequenceEqual(d1.Concat(d2.Where(x => !d1.Any(y => x == y))).Concat(d3.Where(x => !d1.Any(y => x == y) && !d2.Any(y => x == y)))));
 
             g.Dispose();
 
             var z = r.Except(d1.Union(d2).Union(d3)).ToArray();
-            Assert.IsTrue(z.SequenceEqual(Enumerable.Range(0, N).Where(i => !(i % 2 == 0 || i % 3 == 0 || i % 5 == 0))));
+            Assert.True(z.SequenceEqual(Enumerable.Range(0, N).Where(i => !(i % 2 == 0 || i % 3 == 0 || i % 5 == 0))));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void CompositeDisposable_RemoveNull()
         {
-            new CompositeDisposable().Remove(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
 #if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void CancellationDisposable_Ctor_Null()
         {
             new CancellationDisposable(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void CancellationDisposable_DefaultCtor()
         {
             var c = new CancellationDisposable();
-            Assert.IsNotNull(c.Token);
-            Assert.IsFalse(c.Token.IsCancellationRequested);
-            Assert.IsTrue(c.Token.CanBeCanceled);
+            Assert.NotNull(c.Token);
+            Assert.False(c.Token.IsCancellationRequested);
+            Assert.True(c.Token.CanBeCanceled);
             c.Dispose();
-            Assert.IsTrue(c.IsDisposed);
-            Assert.IsTrue(c.Token.IsCancellationRequested);
+            Assert.True(c.IsDisposed);
+            Assert.True(c.Token.IsCancellationRequested);
         }
 
-        [TestMethod]
+        [Fact]
         public void CancellationDisposable_TokenCtor()
         {
             var t = new CancellationTokenSource();
             var c = new CancellationDisposable(t);
-            Assert.IsTrue(t.Token == c.Token);
-            Assert.IsFalse(c.Token.IsCancellationRequested);
-            Assert.IsTrue(c.Token.CanBeCanceled);
+            Assert.True(t.Token == c.Token);
+            Assert.False(c.Token.IsCancellationRequested);
+            Assert.True(c.Token.CanBeCanceled);
             c.Dispose();
-            Assert.IsTrue(c.IsDisposed);
-            Assert.IsTrue(c.Token.IsCancellationRequested);
+            Assert.True(c.IsDisposed);
+            Assert.True(c.Token.IsCancellationRequested);
         }
 #endif
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void ContextDisposable_CreateNullContext()
         {
-            new ContextDisposable(null, Disposable.Empty);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(null, Disposable.Empty));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void ContextDisposable_CreateNullDisposable()
         {
-            new ContextDisposable(new SynchronizationContext(), null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new ContextDisposable(new SynchronizationContext(), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ContextDisposable()
         {
             var disp = false;
             var m = new MySync();
             var c = new ContextDisposable(m, Disposable.Create(() => { disp = true; }));
-            Assert.AreSame(m, c.Context);
-            Assert.IsFalse(m._disposed);
-            Assert.IsFalse(disp);
+            Assert.Same(m, c.Context);
+            Assert.False(m._disposed);
+            Assert.False(disp);
             c.Dispose();
-            Assert.IsTrue(c.IsDisposed);
-            Assert.IsTrue(m._disposed);
-            Assert.IsTrue(disp);
+            Assert.True(c.IsDisposed);
+            Assert.True(m._disposed);
+            Assert.True(disp);
         }
 
         class MySync : SynchronizationContext
@@ -448,14 +448,14 @@ namespace ReactiveTests.Tests
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SerialDisposable_Ctor_Prop()
         {
             var m = new SerialDisposable();
-            Assert.IsNull(m.Disposable);
+            Assert.Null(m.Disposable);
         }
 
-        [TestMethod]
+        [Fact]
         public void SerialDisposable_ReplaceBeforeDispose()
         {
             var disp1 = false;
@@ -464,17 +464,17 @@ namespace ReactiveTests.Tests
             var m = new SerialDisposable();
             var d1 = Disposable.Create(() => { disp1 = true; });
             m.Disposable = d1;
-            Assert.AreSame(d1, m.Disposable);
-            Assert.IsFalse(disp1);
+            Assert.Same(d1, m.Disposable);
+            Assert.False(disp1);
 
             var d2 = Disposable.Create(() => { disp2 = true; });
             m.Disposable = d2;
-            Assert.AreSame(d2, m.Disposable);
-            Assert.IsTrue(disp1);
-            Assert.IsFalse(disp2);
+            Assert.Same(d2, m.Disposable);
+            Assert.True(disp1);
+            Assert.False(disp2);
         }
 
-        [TestMethod]
+        [Fact]
         public void SerialDisposable_ReplaceAfterDispose()
         {
             var disp1 = false;
@@ -482,20 +482,20 @@ namespace ReactiveTests.Tests
 
             var m = new SerialDisposable();
             m.Dispose();
-            Assert.IsTrue(m.IsDisposed);
+            Assert.True(m.IsDisposed);
 
             var d1 = Disposable.Create(() => { disp1 = true; });
             m.Disposable = d1;
-            Assert.IsNull(m.Disposable); // CHECK
-            Assert.IsTrue(disp1);
+            Assert.Null(m.Disposable); // CHECK
+            Assert.True(disp1);
 
             var d2 = Disposable.Create(() => { disp2 = true; });
             m.Disposable = d2;
-            Assert.IsNull(m.Disposable); // CHECK
-            Assert.IsTrue(disp2);
+            Assert.Null(m.Disposable); // CHECK
+            Assert.True(disp2);
         }
 
-        [TestMethod]
+        [Fact]
         public void SerialDisposable_Dispose()
         {
             var disp = false;
@@ -503,108 +503,108 @@ namespace ReactiveTests.Tests
             var m = new SerialDisposable();
             var d = Disposable.Create(() => { disp = true; });
             m.Disposable = d;
-            Assert.AreSame(d, m.Disposable);
-            Assert.IsFalse(disp);
+            Assert.Same(d, m.Disposable);
+            Assert.False(disp);
 
             m.Dispose();
-            Assert.IsTrue(m.IsDisposed);
-            Assert.IsTrue(disp);
-            //Assert.IsNull(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.True(m.IsDisposed);
+            Assert.True(disp);
+            //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void RefCountDisposable_Ctor_Null()
         {
-            new RefCountDisposable(null);
+            ReactiveAssert.Throws<ArgumentNullException>(() => new RefCountDisposable(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCountDisposable_SingleReference()
         {
             var d = new BooleanDisposable();
             var r = new RefCountDisposable(d);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
             r.Dispose();
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
             r.Dispose();
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCountDisposable_RefCounting()
         {
             var d = new BooleanDisposable();
             var r = new RefCountDisposable(d);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             var d1 = r.GetDisposable();
             var d2 = r.GetDisposable();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             d1.Dispose();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             d2.Dispose();
-            Assert.IsFalse(d.IsDisposed); // CHECK
+            Assert.False(d.IsDisposed); // CHECK
 
             r.Dispose();
-            Assert.IsTrue(d.IsDisposed);
-            Assert.IsTrue(r.IsDisposed);
+            Assert.True(d.IsDisposed);
+            Assert.True(r.IsDisposed);
 
             var d3 = r.GetDisposable(); // CHECK
             d3.Dispose();
         }
 
-        [TestMethod]
+        [Fact]
         public void RefCountDisposable_PrimaryDisposesFirst()
         {
             var d = new BooleanDisposable();
             var r = new RefCountDisposable(d);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             var d1 = r.GetDisposable();
             var d2 = r.GetDisposable();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             d1.Dispose();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             r.Dispose();
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
             d2.Dispose();
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduledDisposable_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(null, Disposable.Empty));
             ReactiveAssert.Throws<ArgumentNullException>(() => new ScheduledDisposable(Scheduler.Immediate, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void ScheduledDisposable()
         {
             var d = new BooleanDisposable();
             var s = new ScheduledDisposable(Scheduler.Immediate, d);
 
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(d.IsDisposed);
 
-            Assert.AreSame(Scheduler.Immediate, s.Scheduler);
-            Assert.AreSame(d, s.Disposable);
+            Assert.Same(Scheduler.Immediate, s.Scheduler);
+            Assert.Same(d, s.Disposable);
 
             s.Dispose();
 
-            Assert.IsTrue(d.IsDisposed);
-            Assert.IsTrue(s.IsDisposed);
+            Assert.True(d.IsDisposed);
+            Assert.True(s.IsDisposed);
 
-            Assert.AreSame(Scheduler.Immediate, s.Scheduler);
-            //Assert.AreSame(d, s.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.Same(Scheduler.Immediate, s.Scheduler);
+            //Assert.Same(d, s.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
             s.Disposable.Dispose();            // This should be a nop.
         }
 
-        [TestMethod]
+        [Fact]
         public void MultipleAssignmentDisposable()
         {
             var m = new MultipleAssignmentDisposable();
@@ -612,32 +612,32 @@ namespace ReactiveTests.Tests
             var disp1 = false;
             var d1 = Disposable.Create(() => { disp1 = true; });
             m.Disposable = d1;
-            Assert.AreSame(d1, m.Disposable);
-            Assert.IsFalse(m.IsDisposed);
+            Assert.Same(d1, m.Disposable);
+            Assert.False(m.IsDisposed);
 
             var disp2 = false;
             var d2 = Disposable.Create(() => { disp2 = true; });
             m.Disposable = d2;
-            Assert.AreSame(d2, m.Disposable);
-            Assert.IsFalse(m.IsDisposed);
-            Assert.IsFalse(disp1);
+            Assert.Same(d2, m.Disposable);
+            Assert.False(m.IsDisposed);
+            Assert.False(disp1);
 
             m.Dispose();
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(m.IsDisposed);
-            //Assert.IsNull(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.True(disp2);
+            Assert.True(m.IsDisposed);
+            //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
             m.Disposable.Dispose();        // This should be a nop.
 
             var disp3 = false;
             var d3 = Disposable.Create(() => { disp3 = true; });
             m.Disposable = d3;
-            Assert.IsTrue(disp3);
-            //Assert.IsNull(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.True(disp3);
+            //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
             m.Disposable.Dispose();        // This should be a nop.
-            Assert.IsTrue(m.IsDisposed);
+            Assert.True(m.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void StableCompositeDisposable_ArgumentChecking()
         {
             var d = Disposable.Empty;
@@ -653,100 +653,100 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentException>(() => StableCompositeDisposable.Create(d, d, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void StableCompositeDisposable_Binary()
         {
             var disp1 = false;
-            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+            var d1 = Disposable.Create(() => { Assert.False(disp1); disp1 = true; });
 
             var disp2 = false;
-            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+            var d2 = Disposable.Create(() => { Assert.False(disp2); disp2 = true; });
 
             var d = StableCompositeDisposable.Create(d1, d2);
 
-            Assert.IsFalse(disp1);
-            Assert.IsFalse(disp2);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(disp1);
+            Assert.False(disp2);
+            Assert.False(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void StableCompositeDisposable_Nary1()
         {
             var disp1 = false;
-            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+            var d1 = Disposable.Create(() => { Assert.False(disp1); disp1 = true; });
 
             var disp2 = false;
-            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+            var d2 = Disposable.Create(() => { Assert.False(disp2); disp2 = true; });
 
             var disp3 = false;
-            var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
+            var d3 = Disposable.Create(() => { Assert.False(disp3); disp3 = true; });
 
             var d = StableCompositeDisposable.Create(d1, d2, d3);
 
-            Assert.IsFalse(disp1);
-            Assert.IsFalse(disp2);
-            Assert.IsFalse(disp3);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(disp1);
+            Assert.False(disp2);
+            Assert.False(disp3);
+            Assert.False(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(disp3);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(disp3);
+            Assert.True(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(disp3);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(disp3);
+            Assert.True(d.IsDisposed);
         }
 
-        [TestMethod]
+        [Fact]
         public void StableCompositeDisposable_Nary2()
         {
             var disp1 = false;
-            var d1 = Disposable.Create(() => { Assert.IsFalse(disp1); disp1 = true; });
+            var d1 = Disposable.Create(() => { Assert.False(disp1); disp1 = true; });
 
             var disp2 = false;
-            var d2 = Disposable.Create(() => { Assert.IsFalse(disp2); disp2 = true; });
+            var d2 = Disposable.Create(() => { Assert.False(disp2); disp2 = true; });
 
             var disp3 = false;
-            var d3 = Disposable.Create(() => { Assert.IsFalse(disp3); disp3 = true; });
+            var d3 = Disposable.Create(() => { Assert.False(disp3); disp3 = true; });
 
             var d = StableCompositeDisposable.Create(new List<IDisposable>(new[] { d1, d2, d3 }));
 
-            Assert.IsFalse(disp1);
-            Assert.IsFalse(disp2);
-            Assert.IsFalse(disp3);
-            Assert.IsFalse(d.IsDisposed);
+            Assert.False(disp1);
+            Assert.False(disp2);
+            Assert.False(disp3);
+            Assert.False(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(disp3);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(disp3);
+            Assert.True(d.IsDisposed);
 
             d.Dispose();
 
-            Assert.IsTrue(disp1);
-            Assert.IsTrue(disp2);
-            Assert.IsTrue(disp3);
-            Assert.IsTrue(d.IsDisposed);
+            Assert.True(disp1);
+            Assert.True(disp2);
+            Assert.True(disp3);
+            Assert.True(d.IsDisposed);
         }
     }
 }

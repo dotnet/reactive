@@ -2,31 +2,32 @@
 
 #if !SILVERLIGHT // MethodAccessException
 using System;
+using System.Threading.Tasks;
 using System.Reactive.Concurrency;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ReactiveTests.Tests
 {
-    [TestClass]
+    
     public class AsyncLockTest
     {
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Wait_ArgumentChecking()
         {
             var asyncLock = new AsyncLock();
-            asyncLock.Wait(null);
+            Assert.Throws<ArgumentNullException>(() => asyncLock.Wait(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Wait_Graceful()
         {
             var ok = false;
             new AsyncLock().Wait(() => { ok = true; });
-            Assert.IsTrue(ok);
+            Assert.True(ok);
         }
 
-        [TestMethod]
+        [Fact]
         public void Wait_Fail()
         {
             var l = new AsyncLock();
@@ -35,29 +36,29 @@ namespace ReactiveTests.Tests
             try
             {
                 l.Wait(() => { throw ex; });
-                Assert.Fail();
+                Assert.True(false);
             }
             catch (Exception e)
             {
-                Assert.AreSame(ex, e);
+                Assert.Same(ex, e);
             }
 
             // has faulted; should not run
-            l.Wait(() => { Assert.Fail(); });
+            l.Wait(() => { Assert.True(false); });
         }
 
-        [TestMethod]
+        [Fact]
         public void Wait_QueuesWork()
         {
             var l = new AsyncLock();
 
             var l1 = false;
             var l2 = false;
-            l.Wait(() => { l.Wait(() => { Assert.IsTrue(l1); l2 = true; }); l1 = true; });
-            Assert.IsTrue(l2);
+            l.Wait(() => { l.Wait(() => { Assert.True(l1); l2 = true; }); l1 = true; });
+            Assert.True(l2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Dispose()
         {
             var l = new AsyncLock();
@@ -89,10 +90,10 @@ namespace ReactiveTests.Tests
                 l1 = true;
             });
 
-            Assert.IsTrue(l1);
-            Assert.IsTrue(l2);
-            Assert.IsFalse(l3);
-            Assert.IsFalse(l4);
+            Assert.True(l1);
+            Assert.True(l2);
+            Assert.False(l3);
+            Assert.False(l4);
         }
 
         public class AsyncLock
@@ -101,7 +102,7 @@ namespace ReactiveTests.Tests
 
             public AsyncLock()
             {
-                instance = typeof(Scheduler).Assembly.GetType("System.Reactive.Concurrency.AsyncLock").GetConstructor(new Type[] { }).Invoke(new object[] { });
+                instance = typeof(Scheduler).GetTypeInfo().Assembly.GetType("System.Reactive.Concurrency.AsyncLock").GetConstructor(new Type[] { }).Invoke(new object[] { });
             }
 
             public void Wait(Action action)

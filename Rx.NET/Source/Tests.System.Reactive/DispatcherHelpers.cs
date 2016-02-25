@@ -1,11 +1,15 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
 using System;
+#if DOTNET5_1
 using System.Threading;
+#else
 using System.Windows.Threading;
+#endif
 
 namespace ReactiveTests
 {
+#if HAS_DISPATCHER
     static class DispatcherHelpers
     {
         public static DispatcherWrapper EnsureDispatcher()
@@ -24,7 +28,7 @@ namespace ReactiveTests
 
             return new DispatcherWrapper(d);
 #else
-            return new DispatcherWrapper(System.Windows.Deployment.Current.Dispatcher);
+            return new DispatcherWrapper(Dispatcher.CurrentDispatcher);
 #endif
         }
     }
@@ -65,4 +69,5 @@ namespace ReactiveTests
             _dispatcher.BeginInvoke(action);
         }
     }
+#endif
 }
