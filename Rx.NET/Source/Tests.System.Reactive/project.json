@@ -30,6 +30,7 @@
       "compilationOptions": {
         "define": [
             "NO_EVENTARGS_CONSTRAINT",
+            "NO_REMOTING",
             "HAS_EDI",
             "HAS_WINRT",
             "HAS_PROGRESS",
