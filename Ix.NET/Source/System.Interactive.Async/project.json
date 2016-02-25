@@ -1,0 +1,91 @@
+﻿{
+    "version": "2.0.0-*",
+    "title": "Interactive Extensions - Async Library",
+    "description": "Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.",
+    "authors": [ "Microsoft" ],
+    "copyright": "Copyright (C) Microsoft Corporation",
+    "tags": [ "Ix", "Interactive", "Extensions", "Enumerable", "Asynchronous" ],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
+    "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
+    "requireLicenseAcceptance": true,
+    "frameworks": {
+        "net40": {
+            "compilationOptions": {
+                "define": [
+                    "NO_TASK_DELAY",
+                    "HAS_APTCA",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT",
+                    "NO_WEAKREFOFT"
+                ]
+            }
+        },
+        "net45": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "HAS_DISPATCHER_PRIORITY",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            }
+        },
+        "dotnet5.1": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "NO_WEAKTABLE",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Linq": "4.0.0",
+                "System.Threading": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
+            }
+            
+        },
+        "dotnet5.4": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Threading": "4.0.11-beta-23516"
+            }
+        }
+    }
+}

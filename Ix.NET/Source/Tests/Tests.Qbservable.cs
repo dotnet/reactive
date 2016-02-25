@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
 using System.ComponentModel;
@@ -15,17 +15,17 @@ namespace Tests
 {
     public partial class Tests
     {
-        [TestMethod]
+        [Fact]
         public void Queryable_Enumerable_Parity()
         {
-            var enu = typeof(EnumerableEx).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
-            var qry = typeof(QueryableEx).GetMethods(BindingFlags.Public | BindingFlags.Static).ToList();
+            var enu = typeof(EnumerableEx).GetRuntimeMethods().Where(m => m.IsStatic && m.IsPublic).ToList();
+            var qry = typeof(QueryableEx).GetRuntimeMethods().Where(m => m.IsStatic && m.IsPublic).ToList();
 
             var onlyInObs = enu.Select(m => m.Name).Except(qry.Select(m => m.Name)).Except(new[] { "ForEach", "ToEnumerable", "Multicast", "GetAwaiter", "ToEvent", "ToEventPattern", "ForEachAsync" }).ToList();
             var onlyInQbs = qry.Select(m => m.Name).Except(enu.Select(m => m.Name)).Except(new[] { "ToQueryable", "get_Provider", "Empty", "Range" }).ToList();
 
-            Assert.IsTrue(onlyInObs.Count == 0, "Missing Queryable operator: " + string.Join(", ", onlyInObs.ToArray()));
-            Assert.IsTrue(onlyInQbs.Count == 0, "Missing Enumerable operator: " + string.Join(", ", onlyInQbs.ToArray()));
+            Assert.True(onlyInObs.Count == 0, "Missing Queryable operator: " + string.Join(", ", onlyInObs.ToArray()));
+            Assert.True(onlyInQbs.Count == 0, "Missing Enumerable operator: " + string.Join(", ", onlyInQbs.ToArray()));
 
             var enus = enu.GroupBy(m => m.Name);
             var qrys = qry.GroupBy(m => m.Name);
@@ -36,7 +36,7 @@ namespace Tests
 
             Func<Type, bool> filterReturn = t =>
             {
-                if (t.IsGenericType)
+                if (t.GetTypeInfo().IsGenericType)
                 {
                     var gd = t.GetGenericTypeDefinition();
                     if (gd == typeof(IBuffer<>))
@@ -63,7 +63,7 @@ namespace Tests
                     .OrderBy(x => x).ToList();
 
                 if (!group.Name.Equals("Create"))
-                    Assert.IsTrue(oss.SequenceEqual(qss), "Mismatch between QueryableEx and EnumerableEx for " + group.Name);
+                    Assert.True(oss.SequenceEqual(qss), "Mismatch between QueryableEx and EnumerableEx for " + group.Name);
             }
         }
 
@@ -76,8 +76,8 @@ namespace Tests
 
             var gens = m.IsGenericMethod ? string.Format("<{0}>", string.Join(", ", m.GetGenericArguments().Select(a => GetTypeName(a, correct)).ToArray())) : "";
 
-            var pars = string.Join(", ", pss.Select(p => (Attribute.IsDefined(p, typeof(ParamArrayAttribute)) ? "params " : "") + GetTypeName(p.ParameterType, correct) + " " + p.Name).ToArray());
-            if (Attribute.IsDefined(m, typeof(ExtensionAttribute)))
+            var pars = string.Join(", ", pss.Select(p => (p.IsDefined(typeof(ParamArrayAttribute)) ? "params " : "") + GetTypeName(p.ParameterType, correct) + " " + p.Name).ToArray());
+            if (m.IsDefined(typeof(ExtensionAttribute)))
             {
                 if (pars.StartsWith("IQbservable") || pars.StartsWith("IQueryable"))
                     pars = "this " + pars;
@@ -88,13 +88,13 @@ namespace Tests
 
         public static string GetTypeName(Type t, bool correct)
         {
-            if (t.IsGenericType)
+            if (t.GetTypeInfo().IsGenericType)
             {
                 var gtd = t.GetGenericTypeDefinition();
                 if (gtd == typeof(Expression<>))
-                    return GetTypeName(t.GetGenericArguments()[0], false);
+                    return GetTypeName(t.GenericTypeArguments[0], false);
 
-                var args = string.Join(", ", t.GetGenericArguments().Select(a => GetTypeName(a, false)).ToArray());
+                var args = string.Join(", ", t.GenericTypeArguments.Select(a => GetTypeName(a, false)).ToArray());
 
                 var len = t.Name.IndexOf('`');
                 var name = len >= 0 ? t.Name.Substring(0, len) : t.Name;
@@ -114,32 +114,32 @@ namespace Tests
             return t.Name;
         }
 
-        [TestMethod]
+        [Fact]
         public void QueryableRetarget1()
         {
             var res = QueryableEx.Provider.Empty<int>().AsEnumerable().ToList();
-            Assert.IsTrue(res.SequenceEqual(new int[0]));
+            Assert.True(res.SequenceEqual(new int[0]));
         }
 
-        [TestMethod]
+        [Fact]
         public void QueryableRetarget2()
         {
             var res = QueryableEx.Provider.Return(42).AsEnumerable().ToList();
-            Assert.IsTrue(res.SequenceEqual(new[] { 42 }));
+            Assert.True(res.SequenceEqual(new[] { 42 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void QueryableRetarget3()
         {
             var res = Enumerable.Range(0, 10).AsQueryable().TakeLast(2).AsEnumerable().ToList();
-            Assert.IsTrue(res.SequenceEqual(new[] { 8, 9 }));
+            Assert.True(res.SequenceEqual(new[] { 8, 9 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void QueryableRetarget4()
         {
             var res = QueryableEx.Provider.Range(0, 10).AsEnumerable().ToList();
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
     }
 }

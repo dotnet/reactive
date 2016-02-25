@@ -3,20 +3,20 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Tests
 {
     public partial class Tests
     {
-        [TestMethod]
+        [Fact]
         public void Concat_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Concat(default(IEnumerable<int>[])));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Concat(default(IEnumerable<IEnumerable<int>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Concat1()
         {
             var res = new[]
@@ -25,10 +25,10 @@ namespace Tests
                 new[] { 4, 5 }
             }.Concat();
 
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5 }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Concat2()
         {
             var i = 0;
@@ -36,7 +36,7 @@ namespace Tests
 
             var res = xss.Concat().Select(x => i + " - " + x).ToList();
 
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 
                 "1 - 0",
                 "2 - 0",
                 "2 - 1",
@@ -46,7 +46,7 @@ namespace Tests
             }));
         }
 
-        [TestMethod]
+        [Fact]
         public void Concat3()
         {
             var res = EnumerableEx.Concat(
@@ -54,21 +54,21 @@ namespace Tests
                 new[] { 4, 5 }
             );
 
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5 }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5 }));
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectMany_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(null, new[] { 1 }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(new[] { 1 }, null));
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectMany()
         {
             var res = new[] { 1, 2 }.SelectMany(new[] { 'a', 'b', 'c' }).ToList();
-            Assert.IsTrue(Enumerable.SequenceEqual(res, new[] { 'a', 'b', 'c', 'a', 'b', 'c' }));
+            Assert.True(Enumerable.SequenceEqual(res, new[] { 'a', 'b', 'c', 'a', 'b', 'c' }));
         }
     }
 }

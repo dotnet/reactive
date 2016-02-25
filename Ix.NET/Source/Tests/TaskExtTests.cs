@@ -1,6 +1,6 @@
 ﻿namespace Tests
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Xunit;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -8,7 +8,7 @@
 
     public partial class AsyncTests
     {
-        [TestMethod]
+        [Fact]
         public async Task ExceptionHandling_ShouldThrowUnwrappedException()
         {
             try
@@ -18,7 +18,7 @@
             }
             catch (AggregateException)
             {
-                Assert.Fail("AggregateException has been thrown instead of InvalidOperationException");
+                Assert.True(false, "AggregateException has been thrown instead of InvalidOperationException");
             }
             catch (InvalidOperationException)
             {
@@ -31,7 +31,7 @@
             throw new InvalidOperationException();
         }
 
-        [TestMethod]
+        [Fact]
         public async Task ExceptionHandling_ShouldThrowUnwrappedException2()
         {
             try
@@ -41,7 +41,7 @@
             }
             catch (AggregateException)
             {
-                Assert.Fail("AggregateException has been thrown instead of InvalidOperationException");
+                Assert.True(false, "AggregateException has been thrown instead of InvalidOperationException");
             }
             catch (InvalidOperationException)
             {

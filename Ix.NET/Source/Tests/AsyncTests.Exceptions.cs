@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Threading;
 
 namespace Tests
 {
     public partial class AsyncTests
     {
-        [TestMethod]
+        [Fact]
         public void Catch_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => null));
@@ -24,7 +24,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch1()
         {
             var err = false;
@@ -39,10 +39,10 @@ namespace Tests
             HasNext(e, 3);
             NoNext(e);
 
-            Assert.IsFalse(err);
+            Assert.False(err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch2()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -58,18 +58,18 @@ namespace Tests
             HasNext(e, 2);
             HasNext(e, 3);
 
-            Assert.IsFalse(err);
+            Assert.False(err);
 
             HasNext(e, 4);
 
-            Assert.IsTrue(err);
+            Assert.True(err);
 
             HasNext(e, 5);
             HasNext(e, 6);
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch3()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -85,18 +85,18 @@ namespace Tests
             HasNext(e, 2);
             HasNext(e, 3);
 
-            Assert.IsFalse(err);
+            Assert.False(err);
 
             HasNext(e, 4);
 
-            Assert.IsTrue(err);
+            Assert.True(err);
 
             HasNext(e, 5);
             HasNext(e, 6);
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch4()
         {
             var ex = new DivideByZeroException();
@@ -114,10 +114,10 @@ namespace Tests
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
-            Assert.IsFalse(err);
+            Assert.False(err);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch5()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -136,7 +136,7 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch6()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -151,11 +151,11 @@ namespace Tests
             HasNext(e, 2);
             HasNext(e, 3);
 
-            Assert.IsFalse(err);
+            Assert.False(err);
 
             HasNext(e, 1);
 
-            Assert.IsTrue(err);
+            Assert.True(err);
 
             HasNext(e, 2);
             HasNext(e, 3);
@@ -163,7 +163,7 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch7()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -178,7 +178,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch8()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -198,7 +198,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch9()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -221,7 +221,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch10()
         {
             var res = CatchXss().Catch();
@@ -240,7 +240,7 @@ namespace Tests
             throw new Exception("Bang!");
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch11()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -260,7 +260,7 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch12()
         {
             var res = AsyncEnumerable.Catch(Enumerable.Empty<IAsyncEnumerable<int>>());
@@ -269,14 +269,14 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Finally(default(IAsyncEnumerable<int>), () => { }));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Finally(AsyncEnumerable.Return(42), null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally1()
         {
             var b = false;
@@ -285,13 +285,13 @@ namespace Tests
 
             var e = xs.GetEnumerator();
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             NoNext(e);
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally2()
         {
             var b = false;
@@ -300,16 +300,16 @@ namespace Tests
 
             var e = xs.GetEnumerator();
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             HasNext(e, 42);
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             NoNext(e);
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally3()
         {
             var ex = new Exception("Bang!");
@@ -320,13 +320,13 @@ namespace Tests
 
             var e = xs.GetEnumerator();
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally4()
         {
             var b = false;
@@ -335,19 +335,19 @@ namespace Tests
 
             var e = xs.GetEnumerator();
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             HasNext(e, 1);
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             HasNext(e, 2);
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             NoNext(e);
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        [TestMethod]
+        [Fact]
         public void Finally5()
         {
             var b = false;
@@ -356,15 +356,15 @@ namespace Tests
 
             var e = xs.GetEnumerator();
 
-            Assert.IsFalse(b);
+            Assert.False(b);
             HasNext(e, 1);
 
             e.Dispose();
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        //[TestMethod]
+        //[Fact]
         public void Finally6()
         {
             var b = false;
@@ -379,10 +379,10 @@ namespace Tests
             cts.Cancel();
             t.Wait();
 
-            Assert.IsTrue(b);
+            Assert.True(b);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
@@ -391,7 +391,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext7()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -409,7 +409,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext8()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -429,7 +429,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext9()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -455,7 +455,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext10()
         {
             var res = OnErrorResumeNextXss().OnErrorResumeNext();
@@ -474,7 +474,7 @@ namespace Tests
             throw new Exception("Bang!");
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext11()
         {
             var ex = new InvalidOperationException("Bang!");
@@ -493,7 +493,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void OnErrorResumeNext12()
         {
             var res = AsyncEnumerable.OnErrorResumeNext(Enumerable.Empty<IAsyncEnumerable<int>>());
@@ -502,7 +502,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Retry_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default(IAsyncEnumerable<int>)));
@@ -511,7 +511,7 @@ namespace Tests
             AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Retry<int>(AsyncEnumerable.Return(42), -1));
         }
 
-        [TestMethod]
+        [Fact]
         public void Retry1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
@@ -525,7 +525,7 @@ namespace Tests
             NoNext(e);
         }
 
-        [TestMethod]
+        [Fact]
         public void Retry2()
         {
             var ex = new InvalidOperationException("Bang!");
