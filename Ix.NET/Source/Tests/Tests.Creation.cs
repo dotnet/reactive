@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using System.Collections;
+using System.Threading;
 
 namespace Tests
 {
@@ -41,9 +42,11 @@ namespace Tests
         }
 
 #if HAS_AWAIT
-        [Fact(Skip = "inner async/await usage causes deadlock in xUnit test runner")]
+        [Fact]
         public void CreateYield()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var xs = EnumerableEx.Create<int>(async yield => {
                 var i = 0;
                 while (i < 10)
@@ -62,9 +65,11 @@ namespace Tests
             Assert.Equal(j, 10);
         }
 
-        [Fact(Skip = "inner async/await usage causes deadlock in xUnit test runner")]
+        [Fact]
         public void CreateYieldBreak()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var xs = EnumerableEx.Create<int>(async yield => {
                 var i = 0;
                 while (true)
