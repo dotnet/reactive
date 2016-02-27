@@ -41,7 +41,7 @@ namespace Tests
         }
 
 #if HAS_AWAIT
-        [Fact]
+        [Fact(Skip = "inner async/await usage causes deadlock in xUnit test runner")]
         public void CreateYield()
         {
             var xs = EnumerableEx.Create<int>(async yield => {
@@ -62,7 +62,7 @@ namespace Tests
             Assert.Equal(j, 10);
         }
 
-        [Fact]
+        [Fact(Skip = "inner async/await usage causes deadlock in xUnit test runner")]
         public void CreateYieldBreak()
         {
             var xs = EnumerableEx.Create<int>(async yield => {
