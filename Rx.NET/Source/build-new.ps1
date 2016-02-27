@@ -8,6 +8,6 @@ dnvm use $build -r clr -arch x64 -p
 
 $runtimeDir = Join-Path $env:USERPROFILE "\.dnx\runtimes\dnx-clr-win-x64.$build"
 
-dnu restore . --quiet
+dnu restore . --quiet | out-null
 
 . $msbuildExe .\Rx-New.sln /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:minimal
