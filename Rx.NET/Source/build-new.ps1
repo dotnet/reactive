@@ -13,4 +13,4 @@ Write-Host "Restoring packages" -Foreground Green
 dnu restore . --quiet | out-null
 
 Write-Host "Building projects" -Foreground Green
-. $msbuildExe .\Rx-New.sln /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:minimal
+. $msbuildExe .\Rx-New.sln /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:q
