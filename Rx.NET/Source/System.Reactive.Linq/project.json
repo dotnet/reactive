@@ -92,11 +92,9 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.0",
-                "System.Reflection.TypeExtensions": "4.0.0",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.0",
-                "System.Runtime": "4.0.0",
-                "System.Runtime.Extensions": "4.0.0"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc3-23823",
+                "System.Runtime": "4.1.0-rc3-23823",
+                "System.Runtime.Extensions": "4.1.0-rc3-23823"
             }
         },
         "dotnet5.4": {
@@ -118,9 +116,9 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.11-beta-23516",
-                "System.Reflection.TypeExtensions": "4.1.0-beta-23516",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-beta-23516"
+                "System.Collections.Concurrent": "4.0.12-rc3-23823",
+                "System.Reflection.TypeExtensions": "4.1.0-rc3-23823",
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc3-23823"
             }
         }
     }
