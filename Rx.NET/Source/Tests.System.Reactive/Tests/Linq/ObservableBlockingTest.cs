@@ -1178,7 +1178,7 @@ namespace ReactiveTests.Tests
                     obs.OnNext(1);
                     evt.WaitOne();
                     obs.OnError(ex);
-                }).Start();
+                });
 
                 return () => { };
             });
