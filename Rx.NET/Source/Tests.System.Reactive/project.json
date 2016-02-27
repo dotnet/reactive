@@ -39,7 +39,9 @@
             "HAS_APTCA",
             "HAS_STACKTRACE",
             "HAS_WINFORMS",
-            "USE_TIMER_SELF_ROOT"
+            "USE_TIMER_SELF_ROOT",
+            "DESKTOPCLR",
+            "DESKTOPCLR45"
         ]
       },
       "dependencies": {

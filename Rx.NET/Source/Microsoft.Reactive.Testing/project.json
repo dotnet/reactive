@@ -1,97 +1,119 @@
 ﻿{
-  "version": "3.0.0-*",
-  "title": "Microsoft.Reactive.Testing - Testing Helper Library",
-  "description": "Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.",
-  "authors": [ "Microsoft" ],
-  "copyright": "Copyright (C) Microsoft Corporation",
-  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-  "requireLicenseAcceptance": true,
+    "version": "3.0.0-*",
+    "title": "Microsoft.Reactive.Testing - Testing Helper Library",
+    "description":
+        "Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.",
+    "authors": ["Microsoft"],
+    "copyright": "Copyright (C) Microsoft Corporation",
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+    "requireLicenseAcceptance": true,
 
-  "dependencies": {
-    "System.Reactive.Linq": { "target": "project" },
-    "System.Reactive.PlatformServices": { "target": "project" },
-    "xunit": "2.1.0"
-  },
-
-  "frameworks": {
-    "net45": {
-      "compilationOptions": {
-        "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "HAS_DISPATCHER_PRIORITY",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT"
-        ]
-      },
-      "frameworkAssemblies": {
-        "System.Runtime": "4.0.0.0"
-      }
+    "dependencies": {
+        "System.Reactive.Linq": { "target": "project" },
+        "System.Reactive.PlatformServices": { "target": "project" },
+        "xunit": "2.1.0"
     },
-    "dotnet5.1": {
-      "compilationOptions": {
-        "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "NO_REMOTING",
-          "NO_SERIALIZABLE",
-          "NO_THREAD",
-          "NO_WEAKTABLE",
-          "CRIPPLED_REFLECTION",
-          "PLIB",
-          "USE_TIMER_SELF_ROOT"
-        ]
-      },
-      "dependencies": {
-        "System.Linq": "4.0.0",
-        "System.Collections.Concurrent": "4.0.0",
-        "System.ComponentModel": "4.0.0",
-        "System.Threading": "4.0.0",
-        "System.Threading.Timer": "4.0.0",
-        "System.Runtime": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0"
-      }
 
-    },
-    "dotnet5.4": {
-      "compilationOptions": {
-        "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "NO_REMOTING",
-          "NO_SERIALIZABLE",
-          "NO_THREAD",
-          "CRIPPLED_REFLECTION",
-          "PLIB",
-          "USE_TIMER_SELF_ROOT"
-        ]
-      },
-      "dependencies": {
-        "System.Diagnostics.Tools": "4.0.1-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Linq.Expressions": "4.0.11-beta-23516",
-        "System.Resources.ResourceManager": "4.0.1-beta-23516",
-        "System.Threading": "4.0.11-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516"
-      }
+    "frameworks": {
+        "net45": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "HAS_DISPATCHER_PRIORITY",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
+                ]
+            },
+            "frameworkAssemblies": {
+                "System.Runtime": "4.0.0.0"
+            }
+        },
+        "net46": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "HAS_DISPATCHER_PRIORITY",
+                    "HAS_TPL46",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR46"
+                ]
+            }
+        },
+        "dotnet5.1": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "NO_CDS_COLLECTIONS",
+                    "USE_TIMER_SELF_ROOT",
+                    "PLIB"
+                ]
+            },
+            "dependencies": {
+                "System.Linq": "4.0.0",
+                "System.Collections.Concurrent": "4.0.0",
+                "System.ComponentModel": "4.0.0",
+                "System.Threading": "4.0.0",
+                "System.Threading.Timer": "4.0.0",
+                "System.Runtime": "4.0.0",
+                "System.Runtime.Extensions": "4.0.0"
+            }
+
+        },
+        "dotnet5.4": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "System.Diagnostics.Tools": "4.0.1-beta-23516",
+                "System.Linq": "4.0.1-beta-23516",
+                "System.Linq.Expressions": "4.0.11-beta-23516",
+                "System.Resources.ResourceManager": "4.0.1-beta-23516",
+                "System.Threading": "4.0.11-beta-23516",
+                "System.Runtime": "4.0.21-beta-23516"
+            }
+        }
     }
-  }
 }
