@@ -31,6 +31,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
@@ -62,6 +64,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await_Connectable()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var s = default(long);
@@ -95,6 +99,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await_Error()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var ex = new Exception();
@@ -126,6 +132,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await_Never()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
@@ -156,6 +164,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Await_Empty()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
@@ -189,6 +199,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Simple()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
@@ -216,6 +228,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Cancelled()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var cts = new CancellationTokenSource();
             cts.Cancel();
 
@@ -252,6 +266,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Cancel()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var cts = new CancellationTokenSource();
 
             var scheduler = new TestScheduler();
@@ -289,6 +305,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Connectable()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var scheduler = new TestScheduler();
 
             var s = default(long);
@@ -322,6 +340,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Connectable_Cancelled()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var cts = new CancellationTokenSource();
             cts.Cancel();
 
@@ -365,6 +385,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void RunAsync_Connectable_Cancel()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var cts = new CancellationTokenSource();
 
             var scheduler = new TestScheduler();

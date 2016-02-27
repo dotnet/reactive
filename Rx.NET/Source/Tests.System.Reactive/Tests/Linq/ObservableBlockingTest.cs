@@ -1165,6 +1165,8 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Latest_Error()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var ex = new Exception();
 
             var evt = new AutoResetEvent(false);
