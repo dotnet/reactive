@@ -56,7 +56,7 @@
         "System.Threading.Tasks": "4.0.0.0"
       }
     },
-    "dnx51": {
+    "dnx461": {
       "compilationOptions": {
         "define": [
             "NO_EVENTARGS_CONSTRAINT",
