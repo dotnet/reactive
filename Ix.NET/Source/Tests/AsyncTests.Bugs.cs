@@ -117,7 +117,7 @@ namespace Tests
         }
 
         [Fact]
-        public void DisposesUponError()
+        public async Task DisposesUponError()
         {
             var disposed = new TaskCompletionSource<bool>();
 
@@ -130,7 +130,7 @@ namespace Tests
             var ys = xs.Select(x => { if (x == 1) throw ex; return x; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait());
+            await Assert.ThrowsAsync<Exception>(() => e.MoveNext());
 
             Assert.True(disposed.Task.Result);
         }

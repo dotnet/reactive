@@ -54,9 +54,9 @@ namespace System.Reactive
                 if (object.ReferenceEquals(resourceMan, null))
                 {
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_Core", typeof(Strings_Core).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Core.Strings_Core", typeof(Strings_Core).GetTypeInfo().Assembly);
 #else
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_Core", typeof(Strings_Core).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Core.Strings_Core", typeof(Strings_Core).Assembly);
 #endif
                     resourceMan = temp;
                 }

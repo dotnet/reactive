@@ -54,9 +54,9 @@ namespace System.Reactive
                 if (object.ReferenceEquals(resourceMan, null))
                 {
 #if CRIPPLED_REFLECTION
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_WindowsThreading", typeof(Strings_WindowsThreading).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Windows.Threading.Strings_WindowsThreading", typeof(Strings_WindowsThreading).GetTypeInfo().Assembly);
 #else
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Strings_WindowsThreading", typeof(Strings_WindowsThreading).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Reactive.Windows.Threading.Strings_WindowsThreading", typeof(Strings_WindowsThreading).Assembly);
 #endif
                     resourceMan = temp;
                 }

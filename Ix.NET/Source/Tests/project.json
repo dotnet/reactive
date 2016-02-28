@@ -12,13 +12,17 @@
     "dependencies": {
         "System.Interactive.Providers": { "target": "project" },
         "System.Interactive.Async.Providers": { "target": "project" },
-        "xunit": "2.1.0"
+        "xunit": "2.1.0",
+        "xunit.runner.dnx": "2.1.0-rc1-build204"
     },
     "exclude": [
         "App.cs"
     ],
+    "commands": {
+      "test": "xunit.runner.dnx"
+    },
     "frameworks": {
-        "net45": {
+        "dnx451": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -38,63 +42,35 @@
                 "System.Threading.Tasks": "4.0.0.0"
             }
         },
-        "dotnet5.1": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "NO_WEAKTABLE",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "System.Linq": "4.0.0",
-                "System.Collections.Concurrent": "4.0.0",
-                "System.ComponentModel": "4.0.0",
-                "System.Threading": "4.0.0",
-                "System.Threading.Timer": "4.0.0",
-                "System.Runtime": "4.0.0",
-                "System.Runtime.Extensions": "4.0.0"
-            }
-
-        },
-        "dotnet5.4": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "System.Collections.Concurrent": "4.0.11-beta-23516",
-                "System.ComponentModel": "4.0.1-beta-23516",
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Threading": "4.0.11-beta-23516",
-                "System.Threading.Thread": "4.0.0-beta-23516",
-                "System.Threading.ThreadPool": "4.0.10-beta-23516",
-                "System.Threading.Timer": "4.0.1-beta-23516"
-            }
-        }
+    "dnx461": {
+      "compilationOptions": {
+        "define": [
+            "NO_EVENTARGS_CONSTRAINT",
+            "HAS_EDI",
+            "HAS_WINRT",
+            "HAS_PROGRESS",
+            "PREFER_ASYNC",
+            "HAS_AWAIT",
+            "HAS_APTCA",
+            "NO_REMOTING",
+            "NO_SERIALIZABLE",
+            "NO_THREAD",
+            "CRIPPLED_REFLECTION",
+            "PLIB",
+            "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "System.Collections.Concurrent": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Threading": "4.0.0",
+        "System.Threading.Tasks": "4.0.0",
+        "System.Threading.Timer": "4.0.0",
+        "System.Runtime": "4.0.0",
+        "System.Runtime.Extensions": "4.0.0",
+        "System.Reflection": "4.0.0",        
+        "System.Reflection.Extensions": "4.0.0"
+      }
     }
+  }
 }

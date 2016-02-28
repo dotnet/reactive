@@ -618,12 +618,18 @@ namespace ReactiveTests.Tests
             );
         }
 
-        [Fact(Skip ="")]
+        [Fact]
         public void Iterate_Void_Func_Throw()
         {
             var scheduler = new TestScheduler();
 
-            ReactiveAssert.Throws<InvalidOperationException>(() => scheduler.Start(() => ObservableEx.Create(() => { throw new InvalidOperationException(); })));
+            var obs = scheduler.Start(() => ObservableEx.Create(() => { throw new InvalidOperationException(); }));
+
+            Assert.Equal(1, obs.Messages.Count);
+
+            var notification = obs.Messages[0].Value;
+            Assert.Equal(NotificationKind.OnError, notification.Kind);
+            Assert.IsType<InvalidOperationException>(notification.Exception);
         }
 
         static IEnumerable<IObservable<Object>> _IteratorScenario_Void(int x, int y)
