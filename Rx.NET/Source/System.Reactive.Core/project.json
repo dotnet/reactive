@@ -86,8 +86,8 @@
             },
             "dependencies": {
                 "System.ComponentModel": "4.0.1-rc3-23823",
-                "System.Diagnostics.Debug": "4.0.11-rc3-23823",
                 "System.Diagnostics.Contracts": "4.0.1-rc3-23823",
+                "System.Diagnostics.Debug": "4.0.11-rc3-23823",
                 "System.Dynamic.Runtime": "4.0.11-rc3-23823",
                 "System.Linq": "4.0.1-rc3-23823",
                 "System.Runtime": "4.1.0-rc3-23823",

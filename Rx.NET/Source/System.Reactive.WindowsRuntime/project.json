@@ -40,9 +40,8 @@
                 "version": "1.0.1",
                 "type": "build"
             },
-            "System.Runtime": "4.0.0",
-            "System.Threading.Tasks": "4.0.0",
-            "System.Runtime.WindowsRuntime": "4.0.10"
+            "System.Threading.Tasks": "4.0.11-rc3-23823",
+            "System.Runtime.WindowsRuntime": "4.0.11-rc3-23823"
         }
 
     }

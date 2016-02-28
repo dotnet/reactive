@@ -87,8 +87,6 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Tools": "4.0.0",
-                "System.Diagnostics.Debug": "4.0.10"
             }
         },
         "dotnet5.4": {
@@ -110,8 +108,6 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Tools": "4.0.1-beta-23516",
-                "System.Diagnostics.Debug": "4.0.11-beta-23516"
             }
         }
     }

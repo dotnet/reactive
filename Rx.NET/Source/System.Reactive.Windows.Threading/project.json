@@ -53,28 +53,6 @@
                 "System.Windows": "4.0.0.0",
                 "WindowsBase": "4.0.0.0"
             }
-        },
-        "uap10.0": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "USE_TIMER_SELF_ROOT",
-                    "WINDOWS"
-                ]
-            },
-            "dependencies": {
-                "System.Diagnostics.Tools": "4.0.1-beta-23516",
-                "System.Diagnostics.Debug": "4.0.11-beta-23516"
-            }
         }
     }
 }
