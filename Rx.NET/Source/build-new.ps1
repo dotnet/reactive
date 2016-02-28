@@ -14,3 +14,6 @@ dnu restore . --quiet | out-null
 
 Write-Host "Building projects" -Foreground Green
 . $msbuildExe .\Rx-New.sln /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:q
+
+Write-Host "Running tests" -Foreground Green
+dnx -p "Tests.System.Reactive" test

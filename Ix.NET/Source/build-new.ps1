@@ -20,3 +20,6 @@ $projects = gci . -Directory `
 foreach ($project in $projects) {
   dnu build $project --quiet
 }
+
+Write-Host "Running tests" -Foreground Green
+dnx -p "Tests" test
