@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using System.Collections;
+using System.Threading;
 
 namespace Tests
 {
@@ -44,6 +45,8 @@ namespace Tests
         [Fact]
         public void CreateYield()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var xs = EnumerableEx.Create<int>(async yield => {
                 var i = 0;
                 while (i < 10)
@@ -65,6 +68,8 @@ namespace Tests
         [Fact]
         public void CreateYieldBreak()
         {
+            SynchronizationContext.SetSynchronizationContext(null);
+
             var xs = EnumerableEx.Create<int>(async yield => {
                 var i = 0;
                 while (true)
