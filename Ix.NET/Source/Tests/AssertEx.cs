@@ -4,7 +4,6 @@ using System;
 
 namespace Tests
 {
-    [Obsolete("Switch over to xUnit asserts wherever possible")]
     internal class AssertEx
     {
         internal static void Throws<T>(Action action)
