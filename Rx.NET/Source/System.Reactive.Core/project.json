@@ -114,7 +114,7 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.11-rc3-23823",
+                "System.Collections.Concurrent": "4.0.12-rc3-23823",
                 "System.ComponentModel": "4.0.1-rc3-23823",
                 "System.Linq": "4.0.1-rc3-23823",
                 "System.Threading": "4.0.11-rc3-23823",

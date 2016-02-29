@@ -74,6 +74,11 @@
                     "DESKTOPCLR",
                     "DESKTOPCLR46"
                 ]
+            },
+            "frameworkAssemblies": {
+                "System.Windows": "4.0.0.0",
+                "System.Windows.Forms": "4.0.0.0",
+                "WindowsBase": "4.0.0.0"
             }
         }
     }
