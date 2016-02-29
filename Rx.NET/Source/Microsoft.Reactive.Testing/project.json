@@ -56,7 +56,11 @@
                     "DESKTOPCLR",
                     "DESKTOPCLR46"
                 ]
+            },
+            "dependencies": {
+                "System.Runtime": "4.1.0-rc3-23823"
             }
+            
         },
         "dotnet5.1": {
             "compilationOptions": {
@@ -78,13 +82,6 @@
                 ]
             },
             "dependencies": {
-                "System.Linq": "4.0.0",
-                "System.Collections.Concurrent": "4.0.0",
-                "System.ComponentModel": "4.0.0",
-                "System.Threading": "4.0.0",
-                "System.Threading.Timer": "4.0.0",
-                "System.Runtime": "4.0.0",
-                "System.Runtime.Extensions": "4.0.0"
             }
 
         },
@@ -107,12 +104,6 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Tools": "4.0.1-beta-23516",
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Linq.Expressions": "4.0.11-beta-23516",
-                "System.Resources.ResourceManager": "4.0.1-beta-23516",
-                "System.Threading": "4.0.11-beta-23516",
-                "System.Runtime": "4.0.21-beta-23516"
             }
         }
     }
