@@ -1,19 +1,25 @@
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+
 $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0"
+
 # TODO: if not found, bail out
-
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
-$build = "1.0.0-rc1-update1"
 
-Write-Host "Setting DNVM version" -Foreground Green
-dnvm use $build -r clr -arch x64 -p
+$active = dnvm list -PassThru | Where-Object {$_.Active -eq $true }
 
-$runtimeDir = Join-Path $env:USERPROFILE "\.dnx\runtimes\dnx-clr-win-x64.$build"
+$version = $active | Select -ExpandProperty Version
+$runtime = $active | Select -ExpandProperty Runtime
+$architecture = $active | Select -ExpandProperty Architecture
+
+$runtimeDir = Join-Path $env:USERPROFILE "\.dnx\runtimes\dnx-$runtime-win-$architecture.$version"
 
 Write-Host "Restoring packages" -Foreground Green
-dnu restore . --quiet | out-null
+dnu restore $scriptPath --quiet | out-null
 
 Write-Host "Building projects" -Foreground Green
-. $msbuildExe .\Rx-New.sln /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:q
+$solutionPath = Join-Path $scriptPath "Rx-New.sln"
+. $msbuildExe $solutionPath /m /p:Configuration=Release /p:RuntimeToolingDirectory=$runtimeDir /v:q
 
 Write-Host "Running tests" -Foreground Green
-dnx -p "Tests.System.Reactive" test
+$testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
+dnx -p $testDirectory test
