@@ -87,12 +87,6 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Tools": "4.0.0",
-                "System.Linq": "4.0.0",
-                "System.Linq.Expressions": "4.0.0",
-                "System.Resources.ResourceManager": "4.0.0",
-                "System.Threading": "4.0.0",
-                "System.Runtime": "4.0.0"
             }
         },
         "dotnet5.4": {
@@ -114,13 +108,6 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.11-beta-23516",
-                "System.ComponentModel": "4.0.1-beta-23516",
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Threading": "4.0.11-beta-23516",
-                "System.Threading.Thread": "4.0.0-beta-23516",
-                "System.Threading.ThreadPool": "4.0.10-beta-23516",
-                "System.Threading.Timer": "4.0.1-beta-23516"
             }
         }
     }

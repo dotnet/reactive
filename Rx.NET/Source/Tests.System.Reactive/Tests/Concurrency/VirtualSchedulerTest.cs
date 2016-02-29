@@ -153,7 +153,7 @@ namespace ReactiveTests.Tests
                 }
                 catch (Exception ex)
                 {
-                    Assert.Fail("Virtual time {0}, exception {1}", watch.Elapsed, ex);
+                    Assert.True(false, string.Format("Virtual time {0}, exception {1}", watch.Elapsed, ex));
                 }
             }
         }

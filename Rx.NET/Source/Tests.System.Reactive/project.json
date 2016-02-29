@@ -50,10 +50,6 @@
         "System.Reactive.Runtime.Remoting": { "target": "project" }        
       },
       "frameworkAssemblies": {
-        "System.Windows": "4.0.0.0",
-        "WindowsBase": "4.0.0.0",
-        "System.Runtime": "4.0.0.0",
-        "System.Threading.Tasks": "4.0.0.0"
       }
     },
     "dnx461": {
@@ -71,20 +67,16 @@
             "NO_THREAD",
             "CRIPPLED_REFLECTION",
             "PLIB",
-            "USE_TIMER_SELF_ROOT"
+            "USE_TIMER_SELF_ROOT",
+            "DESKTOPCLR",
+            "DESKTOPCLR46"
         ]
       },
-      "dependencies": {
-        "System.Collections.Concurrent": "4.0.0",
-        "System.Linq": "4.0.0",
-        "System.Threading": "4.0.0",
-        "System.Threading.Tasks": "4.0.0",
-        "System.Threading.Timer": "4.0.0",
-        "System.Runtime": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0",
-        "System.Reflection": "4.0.0",        
-        "System.Reflection.Extensions": "4.0.0"
-      }
+        "dependencies": {
+            "System.Reactive.Windows.Threading": { "target": "project" },
+            "System.Reactive.Windows.Forms": { "target": "project" },
+            "System.Reactive.Runtime.Remoting": { "target": "project" }
+        }
     }
   }
 }
