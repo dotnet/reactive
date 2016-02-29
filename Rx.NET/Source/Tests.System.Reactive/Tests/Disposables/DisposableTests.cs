@@ -378,11 +378,11 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
-#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46 
+        [Fact]
         public void CancellationDisposable_Ctor_Null()
         {
-            new CancellationDisposable(null);
+            Assert.Throws<ArgumentNullException>(() => new CancellationDisposable(null));
         }
 
         [Fact]
