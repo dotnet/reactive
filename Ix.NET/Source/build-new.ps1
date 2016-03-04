@@ -6,7 +6,7 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 Write-Host "Restoring packages" -Foreground Green
-dnu restore $scriptPath --quiet | out-null
+dotnet restore $scriptPath | out-null
 
 Write-Host "Building projects" -Foreground Green
 $projects = gci $scriptPath -Directory `
@@ -14,7 +14,7 @@ $projects = gci $scriptPath -Directory `
   | Select -ExpandProperty FullName
 
 foreach ($project in $projects) {
-  dnu build $project --quiet
+  dotnet build $project
 }
 
 Write-Host "Running tests" -Foreground Green
