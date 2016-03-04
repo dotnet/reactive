@@ -29,7 +29,7 @@
                 ]
             }
         },
-        "dotnet5.1": {
+        "netstandard1.0": {
             "compilationOptions": {
                 "define": [
                     "HAS_AWAIT",
@@ -38,11 +38,11 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Debug": "4.0.11-rc3-23823",
-                "System.Linq": "4.0.1-rc3-23823",
-                "System.Resources.ResourceManager": "4.0.1-rc3-23823",
-                "System.Runtime": "4.1.0-rc3-23823",
-                "System.Threading": "4.0.11-rc3-23823"
+                "System.Diagnostics.Debug": "4.0.11-rc2-23904",
+                "System.Linq": "4.0.1-rc2-23904",
+                "System.Resources.ResourceManager": "4.0.1-rc2-23904",
+                "System.Runtime": "4.1.0-rc2-23904",
+                "System.Threading": "4.0.11-rc2-23904"
             }
 
         }
