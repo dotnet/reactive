@@ -1,10 +1,11 @@
 ﻿{
     "version": "2.0.0-*",
     "title": "Interactive Extensions - Providers Library",
-    "description": "Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.",
-    "authors": [ "Microsoft" ],
+    "description":
+        "Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.",
+    "authors": ["Microsoft"],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Ix", "Interactive", "Extensions", "Enumerable" ],
+    "tags": ["Ix", "Interactive", "Extensions", "Enumerable"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
@@ -16,83 +17,36 @@
         "net40": {
             "compilationOptions": {
                 "define": [
-                    "NO_TASK_DELAY",
                     "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT"
+                    "DESKTOPCLR",
+                    "DESKTOPCLR40"
                 ]
             }
         },
         "net45": {
             "compilationOptions": {
                 "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
                     "HAS_AWAIT",
                     "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT"
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
                 ]
             }
         },
         "dotnet5.1": {
             "compilationOptions": {
                 "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
                     "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "NO_WEAKTABLE",
                     "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
+                    "PLIB"
                 ]
             },
             "dependencies": {
-                "System.Linq": "4.0.0",
-                "System.Linq.Expressions": "4.0.0",
-                "System.Linq.Queryable": "4.0.0",
-                "System.Reflection": "4.0.0",
-                "System.Runtime": "4.0.0",
-                "System.Runtime.Extensions": "4.0.0"
+                "System.Linq.Expressions": "4.0.11-rc3-23823",
+                "System.Linq.Queryable": "4.0.1-rc3-23823",
+                "System.Reflection": "4.1.0-rc3-23823"
             }
 
-        },
-        "dotnet5.4": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Linq.Expressions": "4.0.11-beta-23516",
-                "System.Linq.Queryable": "4.0.1-beta-23516",
-                "System.Reflection":"4.1.0-beta-23516" 
-            }
         }
     }
 }
