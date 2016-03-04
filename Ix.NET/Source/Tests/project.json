@@ -9,6 +9,9 @@
     "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
     "requireLicenseAcceptance": true,
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
     "dependencies": {
         "System.Interactive.Providers": { "target": "project" },
         "System.Interactive.Async.Providers": { "target": "project" },
