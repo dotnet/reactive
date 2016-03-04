@@ -2,9 +2,9 @@
     "version": "2.0.0-*",
     "title": "Interactive Extensions - Tests",
     "description": "Unit Tests",
-    "authors": [ "Microsoft" ],
+    "authors": ["Microsoft"],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ ],
+    "tags": [],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
@@ -19,58 +19,18 @@
         "App.cs"
     ],
     "commands": {
-      "test": "xunit.runner.dnx"
+        "test": "xunit.runner.dnx"
     },
     "frameworks": {
         "dnx451": {
             "compilationOptions": {
                 "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
                     "HAS_AWAIT",
                     "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT"
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
                 ]
-            },
-            "frameworkAssemblies": {
-                "System.Runtime": "4.0.0.0",
-                "System.Threading.Tasks": "4.0.0.0"
             }
-        },
-    "dnx461": {
-      "compilationOptions": {
-        "define": [
-            "NO_EVENTARGS_CONSTRAINT",
-            "HAS_EDI",
-            "HAS_WINRT",
-            "HAS_PROGRESS",
-            "PREFER_ASYNC",
-            "HAS_AWAIT",
-            "HAS_APTCA",
-            "NO_REMOTING",
-            "NO_SERIALIZABLE",
-            "NO_THREAD",
-            "CRIPPLED_REFLECTION",
-            "PLIB",
-            "USE_TIMER_SELF_ROOT"
-        ]
-      },
-      "dependencies": {
-        "System.Collections.Concurrent": "4.0.0",
-        "System.Linq": "4.0.0",
-        "System.Threading": "4.0.0",
-        "System.Threading.Tasks": "4.0.0",
-        "System.Threading.Timer": "4.0.0",
-        "System.Runtime": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0",
-        "System.Reflection": "4.0.0",        
-        "System.Reflection.Extensions": "4.0.0"
-      }
+        }
     }
-  }
 }

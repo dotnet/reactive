@@ -13,79 +13,38 @@
         "net40": {
             "compilationOptions": {
                 "define": [
-                    "NO_TASK_DELAY",
                     "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT"
+                    "DESKTOPCLR",
+                    "DESKTOPCLR40"
                 ]
             }
         },
         "net45": {
             "compilationOptions": {
                 "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
                     "HAS_AWAIT",
                     "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT"
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
                 ]
             }
         },
         "dotnet5.1": {
             "compilationOptions": {
                 "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
                     "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "NO_WEAKTABLE",
                     "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
+                    "PLIB"
                 ]
             },
             "dependencies": {
-                "System.Linq": "4.0.0",
-                "System.Threading": "4.0.0",
-                "System.Runtime": "4.0.0",
-                "System.Runtime.Extensions": "4.0.0"
+                "System.Diagnostics.Debug": "4.0.11-rc3-23823",
+                "System.Linq": "4.0.1-rc3-23823",
+                "System.Resources.ResourceManager": "4.0.1-rc3-23823",
+                "System.Runtime": "4.1.0-rc3-23823",
+                "System.Threading": "4.0.11-rc3-23823"
             }
 
-        },
-        "dotnet5.4": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "System.Linq": "4.0.1-beta-23516",
-                "System.Threading": "4.0.11-beta-23516"
-            }
         }
     }
 }
