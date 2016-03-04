@@ -1,82 +1,78 @@
 {
-  "version": "3.0.0-*",
-  "title": "Reactive Extensions - Core Library",
-  "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
-  "authors": [ "Microsoft" ],
-  "copyright": "Copyright (C) Microsoft Corporation",
-  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-  "requireLicenseAcceptance": true,
-  
-  "dependencies": {
-    "System.Reactive.Interfaces": { "target": "project" },
-    "System.Reactive.Linq": { "target": "project" },
-    "System.Reactive.PlatformServices": { "target": "project" },
-    "Microsoft.Reactive.Testing": { "target": "project" },
-    "System.Reactive.Experimental": { "target": "project" },
-    "System.Reactive.Providers": { "target": "project" }, 
-    "System.Reactive.Observable.Aliases": {"target": "project"},
-    "xunit": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-rc1-build204"
-  },
-  "commands": {
-    "test": "xunit.runner.dnx"
-  },
+    "version": "3.0.0-*",
+    "title": "Reactive Extensions - Core Library",
+    "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
+    "authors": [ "Microsoft" ],
+    "copyright": "Copyright (C) Microsoft Corporation",
+    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+    "requireLicenseAcceptance": true,
 
-  "frameworks": {
-    "dnx451": {
-      "compilationOptions": {
-        "define": [
-            "NO_EVENTARGS_CONSTRAINT",
-            "NO_REMOTING",
-            "HAS_EDI",
-            "HAS_WINRT",
-            "HAS_PROGRESS",
-            "PREFER_ASYNC",
-            "HAS_AWAIT",
-            "HAS_APTCA",
-            "HAS_STACKTRACE",
-            "HAS_WINFORMS",
-            "USE_TIMER_SELF_ROOT",
-            "DESKTOPCLR",
-            "DESKTOPCLR45"
-        ]
-      },
-      "dependencies": {
-        "System.Reactive.Windows.Threading": { "target": "project" },
-        "System.Reactive.Windows.Forms": { "target": "project" },
-        "System.Reactive.Runtime.Remoting": { "target": "project" }        
-      },
-      "frameworkAssemblies": {
-      }
+    "dependencies": {
+        "System.Reactive.Interfaces": { "target": "project" },
+        "System.Reactive.Linq": { "target": "project" },
+        "System.Reactive.PlatformServices": { "target": "project" },
+        "Microsoft.Reactive.Testing": { "target": "project" },
+        "System.Reactive.Experimental": { "target": "project" },
+        "System.Reactive.Providers": { "target": "project" },
+        "System.Reactive.Observable.Aliases": { "target": "project" },
+        "xunit": "2.1.0",
+        "NETStandard.Library": "1.0.0-rc2-23904"
     },
-    "dnx461": {
-      "compilationOptions": {
-        "define": [
-            "NO_EVENTARGS_CONSTRAINT",
-            "HAS_EDI",
-            "HAS_WINRT",
-            "HAS_PROGRESS",
-            "PREFER_ASYNC",
-            "HAS_AWAIT",
-            "HAS_APTCA",
-            "NO_REMOTING",
-            "NO_SERIALIZABLE",
-            "NO_THREAD",
-            "CRIPPLED_REFLECTION",
-            "PLIB",
-            "USE_TIMER_SELF_ROOT",
-            "DESKTOPCLR",
-            "DESKTOPCLR46"
-        ]
-      },
-        "dependencies": {
-            "System.Reactive.Windows.Threading": { "target": "project" },
-            "System.Reactive.Windows.Forms": { "target": "project" },
-            "System.Reactive.Runtime.Remoting": { "target": "project" }
+    "testRunner": "xunit",
+    "frameworks": {
+        "net461": {
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "USE_TIMER_SELF_ROOT",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR46"
+                ]
+            },
+            "dependencies": {
+                "System.Reactive.Windows.Threading": { "target": "project" },
+                "System.Reactive.Windows.Forms": { "target": "project" },
+                "System.Reactive.Runtime.Remoting": { "target": "project" }
+            },
+            "frameworkAssemblies": {
+                "System.Threading.Tasks": "4.0.10.0"
+            }
+        },
+        "netstandardapp1.5": {
+            "imports": [ "dnxcore50", "portable-net45+win8" ],
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ]
+            },
+            "dependencies": {
+                "dotnet-test-xunit": "1.0.0-dev-79755-47"
+            }
         }
     }
-  }
 }

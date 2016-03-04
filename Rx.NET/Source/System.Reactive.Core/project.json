@@ -65,7 +65,7 @@
                 ]
             }
         },
-        "dotnet5.1": {
+        "netstandard1.0": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -85,17 +85,17 @@
                 ]
             },
             "dependencies": {
-                "System.ComponentModel": "4.0.1-rc3-23823",
-                "System.Diagnostics.Contracts": "4.0.1-rc3-23823",
-                "System.Diagnostics.Debug": "4.0.11-rc3-23823",
-                "System.Dynamic.Runtime": "4.0.11-rc3-23823",
-                "System.Linq": "4.0.1-rc3-23823",
-                "System.Runtime": "4.1.0-rc3-23823",
-                "System.Runtime.Extensions": "4.1.0-rc3-23823",
-                "System.Threading": "4.0.11-rc3-23823"
+                "System.ComponentModel": "4.0.1-rc2-23904",
+                "System.Diagnostics.Contracts": "4.0.1-rc2-23904",
+                "System.Diagnostics.Debug": "4.0.11-rc2-23904",
+                "System.Dynamic.Runtime": "4.0.11-rc2-23904",
+                "System.Linq": "4.0.1-rc2-23904",
+                "System.Runtime": "4.1.0-rc2-23904",
+                "System.Runtime.Extensions": "4.1.0-rc2-23904",
+                "System.Threading": "4.0.11-rc2-23904"
             }
         },
-        "dotnet5.4": {
+        "netstandard1.3": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -114,13 +114,13 @@
                 ]
             },
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc3-23823",
-                "System.ComponentModel": "4.0.1-rc3-23823",
-                "System.Linq": "4.0.1-rc3-23823",
-                "System.Threading": "4.0.11-rc3-23823",
-                "System.Threading.Thread": "4.0.0-rc3-23823",
-                "System.Threading.ThreadPool": "4.0.10-rc3-23823",
-                "System.Threading.Timer": "4.0.1-rc3-23823"
+                "System.Collections.Concurrent": "4.0.12-rc2-23904",
+                "System.ComponentModel": "4.0.1-rc2-23904",
+                "System.Linq": "4.0.1-rc2-23904",
+                "System.Threading": "4.0.11-rc2-23904",
+                "System.Threading.Thread": "4.0.0-rc2-23904",
+                "System.Threading.ThreadPool": "4.0.10-rc2-23904",
+                "System.Threading.Timer": "4.0.1-rc2-23904"
             }
         }
     }

@@ -68,7 +68,7 @@
                 ]
             }
         },
-        "dotnet5.1": {
+        "netstandard1.0": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -88,11 +88,11 @@
                 ]
             },
             "dependencies": {
-                "System.Linq.Queryable": "4.0.1-rc3-23823",
-                "System.Reflection.Extensions": "4.0.1-rc3-23823"
+                "System.Linq.Queryable": "4.0.1-rc2-23904",
+                "System.Reflection.Extensions": "4.0.1-rc2-23904"
             }
         },
-        "dotnet5.4": {
+        "netstandard1.3": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -111,7 +111,7 @@
                 ]
             },
             "dependencies": {
-                "System.Linq.Queryable": "4.0.1-rc3-23823"
+                "System.Linq.Queryable": "4.0.1-rc2-23904"
             }
         }
     }

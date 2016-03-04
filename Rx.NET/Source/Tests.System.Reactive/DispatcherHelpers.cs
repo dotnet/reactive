@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
 using System;
-#if DOTNET5_1 || DNX451 || DNX461
+#if NETSTANDARDAPP1_5
 using System.Threading;
 #else
 using System.Windows.Threading;

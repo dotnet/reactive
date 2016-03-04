@@ -15,7 +15,8 @@
   },
 
   "frameworks": {
-    "dotnet5.1": {
+    "netstandard1.1": {
+        "imports": [ "dotnet5.2" ],
         "compilationOptions": {
             "define": [
                 "NO_EVENTARGS_CONSTRAINT",
@@ -40,8 +41,8 @@
                 "version": "1.0.1",
                 "type": "build"
             },
-            "System.Threading.Tasks": "4.0.11-rc3-23823",
-            "System.Runtime.WindowsRuntime": "4.0.11-rc3-23823"
+            "System.Threading.Tasks": "4.0.11-rc2-23904",
+            "System.Runtime.WindowsRuntime": "4.0.11-rc2-23904"
         }
 
     }
