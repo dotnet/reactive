@@ -19,5 +19,6 @@ foreach ($project in $projects) {
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests"
-dnx -p $testDirectory test
+cd  $testDirectory 
+dotnet test
 
