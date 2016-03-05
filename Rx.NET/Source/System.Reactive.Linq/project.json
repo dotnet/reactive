@@ -53,7 +53,7 @@
                 ]
             }
         },
-        "net46": {
+        "net46": {           
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -91,10 +91,11 @@
                     "PLIB"
                 ]
             },
+            "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23904",
-                "System.Runtime": "4.1.0-rc2-23904",
-                "System.Runtime.Extensions": "4.1.0-rc2-23904"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811",
+                "System.Runtime": "4.1.0-rc2-23811",
+                "System.Runtime.Extensions": "4.1.0-rc2-23811"
             }
         },
         "netstandard1.3": {
@@ -115,10 +116,11 @@
                     "USE_TIMER_SELF_ROOT"
                 ]
             },
+            "imports": [ "dotnet5.4"],
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc2-23904",
-                "System.Reflection": "4.1.0-rc2-23904",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23904"
+                "System.Collections.Concurrent": "4.0.12-rc2-23811",
+                "System.Reflection": "4.1.0-rc2-23811",
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811"
             }
         }
     }

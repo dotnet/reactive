@@ -9,7 +9,9 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
-
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },
         "System.Reactive.Linq": { "target": "project" },
@@ -19,10 +21,34 @@
         "System.Reactive.Providers": { "target": "project" },
         "System.Reactive.Observable.Aliases": { "target": "project" },
         "xunit": "2.1.0",
-        "NETStandard.Library": "1.0.0-rc2-23904"
+        "NETStandard.Library": "1.0.0-rc2-23811"
     },
     "testRunner": "xunit",
     "frameworks": {
+        "netstandardapp1.5": {
+            "imports": [ "dnxcore50", "portable-net45+win8" ],
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB",
+                    "USE_TIMER_SELF_ROOT"
+                ],
+                "debugType": "full"
+            },
+            "dependencies": {
+                "dotnet-test-xunit": "1.0.0-dev-79755-47"
+            }
+        },
         "net461": {
             "compilationOptions": {
                 "define": [
@@ -49,29 +75,6 @@
             },
             "frameworkAssemblies": {
                 "System.Threading.Tasks": "4.0.10.0"
-            }
-        },
-        "netstandardapp1.5": {
-            "imports": [ "dnxcore50", "portable-net45+win8" ],
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "dotnet-test-xunit": "1.0.0-dev-79755-47"
             }
         }
     }

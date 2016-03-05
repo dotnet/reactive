@@ -84,15 +84,16 @@
                     "PLIB"
                 ]
             },
+            "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.ComponentModel": "4.0.1-rc2-23904",
-                "System.Diagnostics.Contracts": "4.0.1-rc2-23904",
-                "System.Diagnostics.Debug": "4.0.11-rc2-23904",
-                "System.Dynamic.Runtime": "4.0.11-rc2-23904",
-                "System.Linq": "4.0.1-rc2-23904",
-                "System.Runtime": "4.1.0-rc2-23904",
-                "System.Runtime.Extensions": "4.1.0-rc2-23904",
-                "System.Threading": "4.0.11-rc2-23904"
+                "System.ComponentModel": "4.0.1-rc2-23811",
+                "System.Diagnostics.Contracts": "4.0.1-rc2-23811",
+                "System.Diagnostics.Debug": "4.0.11-rc2-23811",
+                "System.Dynamic.Runtime": "4.0.11-rc2-23811",
+                "System.Linq": "4.0.1-rc2-23811",
+                "System.Runtime": "4.1.0-rc2-23811",
+                "System.Runtime.Extensions": "4.1.0-rc2-23811",
+                "System.Threading": "4.0.11-rc2-23811"
             }
         },
         "netstandard1.3": {
@@ -113,14 +114,15 @@
                     "USE_TIMER_SELF_ROOT"
                 ]
             },
+            "imports": [ "dotnet5.4" ],
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc2-23904",
-                "System.ComponentModel": "4.0.1-rc2-23904",
-                "System.Linq": "4.0.1-rc2-23904",
-                "System.Threading": "4.0.11-rc2-23904",
-                "System.Threading.Thread": "4.0.0-rc2-23904",
-                "System.Threading.ThreadPool": "4.0.10-rc2-23904",
-                "System.Threading.Timer": "4.0.1-rc2-23904"
+                "System.Collections.Concurrent": "4.0.12-rc2-23811",
+                "System.ComponentModel": "4.0.1-rc2-23811",
+                "System.Linq": "4.0.1-rc2-23811",
+                "System.Threading": "4.0.11-rc2-23811",
+                "System.Threading.Thread": "4.0.0-rc2-23811",
+                "System.Threading.ThreadPool": "4.0.10-rc2-23811",
+                "System.Threading.Timer": "4.0.1-rc2-23811"
             }
         }
     }

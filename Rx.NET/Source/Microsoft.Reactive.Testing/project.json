@@ -58,12 +58,12 @@
                 ]
             },
             "dependencies": {
-                "System.Runtime": "4.1.0-rc2-23904"
+                "System.Runtime": "4.1.0-rc2-23811"
             }
             
         },
         "netstandard1.0": {
-            "imports": [ "dnxcore50", "portable-win8+net45" ],
+            "imports": [ "dotnet5.1", "dnxcore50", "portable-net45+win8" ],
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -87,7 +87,7 @@
 
         },
         "netstandard1.3": {
-            "imports": [ "dnxcore50", "portable-win8+net45" ],
+            "imports": [ "dotnet5.4", "dnxcore50", "portable-net45+win8" ],
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
