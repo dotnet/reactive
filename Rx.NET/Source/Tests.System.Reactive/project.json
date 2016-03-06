@@ -10,7 +10,8 @@
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
     "compilationOptions": {
-        "emitEntryPoint": true
+        "emitEntryPoint": true,
+        "nowarn": ["CS0618"]
     },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },
