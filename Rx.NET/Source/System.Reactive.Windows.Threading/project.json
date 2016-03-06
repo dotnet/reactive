@@ -86,6 +86,26 @@
                 "System.Diagnostics.Debug": "4.0.11-rc2-23811",
                 "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811"
             }
+        },
+        "sl5": {
+            "compilationOptions": {
+                "define": [
+                    "NO_RXINTERFACES",
+                    "USE_SL_DISPATCHER",
+                    "NO_SERIALIZABLE",
+                    "NO_REMOTING",
+                    "NO_SEMAPHORE",
+                    "NO_STOPWATCH",
+                    "NO_CDS",
+                    "NO_TASK_DELAY",
+                    "NO_WEAKREFOFT",
+                    "NO_SORTEDDICTIONARY",
+                    "SILVERLIGHT",
+                    "SILVERLIGHT5"
+                ]
+            },
+            "dependencies": {
+            }
         }
     }
 }
