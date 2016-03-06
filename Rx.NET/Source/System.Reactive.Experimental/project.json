@@ -101,6 +101,7 @@
                     "PREFER_ASYNC",
                     "HAS_AWAIT",
                     "HAS_APTCA",
+                    "HAS_TPL46",
                     "NO_REMOTING",
                     "NO_SERIALIZABLE",
                     "NO_THREAD",

@@ -103,6 +103,7 @@
                     "HAS_EDI",
                     "HAS_WINRT",
                     "HAS_PROGRESS",
+                    "HAS_TPL46",
                     "PREFER_ASYNC",
                     "HAS_AWAIT",
                     "HAS_APTCA",
