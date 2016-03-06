@@ -53,7 +53,7 @@
                 ]
             }
         },
-        "net46": {           
+        "net46": {
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -116,11 +116,31 @@
                     "USE_TIMER_SELF_ROOT"
                 ]
             },
-            "imports": [ "dotnet5.4"],
+            "imports": [ "dotnet5.4" ],
             "dependencies": {
                 "System.Collections.Concurrent": "4.0.12-rc2-23811",
                 "System.Reflection": "4.1.0-rc2-23811",
                 "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811"
+            }
+        },
+        "sl5": {
+            "compilationOptions": {
+                "define": [
+                    "NO_RXINTERFACES",
+                    "USE_SL_DISPATCHER",
+                    "NO_SERIALIZABLE",
+                    "NO_REMOTING",
+                    "NO_SEMAPHORE",
+                    "NO_STOPWATCH",
+                    "NO_CDS",
+                    "NO_TASK_DELAY",
+                    "NO_WEAKREFOFT",
+                    "NO_SORTEDDICTIONARY",
+                    "SILVERLIGHT",
+                    "SILVERLIGHT5"
+                ]
+            },
+            "dependencies": {
             }
         }
     }
