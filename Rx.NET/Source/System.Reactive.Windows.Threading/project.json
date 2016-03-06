@@ -86,7 +86,6 @@
                 "System.Diagnostics.Debug": "4.0.11-rc2-23811",
                 "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811"
             }
-
         }
     }
 }
