@@ -107,7 +107,7 @@ stylecop.*
 ~$*
 *.dbmdl
 .vs/
-project.lock.json
+*.lock.json
 artifacts/
 Generated_Code #added for RIA/Silverlight projects
 
@@ -170,3 +170,7 @@ Rx.NET/tools/HomoIcon/HomoIcon.sln.ide/
 Rx.NET/Test/Rx/packages/
 Rx.NET/Samples/Portable/Portable.sln.ide/
 Rx.NET/Samples/Portable/packages/
+
+*.nupkg
+*.nuget.props
+*.nuget.targets
