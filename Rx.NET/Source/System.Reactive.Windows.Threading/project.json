@@ -53,6 +53,40 @@
                 "System.Windows": "4.0.0.0",
                 "WindowsBase": "4.0.0.0"
             }
+        },
+        ".NETPortable,Version=v4.6,Profile=Profile32": {
+            "imports": [ "dotnet5.2" ],
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "NO_REMOTING",
+                    "NO_SERIALIZABLE",
+                    "NO_THREAD",
+                    "CRIPPLED_REFLECTION",
+                    "USE_TIMER_SELF_ROOT",
+                    "WINDOWS",
+                    "WINDOWS81"
+                ]
+            },
+            "dependencies": {
+                "Microsoft.NETCore.Portable.Compatibility": {
+                    "version": "1.0.0",
+                    "type": "build"
+                },
+                "Microsoft.TargetingPack.Private.WinRT": {
+                    "version": "1.0.1",
+                    "type": "build"
+                },
+                "System.Diagnostics.Tools": "4.0.1-rc2-23811",
+                "System.Diagnostics.Debug": "4.0.11-rc2-23811",
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23811"
+            }
+
         }
     }
 }
