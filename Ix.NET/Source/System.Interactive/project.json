@@ -9,38 +9,54 @@
   "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
   "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
   "requireLicenseAcceptance": true,
-  "frameworks": {
-    "net40": {
-      "compilationOptions": {
-        "define": [
-          "HAS_APTCA",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      }
-    },
-    "net45": {
-      "compilationOptions": {
-        "define": [
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "DESKTOPCLR",
-          "DESKTOPCLR45"
-        ]
-      }
-    },
-    "netstandard1.0": {
-      "compilationOptions": {
-        "define": [
-          "HAS_AWAIT",
-          "CRIPPLED_REFLECTION",
-          "PLIB"
-        ]
-      },
-      "imports": [ "dnxcore50", "portable-net45+win8" ],
-      "dependencies": {
-        "NETStandard.Library": "1.0.0-rc2-23811"
-      }
+    "frameworks": {
+        "net40": {
+            "compilationOptions": {
+                "define": [
+                    "HAS_APTCA",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR40"
+                ]
+            }
+        },
+        "net45": {
+            "compilationOptions": {
+                "define": [
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
+                ]
+            }
+        },
+        "netstandard1.0": {
+            "compilationOptions": {
+                "define": [
+                    "HAS_AWAIT",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB"
+                ]
+            },
+            "imports": [ "dnxcore50", "portable-net45+win8" ],
+            "dependencies": {
+                "NETStandard.Library": "1.0.0-rc2-23811"
+            }
+        },
+        "sl5": {
+            "compilationOptions": {
+                "define": [
+                    "NO_SERIALIZABLE",
+                    "NO_TPL",
+                    "NO_REMOTING",
+                    "NO_SEMAPHORE",
+                    "NO_RXINTERFACES",
+                    "SILVERLIGHT",
+                    "SILVERLIGHT5"
+                ]
+            },
+            "dependencies": {
+                "Microsoft.TargetingPack.Private.Silverlight.v5": "1.0.2"
+            }
+        }
     }
-  }
 }

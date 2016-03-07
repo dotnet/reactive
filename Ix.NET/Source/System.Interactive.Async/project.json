@@ -30,18 +30,34 @@
                 ]
             }
         },
-      "netstandard1.0": {
-        "compilationOptions": {
-          "define": [
-            "HAS_AWAIT",
-            "CRIPPLED_REFLECTION",
-            "PLIB"
-          ]
+        "netstandard1.0": {
+            "compilationOptions": {
+                "define": [
+                    "HAS_AWAIT",
+                    "CRIPPLED_REFLECTION",
+                    "PLIB"
+                ]
+            },
+            "imports": [ "dnxcore50", "portable-net45+win8" ],
+            "dependencies": {
+                "NETStandard.Library": "1.0.0-rc2-23811"
+            }
         },
-        "imports": [ "dnxcore50", "portable-net45+win8" ],
-        "dependencies": {
-          "NETStandard.Library": "1.0.0-rc2-23811"
+        "sl5": {
+            "compilationOptions": {
+                "define": [
+                    "NO_SERIALIZABLE",
+                    "NO_TPL",
+                    "NO_REMOTING",
+                    "NO_SEMAPHORE",
+                    "NO_RXINTERFACES",
+                    "SILVERLIGHT",
+                    "SILVERLIGHT5"
+                ]
+            },
+            "dependencies": {
+                "Microsoft.TargetingPack.Private.Silverlight.v5": "1.0.2"
+            }
         }
-      }
     }
 }
