@@ -39,8 +39,8 @@
                     "version": "1.0.1",
                     "type": "build"
                 },
-                "Microsoft.TargetingPack.Private.WindowsPhone.v.8.1": {
-                    "version": "1.0.0",
+                "Microsoft.TargetingPack.Private.WindowsPhone.v8.1": {
+                    "version": "1.0.1",
                     "type": "build"
                 }
             }
