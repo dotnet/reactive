@@ -2,6 +2,7 @@
 
 #if !NO_PERF
 using System;
+using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 
@@ -174,6 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private object _gate;
 
             private IDisposable _sourceSubscription;
+            private IDisposable _periodicSchedulerSubscription;
 
             private bool _hasValue;
             private TSource _value;
@@ -187,9 +189,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
 
+                _periodicSchedulerSubscription = _parent._scheduler.SchedulePeriodic(_parent._interval, Tick);
+
                 return StableCompositeDisposable.Create(
                     sourceSubscription,
-                    _parent._scheduler.SchedulePeriodic(_parent._interval, Tick)
+                    _periodicSchedulerSubscription
                 );
             }
 
@@ -234,7 +238,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _atEnd = true;
-                    _sourceSubscription.Dispose();
+                    Tick();
+                   _sourceSubscription.Dispose();
                 }
             }
         }
