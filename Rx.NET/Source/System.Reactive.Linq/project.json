@@ -93,9 +93,9 @@
             },
             "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23910",
-                "System.Runtime": "4.1.0-rc2-23910",
-                "System.Runtime.Extensions": "4.1.0-rc2-23910"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23911",
+                "System.Runtime": "4.1.0-rc2-23911",
+                "System.Runtime.Extensions": "4.1.0-rc2-23911"
             }
         },
         "netstandard1.3": {
@@ -119,9 +119,9 @@
             },
             "imports": [ "dotnet5.4" ],
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc2-23910",
-                "System.Reflection": "4.1.0-rc2-23910",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23910"
+                "System.Collections.Concurrent": "4.0.12-rc2-23911",
+                "System.Reflection": "4.1.0-rc2-23911",
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23911"
             }
         },
         "sl5": {

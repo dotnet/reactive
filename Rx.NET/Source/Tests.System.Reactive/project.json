@@ -22,7 +22,8 @@
         "System.Reactive.Providers": { "target": "project" },
         "System.Reactive.Observable.Aliases": { "target": "project" },
         "xunit": "2.1.0",
-        "NETStandard.Library": "1.0.0-rc2-23910"
+        "NETStandard.Library": "1.5.0-rc2-23911",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-23911"
     },
     "testRunner": "xunit",
     "frameworks": {
@@ -47,7 +48,7 @@
                 "debugType": "full"
             },
             "dependencies": {
-                "dotnet-test-xunit": "1.0.0-dev-79755-47"
+                "dotnet-test-xunit": "1.0.0-dev-91790-12"
             }
         },
         "net461": {
@@ -78,5 +79,6 @@
                 "System.Threading.Tasks": "4.0.10.0"
             }
         }
-    }
+    },
+    "userSecretsId": "aspnet5-Tests.System.Reactive-20160315032508"
 }
