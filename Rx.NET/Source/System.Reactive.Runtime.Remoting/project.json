@@ -10,6 +10,12 @@
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
 
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
+
     "dependencies": {
         "System.Reactive.Core": { "target": "project" }
     },
@@ -29,22 +35,22 @@
             }
         },
         "net45": {
-          "compilationOptions": {
-            "define": [
-                "NO_EVENTARGS_CONSTRAINT",
-                "HAS_EDI",
-                "HAS_WINRT",
-                "HAS_PROGRESS",
-                "PREFER_ASYNC",
-                "HAS_AWAIT",
-                "HAS_APTCA",
-                "HAS_DISPATCHER_PRIORITY",
-                "HAS_WINFORMS",
-                "USE_TIMER_SELF_ROOT",
-                "DESKTOPCLR",
-                "DESKTOPCLR45"
-            ]
-          }    
+            "compilationOptions": {
+                "define": [
+                    "NO_EVENTARGS_CONSTRAINT",
+                    "HAS_EDI",
+                    "HAS_WINRT",
+                    "HAS_PROGRESS",
+                    "PREFER_ASYNC",
+                    "HAS_AWAIT",
+                    "HAS_APTCA",
+                    "HAS_DISPATCHER_PRIORITY",
+                    "HAS_WINFORMS",
+                    "USE_TIMER_SELF_ROOT",
+                    "DESKTOPCLR",
+                    "DESKTOPCLR45"
+                ]
+            }
         }
     }
 }

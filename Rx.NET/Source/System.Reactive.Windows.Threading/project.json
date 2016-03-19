@@ -1,15 +1,20 @@
 ﻿{
     "version": "3.0.0-*",
     "title": "Reactive Extensions - WPF Helpers",
-    "description":
-        "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
-    "authors": ["Microsoft"],
+    "description": "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
+    "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
+    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
+
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
 
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },
@@ -143,7 +148,7 @@
                 "Microsoft.NETCore.UniversalWindowsPlatform": {
                     "version": "5.2.0-rc2-23911",
                     "type": "build"
-                } 
+                }
             }
         },
         "sl5": {

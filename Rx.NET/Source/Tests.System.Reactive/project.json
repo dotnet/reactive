@@ -11,7 +11,10 @@
     "requireLicenseAcceptance": true,
     "compilationOptions": {
         "emitEntryPoint": true,
-        "nowarn": ["CS0618"]
+        "nowarn": [ "CS0618" ],
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
     },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },

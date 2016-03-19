@@ -9,6 +9,11 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
     "frameworks": {
         "net40": {
             "compilationOptions": {

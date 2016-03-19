@@ -1,18 +1,24 @@
 ﻿{
-  "version": "3.0.0-*",
-  "title": "Reactive Extensions - Core Library",
-  "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
-  "authors": [ "Microsoft" ],
-  "copyright": "Copyright (C) Microsoft Corporation",
-  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-  "requireLicenseAcceptance": true,
+    "version": "3.0.0-*",
+    "title": "Reactive Extensions - Core Library",
+    "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
+    "authors": [ "Microsoft" ],
+    "copyright": "Copyright (C) Microsoft Corporation",
+    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+    "requireLicenseAcceptance": true,
 
-  "dependencies": {
-    "System.Reactive.Providers": { "target": "project" }
-  },
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
+
+    "dependencies": {
+        "System.Reactive.Providers": { "target": "project" }
+    },
 
     "frameworks": {
         "net40": {

@@ -9,13 +9,17 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
-
-  "exclude": [
-    "*/**/ImmutableList.cs",
-    "Reactive/Observer.Extensions.cs",
-    "Reactive/Internal/Observers.cs",
-    "Reactive/Internal/Producer.cs"
-  ],
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
+    "exclude": [
+        "*/**/ImmutableList.cs",
+        "Reactive/Observer.Extensions.cs",
+        "Reactive/Internal/Observers.cs",
+        "Reactive/Internal/Producer.cs"
+    ],
 
     "dependencies": {
         "System.Reactive.Core": { "target": "project" }

@@ -10,6 +10,13 @@
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
 
+    "compilationOptions": {
+        "keyFile": "../35MSSharedLib1024.snk",
+        "publicSign": true,
+        "define": [ "SIGNED" ]
+    },
+
+
     "exclude": [ "Strings_PlatformServices.Designer.cs" ],
 
     "dependencies": {
