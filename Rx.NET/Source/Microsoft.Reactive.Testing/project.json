@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "Microsoft.Reactive.Testing - Testing Helper Library",
     "description": "Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.",
@@ -9,20 +9,26 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
-    
     "compilationOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
-
-
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "dependencies": {
         "System.Reactive.Linq": { "target": "project" },
         "System.Reactive.PlatformServices": { "target": "project" },
         "xunit": "2.1.0"
     },
-
     "frameworks": {
         "net45": {
             "compilationOptions": {
@@ -66,7 +72,6 @@
             "dependencies": {
                 "System.Runtime": "4.1.0-rc2-23911"
             }
-
         },
         "netstandard1.0": {
             "imports": [ "dotnet5.1", "dnxcore50", "portable-net45+win8" ],
@@ -90,7 +95,6 @@
             },
             "dependencies": {
             }
-
         },
         "netstandard1.3": {
             "imports": [ "dotnet5.4", "dnxcore50", "portable-net45+win8" ],
@@ -174,7 +178,6 @@
                     "type": "build"
                 }
             }
-
         },
         "uap10.0": {
             "imports": [ "dotnet5.4" ],

@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "Reactive Extensions - Platform Services Library",
     "description": "Reactive Extensions Platform Services Library used to access platform-specific functionality and enlightenment services.",
@@ -9,20 +9,25 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
-
     "compilationOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
-
-
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "exclude": [ "Strings_PlatformServices.Designer.cs" ],
-
     "dependencies": {
         "System.Reactive.Linq": { "target": "project" }
     },
-
     "frameworks": {
         "net40": {
             "compilationOptions": {
@@ -180,7 +185,6 @@
                     "type": "build"
                 }
             }
-
         },
         "uap10.0": {
             "imports": [ "dotnet5.4" ],

@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "Reactive Extensions - Windows Forms Helpers",
     "description": "Windows Forms extensions library for Rx. Contains scheduler functionality for the Windows Forms UI loop.",
@@ -14,12 +14,20 @@
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
-
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },
         "System.Reactive.Core": { "target": "project" }
     },
-
     "frameworks": {
         "net40": {
             "compilationOptions": {

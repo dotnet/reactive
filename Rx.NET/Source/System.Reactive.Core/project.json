@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "Reactive Extensions - Core Library",
     "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
@@ -14,10 +14,19 @@
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" }
     },
-
     "frameworks": {
         "net40": {
             "compilationOptions": {

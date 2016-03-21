@@ -14,6 +14,16 @@
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        } 
+    },
     "frameworks": {
         "net40": {
             "compilationOptions": {

@@ -16,6 +16,16 @@
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "dependencies": {
         "System.Reactive.Interfaces": { "target": "project" },
         "System.Reactive.Linq": { "target": "project" },
@@ -82,6 +92,5 @@
                 "System.Threading.Tasks": "4.0.10.0"
             }
         }
-    },
-    "userSecretsId": "aspnet5-Tests.System.Reactive-20160315032508"
+    }
 }

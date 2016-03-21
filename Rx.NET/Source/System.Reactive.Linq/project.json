@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "Reactive Extensions - Query Library",
     "description": "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
@@ -14,17 +14,25 @@
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "exclude": [
         "*/**/ImmutableList.cs",
         "Reactive/Observer.Extensions.cs",
         "Reactive/Internal/Observers.cs",
         "Reactive/Internal/Producer.cs"
     ],
-
     "dependencies": {
         "System.Reactive.Core": { "target": "project" }
     },
-
     "frameworks": {
         "net40": {
             "compilationOptions": {

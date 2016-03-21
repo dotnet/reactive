@@ -1,4 +1,4 @@
-﻿{
+{
     "version": "3.0.0-*",
     "title": "System.Reactive.Runtime.Remoting",
     "description": "Reactive Extensions Remoting Library used to expose observable sequences through .NET Remoting.",
@@ -9,17 +9,24 @@
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true,
-
     "compilationOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
-
+    "configurations": {
+        "ReleaseDelaySigned": {
+            "compilationOptions": {
+                "publicSign": false,
+                "delaySign": true,
+                "define": [ "RELEASE", "TRACE" ],
+                "optimize": true
+            }
+        }
+    },
     "dependencies": {
         "System.Reactive.Core": { "target": "project" }
     },
-
     "frameworks": {
         "net40": {
             "compilationOptions": {
