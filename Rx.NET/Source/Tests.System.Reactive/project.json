@@ -61,7 +61,7 @@
                 "debugType": "full"
             },
             "dependencies": {
-                "dotnet-test-xunit": "1.0.0-dev-91790-12"
+                "dotnet-test-xunit": "1.0.0-dev-121895-16"
             }
         },
         "net461": {
