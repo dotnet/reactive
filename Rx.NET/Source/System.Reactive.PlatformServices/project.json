@@ -123,7 +123,7 @@
                 ]
             },
             "dependencies": {
-                "NETStandard.Library": "1.5.0-rc2-23911"
+                "NETStandard.Library": "1.5.0-rc2-23925"
             }
         },
         "wpa81": {
@@ -212,7 +212,7 @@
                     "type": "build"
                 },
                 "Microsoft.NETCore.UniversalWindowsPlatform": {
-                    "version": "5.2.0-rc2-23911",
+                    "version": "5.2.0-rc2-23925",
                     "type": "build"
                 }
             }

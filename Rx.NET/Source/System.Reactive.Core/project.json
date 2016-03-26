@@ -99,14 +99,14 @@
             },
             "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.ComponentModel": "4.0.1-rc2-23911",
-                "System.Diagnostics.Contracts": "4.0.1-rc2-23911",
-                "System.Diagnostics.Debug": "4.0.11-rc2-23911",
-                "System.Dynamic.Runtime": "4.0.11-rc2-23911",
-                "System.Linq": "4.0.1-rc2-23911",
-                "System.Runtime": "4.1.0-rc2-23911",
-                "System.Runtime.Extensions": "4.1.0-rc2-23911",
-                "System.Threading": "4.0.11-rc2-23911"
+                "System.ComponentModel": "4.0.1-rc2-23925",
+                "System.Diagnostics.Contracts": "4.0.1-rc2-23925",
+                "System.Diagnostics.Debug": "4.0.11-rc2-23925",
+                "System.Dynamic.Runtime": "4.0.11-rc2-23925",
+                "System.Linq": "4.1.0-rc2-23925",
+                "System.Runtime": "4.1.0-rc2-23925",
+                "System.Runtime.Extensions": "4.1.0-rc2-23925",
+                "System.Threading": "4.0.11-rc2-23925"
             }
         },
         "netstandard1.3": {
@@ -130,14 +130,14 @@
             },
             "imports": [ "dotnet5.4" ],
             "dependencies": {
-                "System.Diagnostics.Contracts": "4.0.1-rc2-23911",
-                "System.Diagnostics.Debug": "4.0.11-rc2-23911",
-                "System.Collections.Concurrent": "4.0.12-rc2-23911",
-                "System.ComponentModel": "4.0.1-rc2-23911",
-                "System.Linq": "4.0.1-rc2-23911",
-                "System.Runtime.Extensions": "4.1.0-rc2-23911",
-                "System.Threading": "4.0.11-rc2-23911",
-                "System.Threading.Timer": "4.0.1-rc2-23911"
+                "System.Diagnostics.Contracts": "4.0.1-rc2-23925",
+                "System.Diagnostics.Debug": "4.0.11-rc2-23925",
+                "System.Collections.Concurrent": "4.0.12-rc2-23925",
+                "System.ComponentModel": "4.0.1-rc2-23925",
+                "System.Linq": "4.1.0-rc2-23925",
+                "System.Runtime.Extensions": "4.1.0-rc2-23925",
+                "System.Threading": "4.0.11-rc2-23925",
+                "System.Threading.Timer": "4.0.1-rc2-23925"
             }
         },
         "sl5": {

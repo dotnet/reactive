@@ -35,8 +35,8 @@
         "System.Reactive.Providers": { "target": "project" },
         "System.Reactive.Observable.Aliases": { "target": "project" },
         "xunit": "2.1.0",
-        "NETStandard.Library": "1.5.0-rc2-23911",
-        "System.Reflection.TypeExtensions": "4.1.0-rc2-23911"
+        "NETStandard.Library": "1.5.0-rc2-23925",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-23925"
     },
     "testRunner": "xunit",
     "frameworks": {

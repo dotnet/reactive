@@ -48,7 +48,7 @@
                 ]
             },
             "frameworkAssemblies": {
-                "System.Runtime": "4.0.0.0"
+                "System.Runtime": ""
             }
         },
         "net46": {
@@ -70,7 +70,9 @@
                 ]
             },
             "dependencies": {
-                "System.Runtime": "4.1.0-rc2-23911"
+            },
+            "frameworkAssemblies": {
+                "System.Runtime": ""
             }
         },
         "netstandard1.0": {
@@ -205,7 +207,7 @@
                     "type": "build"
                 },
                 "Microsoft.NETCore.UniversalWindowsPlatform": {
-                    "version": "5.2.0-rc2-23911",
+                    "version": "5.2.0-rc2-23925",
                     "type": "build"
                 }
             }
