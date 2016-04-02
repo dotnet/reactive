@@ -71,7 +71,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
             AssertThrows<InvalidOperationException>(() => Nop(e.Current));
         }
 
@@ -207,7 +207,7 @@ namespace Tests
             var xs = AsyncEnumerable.Generate(0, x => { throw ex; }, x => x + 1, x => x * x);
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace Tests
 
             var e = xs.GetEnumerator();
             HasNext(e, 0);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -229,7 +229,7 @@ namespace Tests
 
             var e = xs.GetEnumerator();
             HasNext(e, 0);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -354,7 +354,7 @@ namespace Tests
             var e = xs.GetEnumerator();
             Assert.Equal(1, i);
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
             Assert.True(disposed.Task.Result);
         }
@@ -388,7 +388,7 @@ namespace Tests
 
             try
             {
-                t.Wait();
+                t.Wait(WaitTimeoutMs);
             }
             catch (AggregateException ex)
             {

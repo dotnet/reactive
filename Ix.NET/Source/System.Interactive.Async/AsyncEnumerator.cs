@@ -20,7 +20,7 @@ namespace System.Collections.Generic
         public static Task<bool> MoveNext<T>(this IAsyncEnumerator<T> enumerator)
         {
             if (enumerator == null)
-                throw new ArgumentNullException("enumerator");
+                throw new ArgumentNullException(nameof(enumerator));
 
             return enumerator.MoveNext(CancellationToken.None);
         }

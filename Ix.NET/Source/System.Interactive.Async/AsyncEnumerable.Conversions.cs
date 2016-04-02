@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -11,6 +10,36 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Create(() =>
+            {
+                var e = source.GetEnumerator();
+
+                return Create(
+                    ct =>
+                    {
+                        var res = false;
+                        try
+                        {
+                            res = e.MoveNext();
+                        }
+                        finally
+                        {
+                            if (!res)
+                                e.Dispose();
+                        }
+                        return res ? TaskExt.True : TaskExt.False;
+                    },
+                    () => e.Current,
+                    () => e.Dispose()
+                );
+            });
+        }
+
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
@@ -21,9 +50,9 @@ namespace System.Linq
                 var e = source.GetEnumerator();
 
                 return Create(
-                    ct => Task.Factory.StartNew(() =>
+                    ct => Task.Run(() =>
                     {
-                        var res = default(bool);
+                        var res = false;
                         try
                         {
                             res = e.MoveNext();
@@ -55,9 +84,7 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    var t = e.MoveNext(CancellationToken.None);
-                    t.Wait();
-                    if (!t.Result)
+                    if (!e.MoveNext(CancellationToken.None).Result)
                         break;
                     var c = e.Current;
                     yield return c;
@@ -93,7 +120,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Create(() =>
             {
@@ -243,7 +270,7 @@ namespace System.Linq
         public static IObservable<TSource> ToObservable<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new ToObservableObservable<TSource>(source);
         }

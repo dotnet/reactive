@@ -157,7 +157,7 @@ namespace Tests
 
             try
             {
-                t.Wait();
+                t.Wait(WaitTimeoutMs);
             }
             catch
             {

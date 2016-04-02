@@ -31,6 +31,31 @@ namespace System.Linq
             }
         }
 
+        static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current,
+            Action dispose, IDisposable enumerator)
+        {
+            return Create(async ct =>
+            {
+                using (ct.Register(dispose))
+                {
+                    try
+                    {
+                        var result = await moveNext(ct).ConfigureAwait(false);
+                        if (!result)
+                        {
+                            enumerator?.Dispose();
+                        }
+                        return result;
+                    }
+                    catch
+                    {
+                        enumerator?.Dispose();
+                        throw;
+                    }
+                }
+            }, current, dispose);
+        }
+
         static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             return new AnonymousAsyncEnumerator<T>(moveNext, current, dispose);
@@ -109,7 +134,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
 
             return Create(() => Create<TValue>(
                 ct => TaskExt.Throw<bool>(exception),
@@ -139,7 +164,7 @@ namespace System.Linq
         public static IAsyncEnumerable<int> Range(int start, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return Enumerable.Range(start, count).ToAsyncEnumerable();
         }
@@ -147,7 +172,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element, int count)
         {
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return Enumerable.Repeat(element, count).ToAsyncEnumerable();
         }
@@ -167,7 +192,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<IAsyncEnumerable<TSource>> factory)
         {
             if (factory == null)
-                throw new ArgumentNullException("factory");
+                throw new ArgumentNullException(nameof(factory));
 
             return Create(() => factory().GetEnumerator());
         }
@@ -175,11 +200,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return Create(() =>
             {
@@ -223,9 +248,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException("resourceFactory");
+                throw new ArgumentNullException(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException("enumerableFactory");
+                throw new ArgumentNullException(nameof(enumerableFactory));
 
             return Create(() =>
             {
@@ -248,36 +273,29 @@ namespace System.Linq
                 var current = default(TSource);
 
                 return Create(
-                    (ct, tcs) =>
+                    async ct =>
                     {
-                        e.MoveNext(cts.Token).Then(t =>
+                        bool res;
+                        try
                         {
-                            t.Handle(tcs,
-                                res =>
-                                {
-                                    if (res)
-                                    {
-                                        current = e.Current;
-                                        tcs.TrySetResult(true);
-                                    }
-                                    else
-                                    {
-                                        d.Dispose();
-                                        tcs.TrySetResult(false);
-                                    }
-                                },
-                                ex =>
-                                {
-                                    d.Dispose();
-                                    tcs.TrySetException(ex);
-                                }
-                            );
-                        });
-
-                        return tcs.Task;
+                            res = await e.MoveNext(cts.Token).ConfigureAwait(false);
+                        }
+                        catch (Exception)
+                        {
+                            d.Dispose();
+                            throw;
+                        }
+                        if (res)
+                        {
+                            current = e.Current;
+                            return true;
+                        }
+                        d.Dispose();
+                        return false;
                     },
                     () => current,
-                    d.Dispose
+                    d.Dispose,
+                    null
                 );
             });
         }

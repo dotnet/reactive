@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -14,64 +13,37 @@ namespace System.Linq
         public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
-            var tcs = new TaskCompletionSource<TResult>();
+            return Aggregate_(source, seed, accumulator, resultSelector, cancellationToken);
+        }
 
+        private static async Task<TResult> Aggregate_<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed,
+            Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
+        {
             var acc = seed;
 
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        try
-                        {
-                            acc = accumulator(acc, e.Current);
-                            f(ct);
-                        }
-                        catch (Exception exception)
-                        {
-                            tcs.TrySetException(exception);
-                        }
-                    }
-                    else
-                    {
-                        var result = default(TResult);
-                        try
-                        {
-                            result = resultSelector(acc);
-                        }
-                        catch (Exception exception)
-                        {
-                            tcs.TrySetException(exception);
-                            return;
-                        }
-
-                        tcs.TrySetResult(result);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    acc = accumulator(acc, e.Current);
+                }
+            }
+            var result = resultSelector(acc);
+            return result;
         }
 
         public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return source.Aggregate(seed, accumulator, x => x, cancellationToken);
         }
@@ -79,58 +51,35 @@ namespace System.Linq
         public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
-            
-            var tcs = new TaskCompletionSource<TSource>();
+                throw new ArgumentNullException(nameof(accumulator));
 
+            return Aggregate_(source, accumulator, cancellationToken);
+        }
+
+        private static async Task<TSource> Aggregate_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
+        {
             var first = true;
             var acc = default(TSource);
 
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        try
-                        {
-                            if (first)
-                                acc = e.Current;
-                            else
-                                acc = accumulator(acc, e.Current);
-                            f(ct);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                        }
-
-                        first = false;
-                    }
-                    else
-                    {
-                        if (first)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(acc);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    acc = first ? e.Current : accumulator(acc, e.Current);
+                    first = false;
+                }
+            }
+            if (first)
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return acc;
         }
 
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
@@ -138,9 +87,9 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
@@ -148,7 +97,7 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
@@ -156,9 +105,9 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
@@ -166,91 +115,53 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
-            var tcs = new TaskCompletionSource<bool>();
+            return All_(source, predicate, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        try
-                        {
-                            if (!predicate(e.Current))
-                                tcs.TrySetResult(false);
-                            else
-                                f(ct);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                        }
-                    }
-                    else
-                    {
-                        tcs.TrySetResult(true);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    if (!predicate(e.Current))
+                        return false;
+                }
+            }
+            return true;
         }
 
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
-            var tcs = new TaskCompletionSource<bool>();
+            return Any_(source, predicate, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<bool> Any_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        try
-                        {
-                            if (predicate(e.Current))
-                                tcs.TrySetResult(true);
-                            else
-                                f(ct);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                        }
-                    }
-                    else
-                    {
-                        tcs.TrySetResult(false);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    if (predicate(e.Current))
+                        return true;
+                }
+            }
+            return false;
         }
 
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             var e = source.GetEnumerator();
             return e.MoveNext(cancellationToken);
@@ -259,9 +170,9 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Any(x => comparer.Equals(x, value), cancellationToken);
         }
@@ -269,7 +180,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Contains(value, EqualityComparer<TSource>.Default, cancellationToken);
         }
@@ -277,32 +188,29 @@ namespace System.Linq
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return First_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            e.MoveNext(cancellationToken).Then(t =>
+        private static async Task<TSource> First_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                        tcs.TrySetResult(e.Current);
-                    else
-                        tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                });
-            });
-
-            return tcs.Task.Finally(e.Dispose);
+                    return e.Current;
+                }
+            }
+            throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).First(cancellationToken);
         }
@@ -310,32 +218,29 @@ namespace System.Linq
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return FirstOrDefault_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            e.MoveNext(cancellationToken).Then(t =>
+        private static async Task<TSource> FirstOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                        tcs.TrySetResult(e.Current);
-                    else
-                        tcs.TrySetResult(default(TSource));
-                });
-            });
-
-            return tcs.Task.Finally(e.Dispose);
+                    return e.Current;
+                }
+            }
+            return default(TSource);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).FirstOrDefault(cancellationToken);
         }
@@ -343,46 +248,35 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return Last_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
+        private static async Task<TSource> Last_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
             var last = default(TSource);
             var hasLast = false;
 
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        hasLast = true;
-                        last = e.Current;
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (!hasLast)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(last);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    hasLast = true;
+                    last = e.Current;
+                }
+            }
+            if (!hasLast)
+                throw new InvalidOperationException(Strings.NO_ELEMENTS);
+            return last;
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).Last(cancellationToken);
         }
@@ -390,46 +284,33 @@ namespace System.Linq
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return LastOrDefault_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
+        private static async Task<TSource> LastOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
             var last = default(TSource);
             var hasLast = false;
 
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        hasLast = true;
-                        last = e.Current;
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (!hasLast)
-                            tcs.TrySetResult(default(TSource));
-                        else
-                            tcs.TrySetResult(last);
-                    }
-                });
-            });
-
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                    hasLast = true;
+                    last = e.Current;
+                }
+            }
+            return !hasLast ? default(TSource) : last;
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).LastOrDefault(cancellationToken);
         }
@@ -437,44 +318,34 @@ namespace System.Linq
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return Single_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            e.MoveNext(cancellationToken).Then(t =>
+        private static async Task<TSource> Single_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        var result = e.Current;
-                        e.MoveNext(cancellationToken).Then(t1 =>
-                        {
-                            t1.Handle(tcs, res1 =>
-                            {
-                                if (res1)
-                                    tcs.TrySetException(new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT));
-                                else
-                                    tcs.TrySetResult(result);
-                            });
-                        });
-                    }
-                    else
-                        tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                });
-            });
-
-            return tcs.Task.Finally(e.Dispose);
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
+                var result = e.Current;
+                if (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                {
+                    throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+                }
+                return result;
+            }
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).Single(cancellationToken);
         }
@@ -482,44 +353,35 @@ namespace System.Linq
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return SingleOrDefault_(source, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            e.MoveNext(cancellationToken).Then(t =>
+        private static async Task<TSource> SingleOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        var result = e.Current;
-                        e.MoveNext(cancellationToken).Then(t1 =>
-                        {
-                            t1.Handle(tcs, res1 =>
-                            {
-                                if (res1)
-                                    tcs.TrySetException(new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT));
-                                else
-                                    tcs.TrySetResult(result);
-                            });
-                        });
-                    }
-                    else
-                        tcs.TrySetResult(default(TSource));
-                });
-            });
+                    return default(TSource);
+                }
 
-            return tcs.Task.Finally(e.Dispose);
+                TSource result = e.Current;
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                {
+                    return result;
+                }
+            }
+            throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
         }
 
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).SingleOrDefault(cancellationToken);
         }
@@ -527,87 +389,69 @@ namespace System.Linq
         public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return ElementAt_(source, index, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            var next = default(Action<CancellationToken>);
-            next = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<TSource> ElementAt_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        {
+            if (index >= 0)
             {
-                t.Handle(tcs, res =>
+                using (var e = source.GetEnumerator())
                 {
-                    if (res)
+                    while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                     {
                         if (index == 0)
                         {
-                            tcs.TrySetResult(e.Current);
+                            return e.Current;
                         }
-                        else
-                        {
-                            index--;
-                            next(ct);
-                        }
-                    }
-                    else
-                    {
-                        tcs.TrySetException(new ArgumentOutOfRangeException("index"));
-                    }
-                });
-            });
 
-            next(cancellationToken);
+                        index--;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            throw new ArgumentOutOfRangeException(nameof(index));
         }
 
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
-            var tcs = new TaskCompletionSource<TSource>();
+            return ElementAtOrDefault_(source, index, cancellationToken);
+        }
 
-            var e = source.GetEnumerator();
-
-            var next = default(Action<CancellationToken>);
-            next = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<TSource> ElementAtOrDefault_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        {
+            if (index >= 0)
             {
-                t.Handle(tcs, res =>
+                using (var e = source.GetEnumerator())
                 {
-                    if (res)
+                    while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                     {
                         if (index == 0)
                         {
-                            tcs.TrySetResult(e.Current);
+                            return e.Current;
                         }
-                        else
-                        {
-                            index--;
-                            next(ct);
-                        }
-                    }
-                    else
-                    {
-                        tcs.TrySetResult(default(TSource));
-                    }
-                });
-            });
 
-            next(cancellationToken);
+                        index--;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return default(TSource);
         }
 
         public static Task<TSource[]> ToArray<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(new List<TSource>(), (list, x) => { list.Add(x); return list; }, list => list.ToArray(), cancellationToken);
         }
@@ -615,7 +459,7 @@ namespace System.Linq
         public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(new List<TSource>(), (list, x) => { list.Add(x); return list; }, cancellationToken);
         }
@@ -623,13 +467,13 @@ namespace System.Linq
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Aggregate(new Dictionary<TKey, TElement>(comparer), (d, x) => { d.Add(keySelector(x), elementSelector(x)); return d; }, cancellationToken);
         }
@@ -637,11 +481,11 @@ namespace System.Linq
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
 
             return source.ToDictionary(keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -649,11 +493,11 @@ namespace System.Linq
         public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.ToDictionary(keySelector, x => x, comparer, cancellationToken);
         }
@@ -661,9 +505,9 @@ namespace System.Linq
         public static Task<Dictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.ToDictionary(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -671,13 +515,13 @@ namespace System.Linq
         public static async Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
 
@@ -687,11 +531,11 @@ namespace System.Linq
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
 
             return source.ToLookup(keySelector, elementSelector, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -699,11 +543,11 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.ToLookup(keySelector, x => x, comparer, cancellationToken);
         }
@@ -711,9 +555,9 @@ namespace System.Linq
         public static Task<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.ToLookup(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
@@ -721,404 +565,360 @@ namespace System.Linq
         public static Task<double> Average(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double> Average_(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
+
+                long sum = e.Current;
+                long count = 1;
+                checked
+                {
+                    while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                     {
-                        count++;
                         sum += e.Current;
-                        f(ct);
+                        ++count;
                     }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
+                }
 
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                return (double)sum / count;
+            }
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double?>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double?> Average_(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    int? v = e.Current;
+                    if (v.HasValue)
                     {
-                        if (e.Current.HasValue)
+                        long sum = v.GetValueOrDefault();
+                        long count = 1;
+                        checked
                         {
-                            count++;
-                            sum += e.Current.Value;
+                            while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                            {
+                                v = e.Current;
+                                if (v.HasValue)
+                                {
+                                    sum += v.GetValueOrDefault();
+                                    ++count;
+                                }
+                            }
                         }
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetResult(null);
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
 
-            f(cancellationToken);
+                        return (double)sum / count;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return null;
         }
 
         public static Task<double> Average(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double> Average_(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
+
+                long sum = e.Current;
+                long count = 1;
+                checked
+                {
+                    while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                     {
-                        count++;
                         sum += e.Current;
-                        f(ct);
+                        ++count;
                     }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
+                }
 
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+                return (double)sum / count;
+            }
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double?>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double?> Average_(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    long? v = e.Current;
+                    if (v.HasValue)
                     {
-                        if (e.Current.HasValue)
+                        long sum = v.GetValueOrDefault();
+                        long count = 1;
+                        checked
                         {
-                            count++;
-                            sum += e.Current.Value;
+                            while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                            {
+                                v = e.Current;
+                                if (v.HasValue)
+                                {
+                                    sum += v.GetValueOrDefault();
+                                    ++count;
+                                }
+                            }
                         }
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetResult(null);
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
 
-            f(cancellationToken);
+                        return (double)sum / count;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return null;
         }
 
         public static Task<double> Average(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double> Average_(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        count++;
-                        sum += e.Current;
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
 
-            f(cancellationToken);
+                double sum = e.Current;
+                long count = 1;
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                {
+                    // There is an opportunity to short-circuit here, in that if e.Current is
+                    // ever NaN then the result will always be NaN. Assuming that this case is
+                    // rare enough that not checking is the better approach generally.
+                    sum += e.Current;
+                    ++count;
+                }
 
-            return tcs.Task.Finally(e.Dispose);
+                return sum / count;
+            }
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<double?>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0.0;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<double?> Average_(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    double? v = e.Current;
+                    if (v.HasValue)
                     {
-                        if (e.Current.HasValue)
+                        double sum = v.GetValueOrDefault();
+                        long count = 1;
+                        checked
                         {
-                            count++;
-                            sum += e.Current.Value;
+                            while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                            {
+                                v = e.Current;
+                                if (v.HasValue)
+                                {
+                                    sum += v.GetValueOrDefault();
+                                    ++count;
+                                }
+                            }
                         }
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetResult(null);
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
 
-            f(cancellationToken);
+                        return sum / count;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return null;
         }
 
         public static Task<float> Average(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<float>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0f;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<float> Average_(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        count++;
-                        sum += e.Current;
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
 
-            f(cancellationToken);
+                double sum = e.Current;
+                long count = 1;
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                {
+                    sum += e.Current;
+                    ++count;
+                }
 
-            return tcs.Task.Finally(e.Dispose);
+                return (float)(sum / count);
+            }
         }
 
         public static Task<float?> Average(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<float?>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0f;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<float?> Average_(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    float? v = e.Current;
+                    if (v.HasValue)
                     {
-                        if (e.Current.HasValue)
+                        double sum = v.GetValueOrDefault();
+                        long count = 1;
+                        checked
                         {
-                            count++;
-                            sum += e.Current.Value;
+                            while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                            {
+                                v = e.Current;
+                                if (v.HasValue)
+                                {
+                                    sum += v.GetValueOrDefault();
+                                    ++count;
+                                }
+                            }
                         }
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetResult(null);
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
 
-            f(cancellationToken);
+                        return (float)(sum / count);
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return null;
         }
 
         public static Task<decimal> Average(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<decimal>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0m;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<decimal> Average_(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
-                    {
-                        count++;
-                        sum += e.Current;
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                }
 
-            f(cancellationToken);
+                decimal sum = e.Current;
+                long count = 1;
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                {
+                    sum += e.Current;
+                    ++count;
+                }
 
-            return tcs.Task.Finally(e.Dispose);
+                return sum / count;
+            }
         }
 
         public static Task<decimal?> Average(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var tcs = new TaskCompletionSource<decimal?>();
+            return Average_(source, cancellationToken);
+        }
 
-            var count = 0L;
-            var sum = 0m;
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+        private static async Task<decimal?> Average_(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
+        {
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (res)
+                    decimal? v = e.Current;
+                    if (v.HasValue)
                     {
-                        if (e.Current.HasValue)
+                        decimal sum = v.GetValueOrDefault();
+                        long count = 1;
+                        while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                         {
-                            count++;
-                            sum += e.Current.Value;
+                            v = e.Current;
+                            if (v.HasValue)
+                            {
+                                sum += v.GetValueOrDefault();
+                                ++count;
+                            }
                         }
-                        f(ct);
-                    }
-                    else
-                    {
-                        if (count == 0)
-                            tcs.TrySetResult(null);
-                        else
-                            tcs.TrySetResult(sum / count);
-                    }
-                });
-            });
 
-            f(cancellationToken);
+                        return sum / count;
+                    }
+                }
+            }
 
-            return tcs.Task.Finally(e.Dispose);
+            return null;
         }
 
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1126,9 +926,9 @@ namespace System.Linq
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1136,9 +936,9 @@ namespace System.Linq
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1146,9 +946,9 @@ namespace System.Linq
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1156,9 +956,9 @@ namespace System.Linq
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1166,9 +966,9 @@ namespace System.Linq
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1176,9 +976,9 @@ namespace System.Linq
         public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1186,9 +986,9 @@ namespace System.Linq
         public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1196,9 +996,9 @@ namespace System.Linq
         public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1206,9 +1006,9 @@ namespace System.Linq
         public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Average(cancellationToken);
         }
@@ -1216,7 +1016,7 @@ namespace System.Linq
         public static Task<int> Max(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Max, cancellationToken);
         }
@@ -1224,7 +1024,7 @@ namespace System.Linq
         public static Task<long> Max(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Max, cancellationToken);
         }
@@ -1232,7 +1032,7 @@ namespace System.Linq
         public static Task<double> Max(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Max, cancellationToken);
         }
@@ -1240,7 +1040,7 @@ namespace System.Linq
         public static Task<float> Max(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Max, cancellationToken);
         }
@@ -1248,7 +1048,7 @@ namespace System.Linq
         public static Task<decimal> Max(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Max, cancellationToken);
         }
@@ -1268,7 +1068,7 @@ namespace System.Linq
         public static Task<int?> Max(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(int?), NullableMax, cancellationToken);
         }
@@ -1276,7 +1076,7 @@ namespace System.Linq
         public static Task<long?> Max(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(long?), NullableMax, cancellationToken);
         }
@@ -1284,7 +1084,7 @@ namespace System.Linq
         public static Task<double?> Max(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(double?), NullableMax, cancellationToken);
         }
@@ -1292,7 +1092,7 @@ namespace System.Linq
         public static Task<float?> Max(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(float?), NullableMax, cancellationToken);
         }
@@ -1300,7 +1100,7 @@ namespace System.Linq
         public static Task<decimal?> Max(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(decimal?), NullableMax, cancellationToken);
         }
@@ -1308,7 +1108,7 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             var comparer = Comparer<TSource>.Default;
             return source.Aggregate((x, y) => comparer.Compare(x, y) >= 0 ? x : y, cancellationToken);
@@ -1317,9 +1117,9 @@ namespace System.Linq
         public static Task<int> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1327,9 +1127,9 @@ namespace System.Linq
         public static Task<long> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1337,9 +1137,9 @@ namespace System.Linq
         public static Task<double> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1347,9 +1147,9 @@ namespace System.Linq
         public static Task<float> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1357,9 +1157,9 @@ namespace System.Linq
         public static Task<decimal> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1367,9 +1167,9 @@ namespace System.Linq
         public static Task<int?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1377,9 +1177,9 @@ namespace System.Linq
         public static Task<long?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1387,9 +1187,9 @@ namespace System.Linq
         public static Task<double?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1397,9 +1197,9 @@ namespace System.Linq
         public static Task<float?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1407,9 +1207,9 @@ namespace System.Linq
         public static Task<decimal?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1417,9 +1217,9 @@ namespace System.Linq
         public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Max(cancellationToken);
         }
@@ -1427,7 +1227,7 @@ namespace System.Linq
         public static Task<int> Min(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Min, cancellationToken);
         }
@@ -1435,7 +1235,7 @@ namespace System.Linq
         public static Task<long> Min(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Min, cancellationToken);
         }
@@ -1443,7 +1243,7 @@ namespace System.Linq
         public static Task<double> Min(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Min, cancellationToken);
         }
@@ -1451,7 +1251,7 @@ namespace System.Linq
         public static Task<float> Min(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Min, cancellationToken);
         }
@@ -1459,7 +1259,7 @@ namespace System.Linq
         public static Task<decimal> Min(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(Math.Min, cancellationToken);
         }
@@ -1479,7 +1279,7 @@ namespace System.Linq
         public static Task<int?> Min(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(int?), NullableMin, cancellationToken);
         }
@@ -1487,7 +1287,7 @@ namespace System.Linq
         public static Task<long?> Min(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(long?), NullableMin, cancellationToken);
         }
@@ -1495,7 +1295,7 @@ namespace System.Linq
         public static Task<double?> Min(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(double?), NullableMin, cancellationToken);
         }
@@ -1503,7 +1303,7 @@ namespace System.Linq
         public static Task<float?> Min(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(float?), NullableMin, cancellationToken);
         }
@@ -1511,7 +1311,7 @@ namespace System.Linq
         public static Task<decimal?> Min(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(default(decimal?), NullableMin, cancellationToken);
         }
@@ -1519,7 +1319,7 @@ namespace System.Linq
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             var comparer = Comparer<TSource>.Default;
             return source.Aggregate((x, y) => comparer.Compare(x, y) <= 0 ? x : y, cancellationToken);
@@ -1528,9 +1328,9 @@ namespace System.Linq
         public static Task<int> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1538,9 +1338,9 @@ namespace System.Linq
         public static Task<long> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1548,9 +1348,9 @@ namespace System.Linq
         public static Task<double> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1558,9 +1358,9 @@ namespace System.Linq
         public static Task<float> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1568,9 +1368,9 @@ namespace System.Linq
         public static Task<decimal> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1578,9 +1378,9 @@ namespace System.Linq
         public static Task<int?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1588,9 +1388,9 @@ namespace System.Linq
         public static Task<long?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1598,9 +1398,9 @@ namespace System.Linq
         public static Task<double?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1608,9 +1408,9 @@ namespace System.Linq
         public static Task<float?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1618,9 +1418,9 @@ namespace System.Linq
         public static Task<decimal?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1628,9 +1428,9 @@ namespace System.Linq
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Min(cancellationToken);
         }
@@ -1638,7 +1438,7 @@ namespace System.Linq
         public static Task<int> Sum(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0, (x, y) => x + y, cancellationToken);
         }
@@ -1646,7 +1446,7 @@ namespace System.Linq
         public static Task<long> Sum(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0L, (x, y) => x + y, cancellationToken);
         }
@@ -1654,7 +1454,7 @@ namespace System.Linq
         public static Task<double> Sum(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0.0, (x, y) => x + y, cancellationToken);
         }
@@ -1662,7 +1462,7 @@ namespace System.Linq
         public static Task<float> Sum(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0f, (x, y) => x + y, cancellationToken);
         }
@@ -1670,7 +1470,7 @@ namespace System.Linq
         public static Task<decimal> Sum(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate(0m, (x, y) => x + y, cancellationToken);
         }
@@ -1678,7 +1478,7 @@ namespace System.Linq
         public static Task<int?> Sum(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate((int?)0, (x, y) => x + y.GetValueOrDefault(), cancellationToken);
         }
@@ -1686,7 +1486,7 @@ namespace System.Linq
         public static Task<long?> Sum(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate((long?)0, (x, y) => x + y.GetValueOrDefault(), cancellationToken);
         }
@@ -1694,7 +1494,7 @@ namespace System.Linq
         public static Task<double?> Sum(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate((double?)0, (x, y) => x + y.GetValueOrDefault(), cancellationToken);
         }
@@ -1702,7 +1502,7 @@ namespace System.Linq
         public static Task<float?> Sum(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate((float?)0, (x, y) => x + y.GetValueOrDefault(), cancellationToken);
         }
@@ -1710,7 +1510,7 @@ namespace System.Linq
         public static Task<decimal?> Sum(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Aggregate((decimal?)0, (x, y) => x + y.GetValueOrDefault(), cancellationToken);
         }
@@ -1718,9 +1518,9 @@ namespace System.Linq
         public static Task<int> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1728,9 +1528,9 @@ namespace System.Linq
         public static Task<long> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1738,9 +1538,9 @@ namespace System.Linq
         public static Task<double> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1748,9 +1548,9 @@ namespace System.Linq
         public static Task<float> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1758,9 +1558,9 @@ namespace System.Linq
         public static Task<decimal> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1768,9 +1568,9 @@ namespace System.Linq
         public static Task<int?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1778,9 +1578,9 @@ namespace System.Linq
         public static Task<long?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1788,9 +1588,9 @@ namespace System.Linq
         public static Task<double?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1798,9 +1598,9 @@ namespace System.Linq
         public static Task<float?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1808,9 +1608,9 @@ namespace System.Linq
         public static Task<decimal?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Select(selector).Sum(cancellationToken);
         }
@@ -1818,27 +1618,37 @@ namespace System.Linq
         public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            return source.Any(cancellationToken).Then(t => !t.Result);
+            return IsEmpty_(source, cancellationToken);
+        }
+
+        private static async Task<bool> IsEmpty_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            return !await source.Any(cancellationToken).ConfigureAwait(false);
         }
 
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
-            return MinBy(source, x => x, comparer, cancellationToken).Then(t => t.Result.First());
+            return Min_(source, comparer, cancellationToken);
+        }
+
+        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            return (await MinBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
         }
 
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return MinBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
         }
@@ -1846,11 +1656,11 @@ namespace System.Linq
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }
@@ -1858,19 +1668,24 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
-            return MaxBy(source, x => x, comparer, cancellationToken).Then(t => t.Result.First());
+            return Max_(source, comparer, cancellationToken);
+        }
+
+        private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            return (await MaxBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return MaxBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
         }
@@ -1878,99 +1693,47 @@ namespace System.Linq
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue), cancellationToken);
         }
 
-        private static Task<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
+        private static async Task<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<IList<TSource>>();
+            var result = new List<TSource>();
 
-            var result = new List<TSource>(); 
-            
-            var hasFirst = false;
-            var current = default(TSource);
-            var resKey = default(TKey);
-
-            var e = source.GetEnumerator();
-
-            var f = default(Action<CancellationToken>);
-            f = ct => e.MoveNext(ct).Then(t =>
+            using (var e = source.GetEnumerator())
             {
-                t.Handle(tcs, res =>
+                if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                    throw new InvalidOperationException("Source sequence doesn't contain any elements.");
+
+                var current = e.Current;
+                var resKey = keySelector(current);
+                result.Add(current);
+
+                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (!hasFirst)
+                    var cur = e.Current;
+                    var key = keySelector(cur);
+
+                    var cmp = compare(key, resKey);
+                    if (cmp == 0)
                     {
-                        if (!res)
-                        {
-                            tcs.TrySetException(new InvalidOperationException(Strings.NO_ELEMENTS));
-                            return;
-                        }
-
-                        current = e.Current;
-
-                        try
-                        {
-                            resKey = keySelector(current);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                            return;
-                        }
-
-                        result.Add(current);
-
-                        hasFirst = true;
-                        f(ct);
+                        result.Add(cur);
                     }
-                    else
+                    else if (cmp > 0)
                     {
-                        if (res)
-                        {
-                            var key = default(TKey);
-                            var cmp = default(int);
-
-                            try
-                            {
-                                current = e.Current;
-                                key = keySelector(current);
-                                cmp = compare(key, resKey);
-                            }
-                            catch (Exception ex)
-                            {
-                                tcs.TrySetException(ex);
-                                return;
-                            }
-
-                            if (cmp == 0)
-                            {
-                                result.Add(current);
-                            }
-                            else if (cmp > 0)
-                            {
-                                result = new List<TSource> { current };
-                                resKey = key;
-                            }
-
-                            f(ct);
-                        }
-                        else
-                        {
-                            tcs.TrySetResult(result);
-                        }
+                        result = new List<TSource> { cur };
+                        resKey = key;
                     }
-                });
-            });
+                }
+            }
 
-            f(cancellationToken);
-
-            return tcs.Task.Finally(e.Dispose);
+            return result;
         }
     }
 }

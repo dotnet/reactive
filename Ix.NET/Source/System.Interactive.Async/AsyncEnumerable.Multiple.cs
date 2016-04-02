@@ -14,9 +14,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return Create(() =>
             {
@@ -27,42 +27,30 @@ namespace System.Linq
                 var a = new AssignableDisposable { Disposable = e };
                 var d = Disposable.Create(cts, a);
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) => e.MoveNext(ct).Then(t =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
-                    t.Handle(tcs, res =>
+                    if (await e.MoveNext(ct).ConfigureAwait(false))
                     {
-                        if (res)
-                        {
-                            tcs.TrySetResult(true);
-                        }
-                        else
-                        {
-                            if (switched)
-                            {
-                                tcs.TrySetResult(false);
-                            }
-                            else
-                            {
-                                switched = true;
+                        return true;
+                    }
+                    if (switched)
+                    {
+                        return false;
+                    }
+                    switched = true;
 
-                                e = second.GetEnumerator();
-                                a.Disposable = e;
+                    e = second.GetEnumerator();
+                    a.Disposable = e;
 
-                                f(tcs, ct);
-                            }
-                        }
-                    });
-                });
+                    return await f(ct).ConfigureAwait(false);
+                };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(a);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    e
                 );
             });
         }
@@ -70,11 +58,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Zip<TFirst, TSecond, TResult>(this IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Create(() =>
             {
@@ -86,21 +74,13 @@ namespace System.Linq
                 var d = Disposable.Create(cts, e1, e2);
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        e1.MoveNext(cts.Token).Zip(e2.MoveNext(cts.Token), (f, s) =>
+                    ct => e1.MoveNext(cts.Token).Zip(e2.MoveNext(cts.Token), (f, s) =>
                         {
                             var result = f && s;
                             if (result)
                                 current = selector(e1.Current, e2.Current);
                             return result;
-                        }).Then(t =>
-                        {
-                            t.Handle(tcs, x => tcs.TrySetResult(x));
-                        });
-
-                        return tcs.Task.UsingEnumerator(e1).UsingEnumerator(e2);
-                    },
+                        }),
                     () => current,
                     d.Dispose
                 );
@@ -110,11 +90,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return Create(() =>
             {
@@ -125,40 +105,25 @@ namespace System.Linq
 
                 var mapTask = default(Task<Dictionary<TSource, TSource>>);
                 var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(ct =>
-                {
-                    if (mapTask == null)
-                        mapTask = second.ToDictionary(x => x, comparer, ct);
-                    return mapTask;
-                });
+                    mapTask ?? (mapTask = second.ToDictionary(x => x, comparer, ct)));
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
+                    if (await e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ConfigureAwait(false))
                     {
-                        t.Handle(tcs, res =>
-                        {
-                            if (res)
-                            {
-                                if (!mapTask.Result.ContainsKey(e.Current))
-                                    tcs.TrySetResult(true);
-                                else
-                                    f(tcs, ct);
-                            }
-                            else
-                                tcs.TrySetResult(false);
-                        });
-                    });
+                        if (!mapTask.Result.ContainsKey(e.Current))
+                            return true;
+                        return await f(ct).ConfigureAwait(false);
+                    }
+                    return false;
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(e);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    e
                 );
             });
         }
@@ -166,9 +131,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Except<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.Except(second, EqualityComparer<TSource>.Default);
         }
@@ -176,11 +141,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return Create(() =>
             {
@@ -197,34 +162,23 @@ namespace System.Linq
                     return mapTask;
                 });
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
-                    e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).Then(t =>
+                    if (await e.MoveNext(ct).Zip(getMapTask(ct), (b, _) => b).ConfigureAwait(false))
                     {
-                        t.Handle(tcs, res =>
-                        {
-                            if (res)
-                            {
-                                if (mapTask.Result.ContainsKey(e.Current))
-                                    tcs.TrySetResult(true);
-                                else
-                                    f(tcs, ct);
-                            }
-                            else
-                                tcs.TrySetResult(false);
-                        });
-                    });
+                        if (mapTask.Result.ContainsKey(e.Current))
+                            return true;
+                        return await f(ct).ConfigureAwait(false);
+                    }
+                    return false;
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(e);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    e
                 );
             });
         }
@@ -232,9 +186,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.Intersect(second, EqualityComparer<TSource>.Default);
         }
@@ -242,11 +196,11 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return first.Concat(second).Distinct(comparer);
         }
@@ -254,9 +208,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.Union(second, EqualityComparer<TSource>.Default);
         }
@@ -264,79 +218,39 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
-            var tcs = new TaskCompletionSource<bool>();
+            return SequenceEqual_(first, second, comparer, cancellationToken);
+        }
 
-            var e1 = first.GetEnumerator();
-            var e2 = second.GetEnumerator();
-
-            var run = default(Action<CancellationToken>);
-            run = ct =>
+        private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer,
+            CancellationToken cancellationToken)
+        {
+            using (var e1 = first.GetEnumerator())
+            using (var e2 = second.GetEnumerator())
             {
-                e1.MoveNext(ct).Zip(e2.MoveNext(ct), (f, s) =>
+                while (await e1.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (f ^ s)
+                    if (!(await e2.MoveNext(cancellationToken).ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
                     {
-                        tcs.TrySetResult(false);
                         return false;
                     }
+                }
 
-                    if (f && s)
-                    {
-                        var eq = default(bool);
-                        try
-                        {
-                            eq = comparer.Equals(e1.Current, e2.Current);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                            return false;
-                        }
-
-                        if (!eq)
-                        {
-                            tcs.TrySetResult(false);
-                            return false;
-                        }
-                        else
-                            return true;
-                    }
-                    else
-                    {
-                        tcs.TrySetResult(true);
-                        return false;
-                    }
-                }).Then(t =>
-                {
-                    t.Handle(tcs, res =>
-                    {
-                        if (res)
-                            run(ct);
-                    });
-                });
-            };
-
-            run(cancellationToken);
-
-            return tcs.Task.Finally(() =>
-            {
-                e1.Dispose();
-                e2.Dispose();
-            });
+                return !await e2.MoveNext(cancellationToken).ConfigureAwait(false);
+            }
         }
 
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);
         }
@@ -344,17 +258,17 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
-                throw new ArgumentNullException("outer");
+                throw new ArgumentNullException(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException("inner");
+                throw new ArgumentNullException(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException("outerKeySelector");
+                throw new ArgumentNullException(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException("innerKeySelector");
+                throw new ArgumentNullException(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
 
             return new GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -363,15 +277,15 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector)
         {
             if (outer == null)
-                throw new ArgumentNullException("outer");
+                throw new ArgumentNullException(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException("inner");
+                throw new ArgumentNullException(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException("outerKeySelector");
+                throw new ArgumentNullException(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException("innerKeySelector");
+                throw new ArgumentNullException(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return outer.GroupJoin(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
@@ -508,17 +422,17 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
         {
             if (outer == null)
-                throw new ArgumentNullException("outer");
+                throw new ArgumentNullException(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException("inner");
+                throw new ArgumentNullException(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException("outerKeySelector");
+                throw new ArgumentNullException(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException("innerKeySelector");
+                throw new ArgumentNullException(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return Create(() =>
             {
@@ -534,25 +448,21 @@ namespace System.Linq
                 var innerMap = new Dictionary<TKey, List<TInner>>(comparer);
                 var q = new Queue<TResult>();
 
-                var gate = new object();
-
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
                     if (q.Count > 0)
                     {
                         current = q.Dequeue();
-                        tcs.TrySetResult(true);
-                        return;
+                        return true;
                     }
 
                     var b = useOuter;
                     if (ie == null && oe == null)
                     {
-                        tcs.TrySetResult(false);
-                        return;
+                        return false;
                     }
-                    else if (ie == null)
+                    if (ie == null)
                         b = true;
                     else if (oe == null)
                         b = false;
@@ -560,135 +470,87 @@ namespace System.Linq
 
                     var enqueue = new Func<TOuter, TInner, bool>((o, i) =>
                     {
-                        var result = default(TResult);
-                        try
-                        {
-                            result = resultSelector(o, i);
-                        }
-                        catch (Exception exception)
-                        {
-                            tcs.TrySetException(exception);
-                            return false;
-                        }
-
+                        var result = resultSelector(o, i);
                         q.Enqueue(result);
                         return true;
                     });
 
                     if (b)
-                        oe.MoveNext(ct).Then(t =>
+                    {
+                        if (await oe.MoveNext(ct).ConfigureAwait(false))
                         {
-                            t.Handle(tcs, res =>
+                            var element = oe.Current;
+                            var key = default(TKey);
+
+                            key = outerKeySelector(element);
+
+                            var outerList = default(List<TOuter>);
+                            if (!outerMap.TryGetValue(key, out outerList))
                             {
-                                if (res)
-                                {
-                                    var element = oe.Current;
-                                    var key = default(TKey);
+                                outerList = new List<TOuter>();
+                                outerMap.Add(key, outerList);
+                            }
 
-                                    try
-                                    {
-                                        key = outerKeySelector(element);
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        tcs.TrySetException(exception);
-                                        return;
-                                    }
+                            outerList.Add(element);
 
-                                    var outerList = default(List<TOuter>);
-                                    if (!outerMap.TryGetValue(key, out outerList))
-                                    {
-                                        outerList = new List<TOuter>();
-                                        outerMap.Add(key, outerList);
-                                    }
+                            var innerList = default(List<TInner>);
+                            if (!innerMap.TryGetValue(key, out innerList))
+                            {
+                                innerList = new List<TInner>();
+                                innerMap.Add(key, innerList);
+                            }
 
-                                    outerList.Add(element);
+                            foreach (var v in innerList)
+                            {
+                                if (!enqueue(element, v))
+                                    return false;
+                            }
 
-                                    var innerList = default(List<TInner>);
-                                    if (!innerMap.TryGetValue(key, out innerList))
-                                    {
-                                        innerList = new List<TInner>();
-                                        innerMap.Add(key, innerList);
-                                    }
+                            return await f(ct).ConfigureAwait(false);
+                        }
+                        oe.Dispose();
+                        oe = null;
+                        return await f(ct).ConfigureAwait(false);
+                    }
+                    if (await ie.MoveNext(ct).ConfigureAwait(false))
+                    {
+                        var element = ie.Current;
+                        var key = innerKeySelector(element);
 
-                                    foreach (var v in innerList)
-                                    {
-                                        if (!enqueue(element, v))
-                                            return;
-                                    }
-                                    
-                                    f(tcs, ct);
-                                }
-                                else
-                                {
-                                    oe.Dispose();
-                                    oe = null;
-                                    f(tcs, ct);
-                                }
-                            });
-                        });
-                    else
-                        ie.MoveNext(ct).Then(t =>
+                        var innerList = default(List<TInner>);
+                        if (!innerMap.TryGetValue(key, out innerList))
                         {
-                            t.Handle(tcs, res =>
-                            {
-                                if (res)
-                                {
-                                    var element = ie.Current;
-                                    var key = default(TKey);
+                            innerList = new List<TInner>();
+                            innerMap.Add(key, innerList);
+                        }
 
-                                    try
-                                    {
-                                        key = innerKeySelector(element);
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        tcs.TrySetException(exception);
-                                        return;
-                                    }
+                        innerList.Add(element);
 
-                                    var innerList = default(List<TInner>);
-                                    if (!innerMap.TryGetValue(key, out innerList))
-                                    {
-                                        innerList = new List<TInner>();
-                                        innerMap.Add(key, innerList);
-                                    }
+                        var outerList = default(List<TOuter>);
+                        if (!outerMap.TryGetValue(key, out outerList))
+                        {
+                            outerList = new List<TOuter>();
+                            outerMap.Add(key, outerList);
+                        }
 
-                                    innerList.Add(element);
+                        foreach (var v in outerList)
+                        {
+                            if (!enqueue(v, element))
+                                return false;
+                        }
 
-                                    var outerList = default(List<TOuter>);
-                                    if (!outerMap.TryGetValue(key, out outerList))
-                                    {
-                                        outerList = new List<TOuter>();
-                                        outerMap.Add(key, outerList);
-                                    }
-
-                                    foreach (var v in outerList)
-                                    {
-                                        if (!enqueue(v, element))
-                                            return;
-                                    }
-
-                                    f(tcs, ct);
-                                }
-                                else
-                                {
-                                    ie.Dispose();
-                                    ie = null;
-                                    f(tcs, ct);
-                                }
-                            });
-                        });
+                        return await f(ct).ConfigureAwait(false);
+                    }
+                    ie.Dispose();
+                    ie = null;
+                    return await f(ct).ConfigureAwait(false);
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(oe).UsingEnumerator(ie);
-                    },
+                    f,
                     () => current,
-                    d.Dispose
+                    d.Dispose,
+                    ie
                 );
             });
         }
@@ -696,15 +558,15 @@ namespace System.Linq
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector)
         {
             if (outer == null)
-                throw new ArgumentNullException("outer");
+                throw new ArgumentNullException(nameof(outer));
             if (inner == null)
-                throw new ArgumentNullException("inner");
+                throw new ArgumentNullException(nameof(inner));
             if (outerKeySelector == null)
-                throw new ArgumentNullException("outerKeySelector");
+                throw new ArgumentNullException(nameof(outerKeySelector));
             if (innerKeySelector == null)
-                throw new ArgumentNullException("innerKeySelector");
+                throw new ArgumentNullException(nameof(innerKeySelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return outer.Join(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
@@ -712,7 +574,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Concat_();
         }
@@ -720,7 +582,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Concat<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Concat_();
         }
@@ -736,60 +598,39 @@ namespace System.Linq
                 var a = new AssignableDisposable();
                 var d = Disposable.Create(cts, se, a);
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
                     if (e == null)
                     {
                         var b = false;
-                        try
-                        {
-                            b = se.MoveNext();
-                            if (b)
-                                e = se.Current.GetEnumerator();
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                            return;
-                        }
+                        b = se.MoveNext();
+                        if (b)
+                            e = se.Current.GetEnumerator();
 
                         if (!b)
                         {
-                            tcs.TrySetResult(false);
-                            return;
+                            return false;
                         }
 
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).Then(t =>
+                    if (await e.MoveNext(ct).ConfigureAwait(false))
                     {
-                        t.Handle(tcs, res =>
-                        {
-                            if (res)
-                            {
-                                tcs.TrySetResult(true);
-                            }
-                            else
-                            {
-                                e.Dispose();
-                                e = null;
+                        return true;
+                    }
+                    e.Dispose();
+                    e = null;
 
-                                f(tcs, ct);
-                            }
-                        });
-                    });
+                    return await f(ct).ConfigureAwait(false);
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(a);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    a
                 );
             });
         }
@@ -797,9 +638,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TOther> SelectMany<TSource, TOther>(this IAsyncEnumerable<TSource> source, IAsyncEnumerable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return source.SelectMany(_ => other);
         }
