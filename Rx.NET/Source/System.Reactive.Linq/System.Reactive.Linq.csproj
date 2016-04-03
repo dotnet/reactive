@@ -39,6 +39,8 @@
     <Compile Include="Reactive\Internal\HashSet.cs" />
     <Compile Include="Reactive\Internal\Lookup.cs" />
     <Compile Include="Reactive\Internal\SortedDictionary.cs" />
+    <Compile Include="Reactive\Internal\WeakObservable.cs" />
+    <Compile Include="Reactive\Internal\WeakObserver.cs" />
     <Compile Include="Reactive\Linq\LocalQueryMethodImplementationTypeAttribute.cs" />
     <Compile Include="Reactive\Linq\Observable\Case.cs" />
     <Compile Include="Reactive\Linq\Observable\Collect.cs" />
@@ -209,6 +211,7 @@
     <Compile Include="Reactive\Threading\Tasks\TaskObservableExtensions.cs" />
     <Compile Include="Reactive\TimeInterval.cs" />
     <Compile Include="Reactive\Timestamped.cs" />
+    <Compile Include="Reactive\WeakObservable.Extensions.cs" />
     <Compile Include="Strings_Linq.Generated.cs" />
   </ItemGroup>
   <ItemGroup>
