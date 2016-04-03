@@ -115,6 +115,7 @@
     <Compile Include="Tests\Linq\Subjects\BehaviorSubjectTest.cs" />
     <Compile Include="Tests\Linq\Subjects\ReplaySubjectTest.cs" />
     <Compile Include="Tests\Linq\Subjects\SubjectTest.cs" />
+    <Compile Include="Tests\Linq\WeakObservableTest.cs" />
     <Compile Include="Tests\MySubject.cs" />
     <Compile Include="Tests\RogueEnumerable.cs" />
     <Compile Include="Tests\SystemClockTest.cs" />

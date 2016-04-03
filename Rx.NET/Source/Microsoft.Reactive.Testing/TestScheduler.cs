@@ -159,5 +159,16 @@ namespace Microsoft.Reactive.Testing
         {
             return new MockObserver<T>(this);
         }
+        
+        /// <summary>
+        /// Advances the scheduler's clock by the specified relative time, running all work scheduled for that timespan.
+        /// </summary>
+        /// <param name="time">Relative time to advance the scheduler's clock by.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>
+        /// <exception cref="InvalidOperationException">The scheduler is already running. VirtualTimeScheduler doesn't support running nested work dispatch loops. To simulate time slippage while running work on the scheduler, use <see cref="Sleep"/>.</exception>
+        public void AdvanceBy(TimeSpan time)
+        {
+            base.AdvanceBy(time.Ticks);
+        }
     }
 }
