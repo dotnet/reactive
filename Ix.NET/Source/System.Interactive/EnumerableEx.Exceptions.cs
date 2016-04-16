@@ -43,6 +43,9 @@ namespace System.Linq
                     try
                     {
                         b = e.MoveNext();
+                        if (!b)
+                            break;
+
                         c = e.Current;
                     }
                     catch (TException ex)
@@ -50,9 +53,6 @@ namespace System.Linq
                         err = handler(ex);
                         break;
                     }
-
-                    if (!b)
-                        break;
 
                     yield return c;
                 }
@@ -128,6 +128,9 @@ namespace System.Linq
                         try
                         {
                             b = e.MoveNext();
+                            if (!b)
+                                break;
+
                             c = e.Current;
                         }
                         catch (Exception ex)
@@ -135,9 +138,6 @@ namespace System.Linq
                             error = ex;
                             break;
                         }
-
-                        if (!b)
-                            break;
 
                         yield return c;
                     }
