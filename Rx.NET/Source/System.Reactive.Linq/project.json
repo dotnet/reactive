@@ -4,19 +4,31 @@
     "description": "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
+    
+    "packOptions": {
+      "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+      "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+      "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+      "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+      "requireLicenseAcceptance": true
+    },
+    
+    "buildOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
-        "define": [ "SIGNED" ]
+        "define": [ "SIGNED" ],
+        "compile": {
+          "exclude": [
+            "*/**/ImmutableList.cs",
+            "Reactive/Observer.Extensions.cs",
+            "Reactive/Internal/Observers.cs",
+            "Reactive/Internal/Producer.cs"
+          ],
+        }
     },
     "configurations": {
         "ReleaseDelaySigned": {
-            "compilationOptions": {
+            "buildOptions": {
                 "publicSign": false,
                 "delaySign": true,
                 "define": [ "RELEASE", "TRACE" ],
@@ -24,18 +36,13 @@
             }
         }
     },
-    "exclude": [
-        "*/**/ImmutableList.cs",
-        "Reactive/Observer.Extensions.cs",
-        "Reactive/Internal/Observers.cs",
-        "Reactive/Internal/Producer.cs"
-    ],
+    
     "dependencies": {
         "System.Reactive.Core": { "target": "project" }
     },
     "frameworks": {
         "net40": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_TASK_DELAY",
                     "HAS_APTCA",
@@ -48,7 +55,7 @@
             }
         },
         "net45": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -66,7 +73,7 @@
             }
         },
         "net46": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -85,7 +92,7 @@
             }
         },
         "netstandard1.0": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -103,15 +110,12 @@
                     "PLIB"
                 ]
             },
-            "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23925",
-                "System.Runtime": "4.1.0-rc2-23925",
-                "System.Runtime.Extensions": "4.1.0-rc2-23925"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24103",                
             }
         },
         "netstandard1.3": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -129,15 +133,12 @@
                     "USE_TIMER_SELF_ROOT"
                 ]
             },
-            "imports": [ "dotnet5.4" ],
             "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc2-23925",
-                "System.Reflection": "4.1.0-rc2-23925",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-23925"
+                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24103"
             }
         },
         "sl5": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_RXINTERFACES",
                     "USE_SL_DISPATCHER",

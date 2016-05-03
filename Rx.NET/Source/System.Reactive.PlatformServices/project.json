@@ -5,18 +5,24 @@
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
     "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
+    "packOptions": {
+      "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+      "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+      "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+      "requireLicenseAcceptance": true
+    },
+    
+    "buildOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
-        "define": [ "SIGNED" ]
+        "define": [ "SIGNED" ],
+        "compile": {
+          "exclude": [ "Strings_PlatformServices.Designer.cs" ]
+        }
     },
     "configurations": {
         "ReleaseDelaySigned": {
-            "compilationOptions": {
+            "buildOptions": {
                 "publicSign": false,
                 "delaySign": true,
                 "define": [ "RELEASE", "TRACE" ],
@@ -24,13 +30,12 @@
             }
         }
     },
-    "exclude": [ "Strings_PlatformServices.Designer.cs" ],
     "dependencies": {
         "System.Reactive.Linq": { "target": "project" }
     },
     "frameworks": {
         "net40": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_TASK_DELAY",
                     "HAS_APTCA",
@@ -43,7 +48,7 @@
             }
         },
         "net45": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -61,7 +66,7 @@
             }
         },
         "net46": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -80,8 +85,7 @@
             }
         },
         "netstandard1.0": {
-            "imports": [ "dotnet5.1" ],
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -103,7 +107,6 @@
             }
         },
         "netstandard1.3": {
-            "imports": [ "dotnet5.4" ],
             "compilationOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
@@ -123,12 +126,11 @@
                 ]
             },
             "dependencies": {
-                "NETStandard.Library": "1.5.0-rc2-23925"
             }
         },
         "wpa81": {
             "imports": [ "dotnet5.2" ],
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -158,7 +160,7 @@
         },
         "win81": {
             "imports": [ "dotnet5.2" ],
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -188,7 +190,7 @@
         },
         "uap10.0": {
             "imports": [ "dotnet5.4" ],
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -212,13 +214,13 @@
                     "type": "build"
                 },
                 "Microsoft.NETCore.UniversalWindowsPlatform": {
-                    "version": "5.2.0-rc2-23925",
+                    "version": "5.2.0-rc2-24103",
                     "type": "build"
                 }
             }
         },
         "sl5": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_RXINTERFACES",
                     "USE_SL_DISPATCHER",

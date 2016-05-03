@@ -4,19 +4,23 @@
     "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
+
+    "packOptions": {
+        "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+        "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+        "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+        "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+        "requireLicenseAcceptance": true
+    },
+
+    "buildOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
     "configurations": {
         "ReleaseDelaySigned": {
-            "compilationOptions": {
+            "buildOptions": {
                 "publicSign": false,
                 "delaySign": true,
                 "define": [ "RELEASE", "TRACE" ],
@@ -29,7 +33,7 @@
     },
     "frameworks": {
         "net40": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_TASK_DELAY",
                     "HAS_APTCA",
@@ -42,7 +46,7 @@
             }
         },
         "net45": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -60,7 +64,7 @@
             }
         },
         "net46": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -79,7 +83,7 @@
             }
         },
         "netstandard1.0": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -97,20 +101,14 @@
                     "PLIB"
                 ]
             },
-            "imports": [ "dotnet5.1" ],
             "dependencies": {
-                "System.ComponentModel": "4.0.1-rc2-23925",
-                "System.Diagnostics.Contracts": "4.0.1-rc2-23925",
-                "System.Diagnostics.Debug": "4.0.11-rc2-23925",
-                "System.Dynamic.Runtime": "4.0.11-rc2-23925",
-                "System.Linq": "4.1.0-rc2-23925",
-                "System.Runtime": "4.1.0-rc2-23925",
-                "System.Runtime.Extensions": "4.1.0-rc2-23925",
-                "System.Threading": "4.0.11-rc2-23925"
+                "System.ComponentModel": "4.0.1-rc2-24103",
+                "System.Diagnostics.Contracts": "4.0.1-rc2-24103",
+                "System.Dynamic.Runtime": "4.0.11-rc2-24103"
             }
         },
         "netstandard1.3": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -128,20 +126,14 @@
                     "USE_TIMER_SELF_ROOT"
                 ]
             },
-            "imports": [ "dotnet5.4" ],
             "dependencies": {
-                "System.Diagnostics.Contracts": "4.0.1-rc2-23925",
-                "System.Diagnostics.Debug": "4.0.11-rc2-23925",
-                "System.Collections.Concurrent": "4.0.12-rc2-23925",
-                "System.ComponentModel": "4.0.1-rc2-23925",
-                "System.Linq": "4.1.0-rc2-23925",
-                "System.Runtime.Extensions": "4.1.0-rc2-23925",
-                "System.Threading": "4.0.11-rc2-23925",
-                "System.Threading.Timer": "4.0.1-rc2-23925"
+                "System.ComponentModel": "4.0.1-rc2-24103",
+                "System.Diagnostics.Contracts": "4.0.1-rc2-24103",
+                "System.Dynamic.Runtime": "4.0.11-rc2-24103"
             }
         },
         "sl5": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_RXINTERFACES",
                     "USE_SL_DISPATCHER",

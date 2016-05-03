@@ -4,19 +4,23 @@
     "description": "Reactive Extensions Interfaces Library containing essential interfaces.",
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
+
+    "packOptions": {
+        "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+        "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+        "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+        "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+        "requireLicenseAcceptance": true
+    },
+
+    "buildOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
     "configurations": {
         "ReleaseDelaySigned": {
-            "compilationOptions": {
+            "buildOptions": {
                 "publicSign": false,
                 "delaySign": true,
                 "define": [ "RELEASE", "TRACE" ],
@@ -26,7 +30,7 @@
     },
     "frameworks": {
         "net40": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_TASK_DELAY",
                     "HAS_APTCA",
@@ -39,7 +43,7 @@
             }
         },
         "net45": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -57,8 +61,7 @@
             }
         },
         "netstandard1.0": {
-            "imports": [ "dotnet5.1" ],
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_EVENTARGS_CONSTRAINT",
                     "HAS_EDI",
@@ -77,16 +80,12 @@
                 ]
             },
             "dependencies": {
-                "System.Diagnostics.Tools": "4.0.1-rc2-23925",
-                "System.Linq": "4.1.0-rc2-23925",
-                "System.Linq.Expressions": "4.0.11-rc2-23925",
-                "System.Resources.ResourceManager": "4.0.1-rc2-23925",
-                "System.Runtime": "4.1.0-rc2-23925",
-                "System.Threading": "4.0.11-rc2-23925"
+                "NETStandard.Library": "1.5.0-rc2-24103",
+                "System.Linq.Expressions": "4.0.11-rc2-24103" 
             }
         },
         "sl5": {
-            "compilationOptions": {
+            "buildOptions": {
                 "define": [
                     "NO_RXINTERFACES",
                     "USE_SL_DISPATCHER",
