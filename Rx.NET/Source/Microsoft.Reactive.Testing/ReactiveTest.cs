@@ -38,6 +38,18 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Factory method for an OnNext notification record at a given time with a given value.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="duration">Recorded virtual time the OnNext notification occurs.</param>
+        /// <param name="value">Recorded value stored in the OnNext notification.</param>
+        /// <returns>Recorded OnNext notification.</returns>
+        public static Recorded<Notification<T>> OnNext<T>(TimeSpan duration, T value)
+        {
+            return new Recorded<Notification<T>>(duration.Ticks, Notification.CreateOnNext<T>(value));
+        }
+
+        /// <summary>
         /// Factory method for writing an assert that checks for an OnNext notification record at a given time, using the specified predicate to check the value.
         /// </summary>
         /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
@@ -62,6 +74,17 @@ namespace Microsoft.Reactive.Testing
         public static Recorded<Notification<T>> OnCompleted<T>(long ticks)
         {
             return new Recorded<Notification<T>>(ticks, Notification.CreateOnCompleted<T>());
+        }
+
+        /// <summary>
+        /// Factory method for an OnCompleted notification record at a given time.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="duration">Recorded virtual time the OnCompleted notification occurs.</param>
+        /// <returns>Recorded OnCompleted notification.</returns>
+        public static Recorded<Notification<T>> OnCompleted<T>(TimeSpan duration)
+        {
+            return new Recorded<Notification<T>>(duration.Ticks, Notification.CreateOnCompleted<T>());
         }
 
         /// <summary>
@@ -93,6 +116,22 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Factory method for an OnError notification record at a given time with a given error.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="duration">Recorded virtual time the OnError notification occurs.</param>
+        /// <param name="exception">Recorded exception stored in the OnError notification.</param>
+        /// <returns>Recorded OnError notification.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
+        public static Recorded<Notification<T>> OnError<T>(TimeSpan duration, Exception exception)
+        {
+            if (exception == null)
+                throw new ArgumentNullException("exception");
+
+            return new Recorded<Notification<T>>(duration.Ticks, Notification.CreateOnError<T>(exception));
+        }
+
+        /// <summary>
         /// Factory method for writing an assert that checks for an OnError notification record at a given time, using the specified predicate to check the exception.
         /// </summary>
         /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
@@ -106,6 +145,22 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException("predicate");
 
             return new Recorded<Notification<T>>(ticks, new OnErrorPredicate<T>(predicate));
+        }
+
+        /// <summary>
+        /// Factory method for writing an assert that checks for an OnError notification record at a given time, using the specified predicate to check the exception.
+        /// </summary>
+        /// <typeparam name="T">The element type for the resulting notification object.</typeparam>
+        /// <param name="duration">Recorded virtual time the OnError notification occurs.</param>
+        /// <param name="predicate">Predicate function to check the OnError notification value against an expected exception.</param>
+        /// <returns>Recorded OnError notification with a predicate to assert a given exception.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is null.</exception>
+        public static Recorded<Notification<T>> OnError<T>(TimeSpan duration, Func<Exception, bool> predicate)
+        {
+            if (predicate == null)
+                throw new ArgumentNullException("predicate");
+
+            return new Recorded<Notification<T>>(duration.Ticks, new OnErrorPredicate<T>(predicate));
         }
         
         /// <summary>
