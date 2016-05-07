@@ -1,97 +1,94 @@
 {
-    "version": "3.0.0-*",
-    "title": "Reactive Extensions - Core Library",
-    "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
-    "authors": [ "Microsoft" ],
-    "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - Core Library",
+  "description": "Reactive Extensions Core Library containing base classes and scheduler infrastructure.",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
+  "packOptions": {
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
-        "emitEntryPoint": true,
-        "nowarn": [ "CS0618" ],
-        "keyFile": "../35MSSharedLib1024.snk",
-        "publicSign": true,
-        "define": [ "SIGNED" ]
-    },
-    "configurations": {
-        "ReleaseDelaySigned": {
-            "compilationOptions": {
-                "publicSign": false,
-                "delaySign": true,
-                "define": [ "RELEASE", "TRACE" ],
-                "optimize": true
-            }
-        }
-    },
-    "dependencies": {
-        "System.Reactive.Interfaces": { "target": "project" },
-        "System.Reactive.Linq": { "target": "project" },
-        "System.Reactive.PlatformServices": { "target": "project" },
-        "Microsoft.Reactive.Testing": { "target": "project" },
-        "System.Reactive.Experimental": { "target": "project" },
-        "System.Reactive.Providers": { "target": "project" },
-        "System.Reactive.Observable.Aliases": { "target": "project" },
-        "xunit": "2.1.0",
-        "NETStandard.Library": "1.5.0-rc2-23929",
-        "System.Reflection.TypeExtensions": "4.1.0-rc2-23929"
-    },
-    "testRunner": "xunit",
-    "frameworks": {
-        "netstandardapp1.5": {
-            "imports": [ "dnxcore50", "portable-net45+win8" ],
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ],
-                "debugType": "full"
-            },
-            "dependencies": {
-                "dotnet-test-xunit": "1.0.0-dev-128011-22",
-                "System.Runtime.Serialization.Primitives": "4.1.1-rc2-23929"
-            }
-        },
-        "net461": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "USE_TIMER_SELF_ROOT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR46"
-                ]
-            },
-            "dependencies": {
-                "System.Reactive.Windows.Threading": { "target": "project" },
-                "System.Reactive.Windows.Forms": { "target": "project" },
-                "System.Reactive.Runtime.Remoting": { "target": "project" }
-            },
-            "frameworkAssemblies": {
-                "System.Threading.Tasks": "4.0.10.0"
-            }
-        }
+    "requireLicenseAcceptance": true
+  },
+
+  "buildOptions": {
+    "nowarn": ["CS0618"],
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"]
+  },
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "compibuildOptionslationOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
     }
+  },
+  "dependencies": {
+    "System.Reactive.Interfaces": { "target": "project" },
+    "System.Reactive.Linq": { "target": "project" },
+    "System.Reactive.PlatformServices": { "target": "project" },
+    "Microsoft.Reactive.Testing": { "target": "project" },
+    "System.Reactive.Experimental": { "target": "project" },
+    "System.Reactive.Providers": { "target": "project" },
+    "System.Reactive.Observable.Aliases": { "target": "project" },
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-*"
+  },
+  "testRunner": "xunit",
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": ["dnxcore50", "portable-net45+win8"],
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "PLIB",
+          "USE_TIMER_SELF_ROOT"
+        ]
+
+      }
+    },
+    "net461": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "DESKTOPCLR",
+          "DESKTOPCLR46"
+        ]
+      },
+      "dependencies": {
+        "System.Reactive.Windows.Threading": { "target": "project" },
+        "System.Reactive.Windows.Forms": { "target": "project" },
+        "System.Reactive.Runtime.Remoting": { "target": "project" }
+      },
+      "frameworkAssemblies": {
+        "System.Threading.Tasks": "4.0.10.0"
+      }
+    }
+  }
 }

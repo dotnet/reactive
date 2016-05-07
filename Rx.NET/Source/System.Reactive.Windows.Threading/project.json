@@ -4,24 +4,28 @@
     "description": "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
     "authors": [ "Microsoft" ],
     "copyright": "Copyright (C) Microsoft Corporation",
+
+  "packOptions": {
     "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
+    "requireLicenseAcceptance": true
+  }, 
+    
+    "buildOptions": {
         "keyFile": "../35MSSharedLib1024.snk",
         "publicSign": true,
         "define": [ "SIGNED" ]
     },
     "configurations": {
         "ReleaseDelaySigned": {
-            "compilationOptions": {
-                "publicSign": false,
-                "delaySign": true,
-                "define": [ "RELEASE", "TRACE" ],
-                "optimize": true
-            }
+          "buildOptions": {
+            "publicSign": false,
+            "delaySign": true,
+            "define": [ "RELEASE", "TRACE" ],
+            "optimize": true
+          }
         }
     },
     "dependencies": {
@@ -30,62 +34,61 @@
     },
     "frameworks": {
         "net40": {
-            "compilationOptions": {
-                "define": [
-                    "NO_TASK_DELAY",
-                    "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR40"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_TASK_DELAY",
+              "HAS_APTCA",
+              "HAS_WINFORMS",
+              "USE_TIMER_SELF_ROOT",
+              "NO_WEAKREFOFT",
+              "DESKTOPCLR",
+              "DESKTOPCLR40"
+            ]
+          },
             "frameworkAssemblies": {
                 "WindowsBase": "4.0.0.0"
             }
         },
         "net45": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR45"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_EVENTARGS_CONSTRAINT",
+              "HAS_EDI",
+              "HAS_WINRT",
+              "HAS_PROGRESS",
+              "PREFER_ASYNC",
+              "HAS_AWAIT",
+              "HAS_APTCA",
+              "HAS_DISPATCHER_PRIORITY",
+              "HAS_WINFORMS",
+              "USE_TIMER_SELF_ROOT",
+              "DESKTOPCLR",
+              "DESKTOPCLR45"
+            ]
+          },
             "frameworkAssemblies": {
                 "System.Windows": "4.0.0.0",
                 "WindowsBase": "4.0.0.0"
             }
         },
         "wpa81": {
-            "imports": [ "dotnet5.2" ],
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "USE_TIMER_SELF_ROOT",
-                    "WINDOWS",
-                    "WINDOWS81"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_EVENTARGS_CONSTRAINT",
+              "HAS_EDI",
+              "HAS_WINRT",
+              "HAS_PROGRESS",
+              "PREFER_ASYNC",
+              "HAS_AWAIT",
+              "NO_REMOTING",
+              "NO_SERIALIZABLE",
+              "NO_THREAD",
+              "CRIPPLED_REFLECTION",
+              "USE_TIMER_SELF_ROOT",
+              "WINDOWS",
+              "WINDOWS81"
+            ]
+          },
             "dependencies": {
                 "Microsoft.TargetingPack.Private.WinRT": {
                     "version": "1.0.1",
@@ -97,25 +100,25 @@
                 }
             }
         },
-        "win81": {
+        "netcore451": {
             "imports": [ "dotnet5.2" ],
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "USE_TIMER_SELF_ROOT",
-                    "WINDOWS",
-                    "WINDOWS81"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_EVENTARGS_CONSTRAINT",
+              "HAS_EDI",
+              "HAS_WINRT",
+              "HAS_PROGRESS",
+              "PREFER_ASYNC",
+              "HAS_AWAIT",
+              "NO_REMOTING",
+              "NO_SERIALIZABLE",
+              "NO_THREAD",
+              "CRIPPLED_REFLECTION",
+              "USE_TIMER_SELF_ROOT",
+              "WINDOWS",
+              "WINDOWS81"
+            ]
+          },
             "dependencies": {
                 "Microsoft.TargetingPack.Private.WinRT": {
                     "version": "1.0.1",
@@ -129,24 +132,24 @@
         },
         "uap10.0": {
             "imports": [ "dotnet5.4" ],
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "HAS_TPL46",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "WINDOWS",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_EVENTARGS_CONSTRAINT",
+              "HAS_EDI",
+              "HAS_WINRT",
+              "HAS_PROGRESS",
+              "PREFER_ASYNC",
+              "HAS_AWAIT",
+              "HAS_APTCA",
+              "HAS_TPL46",
+              "NO_REMOTING",
+              "NO_SERIALIZABLE",
+              "NO_THREAD",
+              "CRIPPLED_REFLECTION",
+              "WINDOWS",
+              "USE_TIMER_SELF_ROOT"
+            ]
+          },
             "dependencies": {
                 "Microsoft.TargetingPack.Private.WinRT": {
                     "version": "1.0.1",
@@ -159,22 +162,22 @@
             }
         },
         "sl5": {
-            "compilationOptions": {
-                "define": [
-                    "NO_RXINTERFACES",
-                    "USE_SL_DISPATCHER",
-                    "NO_SERIALIZABLE",
-                    "NO_REMOTING",
-                    "NO_SEMAPHORE",
-                    "NO_STOPWATCH",
-                    "NO_CDS",
-                    "NO_TASK_DELAY",
-                    "NO_WEAKREFOFT",
-                    "NO_SORTEDDICTIONARY",
-                    "SILVERLIGHT",
-                    "SILVERLIGHT5"
-                ]
-            },
+          "buildOptions": {
+            "define": [
+              "NO_RXINTERFACES",
+              "USE_SL_DISPATCHER",
+              "NO_SERIALIZABLE",
+              "NO_REMOTING",
+              "NO_SEMAPHORE",
+              "NO_STOPWATCH",
+              "NO_CDS",
+              "NO_TASK_DELAY",
+              "NO_WEAKREFOFT",
+              "NO_SORTEDDICTIONARY",
+              "SILVERLIGHT",
+              "SILVERLIGHT5"
+            ]
+          },
             "dependencies": {
             }
         }
