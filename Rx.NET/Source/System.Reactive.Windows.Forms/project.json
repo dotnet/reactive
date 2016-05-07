@@ -47,8 +47,8 @@
         ]
       },
       "frameworkAssemblies": {
-        "System.Windows.Forms": "4.0.0.0",
-        "WindowsBase": "4.0.0.0"
+        "System.Windows.Forms": "",
+        "WindowsBase": ""
       }
     },
     "net45": {
@@ -69,9 +69,9 @@
         ]
       },
       "frameworkAssemblies": {
-        "System.Windows": "4.0.0.0",
-        "System.Windows.Forms": "4.0.0.0",
-        "WindowsBase": "4.0.0.0"
+        "System.Windows": "",
+        "System.Windows.Forms": "",
+        "WindowsBase": ""
       }
     },
     "net46": {
@@ -93,9 +93,9 @@
         ]
       },
       "frameworkAssemblies": {
-        "System.Windows": "4.0.0.0",
-        "System.Windows.Forms": "4.0.0.0",
-        "WindowsBase": "4.0.0.0"
+        "System.Windows": "",
+        "System.Windows.Forms": "",
+        "WindowsBase": ""
       }
     }
   }

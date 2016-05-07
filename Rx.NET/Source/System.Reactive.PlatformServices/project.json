@@ -106,7 +106,7 @@
         ]
       },
       "dependencies": {
-            
+      
       }
     },
     "netstandard1.3": {
@@ -129,7 +129,7 @@
         ]
       },
       "dependencies": {
-            
+      
       }
     },
     "wpa81": {
@@ -216,7 +216,7 @@
           "type": "build"
         },
         "Microsoft.NETCore.UniversalWindowsPlatform": {
-          "version": "5.2.0-rc2-24103",
+          "version": "5.2.0-rc2-24027",
           "type": "build"
         }
       }
@@ -239,7 +239,7 @@
         ]
       },
       "dependencies": {
-            
+      
       }
     }
   }

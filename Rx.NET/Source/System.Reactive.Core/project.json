@@ -102,9 +102,9 @@
         ]
       },
       "dependencies": {
-        "System.ComponentModel": "4.0.1-rc2-24103",
-        "System.Diagnostics.Contracts": "4.0.1-rc2-24103",
-        "System.Dynamic.Runtime": "4.0.11-rc2-24103"
+        "System.ComponentModel": "4.0.1-rc2-24027",
+        "System.Diagnostics.Contracts": "4.0.1-rc2-24027",
+        "System.Dynamic.Runtime": "4.0.11-rc2-24027"
       }
     },
     "netstandard1.3": {
@@ -127,9 +127,9 @@
         ]
       },
       "dependencies": {
-        "System.ComponentModel": "4.0.1-rc2-24103",
-        "System.Diagnostics.Contracts": "4.0.1-rc2-24103",
-        "System.Dynamic.Runtime": "4.0.11-rc2-24103"
+        "System.ComponentModel": "4.0.1-rc2-24027",
+        "System.Diagnostics.Contracts": "4.0.1-rc2-24027",
+        "System.Dynamic.Runtime": "4.0.11-rc2-24027"
       }
     },
     "sl5": {
@@ -150,7 +150,7 @@
         ]
       },
       "dependencies": {
-            
+      
       }
     }
   }

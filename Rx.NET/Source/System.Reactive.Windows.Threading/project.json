@@ -1,185 +1,186 @@
 {
-    "version": "3.0.0-*",
-    "title": "Reactive Extensions - WPF Helpers",
-    "description": "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
-    "authors": [ "Microsoft" ],
-    "copyright": "Copyright (C) Microsoft Corporation",
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - WPF Helpers",
+  "description":
+    "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
 
   "packOptions": {
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
     "requireLicenseAcceptance": true
-  }, 
-    
-    "buildOptions": {
-        "keyFile": "../35MSSharedLib1024.snk",
-        "publicSign": true,
-        "define": [ "SIGNED" ]
-    },
-    "configurations": {
-        "ReleaseDelaySigned": {
-          "buildOptions": {
-            "publicSign": false,
-            "delaySign": true,
-            "define": [ "RELEASE", "TRACE" ],
-            "optimize": true
-          }
-        }
-    },
-    "dependencies": {
-        "System.Reactive.Interfaces": { "target": "project" },
-        "System.Reactive.Core": { "target": "project" }
-    },
-    "frameworks": {
-        "net40": {
-          "buildOptions": {
-            "define": [
-              "NO_TASK_DELAY",
-              "HAS_APTCA",
-              "HAS_WINFORMS",
-              "USE_TIMER_SELF_ROOT",
-              "NO_WEAKREFOFT",
-              "DESKTOPCLR",
-              "DESKTOPCLR40"
-            ]
-          },
-            "frameworkAssemblies": {
-                "WindowsBase": "4.0.0.0"
-            }
-        },
-        "net45": {
-          "buildOptions": {
-            "define": [
-              "NO_EVENTARGS_CONSTRAINT",
-              "HAS_EDI",
-              "HAS_WINRT",
-              "HAS_PROGRESS",
-              "PREFER_ASYNC",
-              "HAS_AWAIT",
-              "HAS_APTCA",
-              "HAS_DISPATCHER_PRIORITY",
-              "HAS_WINFORMS",
-              "USE_TIMER_SELF_ROOT",
-              "DESKTOPCLR",
-              "DESKTOPCLR45"
-            ]
-          },
-            "frameworkAssemblies": {
-                "System.Windows": "4.0.0.0",
-                "WindowsBase": "4.0.0.0"
-            }
-        },
-        "wpa81": {
-          "buildOptions": {
-            "define": [
-              "NO_EVENTARGS_CONSTRAINT",
-              "HAS_EDI",
-              "HAS_WINRT",
-              "HAS_PROGRESS",
-              "PREFER_ASYNC",
-              "HAS_AWAIT",
-              "NO_REMOTING",
-              "NO_SERIALIZABLE",
-              "NO_THREAD",
-              "CRIPPLED_REFLECTION",
-              "USE_TIMER_SELF_ROOT",
-              "WINDOWS",
-              "WINDOWS81"
-            ]
-          },
-            "dependencies": {
-                "Microsoft.TargetingPack.Private.WinRT": {
-                    "version": "1.0.1",
-                    "type": "build"
-                },
-                "Microsoft.TargetingPack.Private.WindowsPhone.v8.1": {
-                    "version": "1.0.1",
-                    "type": "build"
-                }
-            }
-        },
-        "netcore451": {
-            "imports": [ "dotnet5.2" ],
-          "buildOptions": {
-            "define": [
-              "NO_EVENTARGS_CONSTRAINT",
-              "HAS_EDI",
-              "HAS_WINRT",
-              "HAS_PROGRESS",
-              "PREFER_ASYNC",
-              "HAS_AWAIT",
-              "NO_REMOTING",
-              "NO_SERIALIZABLE",
-              "NO_THREAD",
-              "CRIPPLED_REFLECTION",
-              "USE_TIMER_SELF_ROOT",
-              "WINDOWS",
-              "WINDOWS81"
-            ]
-          },
-            "dependencies": {
-                "Microsoft.TargetingPack.Private.WinRT": {
-                    "version": "1.0.1",
-                    "type": "build"
-                },
-                "Microsoft.TargetingPack.Private.NETCore.v4.5.1": {
-                    "version": "1.0.0",
-                    "type": "build"
-                }
-            }
-        },
-        "uap10.0": {
-            "imports": [ "dotnet5.4" ],
-          "buildOptions": {
-            "define": [
-              "NO_EVENTARGS_CONSTRAINT",
-              "HAS_EDI",
-              "HAS_WINRT",
-              "HAS_PROGRESS",
-              "PREFER_ASYNC",
-              "HAS_AWAIT",
-              "HAS_APTCA",
-              "HAS_TPL46",
-              "NO_REMOTING",
-              "NO_SERIALIZABLE",
-              "NO_THREAD",
-              "CRIPPLED_REFLECTION",
-              "WINDOWS",
-              "USE_TIMER_SELF_ROOT"
-            ]
-          },
-            "dependencies": {
-                "Microsoft.TargetingPack.Private.WinRT": {
-                    "version": "1.0.1",
-                    "type": "build"
-                },
-                "Microsoft.NETCore.UniversalWindowsPlatform": {
-                    "version": "5.2.0-rc2-23925",
-                    "type": "build"
-                }
-            }
-        },
-        "sl5": {
-          "buildOptions": {
-            "define": [
-              "NO_RXINTERFACES",
-              "USE_SL_DISPATCHER",
-              "NO_SERIALIZABLE",
-              "NO_REMOTING",
-              "NO_SEMAPHORE",
-              "NO_STOPWATCH",
-              "NO_CDS",
-              "NO_TASK_DELAY",
-              "NO_WEAKREFOFT",
-              "NO_SORTEDDICTIONARY",
-              "SILVERLIGHT",
-              "SILVERLIGHT5"
-            ]
-          },
-            "dependencies": {
-            }
-        }
+  },
+
+  "buildOptions": {
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"]
+  },
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "buildOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
     }
+  },
+  "dependencies": {
+    "System.Reactive.Interfaces": { "target": "project" },
+    "System.Reactive.Core": { "target": "project" }
+  },
+  "frameworks": {
+    "net40": {
+      "buildOptions": {
+        "define": [
+          "NO_TASK_DELAY",
+          "HAS_APTCA",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "NO_WEAKREFOFT",
+          "DESKTOPCLR",
+          "DESKTOPCLR40"
+        ]
+      },
+      "frameworkAssemblies": {
+        "WindowsBase": ""
+      }
+    },
+    "net45": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_DISPATCHER_PRIORITY",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "DESKTOPCLR",
+          "DESKTOPCLR45"
+        ]
+      },
+      "frameworkAssemblies": {
+        "System.Windows": "",
+        "WindowsBase": ""
+      }
+    },
+    "wpa81": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.TargetingPack.Private.WindowsPhone.v8.1": {
+          "version": "1.0.1",
+          "type": "build"
+        }
+      }
+    },
+    "netcore451": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.TargetingPack.Private.NETCore.v4.5.1": {
+          "version": "1.0.0",
+          "type": "build"
+        }
+      }
+    },
+    "uap10.0": {
+      "imports": ["dotnet5.4"],
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_TPL46",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "WINDOWS",
+          "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.NETCore.UniversalWindowsPlatform": {
+          "version": "5.2.0-rc2-24027",
+          "type": "build"
+        }
+      }
+    },
+    "sl5": {
+      "buildOptions": {
+        "define": [
+          "NO_RXINTERFACES",
+          "USE_SL_DISPATCHER",
+          "NO_SERIALIZABLE",
+          "NO_REMOTING",
+          "NO_SEMAPHORE",
+          "NO_STOPWATCH",
+          "NO_CDS",
+          "NO_TASK_DELAY",
+          "NO_WEAKREFOFT",
+          "NO_SORTEDDICTIONARY",
+          "SILVERLIGHT",
+          "SILVERLIGHT5"
+        ]
+      },
+      "dependencies": {
+            
+      }
+    }
+  }
 }

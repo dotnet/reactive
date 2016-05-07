@@ -42,7 +42,7 @@
   "testRunner": "xunit",
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": ["dnxcore50", "portable-net45+win8"],
+      "imports": [ "dnxcore50", "portable-net45+win8" ],
       "buildOptions": {
         "define": [
           "NO_EVENTARGS_CONSTRAINT",
@@ -59,7 +59,12 @@
           "PLIB",
           "USE_TIMER_SELF_ROOT"
         ]
-
+      },
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-rc2-3002677",
+          "type": "platform"
+        }
       }
     },
     "net461": {
@@ -87,7 +92,7 @@
         "System.Reactive.Runtime.Remoting": { "target": "project" }
       },
       "frameworkAssemblies": {
-        "System.Threading.Tasks": "4.0.10.0"
+        "System.Threading.Tasks": ""
       }
     }
   }
