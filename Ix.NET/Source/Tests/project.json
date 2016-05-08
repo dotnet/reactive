@@ -1,36 +1,51 @@
 ﻿{
-    "version": "2.0.0-*",
-    "title": "Interactive Extensions - Tests",
-    "description": "Unit Tests",
-    "authors": [ "Microsoft" ],
-    "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ ],
+  "version": "2.0.0-*",
+  "title": "Interactive Extensions - Tests",
+  "description": "Unit Tests",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
+  "packOptions": {
+    "tags": [],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
-    "requireLicenseAcceptance": true,
-    "compilationOptions": {
-        "emitEntryPoint": true        
-    },
-    "dependencies": {
-        "System.Interactive.Providers": { "target": "project" },
-        "System.Interactive.Async.Providers": { "target": "project" },
-        "xunit": "2.1.0",
-        "dotnet-test-xunit": "1.0.0-dev-79755-47"
-    },
+    "requireLicenseAcceptance": true
+  },
+
+  "buildOptions": {
     "exclude": [
-        "App.cs"
-    ],
-    "testRunner": "xunit",
-    "frameworks": {
-        "netstandardapp1.5": {
-            "imports": [ "dnxcore50", "portable-net45+win8" ],
-            "compilationOptions": {
-                "define": [
-                    "HAS_AWAIT"
-                ],
-                "debugType": "full"
-            }
+      "App.cs"
+    ]
+  },
+  "dependencies": {
+    "System.Interactive.Providers": { "target": "project" },
+    "System.Interactive.Async.Providers": { "target": "project" },
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-*"
+  },
+
+  "testRunner": "xunit",
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [ "dotnet", "portable-net45+win8" ],
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-rc2-3002677",
+          "type": "platform"
         }
+      }
+    },
+    "net461": {
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT"
+        ]
+      }
     }
+  }
 }
