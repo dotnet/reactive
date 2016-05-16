@@ -1,73 +1,109 @@
 ﻿{
-    "version": "3.0.0-*",
-    "title": "Reactive Extensions - Interfaces Library",
-    "description": "Reactive Extensions Interfaces Library containing essential interfaces.",
-    "authors": [ "Microsoft" ],
-    "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - Interfaces Library",
+  "description": "Reactive Extensions Interfaces Library containing essential interfaces.",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
+
+  "packOptions": {
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
-    "frameworks": {
-        "net40": {
-            "compilationOptions": {
-                "define": [
-                    "NO_TASK_DELAY",
-                    "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR40"
-                ]
-            }
-        },
-        "net45": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR45"
-                ]
-            }
-        },
-        "dotnet5.1": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "NO_CDS_COLLECTIONS",
-                    "USE_TIMER_SELF_ROOT",
-                    "PLIB"
-                ]
-            },
-            "dependencies": {
-                "System.Diagnostics.Tools": "4.0.1-rc3-23823",
-                "System.Linq": "4.0.1-rc3-23823",
-                "System.Linq.Expressions": "4.0.11-rc3-23823",
-                "System.Resources.ResourceManager": "4.0.1-rc3-23823",
-                "System.Runtime": "4.1.0-rc3-23823",
-                "System.Threading": "4.0.11-rc3-23823"
-            }
-        }
+    "requireLicenseAcceptance": true
+  },
+
+  "buildOptions": {
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"]
+  },
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "buildOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
     }
+  },
+  "frameworks": {
+    "net40": {
+      "buildOptions": {
+        "define": [
+          "NO_TASK_DELAY",
+          "HAS_APTCA",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "NO_WEAKREFOFT",
+          "DESKTOPCLR",
+          "DESKTOPCLR40"
+        ]
+      }
+    },
+    "net45": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_DISPATCHER_PRIORITY",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "DESKTOPCLR",
+          "DESKTOPCLR45"
+        ]
+      }
+    },
+    "netstandard1.0": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "NO_CDS_COLLECTIONS",
+          "USE_TIMER_SELF_ROOT",
+          "PLIB"
+        ]
+      },
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Linq.Expressions": "4.0.11-rc2-24027"
+      }
+    },
+    "sl5": {
+      "buildOptions": {
+        "define": [
+          "NO_RXINTERFACES",
+          "USE_SL_DISPATCHER",
+          "NO_SERIALIZABLE",
+          "NO_REMOTING",
+          "NO_SEMAPHORE",
+          "NO_STOPWATCH",
+          "NO_CDS",
+          "NO_TASK_DELAY",
+          "NO_WEAKREFOFT",
+          "NO_SORTEDDICTIONARY",
+          "SILVERLIGHT",
+          "SILVERLIGHT5"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.Silverlight.v5": "1.0.2"
+      }
+    }
+  }
 }

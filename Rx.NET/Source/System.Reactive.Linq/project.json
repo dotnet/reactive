@@ -1,125 +1,163 @@
-﻿{
-    "version": "3.0.0-*",
-    "title": "Reactive Extensions - Query Library",
-    "description": "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
-    "authors": [ "Microsoft" ],
-    "copyright": "Copyright (C) Microsoft Corporation",
-    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
+{
+  "version": "3.0.0-*",
+  "title": "Reactive Extensions - Query Library",
+  "description":
+    "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
+
+  "packOptions": {
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-    "requireLicenseAcceptance": true,
+    "requireLicenseAcceptance": true
+  },
 
-  "exclude": [
-    "*/**/ImmutableList.cs",
-    "Reactive/Observer.Extensions.cs",
-    "Reactive/Internal/Observers.cs",
-    "Reactive/Internal/Producer.cs"
-  ],
-
-    "dependencies": {
-        "System.Reactive.Core": { "target": "project" }
-    },
-
-    "frameworks": {
-        "net40": {
-            "compilationOptions": {
-                "define": [
-                    "NO_TASK_DELAY",
-                    "HAS_APTCA",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "NO_WEAKREFOFT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR40"
-                ]
-            }
-        },
-        "net45": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR45"
-                ]
-            }
-        },
-        "net46": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "HAS_DISPATCHER_PRIORITY",
-                    "HAS_TPL46",
-                    "HAS_WINFORMS",
-                    "USE_TIMER_SELF_ROOT",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR46"
-                ]
-            }
-        },
-        "dotnet5.1": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "NO_CDS_COLLECTIONS",
-                    "USE_TIMER_SELF_ROOT",
-                    "PLIB"
-                ]
-            },
-            "dependencies": {
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc3-23823",
-                "System.Runtime": "4.1.0-rc3-23823",
-                "System.Runtime.Extensions": "4.1.0-rc3-23823"
-            }
-        },
-        "dotnet5.4": {
-            "compilationOptions": {
-                "define": [
-                    "NO_EVENTARGS_CONSTRAINT",
-                    "HAS_EDI",
-                    "HAS_WINRT",
-                    "HAS_PROGRESS",
-                    "PREFER_ASYNC",
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "NO_REMOTING",
-                    "NO_SERIALIZABLE",
-                    "NO_THREAD",
-                    "CRIPPLED_REFLECTION",
-                    "PLIB",
-                    "USE_TIMER_SELF_ROOT"
-                ]
-            },
-            "dependencies": {
-                "System.Collections.Concurrent": "4.0.12-rc3-23823",
-                "System.Reflection.TypeExtensions": "4.1.0-rc3-23823",
-                "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc3-23823"
-            }
-        }
+  "buildOptions": {
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"],
+    "compile": {
+      "exclude": [
+        "*/**/ImmutableList.cs",
+        "Reactive/Observer.Extensions.cs",
+        "Reactive/Internal/Observers.cs",
+        "Reactive/Internal/Producer.cs"
+      ]
     }
+  },
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "buildOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
+    }
+  },
+
+  "dependencies": {
+    "System.Reactive.Core": { "target": "project" }
+  },
+  "frameworks": {
+    "net40": {
+      "buildOptions": {
+        "define": [
+          "NO_TASK_DELAY",
+          "HAS_APTCA",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "NO_WEAKREFOFT",
+          "DESKTOPCLR",
+          "DESKTOPCLR40"
+        ]
+      }
+    },
+    "net45": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_DISPATCHER_PRIORITY",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "DESKTOPCLR",
+          "DESKTOPCLR45"
+        ]
+      }
+    },
+    "net46": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_DISPATCHER_PRIORITY",
+          "HAS_TPL46",
+          "HAS_WINFORMS",
+          "USE_TIMER_SELF_ROOT",
+          "DESKTOPCLR",
+          "DESKTOPCLR46"
+        ]
+      }
+    },
+    "netstandard1.0": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "NO_CDS_COLLECTIONS",
+          "USE_TIMER_SELF_ROOT",
+          "PLIB"
+        ]
+      },
+      "dependencies": {
+        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24027"
+      }
+    },
+    "netstandard1.3": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "HAS_TPL46",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "PLIB",
+          "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24027"
+      }
+    },
+    "sl5": {
+      "buildOptions": {
+        "define": [
+          "NO_RXINTERFACES",
+          "USE_SL_DISPATCHER",
+          "NO_SERIALIZABLE",
+          "NO_REMOTING",
+          "NO_SEMAPHORE",
+          "NO_STOPWATCH",
+          "NO_CDS",
+          "NO_TASK_DELAY",
+          "NO_WEAKREFOFT",
+          "NO_SORTEDDICTIONARY",
+          "SILVERLIGHT",
+          "SILVERLIGHT5"
+        ]
+      },
+      "dependencies": {
+      
+      }
+    }
+  }
 }

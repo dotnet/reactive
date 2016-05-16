@@ -1,49 +1,125 @@
-﻿{
+{
   "version": "3.0.0-*",
   "title": "Reactive Extensions - Windows Forms Helpers",
-  "description": "Windows Forms extensions library for Rx. Contains scheduler functionality for the Windows Forms UI loop.",
-  "authors": [ "Microsoft" ],
+  "description":
+    "Windows Forms extensions library for Rx. Contains scheduler functionality for the Windows Forms UI loop.",
+  "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
-  "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
-  "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
-  "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
-  "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
-  "requireLicenseAcceptance": true,
+  "packOptions": {
+    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
+    "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
+    "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
+    "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
+    "requireLicenseAcceptance": true
+  },
 
+  "buildOptions": {
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"]
+  },
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "buildOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
+    }
+  },
   "dependencies": {
     "System.Reactive.Linq": { "target": "project" }
   },
-
   "frameworks": {
-    "dotnet5.1": {
-        "compilationOptions": {
-            "define": [
-                "NO_EVENTARGS_CONSTRAINT",
-                "HAS_EDI",
-                "HAS_WINRT",
-                "HAS_PROGRESS",
-                "PREFER_ASYNC",
-                "HAS_AWAIT",
-                "NO_REMOTING",
-                "NO_SERIALIZABLE",
-                "NO_THREAD",
-                "CRIPPLED_REFLECTION",
-                "USE_TIMER_SELF_ROOT"
-            ]
+    "wpa81": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
         },
-        "dependencies": {
-            "Microsoft.NETCore.Portable.Compatibility": {
-                "version": "1.0.0",
-                "type": "build"
-            },
-            "Microsoft.TargetingPack.Private.WinRT": {
-                "version": "1.0.1",
-                "type": "build"
-            },
-            "System.Threading.Tasks": "4.0.11-rc3-23823",
-            "System.Runtime.WindowsRuntime": "4.0.11-rc3-23823"
+        "Microsoft.TargetingPack.Private.WindowsPhone.v8.1": {
+          "version": "1.0.1",
+          "type": "build"
         }
-
+      }
+    },
+    "netcore451": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.TargetingPack.Private.NETCore.v4.5.1": {
+          "version": "1.0.0",
+          "type": "build"
+        }
+      }
+    },
+    "uap10.0": {
+      "imports": ["dotnet5.4"],
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_TPL46",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "WINDOWS",
+          "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.NETCore.UniversalWindowsPlatform": {
+          "version": "5.2.0-rc2-24027",
+          "type": "build"
+        }
+      }
     }
   }
 }

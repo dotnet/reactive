@@ -1,36 +1,51 @@
 ﻿{
-    "version": "2.0.0-*",
-    "title": "Interactive Extensions - Tests",
-    "description": "Unit Tests",
-    "authors": ["Microsoft"],
-    "copyright": "Copyright (C) Microsoft Corporation",
+  "version": "2.0.0-*",
+  "title": "Interactive Extensions - Tests",
+  "description": "Unit Tests",
+  "authors": ["Microsoft"],
+  "copyright": "Copyright (C) Microsoft Corporation",
+  "packOptions": {
     "tags": [],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "https://github.com/Reactive-Extensions/Rx.NET",
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
-    "requireLicenseAcceptance": true,
-    "dependencies": {
-        "System.Interactive.Providers": { "target": "project" },
-        "System.Interactive.Async.Providers": { "target": "project" },
-        "xunit": "2.1.0",
-        "xunit.runner.dnx": "2.1.0-rc1-build204"
-    },
+    "requireLicenseAcceptance": true
+  },
+
+  "buildOptions": {
     "exclude": [
-        "App.cs"
-    ],
-    "commands": {
-        "test": "xunit.runner.dnx"
-    },
-    "frameworks": {
-        "dnx451": {
-            "compilationOptions": {
-                "define": [
-                    "HAS_AWAIT",
-                    "HAS_APTCA",
-                    "DESKTOPCLR",
-                    "DESKTOPCLR45"
-                ]
-            }
+      "App.cs"
+    ]
+  },
+  "dependencies": {
+    "System.Interactive.Providers": { "target": "project" },
+    "System.Interactive.Async.Providers": { "target": "project" },
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-*"
+  },
+
+  "testRunner": "xunit",
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [ "dotnet", "portable-net45+win8" ],
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+            "version": "1.0.0-rc2-3002702",
+            "type": "platform"
         }
+      }
+    },
+    "net461": {
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT"
+        ]
+      }
     }
+  }
 }
