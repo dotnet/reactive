@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>System.Interactive.Async</id>
+        <version>$version$</version>
+        <authors>Microsoft</authors>
+        <owners>Microsoft</owners>
+        <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+        <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+        <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</description>
+        <copyright>Copyright (C) Microsoft Corporation</copyright>
+        <language>en-US</language>
+        <tags>Ix Interactive Extensions Enumerable Asynchronous</tags>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework="net4" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="..\System.Interactive.Async\bin\$configuration$\**\*.*" target="lib" />        
+    </files>
+</package>
