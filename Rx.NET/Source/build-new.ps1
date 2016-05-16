@@ -51,4 +51,5 @@ foreach ($project in $projects) {
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
-dotnet test $testDirectory -c "$configuration"
+dotnet test $testDirectory 
+
