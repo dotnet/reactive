@@ -18,28 +18,10 @@
             <dependency id="System.Reactive" version="$version$" />
         </dependencies>
         <frameworkAssemblies>
-            <frameworkAssembly assemblyName="System" targetFramework="" />
-            <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+            <frameworkAssembly assemblyName="System" targetFramework="net4" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="lib\net40\System.Reactive.Providers.dll" target="lib\net40\System.Reactive.Providers.dll" />
-        <file src="lib\net40\System.Reactive.Providers.XML" target="lib\net40\System.Reactive.Providers.XML" />
-        <file src="lib\net45\System.Reactive.Providers.dll" target="lib\net45\System.Reactive.Providers.dll" />
-        <file src="lib\net45\System.Reactive.Providers.XML" target="lib\net45\System.Reactive.Providers.XML" />
-        <file src="lib\net46\System.Reactive.Providers.dll" target="lib\net46\System.Reactive.Providers.dll" />
-        <file src="lib\net46\System.Reactive.Providers.XML" target="lib\net46\System.Reactive.Providers.XML" />
-        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.dll" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.dll" />
-        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.XML" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Providers.XML" />
-        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Providers.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Providers.dll" />
-        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Providers.XML" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Providers.XML" />
-        <file src="lib\portable-win81+wpa81\System.Reactive.Providers.dll" target="lib\portable-win81+wpa81\System.Reactive.Providers.dll" />
-        <file src="lib\portable-win81+wpa81\System.Reactive.Providers.XML" target="lib\portable-win81+wpa81\System.Reactive.Providers.XML" />
-        <file src="lib\sl5\System.Reactive.Providers.dll" target="lib\sl5\System.Reactive.Providers.dll" />
-        <file src="lib\sl5\System.Reactive.Providers.XML" target="lib\sl5\System.Reactive.Providers.XML" />
-        <file src="lib\windows8\System.Reactive.Providers.dll" target="lib\windows8\System.Reactive.Providers.dll" />
-        <file src="lib\windows8\System.Reactive.Providers.XML" target="lib\windows8\System.Reactive.Providers.XML" />
-        <file src="lib\windowsphone8\System.Reactive.Providers.dll" target="lib\windowsphone8\System.Reactive.Providers.dll" />
-        <file src="lib\windowsphone8\System.Reactive.Providers.XML" target="lib\windowsphone8\System.Reactive.Providers.XML" />
-    </files>
+        <file src="..\System.Reactive.Providers\bin\$configuration$\**\*.*" target="lib" />
 </package>

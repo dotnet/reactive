@@ -1,9 +1,19 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
+$configuration = "Release"
+
+wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile nuget.exe
+
 $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0"
 
 # TODO: if not found, bail out
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
+
+# get version
+.\nuget install -excludeversion -pre gitversion.commandline -outputdirectory tools
+.\tools\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
+
+$version = $env:NuGetVersionV2
 
 Write-Host "Restoring packages" -Foreground Green
 dotnet restore $scriptPath | out-null
@@ -14,10 +24,24 @@ $projects = gci $scriptPath -Directory `
   | Select -ExpandProperty FullName
 
 foreach ($project in $projects) {
-  dotnet build $project
+  dotnet build -c "$configuration" $project
 }
+
+$nuspecDir = Join-Path $scriptPath "NuSpecs"
+
+Write-Host "Building Packages" -Foreground Green
+$nuspecs = ls $nuspecDir\*.nuspec | Select -ExpandProperty FullName
+
+foreach ($nuspec in $nuspecs) {
+   nuget pack $nuspec -Version $version -Properties "Configuration=$configuration"
+}
+
+
+foreach ($project in $projects) {
+  dotnet build -c "$configuration" $project
+}
+
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
-cd $testDirectory 
-dotnet test
+dotnet test $testDirectory -c "$configuration"

@@ -20,23 +20,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="lib\net40\System.Reactive.Linq.dll" target="lib\net40\System.Reactive.Linq.dll" />
-        <file src="lib\net40\System.Reactive.Linq.XML" target="lib\net40\System.Reactive.Linq.XML" />
-        <file src="lib\net45\System.Reactive.Linq.dll" target="lib\net45\System.Reactive.Linq.dll" />
-        <file src="lib\net45\System.Reactive.Linq.XML" target="lib\net45\System.Reactive.Linq.XML" />
-        <file src="lib\net46\System.Reactive.Linq.dll" target="lib\net46\System.Reactive.Linq.dll" />
-        <file src="lib\net46\System.Reactive.Linq.XML" target="lib\net46\System.Reactive.Linq.XML" />
-        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.dll" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.dll" />
-        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.XML" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Linq.XML" />
-        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Linq.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Linq.dll" />
-        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Linq.XML" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Linq.XML" />
-        <file src="lib\portable-win81+wpa81\System.Reactive.Linq.dll" target="lib\portable-win81+wpa81\System.Reactive.Linq.dll" />
-        <file src="lib\portable-win81+wpa81\System.Reactive.Linq.XML" target="lib\portable-win81+wpa81\System.Reactive.Linq.XML" />
-        <file src="lib\sl5\System.Reactive.Linq.dll" target="lib\sl5\System.Reactive.Linq.dll" />
-        <file src="lib\sl5\System.Reactive.Linq.XML" target="lib\sl5\System.Reactive.Linq.XML" />
-        <file src="lib\windows8\System.Reactive.Linq.dll" target="lib\windows8\System.Reactive.Linq.dll" />
-        <file src="lib\windows8\System.Reactive.Linq.XML" target="lib\windows8\System.Reactive.Linq.XML" />
-        <file src="lib\windowsphone8\System.Reactive.Linq.dll" target="lib\windowsphone8\System.Reactive.Linq.dll" />
-        <file src="lib\windowsphone8\System.Reactive.Linq.XML" target="lib\windowsphone8\System.Reactive.Linq.XML" />
+        <file src="..\System.Reactive.Linq\bin\$configuration$\**\*.*" target="lib" />
     </files>
 </package>
