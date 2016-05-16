@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>System.Reactive.Aliases</id>
+        <id>System.Reactive.Observable.Aliases</id>
         <version>$version$</version>
         <title>Reactive Extensions - Aliases</title>
         <authors>Microsoft</authors>
@@ -20,6 +20,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Aliases\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Observable.Aliases\bin\$configuration$\**\*.*" target="lib" />
     </files>
 </package>

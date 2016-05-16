@@ -24,4 +24,5 @@
     </metadata>
     <files>
         <file src="..\System.Reactive.Providers\bin\$configuration$\**\*.*" target="lib" />
+    </files>
 </package>

@@ -2,7 +2,7 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
 
-wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile nuget.exe
+wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\.nuget\nuget.exe
 
 $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0"
 
@@ -10,10 +10,17 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get version
-.\nuget install -excludeversion -pre gitversion.commandline -outputdirectory tools
-.\tools\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
+.\.nuget\nuget.exe install -excludeversion -pre gitversion.commandline -outputdirectory packages
+.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
 
-$version = $env:NuGetVersionV2
+$versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
+
+$ver1 = $versionObj.NuGetVersionV2
+$ver2 = $versionObj.CommitsSinceVersionSourcePadded
+
+$version = "$ver1-$ver2"
+
+Write-Host "Version: $version"
 
 Write-Host "Restoring packages" -Foreground Green
 dotnet restore $scriptPath | out-null
