@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>Rx-Providers</id>
-        <version>2.3.0-beta2</version>
+        <id>System.Reactive.Providers</id>
+        <version>$version$</version>
         <title>Reactive Extensions - Providers Library</title>
         <authors>Microsoft</authors>
         <owners>Microsoft</owners>
@@ -15,7 +15,7 @@
         <language>en-US</language>
         <tags>Rx Reactive Extensions Observable LINQ Events</tags>
         <dependencies>
-            <dependency id="Rx-Main" version="2.3.0-beta2" />
+            <dependency id="System.Reactive" version="$version$" />
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="System" targetFramework="" />

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>Rx-Aliases</id>
-        <version>2.3.0-beta2</version>
+        <id>System.Reactive.Aliases</id>
+        <version>$version$</version>
         <title>Reactive Extensions - Aliases</title>
         <authors>Microsoft</authors>
         <owners>Microsoft</owners>
@@ -15,8 +15,8 @@
         <language>en-US</language>
         <tags>Rx Reactive Extensions Observable LINQ Events</tags>
         <dependencies>
-            <dependency id="Rx-Main" version="2.3.0-beta2" />
-            <dependency id="Rx-Providers" version="2.3.0-beta2" />
+            <dependency id="System.Reactive.Main" version="$version$" />
+            <dependency id="System.Reactive.Providers" version="$version$" />
         </dependencies>
     </metadata>
     <files>
