@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>System.Reactive.Interfaces</id>
+        <id>Microsoft.Reactive.Testing</id>
         <version>$version$</version>
-        <title>Reactive Extensions - Interfaces Library</title>
+        <title>Reactive Extensions - Testing Library</title>
         <authors>Microsoft</authors>
         <owners>Microsoft</owners>
         <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
         <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
         <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>Reactive Extensions Interfaces Library containing essential interfaces.</description>
+        <description>Testing library for Rx. Contains code to help test Rx operators.</description>
         <copyright>Copyright (C) Microsoft Corporation</copyright>
         <language>en-US</language>
         <tags>Rx Reactive Extensions Observable LINQ Events</tags>
         <dependencies>
-        <group targetFramework="netstandard1.0">
-          <dependency id="NETStandard.Library" version="1.5.0-rc2-24027" />
-        </group>
-      </dependencies>
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="xunit" version="2.1.0" />
+        </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Interfaces\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\*.*" target="lib" />
     </files>
 </package>

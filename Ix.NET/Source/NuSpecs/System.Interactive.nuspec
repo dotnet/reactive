@@ -19,6 +19,11 @@
             <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
             <frameworkAssembly assemblyName="System.Core" targetFramework="sl5" />
         </frameworkAssemblies>
+        <dependencies>
+          <group targetFramework="netstandard1.0">
+            <dependency id="NETStandard.Library" version="1.5.0-rc2-24027" />
+          </group>
+        </dependencies>
     </metadata>
     <files>
         <file src="..\System.Interactive\bin\$configuration$\**\*.*" target="lib" />
