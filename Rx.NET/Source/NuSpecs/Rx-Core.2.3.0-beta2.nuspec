@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Rx-Core</id>
+        <version>2.3.0-beta2</version>
+        <title>Reactive Extensions - Core Library</title>
+        <authors>Microsoft</authors>
+        <owners>Microsoft</owners>
+        <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+        <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+        <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Reactive Extensions Core Library containing base classes and scheduler infrastructure.</description>
+        <copyright>Copyright (C) Microsoft Corporation</copyright>
+        <language>en-US</language>
+        <tags>Rx Reactive Extensions Observable LINQ Events</tags>
+        <dependencies>
+            <dependency id="Rx-Interfaces" version="2.3.0-beta2" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Observable" targetFramework="Silverlight4.0-WindowsPhone71" />
+            <frameworkAssembly assemblyName="Microsoft.Phone" targetFramework="Silverlight4.0-WindowsPhone71" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="lib\net40\System.Reactive.Core.dll" target="lib\net40\System.Reactive.Core.dll" />
+        <file src="lib\net40\System.Reactive.Core.XML" target="lib\net40\System.Reactive.Core.XML" />
+        <file src="lib\net45\System.Reactive.Core.dll" target="lib\net45\System.Reactive.Core.dll" />
+        <file src="lib\net45\System.Reactive.Core.XML" target="lib\net45\System.Reactive.Core.XML" />
+        <file src="lib\net46\System.Reactive.Core.dll" target="lib\net46\System.Reactive.Core.dll" />
+        <file src="lib\net46\System.Reactive.Core.XML" target="lib\net46\System.Reactive.Core.XML" />
+        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.dll" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.dll" />
+        <file src="lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.XML" target="lib\portable-net40+sl5+win8+wp8\System.Reactive.Core.XML" />
+        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Core.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Core.dll" />
+        <file src="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Core.XML" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\System.Reactive.Core.XML" />
+        <file src="lib\portable-win81+wpa81\System.Reactive.Core.dll" target="lib\portable-win81+wpa81\System.Reactive.Core.dll" />
+        <file src="lib\portable-win81+wpa81\System.Reactive.Core.XML" target="lib\portable-win81+wpa81\System.Reactive.Core.XML" />
+        <file src="lib\sl5\System.Reactive.Core.dll" target="lib\sl5\System.Reactive.Core.dll" />
+        <file src="lib\sl5\System.Reactive.Core.XML" target="lib\sl5\System.Reactive.Core.XML" />
+        <file src="lib\windows8\System.Reactive.Core.dll" target="lib\windows8\System.Reactive.Core.dll" />
+        <file src="lib\windows8\System.Reactive.Core.XML" target="lib\windows8\System.Reactive.Core.XML" />
+        <file src="lib\windowsphone8\System.Reactive.Core.dll" target="lib\windowsphone8\System.Reactive.Core.dll" />
+        <file src="lib\windowsphone8\System.Reactive.Core.XML" target="lib\windowsphone8\System.Reactive.Core.XML" />
+    </files>
+</package>
