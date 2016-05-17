@@ -11,7 +11,7 @@ $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get version
 .\nuget.exe install -excludeversion -pre gitversion.commandline -outputdirectory packages
-.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
+.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
 
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
 
