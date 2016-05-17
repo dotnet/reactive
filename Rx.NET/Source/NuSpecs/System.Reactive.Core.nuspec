@@ -16,7 +16,7 @@
         <tags>Rx Reactive Extensions Observable LINQ Events</tags>
         <dependencies>
           <group>          
-            <dependency id="System.Reactive.Intefaces" version="$version$" />
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
           </group>
           <group targetFramework="netstandard1.0">
             <dependency id="System.Reactive.Intefaces" version="$version$" />
