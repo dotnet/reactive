@@ -2,12 +2,12 @@ assembly-versioning-scheme: MajorMinorPatch
 mode: ContinuousDeployment
 tag-prefix: '[vV]'
 continuous-delivery-fallback-tag: ci
-next-version: 3.0.0-beta
+next-version: 3.0.0
 major-version-bump-message: '\+semver:\s?(breaking|major)'
 minor-version-bump-message: '\+semver:\s?(feature|minor)'
 patch-version-bump-message: '\+semver:\s?(fix|patch)'
-legacy-semver-padding: 4
-build-metadata-padding: 4
+legacy-semver-padding: 5
+build-metadata-padding: 5
 commits-since-version-source-padding: 5
 commit-message-incrementing: Enabled
 branches:
@@ -19,7 +19,7 @@ branches:
     track-merge-target: false
   core-port:
     mode: ContinuousDeployment
-    tag: ''
+    tag: beta-
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
