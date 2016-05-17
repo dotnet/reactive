@@ -8,7 +8,7 @@ minor-version-bump-message: '\+semver:\s?(feature|minor)'
 patch-version-bump-message: '\+semver:\s?(fix|patch)'
 legacy-semver-padding: 4
 build-metadata-padding: 4
-commits-since-version-source-padding: 4
+commits-since-version-source-padding: 5
 commit-message-incrementing: Enabled
 branches:
   master:
