@@ -16,7 +16,10 @@
     "nowarn": ["CS0618"],
     "keyFile": "../35MSSharedLib1024.snk",
     "publicSign": true,
-    "define": ["SIGNED"]
+    "define": ["SIGNED"],
+    "copyToOutput": {
+            "include": [ "xunit.runner.json" ]
+        }
   },
   "configurations": {
     "ReleaseDelaySigned": {
