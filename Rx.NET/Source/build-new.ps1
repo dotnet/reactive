@@ -29,7 +29,6 @@ $projects = gci $scriptPath -Directory `
 
 foreach ($project in $projects) {
   dotnet build -c "$configuration" $project
-  dotnet build $project
 }
 
 $nuspecDir = Join-Path $scriptPath "NuSpecs"
@@ -45,5 +44,5 @@ foreach ($nuspec in $nuspecs) {
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
-dotnet test $testDirectory 
+dotnet test $testDirectory -c "$configuration"
 
