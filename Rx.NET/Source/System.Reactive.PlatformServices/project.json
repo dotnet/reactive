@@ -106,7 +106,7 @@
         ]
       },
       "dependencies": {
-      
+
       }
     },
     "netstandard1.3": {
@@ -129,7 +129,28 @@
         ]
       },
       "dependencies": {
-      
+
+      }
+    },
+    "netcoreapp1.0": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "HAS_TPL46",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "CRIPPLED_REFLECTION",
+          "PLIB",
+          "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
       }
     },
     "wpa81": {
@@ -191,7 +212,7 @@
       }
     },
     "uap10.0": {
-      "imports": ["dotnet5.4"],
+      "imports": [ "dotnet5.4" ],
       "buildOptions": {
         "define": [
           "NO_EVENTARGS_CONSTRAINT",
@@ -239,7 +260,7 @@
         ]
       },
       "dependencies": {
-      
+
       }
     }
   }
