@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="TaskPoolScheduler.Default">Instance of this type using the default TaskScheduler to schedule work on the TPL task pool.</seealso>
     public sealed class TaskPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        private static readonly TaskPoolScheduler s_instance = new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default));
+        private static readonly Lazy<TaskPoolScheduler> s_instance = new Lazy<TaskPoolScheduler>(() => new TaskPoolScheduler(new TaskFactory(TaskScheduler.Default)));
         private readonly TaskFactory taskFactory;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                return s_instance;
+                return s_instance.Value;
             }
         }
 

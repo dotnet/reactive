@@ -7,11 +7,11 @@ namespace System.Reactive.Linq
 {
     internal static class QueryServices
     {
-        private static Lazy<IQueryServices> s_services = new Lazy<IQueryServices>(Initialize);
+        private static IQueryServices s_services = Initialize();
 
         public static T GetQueryImpl<T>(T defaultInstance)
         {
-            return s_services.Value.Extend(defaultInstance);
+            return s_services.Extend(defaultInstance);
         }
 
         private static IQueryServices Initialize()

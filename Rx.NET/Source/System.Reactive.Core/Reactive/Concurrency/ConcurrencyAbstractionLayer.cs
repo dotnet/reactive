@@ -10,18 +10,10 @@ namespace System.Reactive.Concurrency
     /// </summary>
     internal static class ConcurrencyAbstractionLayer
     {
-        private static Lazy<IConcurrencyAbstractionLayer> s_current = new Lazy<IConcurrencyAbstractionLayer>(Initialize);
-
         /// <summary>
         /// Gets the current CAL. If no CAL has been set yet, it will be initialized to the default.
         /// </summary>
-        public static IConcurrencyAbstractionLayer Current
-        {
-            get
-            {
-                return s_current.Value;
-            }
-        }
+        public static IConcurrencyAbstractionLayer Current { get; } = Initialize();
 
         private static IConcurrencyAbstractionLayer Initialize()
         {

@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.CurrentThread">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class CurrentThreadScheduler : LocalScheduler
     {
-        private static readonly CurrentThreadScheduler s_instance = new CurrentThreadScheduler();
+        private static readonly Lazy<CurrentThreadScheduler> s_instance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
 
         CurrentThreadScheduler()
         {
@@ -23,7 +23,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public static CurrentThreadScheduler Instance
         {
-            get { return s_instance; }
+            get { return s_instance.Value; }
         }
 
 #if !NO_TLS
