@@ -2,8 +2,9 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
 
-wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
-
+if (!(Test-Path .\nuget.exe)) {
+    wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
+}
 $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0"
 
 # TODO: if not found, bail out
