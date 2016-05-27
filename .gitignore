@@ -174,3 +174,6 @@ Rx.NET/Samples/Portable/packages/
 *.nupkg
 *.nuget.props
 *.nuget.targets
+
+# dotnet local cache
+.dotnet
