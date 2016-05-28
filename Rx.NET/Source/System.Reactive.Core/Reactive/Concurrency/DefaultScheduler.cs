@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private static readonly DefaultScheduler s_instance = new DefaultScheduler();
+        private static readonly Lazy<DefaultScheduler> s_instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
         private static IConcurrencyAbstractionLayer s_cal = ConcurrencyAbstractionLayer.Current;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                return s_instance;
+                return s_instance.Value;
             }
         }
 

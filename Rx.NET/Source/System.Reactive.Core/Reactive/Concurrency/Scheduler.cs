@@ -14,7 +14,10 @@ namespace System.Reactive.Concurrency
     {
         // TODO - Review whether this is too eager.
         // Make first use of Scheduler trigger access to and initialization of the CAL.
-        private static DefaultScheduler s_default = DefaultScheduler.Instance;
+
+        // HACK: Causes race condition with Locks in DefaultScheduler's static ctor chain
+        // private static DefaultScheduler s_default = DefaultScheduler.Instance;
+        
 
         /// <summary>
         /// Gets the current time according to the local machine's system clock.
@@ -68,7 +71,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                return s_default;
+                return DefaultScheduler.Instance;
             }
         }
 

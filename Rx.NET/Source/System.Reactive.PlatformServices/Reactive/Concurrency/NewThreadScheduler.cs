@@ -10,7 +10,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class NewThreadScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
-        internal static readonly NewThreadScheduler s_instance = new NewThreadScheduler();
+        internal static readonly Lazy<NewThreadScheduler> s_instance = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler());
 
         private readonly Func<ThreadStart, Thread> _threadFactory;
 
@@ -29,7 +29,7 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-                return s_instance;
+                return s_instance.Value;
             }
         }
 

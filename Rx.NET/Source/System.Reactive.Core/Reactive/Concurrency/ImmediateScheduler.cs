@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Immediate">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ImmediateScheduler : LocalScheduler
     {
-        private static readonly ImmediateScheduler s_instance = new ImmediateScheduler();
+        private static readonly Lazy<ImmediateScheduler> s_instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
 
         ImmediateScheduler()
         {
@@ -22,7 +22,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public static ImmediateScheduler Instance
         {
-            get { return s_instance; }
+            get { return s_instance.Value; }
         }
 
         /// <summary>
