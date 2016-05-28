@@ -96,7 +96,7 @@ namespace ReactiveTests.Tests
         }
 
 #if !SILVERLIGHT
-        [Fact(Skip ="Ignored")]        
+        [Fact]        
         public void SynchronizationContext_ScheduleActionDue()
         {
             var ms = new MySync();
