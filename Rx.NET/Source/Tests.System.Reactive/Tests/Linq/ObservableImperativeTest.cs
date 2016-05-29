@@ -514,11 +514,11 @@ namespace ReactiveTests.Tests
 
             var s = Scheduler.Default.Catch<Exception>(err =>
             {
-                Thread.VolatileWrite(ref hasCaughtEscapingException, 1);
+                Volatile.Write(ref hasCaughtEscapingException, 1);
                 return ex == err;
             });
 
-            while (Thread.VolatileRead(ref hasCaughtEscapingException) == 0)
+            while (Volatile.Read(ref hasCaughtEscapingException) == 0)
             {
                 var xs = Observable.Create<int>(observer =>
                 {

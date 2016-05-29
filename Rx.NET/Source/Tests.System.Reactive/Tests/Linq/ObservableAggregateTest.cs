@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
+using System.Reflection;
 
 namespace ReactiveTests.Tests
 {
@@ -2457,7 +2458,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 #endif
-#if !CRIPPLED_REFLECTION
+#if !CRIPPLED_REFLECTION || NETCOREAPP1_0
         class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
