@@ -20,6 +20,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Observable.Aliases\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Observable.Aliases\bin\$configuration$\**\System.Reactive.Observable.Aliases.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

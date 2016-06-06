@@ -31,6 +31,6 @@
         </frameworkAssemblies>
     </metadata>   
     <files>
-        <file src="..\System.Interactive.Providers\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Interactive.Providers\bin\$configuration$\**\System.Interactive.Providers.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

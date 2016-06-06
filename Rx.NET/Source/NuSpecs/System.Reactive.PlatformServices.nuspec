@@ -20,6 +20,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.PlatformServices\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.PlatformServices\bin\$configuration$\**\System.Reactive.PlatformServices.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

@@ -25,6 +25,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.WindowsRuntime\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.WindowsRuntime\bin\$configuration$\**\System.Reactive.WindowsRuntime.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

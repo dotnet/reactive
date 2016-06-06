@@ -30,6 +30,6 @@
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Providers\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Providers\bin\$configuration$\**\System.Reactive.Providers.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

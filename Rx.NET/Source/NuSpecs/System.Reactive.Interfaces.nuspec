@@ -21,6 +21,6 @@
       </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Interfaces\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Interfaces\bin\$configuration$\**\System.Reactive.Interfaces.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

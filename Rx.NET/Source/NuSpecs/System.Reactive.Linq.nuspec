@@ -27,6 +27,6 @@
         </dependencies>
     </metadata>  
     <files>
-        <file src="..\System.Reactive.Linq\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

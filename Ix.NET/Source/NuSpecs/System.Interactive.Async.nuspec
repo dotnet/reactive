@@ -24,6 +24,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Interactive.Async\bin\$configuration$\**\*.*" target="lib" />        
+        <file src="..\System.Interactive.Async\bin\$configuration$\**\System.Interactive.Async.*" exclude="**\*.deps.json" target="lib" />        
     </files>
 </package>

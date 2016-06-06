@@ -21,6 +21,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

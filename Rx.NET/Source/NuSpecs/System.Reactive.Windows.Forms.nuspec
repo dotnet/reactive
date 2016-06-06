@@ -22,6 +22,6 @@
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Windows.Forms\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Windows.Forms\bin\$configuration$\**\System.Reactive.Windows.Forms.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

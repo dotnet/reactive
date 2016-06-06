@@ -26,6 +26,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Interactive\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Interactive\bin\$configuration$\**\System.Interactive.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

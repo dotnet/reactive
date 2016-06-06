@@ -35,6 +35,6 @@
       </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Core\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Core\bin\$configuration$\**\System.Reactive.Core.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

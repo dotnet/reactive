@@ -22,6 +22,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Experimental\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Experimental\bin\$configuration$\**\System.Reactive.Experimental.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

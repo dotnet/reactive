@@ -29,6 +29,6 @@
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Windows.Threading\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Windows.Threading\bin\$configuration$\**\System.Reactive.Windows.Threading.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

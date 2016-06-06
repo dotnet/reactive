@@ -31,6 +31,6 @@
         </frameworkAssemblies>
     </metadata>  
     <files>
-        <file src="..\System.Interactive.Async.Providers\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Interactive.Async.Providers\bin\$configuration$\**\System.Interactive.Async.Providers.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>

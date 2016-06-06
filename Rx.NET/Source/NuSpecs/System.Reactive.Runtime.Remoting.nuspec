@@ -19,6 +19,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\System.Reactive.Runtime.Remoting\bin\$configuration$\**\*.*" target="lib" />
+        <file src="..\System.Reactive.Runtime.Remoting\bin\$configuration$\**\System.Reactive.Runtime.Remoting.*" exclude="**\*.deps.json" target="lib" />
     </files>
 </package>
