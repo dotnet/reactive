@@ -19,8 +19,8 @@
     "publicSign": true,
     "define": ["SIGNED"],
     "copyToOutput": {
-            "include": [ "xunit.runner.json" ]
-        }
+      "include": [ "xunit.runner.json" ]
+    }
   },
   
   "configurations": {
