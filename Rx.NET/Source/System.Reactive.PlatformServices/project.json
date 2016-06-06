@@ -1,8 +1,7 @@
 {
   "version": "3.0.0-*",
   "title": "Reactive Extensions - Platform Services Library",
-  "description":
-    "Reactive Extensions Platform Services Library used to access platform-specific functionality and enlightenment services.",
+  "description": "Reactive Extensions Platform Services Library used to access platform-specific functionality and enlightenment services.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
 
@@ -22,6 +21,7 @@
       "exclude": ["Strings_PlatformServices.Designer.cs"]
     }
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -32,9 +32,11 @@
       }
     }
   },
+  
   "dependencies": {
     "System.Reactive.Linq": { "target": "project" }
   },
+  
   "frameworks": {
     "net40": {
       "buildOptions": {

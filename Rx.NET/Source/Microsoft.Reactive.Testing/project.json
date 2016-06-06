@@ -1,10 +1,10 @@
 {
   "version": "3.0.0-*",
   "title": "Microsoft.Reactive.Testing - Testing Helper Library",
-  "description":
-    "Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.",
+  "description": "Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
+  
   "packOptions": {
     "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
@@ -13,12 +13,12 @@
     "requireLicenseAcceptance": true
   },
 
-
   "buildOptions": {
     "keyFile": "../35MSSharedLib1024.snk",
     "publicSign": true,
     "define": ["SIGNED"]
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -29,11 +29,13 @@
       }
     }
   },
+  
   "dependencies": {
     "System.Reactive.Linq": { "target": "project" },
     "System.Reactive.PlatformServices": { "target": "project" },
     "xunit": "2.1.0"
   },
+  
   "frameworks": {
     "net45": {
       "buildOptions": {

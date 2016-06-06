@@ -4,6 +4,7 @@
   "description": "Reactive Extensions Remoting Library used to expose observable sequences through .NET Remoting.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
+  
   "packOptions": {
     "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
@@ -17,6 +18,7 @@
     "publicSign": true,
     "define": ["SIGNED"]
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -27,9 +29,11 @@
       }
     }
   },
+  
   "dependencies": {
     "System.Reactive.Core": { "target": "project" }
   },
+  
   "frameworks": {
     "net40": {
       "buildOptions": {

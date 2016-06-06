@@ -4,6 +4,7 @@
   "description": "Interactive Extensions Main Library used to express queries over enumerable sequences.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
+  
   "packOptions": {
     "tags": ["Ix", "Interactive", "Extensions", "Enumerable"],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",

@@ -1,8 +1,7 @@
 {
   "version": "3.0.0-*",
   "title": "Reactive Extensions - Query Library",
-  "description":
-    "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
+  "description": "Reactive Extensions Query Library used to express complex event processing queries over observable sequences.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
 
@@ -27,6 +26,7 @@
       ]
     }
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -41,6 +41,7 @@
   "dependencies": {
     "System.Reactive.Core": { "target": "project" }
   },
+  
   "frameworks": {
     "net40": {
       "buildOptions": {

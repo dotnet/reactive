@@ -18,6 +18,7 @@
     "publicSign": true,
     "define": ["SIGNED"]
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -28,11 +29,13 @@
       }
     }
   },
+  
   "dependencies": {
     "System.Reactive.Interfaces": { "target": "project" },
     "System.Reactive.Core": { "target": "project" },
     "System.Reactive.Linq": { "target": "project" }
   },
+  
   "frameworks": {
     "net40": {
       "buildOptions": {

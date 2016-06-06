@@ -1,8 +1,7 @@
 {
   "version": "3.0.0-*",
   "title": "Reactive Extensions - WPF Helpers",
-  "description":
-    "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
+  "description": "Windows Presentation Foundation extensions library for Rx. Contains scheduler functionality for the WPF Dispatcher.",
   "authors": ["Microsoft"],
   "copyright": "Copyright (C) Microsoft Corporation",
 
@@ -19,6 +18,7 @@
     "publicSign": true,
     "define": ["SIGNED"]
   },
+  
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
@@ -29,10 +29,12 @@
       }
     }
   },
+  
   "dependencies": {
     "System.Reactive.Interfaces": { "target": "project" },
     "System.Reactive.Core": { "target": "project" }
   },
+  
   "frameworks": {
     "net40": {
       "buildOptions": {
