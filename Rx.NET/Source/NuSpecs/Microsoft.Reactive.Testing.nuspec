@@ -14,7 +14,11 @@
     <copyright>Copyright (C) Microsoft Corporation</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
-    <dependencies>      
+    <dependencies>   
+       <group>
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />        
+      </group>   
       <group targetFramework="netcore451">
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.PlatformServices" version="$version$" />        

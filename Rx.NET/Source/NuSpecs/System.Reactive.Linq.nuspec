@@ -1,31 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
-    <metadata>
-        <id>System.Reactive.Linq</id>
-        <version>$version$</version>
-        <title>Reactive Extensions - Query Library</title>
-        <authors>Microsoft</authors>
-        <owners>Microsoft</owners>
-        <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
-        <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
-        <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
-        <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>Reactive Extensions Query Library used to express complex event processing queries over observable sequences.</description>
-        <copyright>Copyright (C) Microsoft Corporation</copyright>
-        <language>en-US</language>
-        <tags>Rx Reactive Extensions Observable LINQ Events</tags>
-        <dependencies>
-          <group>
-            <dependency id="System.Reactive.Interfaces" version="$version$" />
-            <dependency id="System.Reactive.Core" version="$version$" />
-          </group>
-          <group targetFramework="netstandard1.0">
-            <dependency id="System.Reactive.Interfaces" version="$version$" />
-            <dependency id="System.Reactive.Core" version="$version$" />
-          </group>
-        </dependencies>
-    </metadata>  
-    <files>
-        <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
-    </files>
+  <metadata>
+    <id>System.Reactive.Linq</id>
+    <version>$version$</version>
+    <title>Reactive Extensions - Query Library</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Reactive Extensions Query Library used to express complex event processing queries over observable sequences.</description>
+    <copyright>Copyright (C) Microsoft Corporation</copyright>
+    <language>en-US</language>
+    <tags>Rx Reactive Extensions Observable LINQ Events</tags>
+    <dependencies>
+      <group>
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="netstandard1.0">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="net40">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="net45">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="net46">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="netstandard1.3">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="sl5">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
+  </files>
 </package>
