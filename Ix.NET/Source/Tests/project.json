@@ -12,11 +12,29 @@
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
     "requireLicenseAcceptance": true
   },
-
+  
   "buildOptions": {
+    "nowarn": ["CS0618"],
+    "keyFile": "../35MSSharedLib1024.snk",
+    "publicSign": true,
+    "define": ["SIGNED"],
+    "copyToOutput": {
+      "include": [ "xunit.runner.json" ]
+    },
     "exclude": [
       "App.cs"
     ]
+  },
+  
+  "configurations": {
+    "ReleaseDelaySigned": {
+      "compibuildOptionslationOptions": {
+        "publicSign": false,
+        "delaySign": true,
+        "define": ["RELEASE", "TRACE"],
+        "optimize": true
+      }
+    }
   },
   
   "dependencies": {
