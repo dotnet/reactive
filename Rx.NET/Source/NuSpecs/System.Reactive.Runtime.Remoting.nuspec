@@ -17,7 +17,7 @@
     <dependencies>
       <group>
         <dependency id="System.Reactive" version="$version$" />
-      </group>      
+      </group>
       <group targetFramework="net40">
         <dependency id="System.Reactive" version="$version$" />
       </group>

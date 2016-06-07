@@ -20,7 +20,7 @@
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
-      </group>      
+      </group>
       <group targetFramework="net40">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
@@ -44,12 +44,26 @@
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
+        <dependency id="System.Collections" version="4.0.11-rc2-24027" />
+        <dependency id="System.Linq" version="4.1.0-rc2-24027" />
+        <dependency id="System.Linq.Expressions" version="4.0.11-rc2-24027" />
+        <dependency id="System.Reflection" version="4.1.0-rc2-24027" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
+        <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
+        <dependency id="System.Threading" version="4.0.11-rc2-24027" />
       </group>
       <group targetFramework="netstandard1.3">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
+        <dependency id="System.Collections" version="4.0.11-rc2-24027" />
+        <dependency id="System.Linq" version="4.1.0-rc2-24027" />
+        <dependency id="System.Linq.Expressions" version="4.0.11-rc2-24027" />
+        <dependency id="System.Reflection" version="4.1.0-rc2-24027" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
+        <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
+        <dependency id="System.Threading" version="4.0.11-rc2-24027" />
       </group>
       <group targetFramework="sl5">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
