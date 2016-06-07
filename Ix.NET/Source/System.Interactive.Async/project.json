@@ -75,7 +75,10 @@
         ]
       },
       "dependencies": {
-        "Microsoft.TargetingPack.Private.Silverlight.v5": "1.0.2"
+        "Microsoft.TargetingPack.Private.Silverlight.v5": {
+          "version": "1.0.2",
+          "type": "platform"
+        }
       }
     }
   }
