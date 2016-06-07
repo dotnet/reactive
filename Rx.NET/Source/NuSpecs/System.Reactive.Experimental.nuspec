@@ -20,8 +20,7 @@
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
-      </group>
-      
+      </group>      
       <group targetFramework="net40">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
@@ -46,20 +45,17 @@
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
       </group>
-      </group>
       <group targetFramework="netstandard1.3">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
       </group>
-      </group>
       <group targetFramework="sl5">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
-      </group>
       </group>
     </dependencies>
   </metadata>
