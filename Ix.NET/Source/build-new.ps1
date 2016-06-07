@@ -2,6 +2,9 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
 
+$nuspecDir = Join-Path $scriptPath "NuSpecs"
+
+
 if (!(Test-Path .\nuget.exe)) {
     wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
 }
@@ -21,19 +24,33 @@ $version = $versionObj.NuGetVersionV2
 
 Write-Host "Version: $version"
 
+# Get Reference Generator
+.\nuget.exe install -excludeversion -pre NuSpec.ReferenceGenerator -outputdirectory packages
+
 Write-Host "Restoring packages" -Foreground Green
 dotnet restore $scriptPath | out-null
 
 Write-Host "Building projects" -Foreground Green
 $projects = gci $scriptPath -Directory `
   | Where-Object { Test-Path (Join-Path $_.FullName "project.json")  } `
-  | Select -ExpandProperty FullName
 
 foreach ($project in $projects) {
-  dotnet build -c "$configuration" $project  
+  dotnet build -c "$configuration" $project.FullName  
+  
+  $ns = Join-Path $nuSpecDir "$($project.Name).nuspec"  
+    
+  if(Test-Path $ns)
+  {
+    Write-Host "Invoking RefGen on $ns" 
+    
+    $baseDir = Join-Path $project.FullName "bin" | join-path -ChildPath "$configuration"
+    $projJson = Join-Path $project.FullName "project.json"    
+    
+    Write-Host RefGen.exe `"$projJson`" `"$baseDir`" `"$($project.Name).dll`" `"$ns`"
+    .\packages\nuspec.referencegenerator\tools\RefGen.exe "$projJson" "$baseDir" "$($project.Name).dll" "$ns"
+  }
 }
 
-$nuspecDir = Join-Path $scriptPath "NuSpecs"
 
 Write-Host "Building Packages" -Foreground Green
 $nuspecs = ls $nuspecDir\*.nuspec | Select -ExpandProperty FullName
