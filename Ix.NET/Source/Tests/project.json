@@ -28,7 +28,7 @@
   
   "configurations": {
     "ReleaseDelaySigned": {
-      "compibuildOptionslationOptions": {
+      "buildOptions": {
         "publicSign": false,
         "delaySign": true,
         "define": ["RELEASE", "TRACE"],
