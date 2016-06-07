@@ -1,25 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
-    <metadata>
-        <id>Microsoft.Reactive.Testing</id>
-        <version>$version$</version>
-        <title>Reactive Extensions - Testing Library</title>
-        <authors>Microsoft</authors>
-        <owners>Microsoft</owners>
-        <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
-        <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
-        <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
-        <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>Testing library for Rx. Contains code to help test Rx operators.</description>
-        <copyright>Copyright (C) Microsoft Corporation</copyright>
-        <language>en-US</language>
-        <tags>Rx Reactive Extensions Observable LINQ Events</tags>
-        <dependencies>
-            <dependency id="System.Reactive.Linq" version="$version$" />
-            <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        </dependencies>
-    </metadata>
-    <files>
-        <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib" />
-    </files>
+  <metadata>
+    <id>Microsoft.Reactive.Testing</id>
+    <version>$version$</version>
+    <title>Reactive Extensions - Testing Library</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Testing library for Rx. Contains code to help test Rx operators.</description>
+    <copyright>Copyright (C) Microsoft Corporation</copyright>
+    <language>en-US</language>
+    <tags>Rx Reactive Extensions Observable LINQ Events</tags>
+    <dependencies>      
+      <group targetFramework="netcore451">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />        
+      </group>
+      <group targetFramework="net45">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+      <group targetFramework="net46">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+      <group targetFramework="netstandard1.0">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+      <group targetFramework="netstandard1.3">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+      <group targetFramework="uap10.0">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+      <group targetFramework="wpa81">
+        <dependency id="System.Reactive.Linq" version="$version$" />
+        <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib" />
+  </files>
 </package>
