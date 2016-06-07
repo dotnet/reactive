@@ -17,7 +17,6 @@
         <dependencies>
             <dependency id="System.Reactive.Linq" version="$version$" />
             <dependency id="System.Reactive.PlatformServices" version="$version$" />
-            <dependency id="xunit" version="2.1.0" />
         </dependencies>
     </metadata>
     <files>

@@ -22,7 +22,6 @@
           <group targetFramework="netstandard1.0">
             <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Core" version="$version$" />
-            <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1-rc2-24027" />
           </group>
         </dependencies>
     </metadata>  
