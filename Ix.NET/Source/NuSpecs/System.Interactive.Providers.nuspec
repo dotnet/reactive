@@ -28,9 +28,15 @@
         <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
         <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
       </group>
-      <group targetFramework="net40" />
-      <group targetFramework="net45" />
-      <group targetFramework="sl5" />
+      <group targetFramework="net40">
+        <dependency id="System.Interactive" version="$version$" />
+      </group>
+      <group targetFramework="net45">
+        <dependency id="System.Interactive" version="$version$" />
+      </group>
+      <group targetFramework="sl5">
+        <dependency id="System.Interactive" version="$version$" />
+      </group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net4" />
