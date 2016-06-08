@@ -44,8 +44,8 @@ foreach ($project in $projects) {
     $baseDir = Join-Path $project.FullName "bin" | join-path -ChildPath "$configuration"
     $projJson = Join-Path $project.FullName "project.json"    
     
-    Write-Host RefGen.exe `"$projJson`" `"$baseDir`" `"$($project.Name).dll`" `"$ns`"
-    .\packages\nuspec.referencegenerator\tools\RefGen.exe "$projJson" "$baseDir" "$($project.Name).dll" "$ns"
+    Write-Host RefGen.exe generate-cross "-p" `"$projJson`" "-d" `"$baseDir`" "-l" `"$($project.Name).dll`" "-n" `"$ns`"
+    .\packages\nuspec.referencegenerator\tools\RefGen.exe generate-cross -p "$projJson" -d "$baseDir" -l "$($project.Name).dll" -n "$ns"
   }
 }
 
