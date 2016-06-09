@@ -26,6 +26,9 @@
         "Reactive/Internal/Observers.cs",
         "Reactive/Internal/Producer.cs"
       ]
+    },
+    "embed": {
+      "includeFiles": "Properties/System.Reactive.Linq.rd.xml"
     }
   },
   
