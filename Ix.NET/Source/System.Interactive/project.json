@@ -12,16 +12,19 @@
     "licenseUrl": "https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt",
     "requireLicenseAcceptance": true
   },
-  
+
   "buildOptions": {
     "keyFile": "../35MSSharedLib1024.snk",
     "publicSign": true,
-    "define": ["SIGNED"]
+    "define": [ "SIGNED" ],
+    "nowarn": [ "CS1591" ],
+    "xmlDoc": true
   },
   
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
+        "xmlDocs": true, 
         "publicSign": false,
         "delaySign": true,
         "define": ["RELEASE", "TRACE"],

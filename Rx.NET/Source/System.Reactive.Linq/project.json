@@ -16,7 +16,9 @@
   "buildOptions": {
     "keyFile": "../35MSSharedLib1024.snk",
     "publicSign": true,
-    "define": ["SIGNED"],
+    "define": [ "SIGNED" ],
+    "nowarn": [ "CS1591" ],
+    "xmlDoc": true,
     "compile": {
       "exclude": [
         "*/**/ImmutableList.cs",
