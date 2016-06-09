@@ -24,7 +24,6 @@
   "configurations": {
     "ReleaseDelaySigned": {
       "buildOptions": {
-        "xmlDocs": true, 
         "publicSign": false,
         "delaySign": true,
         "define": ["RELEASE", "TRACE"],
