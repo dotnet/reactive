@@ -4,6 +4,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ReactiveTests
 {
@@ -55,7 +56,7 @@ namespace ReactiveTests
             var ee = new ManualResetEvent(false);
             _setEnd(ee);
 
-            new Thread(() =>
+            Task.Run(() =>
             {
                 eb.Set();
                 try
@@ -73,7 +74,7 @@ namespace ReactiveTests
                 {
                     ee.Set();
                 }
-            }).Start();
+            });
 
             return d;
         }

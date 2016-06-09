@@ -3,7 +3,7 @@
 using System;
 #if NETCOREAPP1_0
 using System.Threading;
-#else
+#elif !WINDOWS_UWP
 using System.Windows.Threading;
 #endif
 
