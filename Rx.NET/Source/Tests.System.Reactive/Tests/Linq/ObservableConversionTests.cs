@@ -9,6 +9,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -749,6 +750,7 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public void EnumerableToObservable_LongRunning_Dispose()
         {
             var start = default(ManualResetEvent);

@@ -14,6 +14,7 @@ using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
+using System.Runtime.CompilerServices;
 
 #if !NO_TPL
 using System.Threading.Tasks;
@@ -1468,6 +1469,7 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Generate_LongRunning2()
         {
             var start = default(ManualResetEvent);
@@ -1685,6 +1687,7 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Range_LongRunning2()
         {
             var start = default(ManualResetEvent);
@@ -1917,6 +1920,7 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Repeat_Count_LongRunning2()
         {
             var start = default(ManualResetEvent);
@@ -1940,6 +1944,7 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Repeat_Inf_LongRunning()
         {
             var start = default(ManualResetEvent);
