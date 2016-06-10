@@ -54,9 +54,26 @@ Applications
 * [Tx](http://tx.codeplex.com): a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.
 * [LINQ2Charts](http://linq2charts.codeplex.com): an example for Rx bindings.  Similar to existing APIs like LINQ to XML, it allows developers to use LINQ to create/change/update charts in an easy way and avoid having to deal with XML or other underneath data structures. We would love to see more Rx bindings like this one.
 
-Contributing Code
+Contributing 
 ------------------
 
-Before submitting a feature or substantial code contribution please  discuss it with the team and ensure it follows the product roadmap. Note that all code submissions will be rigorously reviewed and tested by the Rx Team, and only those that meet an extremely high bar for both quality and design/roadmap appropriateness will be merged into the source. 
+### Source code
 
-You will need to submit a  Contributor License Agreement form before submitting your pull request. This needs to only be done once for any Microsoft OSS project. Download the Contributor License Agreement (CLA). Please fill in, sign, scan and email it to <msopentech-cla@microsoft.com>. 
+* Clone the sources: `git clone https://github.com/Reactive-Extensions/Rx.NET.git`
+* [Building, testing and debugging the sources](https://github.com/Reactive-Extensions/Rx.NET/wiki/Building%20Testing%20and%20Debugging)
+
+### Contribute!
+
+Some of the best ways to contribute are to try things out, file bugs, and join in design conversations. 
+
+* [How to Contribute](https://github.com/Reactive-Extensions/Rx.NET/wiki/Contributing-Code)
+* [Pull requests](https://github.com/Reactive-Extensions/Rx.NET/pulls): [Open](https://github.com/dotnet/roslyn/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Apr+is%3Aclosed)
+
+Looking for something to work on? The list of [up for grabs issues](https://github.com/Reactive-Extensions/Rx.NET/issues?q=is%3Aopen+is%3Aissue+label%3A%22Up+for+Grabs%22) is a great place to start.
+
+This project has adopted a code of conduct adapted from the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community. This code of conduct has been [adopted by many other projects](http://contributor-covenant.org/adopters/). For more information see the [Code of conduct](http://www.dotnetfoundation.org/code-of-conduct).
+
+### .NET Foundation
+
+This project is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects) along with other
+projects like [the class libraries for .NET Core](https://github.com/dotnet/corefx/). 
