@@ -14,23 +14,11 @@
   },
 
   "buildOptions": {
-    "nowarn": ["CS0618"],
-    "keyFile": "../35MSSharedLib1024.snk",
-    "publicSign": true,
-    "define": ["SIGNED"],
+    "nowarn": [ "CS0618" ],
+    "keyFile": "../ReactiveX.snk",
+    "define": [ "SIGNED" ],
     "copyToOutput": {
       "include": [ "xunit.runner.json" ]
-    }
-  },
-  
-  "configurations": {
-    "ReleaseDelaySigned": {
-      "compibuildOptionslationOptions": {
-        "publicSign": false,
-        "delaySign": true,
-        "define": ["RELEASE", "TRACE"],
-        "optimize": true
-      }
     }
   },
   
