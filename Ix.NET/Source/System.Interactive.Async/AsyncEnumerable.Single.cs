@@ -1654,49 +1654,22 @@ namespace System.Linq
             source.ForEachAsync(action, cancellationToken).Wait(cancellationToken);
         }
 
-        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
+        public static async Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
             if (action == null)
                 throw new ArgumentNullException("action");
 
-            var tcs = new TaskCompletionSource<bool>();
 
-            var e = source.GetEnumerator();
-
-            var i = 0;
-
-            var f = default(Action<CancellationToken>);
-            f = ct =>
+            using (var asyncEnumerator = source.AsAsyncEnumerable().GetEnumerator())
             {
-                e.MoveNext(ct).Then(t =>
+                var i = 0;
+                while (await asyncEnumerator.MoveNext(cancellationToken))
                 {
-                    t.Handle(tcs, res =>
-                    {
-                        if (res)
-                        {
-                            try
-                            {
-                                action(e.Current, i++);
-                            }
-                            catch (Exception ex)
-                            {
-                                tcs.TrySetException(ex);
-                                return;
-                            }
-
-                            f(ct);
-                        }
-                        else
-                            tcs.TrySetResult(true);
-                    });
-                });
-            };
-
-            f(cancellationToken);
-
-            return tcs.Task.UsingEnumerator(e);
+                    action(asyncEnumerator.Current, i++);
+                }
+            }
         }
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -568,17 +569,17 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEachAsync_Null()
+        public async Task ForEachAsync_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>)));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>)));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>), CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>), CancellationToken.None));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }, CancellationToken.None));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>), CancellationToken.None));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }, CancellationToken.None));
+            await AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>), CancellationToken.None));
         }
 
         [Fact]

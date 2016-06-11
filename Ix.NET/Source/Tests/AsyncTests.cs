@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -17,6 +18,12 @@ namespace Tests
             where E : Exception
         {
             Assert.Throws<E>(a);
+        }
+
+        public Task AssertThrows<E>(Func<Task> func)
+            where E : Exception
+        {
+            return Assert.ThrowsAsync<E>(func);
         }
 
         public void AssertThrows<E>(Action a, Func<E, bool> assert)
