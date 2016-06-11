@@ -15,10 +15,35 @@
         <language>en-US</language>
         <tags>Rx Reactive Extensions Observable LINQ Events</tags>
         <dependencies>
+          <group>
             <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Core" version="$version$" />
             <dependency id="System.Reactive.Linq" version="$version$" />
             <dependency id="System.Reactive.PlatformServices" version="$version$" />
+          </group>
+          <group targetFramework="netcore451">
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.WindowsRuntime" version="$version$" />
+            <dependency id="System.Reactive.Windows.Threading" version="$version$" />
+          </group>
+          <group targetFramework="wpa81">
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.WindowsRuntime" version="$version$" />
+            <dependency id="System.Reactive.Windows.Threading" version="$version$" />
+          </group>
+          <group targetFramework="net40">
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.Windows.Threading" version="$version$" />
+          </group>
         </dependencies>
     </metadata>
     <files />
