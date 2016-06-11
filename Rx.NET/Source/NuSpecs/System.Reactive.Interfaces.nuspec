@@ -26,5 +26,6 @@
   </metadata>
   <files>
     <file src="..\System.Reactive.Interfaces\bin\$configuration$\**\System.Reactive.Interfaces.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Reactive.Interfaces\bin\$configuration$\netstandard1.0\System.Reactive.Interfaces.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wp8+wpa81" />
   </files>
 </package>
