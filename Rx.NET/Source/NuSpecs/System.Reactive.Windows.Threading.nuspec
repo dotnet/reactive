@@ -38,9 +38,6 @@
       <group targetFramework="net45">
         <dependency id="System.Reactive" version="$version$" />
       </group>
-      <group targetFramework="sl5">
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
       <group targetFramework="wpa81">
         <dependency id="System.Reactive" version="$version$" />
       </group>

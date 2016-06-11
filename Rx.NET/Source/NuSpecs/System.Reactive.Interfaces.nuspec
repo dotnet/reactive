@@ -22,7 +22,6 @@
       </group>
       <group targetFramework="net40" />
       <group targetFramework="net45" />
-      <group targetFramework="sl5" />
     </dependencies>
   </metadata>
   <files>

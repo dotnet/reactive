@@ -15,9 +15,7 @@
     <tags>Ix Interactive Extensions Enumerable</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System" targetFramework="sl5" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="sl5" />
     </frameworkAssemblies>
     <dependencies>
       <group targetFramework="netstandard1.0">
@@ -32,7 +30,6 @@
       </group>
       <group targetFramework="net40" />
       <group targetFramework="net45" />
-      <group targetFramework="sl5" />
     </dependencies>
   </metadata>
   <files>

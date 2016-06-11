@@ -45,10 +45,6 @@
         <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
         <dependency id="System.Threading.Tasks" version="4.0.11-rc2-24027" />
       </group>
-      <group targetFramework="sl5">
-        <dependency id="System.Reactive" version="$version$" />
-        <dependency id="System.Reactive.Providers" version="$version$" />
-      </group>
     </dependencies>
   </metadata>
   <files>

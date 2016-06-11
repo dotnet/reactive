@@ -38,9 +38,7 @@
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System" targetFramework="sl5" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="sl5" />
     </frameworkAssemblies>
   </metadata>
   <files>

@@ -34,15 +34,10 @@
       <group targetFramework="net45">
         <dependency id="System.Interactive" version="$version$" />
       </group>
-      <group targetFramework="sl5">
-        <dependency id="System.Interactive" version="$version$" />
-      </group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System" targetFramework="sl5" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="sl5" />
     </frameworkAssemblies>
   </metadata>
   <files>
