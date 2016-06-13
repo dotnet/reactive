@@ -21,6 +21,9 @@
     "xmlDoc": true,
     "compile": {
       "exclude": [ "Strings_PlatformServices.Designer.cs" ]
+    },
+    "embed": {
+      "includeFiles": "Properties/System.Reactive.PlatformServices.rd.xml"
     }
   },
   

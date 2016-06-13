@@ -18,7 +18,10 @@
     "publicSign": true,
     "define": [ "SIGNED" ],
     "nowarn": [ "CS1591" ],
-    "xmlDoc": true
+    "xmlDoc": true,
+    "embed": {
+      "includeFiles": "Properties/System.Interactive.Providers.rd.xml"
+    }
   },
   
   "configurations": {
@@ -26,7 +29,7 @@
       "buildOptions": {
         "publicSign": false,
         "delaySign": true,
-        "define": ["RELEASE", "TRACE"],
+        "define": [ "RELEASE", "TRACE" ],
         "optimize": true
       }
     }
