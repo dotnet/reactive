@@ -26,23 +26,6 @@
   },
   
   "frameworks": {
-    "net40": {
-      "buildOptions": {
-        "define": [
-          "NO_TASK_DELAY",
-          "HAS_APTCA",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT",
-          "NO_WEAKREFOFT",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      },
-      "frameworkAssemblies": {
-        "System.Windows.Forms": "",
-        "WindowsBase": ""
-      }
-    },
     "net45": {
       "buildOptions": {
         "define": [

@@ -22,25 +22,14 @@
       "includeFiles": "Properties/System.Reactive.Providers.rd.xml"
     }
   },
-  
+
   "dependencies": {
-    "System.Reactive.Linq": { "target": "project" }
+    "System.Reactive.Linq": { "target": "project" },
+    "System.Linq.Queryable": "4.0.1-rc2-24027",
+    "System.Reflection.Extensions": "4.0.1-rc2-24027"
   },
   
   "frameworks": {
-    "net40": {
-      "buildOptions": {
-        "define": [
-          "NO_TASK_DELAY",
-          "HAS_APTCA",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT",
-          "NO_WEAKREFOFT",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      }
-    },
     "net45": {
       "buildOptions": {
         "define": [
@@ -57,9 +46,6 @@
           "DESKTOPCLR",
           "DESKTOPCLR45"
         ]
-      },
-      "dependencies": {
-            
       }
     },
     "net46": {
@@ -99,10 +85,6 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
-      },
-      "dependencies": {
-        "System.Linq.Queryable": "4.0.1-rc2-24027",
-        "System.Reflection.Extensions": "4.0.1-rc2-24027"
       }
     },
     "netstandard1.3": {
@@ -123,10 +105,6 @@
           "PLIB",
           "USE_TIMER_SELF_ROOT"
         ]
-      },
-      "dependencies": {
-        "System.Linq.Queryable": "4.0.1-rc2-24027",
-        "System.Reflection.Extensions": "4.0.1-rc2-24027"
       }
     }
   }
