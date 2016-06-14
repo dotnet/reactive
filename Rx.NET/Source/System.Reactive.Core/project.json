@@ -18,7 +18,10 @@
     "publicSign": true,
     "define": [ "SIGNED" ],
     "nowarn": [ "CS1591" ],
-    "xmlDoc": true
+    "xmlDoc": true,
+    "embed": {
+      "includeFiles": "Properties/System.Reactive.Core.rd.xml"
+    }
   },
   
   "configurations": {
