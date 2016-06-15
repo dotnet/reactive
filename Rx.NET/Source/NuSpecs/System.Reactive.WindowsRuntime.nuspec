@@ -20,10 +20,10 @@
       </group>
       <group targetFramework="uap10.0">
         <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
-        <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
-        <dependency id="System.Runtime.WindowsRuntime" version="4.0.11-rc2-24027" />
-        <dependency id="System.Threading.Tasks" version="4.0.11-rc2-24027" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
+        <dependency id="System.Runtime" version="4.1.0" />
+        <dependency id="System.Runtime.WindowsRuntime" version="4.0.11" />
+        <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
       <group targetFramework="netcore451">
         <dependency id="System.Reactive.Linq" version="$version$" />

@@ -25,9 +25,9 @@
 
   "dependencies": {
     "System.Reactive.Interfaces": { "target": "project" },
-    "System.ComponentModel": "4.0.1-rc2-24027",
-    "System.Diagnostics.Contracts": "4.0.1-rc2-24027",
-    "System.Dynamic.Runtime": "4.0.11-rc2-24027"
+    "System.ComponentModel": "4.0.1",
+    "System.Diagnostics.Contracts": "4.0.1",
+    "System.Dynamic.Runtime": "4.0.11"
   },
   
   "frameworks": {
@@ -127,8 +127,8 @@
         ]
       },
       "dependencies": {
-        "System.Threading.Thread": "4.0.0-rc2-24027",
-        "System.Threading.ThreadPool": "4.0.10-rc2-24027"
+        "System.Threading.Thread": "4.0.0",
+        "System.Threading.ThreadPool": "4.0.10"
       }
     }
   }

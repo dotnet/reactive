@@ -25,8 +25,7 @@
 
   "dependencies": {
     "System.Reactive.Linq": { "target": "project" },
-    "System.Linq.Queryable": "4.0.1-rc2-24027",
-    "System.Reflection.Extensions": "4.0.1-rc2-24027"
+    "System.Linq.Queryable": "4.0.1"
   },
   
   "frameworks": {
