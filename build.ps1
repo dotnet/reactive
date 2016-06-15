@@ -7,7 +7,7 @@ write-host "Download latest install script from CLI repo"
 
 New-Item -type directory -f -path $toolsPath | Out-Null
 
-Invoke-WebRequest https://raw.githubusercontent.com/dotnet/cli/v1.0.0-rc2/scripts/obtain/install.ps1 -OutFile $getDotNet
+Invoke-WebRequest https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1 -OutFile $getDotNet
 
 $env:DOTNET_INSTALL_DIR="$repositoryRoot\.dotnet\win7-x64"
 
