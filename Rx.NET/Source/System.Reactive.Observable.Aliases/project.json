@@ -14,22 +14,10 @@
   },
 
   "buildOptions": {
-    "keyFile": "../35MSSharedLib1024.snk",
-    "publicSign": true,
+    "keyFile": "../ReactiveX.snk",
     "define": [ "SIGNED" ],
     "nowarn": [ "CS1591" ],
     "xmlDoc": true
-  },
-  
-  "configurations": {
-    "ReleaseDelaySigned": {
-      "buildOptions": {
-        "publicSign": false,
-        "delaySign": true,
-        "define": ["RELEASE", "TRACE"],
-        "optimize": true
-      }
-    }
   },
   
   "dependencies": {

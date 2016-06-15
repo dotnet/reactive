@@ -14,24 +14,12 @@
   },
 
   "buildOptions": {
-    "keyFile": "../35MSSharedLib1024.snk",
-    "publicSign": true,
+    "keyFile": "../ReactiveX.snk",
     "define": [ "SIGNED" ],
     "nowarn": [ "CS1591" ],
     "xmlDoc": true,
     "embed": {
       "includeFiles": "Properties/System.Reactive.Core.rd.xml"
-    }
-  },
-  
-  "configurations": {
-    "ReleaseDelaySigned": {
-      "buildOptions": {
-        "publicSign": false,
-        "delaySign": true,
-        "define": ["RELEASE", "TRACE"],
-        "optimize": true
-      }
     }
   },
   
