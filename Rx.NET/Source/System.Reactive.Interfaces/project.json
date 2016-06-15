@@ -2,11 +2,11 @@
   "version": "3.0.0-*",
   "title": "Reactive Extensions - Interfaces Library",
   "description": "Reactive Extensions Interfaces Library containing essential interfaces.",
-  "authors": ["Microsoft"],
+  "authors": [ "Microsoft" ],
   "copyright": "Copyright (C) Microsoft Corporation",
 
   "packOptions": {
-    "tags": ["Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events"],
+    "tags": [ "Rx", "Reactive", "Extensions", "Observable", "LINQ", "Events" ],
     "iconUrl": "http://go.microsoft.com/fwlink/?LinkId=261274",
     "projectUrl": "http://go.microsoft.com/fwlink/?LinkId=261273",
     "licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=261272",
@@ -19,21 +19,13 @@
     "nowarn": [ "CS1591" ],
     "xmlDoc": true
   },
-  
+
+  "dependencies": {
+    "NETStandard.Library": "1.5.0-rc2-24027",
+    "System.Linq.Expressions": "4.0.11-rc2-24027"
+  },
+
   "frameworks": {
-    "net40": {
-      "buildOptions": {
-        "define": [
-          "NO_TASK_DELAY",
-          "HAS_APTCA",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT",
-          "NO_WEAKREFOFT",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      }
-    },
     "net45": {
       "buildOptions": {
         "define": [
@@ -70,10 +62,6 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
-      },
-      "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-24027",
-        "System.Linq.Expressions": "4.0.11-rc2-24027"
       }
     }
   }

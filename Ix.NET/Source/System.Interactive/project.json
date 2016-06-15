@@ -23,16 +23,11 @@
     }
   },
 
+  "dependencies": {
+    "NETStandard.Library": "1.5.0-rc2-24027"
+  },
+
   "frameworks": {
-    "net40": {
-      "buildOptions": {
-        "define": [
-          "HAS_APTCA",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      }
-    },
     "net45": {
       "buildOptions": {
         "define": [
@@ -50,9 +45,6 @@
           "CRIPPLED_REFLECTION",
           "PLIB"
         ]
-      },
-      "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-24027"
       }
     }
   }

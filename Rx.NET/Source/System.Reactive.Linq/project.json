@@ -32,23 +32,11 @@
   },
   
   "dependencies": {
-    "System.Reactive.Core": { "target": "project" }
+    "System.Reactive.Core": { "target": "project" },
+    "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24027"
   },
   
   "frameworks": {
-    "net40": {
-      "buildOptions": {
-        "define": [
-          "NO_TASK_DELAY",
-          "HAS_APTCA",
-          "HAS_WINFORMS",
-          "USE_TIMER_SELF_ROOT",
-          "NO_WEAKREFOFT",
-          "DESKTOPCLR",
-          "DESKTOPCLR40"
-        ]
-      }
-    },
     "net45": {
       "buildOptions": {
         "define": [
@@ -104,9 +92,6 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
-      },
-      "dependencies": {
-        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24027"
       }
     },
     "netstandard1.3": {
@@ -127,9 +112,6 @@
           "PLIB",
           "USE_TIMER_SELF_ROOT"
         ]
-      },
-      "dependencies": {
-        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1-rc2-24027"
       }
     }
   }
