@@ -20,7 +20,6 @@
         <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
         <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
       </group>
-      <group targetFramework="net40" />
       <group targetFramework="net45" />
     </dependencies>
   </metadata>

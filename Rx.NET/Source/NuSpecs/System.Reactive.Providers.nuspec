@@ -34,9 +34,6 @@
         <dependency id="System.Threading" version="4.0.11-rc2-24027" />
         <dependency id="System.Threading.Tasks" version="4.0.11-rc2-24027" />
       </group>
-      <group targetFramework="net40">
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
       <group targetFramework="net45">
         <dependency id="System.Reactive" version="$version$" />
       </group>
@@ -61,8 +58,8 @@
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
+      <frameworkAssembly assemblyName="System" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>

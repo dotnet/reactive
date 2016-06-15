@@ -19,10 +19,6 @@
         <dependency id="System.Reactive" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />
       </group>
-      <group targetFramework="net40">
-        <dependency id="System.Reactive" version="$version$" />
-        <dependency id="System.Reactive.Providers" version="$version$" />
-      </group>
       <group targetFramework="net45">
         <dependency id="System.Reactive" version="$version$" />
         <dependency id="System.Reactive.Providers" version="$version$" />

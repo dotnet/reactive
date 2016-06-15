@@ -32,9 +32,6 @@
       <group targetFramework="netcore451">
         <dependency id="System.Reactive.Core" version="$version$" />
       </group>
-      <group targetFramework="net40">
-        <dependency id="System.Reactive.Core" version="$version$" />
-      </group>
       <group targetFramework="net45">
         <dependency id="System.Reactive.Core" version="$version$" />
       </group>
@@ -43,8 +40,7 @@
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="WindowsBase" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Windows" targetFramework="sl5" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>

@@ -37,7 +37,7 @@
             <dependency id="System.Reactive.WindowsRuntime" version="$version$" />
             <dependency id="System.Reactive.Windows.Threading" version="$version$" />
           </group>
-          <group targetFramework="net40">
+          <group targetFramework="net45">
             <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Core" version="$version$" />
             <dependency id="System.Reactive.Linq" version="$version$" />

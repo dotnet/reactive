@@ -28,16 +28,13 @@
         <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
         <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
       </group>
-      <group targetFramework="net40">
-        <dependency id="System.Interactive" version="$version$" />
-      </group>
       <group targetFramework="net45">
         <dependency id="System.Interactive" version="$version$" />
       </group>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="net4" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net4" />
+      <frameworkAssembly assemblyName="System" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>

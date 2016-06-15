@@ -53,9 +53,6 @@
         <dependency id="System.Threading.ThreadPool" version="4.0.10-rc2-24027" />
         <dependency id="System.Threading.Timer" version="4.0.1-rc2-24027" />
       </group>
-      <group targetFramework="net40">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
       <group targetFramework="net45">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
       </group>
