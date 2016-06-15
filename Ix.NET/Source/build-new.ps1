@@ -32,7 +32,7 @@ dotnet restore $scriptPath | out-null
 
 Write-Host "Building projects" -Foreground Green
 $projects = gci $scriptPath -Directory `
-  | Where-Object { Test-Path (Join-Path $_.FullName "project.json")  } `
+   | Where-Object { ($_.Name -notlike "*DeviceRunner") -and (Test-Path (Join-Path $_.FullName "project.json"))  } `
 
 foreach ($project in $projects) {
   dotnet build -c "$configuration" $project.FullName  

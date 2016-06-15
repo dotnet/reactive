@@ -1,6 +1,6 @@
 $repositoryRoot = split-path $MyInvocation.MyCommand.Definition
 $toolsPath = join-path $repositoryRoot ".dotnet"
-$getDotNet = join-path $toolsPath "install.ps1"
+$getDotNet = join-path $toolsPath "dotnet-install.ps1"
 $nugetExePath = join-path $toolsPath "nuget.exe"
 
 write-host "Download latest install script from CLI repo"
