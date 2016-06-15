@@ -19,7 +19,7 @@ branches:
     track-merge-target: false
   core-port:
     mode: ContinuousDeployment
-    tag: beta-
+    tag: rc-
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
