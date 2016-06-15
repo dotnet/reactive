@@ -15,6 +15,12 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Interactive.Async.Pr
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Interactive.Tests", "Tests\System.Interactive.Tests.xproj", "{592E774E-D5BE-44C5-9E4D-E096BEC01552}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

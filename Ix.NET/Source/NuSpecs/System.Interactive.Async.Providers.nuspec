@@ -19,15 +19,14 @@
       </group>
       <group targetFramework="netstandard1.0">
         <dependency id="System.Interactive.Async" version="$version$" />
-        <dependency id="System.Linq.Queryable" version="4.0.1-rc2-24027" />
-        <dependency id="System.Collections" version="4.0.11-rc2-24027" />
-        <dependency id="System.Globalization" version="4.0.11-rc2-24027" />
-        <dependency id="System.Linq" version="4.1.0-rc2-24027" />
-        <dependency id="System.Linq.Expressions" version="4.0.11-rc2-24027" />
-        <dependency id="System.Reflection" version="4.1.0-rc2-24027" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
-        <dependency id="System.Runtime" version="4.1.0-rc2-24027" />
-        <dependency id="System.Threading.Tasks" version="4.0.11-rc2-24027" />
+        <dependency id="System.Collections" version="4.0.11" />
+        <dependency id="System.Globalization" version="4.0.11" />
+        <dependency id="System.Linq" version="4.1.0" />
+        <dependency id="System.Linq.Expressions" version="4.1.0" />
+        <dependency id="System.Reflection" version="4.1.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
+        <dependency id="System.Runtime" version="4.1.0" />
+        <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
       <group targetFramework="net45">
         <dependency id="System.Interactive.Async" version="$version$" />
