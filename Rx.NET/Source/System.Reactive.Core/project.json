@@ -29,7 +29,7 @@
     "System.Diagnostics.Contracts": "4.0.1",
     "System.Dynamic.Runtime": "4.0.11"
   },
-  
+
   "frameworks": {
     "net45": {
       "buildOptions": {
@@ -120,7 +120,7 @@
           "HAS_AWAIT",
           "HAS_APTCA",
           "NO_REMOTING",
-          "NO_SERIALIZABLE",          
+          "NO_SERIALIZABLE",
           "CRIPPLED_REFLECTION",
           "PLIB",
           "USE_TIMER_SELF_ROOT"
@@ -129,6 +129,95 @@
       "dependencies": {
         "System.Threading.Thread": "4.0.0",
         "System.Threading.ThreadPool": "4.0.10"
+      }
+    },
+    "wpa81": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.TargetingPack.Private.WindowsPhone.v8.1": {
+          "version": "1.0.1",
+          "type": "build"
+        }
+      }
+    },
+    "netcore451": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "WINDOWS",
+          "WINDOWS81"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.TargetingPack.Private.NETCore.v4.5.1": {
+          "version": "1.0.0",
+          "type": "build"
+        }
+      }
+    },
+    "uap10.0": {
+      "imports": [ "dotnet5.4" ],
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "HAS_TPL46",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "WINDOWS",
+          "USE_TIMER_SELF_ROOT"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.TargetingPack.Private.WinRT": {
+          "version": "1.0.1",
+          "type": "build"
+        },
+        "Microsoft.NETCore.UniversalWindowsPlatform": {
+          "version": "5.2.0",
+          "type": "build"
+        }
       }
     }
   }

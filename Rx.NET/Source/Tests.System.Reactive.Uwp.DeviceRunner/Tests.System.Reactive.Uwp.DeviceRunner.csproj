@@ -394,7 +394,7 @@
       <HintPath>..\Microsoft.Reactive.Testing\bin\$(Configuration)\uap10.0\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Core">
-      <HintPath>..\System.Reactive.Core\bin\$(Configuration)\netstandard1.3\System.Reactive.Core.dll</HintPath>
+      <HintPath>..\System.Reactive.Core\bin\$(Configuration)\uap10.0\System.Reactive.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Experimental">
       <HintPath>..\System.Reactive.Experimental\bin\$(Configuration)\netstandard1.3\System.Reactive.Experimental.dll</HintPath>
