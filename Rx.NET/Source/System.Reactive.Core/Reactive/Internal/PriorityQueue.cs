@@ -1,5 +1,6 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
+using System;
 using System.Threading;
 using System.Collections.Generic;
 
@@ -15,8 +16,10 @@ namespace System.Reactive
         private IndexedItem[] _items;
         private int _size;
 
+        const int DEFAULT_CAPACITY = 16;
+        
         public PriorityQueue()
-            : this(16)
+            : this(DEFAULT_CAPACITY)
         {
         }
 
@@ -85,12 +88,12 @@ namespace System.Reactive
             return _items[0].Value;
         }
 
-        private void RemoveAt(int index)
+        private void RemoveAt(int index, bool single)
         {
             _items[index] = _items[--_size];
             _items[_size] = default(IndexedItem);
             Heapify();
-            if (_size < _items.Length / 4)
+            if (_size < _items.Length / 4 && (single || _size < DEFAULT_CAPACITY))
             {
                 var temp = _items;
                 _items = new IndexedItem[_items.Length / 2];
@@ -101,10 +104,31 @@ namespace System.Reactive
         public T Dequeue()
         {
             var result = Peek();
-            RemoveAt(0);
+            RemoveAt(0, true);
             return result;
         }
+        
+        public T[] DequeueSome(int count)
+        {
+            if (count == 0) {
+                return new T[0];
+            }
 
+            var ret = new T[count];
+            count = Math.Min(count, _size);
+            for (int i = 0; i < count; i++) {
+                ret[i] = Peek();
+                RemoveAt(0, false);
+            }
+
+            return ret;
+        }
+        
+        public T[] DequeueAll()
+        {
+            return DequeueSome(_size);
+        }
+        
         public void Enqueue(T item)
         {
             if (_size >= _items.Length)
