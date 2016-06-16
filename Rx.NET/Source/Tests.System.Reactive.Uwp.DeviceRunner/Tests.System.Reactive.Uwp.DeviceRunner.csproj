@@ -22,7 +22,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
-    <NoWarn>;2008</NoWarn>
+    <NoWarn>;2008;0618</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -33,7 +33,7 @@
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;NO_THREAD;CRIPPLED_REFLECTION;WINDOWS;USE_TIMER_SELF_ROOT</DefineConstants>
     <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
+    <NoWarn>;2008;0618</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
