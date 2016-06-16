@@ -13,7 +13,7 @@ commit-message-incrementing: Enabled
 branches:
   master:
     mode: ContinuousDeployment
-    tag: ''
+    tag: rc-
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
