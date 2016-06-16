@@ -264,9 +264,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 600)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 600) { 300, 400, 500 }
             );
+#endif
         }
 
         [Fact]
@@ -303,9 +305,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 480)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 480) { 300, 400 }
             );
+#endif
         }
 
         [Fact]
@@ -444,9 +448,9 @@ namespace ReactiveTests.Tests
             Observable.Range(1, 10, DefaultScheduler.Instance).Buffer(TimeSpan.FromDays(1), 3).Skip(1).First().AssertEqual(4, 5, 6);
         }
 
-        #endregion
+#endregion
 
-        #region + Delay +
+#region + Delay +
 
         [Fact]
         public void Delay_ArgumentChecking()
@@ -2850,9 +2854,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 390)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 400) { 250, 300, 350, 400 }
             );
+#endif
         }
 
         [Fact]
@@ -2918,9 +2924,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 330)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 330) { 250, 300 }
             );
+#endif
         }
 
         [Fact]
@@ -2968,9 +2976,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 300)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 300) { 250, 300 }
             );
+#endif
         }
 
         [Fact]
@@ -3022,9 +3032,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 300)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 300) { 250 }
             );
+#endif
         }
 
         [Fact]
@@ -3068,9 +3080,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 1000)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 1000) { 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950 }
             );
+#endif
         }
 
         [Fact]
@@ -7671,9 +7685,11 @@ namespace ReactiveTests.Tests
                 OnNext(650, 4L)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(250, 700) { 350, 450, 550, 650 }
             );
+#endif
         }
 
         [Fact]
@@ -7694,9 +7710,11 @@ namespace ReactiveTests.Tests
                 OnNext(700, 4L)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 750) { 300, 400, 500, 600, 700 }
             );
+#endif
         }
 
         [Fact]
@@ -8217,7 +8235,7 @@ namespace ReactiveTests.Tests
                 if (serviceType == typeof(ISchedulerPeriodic))
                     return this as ISchedulerPeriodic;
 
-                return null;
+                return base.GetService(serviceType);
             }
         }
 
@@ -8519,9 +8537,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 490)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 490) { 300, 400 }
             );
+#endif
         }
 
         [Fact]
@@ -8564,9 +8584,11 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 460)
             );
 
+#if !WINDOWS
             scheduler.Timers.AssertEqual(
                 new TimerRun(200, 460) { 300, 400 }
             );
+#endif
         }
 
         [Fact]
