@@ -88,6 +88,25 @@
         ]
       }
     },
+    "netstandard1.1": {
+      "buildOptions": {
+        "define": [
+          "NO_EVENTARGS_CONSTRAINT",
+          "HAS_EDI",
+          "HAS_WINRT",
+          "HAS_PROGRESS",
+          "PREFER_ASYNC",
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "NO_REMOTING",
+          "NO_SERIALIZABLE",
+          "NO_THREAD",
+          "CRIPPLED_REFLECTION",
+          "USE_TIMER_SELF_ROOT",
+          "PLIB"
+        ]
+      }
+    },
     "netstandard1.3": {
       "buildOptions": {
         "define": [

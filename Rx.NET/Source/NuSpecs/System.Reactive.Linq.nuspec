@@ -36,6 +36,23 @@
         <dependency id="System.Threading" version="4.0.11" />
         <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
+      <group targetFramework="netstandard1.1">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Collections" version="4.0.11" />
+        <dependency id="System.Collections.Concurrent" version="4.0.12" />
+        <dependency id="System.ComponentModel" version="4.0.1" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
+        <dependency id="System.Globalization" version="4.0.11" />
+        <dependency id="System.Linq" version="4.1.0" />
+        <dependency id="System.Reflection" version="4.1.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
+        <dependency id="System.Runtime" version="4.1.0" />
+        <dependency id="System.Runtime.Extensions" version="4.1.0" />
+        <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
+        <dependency id="System.Threading" version="4.0.11" />
+        <dependency id="System.Threading.Tasks" version="4.0.11" />
+      </group>
       <group targetFramework="net45">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
@@ -67,5 +84,6 @@
   <files>
     <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
     <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.0\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wp8+wpa81" />
+    <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.1\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wpa81" />
   </files>
 </package>
