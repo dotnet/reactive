@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Tests.System.Reactive.Uwp.DeviceRunner")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany(".NET Foundation and Contributors.")]
 [assembly: AssemblyProduct("Tests.System.Reactive.Uwp.DeviceRunner")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("\x00a9 .NET Foundation and Contributors.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

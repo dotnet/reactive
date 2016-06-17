@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 #else
 [assembly: AssemblyConfiguration("Retail")]
 #endif
-[assembly: AssemblyCompany("Microsoft Open Technologies, Inc.")]
+[assembly: AssemblyCompany(".NET Foundation and Contributors.")]
 [assembly: AssemblyProduct("Reactive Extensions")]
-[assembly: AssemblyCopyright("\x00a9 Microsoft Open Technologies, Inc.  All rights reserved.")]
+[assembly: AssemblyCopyright("\x00a9 .NET Foundation and Contributors.  All rights reserved.")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
 [assembly: ComVisible(false)]

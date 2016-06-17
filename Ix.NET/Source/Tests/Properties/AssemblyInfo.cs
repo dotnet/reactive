@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany(".NET Foundation and Contributors.")]
 [assembly: AssemblyProduct("Tests")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("\x00a9 .NET Foundation and Contributors.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

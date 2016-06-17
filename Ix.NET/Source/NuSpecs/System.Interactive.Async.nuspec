@@ -8,9 +8,9 @@
     <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</description>
-    <copyright>Copyright (C) Microsoft Corporation</copyright>
+    <copyright>Copyright (c) .NET Foundation and Contributors. All Rights Reserved</copyright>
     <language>en-US</language>
     <tags>Ix Interactive Extensions Enumerable Asynchronous</tags>
     <frameworkAssemblies>

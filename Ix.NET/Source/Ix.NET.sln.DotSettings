@@ -184,6 +184,9 @@
 	<s:String x:Key="/Default/CodeStyle/CSharpUsing/MandatoryImports/=System_002ECollections_002EGeneric/@EntryIndexedValue">System.Collections.Generic</s:String>
 	<s:String x:Key="/Default/CodeStyle/CSharpUsing/MandatoryImports/=System_002ELinq/@EntryIndexedValue">System.Linq</s:String>
 	<s:String x:Key="/Default/CodeStyle/CSharpUsing/MandatoryImports/=System_002EThreading_002ETasks/@EntryIndexedValue">System.Threading.Tasks</s:String>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">// Licensed to the .NET Foundation under one or more agreements.&#xD;
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.&#xD;
+// See the LICENSE file in the project root for more information. </s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/Generate/=Constructor/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/CodeStyle/Generate/=Constructor/Options/=XmlDocumentation/@EntryIndexedValue">False</s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/Generate/=EqualityMembers/@KeyIndexDefined">True</s:Boolean>
