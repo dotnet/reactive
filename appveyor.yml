@@ -1,0 +1,21 @@
+init:
+  - cmd: set
+  
+nuget:
+  disable_publish_on_pr: true
+
+build_script:
+- ps: .\build.ps1
+
+test: off
+artifacts:
+- path: .\artifacts\*.nupkg
+  
+deploy:
+  provider: NuGet
+  server: https://www.myget.org/F/rxnet/api/v2/package
+  on:
+    branch: master  
+  api_key:
+    secure: sFDl4GgLoro7GqbxyymM6wukuWmHYs1/USAYkhrYQl3NwQRu53Rnz1kJyAk9ux4D
+  artifact: .\artifacts\*.nupkg
