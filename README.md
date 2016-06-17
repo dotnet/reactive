@@ -9,7 +9,7 @@ MyGet<br>([gallery](https://www.myget.org/gallery/rxnet)) | ![#](https://img.shi
 
 ### Join the conversation
 
-Catch us in the #rx and #ix channls over in the [.NET Slack](http://tattoocoder.com/aspnet-slack-sign-up/).
+Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder.com/aspnet-slack-sign-up/).
 [![.NET Slack Status](https://aspnetcoreslack.herokuapp.com/badge.svg?2)](http://tattoocoder.com/aspnet-slack-sign-up/) 
 
 A Brief Intro
