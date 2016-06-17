@@ -20,4 +20,3 @@ deploy:
   api_key:
     secure: sFDl4GgLoro7GqbxyymM6wukuWmHYs1/USAYkhrYQl3NwQRu53Rnz1kJyAk9ux4D
   symbol_server: https://www.myget.org/F/rxnet/symbols/api/v2/package
-  artifact: .\artifacts\*.nupkg
