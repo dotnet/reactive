@@ -20,7 +20,13 @@ $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
 
-$version = $versionObj.NuGetVersionV2
+$version = $versionObj.MajorMinorPatch
+$tag = $versionObj.PreReleaseLabel
+$preRelNum = $versionObj.CommitsSinceVersionSourcePadded
+
+if($tag -ne ""){
+  $version = "$version-$tag-$preRelNum"
+}
 
 Write-Host "Version: $version"
 

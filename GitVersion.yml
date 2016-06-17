@@ -13,19 +13,13 @@ commit-message-incrementing: Enabled
 branches:
   master:
     mode: ContinuousDeployment
-    tag: rc-
-    increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-  core-port:
-    mode: ContinuousDeployment
-    tag: rc-
+    tag: rc1
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
   releases?[/-]:
     mode: ContinuousDeployment
-    tag: beta
+    tag: rc
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
@@ -56,7 +50,7 @@ branches:
     track-merge-target: false
   dev(elop)?(ment)?$:
     mode: ContinuousDeployment
-    tag: unstable
+    tag: dev
     increment: Minor
     prevent-increment-of-merged-branch-version: false
     track-merge-target: true
