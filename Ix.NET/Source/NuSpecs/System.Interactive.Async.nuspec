@@ -4,7 +4,7 @@
     <id>System.Interactive.Async</id>
     <version>$version$</version>
     <authors>.NET Foundation and Contributors</authors>
-    <owners>Microsoft</owners>
+    <owners>Microsoft,RxTeam</owners>
     <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
