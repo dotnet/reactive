@@ -1,7 +1,16 @@
 Reactive Extensions
 ======================
 
-[![Join the chat at https://gitter.im/Reactive-Extensions/Rx.NET](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Reactive-Extensions/Rx.NET?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Channel  | Rx | Ix | 
+-------- | :------------: | :-------------: |
+AppVeyor<br>([home](https://ci.appveyor.com/project/dotnetfoundation/rx-net)) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) 
+NuGet.org | ![#](https://img.shields.io/nuget/v/Rx-Main.svg) | ![#](https://img.shields.io/nuget/v/Ix-Main.svg) 
+MyGet<br>([gallery](https://www.myget.org/gallery/rxnet)) | ![#](https://img.shields.io/myget/rxnet/vpre/System.Reactive.svg) | ![#](https://img.shields.io/myget/rxnet/vpre/System.Interactive.svg) 
+
+### Join the conversation
+
+Catch us in the #rx and #ix channls over in the [.NET Slack](http://tattoocoder.com/aspnet-slack-sign-up/).
+[![.NET Slack Status](https://aspnetcoreslack.herokuapp.com/badge.svg?2)](http://tattoocoder.com/aspnet-slack-sign-up/) 
 
 A Brief Intro
 -------------------
@@ -37,21 +46,23 @@ Flavors of Rx
 ---------------
 
 * __Rx.NET__: *(this repository)* The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators.
-* [RxJS](http://rxjs.codeplex.com): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
-* [RxCpp](http://rxcpp.codeplex.com): The Reactive Extensions for Native (RxCpp) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in both C and C++.
+* [RxJS 4](https://github.com/Reactive-Extensions/RxJS) / [RxJS 5 beta](https://github.com/ReactiveX/rxjs): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
+* [RxJava](https://github.com/ReactiveX/RxJava): Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM. 
+* [RxScala](https://github.com/ReactiveX/RxScala): Reactive Extensions for Scala – a library for composing asynchronous and event-based programs using observable sequences 
+* [RxCpp](https://github.com/Reactive-Extensions/RxCpp): The Reactive Extensions for Native (RxCpp) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in both C and C++.
 * [Rx.rb](http://rxrb.codeplex.com): A prototype implementation of Reactive Extensions for Ruby (Rx.rb).
-* [RxPy](http://rxpy.codeplex.com): The Reactive Extensions for Python 3 (Rx.Py) is a set of libraries to compose asynchronous and event-based programs using observable collections and LINQ-style query operators in Python 3. 
+* [RxPy](https://github.com/Reactive-Extensions/RxPy): The Reactive Extensions for Python 3 (Rx.Py) is a set of libraries to compose asynchronous and event-based programs using observable collections and LINQ-style query operators in Python 3. 
 
 
 Interactive Extensions
 -----------------------
 * __Ix.NET__: *(included in this repository)* The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable<T>.
-* [IxJS](http://rxjs.codeplex.com): An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.
-* [IxCpp](http://rxcpp.codeplex.com): An implantation of LINQ for Native Developers in C++
+* [IxJS](https://github.com/ReactiveX/IxJS): An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.
+* [IxCpp](https://github.com/Reactive-Extensions/RxCpp): An implantation of LINQ for Native Developers in C++
 
 Applications
 -------------
-* [Tx](http://tx.codeplex.com): a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.
+* [Tx](https://github.com/Reactive-Extensions/Tx): a set of code samples showing how to use LINQ to events, such as real-time standing queries and queries on past history from trace and log files, which targets ETW, Windows Event Logs and SQL Server Extended Events.
 * [LINQ2Charts](http://linq2charts.codeplex.com): an example for Rx bindings.  Similar to existing APIs like LINQ to XML, it allows developers to use LINQ to create/change/update charts in an easy way and avoid having to deal with XML or other underneath data structures. We would love to see more Rx bindings like this one.
 
 Contributing 
@@ -67,7 +78,7 @@ Contributing
 Some of the best ways to contribute are to try things out, file bugs, and join in design conversations. 
 
 * [How to Contribute](https://github.com/Reactive-Extensions/Rx.NET/wiki/Contributing-Code)
-* [Pull requests](https://github.com/Reactive-Extensions/Rx.NET/pulls): [Open](https://github.com/dotnet/roslyn/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Apr+is%3Aclosed)
+* [Pull requests](https://github.com/Reactive-Extensions/Rx.NET/pulls): [Open](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Apr+is%3Aclosed)
 
 Looking for something to work on? The list of [up for grabs issues](https://github.com/Reactive-Extensions/Rx.NET/issues?q=is%3Aopen+is%3Aissue+label%3A%22Up+for+Grabs%22) is a great place to start.
 
