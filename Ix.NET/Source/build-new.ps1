@@ -14,8 +14,10 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 # TODO: if not found, bail out
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
-# get version
+# get tools
 .\nuget.exe install -excludeversion -pre gitversion.commandline -outputdirectory packages
+
+#update version
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
 
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
@@ -57,14 +59,13 @@ foreach ($project in $projects) {
   }
 }
 
-
 Write-Host "Building Packages" -Foreground Green
 $nuspecs = ls $nuspecDir\*.nuspec | Select -ExpandProperty FullName
 
 New-Item -ItemType Directory -Force -Path .\artifacts
 
 foreach ($nuspec in $nuspecs) {
-   .\nuget pack $nuspec -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.8.6 -outputdirectory .\artifacts
+   .\nuget pack $nuspec -symbols -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.8.6 -outputdirectory .\artifacts
 }
 
 Write-Host "Running tests" -Foreground Green
