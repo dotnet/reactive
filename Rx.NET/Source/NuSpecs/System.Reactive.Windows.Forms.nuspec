@@ -4,7 +4,7 @@
     <id>System.Reactive.Windows.Forms</id>
     <version>$version$</version>
     <title>Reactive Extensions - Windows Forms Helpers</title>
-    <authors>Microsoft</authors>
+    <authors>.NET Foundation and Contributors</authors>
     <owners>Microsoft</owners>
     <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
