@@ -37,7 +37,7 @@ dotnet restore $scriptPath | out-null
 
 #need to ensure core is built first due to bad dependency order determination by dotnet build
 
-$coreDir = gci . -Directory | where-object {$_.Name -eq "System.Reactive.Core"} | Select -First 1
+$coreDir = gci $scriptPath -Directory | where-object {$_.Name -eq "System.Reactive.Core"} | Select -First 1
 dotnet build -c "$configuration" $coreDir.FullName
 
 Write-Host "Building projects" -Foreground Green
