@@ -45,6 +45,5 @@
   </metadata>
   <files>
     <file src="..\System.Reactive.Observable.Aliases\bin\$configuration$\**\System.Reactive.Observable.Aliases.*" exclude="**\*.deps.json" target="lib" />
-    <file src="..\System.Reactive.Observable.Aliases\bin\$configuration$\netstandard1.0\System.Reactive.Observable.Aliases.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wp8+wpa81" />
   </files>
 </package>

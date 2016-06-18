@@ -118,7 +118,5 @@
   </metadata>
   <files>
     <file src="..\System.Reactive.Core\bin\$configuration$\**\System.Reactive.Core.*" exclude="**\*.deps.json" target="lib" />
-    <file src="..\System.Reactive.Core\bin\$configuration$\netstandard1.0\System.Reactive.Core.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wp8+wpa81" />
-    <file src="..\System.Reactive.Core\bin\$configuration$\netstandard1.1\System.Reactive.Core.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wpa81" />
   </files>
 </package>
