@@ -83,7 +83,5 @@
   </metadata>
   <files>
     <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
-    <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.0\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wp8+wpa81" />
-    <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.1\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-win8+net45+wpa81" />
   </files>
 </package>
