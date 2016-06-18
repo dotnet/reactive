@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.0"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.0",
+    "System.Interactive.Async.Providers": "3.0.0-rc1-00346",
+    "System.Interactive.Providers": "3.0.0-rc1-00346"
   },
   "frameworks": {
     "uap10.0": {}

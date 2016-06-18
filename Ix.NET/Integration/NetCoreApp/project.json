@@ -8,7 +8,9 @@
         "Microsoft.NETCore.App": {
             "type": "platform",
             "version": "1.0.0"
-        }
+        },
+        "System.Interactive.Async.Providers": "3.0.0-rc1-00346",
+        "System.Interactive.Providers": "3.0.0-rc1-00346"
     },
 
   "frameworks": {
