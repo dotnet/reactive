@@ -25,3 +25,6 @@ Write-Host "Building Rx.NET" -ForegroundColor Green
 
 Write-Host "Building Ix.NET" -ForegroundColor Green
 .\Ix.NET\Source\build-new
+
+Write-Host "Reverting AssemblyInfo's" -Foreground Green
+gci -re -in AssemblyInfo.cs | %{ git checkout $_ } 

@@ -72,3 +72,6 @@ Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests"  
 dotnet test $testDirectory -c $configuration
 
+Write-Host "Reverting AssemblyInfo's" -Foreground Green
+gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
+
