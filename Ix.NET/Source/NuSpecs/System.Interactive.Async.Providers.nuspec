@@ -30,7 +30,7 @@
       </group>
       <group targetFramework="net45">
         <dependency id="System.Interactive.Async" version="$version$" />
-      </group>      
+      </group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net45" />

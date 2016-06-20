@@ -17,7 +17,7 @@
       <frameworkAssembly assemblyName="System" targetFramework="net45" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
     </frameworkAssemblies>
-    <dependencies>      
+    <dependencies>
       <group targetFramework="netstandard1.0">
         <dependency id="System.Collections" version="4.0.11" />
         <dependency id="System.Diagnostics.Debug" version="4.0.11" />
