@@ -14,7 +14,7 @@
     <language>en-US</language>
     <tags>Ix Interactive Extensions Enumerable Async</tags>
     <dependencies>
-      <group>
+      <group targetFramework="portable-net45+win8+wp8+wpa81">
         <dependency id="System.Interactive.Async" version="$version$" />
       </group>
       <group targetFramework="netstandard1.0">
@@ -30,7 +30,7 @@
       </group>
       <group targetFramework="net45">
         <dependency id="System.Interactive.Async" version="$version$" />
-      </group>
+      </group>      
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net45" />
@@ -39,5 +39,6 @@
   </metadata>
   <files>
     <file src="..\System.Interactive.Async.Providers\bin\$configuration$\**\System.Interactive.Async.Providers.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Interactive.Async.Providers\bin\$configuration$\netstandard1.0\System.Interactive.Async.Providers.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>

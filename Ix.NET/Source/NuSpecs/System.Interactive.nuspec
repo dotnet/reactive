@@ -17,7 +17,7 @@
       <frameworkAssembly assemblyName="System" targetFramework="net45" />
       <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
     </frameworkAssemblies>
-    <dependencies>
+    <dependencies>      
       <group targetFramework="netstandard1.0">
         <dependency id="System.Collections" version="4.0.11" />
         <dependency id="System.Diagnostics.Debug" version="4.0.11" />
@@ -29,9 +29,11 @@
         <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
       <group targetFramework="net45" />
+      <group targetFramework="portable-net45+win8+wp8+wpa81" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\System.Interactive\bin\$configuration$\**\System.Interactive.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Interactive\bin\$configuration$\netstandard1.0\System.Interactive.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>

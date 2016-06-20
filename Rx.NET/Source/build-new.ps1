@@ -76,7 +76,7 @@ foreach ($nuspec in $nuspecs)
     $symbolSwitch = ""
   }
    
-   .\nuget pack $nuspec $symbolSwitch -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.12 -outputdirectory .\artifacts
+   .\nuget pack $nuspec $symbolSwitch -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.8.6 -outputdirectory .\artifacts
 }
 
 Write-Host "Running tests" -Foreground Green

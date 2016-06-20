@@ -21,9 +21,11 @@
         <dependency id="System.Runtime" version="4.1.0" />
       </group>
       <group targetFramework="net45" />
+      <group targetFramework="portable-net45+win8+wp8+wpa81" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\System.Reactive.Interfaces\bin\$configuration$\**\System.Reactive.Interfaces.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Reactive.Interfaces\bin\$configuration$\netstandard1.0\System.Reactive.Interfaces.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>

@@ -14,7 +14,7 @@
     <language>en-US</language>
     <tags>Ix Interactive Extensions Enumerable</tags>
     <dependencies>
-      <group>
+      <group targetFramework="portable-net45+win8+wp8+wpa81">
         <dependency id="System.Interactive" version="$version$" />
       </group>
       <group targetFramework="netstandard1.0">
@@ -39,5 +39,6 @@
   </metadata>
   <files>
     <file src="..\System.Interactive.Providers\bin\$configuration$\**\System.Interactive.Providers.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Interactive.Providers\bin\$configuration$\netstandard1.0\System.Interactive.Providers.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>
