@@ -43,19 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Interactive, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\system.interactive.3.0.0-rc1-00346\lib\portable-win8+net45+wp8+wpa81\System.Interactive.dll</HintPath>
+      <HintPath>..\packages\System.Interactive.3.0.0-rc1-00354\lib\portable-net45+win8+wp8+wpa81\System.Interactive.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Interactive.Async, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\system.interactive.async.3.0.0-rc1-00346\lib\portable-win8+net45+wp8+wpa81\System.Interactive.Async.dll</HintPath>
+      <HintPath>..\packages\System.Interactive.Async.3.0.0-rc1-00354\lib\portable-net45+win8+wp8+wpa81\System.Interactive.Async.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Interactive.Async.Providers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\system.interactive.async.providers.3.0.0-rc1-00346\lib\portable-win8+net45+wp8+wpa81\System.Interactive.Async.Providers.dll</HintPath>
+      <HintPath>..\packages\System.Interactive.Async.Providers.3.0.0-rc1-00354\lib\portable-net45+win8+wp8+wpa81\System.Interactive.Async.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Interactive.Providers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\system.interactive.providers.3.0.0-rc1-00346\lib\portable-win8+net45+wp8+wpa81\System.Interactive.Providers.dll</HintPath>
+      <HintPath>..\packages\System.Interactive.Providers.3.0.0-rc1-00354\lib\portable-net45+win8+wp8+wpa81\System.Interactive.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
