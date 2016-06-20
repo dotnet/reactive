@@ -15,7 +15,11 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group>
+      <group targetFramework="portable-net45+win8+wp8+wpa81">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>
+      <group targetFramework="portable-net45+win8+wpa81">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.Reactive.Core" version="$version$" />
       </group>
@@ -83,5 +87,7 @@
   </metadata>
   <files>
     <file src="..\System.Reactive.Linq\bin\$configuration$\**\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.0\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
+    <file src="..\System.Reactive.Linq\bin\$configuration$\netstandard1.1\System.Reactive.Linq.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wpa81" />
   </files>
 </package>

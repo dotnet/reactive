@@ -15,9 +15,10 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group>
+      <group targetFramework="portable-net45+win8+wp8+wpa81">
         <dependency id="System.Reactive.Linq" version="$version$" />
         <dependency id="System.Reactive.PlatformServices" version="$version$" />
+        <dependency id="xunit.assert" version="2.1.0" />
       </group>
       <group targetFramework="netcore451">
         <dependency id="System.Reactive.Linq" version="$version$" />
@@ -76,5 +77,6 @@
   </metadata>
   <files>
     <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\netstandard1.0\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>

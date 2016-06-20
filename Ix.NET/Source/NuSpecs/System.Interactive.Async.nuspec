@@ -29,9 +29,11 @@
         <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
       <group targetFramework="net45" />
+      <group targetFramework="portable-net45+win8+wp8+wpa81" />
     </dependencies>
   </metadata>
   <files>
     <file src="..\System.Interactive.Async\bin\$configuration$\**\System.Interactive.Async.*" exclude="**\*.deps.json" target="lib" />
+    <file src="..\System.Interactive.Async\bin\$configuration$\netstandard1.0\System.Interactive.Async.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>
