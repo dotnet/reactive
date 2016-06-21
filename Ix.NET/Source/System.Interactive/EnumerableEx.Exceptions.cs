@@ -37,13 +37,11 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    var b = default(bool);
                     var c = default(TSource);
 
                     try
                     {
-                        b = e.MoveNext();
-                        if (!b)
+                        if (!e.MoveNext())
                             break;
 
                         c = e.Current;
@@ -122,13 +120,11 @@ namespace System.Linq
 
                     while (true)
                     {
-                        var b = default(bool);
                         var c = default(TSource);
 
                         try
                         {
-                            b = e.MoveNext();
-                            if (!b)
+                            if (!e.MoveNext())
                                 break;
 
                             c = e.Current;
