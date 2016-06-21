@@ -34,6 +34,5 @@
   </metadata>
   <files>
     <file src="..\System.Interactive\bin\$configuration$\**\System.Interactive.*" exclude="**\*.deps.json" target="lib" />
-    <file src="..\System.Interactive\bin\$configuration$\netstandard1.0\System.Interactive.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>

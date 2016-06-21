@@ -65,7 +65,7 @@ $nuspecs = ls $nuspecDir\*.nuspec | Select -ExpandProperty FullName
 New-Item -ItemType Directory -Force -Path .\artifacts
 
 foreach ($nuspec in $nuspecs) {
-   .\nuget pack $nuspec -symbols -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.8.6 -outputdirectory .\artifacts
+   .\nuget pack $nuspec -symbols -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.12 -outputdirectory .\artifacts
 }
 
 Write-Host "Running tests" -Foreground Green
