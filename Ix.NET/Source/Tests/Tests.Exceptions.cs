@@ -132,7 +132,7 @@ namespace Tests
         {
             var xs = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             var res = xs.Catch<int, MyException>(e => { Assert.Fail(); return new[] { 42 }; });
-            Assert.IsTrue(xs.SequenceEqual(res));
+            Assert.True(xs.SequenceEqual(res));
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
             var res = EnumerableEx.Catch(xss);
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
             var res = xss.Catch();
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
             var res = xss[0].Catch(xss[1]);
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
             var res = EnumerableEx.Catch(xss);
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
         [Fact]
@@ -172,7 +172,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
             var res = xss.Catch();
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
         [Fact]
@@ -180,7 +180,7 @@ namespace Tests
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
             var res = xss[0].Catch(xss[1]);
-            Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
         [Fact]
