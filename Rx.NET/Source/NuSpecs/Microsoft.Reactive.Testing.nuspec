@@ -77,6 +77,5 @@
   </metadata>
   <files>
     <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\**\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib" />
-    <file src="..\Microsoft.Reactive.Testing\bin\$configuration$\netstandard1.0\Microsoft.Reactive.Testing.*" exclude="**\*.deps.json" target="lib\portable-net45+win8+wp8+wpa81" />
   </files>
 </package>
