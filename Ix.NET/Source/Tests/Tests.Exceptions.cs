@@ -127,7 +127,7 @@ namespace Tests
             AssertThrows<MyException>(() => e.MoveNext(), ex => ex == e3);
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch4_Array()
         {
             var xs = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -135,7 +135,7 @@ namespace Tests
             Assert.IsTrue(xs.SequenceEqual(res));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch5_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
@@ -143,7 +143,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch6_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
@@ -151,7 +151,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch7_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
@@ -159,7 +159,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 5)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch8_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
@@ -167,7 +167,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch9_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
@@ -175,7 +175,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch10_Array()
         {
             var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
@@ -183,7 +183,7 @@ namespace Tests
             Assert.IsTrue(res.SequenceEqual(Enumerable.Range(0, 10)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Catch11_Array()
         {
             var e1 = new MyException();
