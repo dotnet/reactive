@@ -128,6 +128,85 @@ namespace Tests
         }
 
         [Fact]
+        public void Catch4_Array()
+        {
+            var xs = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var res = xs.Catch<int, MyException>(e => { Assert.Fail(); return new[] { 42 }; });
+            Assert.True(xs.SequenceEqual(res));
+        }
+
+        [Fact]
+        public void Catch5_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
+            var res = EnumerableEx.Catch(xss);
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
+        }
+
+        [Fact]
+        public void Catch6_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
+            var res = xss.Catch();
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
+        }
+
+        [Fact]
+        public void Catch7_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }, new[] { 5, 6, 7, 8, 9 } };
+            var res = xss[0].Catch(xss[1]);
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 5)));
+        }
+
+        [Fact]
+        public void Catch8_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
+            var res = EnumerableEx.Catch(xss);
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
+        }
+
+        [Fact]
+        public void Catch9_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
+            var res = xss.Catch();
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
+        }
+
+        [Fact]
+        public void Catch10_Array()
+        {
+            var xss = new[] { new[] { 0, 1, 2, 3, 4 }.Concat(EnumerableEx.Throw<int>(new MyException())), new[] { 5, 6, 7, 8, 9 } };
+            var res = xss[0].Catch(xss[1]);
+            Assert.True(res.SequenceEqual(Enumerable.Range(0, 10)));
+        }
+
+        [Fact]
+        public void Catch11_Array()
+        {
+            var e1 = new MyException();
+            var ex1 = EnumerableEx.Throw<int>(e1);
+
+            var e2 = new MyException();
+            var ex2 = EnumerableEx.Throw<int>(e2);
+
+            var e3 = new MyException();
+            var ex3 = EnumerableEx.Throw<int>(e3);
+
+            var xss = new[] { new[] { 0, 1 }.Concat(ex1), new[] { 2, 3 }.Concat(ex2), ex3 };
+            var res = xss.Catch();
+
+            var e = res.GetEnumerator();
+            HasNext(e, 0);
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            AssertThrows<MyException>(() => e.MoveNext(), ex => ex == e3);
+        }
+
+        [Fact]
         public void Finally_Arguments()
         {
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Finally<int>(null, () => { }));

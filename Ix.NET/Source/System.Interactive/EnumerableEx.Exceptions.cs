@@ -37,12 +37,13 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    var b = default(bool);
                     var c = default(TSource);
 
                     try
                     {
-                        b = e.MoveNext();
+                        if (!e.MoveNext())
+                            break;
+
                         c = e.Current;
                     }
                     catch (TException ex)
@@ -50,9 +51,6 @@ namespace System.Linq
                         err = handler(ex);
                         break;
                     }
-
-                    if (!b)
-                        break;
 
                     yield return c;
                 }
@@ -122,12 +120,13 @@ namespace System.Linq
 
                     while (true)
                     {
-                        var b = default(bool);
                         var c = default(TSource);
 
                         try
                         {
-                            b = e.MoveNext();
+                            if (!e.MoveNext())
+                                break;
+
                             c = e.Current;
                         }
                         catch (Exception ex)
@@ -135,9 +134,6 @@ namespace System.Linq
                             error = ex;
                             break;
                         }
-
-                        if (!b)
-                            break;
 
                         yield return c;
                     }
