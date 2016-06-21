@@ -27,7 +27,7 @@ Rx complements and interoperates smoothly with both synchronous data streams (`I
   	
 
 <table>
-   <th></th><th>Single return value</th><th>Mutiple return values</th>
+   <th></th><th>Single return value</th><th>Multiple return values</th>
    <tr>
       <td>Pull/Synchronous/Interactive</td>
       <td>T</td>
