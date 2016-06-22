@@ -668,7 +668,7 @@ namespace System.Linq
             return source.ToDictionary(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
         }
 
-        public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        public static async Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException("source");
@@ -679,7 +679,9 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException("comparer");
 
-            return source.Aggregate(new Lookup<TKey, TElement>(comparer), (lookup, x) => { lookup.Add(keySelector(x), elementSelector(x)); return lookup; }, lookup => (ILookup<TKey, TElement>)lookup, cancellationToken);
+            var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+
+            return lookup;
         }
 
         public static Task<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
@@ -714,53 +716,6 @@ namespace System.Linq
                 throw new ArgumentNullException("keySelector");
 
             return source.ToLookup(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
-        }
-
-        class Lookup<TKey, TElement> : ILookup<TKey, TElement>
-        {
-            private readonly Dictionary<TKey, EnumerableGrouping<TKey, TElement>> map;
-
-            public Lookup(IEqualityComparer<TKey> comparer)
-            {
-                map = new Dictionary<TKey, EnumerableGrouping<TKey, TElement>>(comparer);
-            }
-
-            public void Add(TKey key, TElement element)
-            {
-                var g = default(EnumerableGrouping<TKey, TElement>);
-                if (!map.TryGetValue(key, out g))
-                {
-                    g = new EnumerableGrouping<TKey, TElement>(key);
-                    map.Add(key, g);
-                }
-
-                g.Add(element);
-            }
-
-            public bool Contains(TKey key)
-            {
-                return map.ContainsKey(key);
-            }
-
-            public int Count
-            {
-                get { return map.Keys.Count; }
-            }
-
-            public IEnumerable<TElement> this[TKey key]
-            {
-                get { return map[key]; }
-            }
-
-            public IEnumerator<IGrouping<TKey, TElement>> GetEnumerator()
-            {
-                return map.Values.Cast<IGrouping<TKey, TElement>>().GetEnumerator();
-            }
-
-            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
         }
 
         public static Task<double> Average(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)

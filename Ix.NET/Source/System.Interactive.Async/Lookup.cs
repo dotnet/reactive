@@ -30,6 +30,25 @@ namespace System.Linq.Internal
             return lookup;
         }
 
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        {
+            Debug.Assert(source != null);
+            Debug.Assert(keySelector != null);
+            Debug.Assert(elementSelector != null);
+
+            Lookup<TKey, TElement> lookup = new Lookup<TKey, TElement>(comparer);
+            using (var enu = source.GetEnumerator())
+            {
+                while (await enu.MoveNext(cancellationToken)
+                                .ConfigureAwait(false))
+                {
+                    lookup.GetGrouping(keySelector(enu.Current), create: true).Add(elementSelector(enu.Current));
+                }
+            }
+
+            return lookup;
+        }
+
         internal static Lookup<TKey, TElement> Create(IEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             Debug.Assert(source != null);
