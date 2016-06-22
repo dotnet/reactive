@@ -720,7 +720,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Samples the source observable sequence using a samper observable sequence producing sampling ticks.
+        /// Samples the source observable sequence using a sampler observable sequence producing sampling ticks.
         /// Upon each sampling tick, the latest element (if any) in the source sequence during the last sampling interval is sent to the resulting sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
