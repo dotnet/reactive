@@ -1,7 +1,16 @@
 image: Visual Studio 2015
 init:
   - cmd: set
-  
+
+branches:
+  only:
+    - master
+    - /dev.*/
+
+skip_commits:
+  files:
+    - '**/*.md'
+
 nuget:
   disable_publish_on_pr: true
 
