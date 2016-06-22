@@ -14,7 +14,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Create(() =>
             {
@@ -44,7 +44,7 @@ namespace System.Linq
         public static IEnumerable<TSource> ToEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return ToEnumerable_(source);
         }
@@ -68,38 +68,28 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this Task<TSource> task)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
-
+                throw new ArgumentNullException(nameof(task));
+            
             return Create(() =>
             {
                 var called = 0;
 
+                var value = default(TSource);
                 return Create(
-                    (ct, tcs) =>
+                    async ct =>
                     {
                         if (Interlocked.CompareExchange(ref called, 1, 0) == 0)
                         {
-                            task.Then(continuedTask =>
-                            {
-                                if (continuedTask.IsCanceled)
-                                    tcs.SetCanceled();
-                                else if (continuedTask.IsFaulted)
-                                    tcs.SetException(continuedTask.Exception.InnerException);
-                                else
-                                    tcs.SetResult(true);
-                            });
+                            value = await task.ConfigureAwait(false);
+                            return true;
                         }
-                        else
-                            tcs.SetResult(false);
-
-                        return tcs.Task;
+                        return false;
                     },
-                    () => task.Result,
+                    () => value,
                     () => { });
             });
         }
 
-#if !NO_RXINTERFACES
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -304,6 +294,5 @@ namespace System.Linq
                 return Disposable.Create(ctd, e);
             }
         }
-#endif
     }
 }
