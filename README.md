@@ -15,7 +15,7 @@ Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
 - NuGet v2 feed url (VS 2012+): `https://dotnet.myget.org/F/rx/`
-- Symbol server url: `https://dotnet.myget.org/F/rx/symbols/
+- Symbol server url: `https://dotnet.myget.org/F/rx/symbols/`
 
 A Brief Intro
 -------------------
