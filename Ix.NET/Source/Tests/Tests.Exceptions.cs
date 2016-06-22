@@ -131,7 +131,7 @@ namespace Tests
         public void Catch4_Array()
         {
             var xs = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            var res = xs.Catch<int, MyException>(e => { Assert.Fail(); return new[] { 42 }; });
+            var res = xs.Catch<int, MyException>(e => { Assert.False(true); return new[] { 42 }; });
             Assert.True(xs.SequenceEqual(res));
         }
 
