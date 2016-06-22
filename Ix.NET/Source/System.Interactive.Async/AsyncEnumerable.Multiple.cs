@@ -449,7 +449,7 @@ namespace System.Linq
 
                     if (_innerGroups == null)
                     {
-                        _innerGroups = new Dictionary<TKey, List<TInner>>();
+                        _innerGroups = new Dictionary<TKey, List<TInner>>(_comparer);
 
                         while (await _inner.MoveNext(cancellationToken).ConfigureAwait(false))
                         {
