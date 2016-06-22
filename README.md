@@ -5,12 +5,17 @@ Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
 AppVeyor<br>([home](https://ci.appveyor.com/project/dotnetfoundation/rx-net)) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) 
 NuGet.org | ![#](https://img.shields.io/nuget/v/Rx-Main.svg) | ![#](https://img.shields.io/nuget/v/Ix-Main.svg) 
-MyGet<br>([gallery](https://www.myget.org/gallery/rxnet)) | ![#](https://img.shields.io/myget/rxnet/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/myget/rxnet/v/System.Reactive.svg) | ![#](https://img.shields.io/myget/rxnet/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/myget/rxnet/v/System.Interactive.svg)  
+MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Reactive.svg) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Interactive.svg)  
 
 ### Join the conversation
 
 Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder.com/aspnet-slack-sign-up/).
 [![.NET Slack Status](https://aspnetcoreslack.herokuapp.com/badge.svg?2)](http://tattoocoder.com/aspnet-slack-sign-up/) 
+
+### Get nightly builds
+- NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
+- NuGet v2 feed url (VS 2012+): `https://dotnet.myget.org/F/rx/`
+- Symbol server url: `https://dotnet.myget.org/F/rx/symbols/
 
 A Brief Intro
 -------------------

@@ -14,9 +14,9 @@ artifacts:
   
 deploy:
   provider: NuGet
-  server: https://www.myget.org/F/rxnet/api/v2/package
+  server: https://dotnet.myget.org/F/rx/api/v2/package
   on:
     branch: master  
   api_key:
-    secure: sFDl4GgLoro7GqbxyymM6wukuWmHYs1/USAYkhrYQl3NwQRu53Rnz1kJyAk9ux4D
-  symbol_server: https://www.myget.org/F/rxnet/symbols/api/v2/package
+    secure: 5qZfZf9XVtN+h/UHwocrEBZjaZCajJg9fZbLDPigoew1NG7PzWQxMv1kLQJW6eWE
+  symbol_server: https://dotnet.myget.org/F/rx/symbols/api/v2/package
