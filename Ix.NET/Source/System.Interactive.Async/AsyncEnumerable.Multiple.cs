@@ -405,7 +405,7 @@ namespace System.Linq
             public IAsyncEnumerator<TResult> GetEnumerator()
                 => new GroupJoinAsyncEnumerator(
                     _outer.GetEnumerator(),
-                    _inner.GetEnumerator(),
+                    _inner,
                     _outerKeySelector,
                     _innerKeySelector,
                     _resultSelector,
@@ -414,17 +414,17 @@ namespace System.Linq
             private sealed class GroupJoinAsyncEnumerator : IAsyncEnumerator<TResult>
             {
                 private readonly IAsyncEnumerator<TOuter> _outer;
-                private readonly IAsyncEnumerator<TInner> _inner;
+                private readonly IAsyncEnumerable<TInner> _inner;
                 private readonly Func<TOuter, TKey> _outerKeySelector;
                 private readonly Func<TInner, TKey> _innerKeySelector;
                 private readonly Func<TOuter, IAsyncEnumerable<TInner>, TResult> _resultSelector;
                 private readonly IEqualityComparer<TKey> _comparer;
 
-                private Dictionary<TKey, List<TInner>> _innerGroups;
+                private Internal.Lookup<TKey, TInner> _lookup;
 
                 public GroupJoinAsyncEnumerator(
                     IAsyncEnumerator<TOuter> outer,
-                    IAsyncEnumerator<TInner> inner,
+                    IAsyncEnumerable<TInner> inner,
                     Func<TOuter, TKey> outerKeySelector,
                     Func<TInner, TKey> innerKeySelector,
                     Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector,
@@ -440,52 +440,19 @@ namespace System.Linq
 
                 public async Task<bool> MoveNext(CancellationToken cancellationToken)
                 {
-                    List<TInner> group;
-
+                    // nothing to do 
                     if (!await _outer.MoveNext(cancellationToken).ConfigureAwait(false))
                     {
                         return false;
                     }
 
-                    if (_innerGroups == null)
+                    if (_lookup == null)
                     {
-                        _innerGroups = new Dictionary<TKey, List<TInner>>(_comparer);
-
-                        while (await _inner.MoveNext(cancellationToken).ConfigureAwait(false))
-                        {
-                            var inner = _inner.Current;
-                            var innerKey = _innerKeySelector(inner);
-
-                            if (innerKey != null)
-                            {
-                                if (!_innerGroups.TryGetValue(innerKey, out group))
-                                {
-                                    _innerGroups.Add(innerKey, group = new List<TInner>());
-                                }
-
-                                group.Add(inner);
-                            }
-                        }
+                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, cancellationToken).ConfigureAwait(false);
                     }
-
-                    var outer = _outer.Current;
-                    var outerKey = _outerKeySelector(outer);
-
-                    Current
-                        = _resultSelector(
-                            outer,
-                            new AsyncEnumerableAdapter<TInner>(
-                                outerKey != null
-                                && _innerGroups.TryGetValue(outerKey, out group)
-                                    ? (IEnumerable<TInner>)group
-                                    :
-#if NO_ARRAY_EMPTY
-                                    EmptyArray<TInner>.Value
-#else
-                                    Array.Empty<TInner>()
-#endif
-                                    ));
-
+                    
+                    var item = _outer.Current;
+                    Current = _resultSelector(item, new AsyncEnumerableAdapter<TInner>(_lookup[_outerKeySelector(item)]));
                     return true;
                 }
 
@@ -493,7 +460,6 @@ namespace System.Linq
 
                 public void Dispose()
                 {
-                    _inner.Dispose();
                     _outer.Dispose();
                 }
 
