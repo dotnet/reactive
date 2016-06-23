@@ -33,12 +33,33 @@
         "define": [
           "HAS_AWAIT",
           "HAS_APTCA",
+          "NO_ARRAY_EMPTY",
           "DESKTOPCLR",
           "DESKTOPCLR45"
         ]
       }
     },
+    "net46": {
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT",
+          "HAS_APTCA",
+          "DESKTOPCLR",
+          "DESKTOPCLR46"
+        ]
+      }
+    },
     "netstandard1.0": {
+      "buildOptions": {
+        "define": [
+          "HAS_AWAIT",
+          "NO_ARRAY_EMPTY",
+          "CRIPPLED_REFLECTION",
+          "PLIB"
+        ]
+      }
+    },
+    "netstandard1.3": {
       "buildOptions": {
         "define": [
           "HAS_AWAIT",
