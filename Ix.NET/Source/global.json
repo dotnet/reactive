@@ -1,4 +1,3 @@
 {
-    "sources": [ ".", "tests" ]
-    //"packages": "../../packages"
+  "projects": [ ".", "tests" ]
 }
