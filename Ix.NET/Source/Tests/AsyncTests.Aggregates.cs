@@ -18,6 +18,8 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+        private const int WaitTimeoutMs = 5000;
+
         [Fact]
         public async Task Aggregate_Null()
         {
@@ -168,16 +170,16 @@ namespace Tests
         [Fact]
         public void Count1()
         {
-            Assert.AreEqual(new int[0].ToAsyncEnumerable().Count().Result, 0);
-            Assert.AreEqual(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count().Result, 3);
+            Assert.Equal(new int[0].ToAsyncEnumerable().Count().Result, 0);
+            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count().Result, 3);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).Count().Wait(WaitTimeoutMs));
         }
 
         [Fact]
         public void Count2()
         {
-            Assert.AreEqual(new int[0].ToAsyncEnumerable().Count(x => x < 3).Result, 0);
-            Assert.AreEqual(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3).Result, 2);
+            Assert.Equal(new int[0].ToAsyncEnumerable().Count(x => x < 3).Result, 0);
+            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3).Result, 2);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).Count(x => x < 3).Wait(WaitTimeoutMs));
         }
 
@@ -204,16 +206,16 @@ namespace Tests
         [Fact]
         public void LongCount1()
         {
-            Assert.AreEqual(new int[0].ToAsyncEnumerable().LongCount().Result, 0);
-            Assert.AreEqual(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result, 3);
+            Assert.Equal(new int[0].ToAsyncEnumerable().LongCount().Result, 0);
+            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result, 3);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount().Wait(WaitTimeoutMs));
         }
 
         [Fact]
         public void LongCount2()
         {
-            Assert.AreEqual(new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result, 0);
-            Assert.AreEqual(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result, 2);
+            Assert.Equal(new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result, 0);
+            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result, 2);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount(x => x < 3).Wait(WaitTimeoutMs));
         }
 

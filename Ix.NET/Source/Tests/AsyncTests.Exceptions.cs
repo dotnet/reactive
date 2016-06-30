@@ -323,7 +323,7 @@ namespace Tests
             var e = xs.GetEnumerator();
 
             Assert.False(b);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
             Assert.True(b);
         }

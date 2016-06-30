@@ -1709,7 +1709,7 @@ namespace System.Linq
             using (var e = source.GetEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
-                    throw new InvalidOperationException("Source sequence doesn't contain any elements.");
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var current = e.Current;
                 var resKey = keySelector(current);

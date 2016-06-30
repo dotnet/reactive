@@ -549,7 +549,7 @@ namespace Tests
 
             Assert.False(hasv);
             Assert.False(done);
-            Assert.Same(((AggregateException)exa).Flatten().InnerExceptions.Single(), ex);
+            Assert.Same(exa, ex);
         }
 
         [Fact]
@@ -565,7 +565,7 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ex_.InnerException == ex);
 
             Assert.False(hasv);
-            Assert.Same(((AggregateException)exa).Flatten().InnerExceptions.Single(), ex);
+            Assert.Same(exa, ex);
         }
 
         [Fact]
@@ -602,7 +602,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync(x => sum += x).Wait();
+            xs.ForEachAsync(x => sum += x).Wait(WaitTimeoutMs);
             Assert.Equal(10, sum);
         }
 
@@ -632,7 +632,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync((x, i) => sum += x * i).Wait();
+            xs.ForEachAsync((x, i) => sum += x * i).Wait(WaitTimeoutMs);
             Assert.Equal(1 * 0 + 2 * 1 + 3 * 2 + 4 * 3, sum);
         }
 

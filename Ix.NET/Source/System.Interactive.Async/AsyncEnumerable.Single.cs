@@ -1279,7 +1279,7 @@ namespace System.Linq
             source.ForEachAsync(action, cancellationToken).Wait(cancellationToken);
         }
 
-        public static async Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
+        public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));

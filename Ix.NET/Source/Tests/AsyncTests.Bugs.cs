@@ -191,7 +191,7 @@ namespace Tests
 
             try
             {
-                t.Wait();
+                t.Wait(WaitTimeoutMs);
                 Assert.True(false);
             }
             catch
