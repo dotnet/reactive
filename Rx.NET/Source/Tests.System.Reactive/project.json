@@ -21,7 +21,7 @@
       "include": [ "xunit.runner.json" ]
     }
   },
-  
+
   "dependencies": {
     "System.Reactive.Interfaces": { "target": "project" },
     "System.Reactive.Linq": { "target": "project" },
@@ -30,8 +30,8 @@
     "System.Reactive.Experimental": { "target": "project" },
     "System.Reactive.Providers": { "target": "project" },
     "System.Reactive.Observable.Aliases": { "target": "project" },
-    "xunit": "2.1.0",
-    "dotnet-test-xunit": "1.0.0-rc2-build10025",
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "System.Reflection.TypeExtensions": "4.1.0",
     "System.Diagnostics.StackTrace": "4.0.1"
   },
@@ -40,7 +40,6 @@
   
   "frameworks": {
     "netcoreapp1.0": {
-      "imports": [ "dnxcore50", "portable-net45+win8" ],
       "buildOptions": {
         "define": [
           "NO_EVENTARGS_CONSTRAINT",
