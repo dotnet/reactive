@@ -20,6 +20,9 @@
     "xmlDoc": true,
     "embed": {
       "includeFiles": "Properties/System.Reactive.Experimental.rd.xml"
+    },
+    "compile": {
+      "includeFiles": [ "../GlobalAssemblyVersion.cs" ]
     }
   },
   

@@ -17,7 +17,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Interactive.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
 	ProjectSection(SolutionItems) = preProject
-		build-new.ps1 = build-new.ps1
+		GlobalAssemblyVersion.cs = GlobalAssemblyVersion.cs
+        build-new.ps1 = build-new.ps1
 		global.json = global.json
 		NuGet.Config = NuGet.Config
 	EndProjectSection

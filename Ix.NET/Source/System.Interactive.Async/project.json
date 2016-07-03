@@ -20,6 +20,9 @@
     "xmlDoc": true,
     "embed": {
       "includeFiles": "Properties/System.Interactive.Async.rd.xml"
+    },
+    "compile": {
+      "includeFiles": [ "../GlobalAssemblyVersion.cs" ]
     }
   },
 
