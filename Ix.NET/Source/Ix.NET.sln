@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25402.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Interactive", "System.Interactive\System.Interactive.xproj", "{FF97CD0F-8108-4B66-8A34-42190B459180}"
 EndProject
@@ -16,6 +16,9 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Interactive.Tests", "Tests\System.Interactive.Tests.xproj", "{592E774E-D5BE-44C5-9E4D-E096BEC01552}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
+	ProjectSection(SolutionItems) = preProject
+		GlobalAssemblyVersion.cs = GlobalAssemblyVersion.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Interactive.Tests.Uwp.DeviceRunner", "System.Interactive.Tests.Uwp.DeviceRunner\System.Interactive.Tests.Uwp.DeviceRunner.csproj", "{ED118703-9773-4193-BC2A-966C29BC1A46}"
 	ProjectSection(ProjectDependencies) = postProject

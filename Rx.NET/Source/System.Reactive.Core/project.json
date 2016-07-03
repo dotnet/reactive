@@ -20,6 +20,9 @@
     "xmlDoc": true,
     "embed": {
       "includeFiles": "Properties/System.Reactive.Core.rd.xml"
+    },
+    "compile": {
+      "includeFiles": [ "../GlobalAssemblyVersion.cs" ]
     }
   },
 

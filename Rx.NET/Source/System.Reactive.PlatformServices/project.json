@@ -19,7 +19,8 @@
     "nowarn": [ "CS1591" ],
     "xmlDoc": true,
     "compile": {
-      "exclude": [ "Strings_PlatformServices.Designer.cs" ]
+      "exclude": [ "Strings_PlatformServices.Designer.cs" ],
+      "includeFiles": [ "../GlobalAssemblyVersion.cs" ]
     },
     "embed": {
       "includeFiles": "Properties/System.Reactive.PlatformServices.rd.xml"
