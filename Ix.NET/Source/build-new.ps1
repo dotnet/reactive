@@ -15,10 +15,10 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get tools
-.\nuget.exe install -excludeversion -pre gitversion.commandline -outputdirectory packages
+.\nuget.exe install -excludeversion -pre gitversion.commandline -Version 3.5.5-pullrequest0921 -outputdirectory packages
 
 #update version
-.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
+.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo /excludeUpdateAssemblyVersion
 
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
 
