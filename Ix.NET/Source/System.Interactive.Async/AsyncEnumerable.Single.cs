@@ -355,10 +355,7 @@ namespace System.Linq
                     {
                         if (await e.MoveNext(cts.Token).ConfigureAwait(false))
                         {
-                            if (predicate(e.Current))
-                            {
-                                return true;
-                            }
+                            return predicate(e.Current);
                         }
                         return false;
                     },
@@ -389,10 +386,7 @@ namespace System.Linq
                     {
                         if (await e.MoveNext(cts.Token).ConfigureAwait(false))
                         {
-                            if (predicate(e.Current, checked(index++)))
-                            {
-                                return true;
-                            }
+                            return predicate(e.Current, checked(index++));
                         }
                         return false;
                     },

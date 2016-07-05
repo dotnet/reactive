@@ -11,14 +11,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        static IAsyncEnumerable<T> Create<T>(Func<IAsyncEnumerator<T>> getEnumerator)
+        private static IAsyncEnumerable<T> Create<T>(Func<IAsyncEnumerator<T>> getEnumerator)
         {
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
+        private class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
-            Func<IAsyncEnumerator<T>> getEnumerator;
+            private Func<IAsyncEnumerator<T>> getEnumerator;
 
             public AnonymousAsyncEnumerable(Func<IAsyncEnumerator<T>> getEnumerator)
             {
@@ -31,7 +31,7 @@ namespace System.Linq
             }
         }
 
-        static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current,
+        private static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current,
             Action dispose, IDisposable enumerator)
         {
             return Create(async ct =>
@@ -56,16 +56,16 @@ namespace System.Linq
             }, current, dispose);
         }
 
-        static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
+        private static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             return new AnonymousAsyncEnumerator<T>(moveNext, current, dispose);
         }
 
-        static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
+        private static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             var self = default(IAsyncEnumerator<T>);
             self = new AnonymousAsyncEnumerator<T>(
-                ct =>
+                async ct =>
                 {
                     var tcs = new TaskCompletionSource<bool>();
 
@@ -75,10 +75,10 @@ namespace System.Linq
                         tcs.TrySetCanceled();
                     });
 
-                    var ctr = ct.Register(stop);
-
-                    var res = moveNext(ct, tcs).Finally(ctr.Dispose);
-                    return res;
+                    using (ct.Register(stop))
+                    {
+                        return await moveNext(ct, tcs);
+                    }
                 },
                 current,
                 dispose
@@ -86,7 +86,7 @@ namespace System.Linq
             return self;
         }
 
-        class AnonymousAsyncEnumerator<T> : IAsyncEnumerator<T>
+        private class AnonymousAsyncEnumerator<T> : IAsyncEnumerator<T>
         {
             private readonly Func<CancellationToken, Task<bool>> _moveNext;
             private readonly Func<T> _current;

@@ -34,8 +34,8 @@ namespace System.Linq
                     acc = accumulator(acc, e.Current);
                 }
             }
-            var result = resultSelector(acc);
-            return result;
+
+            return resultSelector(acc);
         }
 
         public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, CancellationToken cancellationToken)
@@ -367,7 +367,7 @@ namespace System.Linq
                     return default(TSource);
                 }
 
-                TSource result = e.Current;
+                var result = e.Current;
                 if (!await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
                     return result;
@@ -608,7 +608,7 @@ namespace System.Linq
             {
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    int? v = e.Current;
+                    var v = e.Current;
                     if (v.HasValue)
                     {
                         long sum = v.GetValueOrDefault();
@@ -651,7 +651,7 @@ namespace System.Linq
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
-                long sum = e.Current;
+                var sum = e.Current;
                 long count = 1;
                 checked
                 {
@@ -680,10 +680,10 @@ namespace System.Linq
             {
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    long? v = e.Current;
+                    var v = e.Current;
                     if (v.HasValue)
                     {
-                        long sum = v.GetValueOrDefault();
+                        var sum = v.GetValueOrDefault();
                         long count = 1;
                         checked
                         {
@@ -723,7 +723,7 @@ namespace System.Linq
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
-                double sum = e.Current;
+                var sum = e.Current;
                 long count = 1;
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
@@ -752,10 +752,10 @@ namespace System.Linq
             {
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    double? v = e.Current;
+                    var v = e.Current;
                     if (v.HasValue)
                     {
-                        double sum = v.GetValueOrDefault();
+                        var sum = v.GetValueOrDefault();
                         long count = 1;
                         checked
                         {
@@ -821,7 +821,7 @@ namespace System.Linq
             {
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    float? v = e.Current;
+                    var v = e.Current;
                     if (v.HasValue)
                     {
                         double sum = v.GetValueOrDefault();
@@ -864,7 +864,7 @@ namespace System.Linq
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
-                decimal sum = e.Current;
+                var sum = e.Current;
                 long count = 1;
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
@@ -890,10 +890,10 @@ namespace System.Linq
             {
                 while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    decimal? v = e.Current;
+                    var v = e.Current;
                     if (v.HasValue)
                     {
-                        decimal sum = v.GetValueOrDefault();
+                        var sum = v.GetValueOrDefault();
                         long count = 1;
                         while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
                         {

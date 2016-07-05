@@ -10,36 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return Create(() =>
-            {
-                var e = source.GetEnumerator();
-
-                return Create(
-                    ct =>
-                    {
-                        var res = false;
-                        try
-                        {
-                            res = e.MoveNext();
-                        }
-                        finally
-                        {
-                            if (!res)
-                                e.Dispose();
-                        }
-                        return res ? TaskExt.True : TaskExt.False;
-                    },
-                    () => e.Current,
-                    () => e.Dispose()
-                );
-            });
-        }
-
         public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)

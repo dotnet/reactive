@@ -1,11 +1,13 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq.Internal
 {
+    /// Adapted from System.Linq.Grouping from .NET Framework
+    /// Source: https://github.com/dotnet/corefx/blob/b90532bc97b07234a7d18073819d019645285f1c/src/System.Linq/src/System/Linq/Grouping.cs#L64
     internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>, IList<TElement>
     {
         internal TKey _key;
@@ -126,6 +128,4 @@ namespace System.Linq.Internal
             }
         }
     }
-
-
 }
