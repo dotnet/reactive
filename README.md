@@ -4,7 +4,7 @@ Reactive Extensions
 Channel  | Rx | Ix | 
 -------- | :------------: | :-------------: |
 AppVeyor<br>([home](https://ci.appveyor.com/project/dotnetfoundation/rx-net)) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) 
-NuGet.org | ![#](https://img.shields.io/nuget/v/Rx-Main.svg) | ![#](https://img.shields.io/nuget/v/Ix-Main.svg) 
+NuGet.org | ![#](https://img.shields.io/nuget/v/System.Reactive.svg) | ![#](https://img.shields.io/nuget/v/System.Interactive.svg) 
 MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Reactive.svg) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Interactive.svg)  
 
 ### Join the conversation
@@ -16,6 +16,18 @@ Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
 - NuGet v2 feed url (VS 2012+): `https://dotnet.myget.org/F/rx/`
 - Symbol server url: `https://dotnet.myget.org/F/rx/symbols/`
+
+### Breaking changes
+The nuget packages have changed their package naming in the move from v2.x.x to v3.0.0
+ * ~~`Rx-Main`~~ is now `System.Reactive`
+ * ~~`Rx-Core`~~ is now `System.Reactive.Core`
+ * ~~`Rx-Interfaces`~~  is now `System.Reactive.Interfaces`
+ * ~~`Rx-Linq`~~  is now `System.Reactive.Linq`
+ * ~~`Rx-PlatformServices`~~  is now `System.Reactive.PlatformServices
+ * ~~`Rx-Testing`~~  is now `Microsoft.Reactive.Testing` 
+
+This brings the Nuget package naming in line with Nuget guidelines and also the dominant namespace in each package.
+Except for the package name changes, there are no other expected breaking changes.
 
 A Brief Intro
 -------------------
