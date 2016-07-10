@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -56,7 +57,7 @@ namespace Tests
             var ys = xs.Select(x => 1 / x);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace Tests
             var ys = xs.Select((x, i) => 1 / i);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
         }
 
         [Fact]
@@ -118,7 +119,7 @@ namespace Tests
             HasNext(e, 8);
             HasNext(e, 5);
             HasNext(e, 7);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -132,7 +133,7 @@ namespace Tests
             HasNext(e, 8);
             HasNext(e, 5);
             HasNext(e, 7);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -143,7 +144,7 @@ namespace Tests
             var ys = xs.Where(x => true);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -154,7 +155,7 @@ namespace Tests
 
             var ys = xs.Where((x, i) => true);
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -206,7 +207,7 @@ namespace Tests
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -217,7 +218,7 @@ namespace Tests
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -237,7 +238,7 @@ namespace Tests
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -273,7 +274,7 @@ namespace Tests
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -284,7 +285,7 @@ namespace Tests
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -304,7 +305,7 @@ namespace Tests
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -356,7 +357,7 @@ namespace Tests
             HasNext(e, 6);
             HasNext(e, 8);
             HasNext(e, 9);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -375,7 +376,7 @@ namespace Tests
             HasNext(e, 3);
             HasNext(e, 8);
             HasNext(e, 10);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -484,7 +485,7 @@ namespace Tests
             var ys = xs.Do(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -544,11 +545,11 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; }, () => { done = true; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ex_.InnerException == ex);
 
             Assert.False(hasv);
             Assert.False(done);
-            Assert.Same(((AggregateException)exa).Flatten().InnerExceptions.Single(), ex);
+            Assert.Same(exa, ex);
         }
 
         [Fact]
@@ -561,24 +562,24 @@ namespace Tests
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ex_.InnerException == ex);
 
             Assert.False(hasv);
-            Assert.Same(((AggregateException)exa).Flatten().InnerExceptions.Single(), ex);
+            Assert.Same(exa, ex);
         }
 
         [Fact]
-        public void ForEachAsync_Null()
+        public async Task ForEachAsync_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>), CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, x => { }, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(null, (x, i) => { }, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ForEachAsync<int>(AsyncEnumerable.Return(42), default(Action<int, int>), CancellationToken.None));
         }
 
         [Fact]
@@ -601,7 +602,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync(x => sum += x).Wait();
+            xs.ForEachAsync(x => sum += x).Wait(WaitTimeoutMs);
             Assert.Equal(10, sum);
         }
 
@@ -631,7 +632,7 @@ namespace Tests
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            xs.ForEachAsync((x, i) => sum += x * i).Wait();
+            xs.ForEachAsync((x, i) => sum += x * i).Wait(WaitTimeoutMs);
             Assert.Equal(1 * 0 + 2 * 1 + 3 * 2 + 4 * 3, sum);
         }
 
@@ -641,7 +642,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -659,7 +660,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
-            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -677,7 +678,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = AsyncEnumerable.Throw<int>(ex);
 
-            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.ForEachAsync(x => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -695,7 +696,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = AsyncEnumerable.Throw<int>(ex);
 
-            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -758,7 +759,7 @@ namespace Tests
             var ys = xs.Take(2);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -826,7 +827,7 @@ namespace Tests
             var ys = xs.TakeWhile(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -873,7 +874,7 @@ namespace Tests
             var ys = xs.TakeWhile((x, i) => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -927,7 +928,7 @@ namespace Tests
             var ys = xs.Skip(2);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -998,7 +999,7 @@ namespace Tests
             var ys = xs.SkipWhile(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1045,7 +1046,7 @@ namespace Tests
             var ys = xs.SkipWhile((x, i) => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1128,7 +1129,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty();
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1138,7 +1139,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty(24);
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1225,7 +1226,7 @@ namespace Tests
             var ys = xs.Reverse();
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1282,7 +1283,7 @@ namespace Tests
             var ys = xs.OrderBy<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1293,7 +1294,7 @@ namespace Tests
             var ys = xs.OrderBy<int, int>(x => x).ThenBy<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1316,7 +1317,7 @@ namespace Tests
             var ys = xs.OrderByDescending<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1327,7 +1328,7 @@ namespace Tests
             var ys = xs.OrderBy<int, int>(x => x).ThenByDescending<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1578,7 +1579,7 @@ namespace Tests
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1601,9 +1602,9 @@ namespace Tests
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 43);
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            AssertThrows<Exception>(() => g2e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
 
         [Fact]
@@ -1619,9 +1620,9 @@ namespace Tests
             Assert.Equal(g1.Key, 42);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 42);
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");           
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");           
         }
 
         static IEnumerable<int> GetXs()
@@ -1639,7 +1640,7 @@ namespace Tests
             var ys = xs.GroupBy<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1663,9 +1664,9 @@ namespace Tests
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 2);
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            AssertThrows<Exception>(() => g2e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -1941,7 +1942,7 @@ namespace Tests
         [Fact]
         public void AsAsyncEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.AsAsyncEnumerable<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.AsAsyncEnumerable<int>((IAsyncEnumerable<int>)null));
         }
 
         [Fact]
@@ -2032,7 +2033,7 @@ namespace Tests
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat();
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
         }
 
         [Fact]
@@ -2041,7 +2042,7 @@ namespace Tests
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat(3);
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
         }
 
         class FailRepeat : IEnumerable<int>
@@ -2103,7 +2104,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex).IgnoreElements();
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2145,7 +2146,7 @@ namespace Tests
             var e = xs.GetEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2271,7 +2272,7 @@ namespace Tests
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2304,7 +2305,7 @@ namespace Tests
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => { throw ex; });
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2315,7 +2316,7 @@ namespace Tests
             var e = xs.GetEnumerator();
             HasNext(e, 2);
             HasNext(e, 3);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NullReferenceException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NullReferenceException);
         }
 
         [Fact]
@@ -2358,7 +2359,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => { throw ex; });
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2368,7 +2369,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y) => { throw ex; });
 
             var e = xs.GetEnumerator();
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2432,7 +2433,7 @@ namespace Tests
             new int[] { 1, 2, 3, 4 }.ToAsyncEnumerable()
                 .TakeLast(0)
                 .ForEachAsync(_ => { isSet = true; })
-                .Wait();
+                .Wait(WaitTimeoutMs);
 
             Assert.False(isSet);
 

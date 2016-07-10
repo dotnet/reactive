@@ -40,7 +40,7 @@ namespace Tests
             var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
             var e = xs.GetEnumerator();
             HasNext(e, 42);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         private IEnumerable<int> ToAsyncEnumerable_Sequence(Exception e)
@@ -95,7 +95,7 @@ namespace Tests
 
             Assert.True(subscribed);
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetEnumerator();
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -133,7 +133,7 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetEnumerator();
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }
 
         class MyObservable<T> : IObservable<T>

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +16,9 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return Create(() =>
             {
@@ -28,74 +29,32 @@ namespace System.Linq
                 var d = Disposable.Create(cts, a);
                 var done = false;
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
                     if (!done)
                     {
-                        e.MoveNext(ct).Then(t =>
+                        try
                         {
-                            t.Handle(tcs,
-                                res =>
-                                {
-                                    tcs.TrySetResult(res);
-                                },
-                                ex =>
-                                {
-                                    var err = default(IAsyncEnumerator<TSource>);
-
-                                    try
-                                    {
-                                        ex.Flatten().Handle(ex_ =>
-                                        {
-                                            var exx = ex_ as TException;
-                                            if (exx != null)
-                                            {
-                                                err = handler(exx).GetEnumerator();
-                                                return true;
-                                            }
-
-                                            return false;
-                                        });
-                                    }
-                                    catch (Exception ex2)
-                                    {
-                                        tcs.TrySetException(ex2);
-                                        return;
-                                    }
-
-                                    if (err != null)
-                                    {
-                                        e = err;
-                                        a.Disposable = e;
-
-                                        done = true;
-                                        f(tcs, ct);
-                                    }
-                                }
-                            );
-                        });
-                    }
-                    else
-                    {
-                        e.MoveNext(ct).Then(t =>
+                            return await e.MoveNext(ct).ConfigureAwait(false);
+                        }
+                        catch (TException ex)
                         {
-                            t.Handle(tcs, res =>
-                            {
-                                tcs.TrySetResult(res);
-                            });
-                        });
+                            var err = handler(ex).GetEnumerator();
+                            e = err;
+                            a.Disposable = e;
+                            done = true;
+                            return await f(ct).ConfigureAwait(false);
+                        }
                     }
+                    return await e.MoveNext(ct).ConfigureAwait(false);
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(a);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    a
                 );
             });
         }
@@ -103,7 +62,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Catch_();
         }
@@ -111,7 +70,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Catch_();
         }
@@ -119,9 +78,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return new[] { first, second }.Catch_();
         }
@@ -137,36 +96,21 @@ namespace System.Linq
                 var a = new AssignableDisposable();
                 var d = Disposable.Create(cts, se, a);
 
-                var error = default(Exception);
+                var error = default(ExceptionDispatchInfo);
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
                     if (e == null)
                     {
-                        var b = false;
-                        try
+                        if (se.MoveNext())
                         {
-                            b = se.MoveNext();
-                            if (b)
-                                e = se.Current.GetEnumerator();
+                            e = se.Current.GetEnumerator();
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            tcs.TrySetException(ex);
-                            return;
-                        }
-
-                        if (!b)
-                        {
-                            if (error != null)
-                            {
-                                tcs.TrySetException(error);
-                                return;
-                            }
-
-                            tcs.TrySetResult(false);
-                            return;
+                            error?.Throw();
+                            return false;
                         }
 
                         error = null;
@@ -174,33 +118,24 @@ namespace System.Linq
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).Then(t =>
+                    try
                     {
-                        t.Handle(tcs,
-                            res =>
-                            {
-                                tcs.TrySetResult(res);
-                            },
-                            ex =>
-                            {
-                                e.Dispose();
-                                e = null;
-
-                                error = ex;
-                                f(tcs, ct);
-                            }
-                        );
-                    });
+                        return await e.MoveNext(ct).ConfigureAwait(false);
+                    }
+                    catch (Exception exception)
+                    {
+                        e.Dispose();
+                        e = null;
+                        error = ExceptionDispatchInfo.Capture(exception);
+                        return await f(ct).ConfigureAwait(false);
+                    }
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(a);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    a
                 );
             });
         }
@@ -208,9 +143,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException("finallyAction");
+                throw new ArgumentNullException(nameof(finallyAction));
 
             return Create(() =>
             {
@@ -220,26 +155,11 @@ namespace System.Linq
                 var r = new Disposable(finallyAction);
                 var d = Disposable.Create(cts, e, r);
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
-                {
-                    e.MoveNext(ct).Then(t =>
-                    {
-                        t.Handle(tcs, res =>
-                        {
-                            tcs.TrySetResult(res);
-                        });
-                    });
-                };
-
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(r);
-                    },
+                    ct => e.MoveNext(ct),
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    r
                 );
             });
         }
@@ -247,9 +167,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return OnErrorResumeNext_(new[] { first, second });
         }
@@ -257,7 +177,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(params IAsyncEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return OnErrorResumeNext_(sources);
         }
@@ -265,7 +185,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return OnErrorResumeNext_(sources);
         }
@@ -281,69 +201,45 @@ namespace System.Linq
                 var a = new AssignableDisposable();
                 var d = Disposable.Create(cts, se, a);
 
-                var f = default(Action<TaskCompletionSource<bool>, CancellationToken>);
-                f = (tcs, ct) =>
+                var f = default(Func<CancellationToken, Task<bool>>);
+                f = async ct =>
                 {
                     if (e == null)
                     {
                         var b = false;
-                        try
+                        b = se.MoveNext();
+                        if (b)
+                            e = se.Current.GetEnumerator();
+                        else
                         {
-                            b = se.MoveNext();
-                            if (b)
-                                e = se.Current.GetEnumerator();
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.TrySetException(ex);
-                            return;
-                        }
-
-                        if (!b)
-                        {
-                            tcs.TrySetResult(false);
-                            return;
+                            return false;
                         }
 
                         a.Disposable = e;
                     }
 
-                    e.MoveNext(ct).Then(t =>
+                    try
                     {
-                        t.Handle(tcs,
-                            res =>
-                            {
-                                if (res)
-                                {
-                                    tcs.TrySetResult(true);
-                                }
-                                else
-                                {
-                                    e.Dispose();
-                                    e = null;
+                        if (await e.MoveNext(ct).ConfigureAwait(false))
+                        {
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
 
-                                    f(tcs, ct);
-                                }
-                            },
-                            ex =>
-                            {
-                                e.Dispose();
-                                e = null;
-
-                                f(tcs, ct);
-                            }
-                        );
-                    });
+                    e.Dispose();
+                    e = null;
+                    return await f(ct).ConfigureAwait(false);
                 };
 
                 return Create(
-                    (ct, tcs) =>
-                    {
-                        f(tcs, cts.Token);
-                        return tcs.Task.UsingEnumerator(a);
-                    },
+                    f,
                     () => e.Current,
-                    d.Dispose
+                    d.Dispose,
+                    a
                 );
             });
         }
@@ -351,7 +247,7 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Retry<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new[] { source }.Repeat().Catch();
         }
@@ -359,9 +255,9 @@ namespace System.Linq
         public static IAsyncEnumerable<TSource> Retry<TSource>(this IAsyncEnumerable<TSource> source, int retryCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (retryCount < 0)
-                throw new ArgumentOutOfRangeException("retryCount");
+                throw new ArgumentOutOfRangeException(nameof(retryCount));
 
             return new[] { source }.Repeat(retryCount).Catch();
         }
