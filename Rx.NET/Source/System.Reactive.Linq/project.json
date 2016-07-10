@@ -24,7 +24,8 @@
         "Reactive/Observer.Extensions.cs",
         "Reactive/Internal/Observers.cs",
         "Reactive/Internal/Producer.cs"
-      ]
+      ],
+      "includeFiles": [ "../GlobalAssemblyVersion.cs" ]
     },
     "embed": {
       "includeFiles": "Properties/System.Reactive.Linq.rd.xml"
