@@ -18,7 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B733D97A-F1ED-4FC3-BF8E-9AC47A89DE96}"
 	ProjectSection(SolutionItems) = preProject
 		GlobalAssemblyVersion.cs = GlobalAssemblyVersion.cs
-        build-new.ps1 = build-new.ps1
+		build-new.ps1 = build-new.ps1
 		global.json = global.json
 		NuGet.Config = NuGet.Config
 	EndProjectSection
