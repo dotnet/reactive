@@ -17,7 +17,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private ImmutableList<IObserver<T>> _observers;
+        private System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
         private bool _isStopped;
         private T _value;
         private Exception _exception;
@@ -34,7 +34,7 @@ namespace System.Reactive.Subjects
         public BehaviorSubject(T value)
         {
             _value = value;
-            _observers = ImmutableList<IObserver<T>>.Empty;
+            _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace System.Reactive.Subjects
             get
             {
                 var observers = _observers;
-                return observers != null && observers.Data.Length > 0;
+                return observers != null && observers.Count > 0;
             }
         }
 
@@ -151,8 +151,8 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    os = System.Linq.Enumerable.ToArray(_observers);
+                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                 }
             }
@@ -181,8 +181,8 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    os = System.Linq.Enumerable.ToArray(_observers);
+                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }
@@ -209,7 +209,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     _value = value;
-                    os = _observers.Data;
+                    os = System.Linq.Enumerable.ToArray(_observers);
                 }
             }
 

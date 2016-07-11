@@ -172,7 +172,8 @@ namespace System.Reactive.Subjects
                     }
                     else
                     {
-                        newObserver = new Observer<T>(new ImmutableList<IObserver<T>>(new[] { oldObserver, observer }));
+                        var list = System.Collections.Immutable.ImmutableList.Create(oldObserver, observer);
+                        newObserver = new Observer<T>(list);
                     }
                 }
 #pragma warning disable 0420

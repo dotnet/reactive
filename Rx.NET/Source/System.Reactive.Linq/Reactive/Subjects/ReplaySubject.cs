@@ -234,7 +234,7 @@ namespace System.Reactive.Subjects
         {
             private readonly object _gate = new object();
 
-            private ImmutableList<IScheduledObserver<T>> _observers;
+            private System.Collections.Immutable.ImmutableList<IScheduledObserver<T>> _observers;
 
             private bool _isStopped;
             private Exception _error;
@@ -242,7 +242,7 @@ namespace System.Reactive.Subjects
 
             public ReplayBase()
             {
-                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
 
                 _isStopped = false;
                 _error = null;
@@ -253,7 +253,7 @@ namespace System.Reactive.Subjects
                 get
                 {
                     var observers = _observers;
-                    return observers != null && observers.Data.Length > 0;
+                    return observers != null && observers.Count > 0;
                 }
             }
 
@@ -280,7 +280,7 @@ namespace System.Reactive.Subjects
                         Next(value);
                         Trim();
 
-                        o = _observers.Data;
+                        o = System.Linq.Enumerable.ToArray(_observers);
                         foreach (var observer in o)
                             observer.OnNext(value);
                     }
@@ -306,11 +306,11 @@ namespace System.Reactive.Subjects
                         _error = error;
                         Trim();
 
-                        o = _observers.Data;
+                        o = System.Linq.Enumerable.ToArray(_observers);
                         foreach (var observer in o)
                             observer.OnError(error);
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 
@@ -333,11 +333,11 @@ namespace System.Reactive.Subjects
                         _isStopped = true;
                         Trim();
 
-                        o = _observers.Data;
+                        o = System.Linq.Enumerable.ToArray(_observers);
                         foreach (var observer in o)
                             observer.OnCompleted();
 
-                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 

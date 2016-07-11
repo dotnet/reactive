@@ -4,6 +4,7 @@
 
 namespace System.Reactive
 {
+    [Obsolete("Let's use System.Collections.Immutable instead")]
     internal class ImmutableList<T>
     {
         public static readonly ImmutableList<T> Empty = new ImmutableList<T>();

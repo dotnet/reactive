@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Runtime.CompilerServices;
@@ -23,7 +24,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private ImmutableList<IObserver<T>> _observers;
+        private System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
         private bool _isDisposed;
         private bool _isStopped;
         private T _value;
@@ -39,7 +40,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public AsyncSubject()
         {
-            _observers = ImmutableList<IObserver<T>>.Empty;
+            _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
         }
 
         #endregion
@@ -54,7 +55,7 @@ namespace System.Reactive.Subjects
             get
             {
                 var observers = _observers;
-                return observers != null && observers.Data.Length > 0;
+                return observers != null && observers.Count > 0;
             }
         }
 
@@ -93,8 +94,9 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    // TODO: this is a dirty dirty hack
+                    os = System.Linq.Enumerable.ToArray(_observers);
+                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     v = _value;
                     hv = _hasValue;
@@ -134,8 +136,8 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    os = _observers.Data;
-                    _observers = ImmutableList<IObserver<T>>.Empty;
+                    os = System.Linq.Enumerable.ToArray(_observers);
+                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }

@@ -62,28 +62,28 @@ namespace System.Reactive
 
     internal class Observer<T> : IObserver<T>
     {
-        private readonly ImmutableList<IObserver<T>> _observers;
+        private readonly System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
 
-        public Observer(ImmutableList<IObserver<T>> observers)
+        public Observer(System.Collections.Immutable.ImmutableList<IObserver<T>> observers)
         {
             _observers = observers;
         }
 
         public void OnCompleted()
         {
-            foreach (var observer in _observers.Data)
+            foreach (var observer in _observers)
                 observer.OnCompleted();
         }
 
         public void OnError(Exception error)
         {
-            foreach (var observer in _observers.Data)
+            foreach (var observer in _observers)
                 observer.OnError(error);
         }
 
         public void OnNext(T value)
         {
-            foreach (var observer in _observers.Data)
+            foreach (var observer in _observers)
                 observer.OnNext(value);
         }
 
@@ -94,13 +94,13 @@ namespace System.Reactive
 
         internal IObserver<T> Remove(IObserver<T> observer)
         {
-            var i = Array.IndexOf(_observers.Data, observer);
+            var i = _observers.IndexOf(observer);
             if (i < 0)
                 return this;
 
-            if (_observers.Data.Length == 2)
+            if (_observers.Count == 2)
             {
-                return _observers.Data[1 - i];
+                return _observers[1 - i];
             }
             else
             {

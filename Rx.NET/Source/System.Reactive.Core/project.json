@@ -30,7 +30,8 @@
     "System.Reactive.Interfaces": { "target": "project" },
     "System.ComponentModel": "4.0.1",
     "System.Diagnostics.Contracts": "4.0.1",
-    "System.Dynamic.Runtime": "4.0.11"
+    "System.Dynamic.Runtime": "4.0.11",
+    "System.Collections.Immutable":  "1.2.0" 
   },
 
   "frameworks": {
