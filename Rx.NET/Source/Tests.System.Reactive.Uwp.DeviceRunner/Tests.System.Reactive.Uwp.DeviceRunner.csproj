@@ -245,9 +245,6 @@
     <Compile Include="..\Tests.System.Reactive\Tests\EventPatternSourceBaseTest.cs">
       <Link>Tests\EventPatternSourceBaseTest.cs</Link>
     </Compile>
-    <Compile Include="..\Tests.System.Reactive\Tests\ImmutableListTest.cs">
-      <Link>Tests\ImmutableListTest.cs</Link>
-    </Compile>
     <Compile Include="..\Tests.System.Reactive\Tests\Linq\ObservableAggregateTest.cs">
       <Link>Tests\Linq\ObservableAggregateTest.cs</Link>
     </Compile>
