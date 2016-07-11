@@ -13,23 +13,8 @@
     <copyright>Copyright (c) .NET Foundation and Contributors. All Rights Reserved</copyright>
     <language>en-US</language>
     <tags>Ix Interactive Extensions Enumerable</tags>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="net45" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
-    </frameworkAssemblies>
     <dependencies>
-      <group targetFramework="netstandard1.0">
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
-      </group>
-      <group targetFramework="net45" />
-      <group targetFramework="portable-net45+win8+wp8+wpa81" />
+      <dependency id="NETStandard.Library" version="1.6.0" />
     </dependencies>
   </metadata>
   <files>

@@ -15,13 +15,7 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group targetFramework="netstandard1.0">
-        <dependency id="System.Linq.Expressions" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-      </group>
-      <group targetFramework="net45" />
-      <group targetFramework="portable-net45+win8+wp8+wpa81" />
+      <dependency id="NETStandard.Library" version="1.6.0" />
     </dependencies>
   </metadata>
   <files>

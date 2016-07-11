@@ -15,31 +15,10 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group>
-        <dependency id="System.Reactive.Core" version="$version$" />
-      </group>
-      <group targetFramework="uap10.0">
-        <dependency id="System.Reactive.Core" version="$version$" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
-        <dependency id="System.Threading" version="4.0.11" />
-      </group>
-      <group targetFramework="netcore451">
-        <dependency id="System.Reactive.Core" version="$version$" />
-      </group>
-      <group targetFramework="net45">
-        <dependency id="System.Reactive.Core" version="$version$" />
-      </group>
-      <group targetFramework="wpa81">
-        <dependency id="System.Reactive.Core" version="$version$" />
-      </group>
+      <dependency id="System.Reactive.Core" version="$version$" />
     </dependencies>
     <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Windows" targetFramework="net45" />
       <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
