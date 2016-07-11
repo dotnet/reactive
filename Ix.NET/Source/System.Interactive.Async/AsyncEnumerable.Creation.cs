@@ -77,7 +77,7 @@ namespace System.Linq
 
                     using (ct.Register(stop))
                     {
-                        return await moveNext(ct, tcs);
+                        return await moveNext(ct, tcs).ConfigureAwait(false);
                     }
                 },
                 current,
