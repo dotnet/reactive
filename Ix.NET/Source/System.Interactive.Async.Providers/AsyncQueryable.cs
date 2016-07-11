@@ -21,7 +21,7 @@ namespace System.Linq
         public static IAsyncQueryable<TElement> AsAsyncQueryable<TElement>(this IAsyncEnumerable<TElement> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             var queryable = source as IAsyncQueryable<TElement>;
             if (queryable != null)

@@ -17,7 +17,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Create<TResult>(Func<IEnumerator<TResult>> getEnumerator)
         {
             if (getEnumerator == null)
-                throw new ArgumentNullException("getEnumerator");
+                throw new ArgumentNullException(nameof(getEnumerator));
 
             return new AnonymousEnumerable<TResult>(getEnumerator);
         }
@@ -32,7 +32,7 @@ namespace System.Linq
         public static IEnumerable<T> Create<T>(Action<IYielder<T>> create)
         {
             if (create == null)
-                throw new ArgumentNullException("create");
+                throw new ArgumentNullException(nameof(create));
 
             foreach (var x in new Yielder<T>(create))
                 yield return x;
@@ -79,7 +79,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Throw<TResult>(Exception exception)
         {
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
 
             return Throw_<TResult>(exception);
         }
@@ -101,7 +101,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Defer<TResult>(Func<IEnumerable<TResult>> enumerableFactory)
         {
             if (enumerableFactory == null)
-                throw new ArgumentNullException("enumerableFactory");
+                throw new ArgumentNullException(nameof(enumerableFactory));
 
             return Defer_(enumerableFactory);
         }
@@ -125,11 +125,11 @@ namespace System.Linq
         public static IEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return Generate_(initialState, condition, iterate, resultSelector);
         }
@@ -151,9 +151,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             if (resourceFactory == null)
-                throw new ArgumentNullException("resourceFactory");
+                throw new ArgumentNullException(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException("enumerableFactory");
+                throw new ArgumentNullException(nameof(enumerableFactory));
 
             return Using_(resourceFactory, enumerableFactory);
         }

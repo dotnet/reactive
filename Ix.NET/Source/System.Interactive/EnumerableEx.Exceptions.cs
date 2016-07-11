@@ -21,9 +21,9 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return source.Catch_(handler);
         }
@@ -72,7 +72,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Catch_();
         }
@@ -86,7 +86,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Catch_();
         }
@@ -101,9 +101,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Catch<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return new[] { first, second }.Catch_();
         }
@@ -157,9 +157,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Finally<TSource>(this IEnumerable<TSource> source, Action finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException("finallyAction");
+                throw new ArgumentNullException(nameof(finallyAction));
 
             return source.Finally_(finallyAction);
         }
@@ -187,9 +187,9 @@ namespace System.Linq
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return OnErrorResumeNext_(new[] { first, second });
         }
@@ -203,7 +203,7 @@ namespace System.Linq
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return OnErrorResumeNext_(sources);
         }
@@ -217,7 +217,7 @@ namespace System.Linq
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return OnErrorResumeNext_(sources);
         }
@@ -257,7 +257,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Retry<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new[] { source }.Repeat().Catch();
         }
@@ -272,9 +272,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Retry<TSource>(this IEnumerable<TSource> source, int retryCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (retryCount < 0)
-                throw new ArgumentOutOfRangeException("retryCount");
+                throw new ArgumentOutOfRangeException(nameof(retryCount));
 
             return new[] { source }.Repeat(retryCount).Catch();
         }

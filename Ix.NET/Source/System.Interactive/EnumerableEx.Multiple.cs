@@ -19,7 +19,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Concat_();
         }
@@ -33,7 +33,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Concat<TSource>(params IEnumerable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Concat_();
         }
@@ -56,9 +56,9 @@ namespace System.Linq
         public static IEnumerable<TOther> SelectMany<TSource, TOther>(this IEnumerable<TSource> source, IEnumerable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return source.SelectMany(_ => other);
         }

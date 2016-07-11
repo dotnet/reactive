@@ -20,7 +20,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Hide<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Hide_();
         }
@@ -40,9 +40,9 @@ namespace System.Linq
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
 
             foreach (var item in source)
                 onNext(item);
@@ -57,9 +57,9 @@ namespace System.Linq
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
 
             var i = 0;
             foreach (var item in source)
@@ -76,9 +76,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
 
             return DoHelper(source, onNext, _ => { }, () => { });
         }
@@ -94,11 +94,11 @@ namespace System.Linq
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
 
             return DoHelper(source, onNext, _ => { }, onCompleted);
         }
@@ -114,11 +114,11 @@ namespace System.Linq
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
 
             return DoHelper(source, onNext, onError, () => { });
         }
@@ -135,13 +135,13 @@ namespace System.Linq
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
 
             return DoHelper(source, onNext, onError, onCompleted);
         }
@@ -157,9 +157,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return DoHelper(source, observer.OnNext, observer.OnError, observer.OnCompleted);
         }
@@ -203,9 +203,9 @@ namespace System.Linq
         public static IEnumerable<IList<TSource>> Buffer<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (count <= 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return source.Buffer_(count, count);
         }
@@ -221,11 +221,11 @@ namespace System.Linq
         public static IEnumerable<IList<TSource>> Buffer<TSource>(this IEnumerable<TSource> source, int count, int skip)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (count <= 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (skip <= 0)
-                throw new ArgumentOutOfRangeException("skip");
+                throw new ArgumentOutOfRangeException(nameof(skip));
 
             return source.Buffer_(count, skip);
         }
@@ -262,7 +262,7 @@ namespace System.Linq
         public static IEnumerable<TSource> IgnoreElements<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.IgnoreElements_();
         }
@@ -286,9 +286,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.Distinct_(keySelector, EqualityComparer<TKey>.Default);
         }
@@ -305,11 +305,11 @@ namespace System.Linq
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Distinct_(keySelector, comparer);
         }
@@ -356,7 +356,7 @@ namespace System.Linq
         public static IEnumerable<TSource> DistinctUntilChanged<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.DistinctUntilChanged_(x => x, EqualityComparer<TSource>.Default);
         }
@@ -371,9 +371,9 @@ namespace System.Linq
         public static IEnumerable<TSource> DistinctUntilChanged<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.DistinctUntilChanged_(x => x, comparer);
         }
@@ -389,9 +389,9 @@ namespace System.Linq
         public static IEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.DistinctUntilChanged_(keySelector, EqualityComparer<TKey>.Default);
         }
@@ -408,11 +408,11 @@ namespace System.Linq
         public static IEnumerable<TSource> DistinctUntilChanged<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.DistinctUntilChanged_(keySelector, comparer);
         }
@@ -451,9 +451,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Expand<TSource>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Expand_(selector);
         }
@@ -485,7 +485,7 @@ namespace System.Linq
         public static IEnumerable<TSource> StartWith<TSource>(this IEnumerable<TSource> source, params TSource[] values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.StartWith_(values);
         }
@@ -511,9 +511,9 @@ namespace System.Linq
         public static IEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return source.Scan_(seed, accumulator);
         }
@@ -539,9 +539,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Scan<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return source.Scan_(accumulator);
         }
@@ -575,9 +575,9 @@ namespace System.Linq
         public static IEnumerable<TSource> TakeLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return source.TakeLast_(count);
         }
@@ -612,9 +612,9 @@ namespace System.Linq
         public static IEnumerable<TSource> SkipLast<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return source.SkipLast_(count);
         }
@@ -640,7 +640,7 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Repeat_(source);
         }
@@ -662,9 +662,9 @@ namespace System.Linq
         public static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
 
             return Repeat_(source, count);
         }

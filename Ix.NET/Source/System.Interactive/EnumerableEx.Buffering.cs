@@ -36,7 +36,7 @@ namespace System.Linq
         public static IBuffer<TSource> Share<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new SharedBuffer<TSource>(source.GetEnumerator());
         }
@@ -52,9 +52,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Share<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Create<TResult>(() => selector(source.Share()).GetEnumerator());
         }
@@ -152,7 +152,7 @@ namespace System.Linq
         public static IBuffer<TSource> Publish<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new PublishedBuffer<TSource>(source.GetEnumerator());
         }
@@ -168,9 +168,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Publish<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Create<TResult>(() => selector(source.Publish()).GetEnumerator());
         }
@@ -325,7 +325,7 @@ namespace System.Linq
         public static IBuffer<TSource> Memoize<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new MemoizedBuffer<TSource>(source.GetEnumerator());
         }
@@ -341,9 +341,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Memoize<TSource, TResult>(this IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Create<TResult>(() => selector(source.Memoize()).GetEnumerator());
         }
@@ -358,9 +358,9 @@ namespace System.Linq
         public static IBuffer<TSource> Memoize<TSource>(this IEnumerable<TSource> source, int readerCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (readerCount <= 0)
-                throw new ArgumentOutOfRangeException("readerCount");
+                throw new ArgumentOutOfRangeException(nameof(readerCount));
 
             return new MemoizedBuffer<TSource>(source.GetEnumerator(), readerCount);
         }
@@ -377,11 +377,11 @@ namespace System.Linq
         public static IEnumerable<TResult> Memoize<TSource, TResult>(this IEnumerable<TSource> source, int readerCount, Func<IEnumerable<TSource>, IEnumerable<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (readerCount <= 0)
-                throw new ArgumentOutOfRangeException("readerCount");
+                throw new ArgumentOutOfRangeException(nameof(readerCount));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Create<TResult>(() => selector(source.Memoize(readerCount)).GetEnumerator());
         }

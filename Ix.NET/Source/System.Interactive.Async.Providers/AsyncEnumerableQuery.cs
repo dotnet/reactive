@@ -129,12 +129,12 @@ namespace System.Linq
         {
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
             if (!typeof(Task<TResult>).IsAssignableFrom(expression.Type))
             {
-                throw new ArgumentException("The specified expression is not assignable to the result type.", "expression");
+                throw new ArgumentException("The specified expression is not assignable to the result type.", nameof(expression));
             }
 
             return new AsyncEnumerableExecutor<TResult>(expression).ExecuteAsync(token);

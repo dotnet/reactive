@@ -20,9 +20,9 @@ namespace System.Linq
         public static IEnumerable<TResult> While<TResult>(Func<bool> condition, IEnumerable<TResult> source)
         {
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return WhileCore(condition, source).Concat();
         }
@@ -44,11 +44,11 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource, IEnumerable<TResult> elseSource)
         {
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
             if (elseSource == null)
-                throw new ArgumentNullException("elseSource");
+                throw new ArgumentNullException(nameof(elseSource));
 
             return EnumerableEx.Defer(() => condition() ? thenSource : elseSource);
         }
@@ -63,9 +63,9 @@ namespace System.Linq
         public static IEnumerable<TResult> If<TResult>(Func<bool> condition, IEnumerable<TResult> thenSource)
         {
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
 
             return EnumerableEx.Defer(() => condition() ? thenSource : Enumerable.Empty<TResult>());
         }
@@ -80,9 +80,9 @@ namespace System.Linq
         public static IEnumerable<TResult> DoWhile<TResult>(this IEnumerable<TResult> source, Func<bool> condition)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
 
             return source.Concat(While(condition, source));
         }
@@ -98,9 +98,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IEnumerable<TResult>> sources)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return Case(selector, sources, Enumerable.Empty<TResult>());
         }
@@ -117,11 +117,11 @@ namespace System.Linq
         public static IEnumerable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IEnumerable<TResult>> sources, IEnumerable<TResult> defaultSource)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (defaultSource == null)
-                throw new ArgumentNullException("defaultSource");
+                throw new ArgumentNullException(nameof(defaultSource));
 
             return EnumerableEx.Defer(() =>
             {
@@ -143,9 +143,9 @@ namespace System.Linq
         public static IEnumerable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return ForCore(source, resultSelector).Concat();
         }

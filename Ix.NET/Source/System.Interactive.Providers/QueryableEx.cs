@@ -23,7 +23,7 @@ namespace System.Linq
         public static bool IsEmpty<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.Execute<bool>(
                 Expression.Call(
@@ -56,9 +56,9 @@ namespace System.Linq
         public static TSource Min<TSource>(this IQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.Execute<TSource>(
                 Expression.Call(
@@ -93,9 +93,9 @@ namespace System.Linq
         public static IList<TSource> MinBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
@@ -131,11 +131,11 @@ namespace System.Linq
         public static IList<TSource> MinBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
@@ -170,9 +170,9 @@ namespace System.Linq
         public static TSource Max<TSource>(this IQueryable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.Execute<TSource>(
                 Expression.Call(
@@ -207,9 +207,9 @@ namespace System.Linq
         public static IList<TSource> MaxBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
@@ -245,11 +245,11 @@ namespace System.Linq
         public static IList<TSource> MaxBy<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.Execute<IList<TSource>>(
                 Expression.Call(
@@ -285,9 +285,9 @@ namespace System.Linq
         public static IQueryable<TResult> Share<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -322,9 +322,9 @@ namespace System.Linq
         public static IQueryable<TResult> Publish<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -359,9 +359,9 @@ namespace System.Linq
         public static IQueryable<TResult> Memoize<TSource, TResult>(this IQueryable<TSource> source, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -397,9 +397,9 @@ namespace System.Linq
         public static IQueryable<TResult> Memoize<TSource, TResult>(this IQueryable<TSource> source, int readerCount, Expression<Func<IEnumerable<TSource>, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -434,9 +434,9 @@ namespace System.Linq
         public static IQueryable<TResult> Create<TResult>(this IQueryProvider provider, Expression<Func<IEnumerator<TResult>>> getEnumerator)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (getEnumerator == null)
-                throw new ArgumentNullException("getEnumerator");
+                throw new ArgumentNullException(nameof(getEnumerator));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -470,7 +470,7 @@ namespace System.Linq
         public static IQueryable<TResult> Return<TResult>(this IQueryProvider provider, TResult value)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -504,9 +504,9 @@ namespace System.Linq
         public static IQueryable<TResult> Throw<TResult>(this IQueryProvider provider, Exception exception)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -540,9 +540,9 @@ namespace System.Linq
         public static IQueryable<TResult> Defer<TResult>(this IQueryProvider provider, Expression<Func<IEnumerable<TResult>>> enumerableFactory)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (enumerableFactory == null)
-                throw new ArgumentNullException("enumerableFactory");
+                throw new ArgumentNullException(nameof(enumerableFactory));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -580,13 +580,13 @@ namespace System.Linq
         public static IQueryable<TResult> Generate<TState, TResult>(this IQueryProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -625,11 +625,11 @@ namespace System.Linq
         public static IQueryable<TSource> Using<TSource, TResource>(this IQueryProvider provider, Expression<Func<TResource>> resourceFactory, Expression<Func<TResource, IEnumerable<TSource>>> enumerableFactory) where TResource : IDisposable
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (resourceFactory == null)
-                throw new ArgumentNullException("resourceFactory");
+                throw new ArgumentNullException(nameof(resourceFactory));
             if (enumerableFactory == null)
-                throw new ArgumentNullException("enumerableFactory");
+                throw new ArgumentNullException(nameof(enumerableFactory));
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -664,7 +664,7 @@ namespace System.Linq
         public static IEnumerable<TResult> Repeat<TResult>(this IQueryProvider provider, TResult value)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -700,9 +700,9 @@ namespace System.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -736,7 +736,7 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -769,9 +769,9 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -805,9 +805,9 @@ namespace System.Linq
         public static IQueryable<TSource> Catch<TSource>(this IQueryable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -841,9 +841,9 @@ namespace System.Linq
         public static IQueryable<TSource> Finally<TSource>(this IQueryable<TSource> source, Expression<Action> finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException("finallyAction");
+                throw new ArgumentNullException(nameof(finallyAction));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -877,9 +877,9 @@ namespace System.Linq
         public static IQueryable<TSource> OnErrorResumeNext<TSource>(this IQueryable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -913,9 +913,9 @@ namespace System.Linq
         public static IEnumerable<TSource> OnErrorResumeNext<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -948,7 +948,7 @@ namespace System.Linq
         public static IQueryable<TSource> OnErrorResumeNext<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -980,7 +980,7 @@ namespace System.Linq
         public static IQueryable<TSource> Retry<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1013,7 +1013,7 @@ namespace System.Linq
         public static IQueryable<TSource> Retry<TSource>(this IQueryable<TSource> source, int retryCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1048,11 +1048,11 @@ namespace System.Linq
         public static IQueryable<TResult> While<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> source)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1089,13 +1089,13 @@ namespace System.Linq
         public static IQueryable<TResult> If<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> thenSource, IEnumerable<TResult> elseSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
             if (elseSource == null)
-                throw new ArgumentNullException("elseSource");
+                throw new ArgumentNullException(nameof(elseSource));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1132,11 +1132,11 @@ namespace System.Linq
         public static IQueryable<TResult> If<TResult>(this IQueryProvider provider, Expression<Func<bool>> condition, IEnumerable<TResult> thenSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1171,9 +1171,9 @@ namespace System.Linq
         public static IQueryable<TResult> DoWhile<TResult>(this IQueryable<TResult> source, Expression<Func<bool>> condition)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
 
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1209,11 +1209,11 @@ namespace System.Linq
         public static IQueryable<TResult> Case<TValue, TResult>(this IQueryProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IEnumerable<TResult>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1250,13 +1250,13 @@ namespace System.Linq
         public static IQueryable<TResult> Case<TValue, TResult>(this IQueryProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IEnumerable<TResult>> sources, IEnumerable<TResult> defaultSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (defaultSource == null)
-                throw new ArgumentNullException("defaultSource");
+                throw new ArgumentNullException(nameof(defaultSource));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1292,11 +1292,11 @@ namespace System.Linq
         public static IQueryable<TResult> For<TSource, TResult>(this IQueryProvider provider, IEnumerable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1329,7 +1329,7 @@ namespace System.Linq
         public static IQueryable<TSource> Concat<TSource>(this IQueryable<IEnumerable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1362,9 +1362,9 @@ namespace System.Linq
         public static IQueryable<TSource> Concat<TSource>(this IQueryProvider provider, params IEnumerable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1399,9 +1399,9 @@ namespace System.Linq
         public static IQueryable<TOther> SelectMany<TSource, TOther>(this IQueryable<TSource> source, IEnumerable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return source.Provider.CreateQuery<TOther>(
                 Expression.Call(
@@ -1479,7 +1479,7 @@ namespace System.Linq
         public static IQueryable<TSource> Hide<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1512,9 +1512,9 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1549,11 +1549,11 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1589,11 +1589,11 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1630,13 +1630,13 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError, Expression<Action> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1673,9 +1673,9 @@ namespace System.Linq
         public static IQueryable<TSource> Do<TSource>(this IQueryable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1710,7 +1710,7 @@ namespace System.Linq
         public static IQueryable<IList<TSource>> Buffer<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1745,7 +1745,7 @@ namespace System.Linq
         public static IQueryable<IList<TSource>> Buffer<TSource>(this IQueryable<TSource> source, int count, int skip)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1779,7 +1779,7 @@ namespace System.Linq
         public static IQueryable<TSource> IgnoreElements<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1813,9 +1813,9 @@ namespace System.Linq
         public static IQueryable<TSource> Distinct<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1851,11 +1851,11 @@ namespace System.Linq
         public static IQueryable<TSource> Distinct<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1889,7 +1889,7 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1922,9 +1922,9 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource>(this IQueryable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1959,9 +1959,9 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1997,11 +1997,11 @@ namespace System.Linq
         public static IQueryable<TSource> DistinctUntilChanged<TSource, TKey>(this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2036,9 +2036,9 @@ namespace System.Linq
         public static IQueryable<TSource> Expand<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, IEnumerable<TSource>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2072,7 +2072,7 @@ namespace System.Linq
         public static IQueryable<TSource> StartWith<TSource>(this IQueryable<TSource> source, params TSource[] values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2108,9 +2108,9 @@ namespace System.Linq
         public static IQueryable<TAccumulate> Scan<TSource, TAccumulate>(this IQueryable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
@@ -2145,9 +2145,9 @@ namespace System.Linq
         public static IQueryable<TSource> Scan<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2181,7 +2181,7 @@ namespace System.Linq
         public static IQueryable<TSource> TakeLast<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2215,7 +2215,7 @@ namespace System.Linq
         public static IQueryable<TSource> SkipLast<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2248,7 +2248,7 @@ namespace System.Linq
         public static IQueryable<TSource> Repeat<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2281,7 +2281,7 @@ namespace System.Linq
         public static IQueryable<TSource> Repeat<TSource>(this IQueryable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2314,7 +2314,7 @@ namespace System.Linq
         public static IQueryable<TResult> Empty<TResult>(this IQueryProvider provider)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2347,7 +2347,7 @@ namespace System.Linq
         public static IQueryable<int> Range(this IQueryProvider provider, int start, int count)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
 
             return provider.CreateQuery<int>(
                 Expression.Call(
@@ -2383,7 +2383,7 @@ namespace System.Linq
         public static IQueryable<TResult> Repeat<TResult>(this IQueryProvider provider, TResult element, int count)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
 
             return provider.CreateQuery<TResult>(
                 Expression.Call(
