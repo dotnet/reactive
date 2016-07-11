@@ -6,7 +6,6 @@ using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Runtime.CompilerServices;
-using System.Reactive.Concurrency;
 
 namespace System.Reactive.Subjects
 {
@@ -24,7 +23,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
+        private ImmutableList<IObserver<T>> _observers;
         private bool _isDisposed;
         private bool _isStopped;
         private T _value;
@@ -40,7 +39,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public AsyncSubject()
         {
-            _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+            _observers = ImmutableList<IObserver<T>>.Empty;
         }
 
         #endregion
@@ -84,7 +83,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            var os = default(IObserver<T>[]);
+            var os = default(ImmutableList<IObserver<T>>);
 
             var v = default(T);
             var hv = false;
@@ -94,9 +93,8 @@ namespace System.Reactive.Subjects
 
                 if (!_isStopped)
                 {
-                    // TODO: this is a dirty dirty hack
-                    os = System.Linq.Enumerable.ToArray(_observers);
-                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+                    os = _observers;
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     v = _value;
                     hv = _hasValue;
@@ -129,15 +127,15 @@ namespace System.Reactive.Subjects
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            var os = default(IObserver<T>[]);
+            var os = default(ImmutableList<IObserver<T>>);
             lock (_gate)
             {
                 CheckDisposed();
 
                 if (!_isStopped)
                 {
-                    os = System.Linq.Enumerable.ToArray(_observers);
-                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+                    os = _observers;
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }

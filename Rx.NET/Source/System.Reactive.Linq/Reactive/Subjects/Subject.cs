@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_PERF
+using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -172,8 +173,7 @@ namespace System.Reactive.Subjects
                     }
                     else
                     {
-                        var list = System.Collections.Immutable.ImmutableList.Create(oldObserver, observer);
-                        newObserver = new Observer<T>(list);
+                        newObserver = new Observer<T>(ImmutableList.Create(oldObserver, observer));
                     }
                 }
 #pragma warning disable 0420

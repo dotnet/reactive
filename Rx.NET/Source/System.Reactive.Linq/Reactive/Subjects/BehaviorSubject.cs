@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Immutable;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Subjects
@@ -17,7 +18,7 @@ namespace System.Reactive.Subjects
 
         private readonly object _gate = new object();
 
-        private System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
+        private ImmutableList<IObserver<T>> _observers;
         private bool _isStopped;
         private T _value;
         private Exception _exception;
@@ -34,7 +35,7 @@ namespace System.Reactive.Subjects
         public BehaviorSubject(T value)
         {
             _value = value;
-            _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+            _observers = ImmutableList<IObserver<T>>.Empty;
         }
 
         #endregion
@@ -144,15 +145,15 @@ namespace System.Reactive.Subjects
         /// </summary>
         public override void OnCompleted()
         {
-            var os = default(IObserver<T>[]);
+            var os = default(ImmutableList<IObserver<T>>);
             lock (_gate)
             {
                 CheckDisposed();
 
                 if (!_isStopped)
                 {
-                    os = System.Linq.Enumerable.ToArray(_observers);
-                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+                    os = _observers;
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                 }
             }
@@ -174,15 +175,15 @@ namespace System.Reactive.Subjects
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            var os = default(IObserver<T>[]);
+            var os = default(ImmutableList<IObserver<T>>);
             lock (_gate)
             {
                 CheckDisposed();
 
                 if (!_isStopped)
                 {
-                    os = System.Linq.Enumerable.ToArray(_observers);
-                    _observers = System.Collections.Immutable.ImmutableList<IObserver<T>>.Empty;
+                    os = _observers;
+                    _observers = ImmutableList<IObserver<T>>.Empty;
                     _isStopped = true;
                     _exception = error;
                 }
@@ -201,7 +202,7 @@ namespace System.Reactive.Subjects
         /// <param name="value">The value to send to all observers.</param>
         public override void OnNext(T value)
         {
-            var os = default(IObserver<T>[]);
+            var os = default(ImmutableList<IObserver<T>>);
             lock (_gate)
             {
                 CheckDisposed();
@@ -209,7 +210,7 @@ namespace System.Reactive.Subjects
                 if (!_isStopped)
                 {
                     _value = value;
-                    os = System.Linq.Enumerable.ToArray(_observers);
+                    os = _observers;
                 }
             }
 

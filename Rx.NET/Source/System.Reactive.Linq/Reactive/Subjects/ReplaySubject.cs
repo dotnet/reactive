@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -234,7 +235,7 @@ namespace System.Reactive.Subjects
         {
             private readonly object _gate = new object();
 
-            private System.Collections.Immutable.ImmutableList<IScheduledObserver<T>> _observers;
+            private ImmutableList<IScheduledObserver<T>> _observers;
 
             private bool _isStopped;
             private Exception _error;
@@ -242,7 +243,7 @@ namespace System.Reactive.Subjects
 
             public ReplayBase()
             {
-                _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
+                _observers = ImmutableList<IScheduledObserver<T>>.Empty;
 
                 _isStopped = false;
                 _error = null;
@@ -270,7 +271,7 @@ namespace System.Reactive.Subjects
 
             public override void OnNext(T value)
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(ImmutableList<IScheduledObserver<T>>);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -280,7 +281,7 @@ namespace System.Reactive.Subjects
                         Next(value);
                         Trim();
 
-                        o = System.Linq.Enumerable.ToArray(_observers);
+                        o = _observers;
                         foreach (var observer in o)
                             observer.OnNext(value);
                     }
@@ -295,7 +296,7 @@ namespace System.Reactive.Subjects
 
             public override void OnError(Exception error)
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(ImmutableList<IScheduledObserver<T>>);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -306,11 +307,11 @@ namespace System.Reactive.Subjects
                         _error = error;
                         Trim();
 
-                        o = System.Linq.Enumerable.ToArray(_observers);
+                        o = _observers;
                         foreach (var observer in o)
                             observer.OnError(error);
 
-                        _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 
@@ -323,7 +324,7 @@ namespace System.Reactive.Subjects
 
             public override void OnCompleted()
             {
-                var o = default(IScheduledObserver<T>[]);
+                var o = default(ImmutableList<IScheduledObserver<T>>);
                 lock (_gate)
                 {
                     CheckDisposed();
@@ -333,11 +334,11 @@ namespace System.Reactive.Subjects
                         _isStopped = true;
                         Trim();
 
-                        o = System.Linq.Enumerable.ToArray(_observers);
+                        o = _observers;
                         foreach (var observer in o)
                             observer.OnCompleted();
 
-                        _observers = System.Collections.Immutable.ImmutableList<IScheduledObserver<T>>.Empty;
+                        _observers = ImmutableList<IScheduledObserver<T>>.Empty;
                     }
                 }
 

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections.Immutable;
+
 namespace System.Reactive
 {
     internal class NopObserver<T> : IObserver<T>
@@ -62,9 +64,9 @@ namespace System.Reactive
 
     internal class Observer<T> : IObserver<T>
     {
-        private readonly System.Collections.Immutable.ImmutableList<IObserver<T>> _observers;
+        private readonly ImmutableList<IObserver<T>> _observers;
 
-        public Observer(System.Collections.Immutable.ImmutableList<IObserver<T>> observers)
+        public Observer(ImmutableList<IObserver<T>> observers)
         {
             _observers = observers;
         }
