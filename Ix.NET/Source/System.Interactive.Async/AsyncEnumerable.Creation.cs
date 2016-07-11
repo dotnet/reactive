@@ -11,7 +11,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        private static IAsyncEnumerable<T> Create<T>(Func<IAsyncEnumerator<T>> getEnumerator)
+        public static IAsyncEnumerable<T> Create<T>(Func<IAsyncEnumerator<T>> getEnumerator)
         {
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
@@ -56,7 +56,7 @@ namespace System.Linq
             }, current, dispose);
         }
 
-        private static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
+        public static IAsyncEnumerator<T> Create<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             return new AnonymousAsyncEnumerator<T>(moveNext, current, dispose);
         }
