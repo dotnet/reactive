@@ -25,7 +25,7 @@ namespace System.Reactive.Concurrency
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
 
             //
             // The contract for periodic scheduling in Rx is that specifying TimeSpan.Zero as the period causes the scheduler to 

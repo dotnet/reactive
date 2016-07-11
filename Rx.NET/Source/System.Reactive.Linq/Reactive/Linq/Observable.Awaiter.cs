@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
         public static AsyncSubject<TSource> GetAwaiter<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.GetAwaiter<TSource>(source);
         }
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
         public static AsyncSubject<TSource> GetAwaiter<TSource>(this IConnectableObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.GetAwaiter<TSource>(source);
         }
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq
         public static AsyncSubject<TSource> RunAsync<TSource>(this IObservable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.RunAsync<TSource>(source, cancellationToken);
         }
@@ -72,7 +72,7 @@ namespace System.Reactive.Linq
         public static AsyncSubject<TSource> RunAsync<TSource>(this IConnectableObservable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.RunAsync<TSource>(source, cancellationToken);
         }

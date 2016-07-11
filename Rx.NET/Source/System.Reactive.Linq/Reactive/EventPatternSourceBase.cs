@@ -31,9 +31,9 @@ namespace System.Reactive
         protected EventPatternSourceBase(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (invokeHandler == null)
-                throw new ArgumentNullException("invokeHandler");
+                throw new ArgumentNullException(nameof(invokeHandler));
 
             _source = source;
             _invokeHandler = invokeHandler;
@@ -49,9 +49,9 @@ namespace System.Reactive
         protected void Add(Delegate handler, Action<TSender, TEventArgs> invoke)
         {
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
             if (invoke == null)
-                throw new ArgumentNullException("invoke");
+                throw new ArgumentNullException(nameof(invoke));
 
             var gate = new object();
             var isAdded = false;
@@ -107,7 +107,7 @@ namespace System.Reactive
         protected void Remove(Delegate handler)
         {
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             var d = default(IDisposable);
 

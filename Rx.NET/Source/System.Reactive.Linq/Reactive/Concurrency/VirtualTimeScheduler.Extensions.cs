@@ -25,9 +25,9 @@ namespace System.Reactive.Concurrency
             where TAbsolute : IComparable<TAbsolute>
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return scheduler.ScheduleRelative(action, dueTime, Invoke);
         }
@@ -46,9 +46,9 @@ namespace System.Reactive.Concurrency
             where TAbsolute : IComparable<TAbsolute>
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return scheduler.ScheduleAbsolute(action, dueTime, Invoke);
         }

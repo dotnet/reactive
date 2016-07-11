@@ -24,9 +24,9 @@ namespace System.Reactive.Disposables
         public ScheduledDisposable(IScheduler scheduler, IDisposable disposable)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (disposable == null)
-                throw new ArgumentNullException("disposable");
+                throw new ArgumentNullException(nameof(disposable));
 
             _scheduler = scheduler;
             _disposable = disposable;

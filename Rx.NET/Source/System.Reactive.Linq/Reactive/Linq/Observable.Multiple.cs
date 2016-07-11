@@ -28,9 +28,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Amb<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.Amb<TSource>(first, second);
         }
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Amb<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Amb<TSource>(sources);
         }
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Amb<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Amb<TSource>(sources);
         }
@@ -83,9 +83,9 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource, TBufferClosing>(this IObservable<TSource> source, Func<IObservable<TBufferClosing>> bufferClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferClosingSelector == null)
-                throw new ArgumentNullException("bufferClosingSelector");
+                throw new ArgumentNullException(nameof(bufferClosingSelector));
 
             return s_impl.Buffer<TSource, TBufferClosing>(source, bufferClosingSelector);
         }
@@ -104,11 +104,11 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(this IObservable<TSource> source, IObservable<TBufferOpening> bufferOpenings, Func<TBufferOpening, IObservable<TBufferClosing>> bufferClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferOpenings == null)
-                throw new ArgumentNullException("bufferOpenings");
+                throw new ArgumentNullException(nameof(bufferOpenings));
             if (bufferClosingSelector == null)
-                throw new ArgumentNullException("bufferClosingSelector");
+                throw new ArgumentNullException(nameof(bufferClosingSelector));
 
             return s_impl.Buffer<TSource, TBufferOpening, TBufferClosing>(source, bufferOpenings, bufferClosingSelector);
         }
@@ -125,9 +125,9 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Buffer<TSource, TBufferBoundary>(this IObservable<TSource> source, IObservable<TBufferBoundary> bufferBoundaries)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferBoundaries == null)
-                throw new ArgumentNullException("bufferBoundaries");
+                throw new ArgumentNullException(nameof(bufferBoundaries));
 
             return s_impl.Buffer<TSource, TBufferBoundary>(source, bufferBoundaries);
         }
@@ -148,9 +148,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Catch<TSource, TException>(this IObservable<TSource> source, Func<TException, IObservable<TSource>> handler) where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return s_impl.Catch<TSource, TException>(source, handler);
         }
@@ -166,9 +166,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Catch<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.Catch<TSource>(first, second);
         }
@@ -183,7 +183,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Catch<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Catch<TSource>(sources);
         }
@@ -198,7 +198,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Catch<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Catch<TSource>(sources);
         }
@@ -221,11 +221,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this IObservable<TSource1> first, IObservable<TSource2> second, Func<TSource1, TSource2, TResult> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TResult>(first, second, resultSelector);
         }
@@ -252,13 +252,13 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Func<TSource1, TSource2, TSource3, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TResult>(source1, source2, source3, resultSelector);
         }
@@ -281,15 +281,15 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Func<TSource1, TSource2, TSource3, TSource4, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(source1, source2, source3, source4, resultSelector);
         }
@@ -315,17 +315,17 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(source1, source2, source3, source4, source5, resultSelector);
         }
@@ -352,19 +352,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(source1, source2, source3, source4, source5, source6, resultSelector);
         }
@@ -393,21 +393,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(source1, source2, source3, source4, source5, source6, source7, resultSelector);
         }
@@ -438,23 +438,23 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, resultSelector);
         }
@@ -487,25 +487,25 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, resultSelector);
         }
@@ -540,27 +540,27 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, resultSelector);
         }
@@ -597,29 +597,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, resultSelector);
         }
@@ -658,31 +658,31 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, resultSelector);
         }
@@ -723,33 +723,33 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, resultSelector);
         }
@@ -792,35 +792,35 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, resultSelector);
         }
@@ -865,37 +865,37 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, resultSelector);
         }
@@ -942,39 +942,39 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (source16 == null)
-                throw new ArgumentNullException("source16");
+                throw new ArgumentNullException(nameof(source16));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, source16, resultSelector);
         }
@@ -997,9 +997,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> CombineLatest<TSource, TResult>(this IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.CombineLatest<TSource, TResult>(sources, resultSelector);
         }
@@ -1014,7 +1014,7 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> CombineLatest<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.CombineLatest<TSource>(sources);
         }
@@ -1029,7 +1029,7 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> CombineLatest<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.CombineLatest<TSource>(sources);
         }
@@ -1049,9 +1049,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Concat<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.Concat<TSource>(first, second);
         }
@@ -1066,7 +1066,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Concat<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Concat<TSource>(sources);
         }
@@ -1081,7 +1081,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Concat<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Concat<TSource>(sources);
         }
@@ -1096,7 +1096,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Concat<TSource>(this IObservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Concat<TSource>(sources);
         }
@@ -1114,7 +1114,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Concat<TSource>(this IObservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Concat<TSource>(sources);
         }
@@ -1135,7 +1135,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IObservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Merge<TSource>(sources);
         }
@@ -1153,7 +1153,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IObservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Merge<TSource>(sources);
         }
@@ -1172,9 +1172,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (maxConcurrent <= 0)
-                throw new ArgumentOutOfRangeException("maxConcurrent");
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrent));
 
             return s_impl.Merge<TSource>(sources, maxConcurrent);
         }
@@ -1191,9 +1191,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IEnumerable<IObservable<TSource>> sources, int maxConcurrent)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (maxConcurrent <= 0)
-                throw new ArgumentOutOfRangeException("maxConcurrent");
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrent));
 
             return s_impl.Merge<TSource>(sources, maxConcurrent);
         }
@@ -1211,11 +1211,11 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IEnumerable<IObservable<TSource>> sources, int maxConcurrent, IScheduler scheduler)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (maxConcurrent <= 0)
-                throw new ArgumentOutOfRangeException("maxConcurrent");
+                throw new ArgumentOutOfRangeException(nameof(maxConcurrent));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.Merge<TSource>(sources, maxConcurrent, scheduler);
         }
@@ -1231,9 +1231,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.Merge<TSource>(first, second);
         }
@@ -1250,11 +1250,11 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IObservable<TSource> first, IObservable<TSource> second, IScheduler scheduler)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.Merge<TSource>(first, second, scheduler);
         }
@@ -1269,7 +1269,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Merge<TSource>(sources);
         }
@@ -1285,9 +1285,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(IScheduler scheduler, params IObservable<TSource>[] sources)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Merge<TSource>(scheduler, sources);
         }
@@ -1302,7 +1302,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Merge<TSource>(sources);
         }
@@ -1318,9 +1318,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Merge<TSource>(this IEnumerable<IObservable<TSource>> sources, IScheduler scheduler)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.Merge<TSource>(sources, scheduler);
         }
@@ -1340,9 +1340,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> OnErrorResumeNext<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.OnErrorResumeNext<TSource>(first, second);
         }
@@ -1357,7 +1357,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> OnErrorResumeNext<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.OnErrorResumeNext<TSource>(sources);
         }
@@ -1372,7 +1372,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.OnErrorResumeNext<TSource>(sources);
         }
@@ -1393,9 +1393,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SkipUntil<TSource, TOther>(this IObservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return s_impl.SkipUntil<TSource, TOther>(source, other);
         }
@@ -1417,7 +1417,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Switch<TSource>(this IObservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Switch<TSource>(sources);
         }
@@ -1437,7 +1437,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Switch<TSource>(this IObservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Switch<TSource>(sources);
         }
@@ -1460,9 +1460,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> TakeUntil<TSource, TOther>(this IObservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             return s_impl.TakeUntil<TSource, TOther>(source, other);
         }
@@ -1483,9 +1483,9 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(this IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowClosingSelector == null)
-                throw new ArgumentNullException("windowClosingSelector");
+                throw new ArgumentNullException(nameof(windowClosingSelector));
 
             return s_impl.Window<TSource, TWindowClosing>(source, windowClosingSelector);
         }
@@ -1504,11 +1504,11 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowOpenings == null)
-                throw new ArgumentNullException("windowOpenings");
+                throw new ArgumentNullException(nameof(windowOpenings));
             if (windowClosingSelector == null)
-                throw new ArgumentNullException("windowClosingSelector");
+                throw new ArgumentNullException(nameof(windowClosingSelector));
 
             return s_impl.Window<TSource, TWindowOpening, TWindowClosing>(source, windowOpenings, windowClosingSelector);
         }
@@ -1525,9 +1525,9 @@ namespace System.Reactive.Linq
         public static IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(this IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowBoundaries == null)
-                throw new ArgumentNullException("windowBoundaries");
+                throw new ArgumentNullException(nameof(windowBoundaries));
 
             return s_impl.Window<TSource, TWindowBoundary>(source, windowBoundaries);
         }
@@ -1550,11 +1550,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.WithLatestFrom<TFirst, TSecond, TResult>(first, second, resultSelector);
         }
@@ -1577,11 +1577,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TResult>(this IObservable<TSource1> first, IObservable<TSource2> second, Func<TSource1, TSource2, TResult> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TResult>(first, second, resultSelector);
         }
@@ -1608,13 +1608,13 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Func<TSource1, TSource2, TSource3, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TResult>(source1, source2, source3, resultSelector);
         }
@@ -1637,15 +1637,15 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Func<TSource1, TSource2, TSource3, TSource4, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TResult>(source1, source2, source3, source4, resultSelector);
         }
@@ -1671,17 +1671,17 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(source1, source2, source3, source4, source5, resultSelector);
         }
@@ -1708,19 +1708,19 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(source1, source2, source3, source4, source5, source6, resultSelector);
         }
@@ -1749,21 +1749,21 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(source1, source2, source3, source4, source5, source6, source7, resultSelector);
         }
@@ -1794,23 +1794,23 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, resultSelector);
         }
@@ -1843,25 +1843,25 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, resultSelector);
         }
@@ -1896,27 +1896,27 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, resultSelector);
         }
@@ -1953,29 +1953,29 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, resultSelector);
         }
@@ -2014,31 +2014,31 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, resultSelector);
         }
@@ -2079,33 +2079,33 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, resultSelector);
         }
@@ -2148,35 +2148,35 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, resultSelector);
         }
@@ -2221,37 +2221,37 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, resultSelector);
         }
@@ -2298,39 +2298,39 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IObservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (source16 == null)
-                throw new ArgumentNullException("source16");
+                throw new ArgumentNullException(nameof(source16));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, source16, resultSelector);
         }
@@ -2353,9 +2353,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource, TResult>(this IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource, TResult>(sources, resultSelector);
         }
@@ -2370,7 +2370,7 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Zip<TSource>(this IEnumerable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Zip<TSource>(sources);
         }
@@ -2385,7 +2385,7 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> Zip<TSource>(params IObservable<TSource>[] sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
 
             return s_impl.Zip<TSource>(sources);
         }
@@ -2404,11 +2404,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Zip<TSource1, TSource2, TResult>(this IObservable<TSource1> first, IEnumerable<TSource2> second, Func<TSource1, TSource2, TResult> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Zip<TSource1, TSource2, TResult>(first, second, resultSelector);
         }

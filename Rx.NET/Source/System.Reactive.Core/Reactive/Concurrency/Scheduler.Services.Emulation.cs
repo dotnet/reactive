@@ -29,11 +29,11 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return SchedulePeriodic_(scheduler, state, period, action);
         }
@@ -55,11 +55,11 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Action<TState> action)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return SchedulePeriodic_(scheduler, state, period, state_ => { action(state_); return state_; });
         }
@@ -79,11 +79,11 @@ namespace System.Reactive.Concurrency
         public static IDisposable SchedulePeriodic(this IScheduler scheduler, TimeSpan period, Action action)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return SchedulePeriodic_(scheduler, action, period, a => { a(); return a; });
         }
@@ -100,7 +100,7 @@ namespace System.Reactive.Concurrency
         public static IStopwatch StartStopwatch(this IScheduler scheduler)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             //
             // All schedulers deriving from LocalScheduler will automatically pick up this

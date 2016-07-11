@@ -27,7 +27,7 @@ namespace System.Reactive.Concurrency
         protected ScheduledItem(TAbsolute dueTime, IComparer<TAbsolute> comparer)
         {
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             _dueTime = dueTime;
             _comparer = comparer;
@@ -212,9 +212,9 @@ namespace System.Reactive.Concurrency
             : base(dueTime, comparer)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             _scheduler = scheduler;
             _state = state;

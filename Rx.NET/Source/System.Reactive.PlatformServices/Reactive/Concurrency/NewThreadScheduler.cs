@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
         public NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
             if (threadFactory == null)
-                throw new ArgumentNullException("threadFactory");
+                throw new ArgumentNullException(nameof(threadFactory));
 #else
         private NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
@@ -64,7 +64,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var scheduler = new EventLoopScheduler(_threadFactory);
             scheduler.ExitIfEmpty = true;
@@ -82,7 +82,7 @@ namespace System.Reactive.Concurrency
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var d = new BooleanDisposable();
 
@@ -114,9 +114,9 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var periodic = new Periodic<TState>(state, period, action);
 

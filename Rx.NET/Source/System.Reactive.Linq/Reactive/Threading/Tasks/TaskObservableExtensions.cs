@@ -28,7 +28,7 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<Unit> ToObservable(this Task task)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
 
             return ToObservableImpl(task, null);
         }
@@ -44,9 +44,9 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<Unit> ToObservable(this Task task, IScheduler scheduler)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return ToObservableImpl(task, scheduler);
         }
@@ -122,7 +122,7 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
 
             return ToObservableImpl(task, null);
         }
@@ -139,9 +139,9 @@ namespace System.Reactive.Threading.Tasks
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, IScheduler scheduler)
         {
             if (task == null)
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return ToObservableImpl(task, scheduler);
         }
@@ -250,7 +250,7 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable)
         {
             if (observable == null)
-                throw new ArgumentNullException("observable");
+                throw new ArgumentNullException(nameof(observable));
 
             return observable.ToTask(new CancellationToken(), null);
         }
@@ -266,7 +266,7 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, object state)
         {
             if (observable == null)
-                throw new ArgumentNullException("observable");
+                throw new ArgumentNullException(nameof(observable));
 
             return observable.ToTask(new CancellationToken(), state);
         }
@@ -282,7 +282,7 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken)
         {
             if (observable == null)
-                throw new ArgumentNullException("observable");
+                throw new ArgumentNullException(nameof(observable));
 
             return observable.ToTask(cancellationToken, null);
         }
@@ -299,7 +299,7 @@ namespace System.Reactive.Threading.Tasks
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object state)
         {
             if (observable == null)
-                throw new ArgumentNullException("observable");
+                throw new ArgumentNullException(nameof(observable));
 
             var hasValue = false;
             var lastValue = default(TResult);

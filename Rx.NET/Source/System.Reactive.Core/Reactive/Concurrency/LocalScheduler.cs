@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
         public virtual IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return Schedule(state, TimeSpan.Zero, action);
         }
@@ -57,7 +57,7 @@ namespace System.Reactive.Concurrency
         public virtual IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return Enqueue(state, dueTime, action);
         }

@@ -33,7 +33,7 @@ namespace System.Reactive.Concurrency
         public SchedulerQueue(int capacity)
         {
             if (capacity < 0)
-                throw new ArgumentOutOfRangeException("capacity");
+                throw new ArgumentOutOfRangeException(nameof(capacity));
 
             _queue = new PriorityQueue<ScheduledItem<TAbsolute>>(capacity);
         }

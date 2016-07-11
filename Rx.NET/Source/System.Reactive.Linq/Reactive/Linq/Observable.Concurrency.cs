@@ -26,9 +26,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.ObserveOn<TSource>(source, scheduler);
         }
@@ -49,9 +49,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             return s_impl.ObserveOn<TSource>(source, context);
         }
@@ -77,9 +77,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.SubscribeOn<TSource>(source, scheduler);
         }
@@ -101,9 +101,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             return s_impl.SubscribeOn<TSource>(source, context);
         }
@@ -128,7 +128,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Synchronize<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Synchronize<TSource>(source);
         }
@@ -145,9 +145,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Synchronize<TSource>(this IObservable<TSource> source, object gate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (gate == null)
-                throw new ArgumentNullException("gate");
+                throw new ArgumentNullException(nameof(gate));
 
             return s_impl.Synchronize<TSource>(source, gate);
         }

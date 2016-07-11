@@ -24,11 +24,11 @@ namespace System.Reactive
         public AnonymousObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
 
             _onNext = onNext;
             _onError = onError;

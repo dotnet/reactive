@@ -21,9 +21,9 @@ namespace System.Reactive.Disposables
         public static ICancelable Create(IDisposable disposable1, IDisposable disposable2)
         {
             if (disposable1 == null)
-                throw new ArgumentNullException("disposable1");
+                throw new ArgumentNullException(nameof(disposable1));
             if (disposable2 == null)
-                throw new ArgumentNullException("disposable2");
+                throw new ArgumentNullException(nameof(disposable2));
 
             return new Binary(disposable1, disposable2);
         }
@@ -36,7 +36,7 @@ namespace System.Reactive.Disposables
         public static ICancelable Create(params IDisposable[] disposables)
         {
             if (disposables == null)
-                throw new ArgumentNullException("disposables");
+                throw new ArgumentNullException(nameof(disposables));
 
             return new NAry(disposables);
         }
@@ -49,7 +49,7 @@ namespace System.Reactive.Disposables
         public static ICancelable Create(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
-                throw new ArgumentNullException("disposables");
+                throw new ArgumentNullException(nameof(disposables));
 
             return new NAry(disposables);
         }
@@ -123,7 +123,7 @@ namespace System.Reactive.Disposables
                 // Doing this on the list to avoid duplicate enumeration of disposables.
                 //
                 if (_disposables.Contains(null))
-                    throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, "disposables");
+                    throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
             }
 
             public override bool IsDisposed

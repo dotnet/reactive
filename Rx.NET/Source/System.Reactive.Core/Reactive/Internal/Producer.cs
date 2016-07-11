@@ -35,7 +35,7 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<TSource> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return SubscribeRaw(observer, true);
         }

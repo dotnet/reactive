@@ -84,7 +84,7 @@ namespace System.Reactive.Subjects
         public IDisposable Subscribe(IObserver<TResult> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return _subject.SubscribeSafe(observer);
         }

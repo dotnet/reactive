@@ -26,7 +26,7 @@ namespace System.Reactive.Concurrency
         public TaskPoolScheduler(TaskFactory taskFactory)
         {
             if (taskFactory == null)
-                throw new ArgumentNullException("taskFactory");
+                throw new ArgumentNullException(nameof(taskFactory));
 
             this.taskFactory = taskFactory;
         }
@@ -53,7 +53,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var d = new SerialDisposable();
             var cancelable = new CancellationDisposable();
@@ -101,7 +101,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -179,9 +179,9 @@ namespace System.Reactive.Concurrency
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
 #if !NO_TASK_DELAY
             var cancel = new CancellationDisposable();

@@ -172,7 +172,7 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
-                throw new ArgumentNullException("error");
+                throw new ArgumentNullException(nameof(error));
 
             var os = default(IObserver<T>[]);
             lock (_gate)
@@ -233,7 +233,7 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             var ex = default(Exception);
 

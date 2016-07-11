@@ -37,7 +37,7 @@ namespace System.Reactive.Disposables
         public RefCountDisposable(IDisposable disposable, bool throwWhenDisposed)
         {
             if (disposable == null)
-                throw new ArgumentNullException("disposable");
+                throw new ArgumentNullException(nameof(disposable));
 
             _disposable = disposable;
             _isPrimaryDisposed = false;

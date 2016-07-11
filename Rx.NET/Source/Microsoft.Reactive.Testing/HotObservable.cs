@@ -19,9 +19,9 @@ namespace Microsoft.Reactive.Testing
         public HotObservable(TestScheduler scheduler, params Recorded<Notification<T>>[] messages)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (messages == null)
-                throw new ArgumentNullException("messages");
+                throw new ArgumentNullException(nameof(messages));
 
             this.scheduler = scheduler;
             this.messages = messages;
@@ -44,7 +44,7 @@ namespace Microsoft.Reactive.Testing
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             observers.Add(observer);
             subscriptions.Add(new Subscription(scheduler.Clock));

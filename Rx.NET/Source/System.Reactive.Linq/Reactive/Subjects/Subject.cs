@@ -92,7 +92,7 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
-                throw new ArgumentNullException("error");
+                throw new ArgumentNullException(nameof(error));
 
             var oldObserver = default(IObserver<T>);
             var newObserver = new DoneObserver<T> { Exception = error };
@@ -132,7 +132,7 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             var oldObserver = default(IObserver<T>);
             var newObserver = default(IObserver<T>);

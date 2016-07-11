@@ -18,7 +18,7 @@ namespace ReactiveTests
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             observer.OnError(null);
             return Disposable.Empty;

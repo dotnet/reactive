@@ -135,7 +135,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable ScheduleAbsolute<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var si = default(ScheduledItem<DateTimeOffset, TState>);
 

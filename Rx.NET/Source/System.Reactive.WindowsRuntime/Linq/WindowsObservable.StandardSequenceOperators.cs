@@ -24,9 +24,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperation<TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.SelectMany(x => selector(x).ToObservable());
         }
@@ -45,9 +45,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TResult, TProgress>(this IObservable<TSource> source, Func<TSource, IAsyncOperationWithProgress<TResult, TProgress>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return source.SelectMany(x => selector(x).ToObservable());
         }
@@ -67,11 +67,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TAsyncOperationResult, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperation<TAsyncOperationResult>> asyncOperationSelector, Func<TSource, TAsyncOperationResult, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (asyncOperationSelector == null)
-                throw new ArgumentNullException("asyncOperationSelector");
+                throw new ArgumentNullException(nameof(asyncOperationSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return source.SelectMany(x => asyncOperationSelector(x).ToObservable(), resultSelector);
         }
@@ -92,11 +92,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> SelectMany<TSource, TAsyncOperationResult, TAsyncOperationProgress, TResult>(this IObservable<TSource> source, Func<TSource, IAsyncOperationWithProgress<TAsyncOperationResult, TAsyncOperationProgress>> asyncOperationSelector, Func<TSource, TAsyncOperationResult, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (asyncOperationSelector == null)
-                throw new ArgumentNullException("asyncOperationSelector");
+                throw new ArgumentNullException(nameof(asyncOperationSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return source.SelectMany(x => asyncOperationSelector(x).ToObservable(), resultSelector);
         }

@@ -19,9 +19,9 @@ namespace ReactiveTests
         public MockEnumerable(TestScheduler scheduler, IEnumerable<T> underlyingEnumerable)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (underlyingEnumerable == null)
-                throw new ArgumentNullException("underlyingEnumerable");
+                throw new ArgumentNullException(nameof(underlyingEnumerable));
 
             this.Scheduler = scheduler;
             this.underlyingEnumerable = underlyingEnumerable;

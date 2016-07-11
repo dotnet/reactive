@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> AsObservable<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source;
         }
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToQbservable<TSource>(this IQueryable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
@@ -73,9 +73,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToQbservable<TSource>(this IQueryable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return ((IQbservableProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(

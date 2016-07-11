@@ -32,7 +32,7 @@ namespace System.Reactive.Linq
         public static Func<IObservable<TResult>> FromAsyncPattern<TResult>(Func<AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
                 throw new ArgumentNullException("end");
 

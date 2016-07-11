@@ -17,7 +17,7 @@ namespace ReactiveTests
         public MockDisposable(TestScheduler scheduler)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             this.scheduler = scheduler;
             Add(scheduler.Clock);

@@ -36,7 +36,7 @@ namespace System.Reactive.Disposables
         public CompositeDisposable(int capacity)
         {
             if (capacity < 0)
-                throw new ArgumentOutOfRangeException("capacity");
+                throw new ArgumentOutOfRangeException(nameof(capacity));
 
             _disposables = new List<IDisposable>(capacity);
         }
@@ -61,7 +61,7 @@ namespace System.Reactive.Disposables
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
-                throw new ArgumentNullException("disposables");
+                throw new ArgumentNullException(nameof(disposables));
 
             _disposables = new List<IDisposable>(disposables);
             
@@ -69,7 +69,7 @@ namespace System.Reactive.Disposables
             // Doing this on the list to avoid duplicate enumeration of disposables.
             //
             if (_disposables.Contains(null))
-                throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, "disposables");
+                throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
             
             _count = _disposables.Count;
         }
@@ -93,7 +93,7 @@ namespace System.Reactive.Disposables
         public void Add(IDisposable item)
         {
             if (item == null)
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
 
             var shouldDispose = false;
             lock (_gate)
@@ -118,7 +118,7 @@ namespace System.Reactive.Disposables
         public bool Remove(IDisposable item)
         {
             if (item == null)
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
 
             var shouldDispose = false;
 
@@ -211,7 +211,7 @@ namespace System.Reactive.Disposables
         public bool Contains(IDisposable item)
         {
             if (item == null)
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
 
             lock (_gate)
             {
@@ -229,9 +229,9 @@ namespace System.Reactive.Disposables
         public void CopyTo(IDisposable[] array, int arrayIndex)
         {
             if (array == null)
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             if (arrayIndex < 0 || arrayIndex >= array.Length)
-                throw new ArgumentOutOfRangeException("arrayIndex");
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
             lock (_gate)
             {

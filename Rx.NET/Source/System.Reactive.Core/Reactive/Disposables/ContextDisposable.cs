@@ -25,9 +25,9 @@ namespace System.Reactive.Disposables
         public ContextDisposable(SynchronizationContext context, IDisposable disposable)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             if (disposable == null)
-                throw new ArgumentNullException("disposable");
+                throw new ArgumentNullException(nameof(disposable));
 
             _context = context;
             _disposable = disposable;

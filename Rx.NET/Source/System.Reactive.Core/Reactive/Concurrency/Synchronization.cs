@@ -32,9 +32,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return new AnonymousObservable<TSource>(observer =>
             {
@@ -67,9 +67,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             return new AnonymousObservable<TSource>(observer =>
             {
@@ -99,9 +99,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
 #if !NO_PERF
             return new ObserveOn<TSource>(source, scheduler);
@@ -122,9 +122,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
 #if !NO_PERF
             return new ObserveOn<TSource>(source, context);
@@ -169,7 +169,7 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
 #if !NO_PERF
             return new Synchronize<TSource>(source);
@@ -193,9 +193,9 @@ namespace System.Reactive.Concurrency
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, object gate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (gate == null)
-                throw new ArgumentNullException("gate");
+                throw new ArgumentNullException(nameof(gate));
 
 #if !NO_PERF
             return new Synchronize<TSource>(source, gate);

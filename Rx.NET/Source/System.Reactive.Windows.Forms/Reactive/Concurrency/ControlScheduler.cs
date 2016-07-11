@@ -26,7 +26,7 @@ namespace System.Reactive.Concurrency
         public ControlScheduler(Control control)
         {
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             _control = control;
         }
@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var d = new SingleAssignmentDisposable();
 
@@ -75,7 +75,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -146,9 +146,9 @@ namespace System.Reactive.Concurrency
             // Threshold derived from Interval property setter in ndp\fx\src\winforms\managed\system\winforms\Timer.cs.
             //
             if (period.TotalMilliseconds < 1)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var createTimer = new Func<IScheduler, TState, IDisposable>((scheduler1, state1) =>
             {

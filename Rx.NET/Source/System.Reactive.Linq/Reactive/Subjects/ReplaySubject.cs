@@ -183,7 +183,7 @@ namespace System.Reactive.Subjects
         public override void OnError(Exception error)
         {
             if (error == null)
-                throw new ArgumentNullException("error");
+                throw new ArgumentNullException(nameof(error));
 
             _implementation.OnError(error);
         }
@@ -209,7 +209,7 @@ namespace System.Reactive.Subjects
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return _implementation.Subscribe(observer);
         }
@@ -519,11 +519,11 @@ namespace System.Reactive.Subjects
             public ReplayByTime(int bufferSize, TimeSpan window, IScheduler scheduler)
             {
                 if (bufferSize < 0)
-                    throw new ArgumentOutOfRangeException("bufferSize");
+                    throw new ArgumentOutOfRangeException(nameof(bufferSize));
                 if (window < TimeSpan.Zero)
-                    throw new ArgumentOutOfRangeException("window");
+                    throw new ArgumentOutOfRangeException(nameof(window));
                 if (scheduler == null)
-                    throw new ArgumentNullException("scheduler");
+                    throw new ArgumentNullException(nameof(scheduler));
 
                 _bufferSize = bufferSize;
                 _window = window;

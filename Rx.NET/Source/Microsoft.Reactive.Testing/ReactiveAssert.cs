@@ -43,9 +43,9 @@ namespace Microsoft.Reactive.Testing
         public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
 
             if (!expected.SequenceEqual(actual))
                 Assert.True(false, Message(actual, expected));
@@ -62,9 +62,9 @@ namespace Microsoft.Reactive.Testing
         public static void AreElementsEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, string message)
         {
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
 
             if (!expected.SequenceEqual(actual))
                 Assert.True(false, message);
@@ -80,9 +80,9 @@ namespace Microsoft.Reactive.Testing
         public static void AreElementsEqual<T>(IObservable<T> expected, IObservable<T> actual)
         {
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
 
             AreElementsEqual(expected.Materialize().ToEnumerable(), actual.Materialize().ToEnumerable());
         }
@@ -98,9 +98,9 @@ namespace Microsoft.Reactive.Testing
         public static void AreElementsEqual<T>(IObservable<T> expected, IObservable<T> actual, string message)
         {
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
 
             AreElementsEqual(expected.Materialize().ToEnumerable(), actual.Materialize().ToEnumerable(), message);
         }
@@ -114,7 +114,7 @@ namespace Microsoft.Reactive.Testing
         public static void Throws<TException>(Action action) where TException : Exception
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var failed = false;
             try
@@ -144,7 +144,7 @@ namespace Microsoft.Reactive.Testing
         public static void Throws<TException>(Action action, string message) where TException : Exception
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var failed = false;
             try
@@ -174,7 +174,7 @@ namespace Microsoft.Reactive.Testing
         public static void Throws<TException>(TException exception, Action action) where TException : Exception
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var failed = false;
             try
@@ -206,7 +206,7 @@ namespace Microsoft.Reactive.Testing
         public static void Throws<TException>(TException exception, Action action, string message) where TException : Exception
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var failed = false;
             try
@@ -237,9 +237,9 @@ namespace Microsoft.Reactive.Testing
         public static void AssertEqual<T>(this IEnumerable<T> actual, IEnumerable<T> expected)
         {
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
 
             ReactiveAssert.AreElementsEqual(expected, actual);
         }
@@ -254,9 +254,9 @@ namespace Microsoft.Reactive.Testing
         public static void AssertEqual<T>(this IEnumerable<T> actual, params T[] expected)
         {
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
 
             ReactiveAssert.AreElementsEqual(expected, actual);
         }
@@ -271,9 +271,9 @@ namespace Microsoft.Reactive.Testing
         public static void AssertEqual<T>(this IObservable<T> actual, IObservable<T> expected)
         {
             if (actual == null)
-                throw new ArgumentNullException("actual");
+                throw new ArgumentNullException(nameof(actual));
             if (expected == null)
-                throw new ArgumentNullException("expected");
+                throw new ArgumentNullException(nameof(expected));
 
             ReactiveAssert.AreElementsEqual(expected, actual);
         }

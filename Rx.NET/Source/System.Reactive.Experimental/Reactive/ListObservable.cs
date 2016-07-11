@@ -30,7 +30,7 @@ namespace System.Reactive
         public ListObservable(IObservable<T> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             subscription = source.Subscribe(results.Add, subject.OnError, subject.OnCompleted);
         }
@@ -199,7 +199,7 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<object> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return StableCompositeDisposable.Create(subscription, subject.Subscribe(observer));
         }

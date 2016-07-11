@@ -26,7 +26,7 @@ namespace System.Reactive.Disposables
         public static IDisposable Create(Action dispose)
         {
             if (dispose == null)
-                throw new ArgumentNullException("dispose");
+                throw new ArgumentNullException(nameof(dispose));
 
             return new AnonymousDisposable(dispose);
         }

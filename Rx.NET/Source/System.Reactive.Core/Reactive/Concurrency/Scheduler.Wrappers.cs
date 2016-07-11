@@ -17,7 +17,7 @@ namespace System.Reactive.Concurrency
         public static IScheduler DisableOptimizations(this IScheduler scheduler)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return new DisableOptimizationsScheduler(scheduler);
         }
@@ -32,9 +32,9 @@ namespace System.Reactive.Concurrency
         public static IScheduler DisableOptimizations(this IScheduler scheduler, params Type[] optimizationInterfaces)
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (optimizationInterfaces == null)
-                throw new ArgumentNullException("optimizationInterfaces");
+                throw new ArgumentNullException(nameof(optimizationInterfaces));
 
             return new DisableOptimizationsScheduler(scheduler, optimizationInterfaces);
         }
@@ -51,9 +51,9 @@ namespace System.Reactive.Concurrency
             where TException : Exception
         {
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
 
             return new CatchScheduler<TException>(scheduler, handler);
         }

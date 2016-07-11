@@ -25,7 +25,7 @@ namespace System.Reactive.Concurrency
         public void Wait(Action action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var isOwner = false;
             lock (queue)

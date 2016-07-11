@@ -34,7 +34,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> AsQbservable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new ObservableQuery<TSource>(source);
         }

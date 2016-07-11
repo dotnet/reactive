@@ -27,7 +27,7 @@ namespace System.Reactive
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             var autoDetachObserver = new AutoDetachObserver<T>(observer);
             

@@ -27,9 +27,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SubscribeOn<TSource>(this IObservable<TSource> source, Control control)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             return Synchronization.SubscribeOn(source, new ControlScheduler(control));
         }
@@ -45,9 +45,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, Control control)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (control == null)
-                throw new ArgumentNullException("control");
+                throw new ArgumentNullException(nameof(control));
 
             return Synchronization.ObserveOn(source, new ControlScheduler(control));
         }

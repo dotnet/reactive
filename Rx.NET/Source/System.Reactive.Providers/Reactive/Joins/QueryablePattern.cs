@@ -55,7 +55,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3> And<TSource3>(IObservable<TSource3> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource3));
@@ -79,7 +79,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -118,7 +118,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4> And<TSource4>(IObservable<TSource4> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource4));
@@ -142,7 +142,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -183,7 +183,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5> And<TSource5>(IObservable<TSource5> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource5));
@@ -208,7 +208,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -250,7 +250,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> And<TSource6>(IObservable<TSource6> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource6));
@@ -274,7 +274,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -316,7 +316,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> And<TSource7>(IObservable<TSource7> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource7));
@@ -340,7 +340,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -383,7 +383,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> And<TSource8>(IObservable<TSource8> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource8));
@@ -407,7 +407,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -451,7 +451,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> And<TSource9>(IObservable<TSource9> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource9));
@@ -475,7 +475,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -520,7 +520,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> And<TSource10>(IObservable<TSource10> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource10));
@@ -544,7 +544,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -590,7 +590,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> And<TSource11>(IObservable<TSource11> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource11));
@@ -614,7 +614,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -661,7 +661,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> And<TSource12>(IObservable<TSource12> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource12));
@@ -685,7 +685,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -733,7 +733,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> And<TSource13>(IObservable<TSource13> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource13));
@@ -757,7 +757,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -806,7 +806,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> And<TSource14>(IObservable<TSource14> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource14));
@@ -830,7 +830,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -880,7 +880,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> And<TSource15>(IObservable<TSource15> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource15));
@@ -904,7 +904,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -955,7 +955,7 @@ namespace System.Reactive.Joins
         public QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> And<TSource16>(IObservable<TSource16> other)
         {
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>);
             var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource16));
@@ -979,7 +979,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
@@ -1031,7 +1031,7 @@ namespace System.Reactive.Joins
         public QueryablePlan<TResult> Then<TResult>(Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> selector)
         {
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16>);
             var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));

@@ -22,7 +22,7 @@ namespace System.Reactive
         public AnonymousObservable(Func<IObserver<T>, IDisposable> subscribe)
         {
             if (subscribe == null)
-                throw new ArgumentNullException("subscribe");
+                throw new ArgumentNullException(nameof(subscribe));
 
             _subscribe = subscribe;
         }

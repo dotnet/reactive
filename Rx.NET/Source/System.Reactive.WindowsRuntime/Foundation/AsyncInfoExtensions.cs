@@ -28,7 +28,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable(this IAsyncAction source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new AsyncInfoToObservableBridge<Unit, Unit>(
                 source,
@@ -51,7 +51,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable<TProgress>(this IAsyncActionWithProgress<TProgress> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.ToObservable_(null);
         }
@@ -68,9 +68,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<Unit> ToObservable<TProgress>(this IAsyncActionWithProgress<TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (progress == null)
-                throw new ArgumentNullException("progress");
+                throw new ArgumentNullException(nameof(progress));
 
             return source.ToObservable_(progress);
         }
@@ -86,7 +86,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TProgress> ToObservableProgress<TProgress>(this IAsyncActionWithProgress<TProgress> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Observable.Create<TProgress>(observer =>
             {
@@ -123,7 +123,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult>(this IAsyncOperation<TResult> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return new AsyncInfoToObservableBridge<TResult, Unit>(
                 source,
@@ -147,7 +147,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.ToObservable_(null, false);
         }
@@ -165,9 +165,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservable<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (progress == null)
-                throw new ArgumentNullException("progress");
+                throw new ArgumentNullException(nameof(progress));
 
             return source.ToObservable_(progress, false);
         }
@@ -184,7 +184,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TProgress> ToObservableProgress<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Observable.Create<TProgress>(observer =>
             {
@@ -207,7 +207,7 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservableMultiple<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.ToObservable_(null, true);
         }
@@ -226,9 +226,9 @@ namespace System.Reactive.Windows.Foundation
         public static IObservable<TResult> ToObservableMultiple<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source, IProgress<TProgress> progress)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (progress == null)
-                throw new ArgumentNullException("progress");
+                throw new ArgumentNullException(nameof(progress));
 
             return source.ToObservable_(progress, true);
         }

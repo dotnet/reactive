@@ -22,9 +22,9 @@ namespace System.Reactive.Linq
         public static IDisposable Subscribe<TSource>(this IEnumerable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
 
             return s_impl.Subscribe<TSource>(source, observer);
         }
@@ -41,11 +41,11 @@ namespace System.Reactive.Linq
         public static IDisposable Subscribe<TSource>(this IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.Subscribe<TSource>(source, observer, scheduler);
         }
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
         public static IEnumerable<TSource> ToEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToEnumerable<TSource>(source);
         }
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq
         public static IEventSource<Unit> ToEvent(this IObservable<Unit> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToEvent(source);
         }
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
         public static IEventSource<TSource> ToEvent<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToEvent<TSource>(source);
         }
@@ -119,7 +119,7 @@ namespace System.Reactive.Linq
 #endif
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToEventPattern<TEventArgs>(source);
         }
@@ -138,7 +138,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ToObservable<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToObservable<TSource>(source);
         }
@@ -154,9 +154,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ToObservable<TSource>(this IEnumerable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
 
             return s_impl.ToObservable<TSource>(source, scheduler);
         }

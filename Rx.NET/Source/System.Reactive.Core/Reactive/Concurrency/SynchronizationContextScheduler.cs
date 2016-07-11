@@ -24,7 +24,7 @@ namespace System.Reactive.Concurrency
         public SynchronizationContextScheduler(SynchronizationContext context)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             
             _context = context;
             _alwaysPost = true;
@@ -39,7 +39,7 @@ namespace System.Reactive.Concurrency
         public SynchronizationContextScheduler(SynchronizationContext context, bool alwaysPost)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             _context = context;
             _alwaysPost = alwaysPost;
@@ -56,7 +56,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var d = new SingleAssignmentDisposable();
 
@@ -88,7 +88,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)

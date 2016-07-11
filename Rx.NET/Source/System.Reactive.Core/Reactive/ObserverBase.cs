@@ -48,7 +48,7 @@ namespace System.Reactive
         public void OnError(Exception error)
         {
             if (error == null)
-                throw new ArgumentNullException("error");
+                throw new ArgumentNullException(nameof(error));
 
             if (Interlocked.Exchange(ref isStopped, 1) == 0)
             {

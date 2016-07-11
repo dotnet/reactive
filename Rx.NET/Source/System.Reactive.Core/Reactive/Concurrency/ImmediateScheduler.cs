@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return action(new AsyncLockScheduler(), state);
         }
@@ -55,7 +55,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks > 0)
@@ -73,7 +73,7 @@ namespace System.Reactive.Concurrency
             public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
                 if (action == null)
-                    throw new ArgumentNullException("action");
+                    throw new ArgumentNullException(nameof(action));
 
                 var m = new SingleAssignmentDisposable();
 
@@ -92,7 +92,7 @@ namespace System.Reactive.Concurrency
             public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
             {
                 if (action == null)
-                    throw new ArgumentNullException("action");
+                    throw new ArgumentNullException(nameof(action));
 
                 if (dueTime.Ticks <= 0)
                     return Schedule<TState>(state, action);

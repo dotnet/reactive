@@ -17,9 +17,9 @@ namespace System.Reactive
         public IQbservable<TResult> CreateQuery<TResult>(Expression expression)
         {
             if (expression == null)
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             if (!typeof(IObservable<TResult>).IsAssignableFrom(expression.Type))
-                throw new ArgumentException(Strings_Providers.INVALID_TREE_TYPE, "expression");
+                throw new ArgumentException(Strings_Providers.INVALID_TREE_TYPE, nameof(expression));
 
             return new ObservableQuery<TResult>(expression);
         }
@@ -39,7 +39,7 @@ namespace System.Reactive
             //
             var call = expression as MethodCallExpression;
             if (call == null || call.Method.DeclaringType != typeof(Qbservable) || call.Method.Name != "ToQueryable")
-                throw new ArgumentException(Strings_Providers.EXPECTED_TOQUERYABLE_METHODCALL, "expression");
+                throw new ArgumentException(Strings_Providers.EXPECTED_TOQUERYABLE_METHODCALL, nameof(expression));
 
             //
             // This is the IQbservable<T> object corresponding to the lhs. Now wrap

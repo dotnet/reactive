@@ -26,9 +26,9 @@ namespace System.Reactive.Linq
         public static IObservable<TAccumulate> Aggregate<TSource, TAccumulate>(this IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return s_impl.Aggregate<TSource, TAccumulate>(source, seed, accumulator);
         }
@@ -50,11 +50,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return s_impl.Aggregate<TSource, TAccumulate, TResult>(source, seed, accumulator, resultSelector);
         }
@@ -73,9 +73,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Aggregate<TSource>(this IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return s_impl.Aggregate<TSource>(source, accumulator);
         }
@@ -96,9 +96,9 @@ namespace System.Reactive.Linq
         public static IObservable<bool> All<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.All<TSource>(source, predicate);
         }
@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
         public static IObservable<bool> Any<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Any<TSource>(source);
         }
@@ -135,9 +135,9 @@ namespace System.Reactive.Linq
         public static IObservable<bool> Any<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.Any<TSource>(source, predicate);
         }
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average(this IObservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -173,7 +173,7 @@ namespace System.Reactive.Linq
         public static IObservable<float> Average(this IObservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -190,7 +190,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Average(this IObservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -207,7 +207,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average(this IObservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average(this IObservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average(this IObservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Average(this IObservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -273,7 +273,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Average(this IObservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -290,7 +290,7 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average(this IObservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -307,7 +307,7 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average(this IObservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Average(source);
         }
@@ -326,9 +326,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Average<TSource>(this IObservable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -346,9 +346,9 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average<TSource>(this IObservable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -366,9 +366,9 @@ namespace System.Reactive.Linq
         public static IObservable<float> Average<TSource>(this IObservable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -387,9 +387,9 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average<TSource>(this IObservable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -408,9 +408,9 @@ namespace System.Reactive.Linq
         public static IObservable<double> Average<TSource>(this IObservable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -429,9 +429,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Average<TSource>(this IObservable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -449,9 +449,9 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average<TSource>(this IObservable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -469,9 +469,9 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Average<TSource>(this IObservable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -490,9 +490,9 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average<TSource>(this IObservable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -511,9 +511,9 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Average<TSource>(this IObservable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Average<TSource>(source, selector);
         }
@@ -534,7 +534,7 @@ namespace System.Reactive.Linq
         public static IObservable<bool> Contains<TSource>(this IObservable<TSource> source, TSource value)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Contains<TSource>(source, value);
         }
@@ -552,9 +552,9 @@ namespace System.Reactive.Linq
         public static IObservable<bool> Contains<TSource>(this IObservable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.Contains<TSource>(source, value, comparer);
         }
@@ -575,7 +575,7 @@ namespace System.Reactive.Linq
         public static IObservable<int> Count<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Count<TSource>(source);
         }
@@ -592,9 +592,9 @@ namespace System.Reactive.Linq
         public static IObservable<int> Count<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.Count<TSource>(source, predicate);
         }
@@ -616,9 +616,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ElementAt<TSource>(this IObservable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return s_impl.ElementAt<TSource>(source, index);
         }
@@ -639,9 +639,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> ElementAtOrDefault<TSource>(this IObservable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             return s_impl.ElementAtOrDefault<TSource>(source, index);
         }
@@ -661,7 +661,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> FirstAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.FirstAsync<TSource>(source);
         }
@@ -678,9 +678,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> FirstAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.FirstAsync<TSource>(source, predicate);
         }
@@ -699,7 +699,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.FirstOrDefaultAsync<TSource>(source);
         }
@@ -715,9 +715,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> FirstOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.FirstOrDefaultAsync<TSource>(source, predicate);
         }
@@ -736,7 +736,7 @@ namespace System.Reactive.Linq
         public static IObservable<bool> IsEmpty<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.IsEmpty<TSource>(source);
         }
@@ -756,7 +756,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> LastAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.LastAsync<TSource>(source);
         }
@@ -773,9 +773,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> LastAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.LastAsync<TSource>(source, predicate);
         }
@@ -794,7 +794,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> LastOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.LastOrDefaultAsync<TSource>(source);
         }
@@ -810,9 +810,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> LastOrDefaultAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.LastOrDefaultAsync<TSource>(source, predicate);
         }
@@ -833,7 +833,7 @@ namespace System.Reactive.Linq
         public static IObservable<long> LongCount<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.LongCount<TSource>(source);
         }
@@ -850,9 +850,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> LongCount<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.LongCount<TSource>(source, predicate);
         }
@@ -872,7 +872,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Max<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max<TSource>(source);
         }
@@ -889,9 +889,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Max<TSource>(this IObservable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.Max<TSource>(source, comparer);
         }
@@ -906,7 +906,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Max(this IObservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -921,7 +921,7 @@ namespace System.Reactive.Linq
         public static IObservable<float> Max(this IObservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -936,7 +936,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Max(this IObservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -951,7 +951,7 @@ namespace System.Reactive.Linq
         public static IObservable<int> Max(this IObservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -966,7 +966,7 @@ namespace System.Reactive.Linq
         public static IObservable<long> Max(this IObservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -981,7 +981,7 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Max(this IObservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -996,7 +996,7 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Max(this IObservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -1011,7 +1011,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Max(this IObservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -1026,7 +1026,7 @@ namespace System.Reactive.Linq
         public static IObservable<int?> Max(this IObservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -1041,7 +1041,7 @@ namespace System.Reactive.Linq
         public static IObservable<long?> Max(this IObservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Max(source);
         }
@@ -1059,9 +1059,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Max<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource, TResult>(source, selector);
         }
@@ -1080,11 +1080,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Max<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector, IComparer<TResult> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.Max<TSource, TResult>(source, selector, comparer);
         }
@@ -1101,9 +1101,9 @@ namespace System.Reactive.Linq
         public static IObservable<double> Max<TSource>(this IObservable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1120,9 +1120,9 @@ namespace System.Reactive.Linq
         public static IObservable<float> Max<TSource>(this IObservable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1139,9 +1139,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Max<TSource>(this IObservable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1158,9 +1158,9 @@ namespace System.Reactive.Linq
         public static IObservable<int> Max<TSource>(this IObservable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1177,9 +1177,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Max<TSource>(this IObservable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1196,9 +1196,9 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Max<TSource>(this IObservable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1215,9 +1215,9 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Max<TSource>(this IObservable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1234,9 +1234,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Max<TSource>(this IObservable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1253,9 +1253,9 @@ namespace System.Reactive.Linq
         public static IObservable<int?> Max<TSource>(this IObservable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1272,9 +1272,9 @@ namespace System.Reactive.Linq
         public static IObservable<long?> Max<TSource>(this IObservable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Max<TSource>(source, selector);
         }
@@ -1296,9 +1296,9 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> MaxBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return s_impl.MaxBy<TSource, TKey>(source, keySelector);
         }
@@ -1317,11 +1317,11 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> MaxBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.MaxBy<TSource, TKey>(source, keySelector, comparer);
         }
@@ -1341,7 +1341,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Min<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min<TSource>(source);
         }
@@ -1358,9 +1358,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> Min<TSource>(this IObservable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.Min<TSource>(source, comparer);
         }
@@ -1375,7 +1375,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Min(this IObservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1390,7 +1390,7 @@ namespace System.Reactive.Linq
         public static IObservable<float> Min(this IObservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1405,7 +1405,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Min(this IObservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1420,7 +1420,7 @@ namespace System.Reactive.Linq
         public static IObservable<int> Min(this IObservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1435,7 +1435,7 @@ namespace System.Reactive.Linq
         public static IObservable<long> Min(this IObservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1450,7 +1450,7 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Min(this IObservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1465,7 +1465,7 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Min(this IObservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1480,7 +1480,7 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Min(this IObservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1495,7 +1495,7 @@ namespace System.Reactive.Linq
         public static IObservable<int?> Min(this IObservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1510,7 +1510,7 @@ namespace System.Reactive.Linq
         public static IObservable<long?> Min(this IObservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Min(source);
         }
@@ -1528,9 +1528,9 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Min<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource, TResult>(source, selector);
         }
@@ -1549,11 +1549,11 @@ namespace System.Reactive.Linq
         public static IObservable<TResult> Min<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> selector, IComparer<TResult> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.Min<TSource, TResult>(source, selector, comparer);
         }
@@ -1570,9 +1570,9 @@ namespace System.Reactive.Linq
         public static IObservable<double> Min<TSource>(this IObservable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1589,9 +1589,9 @@ namespace System.Reactive.Linq
         public static IObservable<float> Min<TSource>(this IObservable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1608,9 +1608,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal> Min<TSource>(this IObservable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1627,9 +1627,9 @@ namespace System.Reactive.Linq
         public static IObservable<int> Min<TSource>(this IObservable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1646,9 +1646,9 @@ namespace System.Reactive.Linq
         public static IObservable<long> Min<TSource>(this IObservable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1665,9 +1665,9 @@ namespace System.Reactive.Linq
         public static IObservable<double?> Min<TSource>(this IObservable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1684,9 +1684,9 @@ namespace System.Reactive.Linq
         public static IObservable<float?> Min<TSource>(this IObservable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1703,9 +1703,9 @@ namespace System.Reactive.Linq
         public static IObservable<decimal?> Min<TSource>(this IObservable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1722,9 +1722,9 @@ namespace System.Reactive.Linq
         public static IObservable<int?> Min<TSource>(this IObservable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1741,9 +1741,9 @@ namespace System.Reactive.Linq
         public static IObservable<long?> Min<TSource>(this IObservable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return s_impl.Min<TSource>(source, selector);
         }
@@ -1765,9 +1765,9 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> MinBy<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return s_impl.MinBy<TSource, TKey>(source, keySelector);
         }
@@ -1811,9 +1811,9 @@ namespace System.Reactive.Linq
         public static IObservable<bool> SequenceEqual<TSource>(this IObservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.SequenceEqual<TSource>(first, second);
         }
@@ -1852,9 +1852,9 @@ namespace System.Reactive.Linq
         public static IObservable<bool> SequenceEqual<TSource>(this IObservable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return s_impl.SequenceEqual<TSource>(first, second);
         }
@@ -1896,7 +1896,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SingleAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.SingleAsync<TSource>(source);
         }
@@ -1913,9 +1913,9 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SingleAsync<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return s_impl.SingleAsync<TSource>(source, predicate);
         }
@@ -1935,7 +1935,7 @@ namespace System.Reactive.Linq
         public static IObservable<TSource> SingleOrDefaultAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.SingleOrDefaultAsync<TSource>(source);
         }
@@ -1973,7 +1973,7 @@ namespace System.Reactive.Linq
         public static IObservable<double> Sum(this IObservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Sum(source);
         }
@@ -1988,7 +1988,7 @@ namespace System.Reactive.Linq
         public static IObservable<float> Sum(this IObservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.Sum(source);
         }
@@ -2448,7 +2448,7 @@ namespace System.Reactive.Linq
         public static IObservable<IList<TSource>> ToList<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return s_impl.ToList<TSource>(source);
         }
@@ -2470,9 +2470,9 @@ namespace System.Reactive.Linq
         public static IObservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return s_impl.ToLookup<TSource, TKey>(source, keySelector);
         }
@@ -2491,11 +2491,11 @@ namespace System.Reactive.Linq
         public static IObservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.ToLookup<TSource, TKey>(source, keySelector, comparer);
         }
@@ -2515,11 +2515,11 @@ namespace System.Reactive.Linq
         public static IObservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
 
             return s_impl.ToLookup<TSource, TKey, TElement>(source, keySelector, elementSelector);
         }
@@ -2540,13 +2540,13 @@ namespace System.Reactive.Linq
         public static IObservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return s_impl.ToLookup<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
