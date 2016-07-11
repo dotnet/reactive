@@ -29,7 +29,7 @@ namespace System.Reactive
         /// <param name="value">Next element in the sequence.</param>
         public void OnNext(T value)
         {
-            if (isStopped == 0)
+            if (Volatile.Read(ref isStopped) == 0)
                 OnNextCore(value);
         }
 
@@ -98,7 +98,7 @@ namespace System.Reactive
         {
             if (disposing)
             {
-                isStopped = 1;
+                Volatile.Write(ref isStopped, 1);
             }
         }
 
