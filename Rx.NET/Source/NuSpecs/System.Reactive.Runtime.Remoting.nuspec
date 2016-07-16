@@ -15,12 +15,7 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group>
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
-      <group targetFramework="net45">
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
+      <dependency id="System.Reactive.Core" version="$version$" />
     </dependencies>
   </metadata>
   <files>

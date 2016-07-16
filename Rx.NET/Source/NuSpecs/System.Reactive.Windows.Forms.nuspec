@@ -15,18 +15,12 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group>
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
-      <group targetFramework="net45">
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
-      <group targetFramework="net46">
-        <dependency id="System.Reactive" version="$version$" />
-      </group>
+      <dependency id="System.Reactive.Core" version="$version$" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Windows" targetFramework="net45" />
+      <frameworkAssembly assemblyName="WindowsBase" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>

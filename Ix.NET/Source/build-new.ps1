@@ -32,9 +32,6 @@ if($tag -ne ""){
 
 Write-Host "Version: $version"
 
-# Get Reference Generator
-.\nuget.exe install -excludeversion -pre NuSpec.ReferenceGenerator -outputdirectory packages
-
 Write-Host "Restoring packages" -Foreground Green
 dotnet restore $scriptPath | out-null
 
@@ -44,19 +41,6 @@ $projects = gci $scriptPath -Directory `
 
 foreach ($project in $projects) {
   dotnet build -c "$configuration" $project.FullName  
-  
-  $ns = Join-Path $nuSpecDir "$($project.Name).nuspec"  
-    
-  if(Test-Path $ns)
-  {
-    Write-Host "Invoking RefGen on $ns" 
-    
-    $baseDir = Join-Path $project.FullName "bin" | join-path -ChildPath "$configuration"
-    $projJson = Join-Path $project.FullName "project.json"    
-    
-    Write-Host RefGen.exe generate-cross "-p" `"$projJson`" "-d" `"$baseDir`" "-l" `"$($project.Name).dll`" "-n" `"$ns`"
-    .\packages\nuspec.referencegenerator\tools\RefGen.exe generate-cross -p "$projJson" -d "$baseDir" -l "$($project.Name).dll" -n "$ns"
-  }
 }
 
 Write-Host "Building Packages" -Foreground Green

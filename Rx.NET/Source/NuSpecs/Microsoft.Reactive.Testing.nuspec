@@ -15,64 +15,8 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <group targetFramework="portable-net45+win8+wp8+wpa81">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="netcore451">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="net45">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="net46">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="netstandard1.0">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="netstandard1.3">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="uap10.0">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
-      <group targetFramework="wpa81">
-        <dependency id="System.Reactive.Linq" version="$version$" />
-        <dependency id="System.Reactive.PlatformServices" version="$version$" />
-        <dependency id="xunit.assert" version="2.1.0" />
-      </group>
+      <dependency id="System.Reactive.PlatformServices" version="$version$" />
+      <dependency id="xunit.assert" version="2.1.0" />
     </dependencies>
   </metadata>
   <files>

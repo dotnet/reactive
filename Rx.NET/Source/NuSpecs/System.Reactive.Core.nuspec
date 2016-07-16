@@ -14,109 +14,21 @@
     <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
-    <dependencies>
-      <group targetFramework="portable-net45+win8+wp8+wpa81">
+    <dependencies>   
+      <group>
         <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
-      <group targetFramework="portable-net45+win8+wpa81">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
-      <group targetFramework="netstandard1.0">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
         <dependency id="System.ComponentModel" version="4.0.1" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
+        <dependency id="System.Diagnostics.Contracts" version="4.0.1" />
         <dependency id="System.Dynamic.Runtime" version="4.0.11" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
-      </group>
-      <group targetFramework="netstandard1.1">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Collections.Concurrent" version="4.0.12" />
-        <dependency id="System.ComponentModel" version="4.0.1" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
-        <dependency id="System.Dynamic.Runtime" version="4.0.11" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
       </group>
       <group targetFramework="netcoreapp1.0">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Collections.Concurrent" version="4.0.12" />
         <dependency id="System.ComponentModel" version="4.0.1" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
+        <dependency id="System.Diagnostics.Contracts" version="4.0.1" />
+        <dependency id="System.Dynamic.Runtime" version="4.0.11" />
         <dependency id="System.Threading.Thread" version="4.0.0" />
         <dependency id="System.Threading.ThreadPool" version="4.0.10" />
-        <dependency id="System.Threading.Timer" version="4.0.1" />
-      </group>
-      <group targetFramework="net45">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
-      <group targetFramework="net46">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
-      <group targetFramework="netstandard1.3">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Collections.Concurrent" version="4.0.12" />
-        <dependency id="System.ComponentModel" version="4.0.1" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
-      </group>
-      <group targetFramework="netcore451">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
-      <group targetFramework="uap10.0">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-        <dependency id="System.Collections" version="4.0.11" />
-        <dependency id="System.Collections.Concurrent" version="4.0.12" />
-        <dependency id="System.ComponentModel" version="4.0.1" />
-        <dependency id="System.Diagnostics.Debug" version="4.0.11" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.1" />
-        <dependency id="System.Globalization" version="4.0.11" />
-        <dependency id="System.Linq" version="4.1.0" />
-        <dependency id="System.Reflection" version="4.1.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.1" />
-        <dependency id="System.Runtime" version="4.1.0" />
-        <dependency id="System.Runtime.Extensions" version="4.1.0" />
-        <dependency id="System.Threading" version="4.0.11" />
-        <dependency id="System.Threading.Tasks" version="4.0.11" />
-      </group>
-      <group targetFramework="wpa81">
-        <dependency id="System.Reactive.Interfaces" version="$version$" />
-      </group>
+      </group>      
     </dependencies>
   </metadata>
   <files>
