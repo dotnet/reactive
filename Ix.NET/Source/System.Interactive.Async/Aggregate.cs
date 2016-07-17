@@ -15,11 +15,11 @@ namespace System.Linq
         public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
 
             return Aggregate(source, seed, accumulator, resultSelector, CancellationToken.None);
         }
@@ -27,9 +27,9 @@ namespace System.Linq
         public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return Aggregate(source, seed, accumulator, CancellationToken.None);
         }
@@ -37,9 +37,9 @@ namespace System.Linq
         public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
 
             return Aggregate(source, accumulator, CancellationToken.None);
         }

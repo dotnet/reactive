@@ -15,11 +15,11 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return SequenceEqual(first, second, comparer, CancellationToken.None);
         }
@@ -27,9 +27,9 @@ namespace System.Linq
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
 
             return SequenceEqual(first, second, CancellationToken.None);
         }

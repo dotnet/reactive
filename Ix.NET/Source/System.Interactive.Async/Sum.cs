@@ -184,7 +184,7 @@ namespace System.Linq
         public static Task<int> Sum(this IAsyncEnumerable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -192,7 +192,7 @@ namespace System.Linq
         public static Task<long> Sum(this IAsyncEnumerable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -200,7 +200,7 @@ namespace System.Linq
         public static Task<double> Sum(this IAsyncEnumerable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -208,7 +208,7 @@ namespace System.Linq
         public static Task<float> Sum(this IAsyncEnumerable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -216,7 +216,7 @@ namespace System.Linq
         public static Task<decimal> Sum(this IAsyncEnumerable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -224,7 +224,7 @@ namespace System.Linq
         public static Task<int?> Sum(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -232,7 +232,7 @@ namespace System.Linq
         public static Task<long?> Sum(this IAsyncEnumerable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -240,7 +240,7 @@ namespace System.Linq
         public static Task<double?> Sum(this IAsyncEnumerable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -248,7 +248,7 @@ namespace System.Linq
         public static Task<float?> Sum(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -256,7 +256,7 @@ namespace System.Linq
         public static Task<decimal?> Sum(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Sum(source, CancellationToken.None);
         }
@@ -264,9 +264,9 @@ namespace System.Linq
         public static Task<int> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -274,9 +274,9 @@ namespace System.Linq
         public static Task<long> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -284,9 +284,9 @@ namespace System.Linq
         public static Task<double> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -294,9 +294,9 @@ namespace System.Linq
         public static Task<float> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -304,9 +304,9 @@ namespace System.Linq
         public static Task<decimal> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -314,9 +314,9 @@ namespace System.Linq
         public static Task<int?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -324,9 +324,9 @@ namespace System.Linq
         public static Task<long?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -334,9 +334,9 @@ namespace System.Linq
         public static Task<double?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -344,9 +344,9 @@ namespace System.Linq
         public static Task<float?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }
@@ -354,9 +354,9 @@ namespace System.Linq
         public static Task<decimal?> Sum<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Sum(source, selector, CancellationToken.None);
         }

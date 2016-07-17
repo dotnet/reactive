@@ -25,7 +25,7 @@ namespace System.Linq
         public static Task<int> Max(this IAsyncEnumerable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -33,7 +33,7 @@ namespace System.Linq
         public static Task<long> Max(this IAsyncEnumerable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -41,7 +41,7 @@ namespace System.Linq
         public static Task<double> Max(this IAsyncEnumerable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -49,7 +49,7 @@ namespace System.Linq
         public static Task<float> Max(this IAsyncEnumerable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -269,7 +269,7 @@ namespace System.Linq
         public static Task<decimal> Max(this IAsyncEnumerable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -277,7 +277,7 @@ namespace System.Linq
         public static Task<int?> Max(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -285,7 +285,7 @@ namespace System.Linq
         public static Task<long?> Max(this IAsyncEnumerable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -293,7 +293,7 @@ namespace System.Linq
         public static Task<double?> Max(this IAsyncEnumerable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -301,7 +301,7 @@ namespace System.Linq
         public static Task<float?> Max(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -309,7 +309,7 @@ namespace System.Linq
         public static Task<decimal?> Max(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -317,7 +317,7 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Max(source, CancellationToken.None);
         }
@@ -325,9 +325,9 @@ namespace System.Linq
         public static Task<int> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -335,9 +335,9 @@ namespace System.Linq
         public static Task<long> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -345,9 +345,9 @@ namespace System.Linq
         public static Task<double> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -355,9 +355,9 @@ namespace System.Linq
         public static Task<float> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -365,9 +365,9 @@ namespace System.Linq
         public static Task<decimal> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -375,9 +375,9 @@ namespace System.Linq
         public static Task<int?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -385,9 +385,9 @@ namespace System.Linq
         public static Task<long?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -395,9 +395,9 @@ namespace System.Linq
         public static Task<double?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -405,9 +405,9 @@ namespace System.Linq
         public static Task<float?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -415,9 +415,9 @@ namespace System.Linq
         public static Task<decimal?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -425,9 +425,9 @@ namespace System.Linq
         public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Max(source, selector, CancellationToken.None);
         }
@@ -436,9 +436,9 @@ namespace System.Linq
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Max(comparer, CancellationToken.None);
         }
@@ -446,9 +446,9 @@ namespace System.Linq
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.MaxBy(keySelector, CancellationToken.None);
         }
@@ -456,11 +456,11 @@ namespace System.Linq
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.MaxBy(keySelector, comparer, CancellationToken.None);
         }

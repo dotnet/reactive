@@ -32,7 +32,7 @@ namespace System.Linq
         public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return source.IsEmpty(CancellationToken.None);
         }

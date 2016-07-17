@@ -34,7 +34,7 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Count(source, CancellationToken.None);
         }
@@ -42,9 +42,9 @@ namespace System.Linq
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return Count(source, predicate, CancellationToken.None);
         }
@@ -71,7 +71,7 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return LongCount(source, CancellationToken.None);
         }
@@ -79,9 +79,9 @@ namespace System.Linq
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return LongCount(source, predicate, CancellationToken.None);
         }

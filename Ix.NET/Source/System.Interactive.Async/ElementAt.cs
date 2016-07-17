@@ -26,7 +26,7 @@ namespace System.Linq
         public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return ElementAt(source, index, CancellationToken.None);
         }
@@ -44,7 +44,7 @@ namespace System.Linq
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return ElementAtOrDefault(source, index, CancellationToken.None);
         }

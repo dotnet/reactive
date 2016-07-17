@@ -15,9 +15,9 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return Contains(source, value, comparer, CancellationToken.None);
         }
@@ -25,7 +25,7 @@ namespace System.Linq
         public static Task<bool> Contains<TSource>(this IAsyncEnumerable<TSource> source, TSource value)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Contains(source, value, CancellationToken.None);
         }

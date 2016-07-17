@@ -15,9 +15,9 @@ namespace System.Linq
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return All(source, predicate, CancellationToken.None);
         }
@@ -35,9 +35,9 @@ namespace System.Linq
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return Any(source, predicate, CancellationToken.None);
         }
@@ -45,7 +45,7 @@ namespace System.Linq
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Any(source, CancellationToken.None);
         }

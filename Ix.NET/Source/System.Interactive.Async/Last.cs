@@ -15,7 +15,7 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Last(source, CancellationToken.None);
         }
@@ -23,9 +23,9 @@ namespace System.Linq
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return Last(source, predicate, CancellationToken.None);
         }
@@ -52,7 +52,7 @@ namespace System.Linq
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return LastOrDefault(source, CancellationToken.None);
         }
@@ -60,9 +60,9 @@ namespace System.Linq
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
 
             return LastOrDefault(source, predicate, CancellationToken.None);
         }

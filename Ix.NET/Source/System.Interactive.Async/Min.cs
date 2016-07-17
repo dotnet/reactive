@@ -15,9 +15,9 @@ namespace System.Linq
         public static Task<decimal?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -25,9 +25,9 @@ namespace System.Linq
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -46,7 +46,7 @@ namespace System.Linq
         public static Task<int> Min(this IAsyncEnumerable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -54,7 +54,7 @@ namespace System.Linq
         public static Task<long> Min(this IAsyncEnumerable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -62,7 +62,7 @@ namespace System.Linq
         public static Task<double> Min(this IAsyncEnumerable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -70,7 +70,7 @@ namespace System.Linq
         public static Task<float> Min(this IAsyncEnumerable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -78,7 +78,7 @@ namespace System.Linq
         public static Task<decimal> Min(this IAsyncEnumerable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -86,7 +86,7 @@ namespace System.Linq
         public static Task<int?> Min(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -94,7 +94,7 @@ namespace System.Linq
         public static Task<long?> Min(this IAsyncEnumerable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -102,7 +102,7 @@ namespace System.Linq
         public static Task<double?> Min(this IAsyncEnumerable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -110,7 +110,7 @@ namespace System.Linq
         public static Task<float?> Min(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -118,7 +118,7 @@ namespace System.Linq
         public static Task<decimal?> Min(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -126,7 +126,7 @@ namespace System.Linq
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             return Min(source, CancellationToken.None);
         }
@@ -134,9 +134,9 @@ namespace System.Linq
         public static Task<int> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -144,9 +144,9 @@ namespace System.Linq
         public static Task<long> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -154,9 +154,9 @@ namespace System.Linq
         public static Task<double> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -164,9 +164,9 @@ namespace System.Linq
         public static Task<float> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -174,9 +174,9 @@ namespace System.Linq
         public static Task<decimal> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -184,9 +184,9 @@ namespace System.Linq
         public static Task<int?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -194,9 +194,9 @@ namespace System.Linq
         public static Task<long?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -204,9 +204,9 @@ namespace System.Linq
         public static Task<double?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -404,9 +404,9 @@ namespace System.Linq
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.Min(comparer, CancellationToken.None);
         }
@@ -437,9 +437,9 @@ namespace System.Linq
         public static Task<float?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
 
             return Min(source, selector, CancellationToken.None);
         }
@@ -447,9 +447,9 @@ namespace System.Linq
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
 
             return source.MinBy(keySelector, CancellationToken.None);
         }
@@ -457,11 +457,11 @@ namespace System.Linq
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
 
             return source.MinBy(keySelector, comparer, CancellationToken.None);
         }

@@ -15,9 +15,9 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             source.ForEachAsync(action)
                   .Wait();
@@ -26,9 +26,9 @@ namespace System.Linq
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             source.ForEachAsync(action)
                   .Wait();
@@ -60,9 +60,9 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> action)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return ForEachAsync(source, action, CancellationToken.None);
         }
@@ -70,9 +70,9 @@ namespace System.Linq
         public static Task ForEachAsync<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             return ForEachAsync(source, action, CancellationToken.None);
         }
