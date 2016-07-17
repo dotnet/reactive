@@ -21,50 +21,51 @@ namespace System.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return CreateEnumerable(() =>
-            {
-                var e = source.GetEnumerator();
-
-                var cts = new CancellationTokenDisposable();
-                var a = new AssignableDisposable
+            return CreateEnumerable(
+                () =>
                 {
-                    Disposable = e
-                };
-                var d = Disposable.Create(cts, a);
-                var done = false;
+                    var e = source.GetEnumerator();
 
-                var f = default(Func<CancellationToken, Task<bool>>);
-                f = async ct =>
-                {
-                    if (!done)
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable
                     {
-                        try
+                        Disposable = e
+                    };
+                    var d = Disposable.Create(cts, a);
+                    var done = false;
+
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
                         {
+                            if (!done)
+                            {
+                                try
+                                {
+                                    return await e.MoveNext(ct)
+                                                  .ConfigureAwait(false);
+                                }
+                                catch (TException ex)
+                                {
+                                    var err = handler(ex)
+                                        .GetEnumerator();
+                                    e = err;
+                                    a.Disposable = e;
+                                    done = true;
+                                    return await f(ct)
+                                               .ConfigureAwait(false);
+                                }
+                            }
                             return await e.MoveNext(ct)
                                           .ConfigureAwait(false);
-                        }
-                        catch (TException ex)
-                        {
-                            var err = handler(ex)
-                                .GetEnumerator();
-                            e = err;
-                            a.Disposable = e;
-                            done = true;
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        }
-                    }
-                    return await e.MoveNext(ct)
-                                  .ConfigureAwait(false);
-                };
+                        };
 
-                return CreateEnumerator(
-                    f,
-                    () => e.Current,
-                    d.Dispose,
-                    a
-                );
-            });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        a
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -90,64 +91,65 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return new[] { first, second }.Catch_();
+            return new[] {first, second}.Catch_();
         }
 
         private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return CreateEnumerable(() =>
-            {
-                var se = sources.GetEnumerator();
-                var e = default(IAsyncEnumerator<TSource>);
-
-                var cts = new CancellationTokenDisposable();
-                var a = new AssignableDisposable();
-                var d = Disposable.Create(cts, se, a);
-
-                var error = default(ExceptionDispatchInfo);
-
-                var f = default(Func<CancellationToken, Task<bool>>);
-                f = async ct =>
+            return CreateEnumerable(
+                () =>
                 {
-                    if (e == null)
-                    {
-                        if (se.MoveNext())
+                    var se = sources.GetEnumerator();
+                    var e = default(IAsyncEnumerator<TSource>);
+
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable();
+                    var d = Disposable.Create(cts, se, a);
+
+                    var error = default(ExceptionDispatchInfo);
+
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
                         {
-                            e = se.Current.GetEnumerator();
-                        }
-                        else
-                        {
-                            error?.Throw();
-                            return false;
-                        }
+                            if (e == null)
+                            {
+                                if (se.MoveNext())
+                                {
+                                    e = se.Current.GetEnumerator();
+                                }
+                                else
+                                {
+                                    error?.Throw();
+                                    return false;
+                                }
 
-                        error = null;
+                                error = null;
 
-                        a.Disposable = e;
-                    }
+                                a.Disposable = e;
+                            }
 
-                    try
-                    {
-                        return await e.MoveNext(ct)
-                                      .ConfigureAwait(false);
-                    }
-                    catch (Exception exception)
-                    {
-                        e.Dispose();
-                        e = null;
-                        error = ExceptionDispatchInfo.Capture(exception);
-                        return await f(ct)
-                                   .ConfigureAwait(false);
-                    }
-                };
+                            try
+                            {
+                                return await e.MoveNext(ct)
+                                              .ConfigureAwait(false);
+                            }
+                            catch (Exception exception)
+                            {
+                                e.Dispose();
+                                e = null;
+                                error = ExceptionDispatchInfo.Capture(exception);
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                        };
 
-                return CreateEnumerator(
-                    f,
-                    () => e.Current,
-                    d.Dispose,
-                    a
-                );
-            });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        a
+                    );
+                });
         }
     }
 }

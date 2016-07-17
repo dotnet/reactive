@@ -18,54 +18,55 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw new ArgumentNullException(nameof(enumerableFactory));
 
-            return CreateEnumerable(() =>
-                          {
-                              var resource = resourceFactory();
-                              var e = default(IAsyncEnumerator<TSource>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var resource = resourceFactory();
+                    var e = default(IAsyncEnumerator<TSource>);
 
-                              try
-                              {
-                                  e = enumerableFactory(resource)
-                                      .GetEnumerator();
-                              }
-                              catch (Exception)
-                              {
-                                  resource.Dispose();
-                                  throw;
-                              }
+                    try
+                    {
+                        e = enumerableFactory(resource)
+                            .GetEnumerator();
+                    }
+                    catch (Exception)
+                    {
+                        resource.Dispose();
+                        throw;
+                    }
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, resource, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, resource, e);
 
-                              var current = default(TSource);
+                    var current = default(TSource);
 
-                              return CreateEnumerator(
-                                  async ct =>
-                                  {
-                                      bool res;
-                                      try
-                                      {
-                                          res = await e.MoveNext(cts.Token)
-                                                       .ConfigureAwait(false);
-                                      }
-                                      catch (Exception)
-                                      {
-                                          d.Dispose();
-                                          throw;
-                                      }
-                                      if (res)
-                                      {
-                                          current = e.Current;
-                                          return true;
-                                      }
-                                      d.Dispose();
-                                      return false;
-                                  },
-                                  () => current,
-                                  d.Dispose,
-                                  null
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            bool res;
+                            try
+                            {
+                                res = await e.MoveNext(cts.Token)
+                                             .ConfigureAwait(false);
+                            }
+                            catch (Exception)
+                            {
+                                d.Dispose();
+                                throw;
+                            }
+                            if (res)
+                            {
+                                current = e.Current;
+                                return true;
+                            }
+                            d.Dispose();
+                            return false;
+                        },
+                        () => current,
+                        d.Dispose,
+                        null
+                    );
+                });
         }
     }
 }

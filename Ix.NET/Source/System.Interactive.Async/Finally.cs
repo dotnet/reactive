@@ -18,21 +18,22 @@ namespace System.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var r = new Disposable(finallyAction);
-                              var d = Disposable.Create(cts, e, r);
+                    var cts = new CancellationTokenDisposable();
+                    var r = new Disposable(finallyAction);
+                    var d = Disposable.Create(cts, e, r);
 
-                              return CreateEnumerator(
-                                  ct => e.MoveNext(ct),
-                                  () => e.Current,
-                                  d.Dispose,
-                                  r
-                              );
-                          });
+                    return CreateEnumerator(
+                        ct => e.MoveNext(ct),
+                        () => e.Current,
+                        d.Dispose,
+                        r
+                    );
+                });
         }
     }
 }

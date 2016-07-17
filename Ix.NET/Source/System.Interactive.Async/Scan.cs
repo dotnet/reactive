@@ -19,39 +19,40 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var acc = seed;
-                              var current = default(TAccumulate);
+                    var acc = seed;
+                    var current = default(TAccumulate);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (!await e.MoveNext(ct)
-                                                  .ConfigureAwait(false))
-                                      {
-                                          return false;
-                                      }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (!await e.MoveNext(ct)
+                                        .ConfigureAwait(false))
+                            {
+                                return false;
+                            }
 
-                                      var item = e.Current;
-                                      acc = accumulator(acc, item);
+                            var item = e.Current;
+                            acc = accumulator(acc, item);
 
-                                      current = acc;
-                                      return true;
-                                  };
+                            current = acc;
+                            return true;
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> Scan<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
@@ -61,49 +62,50 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var hasSeed = false;
-                              var acc = default(TSource);
-                              var current = default(TSource);
+                    var hasSeed = false;
+                    var acc = default(TSource);
+                    var current = default(TSource);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (!await e.MoveNext(ct)
-                                                  .ConfigureAwait(false))
-                                      {
-                                          return false;
-                                      }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (!await e.MoveNext(ct)
+                                        .ConfigureAwait(false))
+                            {
+                                return false;
+                            }
 
-                                      var item = e.Current;
+                            var item = e.Current;
 
-                                      if (!hasSeed)
-                                      {
-                                          hasSeed = true;
-                                          acc = item;
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
+                            if (!hasSeed)
+                            {
+                                hasSeed = true;
+                                acc = item;
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
 
-                                      acc = accumulator(acc, item);
+                            acc = accumulator(acc, item);
 
-                                      current = acc;
-                                      return true;
-                                  };
+                            current = acc;
+                            return true;
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

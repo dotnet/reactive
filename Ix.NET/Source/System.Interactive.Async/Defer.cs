@@ -16,8 +16,9 @@ namespace System.Linq
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return CreateEnumerable(() => factory()
-                              .GetEnumerator());
+            return CreateEnumerable(
+                () => factory()
+                    .GetEnumerator());
         }
     }
 }

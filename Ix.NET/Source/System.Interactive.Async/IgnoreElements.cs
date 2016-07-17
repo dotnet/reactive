@@ -17,33 +17,34 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (!await e.MoveNext(ct)
-                                                  .ConfigureAwait(false))
-                                      {
-                                          return false;
-                                      }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (!await e.MoveNext(ct)
+                                        .ConfigureAwait(false))
+                            {
+                                return false;
+                            }
 
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return CreateEnumerator<TSource>(
-                                  f,
-                                  () => { throw new InvalidOperationException(); },
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator<TSource>(
+                        f,
+                        () => { throw new InvalidOperationException(); },
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

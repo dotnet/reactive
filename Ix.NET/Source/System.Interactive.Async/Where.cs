@@ -19,34 +19,35 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          if (predicate(e.Current))
-                                              return true;
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      return false;
-                                  };
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                if (predicate(e.Current))
+                                    return true;
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            return false;
+                        };
 
-                              return CreateEnumerator(
-                                  ct => f(cts.Token),
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        ct => f(cts.Token),
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -56,35 +57,36 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var index = 0;
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var index = 0;
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          if (predicate(e.Current, checked(index++)))
-                                              return true;
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      return false;
-                                  };
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                if (predicate(e.Current, checked(index++)))
+                                    return true;
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            return false;
+                        };
 
-                              return CreateEnumerator(
-                                  ct => f(cts.Token),
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        ct => f(cts.Token),
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

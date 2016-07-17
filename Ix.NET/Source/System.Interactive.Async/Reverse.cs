@@ -16,36 +16,38 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var stack = default(Stack<TSource>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var stack = default(Stack<TSource>);
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return CreateEnumerator(
-                                  async ct =>
-                                  {
-                                      if (stack == null)
-                                      {
-                                          stack = await CreateEnumerable(() => e)
-                                                      .Aggregate(new Stack<TSource>(), (s, x) =>
-                                                                                       {
-                                                                                           s.Push(x);
-                                                                                           return s;
-                                                                                       }, cts.Token)
-                                                      .ConfigureAwait(false);
-                                          return stack.Count > 0;
-                                      }
-                                      stack.Pop();
-                                      return stack.Count > 0;
-                                  },
-                                  () => stack.Peek(),
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (stack == null)
+                            {
+                                stack = await CreateEnumerable(
+                                                () => e)
+                                            .Aggregate(new Stack<TSource>(), (s, x) =>
+                                                                             {
+                                                                                 s.Push(x);
+                                                                                 return s;
+                                                                             }, cts.Token)
+                                            .ConfigureAwait(false);
+                                return stack.Count > 0;
+                            }
+                            stack.Pop();
+                            return stack.Count > 0;
+                        },
+                        () => stack.Peek(),
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

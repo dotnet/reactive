@@ -40,58 +40,59 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return CreateEnumerable(() =>
-                          {
-                              var se = sources.GetEnumerator();
-                              var e = default(IAsyncEnumerator<TSource>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var se = sources.GetEnumerator();
+                    var e = default(IAsyncEnumerator<TSource>);
 
-                              var cts = new CancellationTokenDisposable();
-                              var a = new AssignableDisposable();
-                              var d = Disposable.Create(cts, se, a);
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable();
+                    var d = Disposable.Create(cts, se, a);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (e == null)
-                                      {
-                                          var b = false;
-                                          b = se.MoveNext();
-                                          if (b)
-                                              e = se.Current.GetEnumerator();
-                                          else
-                                          {
-                                              return false;
-                                          }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (e == null)
+                            {
+                                var b = false;
+                                b = se.MoveNext();
+                                if (b)
+                                    e = se.Current.GetEnumerator();
+                                else
+                                {
+                                    return false;
+                                }
 
-                                          a.Disposable = e;
-                                      }
+                                a.Disposable = e;
+                            }
 
-                                      try
-                                      {
-                                          if (await e.MoveNext(ct)
-                                                     .ConfigureAwait(false))
-                                          {
-                                              return true;
-                                          }
-                                      }
-                                      catch
-                                      {
-                                          // ignore
-                                      }
+                            try
+                            {
+                                if (await e.MoveNext(ct)
+                                           .ConfigureAwait(false))
+                                {
+                                    return true;
+                                }
+                            }
+                            catch
+                            {
+                                // ignore
+                            }
 
-                                      e.Dispose();
-                                      e = null;
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            e.Dispose();
+                            e = null;
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => e.Current,
-                                  d.Dispose,
-                                  a
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        a
+                    );
+                });
         }
     }
 }

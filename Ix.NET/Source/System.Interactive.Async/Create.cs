@@ -25,27 +25,28 @@ namespace System.Linq
         private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current,
                                                                Action dispose, IDisposable enumerator)
         {
-            return CreateEnumerator(async ct =>
-                                    {
-                                        using (ct.Register(dispose))
-                                        {
-                                            try
-                                            {
-                                                var result = await moveNext(ct)
-                                                                 .ConfigureAwait(false);
-                                                if (!result)
-                                                {
-                                                    enumerator?.Dispose();
-                                                }
-                                                return result;
-                                            }
-                                            catch
-                                            {
-                                                enumerator?.Dispose();
-                                                throw;
-                                            }
-                                        }
-                                    }, current, dispose);
+            return CreateEnumerator(
+                async ct =>
+                {
+                    using (ct.Register(dispose))
+                    {
+                        try
+                        {
+                            var result = await moveNext(ct)
+                                             .ConfigureAwait(false);
+                            if (!result)
+                            {
+                                enumerator?.Dispose();
+                            }
+                            return result;
+                        }
+                        catch
+                        {
+                            enumerator?.Dispose();
+                            throw;
+                        }
+                    }
+                }, current, dispose);
         }
 
         private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
@@ -56,11 +57,12 @@ namespace System.Linq
                 {
                     var tcs = new TaskCompletionSource<bool>();
 
-                    var stop = new Action(() =>
-                                          {
-                                              self.Dispose();
-                                              tcs.TrySetCanceled();
-                                          });
+                    var stop = new Action(
+                        () =>
+                        {
+                            self.Dispose();
+                            tcs.TrySetCanceled();
+                        });
 
                     using (ct.Register(stop))
                     {
@@ -111,10 +113,7 @@ namespace System.Linq
                 return _moveNext(cancellationToken);
             }
 
-            public T Current
-            {
-                get { return _current(); }
-            }
+            public T Current => _current();
 
             public void Dispose()
             {

@@ -23,16 +23,16 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
         {
-            return CreateEnumerable(() =>
-                          {
-                              return CreateEnumerator(
-                                  ct => TaskExt.True,
-                                  () => element,
-                                  () => { }
-                              );
-                          });
+            return CreateEnumerable(
+                () =>
+                {
+                    return CreateEnumerator(
+                        ct => TaskExt.True,
+                        () => element,
+                        () => { }
+                    );
+                });
         }
-
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
@@ -41,49 +41,50 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = default(IAsyncEnumerator<TSource>);
-                              var a = new AssignableDisposable();
-                              var n = count;
-                              var current = default(TSource);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = default(IAsyncEnumerator<TSource>);
+                    var a = new AssignableDisposable();
+                    var n = count;
+                    var current = default(TSource);
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, a);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, a);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (e == null)
-                                      {
-                                          if (n-- == 0)
-                                          {
-                                              return false;
-                                          }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (e == null)
+                            {
+                                if (n-- == 0)
+                                {
+                                    return false;
+                                }
 
-                                          e = source.GetEnumerator();
+                                e = source.GetEnumerator();
 
-                                          a.Disposable = e;
-                                      }
+                                a.Disposable = e;
+                            }
 
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          current = e.Current;
-                                          return true;
-                                      }
-                                      e = null;
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                current = e.Current;
+                                return true;
+                            }
+                            e = null;
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
@@ -91,43 +92,44 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e = default(IAsyncEnumerator<TSource>);
-                              var a = new AssignableDisposable();
-                              var current = default(TSource);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = default(IAsyncEnumerator<TSource>);
+                    var a = new AssignableDisposable();
+                    var current = default(TSource);
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, a);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, a);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (e == null)
-                                      {
-                                          e = source.GetEnumerator();
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (e == null)
+                            {
+                                e = source.GetEnumerator();
 
-                                          a.Disposable = e;
-                                      }
+                                a.Disposable = e;
+                            }
 
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          current = e.Current;
-                                          return true;
-                                      }
-                                      e = null;
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                current = e.Current;
+                                return true;
+                            }
+                            e = null;
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

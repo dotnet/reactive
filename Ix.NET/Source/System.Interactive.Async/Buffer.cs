@@ -1,6 +1,6 @@
-﻿// // Licensed to the .NET Foundation under one or more agreements.
-// // The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// // See the LICENSE file in the project root for more information. 
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
 
 using System;
 using System.Collections.Generic;
@@ -36,66 +36,67 @@ namespace System.Linq
 
         private static IAsyncEnumerable<IList<TSource>> Buffer_<TSource>(this IAsyncEnumerable<TSource> source, int count, int skip)
         {
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var buffers = new Queue<IList<TSource>>();
+                    var buffers = new Queue<IList<TSource>>();
 
-                              var i = 0;
+                    var i = 0;
 
-                              var current = default(IList<TSource>);
-                              var stopped = false;
+                    var current = default(IList<TSource>);
+                    var stopped = false;
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (!stopped)
-                                      {
-                                          if (await e.MoveNext(ct)
-                                                     .ConfigureAwait(false))
-                                          {
-                                              var item = e.Current;
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (!stopped)
+                            {
+                                if (await e.MoveNext(ct)
+                                           .ConfigureAwait(false))
+                                {
+                                    var item = e.Current;
 
-                                              if (i++%skip == 0)
-                                                  buffers.Enqueue(new List<TSource>(count));
+                                    if (i++%skip == 0)
+                                        buffers.Enqueue(new List<TSource>(count));
 
-                                              foreach (var buffer in buffers)
-                                                  buffer.Add(item);
+                                    foreach (var buffer in buffers)
+                                        buffer.Add(item);
 
-                                              if (buffers.Count > 0 && buffers.Peek()
-                                                                              .Count == count)
-                                              {
-                                                  current = buffers.Dequeue();
-                                                  return true;
-                                              }
-                                              return await f(ct)
-                                                         .ConfigureAwait(false);
-                                          }
-                                          stopped = true;
-                                          e.Dispose();
+                                    if (buffers.Count > 0 && buffers.Peek()
+                                                                    .Count == count)
+                                    {
+                                        current = buffers.Dequeue();
+                                        return true;
+                                    }
+                                    return await f(ct)
+                                               .ConfigureAwait(false);
+                                }
+                                stopped = true;
+                                e.Dispose();
 
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      if (buffers.Count > 0)
-                                      {
-                                          current = buffers.Dequeue();
-                                          return true;
-                                      }
-                                      return false;
-                                  };
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            if (buffers.Count > 0)
+                            {
+                                current = buffers.Dequeue();
+                                return true;
+                            }
+                            return false;
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

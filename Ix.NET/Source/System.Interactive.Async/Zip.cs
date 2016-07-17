@@ -20,28 +20,30 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return CreateEnumerable(() =>
-                          {
-                              var e1 = first.GetEnumerator();
-                              var e2 = second.GetEnumerator();
-                              var current = default(TResult);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e1 = first.GetEnumerator();
+                    var e2 = second.GetEnumerator();
+                    var current = default(TResult);
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e1, e2);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e1, e2);
 
-                              return CreateEnumerator(
-                                  ct => e1.MoveNext(cts.Token)
-                                          .Zip(e2.MoveNext(cts.Token), (f, s) =>
-                                                                       {
-                                                                           var result = f && s;
-                                                                           if (result)
-                                                                               current = selector(e1.Current, e2.Current);
-                                                                           return result;
-                                                                       }),
-                                  () => current,
-                                  d.Dispose
-                              );
-                          });
+                    return CreateEnumerator(
+                        ct => e1.MoveNext(cts.Token)
+                                .Zip(e2.MoveNext(cts.Token),
+                                     (f, s) =>
+                                     {
+                                         var result = f && s;
+                                         if (result)
+                                             current = selector(e1.Current, e2.Current);
+                                         return result;
+                                     }),
+                        () => current,
+                        d.Dispose
+                    );
+                });
         }
     }
 }

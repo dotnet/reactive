@@ -16,62 +16,63 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(() =>
-                          {
-                              var observer = new ToAsyncEnumerableObserver<TSource>();
+            return CreateEnumerable(
+                () =>
+                {
+                    var observer = new ToAsyncEnumerableObserver<TSource>();
 
-                              var subscription = source.Subscribe(observer);
+                    var subscription = source.Subscribe(observer);
 
-                              return CreateEnumerator(
-                                  (ct, tcs) =>
-                                  {
-                                      var hasValue = false;
-                                      var hasCompleted = false;
-                                      var error = default(Exception);
+                    return CreateEnumerator(
+                        (ct, tcs) =>
+                        {
+                            var hasValue = false;
+                            var hasCompleted = false;
+                            var error = default(Exception);
 
-                                      lock (observer.SyncRoot)
-                                      {
-                                          if (observer.Values.Count > 0)
-                                          {
-                                              hasValue = true;
-                                              observer.Current = observer.Values.Dequeue();
-                                          }
-                                          else if (observer.HasCompleted)
-                                          {
-                                              hasCompleted = true;
-                                          }
-                                          else if (observer.Error != null)
-                                          {
-                                              error = observer.Error;
-                                          }
-                                          else
-                                          {
-                                              observer.TaskCompletionSource = tcs;
-                                          }
-                                      }
+                            lock (observer.SyncRoot)
+                            {
+                                if (observer.Values.Count > 0)
+                                {
+                                    hasValue = true;
+                                    observer.Current = observer.Values.Dequeue();
+                                }
+                                else if (observer.HasCompleted)
+                                {
+                                    hasCompleted = true;
+                                }
+                                else if (observer.Error != null)
+                                {
+                                    error = observer.Error;
+                                }
+                                else
+                                {
+                                    observer.TaskCompletionSource = tcs;
+                                }
+                            }
 
-                                      if (hasValue)
-                                      {
-                                          tcs.TrySetResult(true);
-                                      }
-                                      else if (hasCompleted)
-                                      {
-                                          tcs.TrySetResult(false);
-                                      }
-                                      else if (error != null)
-                                      {
-                                          tcs.TrySetException(error);
-                                      }
+                            if (hasValue)
+                            {
+                                tcs.TrySetResult(true);
+                            }
+                            else if (hasCompleted)
+                            {
+                                tcs.TrySetResult(false);
+                            }
+                            else if (error != null)
+                            {
+                                tcs.TrySetException(error);
+                            }
 
-                                      return tcs.Task;
-                                  },
-                                  () => observer.Current,
-                                  () =>
-                                  {
-                                      subscription.Dispose();
-                                      // Should we cancel in-flight operations somehow?
-                                  });
-                          });
+                            return tcs.Task;
+                        },
+                        () => observer.Current,
+                        () =>
+                        {
+                            subscription.Dispose();
+                            // Should we cancel in-flight operations somehow?
+                        });
+                });
         }
 
         public static IObservable<TSource> ToObservable<TSource>(this IAsyncEnumerable<TSource> source)

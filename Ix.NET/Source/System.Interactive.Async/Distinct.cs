@@ -102,55 +102,56 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DistinctUntilChanged_<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
-            return CreateEnumerable(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var currentKey = default(TKey);
-                              var hasCurrentKey = false;
-                              var current = default(TSource);
+                    var currentKey = default(TKey);
+                    var hasCurrentKey = false;
+                    var current = default(TSource);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          var item = e.Current;
-                                          var key = default(TKey);
-                                          var comparerEquals = false;
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                var item = e.Current;
+                                var key = default(TKey);
+                                var comparerEquals = false;
 
-                                          key = keySelector(item);
+                                key = keySelector(item);
 
-                                          if (hasCurrentKey)
-                                          {
-                                              comparerEquals = comparer.Equals(currentKey, key);
-                                          }
+                                if (hasCurrentKey)
+                                {
+                                    comparerEquals = comparer.Equals(currentKey, key);
+                                }
 
-                                          if (!hasCurrentKey || !comparerEquals)
-                                          {
-                                              hasCurrentKey = true;
-                                              currentKey = key;
+                                if (!hasCurrentKey || !comparerEquals)
+                                {
+                                    hasCurrentKey = true;
+                                    currentKey = key;
 
-                                              current = item;
-                                              return true;
-                                          }
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      return false;
-                                  };
+                                    current = item;
+                                    return true;
+                                }
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            return false;
+                        };
 
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

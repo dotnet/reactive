@@ -20,43 +20,44 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return CreateEnumerable(() =>
-                          {
-                              var i = initialState;
-                              var started = false;
-                              var current = default(TResult);
+            return CreateEnumerable(
+                () =>
+                {
+                    var i = initialState;
+                    var started = false;
+                    var current = default(TResult);
 
-                              return CreateEnumerator(
-                                  ct =>
-                                  {
-                                      var b = false;
-                                      try
-                                      {
-                                          if (started)
-                                              i = iterate(i);
+                    return CreateEnumerator(
+                        ct =>
+                        {
+                            var b = false;
+                            try
+                            {
+                                if (started)
+                                    i = iterate(i);
 
-                                          b = condition(i);
+                                b = condition(i);
 
-                                          if (b)
-                                              current = resultSelector(i);
-                                      }
-                                      catch (Exception ex)
-                                      {
-                                          return TaskExt.Throw<bool>(ex);
-                                      }
+                                if (b)
+                                    current = resultSelector(i);
+                            }
+                            catch (Exception ex)
+                            {
+                                return TaskExt.Throw<bool>(ex);
+                            }
 
-                                      if (!b)
-                                          return TaskExt.False;
+                            if (!b)
+                                return TaskExt.False;
 
-                                      if (!started)
-                                          started = true;
+                            if (!started)
+                                started = true;
 
-                                      return TaskExt.True;
-                                  },
-                                  () => current,
-                                  () => { }
-                              );
-                          });
+                            return TaskExt.True;
+                        },
+                        () => current,
+                        () => { }
+                    );
+                });
         }
     }
 }
