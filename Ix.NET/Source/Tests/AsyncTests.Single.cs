@@ -2323,16 +2323,29 @@ namespace Tests
         public void Scan_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(default(IAsyncEnumerable<int>), 3, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), 3, null));
-
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), 3, (Func<int, int, int>)null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), 3, (Func<int, int, CancellationToken, Task<int>>)null));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(default(IAsyncEnumerable<int>), (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), (Func<int, int, int>)null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Scan(AsyncEnumerable.Return(42), (Func<int, int, CancellationToken, Task<int>>)null));
         }
 
         [Fact]
         public void Scan1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => x + y);
+
+            var e = xs.GetEnumerator();
+            HasNext(e, 9);
+            HasNext(e, 11);
+            HasNext(e, 14);
+            NoNext(e);
+        }
+
+        [Fact]
+        public void Scan_Async1()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y, ct) => Task.FromResult(x + y));
 
             var e = xs.GetEnumerator();
             HasNext(e, 9);
@@ -2353,6 +2366,17 @@ namespace Tests
         }
 
         [Fact]
+        public void Scan_Async2()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y, ct) => Task.FromResult(x + y));
+
+            var e = xs.GetEnumerator();
+            HasNext(e, 3);
+            HasNext(e, 6);
+            NoNext(e);
+        }
+
+        [Fact]
         public void Scan3()
         {
             var ex = new Exception("Bang!");
@@ -2360,6 +2384,16 @@ namespace Tests
 
             var e = xs.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        [Fact]
+        public void Scan_Async3()
+        {
+            var ex = new Exception("Bang!");
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, async (x, y, ct) => { throw ex; });
+
+            var e = xs.GetEnumerator();
+            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -2371,6 +2405,17 @@ namespace Tests
             var e = xs.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
+
+        [Fact]
+        public void Scan_Async4()
+        {
+            var ex = new Exception("Bang!");
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(async (x, y, ct) => { throw ex; });
+
+            var e = xs.GetEnumerator();
+            AssertThrows<Exception>(() => e.MoveNext().Wait(), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
 
         [Fact]
         public void DistinctKey_Null()
