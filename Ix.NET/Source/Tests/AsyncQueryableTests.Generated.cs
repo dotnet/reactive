@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 #define DEBUG // for Debug.WriteLine
-#if !SILVERLIGHTM7 && !PORTABLE
 
 using System;
 using System.Collections.Generic;
@@ -3378,4 +3377,3 @@ namespace Tests
 
 	}
 }
-#endif

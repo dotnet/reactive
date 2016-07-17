@@ -1425,50 +1425,6 @@ namespace System.Linq
         }
 #pragma warning restore 1591
 
-#if NO_ZIP
-        /// <summary>
-        /// Merges two sequences by applying the specified selector function on index-based corresponding element pairs from both sequences.
-        /// </summary>
-        /// <typeparam name="TFirst">The type of the elements of the first input sequence.</typeparam>
-        /// <typeparam name="TSecond">The type of the elements of the second input sequence.</typeparam>
-        /// <typeparam name="TResult">The type of the elements of the result sequence.</typeparam>
-        /// <param name="first">The first sequence to merge.</param>
-        /// <param name="second">The second sequence to merge.</param>
-        /// <param name="resultSelector">Function to apply to each pair of elements from both sequences.</param>
-        /// <returns>Sequence consisting of the result of pairwise application of the selector function over pairs of elements from the source sequences.</returns>
-        public static IQueryable<TResult> Zip<TFirst, TSecond, TResult>(this IQueryable<TFirst> first, IEnumerable<TSecond> second, Expression<Func<TFirst, TSecond, TResult>> resultSelector)
-        {
-            if (first == null)
-                throw new ArgumentNullException("first");
-            if (second == null)
-                throw new ArgumentNullException("second");
-            if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
-
-            return first.Provider.CreateQuery<TResult>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => QueryableEx.Zip<TFirst, TSecond, TResult>(default(IQueryable<TFirst>), default(IEnumerable<TSecond>), default(Expression<Func<TFirst, TSecond, TResult>>))),
-#else
-                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TFirst), typeof(TSecond), typeof(TResult)),
-#endif
-                    first.Expression,
-                    GetSourceExpression(second),
-                    resultSelector
-                )
-            );
-        }
-
-#pragma warning disable 1591
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(IEnumerable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
-        {
-            return EnumerableEx.Zip(first, second, resultSelector);
-        }
-#pragma warning restore 1591
-#endif
-
         /// <summary>
         /// Hides the enumerable sequence object identity.
         /// </summary>
@@ -1662,7 +1618,6 @@ namespace System.Linq
         }
 #pragma warning restore 1591
 
-#if !NO_RXINTERFACES
         /// <summary>
         /// Lazily invokes observer methods for each value in the sequence, and upon successful or exceptional termination.
         /// </summary>
@@ -1698,7 +1653,6 @@ namespace System.Linq
             return EnumerableEx.Do(source, observer);
         }
 #pragma warning restore 1591
-#endif
 
         /// <summary>
         /// Generates a sequence of non-overlapping adjacent buffers over the source sequence.

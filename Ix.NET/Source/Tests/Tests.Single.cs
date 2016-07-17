@@ -139,10 +139,8 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, _ => { }, default(Action)));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(Action<int>), _ => { }));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, _ => { }, default(Action<Exception>)));
-#if !NO_RXINTERFACES
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(null, new MyObserver()));
             AssertThrows<ArgumentNullException>(() => EnumerableEx.Do<int>(new[] { 1 }, default(IObserver<int>)));
-#endif
         }
 
         [Fact]
@@ -172,7 +170,6 @@ namespace Tests
             Assert.True(ok);
         }
 
-#if !NO_RXINTERFACES
         [Fact]
         public void Do4()
         {
@@ -203,7 +200,6 @@ namespace Tests
                 Sum += value;
             }
         }
-#endif
 
         [Fact]
         public void Do5()
