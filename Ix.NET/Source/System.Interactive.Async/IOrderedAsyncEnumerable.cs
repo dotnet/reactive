@@ -6,11 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    public interface IOrderedAsyncEnumerable<
-#if !NO_VARIANCE
-out 
-#endif
-        TElement> : IAsyncEnumerable<TElement>
+    public interface IOrderedAsyncEnumerable<out TElement> : IAsyncEnumerable<TElement>
     {
         IOrderedAsyncEnumerable<TElement> CreateOrderedEnumerable<TKey>(Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending);
     }
