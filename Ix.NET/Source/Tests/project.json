@@ -19,10 +19,7 @@
     "define": [ "SIGNED" ],
     "copyToOutput": {
       "include": [ "xunit.runner.json" ]
-    },
-    "exclude": [
-      "App.cs"
-    ]
+    }
   },
 
   "dependencies": {
