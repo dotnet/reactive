@@ -35,7 +35,6 @@
     "net45": {
       "buildOptions": {
         "define": [
-          "HAS_AWAIT",
           "HAS_APTCA",
           "DESKTOPCLR",
           "DESKTOPCLR45"
@@ -45,7 +44,6 @@
     "netstandard1.0": {
       "buildOptions": {
         "define": [
-          "HAS_AWAIT",
           "CRIPPLED_REFLECTION",
           "PLIB"
         ]

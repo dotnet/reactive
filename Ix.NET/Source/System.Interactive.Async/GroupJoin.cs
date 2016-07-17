@@ -73,11 +73,7 @@ namespace System.Linq
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-#if HAS_AWAIT
                     return Task.FromResult(_enumerator.MoveNext());
-#else
-                    return TaskEx.FromResult(_enumerator.MoveNext());
-#endif
                 }
 
                 public T Current => _enumerator.Current;

@@ -43,7 +43,6 @@ namespace Tests
             Assert.True(hot);
         }
 
-#if HAS_AWAIT
         [Fact]
         public void CreateYield()
         {
@@ -105,7 +104,7 @@ namespace Tests
 
             AssertThrows<NotSupportedException>(() => xs.GetEnumerator().Reset());
         }
-#endif
+
 
         private static IEnumerator<int> MyEnumerator()
         {

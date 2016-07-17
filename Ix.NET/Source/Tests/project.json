@@ -37,11 +37,6 @@
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [ "dotnet", "dnxcore50", "portable-net45+win8" ],
-      "buildOptions": {
-        "define": [
-          "HAS_AWAIT"
-        ]
-      },
       "dependencies": {
         "Microsoft.NETCore.App": {
             "version": "1.0.0",
@@ -50,11 +45,6 @@
       }
     },
     "net461": {
-      "buildOptions": {
-        "define": [
-          "HAS_AWAIT"
-        ]
-      }
     }
   }
 }
