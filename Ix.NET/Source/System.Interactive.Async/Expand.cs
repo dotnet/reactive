@@ -19,7 +19,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = default(IAsyncEnumerator<TSource>);
 
@@ -64,7 +64,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,

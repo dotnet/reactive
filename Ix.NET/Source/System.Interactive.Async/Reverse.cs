@@ -16,7 +16,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var stack = default(Stack<TSource>);
@@ -24,12 +24,12 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (stack == null)
                                       {
-                                          stack = await Create(() => e)
+                                          stack = await CreateEnumerable(() => e)
                                                       .Aggregate(new Stack<TSource>(), (s, x) =>
                                                                                        {
                                                                                            s.Push(x);

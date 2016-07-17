@@ -20,7 +20,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e1 = first.GetEnumerator();
                               var e2 = second.GetEnumerator();
@@ -29,7 +29,7 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e1, e2);
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct => e1.MoveNext(cts.Token)
                                           .Zip(e2.MoveNext(cts.Token), (f, s) =>
                                                                        {

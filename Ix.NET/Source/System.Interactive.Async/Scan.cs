@@ -19,7 +19,7 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -45,7 +45,7 @@ namespace System.Linq
                                       return true;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
@@ -61,7 +61,7 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -97,7 +97,7 @@ namespace System.Linq
                                       return true;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,

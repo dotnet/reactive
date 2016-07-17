@@ -30,7 +30,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var ie = default(IAsyncEnumerator<TResult>);
@@ -70,7 +70,7 @@ namespace System.Linq
                                           return false;
                                       };
 
-                              return Create(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
+                              return CreateEnumerator(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
                                             () => ie.Current,
                                             d.Dispose,
                                             e
@@ -85,7 +85,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var ie = default(IAsyncEnumerator<TResult>);
@@ -127,7 +127,7 @@ namespace System.Linq
                                           return false;
                                       };
 
-                              return Create(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
+                              return CreateEnumerator(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
                                             () => ie.Current,
                                             d.Dispose,
                                             e

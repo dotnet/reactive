@@ -17,7 +17,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -37,7 +37,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create<TSource>(
+                              return CreateEnumerator<TSource>(
                                   f,
                                   () => { throw new InvalidOperationException(); },
                                   d.Dispose,

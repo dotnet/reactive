@@ -19,7 +19,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var n = count;
@@ -45,7 +45,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct => f(cts.Token),
                                   () => e.Current,
                                   d.Dispose,
@@ -61,7 +61,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -91,7 +91,7 @@ namespace System.Linq
                                       return false;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
@@ -107,7 +107,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var skipping = true;
@@ -135,7 +135,7 @@ namespace System.Linq
                                                     .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,
@@ -151,7 +151,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var skipping = true;
@@ -180,7 +180,7 @@ namespace System.Linq
                                                     .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,

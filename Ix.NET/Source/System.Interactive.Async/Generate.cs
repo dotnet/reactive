@@ -20,13 +20,13 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var i = initialState;
                               var started = false;
                               var current = default(TResult);
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct =>
                                   {
                                       var b = false;

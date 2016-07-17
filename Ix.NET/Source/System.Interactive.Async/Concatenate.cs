@@ -19,7 +19,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var switched = false;
                               var e = first.GetEnumerator();
@@ -52,7 +52,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,
@@ -79,7 +79,7 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> Concat_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var se = sources.GetEnumerator();
                               var e = default(IAsyncEnumerator<TSource>);
@@ -118,7 +118,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,

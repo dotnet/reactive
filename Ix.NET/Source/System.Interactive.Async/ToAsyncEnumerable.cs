@@ -15,11 +15,11 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
             {
                 var e = source.GetEnumerator();
 
-                return Create(
+                return CreateEnumerator(
                     ct => Task.Run(() =>
                     {
                         var res = false;
@@ -67,12 +67,12 @@ namespace System.Linq
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
             
-            return Create(() =>
+            return CreateEnumerable(() =>
             {
                 var called = 0;
 
                 var value = default(TSource);
-                return Create(
+                return CreateEnumerator(
                     async ct =>
                     {
                         if (Interlocked.CompareExchange(ref called, 1, 0) == 0)

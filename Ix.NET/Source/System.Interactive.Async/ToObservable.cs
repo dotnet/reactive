@@ -16,13 +16,13 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var observer = new ToAsyncEnumerableObserver<TSource>();
 
                               var subscription = source.Subscribe(observer);
 
-                              return Create(
+                              return CreateEnumerator(
                                   (ct, tcs) =>
                                   {
                                       var hasValue = false;

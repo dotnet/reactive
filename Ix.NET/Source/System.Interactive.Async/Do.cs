@@ -72,7 +72,7 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoHelper<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -110,7 +110,7 @@ namespace System.Linq
                                       }
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,

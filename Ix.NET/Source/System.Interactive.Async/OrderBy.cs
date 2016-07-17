@@ -22,11 +22,11 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return new OrderedAsyncEnumerable<TSource, TKey>(
-                Create(() =>
+                CreateEnumerable(() =>
                        {
                            var current = default(IEnumerable<TSource>);
 
-                           return Create(
+                           return CreateEnumerator(
                                async ct =>
                                {
                                    if (current == null)
@@ -152,7 +152,7 @@ namespace System.Linq
 
             private IAsyncEnumerable<IEnumerable<T>> Classes()
             {
-                return Create(() =>
+                return CreateEnumerable(() =>
                               {
                                   var e = equivalenceClasses.GetEnumerator();
                                   var list = new List<IEnumerable<T>>();
@@ -182,7 +182,7 @@ namespace System.Linq
                                           return e1.MoveNext();
                                       };
 
-                                  return Create(
+                                  return CreateEnumerator(
                                       async ct =>
                                       {
                                           if (e1 != null)

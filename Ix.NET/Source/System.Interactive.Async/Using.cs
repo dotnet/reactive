@@ -18,7 +18,7 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw new ArgumentNullException(nameof(enumerableFactory));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var resource = resourceFactory();
                               var e = default(IAsyncEnumerator<TSource>);
@@ -39,7 +39,7 @@ namespace System.Linq
 
                               var current = default(TSource);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       bool res;

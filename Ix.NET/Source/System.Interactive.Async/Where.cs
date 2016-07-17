@@ -19,7 +19,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -40,7 +40,7 @@ namespace System.Linq
                                       return false;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct => f(cts.Token),
                                   () => e.Current,
                                   d.Dispose,
@@ -56,7 +56,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var index = 0;
@@ -78,7 +78,7 @@ namespace System.Linq
                                       return false;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct => f(cts.Token),
                                   () => e.Current,
                                   d.Dispose,

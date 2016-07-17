@@ -21,7 +21,7 @@ namespace System.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
             {
                 var e = source.GetEnumerator();
 
@@ -58,7 +58,7 @@ namespace System.Linq
                                   .ConfigureAwait(false);
                 };
 
-                return Create(
+                return CreateEnumerator(
                     f,
                     () => e.Current,
                     d.Dispose,
@@ -95,7 +95,7 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return Create(() =>
+            return CreateEnumerable(() =>
             {
                 var se = sources.GetEnumerator();
                 var e = default(IAsyncEnumerator<TSource>);
@@ -141,7 +141,7 @@ namespace System.Linq
                     }
                 };
 
-                return Create(
+                return CreateEnumerator(
                     f,
                     () => e.Current,
                     d.Dispose,

@@ -31,7 +31,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = first.GetEnumerator();
 
@@ -57,7 +57,7 @@ namespace System.Linq
                                       return false;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,

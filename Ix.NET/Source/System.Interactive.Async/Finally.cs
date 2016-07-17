@@ -18,7 +18,7 @@ namespace System.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -26,7 +26,7 @@ namespace System.Linq
                               var r = new Disposable(finallyAction);
                               var d = Disposable.Create(cts, e, r);
 
-                              return Create(
+                              return CreateEnumerator(
                                   ct => e.MoveNext(ct),
                                   () => e.Current,
                                   d.Dispose,

@@ -22,7 +22,7 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TValue> Empty<TValue>()
         {
-            return Create(() => Create<TValue>(
+            return CreateEnumerable(() => CreateEnumerator<TValue>(
                               ct => TaskExt.False,
                               () => { throw new InvalidOperationException(); },
                               () => { })
@@ -47,7 +47,7 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TValue> Never<TValue>()
         {
-            return Create(() => Create<TValue>(
+            return CreateEnumerable(() => CreateEnumerator<TValue>(
                               (ct, tcs) => tcs.Task,
                               () => { throw new InvalidOperationException(); },
                               () => { })
@@ -65,7 +65,7 @@ namespace System.Linq
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            return Create(() => Create<TValue>(
+            return CreateEnumerable(() => CreateEnumerator<TValue>(
                               ct => TaskExt.Throw<bool>(exception),
                               () => { throw new InvalidOperationException(); },
                               () => { })

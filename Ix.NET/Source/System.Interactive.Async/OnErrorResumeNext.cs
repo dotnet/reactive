@@ -40,7 +40,7 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var se = sources.GetEnumerator();
                               var e = default(IAsyncEnumerator<TSource>);
@@ -85,7 +85,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => e.Current,
                                   d.Dispose,

@@ -19,7 +19,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var n = count;
@@ -27,7 +27,7 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (n == 0)
@@ -57,7 +57,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
@@ -101,7 +101,7 @@ namespace System.Linq
                                       return false;
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
@@ -117,14 +117,14 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
 
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (await e.MoveNext(cts.Token)
@@ -148,7 +148,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var index = 0;
@@ -156,7 +156,7 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (await e.MoveNext(cts.Token)

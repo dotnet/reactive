@@ -18,7 +18,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var current = default(TResult);
@@ -26,7 +26,7 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (await e.MoveNext(cts.Token)
@@ -51,7 +51,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = source.GetEnumerator();
                               var current = default(TResult);
@@ -60,7 +60,7 @@ namespace System.Linq
                               var cts = new CancellationTokenDisposable();
                               var d = Disposable.Create(cts, e);
 
-                              return Create(
+                              return CreateEnumerator(
                                   async ct =>
                                   {
                                       if (await e.MoveNext(cts.Token)

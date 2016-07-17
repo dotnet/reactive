@@ -23,9 +23,9 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
         {
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
-                              return Create(
+                              return CreateEnumerator(
                                   ct => TaskExt.True,
                                   () => element,
                                   () => { }
@@ -41,7 +41,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = default(IAsyncEnumerator<TSource>);
                               var a = new AssignableDisposable();
@@ -77,7 +77,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
@@ -91,7 +91,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var e = default(IAsyncEnumerator<TSource>);
                               var a = new AssignableDisposable();
@@ -121,7 +121,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
