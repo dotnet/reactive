@@ -511,7 +511,7 @@ namespace ReactiveTests.Tests
             m.Dispose();
             Assert.True(m.IsDisposed);
             Assert.True(disp);
-            //Assert.Null(m.Disposable); // BREAKING CHANGE v2 > v1.x - Undefined behavior after disposal.
+            Assert.Null(m.Disposable);   // At v1.1 Behaviour after disposal was undefined. v3 can now enforce the breaking change behavior from 1.1->2.0
         }
 
         [Fact]
