@@ -63,7 +63,7 @@ namespace Tests
                     .Select(m => GetSignature(m, true))
                     .OrderBy(x => x).ToList();
 
-                if (!(group.Name.Equals("CreateEnumerable") || group.Name.Equals("CreateEnumerator")))
+                if (!group.Name.Equals("Create"))
                     Assert.True(oss.SequenceEqual(qss), "Mismatch between QueryableEx and EnumerableEx for " + group.Name);
             }
         }
