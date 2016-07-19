@@ -178,17 +178,14 @@ namespace Tests
         }
 
         [Fact]
-        public void CanCancelMoveNextOnBlockingToAsync()
+        public void CanCancelMoveNext()
         {
-            var evt = new ManualResetEvent(false);
-            var blockingMoveNextStarted = new ManualResetEvent(false);
-            var xs = Blocking(evt, blockingMoveNextStarted).ToAsyncEnumerable();
+            var xs = new CancellationTestEnumerable().Select(x => x).Where(x => true);
 
             var e = xs.GetEnumerator();
             var cts = new CancellationTokenSource();
             var t = e.MoveNext(cts.Token);
 
-            blockingMoveNextStarted.WaitOne();
             cts.Cancel();
 
             try
@@ -199,6 +196,55 @@ namespace Tests
             catch
             {
                 Assert.True(t.IsCanceled);
+            }
+        }
+
+        /// <summary>
+        /// Waits WaitTimeoutMs or until cancellation is requested. If cancellation was not requested, MoveNext returns true.
+        /// </summary>
+        private sealed class CancellationTestEnumerable : IAsyncEnumerable<object>
+        {
+            public IAsyncEnumerator<object> GetEnumerator() => new TestEnumerator();
+
+            private sealed class TestEnumerator : IAsyncEnumerator<object>
+            {
+                public void Dispose()
+                {
+                }
+                
+                public object Current { get; }
+                
+                public async Task<bool> MoveNext(CancellationToken cancellationToken)
+                {
+                    await Task.Delay(WaitTimeoutMs, cancellationToken);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return true;
+                }
+            }
+        }
+
+        [Fact]
+        public void ToAsyncEnumeratorCannotCancelOnceRunning()
+        {
+            var evt = new ManualResetEvent(false);
+            var isRunningEvent = new ManualResetEvent(false);
+            var xs = Blocking(evt, isRunningEvent).ToAsyncEnumerable();
+
+            var e = xs.GetEnumerator();
+            var cts = new CancellationTokenSource();
+            var t = e.MoveNext(cts.Token);
+
+            isRunningEvent.WaitOne();
+            cts.Cancel();
+
+            try
+            {
+                t.Wait(0);
+                Assert.False(t.IsCanceled);
+            }
+            catch
+            {
+                Assert.False(true);
             }
 
             evt.Set();
