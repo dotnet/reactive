@@ -178,15 +178,17 @@ namespace Tests
         }
 
         [Fact]
-        public void CanCancelMoveNext()
+        public void CanCancelMoveNextOnBlockingToAsync()
         {
             var evt = new ManualResetEvent(false);
-            var xs = Blocking(evt).ToAsyncEnumerable().Select(x => x).Where(x => true);
+            var blockingMoveNextStarted = new ManualResetEvent(false);
+            var xs = Blocking(evt, blockingMoveNextStarted).ToAsyncEnumerable();
 
             var e = xs.GetEnumerator();
             var cts = new CancellationTokenSource();
             var t = e.MoveNext(cts.Token);
 
+            blockingMoveNextStarted.WaitOne();
             cts.Cancel();
 
             try
@@ -202,8 +204,9 @@ namespace Tests
             evt.Set();
         }
 
-        static IEnumerable<int> Blocking(ManualResetEvent evt)
+        static IEnumerable<int> Blocking(ManualResetEvent evt, ManualResetEvent blockingStarted)
         {
+            blockingStarted.Set();
             evt.WaitOne();
             yield return 42;
         }
