@@ -72,51 +72,52 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoHelper<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var current = default(TSource);
+                    var current = default(TSource);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      try
-                                      {
-                                          var result = await e.MoveNext(ct)
-                                                              .ConfigureAwait(false);
-                                          if (!result)
-                                          {
-                                              onCompleted();
-                                          }
-                                          else
-                                          {
-                                              current = e.Current;
-                                              onNext(current);
-                                          }
-                                          return result;
-                                      }
-                                      catch (OperationCanceledException)
-                                      {
-                                          throw;
-                                      }
-                                      catch (Exception ex)
-                                      {
-                                          onError(ex);
-                                          throw;
-                                      }
-                                  };
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            try
+                            {
+                                var result = await e.MoveNext(ct)
+                                                    .ConfigureAwait(false);
+                                if (!result)
+                                {
+                                    onCompleted();
+                                }
+                                else
+                                {
+                                    current = e.Current;
+                                    onNext(current);
+                                }
+                                return result;
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                throw;
+                            }
+                            catch (Exception ex)
+                            {
+                                onError(ex);
+                                throw;
+                            }
+                        };
 
-                              return Create(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

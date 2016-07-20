@@ -19,58 +19,59 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
-                          {
-                              var e = default(IAsyncEnumerator<TSource>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = default(IAsyncEnumerator<TSource>);
 
-                              var cts = new CancellationTokenDisposable();
-                              var a = new AssignableDisposable();
-                              var d = Disposable.Create(cts, a);
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable();
+                    var d = Disposable.Create(cts, a);
 
-                              var queue = new Queue<IAsyncEnumerable<TSource>>();
-                              queue.Enqueue(source);
+                    var queue = new Queue<IAsyncEnumerable<TSource>>();
+                    queue.Enqueue(source);
 
-                              var current = default(TSource);
+                    var current = default(TSource);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (e == null)
-                                      {
-                                          if (queue.Count > 0)
-                                          {
-                                              var src = queue.Dequeue();
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (e == null)
+                            {
+                                if (queue.Count > 0)
+                                {
+                                    var src = queue.Dequeue();
 
-                                              e = src.GetEnumerator();
+                                    e = src.GetEnumerator();
 
-                                              a.Disposable = e;
-                                              return await f(ct)
-                                                         .ConfigureAwait(false);
-                                          }
-                                          return false;
-                                      }
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          var item = e.Current;
-                                          var next = selector(item);
+                                    a.Disposable = e;
+                                    return await f(ct)
+                                               .ConfigureAwait(false);
+                                }
+                                return false;
+                            }
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                var item = e.Current;
+                                var next = selector(item);
 
-                                          queue.Enqueue(next);
-                                          current = item;
-                                          return true;
-                                      }
-                                      e = null;
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                                queue.Enqueue(next);
+                                current = item;
+                                return true;
+                            }
+                            e = null;
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return Create(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

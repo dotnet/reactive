@@ -25,7 +25,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(() =>
+            return CreateEnumerable(() =>
                           {
                               var gate = new object();
 
@@ -139,7 +139,7 @@ namespace System.Linq
                                                  .ConfigureAwait(false);
                                   };
 
-                              return Create(
+                              return CreateEnumerator(
                                   f,
                                   () => current,
                                   d.Dispose,
@@ -306,7 +306,7 @@ namespace System.Linq
                         return false;
                     };
 
-                return Create(
+                return CreateEnumerator(
                     ct =>
                     {
                         ++index;

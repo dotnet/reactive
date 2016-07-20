@@ -19,46 +19,47 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return Create(() =>
-                          {
-                              var switched = false;
-                              var e = first.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var switched = false;
+                    var e = first.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var a = new AssignableDisposable
-                              {
-                                  Disposable = e
-                              };
-                              var d = Disposable.Create(cts, a);
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable
+                    {
+                        Disposable = e
+                    };
+                    var d = Disposable.Create(cts, a);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          return true;
-                                      }
-                                      if (switched)
-                                      {
-                                          return false;
-                                      }
-                                      switched = true;
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                return true;
+                            }
+                            if (switched)
+                            {
+                                return false;
+                            }
+                            switched = true;
 
-                                      e = second.GetEnumerator();
-                                      a.Disposable = e;
+                            e = second.GetEnumerator();
+                            a.Disposable = e;
 
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return Create(
-                                  f,
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> Concat<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -79,52 +80,53 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> Concat_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return Create(() =>
-                          {
-                              var se = sources.GetEnumerator();
-                              var e = default(IAsyncEnumerator<TSource>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var se = sources.GetEnumerator();
+                    var e = default(IAsyncEnumerator<TSource>);
 
-                              var cts = new CancellationTokenDisposable();
-                              var a = new AssignableDisposable();
-                              var d = Disposable.Create(cts, se, a);
+                    var cts = new CancellationTokenDisposable();
+                    var a = new AssignableDisposable();
+                    var d = Disposable.Create(cts, se, a);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (e == null)
-                                      {
-                                          var b = false;
-                                          b = se.MoveNext();
-                                          if (b)
-                                              e = se.Current.GetEnumerator();
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (e == null)
+                            {
+                                var b = false;
+                                b = se.MoveNext();
+                                if (b)
+                                    e = se.Current.GetEnumerator();
 
-                                          if (!b)
-                                          {
-                                              return false;
-                                          }
+                                if (!b)
+                                {
+                                    return false;
+                                }
 
-                                          a.Disposable = e;
-                                      }
+                                a.Disposable = e;
+                            }
 
-                                      if (await e.MoveNext(ct)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          return true;
-                                      }
-                                      e.Dispose();
-                                      e = null;
+                            if (await e.MoveNext(ct)
+                                       .ConfigureAwait(false))
+                            {
+                                return true;
+                            }
+                            e.Dispose();
+                            e = null;
 
-                                      return await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
+                            return await f(ct)
+                                       .ConfigureAwait(false);
+                        };
 
-                              return Create(
-                                  f,
-                                  () => e.Current,
-                                  d.Dispose,
-                                  a
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        a
+                    );
+                });
         }
     }
 }

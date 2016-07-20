@@ -30,52 +30,53 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var ie = default(IAsyncEnumerator<TResult>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var ie = default(IAsyncEnumerator<TResult>);
 
-                              var innerDisposable = new AssignableDisposable();
+                    var innerDisposable = new AssignableDisposable();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, innerDisposable, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, innerDisposable, e);
 
-                              var inner = default(Func<CancellationToken, Task<bool>>);
-                              var outer = default(Func<CancellationToken, Task<bool>>);
+                    var inner = default(Func<CancellationToken, Task<bool>>);
+                    var outer = default(Func<CancellationToken, Task<bool>>);
 
-                              inner = async ct =>
-                                      {
-                                          if (await ie.MoveNext(ct)
-                                                      .ConfigureAwait(false))
-                                          {
-                                              return true;
-                                          }
-                                          innerDisposable.Disposable = null;
-                                          return await outer(ct)
-                                                     .ConfigureAwait(false);
-                                      };
+                    inner = async ct =>
+                            {
+                                if (await ie.MoveNext(ct)
+                                            .ConfigureAwait(false))
+                                {
+                                    return true;
+                                }
+                                innerDisposable.Disposable = null;
+                                return await outer(ct)
+                                           .ConfigureAwait(false);
+                            };
 
-                              outer = async ct =>
-                                      {
-                                          if (await e.MoveNext(ct)
-                                                     .ConfigureAwait(false))
-                                          {
-                                              var enumerable = selector(e.Current);
-                                              ie = enumerable.GetEnumerator();
-                                              innerDisposable.Disposable = ie;
+                    outer = async ct =>
+                            {
+                                if (await e.MoveNext(ct)
+                                           .ConfigureAwait(false))
+                                {
+                                    var enumerable = selector(e.Current);
+                                    ie = enumerable.GetEnumerator();
+                                    innerDisposable.Disposable = ie;
 
-                                              return await inner(ct)
-                                                         .ConfigureAwait(false);
-                                          }
-                                          return false;
-                                      };
+                                    return await inner(ct)
+                                               .ConfigureAwait(false);
+                                }
+                                return false;
+                            };
 
-                              return Create(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
+                    return CreateEnumerator(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
                                             () => ie.Current,
                                             d.Dispose,
                                             e
-                              );
-                          });
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TResult>> selector)
@@ -85,54 +86,55 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var ie = default(IAsyncEnumerator<TResult>);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var ie = default(IAsyncEnumerator<TResult>);
 
-                              var index = 0;
+                    var index = 0;
 
-                              var innerDisposable = new AssignableDisposable();
+                    var innerDisposable = new AssignableDisposable();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, innerDisposable, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, innerDisposable, e);
 
-                              var inner = default(Func<CancellationToken, Task<bool>>);
-                              var outer = default(Func<CancellationToken, Task<bool>>);
+                    var inner = default(Func<CancellationToken, Task<bool>>);
+                    var outer = default(Func<CancellationToken, Task<bool>>);
 
-                              inner = async ct =>
-                                      {
-                                          if (await ie.MoveNext(ct)
-                                                      .ConfigureAwait(false))
-                                          {
-                                              return true;
-                                          }
-                                          innerDisposable.Disposable = null;
-                                          return await outer(ct)
-                                                     .ConfigureAwait(false);
-                                      };
+                    inner = async ct =>
+                            {
+                                if (await ie.MoveNext(ct)
+                                            .ConfigureAwait(false))
+                                {
+                                    return true;
+                                }
+                                innerDisposable.Disposable = null;
+                                return await outer(ct)
+                                           .ConfigureAwait(false);
+                            };
 
-                              outer = async ct =>
-                                      {
-                                          if (await e.MoveNext(ct)
-                                                     .ConfigureAwait(false))
-                                          {
-                                              var enumerable = selector(e.Current, checked(index++));
-                                              ie = enumerable.GetEnumerator();
-                                              innerDisposable.Disposable = ie;
+                    outer = async ct =>
+                            {
+                                if (await e.MoveNext(ct)
+                                           .ConfigureAwait(false))
+                                {
+                                    var enumerable = selector(e.Current, checked(index++));
+                                    ie = enumerable.GetEnumerator();
+                                    innerDisposable.Disposable = ie;
 
-                                              return await inner(ct)
-                                                         .ConfigureAwait(false);
-                                          }
-                                          return false;
-                                      };
+                                    return await inner(ct)
+                                               .ConfigureAwait(false);
+                                }
+                                return false;
+                            };
 
-                              return Create(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
+                    return CreateEnumerator(ct => ie == null ? outer(cts.Token) : inner(cts.Token),
                                             () => ie.Current,
                                             d.Dispose,
                                             e
-                              );
-                          });
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> selector, Func<TSource, TCollection, TResult> resultSelector)

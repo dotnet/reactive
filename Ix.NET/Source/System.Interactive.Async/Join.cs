@@ -27,7 +27,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(
+            return CreateEnumerable(
                 () =>
                 {
                     var oe = outer.GetEnumerator();
@@ -147,7 +147,7 @@ namespace System.Linq
                                        .ConfigureAwait(false);
                         };
 
-                    return Create(
+                    return CreateEnumerator(
                         f,
                         () => current,
                         d.Dispose,

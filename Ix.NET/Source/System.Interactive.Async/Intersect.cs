@@ -21,46 +21,47 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create(() =>
-                          {
-                              var e = first.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = first.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var mapTask = default(Task<Dictionary<TSource, TSource>>);
-                              var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(
-                                  ct =>
-                                  {
-                                      if (mapTask == null)
-                                          mapTask = second.ToDictionary(x => x, comparer, ct);
-                                      return mapTask;
-                                  });
+                    var mapTask = default(Task<Dictionary<TSource, TSource>>);
+                    var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(
+                        ct =>
+                        {
+                            if (mapTask == null)
+                                mapTask = second.ToDictionary(x => x, comparer, ct);
+                            return mapTask;
+                        });
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (await e.MoveNext(ct)
-                                                 .Zip(getMapTask(ct), (b, _) => b)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          // Note: Result here is safe because the task
-                                          // was completed in the Zip() call above
-                                          if (mapTask.Result.ContainsKey(e.Current))
-                                              return true;
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      return false;
-                                  };
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (await e.MoveNext(ct)
+                                       .Zip(getMapTask(ct), (b, _) => b)
+                                       .ConfigureAwait(false))
+                            {
+                                // Note: Result here is safe because the task
+                                // was completed in the Zip() call above
+                                if (mapTask.Result.ContainsKey(e.Current))
+                                    return true;
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            return false;
+                        };
 
-                              return Create(
-                                  f,
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
 

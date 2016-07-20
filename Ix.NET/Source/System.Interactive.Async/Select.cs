@@ -18,30 +18,31 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var current = default(TResult);
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var current = default(TResult);
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return Create(
-                                  async ct =>
-                                  {
-                                      if (await e.MoveNext(cts.Token)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          current = selector(e.Current);
-                                          return true;
-                                      }
-                                      return false;
-                                  },
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (await e.MoveNext(cts.Token)
+                                       .ConfigureAwait(false))
+                            {
+                                current = selector(e.Current);
+                                return true;
+                            }
+                            return false;
+                        },
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TResult> Select<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, int, TResult> selector)
@@ -51,31 +52,32 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var current = default(TResult);
-                              var index = 0;
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var current = default(TResult);
+                    var index = 0;
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return Create(
-                                  async ct =>
-                                  {
-                                      if (await e.MoveNext(cts.Token)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          current = selector(e.Current, checked(index++));
-                                          return true;
-                                      }
-                                      return false;
-                                  },
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (await e.MoveNext(cts.Token)
+                                       .ConfigureAwait(false))
+                            {
+                                current = selector(e.Current, checked(index++));
+                                return true;
+                            }
+                            return false;
+                        },
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }

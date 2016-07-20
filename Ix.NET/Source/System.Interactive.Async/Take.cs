@@ -19,35 +19,36 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var n = count;
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var n = count;
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return Create(
-                                  async ct =>
-                                  {
-                                      if (n == 0)
-                                          return false;
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (n == 0)
+                                return false;
 
-                                      var result = await e.MoveNext(cts.Token)
-                                                          .ConfigureAwait(false);
+                            var result = await e.MoveNext(cts.Token)
+                                                .ConfigureAwait(false);
 
-                                      --n;
+                            --n;
 
-                                      if (n == 0)
-                                          e.Dispose();
+                            if (n == 0)
+                                e.Dispose();
 
-                                      return result;
-                                  },
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                            return result;
+                        },
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> TakeLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
@@ -57,57 +58,58 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              var q = new Queue<TSource>(count);
-                              var done = false;
-                              var current = default(TSource);
+                    var q = new Queue<TSource>(count);
+                    var done = false;
+                    var current = default(TSource);
 
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      if (!done)
-                                      {
-                                          if (await e.MoveNext(ct)
-                                                     .ConfigureAwait(false))
-                                          {
-                                              if (count > 0)
-                                              {
-                                                  var item = e.Current;
-                                                  if (q.Count >= count)
-                                                      q.Dequeue();
-                                                  q.Enqueue(item);
-                                              }
-                                          }
-                                          else
-                                          {
-                                              done = true;
-                                              e.Dispose();
-                                          }
+                    var f = default(Func<CancellationToken, Task<bool>>);
+                    f = async ct =>
+                        {
+                            if (!done)
+                            {
+                                if (await e.MoveNext(ct)
+                                           .ConfigureAwait(false))
+                                {
+                                    if (count > 0)
+                                    {
+                                        var item = e.Current;
+                                        if (q.Count >= count)
+                                            q.Dequeue();
+                                        q.Enqueue(item);
+                                    }
+                                }
+                                else
+                                {
+                                    done = true;
+                                    e.Dispose();
+                                }
 
-                                          return await f(ct)
-                                                     .ConfigureAwait(false);
-                                      }
-                                      if (q.Count > 0)
-                                      {
-                                          current = q.Dequeue();
-                                          return true;
-                                      }
-                                      return false;
-                                  };
+                                return await f(ct)
+                                           .ConfigureAwait(false);
+                            }
+                            if (q.Count > 0)
+                            {
+                                current = q.Dequeue();
+                                return true;
+                            }
+                            return false;
+                        };
 
-                              return Create(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        f,
+                        () => current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -117,28 +119,29 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return Create(
-                                  async ct =>
-                                  {
-                                      if (await e.MoveNext(cts.Token)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          return predicate(e.Current);
-                                      }
-                                      return false;
-                                  },
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (await e.MoveNext(cts.Token)
+                                       .ConfigureAwait(false))
+                            {
+                                return predicate(e.Current);
+                            }
+                            return false;
+                        },
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -148,29 +151,30 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create(() =>
-                          {
-                              var e = source.GetEnumerator();
-                              var index = 0;
+            return CreateEnumerable(
+                () =>
+                {
+                    var e = source.GetEnumerator();
+                    var index = 0;
 
-                              var cts = new CancellationTokenDisposable();
-                              var d = Disposable.Create(cts, e);
+                    var cts = new CancellationTokenDisposable();
+                    var d = Disposable.Create(cts, e);
 
-                              return Create(
-                                  async ct =>
-                                  {
-                                      if (await e.MoveNext(cts.Token)
-                                                 .ConfigureAwait(false))
-                                      {
-                                          return predicate(e.Current, checked(index++));
-                                      }
-                                      return false;
-                                  },
-                                  () => e.Current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (await e.MoveNext(cts.Token)
+                                       .ConfigureAwait(false))
+                            {
+                                return predicate(e.Current, checked(index++));
+                            }
+                            return false;
+                        },
+                        () => e.Current,
+                        d.Dispose,
+                        e
+                    );
+                });
         }
     }
 }
