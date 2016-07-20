@@ -77,7 +77,7 @@ namespace System.Linq
                 }
             }
 
-            public abstract Task<bool> MoveNextCore(CancellationToken cancellationToken);
+            protected abstract Task<bool> MoveNextCore(CancellationToken cancellationToken);
 
             public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
             {
