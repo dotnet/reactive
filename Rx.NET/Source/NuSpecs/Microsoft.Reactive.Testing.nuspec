@@ -16,7 +16,6 @@
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
       <dependency id="System.Reactive.PlatformServices" version="$version$" />
-      <dependency id="xunit.assert" version="2.1.0" />
     </dependencies>
   </metadata>
   <files>
