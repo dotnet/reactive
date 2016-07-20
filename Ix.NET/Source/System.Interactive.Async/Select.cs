@@ -106,7 +106,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            public override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
