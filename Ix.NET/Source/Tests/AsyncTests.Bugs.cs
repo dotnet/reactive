@@ -99,7 +99,7 @@ namespace Tests
 #endif
 
         [Fact]
-        public void CorrectDispose()
+        public async void CorrectDispose()
         {
             var disposed = new TaskCompletionSource<bool>();
 
@@ -111,11 +111,19 @@ namespace Tests
             var ys = xs.Select(x => x + 1);
 
             var e = ys.GetEnumerator();
+
+            // We have to call move next because otherwise the internal enumerator is never allocated
+            await e.MoveNext();
             e.Dispose();
+
+            await disposed.Task;
 
             Assert.True(disposed.Task.Result);
 
             Assert.False(e.MoveNext().Result);
+
+            var next = await e.MoveNext();
+            Assert.False(next);
         }
 
         [Fact]
