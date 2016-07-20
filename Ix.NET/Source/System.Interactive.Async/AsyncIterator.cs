@@ -52,33 +52,20 @@ namespace System.Linq
                 state = State.Disposed;
             }
 
-            private void Cancel()
-            {
-                if (!cancellationTokenSource.IsCancellationRequested)
-                {
-                    cancellationTokenSource.Cancel();
-                }
-                Dispose();
-                Debug.WriteLine("Canceled");
-            }
-
             public TSource Current => current;
 
             public async Task<bool> MoveNext(CancellationToken cancellationToken)
             {
-              //  using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
-                using (cancellationToken.Register(Cancel))
+                if (state == State.Disposed)
+                    return false;
+
+                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
+                using (cancellationToken.Register(Dispose))
 
                 {
                     try
                     {
-                        var result = await MoveNextCore(cancellationTokenSource.Token).ConfigureAwait(false);
-
-                     //   cts.Dispose();
-                        //if (cts.IsCancellationRequested)
-                        //{
-                        //    Dispose();
-                        //}
+                        var result = await MoveNextCore(cts.Token).ConfigureAwait(false);
 
                         return result;
                     }
