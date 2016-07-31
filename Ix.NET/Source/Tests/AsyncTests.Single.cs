@@ -1589,21 +1589,23 @@ namespace Tests
 
             var e = ys.GetEnumerator();
 
-            Assert.True(e.MoveNext().Result);
-            var g1 = e.Current;
-            Assert.Equal(g1.Key, 42);
-            var g1e = g1.GetEnumerator();
-            HasNext(g1e, 42);
-
-            Assert.True(e.MoveNext().Result);
-            var g2 = e.Current;
-            Assert.Equal(g2.Key, 43);
-            var g2e = g2.GetEnumerator();
-            HasNext(g2e, 43);
-
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
-            AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+
+            //Assert.True(e.MoveNext().Result);
+            //var g1 = e.Current;
+            //Assert.Equal(g1.Key, 42);
+            //var g1e = g1.GetEnumerator();
+            //HasNext(g1e, 42);
+
+            //Assert.True(e.MoveNext().Result);
+            //var g2 = e.Current;
+            //Assert.Equal(g2.Key, 43);
+            //var g2e = g2.GetEnumerator();
+            //HasNext(g2e, 43);
+
+            
+            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
 
         [Fact]
@@ -1614,14 +1616,16 @@ namespace Tests
 
             var e = ys.GetEnumerator();
 
-            Assert.True(e.MoveNext().Result);
-            var g1 = e.Current;
-            Assert.Equal(g1.Key, 42);
-            var g1e = g1.GetEnumerator();
-            HasNext(g1e, 42);
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");           
+            //Assert.True(e.MoveNext().Result);
+            //var g1 = e.Current;
+            //Assert.Equal(g1.Key, 42);
+            //var g1e = g1.GetEnumerator();
+            //HasNext(g1e, 42);
+            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
+
+                    
         }
 
         static IEnumerable<int> GetXs()
@@ -1651,21 +1655,23 @@ namespace Tests
 
             var e = ys.GetEnumerator();
 
-            Assert.True(e.MoveNext().Result);
-            var g1 = e.Current;
-            Assert.Equal(g1.Key, 1);
-            var g1e = g1.GetEnumerator();
-            HasNext(g1e, 1);
-
-            Assert.True(e.MoveNext().Result);
-            var g2 = e.Current;
-            Assert.Equal(g2.Key, 2);
-            var g2e = g2.GetEnumerator();
-            HasNext(g2e, 2);
-
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-            AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+
+            //Assert.True(e.MoveNext().Result);
+            //var g1 = e.Current;
+            //Assert.Equal(g1.Key, 1);
+            //var g1e = g1.GetEnumerator();
+            //HasNext(g1e, 1);
+
+            //Assert.True(e.MoveNext().Result);
+            //var g2 = e.Current;
+            //Assert.Equal(g2.Key, 2);
+            //var g2e = g2.GetEnumerator();
+            //HasNext(g2e, 2);
+
+           
+            //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
