@@ -25,6 +25,11 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
+            var arrayProvider = source as IIListProvider<TSource>;
+            if (arrayProvider != null)
+                return arrayProvider.ToArrayAsync(cancellationToken);
+
+
             return source.Aggregate(new List<TSource>(), (list, x) =>
                                                          {
                                                              list.Add(x);
@@ -144,6 +149,10 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+
+            var listProvider = source as IIListProvider<TSource>;
+            if (listProvider != null)
+                return listProvider.ToListAsync(cancellationToken);
 
             return source.Aggregate(new List<TSource>(), (list, x) =>
                                                          {
