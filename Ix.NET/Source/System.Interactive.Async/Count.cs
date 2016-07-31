@@ -17,6 +17,12 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
+            var listProv = source as IIListProvider<TSource>;
+            if (listProv != null)
+            {
+                return listProv.GetCountAsync(onlyIfCheap: false, cancellationToken: cancellationToken);
+            }
+
             return source.Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
 

@@ -48,7 +48,7 @@ namespace System.Linq
             return outer.GroupJoin(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
-        private sealed class AsyncEnumerableAdapter<T> : IAsyncEnumerable<T>
+        internal sealed class AsyncEnumerableAdapter<T> : IAsyncEnumerable<T>
         {
             private readonly IEnumerable<T> _source;
 
