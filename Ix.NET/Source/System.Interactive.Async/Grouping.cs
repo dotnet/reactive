@@ -169,7 +169,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.GroupBy(keySelector, x => x, comparer);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, CancellationToken.None);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -179,7 +179,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.GroupBy(keySelector, x => x, EqualityComparer<TKey>.Default);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, CancellationToken.None);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
@@ -254,6 +254,82 @@ namespace System.Linq
                     yield return group;
                 }
                 group.Add(elementSelector(x));
+            }
+        }
+
+        internal sealed class GroupedAsyncEnumerable<TSource, TKey> : IIListProvider<IAsyncGrouping<TKey, TSource>>
+        {
+            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, TKey> keySelector;
+            private readonly IEqualityComparer<TKey> comparer;
+            private readonly CancellationToken cancellationToken;
+
+            public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+            {
+                if (source == null) throw new ArgumentNullException(nameof(source));
+                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
+                this.source = source;
+                this.keySelector = keySelector;
+                this.comparer = comparer;
+                this.cancellationToken = cancellationToken;
+            }
+
+
+            public IAsyncEnumerator<IAsyncGrouping<TKey, TSource>> GetEnumerator()
+            {
+                Internal.Lookup<TKey, TSource> lookup = null;
+                IAsyncGrouping<TKey, TSource> current = null;
+                IEnumerator<IGrouping<TKey, TSource>> enumerator = null;
+
+                return CreateEnumerator(
+                    async ct =>
+                    {
+                        if (lookup == null)
+                        {
+                            lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, ct).ConfigureAwait(false);
+                            enumerator = lookup.GetEnumerator();
+                        }
+
+                        // By the time we get here, the lookup is sync
+                        if (ct.IsCancellationRequested)
+                            return false;
+
+                        return enumerator?.MoveNext() ?? false;
+                    },
+                    () => (IAsyncGrouping<TKey, TSource>)enumerator?.Current,
+                    () =>
+                        {
+                            if (enumerator != null)
+                            {
+                                enumerator.Dispose();
+                                enumerator = null;
+                            }
+                        });
+            }
+
+            public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                IIListProvider<IAsyncGrouping<TKey, TSource>> lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await lookup.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
+            {
+                IIListProvider<IAsyncGrouping<TKey, TSource>> lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await lookup.ToListAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return -1;
+                }
+
+                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                return lookup.Count;
             }
         }
 
@@ -339,7 +415,7 @@ namespace System.Linq.Internal
 {
     /// Adapted from System.Linq.Grouping from .NET Framework
     /// Source: https://github.com/dotnet/corefx/blob/b90532bc97b07234a7d18073819d019645285f1c/src/System.Linq/src/System/Linq/Grouping.cs#L64
-    internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>, IList<TElement>
+    internal class Grouping<TKey, TElement> : IGrouping<TKey, TElement>, IList<TElement>, IAsyncGrouping<TKey, TElement>
     {
         internal int _count;
         internal TElement[] _elements;
@@ -348,17 +424,17 @@ namespace System.Linq.Internal
         internal TKey _key;
         internal Grouping<TKey, TElement> _next;
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         public IEnumerator<TElement> GetEnumerator()
         {
             for (var i = 0; i < _count; i++)
             {
                 yield return _elements[i];
             }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         // DDB195907: implement IGrouping<>.Key implicitly
@@ -450,6 +526,12 @@ namespace System.Linq.Internal
             {
                 Array.Resize(ref _elements, _count);
             }
+        }
+
+        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetEnumerator()
+        {
+            var adapter = new AsyncEnumerable.AsyncEnumerableAdapter<TElement>(this);
+            return adapter.GetEnumerator();
         }
     }
 }
