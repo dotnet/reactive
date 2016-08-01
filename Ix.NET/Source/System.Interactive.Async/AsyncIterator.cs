@@ -83,13 +83,7 @@ namespace System.Linq
                 {
                     return false;
                 }
-
-                // Short circuit and don't even call MoveNexCore
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    Dispose();
-                    return false;
-                }
+               
 
                 // We keep these because cancelling any of these must trigger dispose of the iterator
                 moveNextRegistrations.Add(cancellationToken.Register(Dispose));
@@ -98,6 +92,9 @@ namespace System.Linq
                 {
                     try
                     {
+                        // Short circuit and don't even call MoveNexCore
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         var result = await MoveNextCore(cts.Token).ConfigureAwait(false);
 
                         currentIsInvalid = !result; // if move next is false, invalid otherwise valid
