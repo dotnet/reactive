@@ -359,7 +359,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Using6()
+        public async Task Using6()
         {
             var i = 0;
             var disposed = new TaskCompletionSource<bool>();
@@ -394,7 +394,8 @@ namespace Tests
                 ex.Flatten().Handle(inner => inner is TaskCanceledException);
             }
 
-            Assert.True(disposed.Task.Result);
+            Assert.True(disposed.Task.IsCompleted);
+            Assert.True(await disposed.Task);
         }
 
         class MyD : IDisposable

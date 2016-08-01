@@ -23,6 +23,7 @@ namespace System.Linq
             internal State state = State.New;
             internal TSource current;
             private CancellationTokenSource cancellationTokenSource;
+            private List<CancellationTokenRegistration> moveNextRegistrations;
 
             protected AsyncIterator()
             {
@@ -37,6 +38,7 @@ namespace System.Linq
 
                 enumerator.state = State.Allocated;
                 enumerator.cancellationTokenSource = new CancellationTokenSource();
+                enumerator.moveNextRegistrations = new List<CancellationTokenRegistration>();
                 return enumerator;
             }
 
@@ -48,6 +50,11 @@ namespace System.Linq
                     cancellationTokenSource.Cancel();
                 }
                 cancellationTokenSource.Dispose();
+                foreach (var r in moveNextRegistrations)
+                {
+                    r.Dispose();
+                }
+                moveNextRegistrations.Clear();
                 current = default(TSource);
                 state = State.Disposed;
             }
@@ -59,14 +66,15 @@ namespace System.Linq
                 if (state == State.Disposed)
                     return false;
 
-                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
-                using (cancellationToken.Register(Dispose))
+                // We keep these because cancelling any of these must trigger dispose of the iterator
+                moveNextRegistrations.Add(cancellationToken.Register(Dispose));
 
+                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
                 {
                     try
                     {
                         var result = await MoveNextCore(cts.Token).ConfigureAwait(false);
-
+                        
                         return result;
                     }
                     catch

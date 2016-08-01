@@ -146,7 +146,7 @@ namespace Tests
         }
 
         [Fact]
-        public void CorrectCancel()
+        public async Task CorrectCancel()
         {
             var disposed = new TaskCompletionSource<bool>();
 
@@ -179,10 +179,12 @@ namespace Tests
                 // it. This design is chosen because cancelling a MoveNext call leaves
                 // the enumerator in an indeterminate state. Further interactions with
                 // it should be forbidden.
-                Assert.True(disposed.Task.Result);
+
+                var result = await disposed.Task;
+                Assert.True(result);
             }
 
-            Assert.False(e.MoveNext().Result);
+            Assert.False(await e.MoveNext());
         }
 
         [Fact]
@@ -240,21 +242,33 @@ namespace Tests
 
             var e = xs.GetEnumerator();
             var cts = new CancellationTokenSource();
-            var t = e.MoveNext(cts.Token);
+
+
+            Task<bool> t = null;
+            var tMoveNext =Task.Run(
+                () =>
+                {
+                    // This call *will* block
+                    t = e.MoveNext(cts.Token);
+                });
+         
 
             isRunningEvent.WaitOne();
             cts.Cancel();
 
             try
             {
-                t.Wait(0);
+                tMoveNext.Wait(0);
                 Assert.False(t.IsCanceled);
             }
             catch
             {
-                Assert.False(true);
+                // T will still be null
+                Assert.Null(t);
             }
 
+
+            // enable it to finish
             evt.Set();
         }
 
@@ -266,7 +280,7 @@ namespace Tests
         }
 
         [Fact]
-        public void TakeOneFromSelectMany()
+        public async Task TakeOneFromSelectMany()
         {
             var enumerable = AsyncEnumerable
                 .Return(0)
@@ -274,7 +288,7 @@ namespace Tests
                 .Take(1)
                 .Do(_ => { });
 
-            Assert.Equal("Check", enumerable.First().Result);
+            Assert.Equal("Check", await enumerable.First());
         }
 
         [Fact]
