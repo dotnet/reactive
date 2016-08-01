@@ -31,7 +31,6 @@ namespace System.Linq
             return new GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
 
-
         public static IAsyncEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, IAsyncEnumerable<TInner>, TResult> resultSelector)
         {
             if (outer == null)
@@ -48,39 +47,7 @@ namespace System.Linq
             return outer.GroupJoin(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
-        internal sealed class AsyncEnumerableAdapter<T> : IAsyncEnumerable<T>
-        {
-            private readonly IEnumerable<T> _source;
-
-            public AsyncEnumerableAdapter(IEnumerable<T> source)
-            {
-                _source = source;
-            }
-
-            public IAsyncEnumerator<T> GetEnumerator()
-                => new AsyncEnumeratorAdapter(_source.GetEnumerator());
-
-            private sealed class AsyncEnumeratorAdapter : IAsyncEnumerator<T>
-            {
-                private readonly IEnumerator<T> _enumerator;
-
-                public AsyncEnumeratorAdapter(IEnumerator<T> enumerator)
-                {
-                    _enumerator = enumerator;
-                }
-
-                public Task<bool> MoveNext(CancellationToken cancellationToken)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    return Task.FromResult(_enumerator.MoveNext());
-                }
-
-                public T Current => _enumerator.Current;
-
-                public void Dispose() => _enumerator.Dispose();
-            }
-        }
+       
 
 
         private sealed class GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult> : IAsyncEnumerable<TResult>

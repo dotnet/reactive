@@ -76,6 +76,8 @@ namespace System.Linq
             return self;
         }
 
+        
+
         private class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly Func<IAsyncEnumerator<T>> getEnumerator;

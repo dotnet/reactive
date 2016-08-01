@@ -279,7 +279,6 @@ namespace System.Linq
             public IAsyncEnumerator<IAsyncGrouping<TKey, TSource>> GetEnumerator()
             {
                 Internal.Lookup<TKey, TSource> lookup = null;
-                IAsyncGrouping<TKey, TSource> current = null;
                 IEnumerator<IGrouping<TKey, TSource>> enumerator = null;
 
                 return CreateEnumerator(
