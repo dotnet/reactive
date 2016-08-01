@@ -24,6 +24,7 @@ namespace System.Linq
             internal TSource current;
             private CancellationTokenSource cancellationTokenSource;
             private List<CancellationTokenRegistration> moveNextRegistrations;
+            private bool currentIsInvalid = true;
 
             protected AsyncIterator()
             {
@@ -50,21 +51,38 @@ namespace System.Linq
                     cancellationTokenSource.Cancel();
                 }
                 cancellationTokenSource.Dispose();
-                foreach (var r in moveNextRegistrations)
-                {
-                    r.Dispose();
-                }
-                moveNextRegistrations.Clear();
+
                 current = default(TSource);
                 state = State.Disposed;
+
+                var toClean = moveNextRegistrations?.ToList();
+                moveNextRegistrations = null;
+                if (toClean != null)
+                {
+                    foreach (var r in toClean)
+                    {
+                        r.Dispose();
+                    }
+                    toClean.Clear();
+                }
             }
 
-            public TSource Current => current;
+            public TSource Current
+            {
+                get
+                {
+                    if (currentIsInvalid)
+                        throw new InvalidOperationException("Enumerator is in an invalid state");
+                    return current;
+                }
+            }
 
             public async Task<bool> MoveNext(CancellationToken cancellationToken)
             {
                 if (state == State.Disposed)
+                {
                     return false;
+                }
 
                 // We keep these because cancelling any of these must trigger dispose of the iterator
                 moveNextRegistrations.Add(cancellationToken.Register(Dispose));
@@ -74,11 +92,14 @@ namespace System.Linq
                     try
                     {
                         var result = await MoveNextCore(cts.Token).ConfigureAwait(false);
-                        
+
+                        currentIsInvalid = !result; // if move next is false, invalid otherwise valid
+
                         return result;
                     }
                     catch
                     {
+                        currentIsInvalid = true;
                         Dispose();
                         throw;
                     }
