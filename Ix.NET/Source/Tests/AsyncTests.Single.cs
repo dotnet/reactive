@@ -1915,6 +1915,9 @@ namespace Tests
 
             e.Dispose();
 
+           // TODO: Do the internal iterators really get cleaned up?
+           // look once this group by method has been updated
+
             HasNext(g1e, 'd');
             HasNext(g1e, 'g');
             HasNext(g1e, 'j');
