@@ -13,7 +13,7 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get version
-.\nuget.exe install -excludeversion -pre gitversion.commandline -Version 3.5.5-pullrequest0921 -outputdirectory packages
+.\nuget.exe install -excludeversion gitversion.commandline -outputdirectory packages
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
 
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
@@ -43,6 +43,8 @@ $projects = gci $scriptPath -Directory `
 
 foreach ($project in $projects) {
   dotnet build -c "$configuration" $project.FullName  
+  if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
 }
 
 Write-Host "Building Packages" -Foreground Green
@@ -61,11 +63,14 @@ foreach ($nuspec in $nuspecs)
   }
    
    .\nuget pack $nuspec $symbolSwitch -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.12 -outputdirectory .\artifacts
+   if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
 }
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 dotnet test $testDirectory -c "$configuration"
+if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 Write-Host "Reverting AssemblyInfo's" -Foreground Green
 gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
