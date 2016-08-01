@@ -84,6 +84,13 @@ namespace System.Linq
                     return false;
                 }
 
+                // Short circuit and don't even call MoveNexCore
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Dispose();
+                    return false;
+                }
+
                 // We keep these because cancelling any of these must trigger dispose of the iterator
                 moveNextRegistrations.Add(cancellationToken.Register(Dispose));
 
