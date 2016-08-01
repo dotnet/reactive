@@ -64,7 +64,7 @@ namespace System.Linq
                         },
                         () => current,
                         d.Dispose,
-                        d
+                        null
                     );
                 });
         }
