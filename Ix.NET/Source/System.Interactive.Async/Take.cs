@@ -27,6 +27,7 @@ namespace System.Linq
 
                     var cts = new CancellationTokenDisposable();
                     var d = Disposable.Create(cts, e);
+                    var current = default(TSource);
 
                     return CreateEnumerator(
                         async ct =>
@@ -38,13 +39,15 @@ namespace System.Linq
                                                 .ConfigureAwait(false);
 
                             --n;
+                            if (result)
+                                current = e.Current;
 
                             if (n == 0)
                                 e.Dispose();
 
                             return result;
                         },
-                        () => e.Current,
+                        () => current,
                         d.Dispose,
                         e
                     );
