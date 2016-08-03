@@ -3,6 +3,7 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $configuration = "Release"
 
 $nuspecDir = Join-Path $scriptPath "NuSpecs"
+$isAppVeyor = Test-Path -Path env:\APPVEYOR
 
 if (!(Test-Path .\nuget.exe)) {
     wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
@@ -43,7 +44,12 @@ $projects = gci $scriptPath -Directory `
 
 foreach ($project in $projects) {
   dotnet build -c "$configuration" $project.FullName  
-  if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+  if ($LastExitCode -ne 0) { 
+    Write-Host "Error building project $project" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+    }  
+  }
 
 }
 
@@ -63,14 +69,24 @@ foreach ($nuspec in $nuspecs)
   }
    
    .\nuget pack $nuspec $symbolSwitch -Version $version -Properties "Configuration=$configuration" -MinClientVersion 2.12 -outputdirectory .\artifacts
-   if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+   if ($LastExitCode -ne 0) { 
+    Write-Host "Error packing NuGet $nuspec" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+    }  
+  }
 
 }
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 dotnet test $testDirectory -c "$configuration"
-if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+if ($LastExitCode -ne 0) { 
+    Write-Host "Error with tests" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+    }  
+}
 
 Write-Host "Reverting AssemblyInfo's" -Foreground Green
 gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
