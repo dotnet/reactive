@@ -60,13 +60,15 @@ namespace System.Linq
             return Any_(source, predicate, cancellationToken);
         }
 
-        public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static async Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var e = source.GetEnumerator();
-            return e.MoveNext(cancellationToken);
+            using (var e = source.GetEnumerator())
+            {
+                return await e.MoveNext(cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
