@@ -162,9 +162,11 @@ namespace System.Linq
                                     goto case Mode.DoLoop;
                                 }
 
-                                Dispose();
+                             
                                 break;
                         }
+
+                        Dispose();
 
                         break;
                 }
