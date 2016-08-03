@@ -25,127 +25,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return CreateEnumerable(() =>
-                          {
-                              var gate = new object();
-
-                              var e = source.GetEnumerator();
-                              var count = 1;
-
-                              var map = new Dictionary<TKey, AsyncGrouping<TKey, TElement>>(comparer);
-                              var list = new List<IAsyncGrouping<TKey, TElement>>();
-
-                              var index = 0;
-
-                              var current = default(IAsyncGrouping<TKey, TElement>);
-                              var faulted = default(ExceptionDispatchInfo);
-
-                              var res = default(bool?);
-
-                              var cts = new CancellationTokenDisposable();
-                              var refCount = new Disposable(
-                                  () =>
-                                  {
-                                      if (Interlocked.Decrement(ref count) == 0)
-                                          e.Dispose();
-                                  }
-                              );
-                              var d = Disposable.Create(cts, refCount);
-
-                              var iterateSource = default(Func<CancellationToken, Task<bool>>);
-                              iterateSource = async ct =>
-                                              {
-                                                  lock (gate)
-                                                  {
-                                                      if (res != null)
-                                                      {
-                                                          return res.Value;
-                                                      }
-                                                      res = null;
-                                                  }
-
-                                                  faulted?.Throw();
-
-                                                  try
-                                                  {
-                                                      res = await e.MoveNext(ct)
-                                                                   .ConfigureAwait(false);
-                                                      if (res == true)
-                                                      {
-                                                          var key = default(TKey);
-                                                          var element = default(TElement);
-
-                                                          var cur = e.Current;
-                                                          try
-                                                          {
-                                                              key = keySelector(cur);
-                                                              element = elementSelector(cur);
-                                                          }
-                                                          catch (Exception exception)
-                                                          {
-                                                              foreach (var v in map.Values)
-                                                                  v.Error(exception);
-
-                                                              throw;
-                                                          }
-
-                                                          var group = default(AsyncGrouping<TKey, TElement>);
-                                                          if (!map.TryGetValue(key, out group))
-                                                          {
-                                                              group = new AsyncGrouping<TKey, TElement>(key, iterateSource, refCount);
-                                                              map.Add(key, group);
-                                                              lock (list)
-                                                                  list.Add(group);
-
-                                                              Interlocked.Increment(ref count);
-                                                          }
-                                                          group.Add(element);
-                                                      }
-
-                                                      return res.Value;
-                                                  }
-                                                  catch (Exception ex)
-                                                  {
-                                                      foreach (var v in map.Values)
-                                                          v.Error(ex);
-
-                                                      faulted = ExceptionDispatchInfo.Capture(ex);
-                                                      throw;
-                                                  }
-                                                  finally
-                                                  {
-                                                      res = null;
-                                                  }
-                                              };
-
-                              var f = default(Func<CancellationToken, Task<bool>>);
-                              f = async ct =>
-                                  {
-                                      var result = await iterateSource(ct)
-                                                       .ConfigureAwait(false);
-
-                                      current = null;
-                                      lock (list)
-                                      {
-                                          if (index < list.Count)
-                                              current = list[index++];
-                                      }
-
-                                      if (current != null)
-                                      {
-                                          return true;
-                                      }
-                                      return result && await f(ct)
-                                                 .ConfigureAwait(false);
-                                  };
-
-                              return CreateEnumerator(
-                                  f,
-                                  () => current,
-                                  d.Dispose,
-                                  e
-                              );
-                          });
+            return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector)
@@ -225,8 +105,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.GroupBy(keySelector, x => x, comparer)
-                         .Select(g => resultSelector(g.Key, g));
+            return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector)
@@ -238,8 +117,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return source.GroupBy(keySelector, x => x, EqualityComparer<TKey>.Default)
-                         .Select(g => resultSelector(g.Key, g));
+            return GroupBy(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
         private static IEnumerable<IGrouping<TKey, TElement>> GroupUntil<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IComparer<TKey> comparer)
@@ -254,6 +132,158 @@ namespace System.Linq
                     yield return group;
                 }
                 group.Add(elementSelector(x));
+            }
+        }
+
+        internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : IIListProvider<TResult>
+        {
+            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, TKey> keySelector;
+            private readonly Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector;
+            private readonly IEqualityComparer<TKey> comparer;
+
+            public GroupedResultAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
+            {
+                if (source == null) throw new ArgumentNullException(nameof(source));
+                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+                if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
+
+                this.source = source;
+                this.keySelector = keySelector;
+                this.resultSelector = resultSelector;
+                this.comparer = comparer;
+            }
+
+
+            public IAsyncEnumerator<TResult> GetEnumerator()
+            {
+                Internal.Lookup<TKey, TSource> lookup = null;
+                IEnumerator<TResult> enumerator = null;
+
+                return CreateEnumerator(
+                    async ct =>
+                    {
+                        if (lookup == null)
+                        {
+                            lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, ct).ConfigureAwait(false);
+                            enumerator = lookup.ApplyResultSelector(resultSelector).GetEnumerator();
+                        }
+
+                        // By the time we get here, the lookup is sync
+                        if (ct.IsCancellationRequested)
+                            return false;
+
+                        return enumerator?.MoveNext() ?? false;
+                    },
+                    () => enumerator.Current,
+                    () =>
+                    {
+                        if (enumerator != null)
+                        {
+                            enumerator.Dispose();
+                            enumerator = null;
+                        }
+                    });
+            }
+
+            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return lookup.ToArray(resultSelector);
+            }
+
+            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return lookup.ToList(resultSelector);
+            }
+
+            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return -1;
+                }
+
+                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                return lookup.Count;
+            }
+        }
+
+        internal sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : IIListProvider<IAsyncGrouping<TKey, TElement>>
+        {
+            private readonly IAsyncEnumerable<TSource> source;
+            private readonly Func<TSource, TKey> keySelector;
+            private readonly Func<TSource, TElement> elementSelector;
+            private readonly IEqualityComparer<TKey> comparer;
+
+            public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+            {
+                if (source == null) throw new ArgumentNullException(nameof(source));
+                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+                if (elementSelector == null) throw new ArgumentNullException(nameof(elementSelector));
+
+                this.source = source;
+                this.keySelector = keySelector;
+                this.elementSelector = elementSelector;
+                this.comparer = comparer;
+            }
+
+
+            public IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> GetEnumerator()
+            {
+                Internal.Lookup<TKey, TElement> lookup = null;
+                IEnumerator<IGrouping<TKey, TElement>> enumerator = null;
+
+                return CreateEnumerator(
+                    async ct =>
+                    {
+                        if (lookup == null)
+                        {
+                            lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, ct).ConfigureAwait(false);
+                            enumerator = lookup.GetEnumerator();
+                        }
+
+                        // By the time we get here, the lookup is sync
+                        if (ct.IsCancellationRequested)
+                            return false;
+
+                        return enumerator?.MoveNext() ?? false;
+                    },
+                    () => (IAsyncGrouping<TKey, TElement>)enumerator?.Current,
+                    () =>
+                    {
+                        if (enumerator != null)
+                        {
+                            enumerator.Dispose();
+                            enumerator = null;
+                        }
+                    });
+            }
+
+            public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                IIListProvider<IAsyncGrouping<TKey, TElement>> lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await lookup.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
+            {
+                IIListProvider<IAsyncGrouping<TKey, TElement>> lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await lookup.ToListAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return -1;
+                }
+
+                var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+
+                return lookup.Count;
             }
         }
 
@@ -330,79 +360,6 @@ namespace System.Linq
             }
         }
 
-        private class AsyncGrouping<TKey, TElement> : IAsyncGrouping<TKey, TElement>
-        {
-            private readonly List<TElement> elements = new List<TElement>();
-            private readonly Func<CancellationToken, Task<bool>> iterateSource;
-            private readonly IDisposable sourceDisposable;
-            private bool done;
-            private ExceptionDispatchInfo exception;
-
-            public AsyncGrouping(TKey key, Func<CancellationToken, Task<bool>> iterateSource, IDisposable sourceDisposable)
-            {
-                this.iterateSource = iterateSource;
-                this.sourceDisposable = sourceDisposable;
-                Key = key;
-            }
-
-            public TKey Key { get; }
-
-            public IAsyncEnumerator<TElement> GetEnumerator()
-            {
-                var index = -1;
-
-                var cts = new CancellationTokenDisposable();
-                var d = Disposable.Create(cts, sourceDisposable);
-
-                var f = default(Func<CancellationToken, Task<bool>>);
-                f = async ct =>
-                    {
-                        var size = 0;
-                        lock (elements)
-                            size = elements.Count;
-
-                        if (index < size)
-                        {
-                            return true;
-                        }
-                        if (done)
-                        {
-                            exception?.Throw();
-                            return false;
-                        }
-                        if (await iterateSource(ct)
-                                .ConfigureAwait(false))
-                        {
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        }
-                        return false;
-                    };
-
-                return CreateEnumerator(
-                    ct =>
-                    {
-                        ++index;
-                        return f(cts.Token);
-                    },
-                    () => elements[index],
-                    d.Dispose,
-                    null
-                );
-            }
-
-            public void Add(TElement element)
-            {
-                lock (elements)
-                    elements.Add(element);
-            }
-
-            public void Error(Exception exception)
-            {
-                done = true;
-                this.exception = ExceptionDispatchInfo.Capture(exception);
-            }
-        }
     }
 }
 
@@ -527,8 +484,7 @@ namespace System.Linq.Internal
 
         IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetEnumerator()
         {
-            var adapter = new AsyncEnumerable.AsyncEnumerableAdapter<TElement>(this);
-            return adapter.GetEnumerator();
+            return this.ToAsyncEnumerable().GetEnumerator();
         }
     }
 }
