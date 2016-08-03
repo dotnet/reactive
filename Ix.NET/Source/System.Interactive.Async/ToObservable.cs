@@ -202,7 +202,13 @@ namespace System.Linq
                                                  if (t.Result)
                                                  {
                                                      observer.OnNext(e.Current);
-                                                     f();
+
+                                                     if (!ctd.Token.IsCancellationRequested)
+                                                         f();
+                                                     
+                                                     //In case cancellation is requested, this could only have happened
+                                                     //by disposing the returned composite disposable (see below).
+                                                     //In that case, e will be disposed too, so there is no need to dispose e here.
                                                  }
                                                  else
                                                  {
