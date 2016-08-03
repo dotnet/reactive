@@ -127,7 +127,7 @@ namespace System.Linq
                     }
 
                     var item = _outer.Current;
-                    Current = _resultSelector(item, new AsyncEnumerableAdapter<TInner>(_lookup[_outerKeySelector(item)]));
+                    Current = _resultSelector(item, _lookup[_outerKeySelector(item)].ToAsyncEnumerable());
                     return true;
                 }
 

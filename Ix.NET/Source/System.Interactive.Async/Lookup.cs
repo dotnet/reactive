@@ -189,6 +189,20 @@ namespace System.Linq.Internal
             }
         }
 
+        public IEnumerable<TResult> ApplyResultSelector<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
+        {
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    g.Trim();
+                    yield return resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                } while (g != _lastGrouping);
+            }
+        }
+
         internal static Lookup<TKey, TElement> Create<TSource>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             Debug.Assert(source != null);
@@ -363,6 +377,25 @@ namespace System.Linq.Internal
             return array;
         }
 
+        internal TResult[] ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
+        {
+            var array = new TResult[Count];
+            var index = 0;
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    g.Trim();
+                    array[index] = resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                    ++index;
+                } while (g != _lastGrouping);
+            }
+
+            return array;
+        }
+
 
         internal List<TResult> ToList<TResult>(Func<TKey, IEnumerable<TElement>, TResult> resultSelector)
         {
@@ -375,6 +408,23 @@ namespace System.Linq.Internal
                     g = g._next;
                     g.Trim();
                     list.Add(resultSelector(g._key, g._elements));
+                } while (g != _lastGrouping);
+            }
+
+            return list;
+        }
+
+        internal List<TResult> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
+        {
+            var list = new List<TResult>(Count);
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    g.Trim();
+                    list.Add(resultSelector(g._key, g._elements.ToAsyncEnumerable()));
                 } while (g != _lastGrouping);
             }
 
@@ -399,7 +449,7 @@ namespace System.Linq.Internal
 
         IAsyncEnumerator<IGrouping<TKey, TElement>> IAsyncEnumerable<IGrouping<TKey, TElement>>.GetEnumerator()
         {
-            return new AsyncEnumerable.AsyncEnumerableAdapter<IGrouping<TKey, TElement>>(this).GetEnumerator();
+            return this.ToAsyncEnumerable<IGrouping<TKey, TElement>>().GetEnumerator();
         }
 
         public Task<IGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -446,7 +496,7 @@ namespace System.Linq.Internal
 
         IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetEnumerator()
         {
-            return new AsyncEnumerable.AsyncEnumerableAdapter<IAsyncGrouping<TKey, TElement>>(Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this)).GetEnumerator();
+            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetEnumerator();
         }
 
         Task<List<IAsyncGrouping<TKey, TElement>>> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
