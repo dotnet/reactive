@@ -389,6 +389,10 @@ namespace ReactiveTests.Tests
     public class MarshalByRefCell<T> : MarshalByRefObject
     {
         public T Value;
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 
     public class MarshalByRefAction : MarshalByRefObject
@@ -403,6 +407,10 @@ namespace ReactiveTests.Tests
         public void Invoke()
         {
             _action();
+        }
+        public override object InitializeLifetimeService()
+        {
+            return null;
         }
     }
 }
