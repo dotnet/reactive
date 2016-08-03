@@ -169,7 +169,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, CancellationToken.None);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
         }
 
         public static IAsyncEnumerable<IAsyncGrouping<TKey, TSource>> GroupBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -179,7 +179,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default, CancellationToken.None);
+            return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         public static IAsyncEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
@@ -262,9 +262,8 @@ namespace System.Linq
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, TKey> keySelector;
             private readonly IEqualityComparer<TKey> comparer;
-            private readonly CancellationToken cancellationToken;
 
-            public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+            public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 if (source == null) throw new ArgumentNullException(nameof(source));
                 if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
@@ -272,7 +271,6 @@ namespace System.Linq
                 this.source = source;
                 this.keySelector = keySelector;
                 this.comparer = comparer;
-                this.cancellationToken = cancellationToken;
             }
 
 
