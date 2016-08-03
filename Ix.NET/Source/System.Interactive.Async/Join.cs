@@ -57,7 +57,6 @@ namespace System.Linq
             private readonly IEqualityComparer<TKey> comparer;
 
             private IAsyncEnumerator<TOuter> outerEnumerator;
-            private IAsyncEnumerator<TInner> innerEnumerator;
             private Mode mode;
 
             public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
