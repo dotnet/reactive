@@ -29,12 +29,7 @@ namespace System.Linq
             if (arrayProvider != null)
                 return arrayProvider.ToArrayAsync(cancellationToken);
 
-
-            return source.Aggregate(new List<TSource>(), (list, x) =>
-                                                         {
-                                                             list.Add(x);
-                                                             return list;
-                                                         }, list => list.ToArray(), cancellationToken);
+            return AsyncEnumerableHelpers.ToArray(source, cancellationToken);
         }
 
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
