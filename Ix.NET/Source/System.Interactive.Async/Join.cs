@@ -57,7 +57,8 @@ namespace System.Linq
             private readonly IEqualityComparer<TKey> comparer;
 
             private IAsyncEnumerator<TOuter> outerEnumerator;
-            private Mode mode;
+ 
+
 
             public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -91,48 +92,46 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            private enum Mode
-            {
-                Begin,
-                DoLoop,
-                For,
-                While,
-            }
-
             // State machine vars
             Internal.Lookup<TKey, TInner> lookup;
             int count;
             TInner[] elements;
             int index;
             TOuter item;
+            private int mode;
+
+            const int State_Begin = 1;
+            const int State_DoLoop = 2;
+            const int State_For = 3;
+            const int State_While = 4;
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
                 {
-                    case State.Allocated:
+                    case AsyncIteratorState.Allocated:
                         outerEnumerator = outer.GetEnumerator();
-                        mode = Mode.Begin;
-                        state = State.Iterating;
-                        goto case State.Iterating;
+                        mode = State_Begin;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    case State.Iterating:
+                    case AsyncIteratorState.Iterating:
                         switch (mode)
                         {
-                            case Mode.Begin:
+                            case State_Begin:
                                 if (await outerEnumerator.MoveNext(cancellationToken)
                                                          .ConfigureAwait(false))
                                 {
                                     lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
                                     if (lookup.Count != 0)
                                     {
-                                        mode = Mode.DoLoop;
-                                        goto case Mode.DoLoop;   
+                                        mode = State_DoLoop;
+                                        goto case State_DoLoop;   
                                     }
                                 }
 
                                 break;
-                            case Mode.DoLoop:
+                            case State_DoLoop:
                                 item = outerEnumerator.Current;
                                 var g = lookup.GetGrouping(outerKeySelector(item), create: false);
                                 if (g != null)
@@ -140,26 +139,26 @@ namespace System.Linq
                                     count = g._count;
                                     elements = g._elements;
                                     index = 0;
-                                    mode = Mode.For;
-                                    goto case Mode.For;
+                                    mode = State_For;
+                                    goto case State_For;
                                 }
 
                                 break;
 
-                            case Mode.For:
+                            case State_For:
                                 current = resultSelector(item, elements[index]);
                                 index++;
                                 if (index == count)
                                 {
-                                    mode = Mode.While;
+                                    mode = State_While;
                                 }
                                 return true;
 
-                            case Mode.While:
+                            case State_While:
                                 var hasNext = await outerEnumerator.MoveNext(cancellationToken).ConfigureAwait(false);
                                 if (hasNext)
                                 {
-                                    goto case Mode.DoLoop;
+                                    goto case State_DoLoop;
                                 }
 
                              
