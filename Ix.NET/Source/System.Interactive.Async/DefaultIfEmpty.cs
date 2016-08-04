@@ -63,22 +63,22 @@ namespace System.Linq
             {
                 switch (state)
                 {
-                    case State.Allocated:
+                    case AsyncIteratorState.Allocated:
                         enumerator = source.GetEnumerator();
                         if (await enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             current = enumerator.Current;
-                            state = State.Iterating;
+                            state = AsyncIteratorState.Iterating;
                         }
                         else
                         {
                             current = defaultValue;
-                            state = State.Disposed; 
+                            state = AsyncIteratorState.Disposed; 
                         }
                         return true;
 
-                    case State.Iterating:
+                    case AsyncIteratorState.Iterating:
                         if (await enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {

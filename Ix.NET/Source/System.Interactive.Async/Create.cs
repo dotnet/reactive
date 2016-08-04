@@ -113,11 +113,11 @@ namespace System.Linq
             {
                 switch (state)
                 {
-                    case State.Allocated:
-                        state = State.Iterating;
-                        goto case State.Iterating;
+                    case AsyncIteratorState.Allocated:
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    case State.Iterating:
+                    case AsyncIteratorState.Iterating:
                         if (await moveNext(cancellationToken).ConfigureAwait(false))
                         {
                             current = currentFunc();
