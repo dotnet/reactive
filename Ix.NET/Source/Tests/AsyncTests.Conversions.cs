@@ -324,7 +324,7 @@ namespace Tests
 
             var ae = AsyncEnumerable.CreateEnumerable(
                 () => AsyncEnumerable.CreateEnumerator<int>(
-                    async ct => false,
+                    ct => Task.FromResult(false),
                     () => { throw new InvalidOperationException(); },
                     () => { evt.Set(); }));
 
