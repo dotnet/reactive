@@ -9,18 +9,20 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        internal enum AsyncIteratorState
+        {
+            New = 0,
+            Allocated = 1,
+            Iterating = 2,
+            Disposed = -1,
+        }
+
         internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
         {
-            public enum State
-            {
-                New = 0,
-                Allocated = 1,
-                Iterating = 2,
-                Disposed = -1,
-            }
+            
 
             private readonly int threadId;
-            internal State state = State.New;
+            internal AsyncIteratorState state = AsyncIteratorState.New;
             internal TSource current;
             private CancellationTokenSource cancellationTokenSource;
             private List<CancellationTokenRegistration> moveNextRegistrations;
@@ -35,9 +37,9 @@ namespace System.Linq
 
             public IAsyncEnumerator<TSource> GetEnumerator()
             {
-                var enumerator = state == State.New && threadId == Environment.CurrentManagedThreadId ? this : Clone();
+                var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId ? this : Clone();
 
-                enumerator.state = State.Allocated;
+                enumerator.state = AsyncIteratorState.Allocated;
                 enumerator.cancellationTokenSource = new CancellationTokenSource();
                 enumerator.moveNextRegistrations = new List<CancellationTokenRegistration>();
                 return enumerator;
@@ -53,7 +55,7 @@ namespace System.Linq
                 cancellationTokenSource.Dispose();
 
                 current = default(TSource);
-                state = State.Disposed;
+                state = AsyncIteratorState.Disposed;
 
                 var toClean = moveNextRegistrations?.ToList();
                 moveNextRegistrations = null;
@@ -79,7 +81,7 @@ namespace System.Linq
 
             public async Task<bool> MoveNext(CancellationToken cancellationToken)
             {
-                if (state == State.Disposed)
+                if (state == AsyncIteratorState.Disposed)
                 {
                     return false;
                 }

@@ -171,15 +171,15 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                if (state == State.Allocated)
+                if (state == AsyncIteratorState.Allocated)
                 {
                     enumerator = GetAsyncEnumerable(0)
                         .GetEnumerator();
-                    state = State.Iterating;
+                    state = AsyncIteratorState.Iterating;
                     counter = 2;
                 }
 
-                if (state == State.Iterating)
+                if (state == AsyncIteratorState.Iterating)
                 {
                     while (true)
                     {

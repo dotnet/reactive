@@ -101,12 +101,12 @@ namespace System.Linq
             {
                 switch (state)
                 {
-                    case State.Allocated:
+                    case AsyncIteratorState.Allocated:
                         enumerator = source.GetEnumerator();
-                        state = State.Iterating;
-                        goto case State.Iterating;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    case State.Iterating:
+                    case AsyncIteratorState.Iterating:
                         if (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
