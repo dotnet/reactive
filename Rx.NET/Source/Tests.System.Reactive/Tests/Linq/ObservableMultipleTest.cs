@@ -8347,6 +8347,35 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void MergeConcat_NoStackOverflow()
+        {
+            var s = new Subject<int>();
+            var source = s.Select(v => v == 0 ? Observable.Return(v, DefaultScheduler.Instance) : Observable.Return(v, ImmediateScheduler.Instance)).Merge(1);
+
+            var done = new ManualResetEvent(false);
+
+            var values = new List<int>();
+            var error = new List<Exception>();
+
+            source.Subscribe(values.Add, e =>
+            {
+                error.Add(e);
+                done.Set();
+            }, () => done.Set());
+
+            for (int i = 0; i < 1000000; i++)
+            {
+                s.OnNext(i);
+            }
+            s.OnCompleted();
+
+            done.WaitOne();
+
+            Assert.Equal(1000000, values.Count);
+            Assert.Equal(0, error.Count);
+        }
+
 #if !NO_TPL
         [Fact]
         public void Merge_Task()
