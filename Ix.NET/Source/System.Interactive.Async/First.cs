@@ -88,6 +88,12 @@ namespace System.Linq
 
         private static async Task<TSource> First_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
+            var list = source as IList<TSource>;
+            if (list?.Count > 0)
+            {
+                return list[0];
+            }
+
             using (var e = source.GetEnumerator())
             {
                 if (await e.MoveNext(cancellationToken)
@@ -101,6 +107,12 @@ namespace System.Linq
 
         private static async Task<TSource> FirstOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
+            var list = source as IList<TSource>;
+            if (list?.Count > 0)
+            {
+                return list[0];
+            }
+
             using (var e = source.GetEnumerator())
             {
                 if (await e.MoveNext(cancellationToken)

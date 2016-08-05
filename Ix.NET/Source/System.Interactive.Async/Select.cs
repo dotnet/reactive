@@ -27,7 +27,11 @@ namespace System.Linq
                 return iterator.Select(selector);
             }
 
-            // TODO: Can we add optimizations for IList or anything else here?
+            var ilist = source as IList<TSource>;
+            if (ilist != null)
+            {
+               return new SelectIListIterator<TSource, TResult>(ilist, selector);
+            }
 
             return new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector);
         }
@@ -134,6 +138,66 @@ namespace System.Linq
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
             {
                 return new SelectEnumerableAsyncIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
+            }
+        }
+
+        internal sealed class SelectIListIterator<TSource, TResult> : AsyncIterator<TResult>
+        {
+            private readonly IList<TSource> source;
+            private readonly Func<TSource, TResult> selector;
+            private IEnumerator<TSource> enumerator;
+
+            public SelectIListIterator(IList<TSource> source, Func<TSource, TResult> selector)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(selector != null);
+
+                this.source = source;
+                this.selector = selector;
+            }
+
+            public override AsyncIterator<TResult> Clone()
+            {
+                return new SelectIListIterator<TSource, TResult>(source, selector);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
+
+                base.Dispose();
+            }
+
+            protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if ( enumerator.MoveNext())
+                        {
+                            current = selector(enumerator.Current);
+                            return Task.FromResult(true);
+                        }
+
+                        Dispose();
+                        break;
+                }
+
+                return Task.FromResult(false);
+            }
+
+            public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
+            {
+                return new SelectIListIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
         }
     }
