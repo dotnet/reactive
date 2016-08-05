@@ -40,9 +40,10 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private object _gate;
-            private object _latestGate;
-            private volatile bool hasLatest;
+            private volatile bool _hasLatest;
             private TSecond _latest;
+
+            private object _latestGate;
 
             public IDisposable Run()
             {
@@ -89,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TFirst value)
                 {
-                    if (_parent.hasLatest)
+                    if (_parent._hasLatest)
                     {
 
                         TSecond latest;
@@ -156,9 +157,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         _parent._latest = value;
                     }
 
-                    if (!_parent.hasLatest)
+                    if (!_parent._hasLatest)
                     {
-                        _parent.hasLatest = true;
+                        _parent._hasLatest = true;
                     }
                 }
             }
