@@ -14,11 +14,6 @@ namespace System.Reactive.Disposables
         private IDisposable _current;
 
         /// <summary>
-        /// The single instance representing the disposed state of this container.
-        /// </summary>
-        static readonly IDisposable DISPOSED = new Disposed();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.MultipleAssignmentDisposable"/> class with no current underlying disposable.
         /// </summary>
         public MultipleAssignmentDisposable()
@@ -32,7 +27,7 @@ namespace System.Reactive.Disposables
         {
             get
             {
-                return Volatile.Read(ref _current) == DISPOSED;
+                return Volatile.Read(ref _current) == BooleanDisposable.True;
             }
         }
 
@@ -46,7 +41,7 @@ namespace System.Reactive.Disposables
             {
                 var a = Volatile.Read(ref _current);
                 // Don't leak the DISPOSED sentinel
-                if (a == DISPOSED)
+                if (a == BooleanDisposable.True)
                 {
                     a = DefaultDisposable.Instance;
                 }
@@ -60,7 +55,7 @@ namespace System.Reactive.Disposables
                 for (;;)
                 {
                     // If it is the disposed instance, dispose the value.
-                    if (old == DISPOSED)
+                    if (old == BooleanDisposable.True)
                     {
                         value?.Dispose();
                         return;
@@ -86,24 +81,16 @@ namespace System.Reactive.Disposables
             // Read the current atomically.
             var a = Volatile.Read(ref _current);
             // If it is the disposed instance, don't bother further.
-            if (a != DISPOSED)
+            if (a != BooleanDisposable.True)
             {
                 // Atomically swap in the disposed instance.
-                a = Interlocked.Exchange(ref _current, DISPOSED);
+                a = Interlocked.Exchange(ref _current, BooleanDisposable.True);
                 // It is possible there was a concurrent Dispose call so don't need to call Dispose()
                 // on DISPOSED
-                if (a != DISPOSED)
+                if (a != BooleanDisposable.True)
                 {
                     a?.Dispose();
                 }
-            }
-        }
-
-        sealed class Disposed : IDisposable
-        {
-            public void Dispose()
-            {
-                // ignored
             }
         }
     }
