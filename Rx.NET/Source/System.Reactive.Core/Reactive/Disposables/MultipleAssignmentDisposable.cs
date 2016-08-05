@@ -27,6 +27,9 @@ namespace System.Reactive.Disposables
         {
             get
             {
+                // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
+                // to the outside world (see the Disposable property getter), so no-one can ever assign
+                // this value to us manually.
                 return Volatile.Read(ref _current) == BooleanDisposable.True;
             }
         }
