@@ -25,7 +25,6 @@ namespace System.Linq
             internal AsyncIteratorState state = AsyncIteratorState.New;
             internal TSource current;
             private CancellationTokenSource cancellationTokenSource;
-            private List<CancellationTokenRegistration> moveNextRegistrations;
             private bool currentIsInvalid = true;
 
             protected AsyncIterator()
@@ -41,7 +40,6 @@ namespace System.Linq
 
                 enumerator.state = AsyncIteratorState.Allocated;
                 enumerator.cancellationTokenSource = new CancellationTokenSource();
-                enumerator.moveNextRegistrations = new List<CancellationTokenRegistration>();
                 return enumerator;
             }
 
@@ -56,17 +54,6 @@ namespace System.Linq
 
                 current = default(TSource);
                 state = AsyncIteratorState.Disposed;
-
-                var toClean = moveNextRegistrations?.ToList();
-                moveNextRegistrations = null;
-                if (toClean != null)
-                {
-                    foreach (var r in toClean)
-                    {
-                        r.Dispose();
-                    }
-                    toClean.Clear();
-                }
             }
 
             public TSource Current
@@ -85,11 +72,8 @@ namespace System.Linq
                 {
                     return false;
                 }
-               
 
-                // We keep these because cancelling any of these must trigger dispose of the iterator
-                moveNextRegistrations.Add(cancellationToken.Register(Dispose));
-
+                using (cancellationToken.Register(Dispose))
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
                 {
                     try
