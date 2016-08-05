@@ -17,6 +17,12 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
+            var collectionoft = source as ICollection<TSource>;
+            if (collectionoft != null)
+            {
+                return Task.FromResult(collectionoft.Count);
+            }
+
             var listProv = source as IIListProvider<TSource>;
             if (listProv != null)
             {
