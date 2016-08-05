@@ -23,7 +23,7 @@ namespace System.Linq
 
             return Defer(() =>
                          {
-                             var set = new HashSet<TKey>(comparer);
+                             var set = new Set<TKey>(comparer);
                              return source.Where(item => set.Add(keySelector(item)));
                          });
         }
