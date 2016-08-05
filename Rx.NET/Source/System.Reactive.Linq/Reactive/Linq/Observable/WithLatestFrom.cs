@@ -90,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TFirst value)
                 {
-                    if (_parent._hasLatest)
+                    if (_parent._hasLatest) // Volatile read
                     {
 
                         TSecond latest;
