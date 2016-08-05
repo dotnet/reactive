@@ -31,23 +31,23 @@ namespace System.Reactive.Linq.ObservableImpl
 
         class _ : Sink<TResult>
         {
-            static readonly object EMPTY = new object();
-
             private readonly WithLatestFrom<TFirst, TSecond, TResult> _parent;
 
             public _(WithLatestFrom<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
                 _parent = parent;
-                Volatile.Write(ref _latest, EMPTY); // StoreStore barrier
             }
 
             private object _gate;
-            private object _latest;
+            private object _latestGate;
+            private volatile bool hasLatest;
+            private TSecond _latest;
 
             public IDisposable Run()
             {
                 _gate = new object();
+                _latestGate = new object();
 
                 var sndSubscription = new SingleAssignmentDisposable();
 
@@ -89,14 +89,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TFirst value)
                 {
-                    var latest = Volatile.Read(ref _parent._latest);  // Volatile read
-                    if (latest != EMPTY)
+                    if (_parent.hasLatest)
                     {
+
+                        TSecond latest;
+
+                        lock (_parent._latestGate)
+                        {
+                            latest = _parent._latest;
+                        }
+
                         var res = default(TResult);
 
                         try
                         {
-                            res = _parent._parent._resultSelector(value, (TSecond)_parent._latest);
+                            res = _parent._parent._resultSelector(value, latest);
                         }
                         catch (Exception ex)
                         {
@@ -144,7 +151,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSecond value)
                 {
-                    Interlocked.Exchange(ref _parent._latest, value); // StoreStore, StoreLoad barrier (can be just Write)
+                    lock (_parent._latestGate)
+                    {
+                        _parent._latest = value;
+                    }
+
+                    if (!_parent.hasLatest)
+                    {
+                        _parent.hasLatest = true;
+                    }
                 }
             }
         }
