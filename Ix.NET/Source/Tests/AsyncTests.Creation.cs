@@ -370,7 +370,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { disposed.TrySetResult(true); });
                 },
-                _ => AsyncEnumerable.Range(0, 10)
+                _ => new CancellationTestAsyncEnumerable(2) // need to use this to verify we actually cancel
             );
 
             Assert.Equal(0, i);
