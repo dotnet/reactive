@@ -104,9 +104,15 @@ namespace Tests
         [Fact]
         public void Concat6()
         {
-            // Note: Concat does an eager traverse of the enumerables to build up
-            // its sequences. If the outer enumerable throws it'll trhow here.
-            AssertThrows<Exception>(() => AsyncEnumerable.Concat(ConcatXss()), ex_ => ex_.Message == "Bang!");
+            var res = AsyncEnumerable.Concat(ConcatXss());
+
+            var e = res.GetEnumerator();
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 4);
+            HasNext(e, 5);
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
 
         static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
