@@ -34,9 +34,9 @@ namespace System.Linq
                         async ct =>
                         {
                             if (baseEnumerator == null)
-                                baseEnumerator = (await asyncFactory(ct)).GetEnumerator();
+                                baseEnumerator = (await asyncFactory(ct).ConfigureAwait(false)).GetEnumerator();
 
-                            return await baseEnumerator.MoveNext(ct);
+                            return await baseEnumerator.MoveNext(ct).ConfigureAwait(false);
                         },
                         () =>
                         {
