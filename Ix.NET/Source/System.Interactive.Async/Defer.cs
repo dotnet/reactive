@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -19,6 +18,35 @@ namespace System.Linq
             return CreateEnumerable(
                 () => factory()
                     .GetEnumerator());
+        }
+
+        public static IAsyncEnumerable<TSource> Defer<TSource>(Func<CancellationToken, Task<IAsyncEnumerable<TSource>>> asyncFactory)
+        {
+            if (asyncFactory == null)
+                throw new ArgumentNullException(nameof(asyncFactory));
+
+            return CreateEnumerable(
+                () => 
+                {
+                    var baseEnumerator = default(IAsyncEnumerator<TSource>);
+
+                    return CreateEnumerator(
+                        async ct =>
+                        {
+                            if (baseEnumerator == null)
+                                baseEnumerator = (await asyncFactory(ct)).GetEnumerator();
+
+                            return await baseEnumerator.MoveNext(ct);
+                        },
+                        () =>
+                        {
+                            if (baseEnumerator == null)
+                                throw new InvalidOperationException();
+
+                            return baseEnumerator.Current;
+                        },
+                        () => baseEnumerator?.Dispose());
+                });
         }
     }
 }

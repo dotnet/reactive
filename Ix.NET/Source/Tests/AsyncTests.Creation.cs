@@ -153,7 +153,7 @@ namespace Tests
         [Fact]
         public void Defer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer(default(Func<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -174,6 +174,67 @@ namespace Tests
                 HasNext(e, 1);
                 NoNext(e);
             }
+        }
+
+        [Fact]
+        public void Defer_async()
+        {
+            var x = 0;
+            var xs = AsyncEnumerable.Defer<int>(async ct => new[] { x }.ToAsyncEnumerable());
+
+            {
+                var e = xs.GetEnumerator();
+                HasNext(e, 0);
+                NoNext(e);
+            }
+
+            {
+                x++;
+                var e = xs.GetEnumerator();
+                HasNext(e, 1);
+                NoNext(e);
+            }
+        }
+
+        [Fact]
+        public void Defer_async_delayed()
+        {
+            var x = 0;
+            var xs = AsyncEnumerable.Defer<int>(async ct =>
+                                                {
+                                                    await Task.Delay(10, ct);
+
+                                                    return new[] { x }.ToAsyncEnumerable();
+                                                });
+
+            {
+                var e = xs.GetEnumerator();
+                HasNext(e, 0);
+                NoNext(e);
+            }
+
+            {
+                x++;
+                var e = xs.GetEnumerator();
+                HasNext(e, 1);
+                NoNext(e);
+            }
+        }
+
+        [Fact]
+        public void Defer_creation_exception_bubbles_up_to_MoveNext()
+        {
+            var ex = new Exception("Bang");
+            var xs = AsyncEnumerable.Defer<int>(
+                async ct =>
+                {
+                    throw ex;
+                    return default(IAsyncEnumerable<int>);
+                });
+
+            var e = xs.GetEnumerator();
+
+            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
