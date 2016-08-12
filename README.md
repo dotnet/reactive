@@ -19,12 +19,12 @@ Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder
 
 ### Breaking changes
 The NuGet packages have changed their package naming in the move from v2.x.x to v3.0.0
- * ~~`Rx-Main`~~ is now `System.Reactive`
- * ~~`Rx-Core`~~ is now `System.Reactive.Core`
- * ~~`Rx-Interfaces`~~  is now `System.Reactive.Interfaces`
- * ~~`Rx-Linq`~~  is now `System.Reactive.Linq`
- * ~~`Rx-PlatformServices`~~  is now `System.Reactive.PlatformServices`
- * ~~`Rx-Testing`~~  is now `Microsoft.Reactive.Testing`
+ * ~~`Rx-Main`~~ is now [`System.Reactive`](https://www.nuget.org/packages/System.Reactive/)
+ * ~~`Rx-Core`~~ is now [`System.Reactive.Core`](https://www.nuget.org/packages/System.Reactive.Core/)
+ * ~~`Rx-Interfaces`~~  is now [`System.Reactive.Interfaces`](https://www.nuget.org/packages/System.Reactive.Interfaces/)
+ * ~~`Rx-Linq`~~  is now [`System.Reactive.Linq`](https://www.nuget.org/packages/System.Reactive.Linq/)
+ * ~~`Rx-PlatformServices`~~  is now [`System.Reactive.PlatformServices`](https://www.nuget.org/packages/System.Reactive.PlatformServices/)
+ * ~~`Rx-Testing`~~  is now [`Microsoft.Reactive.Testing`](https://www.nuget.org/packages/Microsoft.Reactive.Testing/)
 
 This brings the NuGet package naming in line with NuGet guidelines and also the dominant namespace in each package.
 The strong name key has also changed, which is considered a breaking change.
