@@ -880,7 +880,6 @@ namespace Tests
         public void Skip_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Skip<int>(AsyncEnumerable.Return(42), -1));
         }
 
         [Fact]
@@ -2464,7 +2463,6 @@ namespace Tests
         public void SkipLast_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SkipLast(default(IAsyncEnumerable<int>), 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.SkipLast(AsyncEnumerable.Return(42), -1));
         }
 
         [Fact]
