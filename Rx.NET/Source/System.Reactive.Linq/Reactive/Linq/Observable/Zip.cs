@@ -157,6 +157,11 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
+                            if (Queue.Count == 0) // no chance for further match
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                            }
                             _self.Dispose();
                         }
                     }

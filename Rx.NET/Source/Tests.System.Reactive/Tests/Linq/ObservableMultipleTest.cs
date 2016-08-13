@@ -12156,11 +12156,10 @@ namespace ReactiveTests.Tests
                 e.Zip(n, (x, y) => x + y)
             );
 
-            res.Messages.AssertEqual(
-            );
+            res.Messages.AssertEqual(OnCompleted<int>(210));
 
             n.Subscriptions.AssertEqual(
-                Subscribe(200, 1000)
+                Subscribe(200, 210)
             );
 
             e.Subscriptions.AssertEqual(
@@ -12217,12 +12216,12 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnCompleted<int>(220)
+                OnCompleted<int>(210)
             );
 
-            var i = 0;
+            //var i = 0;
             foreach (var e in new[] { e0, e1 })
-                e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
+                e.Subscriptions.AssertEqual(Subscribe(200, 210));// + (++i * 10)));
         }
 
         [TestMethod]
@@ -12651,7 +12650,7 @@ namespace ReactiveTests.Tests
             );
 
             res.Messages.AssertEqual(
-                OnCompleted<int>(215)
+                OnCompleted<int>(210)
             );
 
             e.Subscriptions.AssertEqual(
@@ -12659,7 +12658,7 @@ namespace ReactiveTests.Tests
             );
 
             o.Subscriptions.AssertEqual(
-                Subscribe(200, 215)
+                Subscribe(200, 210)
             );
         }
 
@@ -12789,7 +12788,7 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnNext(220, 2 + 3),
-                OnCompleted<int>(240)
+                OnCompleted<int>(230)
             );
 
             o1.Subscriptions.AssertEqual(
@@ -12797,7 +12796,7 @@ namespace ReactiveTests.Tests
             );
 
             o2.Subscriptions.AssertEqual(
-                Subscribe(200, 240)
+                Subscribe(200, 230)
             );
         }
 
@@ -13083,7 +13082,7 @@ namespace ReactiveTests.Tests
 
             res.Messages.AssertEqual(
                 OnNext(215, 6),
-                OnCompleted<int>(225)
+                OnCompleted<int>(220)
             );
 
             o.Subscriptions.AssertEqual(
@@ -13091,7 +13090,7 @@ namespace ReactiveTests.Tests
             );
 
             e.Subscriptions.AssertEqual(
-                Subscribe(200, 225)
+                Subscribe(200, 220)
             );
         }
 
@@ -15804,6 +15803,26 @@ namespace ReactiveTests.Tests
         }
 
         #endregion
+
+
+        [TestMethod]
+        public void Zip_Commpletion_Test()
+        {
+            var scheduler = new TestScheduler();
+
+            var e0 = scheduler.CreateHotObservable(new[] { OnNext(150, "A"), OnCompleted<string>(300) });
+            var e1 = scheduler.CreateHotObservable(new[] { OnNext(200, 1), OnNext(500, 2), OnNext(600, 3) }); //, OnCompleted<int>(900) });
+
+            var res = scheduler.Start(() =>
+                Observable.Zip(e0, e1, (_0, _1) => _0 + _1)
+                , created: 0, subscribed: 0, disposed: 1000);
+
+
+            res.Messages.AssertEqual(// no chance to further matching
+                OnNext(200, "A1"), OnCompleted<string>(300)
+            );
+
+        }
 
         #endregion
     }
