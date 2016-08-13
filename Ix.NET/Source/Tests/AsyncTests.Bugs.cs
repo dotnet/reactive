@@ -256,8 +256,6 @@ namespace Tests
         /// </summary>
         private sealed class CancellationTestEnumerable<T> : IEnumerable<T>
         {
-            private readonly CancellationToken cancellationToken;
-
             public CancellationTestEnumerable()
             {
             }
