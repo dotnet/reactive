@@ -2024,6 +2024,17 @@ namespace Tests
             Assert.Equal(3, i);
         }
 
+        [Fact]
+        public void RepeatSeq0()
+        {
+            var i = 0;
+            var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(0);
+
+            var e = xs.GetEnumerator();
+
+            NoNext(e);
+        }
+
         static IEnumerable<int> RepeatXs(Action started)
         {
             started();
