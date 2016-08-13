@@ -31,40 +31,105 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return CreateEnumerable(
-                () =>
+            return new ExceptAsyncIterator<TSource>(first, second, comparer);
+        }
+
+        private sealed class ExceptAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly IEqualityComparer<TSource> comparer;
+            private readonly IAsyncEnumerable<TSource> first;
+            private readonly IAsyncEnumerable<TSource> second;
+
+            private Task fillSetTask;
+
+            private IAsyncEnumerator<TSource> firstEnumerator;
+            private Set<TSource> set;
+
+            private bool setFilled;
+
+            public ExceptAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
+            {
+                this.first = first;
+                this.second = second;
+                this.comparer = comparer;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new ExceptAsyncIterator<TSource>(first, second, comparer);
+            }
+
+            public override void Dispose()
+            {
+                if (firstEnumerator != null)
                 {
-                    var e = first.GetEnumerator();
+                    firstEnumerator.Dispose();
+                    firstEnumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                set = null;
 
-                    var mapTask = default(Task<Dictionary<TSource, TSource>>);
-                    var getMapTask = new Func<CancellationToken, Task<Dictionary<TSource, TSource>>>(
-                        ct => mapTask ?? (mapTask = second.ToDictionary(x => x, comparer, ct)));
+                base.Dispose();
+            }
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        firstEnumerator = first.GetEnumerator();
+                        set = new Set<TSource>(comparer);
+                        setFilled = false;
+                        fillSetTask = FillSet(cancellationToken);
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+
+                        bool moveNext;
+                        if (!setFilled)
                         {
-                            if (await e.MoveNext(ct)
-                                       .Zip(getMapTask(ct), (b, _) => b)
-                                       .ConfigureAwait(false))
-                            {
-                                if (!mapTask.Result.ContainsKey(e.Current))
-                                    return true;
-                                return await f(ct)
-                                           .ConfigureAwait(false);
-                            }
-                            return false;
-                        };
+                            // This is here so we don't need to call Task.WhenAll each time after the set is filled
+                            var moveNextTask = firstEnumerator.MoveNext(cancellationToken);
+                            await Task.WhenAll(moveNextTask, fillSetTask)
+                                      .ConfigureAwait(false);
+                            setFilled = true;
+                            moveNext = moveNextTask.Result;
+                        }
+                        else
+                        {
+                            moveNext = await firstEnumerator.MoveNext(cancellationToken)
+                                                            .ConfigureAwait(false);
+                        }
 
-                    return CreateEnumerator(
-                        f,
-                        () => e.Current,
-                        d.Dispose,
-                        e
-                    );
-                });
+                        if (moveNext)
+                        {
+                            var item = firstEnumerator.Current;
+                            if (set.Add(item))
+                            {
+                                current = item;
+                                return true;
+                            }
+                            goto case AsyncIteratorState.Iterating; // loop
+                        }
+
+                        Dispose();
+                        break;
+                }
+
+                return false;
+            }
+
+            private async Task FillSet(CancellationToken cancellationToken)
+            {
+                var array = await second.ToArray(cancellationToken)
+                                        .ConfigureAwait(false);
+                for (var i = 0; i < array.Length; i++)
+                {
+                    set.Add(array[i]);
+                }
+            }
         }
     }
 }
