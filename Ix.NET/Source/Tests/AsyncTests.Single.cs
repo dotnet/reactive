@@ -711,7 +711,16 @@ namespace Tests
         public void Take_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(null, 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Take<int>(AsyncEnumerable.Return(42), -1));
+        }
+
+        [Fact]
+        public void Take0()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Take(-2);
+
+            var e = ys.GetEnumerator();
+            NoNext(e);
         }
 
         [Fact]
@@ -881,6 +890,16 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(null, 5));
         }
+
+        //[Fact]
+        //public void Skip0()
+        //{
+        //    var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+        //    var ys = xs.Skip(-2);
+
+        //    var e = ys.GetEnumerator();
+        //    NoNext(e);
+        //}
 
         [Fact]
         public void Skip1()
@@ -2414,7 +2433,15 @@ namespace Tests
         public void TakeLast_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeLast(default(IAsyncEnumerable<int>), 5));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.TakeLast(AsyncEnumerable.Return(42), -1));
+        }
+
+        [Fact]
+        public void TakeLast0()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(-2);
+
+            var e = xs.GetEnumerator();
+            NoNext(e);
         }
 
         [Fact]
