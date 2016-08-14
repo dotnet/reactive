@@ -1,6 +1,9 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,30 +12,18 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        internal enum AsyncIteratorState
-        {
-            New = 0,
-            Allocated = 1,
-            Iterating = 2,
-            Disposed = -1,
-        }
-
         internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
         {
-            
-
             private readonly int threadId;
-            internal AsyncIteratorState state = AsyncIteratorState.New;
-            internal TSource current;
             private CancellationTokenSource cancellationTokenSource;
+            internal TSource current;
             private bool currentIsInvalid = true;
+            internal AsyncIteratorState state = AsyncIteratorState.New;
 
             protected AsyncIterator()
             {
                 threadId = Environment.CurrentManagedThreadId;
             }
-
-            public abstract AsyncIterator<TSource> Clone();
 
             public IAsyncEnumerator<TSource> GetEnumerator()
             {
@@ -40,10 +31,21 @@ namespace System.Linq
 
                 enumerator.state = AsyncIteratorState.Allocated;
                 enumerator.cancellationTokenSource = new CancellationTokenSource();
+
+                try
+                {
+                    enumerator.OnGetEnumerator();
+                }
+                catch
+                {
+                    enumerator.Dispose();
+                    throw;
+                }
+
                 return enumerator;
             }
 
-            
+
             public virtual void Dispose()
             {
                 if (!cancellationTokenSource.IsCancellationRequested)
@@ -81,7 +83,8 @@ namespace System.Linq
                         // Short circuit and don't even call MoveNexCore
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        var result = await MoveNextCore(cts.Token).ConfigureAwait(false);
+                        var result = await MoveNextCore(cts.Token)
+                                         .ConfigureAwait(false);
 
                         currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 
@@ -96,7 +99,7 @@ namespace System.Linq
                 }
             }
 
-            protected abstract Task<bool> MoveNextCore(CancellationToken cancellationToken);
+            public abstract AsyncIterator<TSource> Clone();
 
             public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, TResult> selector)
             {
@@ -107,6 +110,20 @@ namespace System.Linq
             {
                 return new WhereEnumerableAsyncIterator<TSource>(this, predicate);
             }
+
+            protected abstract Task<bool> MoveNextCore(CancellationToken cancellationToken);
+
+            protected virtual void OnGetEnumerator()
+            {
+            }
+        }
+
+        internal enum AsyncIteratorState
+        {
+            New = 0,
+            Allocated = 1,
+            Iterating = 2,
+            Disposed = -1
         }
     }
 }
