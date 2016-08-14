@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -18,55 +19,77 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw new ArgumentNullException(nameof(enumerableFactory));
 
-            return CreateEnumerable(
-                () =>
+            return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
+        }
+
+        private sealed class UsingAsyncIterator<TSource, TResource> : AsyncIterator<TSource> where TResource : IDisposable
+        {
+            private readonly Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory;
+            private readonly Func<TResource> resourceFactory;
+            private IAsyncEnumerable<TSource> enumerable;
+            private IAsyncEnumerator<TSource> enumerator;
+
+            private TResource resource;
+
+            public UsingAsyncIterator(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory)
+            {
+                this.resourceFactory = resourceFactory;
+                this.enumerableFactory = enumerableFactory;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new UsingAsyncIterator<TSource, TResource>(resourceFactory, enumerableFactory);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var resource = resourceFactory();
-                    var e = default(IAsyncEnumerator<TSource>);
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    try
-                    {
-                        e = enumerableFactory(resource)
-                            .GetEnumerator();
-                    }
-                    catch (Exception)
-                    {
-                        resource.Dispose();
-                        throw;
-                    }
+                if (resource != null)
+                {
+                    resource.Dispose();
+                    resource = default(TResource);
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, resource, e);
+                base.Dispose();
+            }
 
-                    var current = default(TSource);
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = enumerable.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    return CreateEnumerator(
-                        async ct =>
+                    case AsyncIteratorState.Iterating:
+                        while (await enumerator.MoveNext(cancellationToken)
+                                               .ConfigureAwait(false))
                         {
-                            bool res;
-                            try
-                            {
-                                res = await e.MoveNext(cts.Token)
-                                             .ConfigureAwait(false);
-                            }
-                            catch (Exception)
-                            {
-                                d.Dispose();
-                                throw;
-                            }
-                            if (res)
-                            {
-                                current = e.Current;
-                                return true;
-                            }
-                            d.Dispose();
-                            return false;
-                        },
-                        () => current,
-                        d.Dispose,
-                        null
-                    );
-                });
+                            current = enumerator.Current;
+                            return true;
+                        }
+
+                        Dispose();
+                        break;
+                }
+
+                return false;
+            }
+
+            protected override void OnGetEnumerator()
+            {
+                resource = resourceFactory();
+                enumerable = enumerableFactory(resource);
+
+                base.OnGetEnumerator();
+            }
         }
     }
 }
