@@ -19,13 +19,7 @@ namespace System.Linq
 
         public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
-            return new AnonymousAsyncIterator<T>(moveNext, current, dispose, null);
-        }
-
-        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current,
-                                                               Action dispose, IDisposable enumerator)
-        {
-            return new AnonymousAsyncIterator<T>(moveNext, current, dispose, enumerator);
+            return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
 
         private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
@@ -49,8 +43,7 @@ namespace System.Linq
                     }
                 },
                 current,
-                dispose, 
-                null
+                dispose
             );
             return self;
         }
@@ -76,16 +69,14 @@ namespace System.Linq
         {
             private readonly Func<T> currentFunc;
             private readonly Action dispose;
-            private IDisposable enumerator;
             private readonly Func<CancellationToken, Task<bool>> moveNext;
 
 
-            public AnonymousAsyncIterator(Func<CancellationToken, Task<bool>> moveNext, Func<T> currentFunc, Action dispose, IDisposable enumerator)
+            public AnonymousAsyncIterator(Func<CancellationToken, Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
             {
                 this.moveNext = moveNext;
                 this.currentFunc = currentFunc;
                 this.dispose = dispose;
-                this.enumerator = enumerator;
 
                 // Explicit call to initialize enumerator mode
                 GetEnumerator();
@@ -98,11 +89,6 @@ namespace System.Linq
 
             public override void Dispose()
             {
-                if (enumerator != null)
-                {
-                    enumerator.Dispose();
-                    enumerator = null;
-                }
                 dispose?.Invoke();
 
                 base.Dispose();
