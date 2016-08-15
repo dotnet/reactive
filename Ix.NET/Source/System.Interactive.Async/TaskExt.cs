@@ -9,12 +9,5 @@ namespace System.Threading.Tasks
     {
         public static readonly Task<bool> True = Task.FromResult(true);
         public static readonly Task<bool> False = Task.FromResult(false);
-        
-        public static Task<T> Throw<T>(Exception exception)
-        {
-            var tcs = new TaskCompletionSource<T>();
-            tcs.TrySetException(exception);
-            return tcs.Task;
-        }
     }
 }
