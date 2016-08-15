@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -18,22 +19,63 @@ namespace System.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return CreateEnumerable(
-                () =>
+            return new FinallyAsyncIterator<TSource>(source, finallyAction);
+        }
+
+        private sealed class FinallyAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Action finallyAction;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public FinallyAsyncIterator(IAsyncEnumerable<TSource> source, Action finallyAction)
+            {
+                this.source = source;
+                this.finallyAction = finallyAction;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new FinallyAsyncIterator<TSource>(source, finallyAction);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
+                    enumerator.Dispose();
+                    enumerator = null;
 
-                    var cts = new CancellationTokenDisposable();
-                    var r = new Disposable(finallyAction);
-                    var d = Disposable.Create(cts, e, r);
+                    finallyAction();
+                }
 
-                    return CreateEnumerator(
-                        ct => e.MoveNext(ct),
-                        () => e.Current,
-                        d.Dispose,
-                        r
-                    );
-                });
+                base.Dispose();
+            }
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
+                        {
+                            current = enumerator.Current;
+                            return true;
+                        }
+
+                        Dispose();
+                        break;
+                }
+
+                return false;
+            }
         }
     }
 }
