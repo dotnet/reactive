@@ -24,9 +24,7 @@ namespace System.Linq
         {
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
-                    ct => TaskExt.False,
-                    () => { throw new InvalidOperationException(); },
-                    () => { })
+                    ct => TaskExt.False, null, null)
             );
         }
 
