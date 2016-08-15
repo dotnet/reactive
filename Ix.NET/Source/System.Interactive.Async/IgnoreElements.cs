@@ -17,34 +17,57 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(
-                () =>
+            return new IgnoreElementsAsyncIterator<TSource>(source);
+        }
+
+        private sealed class IgnoreElementsAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly IAsyncEnumerable<TSource> source;
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public IgnoreElementsAsyncIterator(IAsyncEnumerable<TSource> source)
+            {
+                this.source = source;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new IgnoreElementsAsyncIterator<TSource>(source);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                base.Dispose();
+            }
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (!await enumerator.MoveNext(cancellationToken)
+                                             .ConfigureAwait(false))
                         {
-                            if (!await e.MoveNext(ct)
-                                        .ConfigureAwait(false))
-                            {
-                                return false;
-                            }
+                            break;
+                        }
 
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        };
+                        goto case AsyncIteratorState.Iterating; // Loop
+                }
 
-                    return CreateEnumerator<TSource>(
-                        f,
-                        () => { throw new InvalidOperationException(); },
-                        d.Dispose,
-                        e
-                    );
-                });
+                Dispose();
+                return false;
+            }
         }
     }
 }
