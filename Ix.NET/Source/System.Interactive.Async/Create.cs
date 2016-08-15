@@ -39,7 +39,6 @@ namespace System.Linq
                     var stop = new Action(
                         () =>
                         {
-                            self.Dispose();
                             tcs.TrySetCanceled();
                         });
 
