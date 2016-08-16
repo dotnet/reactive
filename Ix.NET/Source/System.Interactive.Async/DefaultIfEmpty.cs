@@ -74,6 +74,9 @@ namespace System.Linq
                         else
                         {
                             current = defaultValue;
+                            enumerator.Dispose();
+                            enumerator = null;
+
                             state = AsyncIteratorState.Disposed; 
                         }
                         return true;
