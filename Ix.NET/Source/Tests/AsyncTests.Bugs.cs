@@ -377,6 +377,13 @@ namespace Tests
             Assert.True(disposes.All(d => d.DisposeCount == 1));
         }
 
+        [Fact]
+        public void DisposeAfterCreation()
+        {
+            var enumerable = AsyncEnumerable.Return(0) as IDisposable;
+            enumerable?.Dispose();
+        }
+
         private class DisposeCounter : IAsyncEnumerable<object>
         {
             public int DisposeCount { get; private set; }
