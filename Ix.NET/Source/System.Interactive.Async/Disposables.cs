@@ -26,25 +26,11 @@ namespace System.Linq
         }
     }
 
-    class Disposable : IDisposable
+    static class Disposable
     {
-        private static Action s_nop = () => { };
-        private Action _dispose;
-
-        public Disposable(Action dispose)
-        {
-            _dispose = dispose;
-        }
-
         public static IDisposable Create(IDisposable d1, IDisposable d2)
         {
             return new BinaryDisposable(d1, d2);
-        }
-
-        public void Dispose()
-        {
-            var dispose = Interlocked.Exchange(ref _dispose, s_nop);
-            dispose();
         }
     }
 
