@@ -1,10 +1,8 @@
 image: Visual Studio 2015
-init:
-  - cmd: set
 
 environment:
   COVERALLS_REPO_TOKEN:
-    secure: UHHvZf0xOadSg6wc6ITa3XqtDf3AIv31D2Bs0opREd4/Ni+1KsqcHitWDAahZhTG
+    secure: DOSlU041NY0WKjv9njrNqj14CLEzrF4ogZsbvqIXnNLd492oNlQf4dD5yr7TSK/S
 
 branches:
   only:
