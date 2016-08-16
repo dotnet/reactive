@@ -4,6 +4,14 @@ $configuration = "Release"
 
 $nuspecDir = Join-Path $scriptPath "NuSpecs"
 $isAppVeyor = Test-Path -Path env:\APPVEYOR
+$outputLocation = Join-Path $scriptPath "testResults"
+
+#remove any old coverage file
+md -Force $outputLocation | Out-Null
+$outputPath = (Resolve-Path $outputLocation).Path
+$outputFile = Join-Path $outputPath -childpath 'coverage.xml'
+Remove-Item $outputPath -Force -Recurse
+md -Force $outputLocation | Out-Null
 
 if (!(Test-Path .\nuget.exe)) {
     wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
@@ -16,6 +24,10 @@ $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get tools
 .\nuget.exe install -excludeversion gitversion.commandline -outputdirectory packages
+.\nuget.exe install -excludeversion OpenCover -outputdirectory packages
+.\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
+.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
+
 
 #update version
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
@@ -67,12 +79,27 @@ foreach ($nuspec in $nuspecs) {
 
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests"  
-dotnet test $testDirectory -c $configuration
+
+# Execute OpenCover with a target of "dotnet test"
+.\packages\OpenCover\tools\OpenCover.Console.exe  -register:user -oldStyle -mergeoutput -target:dotnet.exe -threshold:1 -targetdir:"$testDirectory" -targetargs:"test $testDirectory -c $configuration" -output:"$outputFile" -skipautoprops -returntargetcode "-excludebyattribute:System.Diagnostics.DebuggerNonUserCodeAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests]* -[xunit.*]*" 
+
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with tests" -Foreground Red
     if($isAppVeyor) {
       $host.SetShouldExit($LastExitCode)
     }  
+}
+
+
+# Either display or publish the results
+if ($env:CI -eq 'True')
+{
+  .\packages\coveralls.io\tools\coveralls.net.exe  --opencover "$outputFile" --full-sources
+}
+else
+{
+	.\packages\ReportGenerator\tools\ReportGenerator.exe -reports:"$outputFile" -targetdir:"$outputPath"
+	 &$outPutPath/index.htm
 }
 
 Write-Host "Reverting AssemblyInfo's" -Foreground Green
