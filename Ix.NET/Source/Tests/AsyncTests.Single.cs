@@ -15,6 +15,14 @@ namespace Tests
     public partial class AsyncTests
     {
         [Fact]
+        public void MoveNextExtension_Null()
+        {
+            var en = default(IAsyncEnumerator<int>);
+
+            Assert.ThrowsAsync<ArgumentNullException>(() => en.MoveNext());
+        }
+
+        [Fact]
         public void MoveNextExtension()
         {
             var enumerable = new CancellationTestAsyncEnumerable();
@@ -79,6 +87,81 @@ namespace Tests
 
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
+        }
+
+        [Fact]
+        public void Select5()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 'd');
+            HasNext(e, 'e');
+            HasNext(e, 'f');
+            NoNext(e);
+        }
+
+        [Fact]
+        public void Select6()
+        {
+            var xs = new CancellationTestAsyncEnumerable();
+            var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 'd');
+            HasNext(e, 'e');
+            HasNext(e, 'f');
+        }
+
+        [Fact]
+        public void SelectWhere1()
+        {
+            var xs = new CancellationTestAsyncEnumerable();
+            var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 2);
+            HasNext(e, 4);
+            HasNext(e, 6);
+        }
+
+        [Fact]
+        public void WhereSelect1()
+        {
+            var xs = new CancellationTestAsyncEnumerable();
+            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 2);
+            HasNext(e, 4);
+            HasNext(e, 6);
+        }
+
+
+        [Fact]
+        public void SelectWhere2()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 2);
+            HasNext(e, 4);
+            NoNext(e);
+
+        }
+
+        [Fact]
+        public void WhereSelect2()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 2);
+            HasNext(e, 4);
+            NoNext(e);
         }
 
         [Fact]

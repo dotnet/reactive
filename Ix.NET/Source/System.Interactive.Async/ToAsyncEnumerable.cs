@@ -198,6 +198,11 @@ namespace System.Linq
                 return Task.FromResult(false);
             }
 
+            public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector)
+            {
+                return new SelectIListIterator<T, TResult>(source, selector);
+            }
+
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
