@@ -15,6 +15,18 @@ namespace Tests
     public partial class AsyncTests
     {
         [Fact]
+        public void MoveNextExtension()
+        {
+            var enumerable = new CancellationTestAsyncEnumerable();
+            var en = enumerable.GetEnumerator();
+
+            en.MoveNext();
+
+            Assert.True(en.MoveNextWasCalled);
+            Assert.Equal(CancellationToken.None, en.LastToken);
+        }
+
+        [Fact]
         public void Select_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(null, x => x));

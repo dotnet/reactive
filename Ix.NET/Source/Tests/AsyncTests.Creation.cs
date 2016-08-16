@@ -12,14 +12,6 @@ using System.Threading;
 
 namespace Tests
 {
-    static class Ext
-    {
-        public static Task<bool> MoveNext<T>(this IAsyncEnumerator<T> enumerator)
-        {
-            return enumerator.MoveNext(CancellationToken.None);
-        }
-    }
-
     public partial class AsyncTests
     {
         [Fact]

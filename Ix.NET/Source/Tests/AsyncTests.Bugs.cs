@@ -213,7 +213,7 @@ namespace Tests
         /// <summary>
         /// Waits WaitTimeoutMs or until cancellation is requested. If cancellation was not requested, MoveNext returns true.
         /// </summary>
-        private sealed class CancellationTestAsyncEnumerable : IAsyncEnumerable<int>
+        internal sealed class CancellationTestAsyncEnumerable : IAsyncEnumerable<int>
         {
             private readonly int iterationsBeforeDelay;
 
@@ -221,9 +221,12 @@ namespace Tests
             {
                 this.iterationsBeforeDelay = iterationsBeforeDelay;
             }
-            public IAsyncEnumerator<int> GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetEnumerator() => GetEnumerator();
 
-            private sealed class TestEnumerator : IAsyncEnumerator<int>
+            public TestEnumerator GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
+
+
+            internal sealed class TestEnumerator : IAsyncEnumerator<int>
             {
                 private readonly int iterationsBeforeDelay;
 
@@ -236,10 +239,16 @@ namespace Tests
                 {
                 }
 
+                public CancellationToken LastToken { get; private set; }
+                public bool MoveNextWasCalled { get; private set; }
+
                 public int Current => i;
                 
                 public async Task<bool> MoveNext(CancellationToken cancellationToken)
                 {
+                    LastToken = cancellationToken;
+                    MoveNextWasCalled = true;
+                  
                     i++;
                     if (Current >= iterationsBeforeDelay)
                     {
