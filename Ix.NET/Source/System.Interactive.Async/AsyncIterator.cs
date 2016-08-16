@@ -73,6 +73,10 @@ namespace System.Linq
 
             public async Task<bool> MoveNext(CancellationToken cancellationToken)
             {
+                // Note: MoveNext *must* be implemented as an async method to ensure
+                // that any exceptions thrown from the MoveNextCore call are handled 
+                // by the try/catch, whether they're sync or async
+
                 if (state == AsyncIteratorState.Disposed)
                 {
                     return false;

@@ -132,8 +132,27 @@ namespace System.Linq
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return onlyIfCheap ? -1 : (await FillSet(cancellationToken)
-                                               .ConfigureAwait(false)).Count;
+                if (onlyIfCheap)
+                {
+                    return -1;
+                }
+
+                var count = 0;
+                var s = new Set<TKey>(comparer);
+                using (var enu = source.GetEnumerator())
+                {
+                    while (await enu.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
+                    {
+                        var item = enu.Current;
+                        if (s.Add(keySelector(item)))
+                        {
+                            count++;
+                        }
+                    }
+                }
+
+                return count;
             }
 
             public override AsyncIterator<TSource> Clone()

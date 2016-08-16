@@ -125,9 +125,9 @@ namespace System.Linq
             {
                 var array = await second.ToArray(cancellationToken)
                                         .ConfigureAwait(false);
-                for (var i = 0; i < array.Length; i++)
+                foreach (var t in array)
                 {
-                    set.Add(array[i]);
+                    set.Add(t);
                 }
             }
         }

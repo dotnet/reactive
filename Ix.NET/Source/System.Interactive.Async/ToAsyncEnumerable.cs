@@ -212,7 +212,7 @@ namespace System.Linq
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.Count());
+                return Task.FromResult(source.Count);
             }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
@@ -299,7 +299,7 @@ namespace System.Linq
             }
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return Task.FromResult(source.Count());
+                return Task.FromResult(source.Count);
             }
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();

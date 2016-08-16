@@ -110,6 +110,9 @@ namespace System.Linq
                             }
                             catch (TException ex)
                             {
+                                // Note: Ideally we'd dipose of the previous enumerator before
+                                // invoking the handler, but we use this order to preserve
+                                // current behavior
                                 var err = handler(ex)
                                     .GetEnumerator();
                                 enumerator?.Dispose();
