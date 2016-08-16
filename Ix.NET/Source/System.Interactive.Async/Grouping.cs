@@ -120,21 +120,6 @@ namespace System.Linq
             return GroupBy(source, keySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
-        private static IEnumerable<IGrouping<TKey, TElement>> GroupUntil<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IComparer<TKey> comparer)
-        {
-            var group = default(EnumerableGrouping<TKey, TElement>);
-            foreach (var x in source)
-            {
-                var key = keySelector(x);
-                if (group == null || comparer.Compare(group.Key, key) != 0)
-                {
-                    group = new EnumerableGrouping<TKey, TElement>(key);
-                    yield return group;
-                }
-                group.Add(elementSelector(x));
-            }
-        }
-
         internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> source;
