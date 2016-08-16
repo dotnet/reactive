@@ -12,6 +12,8 @@ branches:
 skip_commits:
   files:
     - '**/*.md'
+    
+skip_non_tags: true
 
 nuget:
   disable_publish_on_pr: true
