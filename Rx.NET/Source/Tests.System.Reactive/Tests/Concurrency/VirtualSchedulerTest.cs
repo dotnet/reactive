@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
@@ -127,7 +128,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if DESKTOPCLR
         [Fact]
         public void Virtual_ThreadSafety()
         {
@@ -136,9 +136,9 @@ namespace ReactiveTests.Tests
                 var scheduler = new TestScheduler();
                 var seq = Observable.Never<string>();
 
-                ThreadPool.QueueUserWorkItem(_ =>
+                Task.Run(()=>
                 {
-                    Thread.Sleep(50);
+                    Task.Delay(50).Wait();
                     seq.Timeout(TimeSpan.FromSeconds(10), scheduler).Subscribe(s => { });
                 });
 
@@ -159,6 +159,5 @@ namespace ReactiveTests.Tests
                 }
             }
         }
-#endif
     }
 }
