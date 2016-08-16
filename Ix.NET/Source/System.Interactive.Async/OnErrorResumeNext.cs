@@ -88,37 +88,41 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator == null)
+                        while (true)
                         {
-                            if (!sourcesEnumerator.MoveNext())
+                            if (enumerator == null)
                             {
-                                break; // done, nothing else to do
+                                if (!sourcesEnumerator.MoveNext())
+                                {
+                                    break; // while -- done, nothing else to do
+                                }
+
+                                enumerator = sourcesEnumerator.Current.GetEnumerator();
                             }
 
-                            enumerator = sourcesEnumerator.Current.GetEnumerator();
-                        }
-
-                        try
-                        {
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
+                            try
                             {
-                                current = enumerator.Current;
-                                return true;
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
+                                {
+                                    current = enumerator.Current;
+                                    return true;
+                                }
                             }
-                        }
-                        catch
-                        {
-                            // Ignore
+                            catch
+                            {
+                                // Ignore
+                            }
+
+                            // Done with the current one, go to the next
+                            enumerator.Dispose();
+                            enumerator = null;
                         }
 
-                        // Done with the current one, go to the next
-                        enumerator.Dispose();
-                        enumerator = null;
-                        goto case AsyncIteratorState.Iterating;
+                        break; // case
+                        
                 }
-
-
+                
                 Dispose();
                 return false;
             }

@@ -184,7 +184,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -194,7 +194,6 @@ namespace System.Linq
                                 current = queue.Dequeue();
                                 return true;
                             }
-                            goto case AsyncIteratorState.Iterating; // loop until either the await is false or we return an item
                         }
 
                         break;

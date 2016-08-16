@@ -77,16 +77,17 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!await enumerator.MoveNext(cancellationToken)
+                        if (await enumerator.MoveNext(cancellationToken)
                                              .ConfigureAwait(false))
                         {
-                            break;
+                            var item = enumerator.Current;
+                            accumulated = accumulator(accumulated, item);
+                            current = accumulated;
+                            return true;
                         }
 
-                        var item = enumerator.Current;
-                        accumulated = accumulator(accumulated, item);
-                        current = accumulated;
-                        return true;
+                        break;
+                        
                 }
 
                 Dispose();
@@ -139,23 +140,25 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!await enumerator.MoveNext(cancellationToken)
-                                             .ConfigureAwait(false))
+
+                        while (await enumerator.MoveNext(cancellationToken)
+                                               .ConfigureAwait(false))
                         {
-                            break;
+                            var item = enumerator.Current;
+                            if (!hasSeed)
+                            {
+                                hasSeed = true;
+                                accumulated = item;
+                                continue; // loop
+                            }
+
+                            accumulated = accumulator(accumulated, item);
+                            current = accumulated;
+                            return true;
                         }
 
-                        var item = enumerator.Current;
-                        if (!hasSeed)
-                        {
-                            hasSeed = true;
-                            accumulated = item;
-                            goto case AsyncIteratorState.Iterating; // loop
-                        }
+                        break; // case
 
-                        accumulated = accumulator(accumulated, item);
-                        current = accumulated;
-                        return true;
                 }
 
                 Dispose();

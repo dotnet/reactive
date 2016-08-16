@@ -84,45 +84,50 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!stopped)
+                        while (true)
                         {
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
+                            if (!stopped)
                             {
-                                var item = enumerator.Current;
-                                if (index++%skip == 0)
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
                                 {
-                                    buffers.Enqueue(new List<TSource>(count));
-                                }
+                                    var item = enumerator.Current;
+                                    if (index++ % skip == 0)
+                                    {
+                                        buffers.Enqueue(new List<TSource>(count));
+                                    }
 
-                                foreach (var buffer in buffers)
-                                {
-                                    buffer.Add(item);
-                                }
+                                    foreach (var buffer in buffers)
+                                    {
+                                        buffer.Add(item);
+                                    }
 
-                                if (buffers.Count > 0 && buffers.Peek()
-                                                                .Count == count)
-                                {
-                                    current = buffers.Dequeue();
-                                    return true;
-                                }
+                                    if (buffers.Count > 0 && buffers.Peek()
+                                                                    .Count == count)
+                                    {
+                                        current = buffers.Dequeue();
+                                        return true;
+                                    }
 
-                                goto case AsyncIteratorState.Iterating; // loop
+                                    continue; // loop
+                                }
+                                stopped = true;
+                                enumerator.Dispose();
+                                enumerator = null;
+
+                                continue; // loop
                             }
-                            stopped = true;
-                            enumerator.Dispose();
-                            enumerator = null;
 
-                            goto case AsyncIteratorState.Iterating; // loop
+                            if (buffers.Count > 0)
+                            {
+                                current = buffers.Dequeue();
+                                return true;
+                            }
+
+                            break; // exit the while
                         }
 
-                        if (buffers.Count > 0)
-                        {
-                            current = buffers.Dequeue();
-                            return true;
-                        }
-
-                        break;
+                        break; // case
                 }
 
                 Dispose();

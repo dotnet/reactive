@@ -89,31 +89,33 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
 
                         bool moveNext;
-                        if (!setFilled)
+                        do
                         {
-                            // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                            var moveNextTask = firstEnumerator.MoveNext(cancellationToken);
-                            await Task.WhenAll(moveNextTask, fillSetTask)
-                                      .ConfigureAwait(false);
-                            setFilled = true;
-                            moveNext = moveNextTask.Result;
-                        }
-                        else
-                        {
-                            moveNext = await firstEnumerator.MoveNext(cancellationToken)
-                                                            .ConfigureAwait(false);
-                        }
-
-                        if (moveNext)
-                        {
-                            var item = firstEnumerator.Current;
-                            if (set.Remove(item))
+                            if (!setFilled)
                             {
-                                current = item;
-                                return true;
+                                // This is here so we don't need to call Task.WhenAll each time after the set is filled
+                                var moveNextTask = firstEnumerator.MoveNext(cancellationToken);
+                                await Task.WhenAll(moveNextTask, fillSetTask)
+                                          .ConfigureAwait(false);
+                                setFilled = true;
+                                moveNext = moveNextTask.Result;
                             }
-                            goto case AsyncIteratorState.Iterating; // loop
-                        }
+                            else
+                            {
+                                moveNext = await firstEnumerator.MoveNext(cancellationToken)
+                                                                .ConfigureAwait(false);
+                            }
+
+                            if (moveNext)
+                            {
+                                var item = firstEnumerator.Current;
+                                if (set.Remove(item))
+                                {
+                                    current = item;
+                                    return true;
+                                }
+                            }
+                        } while (moveNext);
 
                         Dispose();
                         break;
