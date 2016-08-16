@@ -48,11 +48,14 @@ namespace System.Linq
 
             public virtual void Dispose()
             {
-                if (!cancellationTokenSource.IsCancellationRequested)
+                if (cancellationTokenSource != null)
                 {
-                    cancellationTokenSource.Cancel();
+                    if (!cancellationTokenSource.IsCancellationRequested)
+                    {
+                        cancellationTokenSource.Cancel();
+                    }
+                    cancellationTokenSource.Dispose();
                 }
-                cancellationTokenSource.Dispose();
 
                 current = default(TSource);
                 state = AsyncIteratorState.Disposed;
