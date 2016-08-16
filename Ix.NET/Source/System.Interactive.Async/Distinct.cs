@@ -382,7 +382,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -399,8 +399,6 @@ namespace System.Linq
                                 current = item;
                                 return true;
                             }
-
-                            goto case AsyncIteratorState.Iterating; // loop
                         }
 
                         break;
@@ -455,8 +453,8 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
+                        while (await enumerator.MoveNext(cancellationToken)
+                                               .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             var key = keySelector(item);
@@ -473,11 +471,9 @@ namespace System.Linq
                                 current = item;
                                 return true;
                             }
-
-                            goto case AsyncIteratorState.Iterating; // loop
                         }
 
-                        break;
+                        break; // case
                 }
 
                 Dispose();

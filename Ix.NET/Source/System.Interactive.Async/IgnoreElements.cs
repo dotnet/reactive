@@ -56,13 +56,13 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!await enumerator.MoveNext(cancellationToken)
-                                             .ConfigureAwait(false))
+                        while (await enumerator.MoveNext(cancellationToken)
+                                               .ConfigureAwait(false))
                         {
-                            break;
+                            // Do nothing, we're ignoring these elements
                         }
 
-                        goto case AsyncIteratorState.Iterating; // Loop
+                        break; // case
                 }
 
                 Dispose();

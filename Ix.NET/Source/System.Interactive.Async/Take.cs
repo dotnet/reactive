@@ -163,39 +163,44 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (!isDone)
+                        while (true)
                         {
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
+                            if (!isDone)
                             {
-                                if (count > 0)
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
                                 {
-                                    var item = enumerator.Current;
-                                    if (queue.Count >= count)
+                                    if (count > 0)
                                     {
-                                        queue.Dequeue();
+                                        var item = enumerator.Current;
+                                        if (queue.Count >= count)
+                                        {
+                                            queue.Dequeue();
+                                        }
+                                        queue.Enqueue(item);
                                     }
-                                    queue.Enqueue(item);
                                 }
+                                else
+                                {
+                                    isDone = true;
+                                    // Dispose early here as we can
+                                    enumerator.Dispose();
+                                    enumerator = null;
+                                }
+
+                                continue; // loop until queue is drained
                             }
-                            else
+
+                            if (queue.Count > 0)
                             {
-                                isDone = true;
-                                // Dispose early here as we can
-                                enumerator.Dispose();
-                                enumerator = null;
+                                current = queue.Dequeue();
+                                return true;
                             }
 
-                            goto case AsyncIteratorState.Iterating; // loop until queue is drained
+                            break; // while
                         }
 
-                        if (queue.Count > 0)
-                        {
-                            current = queue.Dequeue();
-                            return true;
-                        }
-
-                        break;
+                        break; // case
                 }
 
                 Dispose();

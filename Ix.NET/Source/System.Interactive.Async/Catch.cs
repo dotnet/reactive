@@ -97,39 +97,44 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (!isDone)
+                        while (true)
                         {
-                            try
+                            if (!isDone)
                             {
-                                if (await enumerator.MoveNext(cancellationToken)
-                                                    .ConfigureAwait(false))
+                                try
                                 {
-                                    current = enumerator.Current;
-                                    return true;
+                                    if (await enumerator.MoveNext(cancellationToken)
+                                                        .ConfigureAwait(false))
+                                    {
+                                        current = enumerator.Current;
+                                        return true;
+                                    }
+                                }
+                                catch (TException ex)
+                                {
+                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // invoking the handler, but we use this order to preserve
+                                    // current behavior
+                                    var err = handler(ex)
+                                        .GetEnumerator();
+                                    enumerator?.Dispose();
+                                    enumerator = err;
+                                    isDone = true;
+                                    continue; // loop so we hit the catch state
                                 }
                             }
-                            catch (TException ex)
+
+                            if (await enumerator.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
                             {
-                                // Note: Ideally we'd dipose of the previous enumerator before
-                                // invoking the handler, but we use this order to preserve
-                                // current behavior
-                                var err = handler(ex)
-                                    .GetEnumerator();
-                                enumerator?.Dispose();
-                                enumerator = err;
-                                isDone = true;
-                                goto case AsyncIteratorState.Iterating; // loop so we hit the catch state
+                                current = enumerator.Current;
+                                return true;
                             }
+
+                            break; // while
                         }
 
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
-
-                        break;
+                        break; // case
                 }
 
                 Dispose();
@@ -185,38 +190,43 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator == null)
+                        while (true)
                         {
-                            if (!sourcesEnumerator.MoveNext())
+                            if (enumerator == null)
                             {
-                                // only throw if we have an error on the last one
-                                error?.Throw();
-                                break; // done, nothing else to do
+                                if (!sourcesEnumerator.MoveNext())
+                                {
+                                    // only throw if we have an error on the last one
+                                    error?.Throw();
+                                    break; // done, nothing else to do
+                                }
+
+                                error = null;
+                                enumerator = sourcesEnumerator.Current.GetEnumerator();
                             }
 
-                            error = null;
-                            enumerator = sourcesEnumerator.Current.GetEnumerator();
-                        }
-
-                        try
-                        {
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
+                            try
                             {
-                                current = enumerator.Current;
-                                return true;
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
+                                {
+                                    current = enumerator.Current;
+                                    return true;
+                                }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            // Done with the current one, go to the next
-                            enumerator.Dispose();
-                            enumerator = null;
-                            error = ExceptionDispatchInfo.Capture(ex);
-                            goto case AsyncIteratorState.Iterating;
+                            catch (Exception ex)
+                            {
+                                // Done with the current one, go to the next
+                                enumerator.Dispose();
+                                enumerator = null;
+                                error = ExceptionDispatchInfo.Capture(ex);
+                                continue;
+                            }
+
+                            break; // while
                         }
 
-                        break;
+                        break; // case
                 }
 
 

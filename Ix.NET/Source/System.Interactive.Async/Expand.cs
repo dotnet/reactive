@@ -66,33 +66,37 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (enumerator == null)
+                        while (true)
                         {
-                            if (queue.Count > 0)
+                            if (enumerator == null)
                             {
-                                var src = queue.Dequeue();
+                                if (queue.Count > 0)
+                                {
+                                    var src = queue.Dequeue();
 
-                                enumerator?.Dispose();
-                                enumerator = src.GetEnumerator();
+                                    enumerator?.Dispose();
+                                    enumerator = src.GetEnumerator();
 
-                                goto case AsyncIteratorState.Iterating; // loop
+                                    continue; // loop
+                                }
+
+                                break; // while
                             }
 
-                            break;
+                            if (await enumerator.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
+                            {
+                                var item = enumerator.Current;
+                                var next = selector(item);
+                                queue.Enqueue(next);
+                                current = item;
+                                return true;
+                            }
+                            enumerator.Dispose();
+                            enumerator = null;
                         }
 
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            var next = selector(item);
-                            queue.Enqueue(next);
-                            current = item;
-                            return true;
-                        }
-                        enumerator.Dispose();
-                        enumerator = null;
-                        goto case AsyncIteratorState.Iterating; // loop
+                        break; // case
                 }
 
                 Dispose();
