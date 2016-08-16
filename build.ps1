@@ -21,7 +21,7 @@ if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
 $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 
 Write-Host "Building Rx.NET" -ForegroundColor Green
-.\Rx.NET\Source\build-new
+#.\Rx.NET\Source\build-new
 
 Write-Host "Building Ix.NET" -ForegroundColor Green
 .\Ix.NET\Source\build-new
