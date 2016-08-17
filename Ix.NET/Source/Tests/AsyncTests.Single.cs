@@ -1255,6 +1255,64 @@ namespace Tests
         }
 
         [Fact]
+        public async Task DefaultIfEmpty9()
+        {
+            var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
+
+            var res = new[] { 42 };
+
+            Assert.True(res.SequenceEqual(await xs.ToArray()));
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty10()
+        {
+            var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
+
+            var res = new List<int> { 42 };
+
+            Assert.True(res.SequenceEqual(await xs.ToList()));
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty11()
+        {
+            var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
+            
+            Assert.Equal(1, await xs.Count());
+        }
+
+
+        [Fact]
+        public async Task DefaultIfEmpty12()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
+
+            var res = new[] { 1, 2, 3, 4 };
+
+            Assert.True(res.SequenceEqual(await xs.ToArray()));
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty13()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
+
+            var res = new List<int> { 1, 2, 3, 4 };
+
+            Assert.True(res.SequenceEqual(await xs.ToList()));
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty14()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
+
+            Assert.Equal(4, await xs.Count());
+        }
+
+
+        [Fact]
         public void Distinct_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null));
@@ -1288,6 +1346,32 @@ namespace Tests
             HasNext(e, 5);
             HasNext(e, 4);
             NoNext(e);
+        }
+
+        [Fact]
+        public async Task Distinct3()
+        {
+            var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
+            
+            var res = new [] { 1, 2, 3, 5, 4 };
+            Assert.True(res.SequenceEqual(await xs.ToArray()));
+        }
+
+        [Fact]
+        public async Task Distinct4()
+        {
+            var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
+
+            var res = new List<int> { 1, 2, 3, 5, 4 };
+            Assert.True(res.SequenceEqual(await xs.ToList()));
+        }
+
+        [Fact]
+        public async Task Distinct5()
+        {
+            var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
+            
+            Assert.Equal(5, await xs.Count());
         }
 
         [Fact]

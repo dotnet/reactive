@@ -930,6 +930,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task ElementAt7()
+        {
+            var en = new CancellationTestAsyncEnumerable();
+
+            var res = en.ElementAt(1);
+            Assert.Equal(1, await res);
+        }
+
+        [Fact]
         public async Task ElementAtOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(null, 0));
@@ -1051,6 +1060,18 @@ namespace Tests
             var ex = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
             Assert.True(ex.SequenceEqual(xs));
+        }
+
+        [Fact]
+        public async Task ToArray5()
+        {
+            var res = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+            var xs = new HashSet<int>(res);
+
+            var arr = await xs.ToAsyncEnumerable().ToArray();
+            
+
+            Assert.True(res.SequenceEqual(arr));
         }
 
         [Fact]
