@@ -175,20 +175,6 @@ namespace System.Linq.Internal
             }
         }
 
-        public IEnumerable<TResult> ApplyResultSelector<TResult>(Func<TKey, IEnumerable<TElement>, TResult> resultSelector)
-        {
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    g.Trim();
-                    yield return resultSelector(g._key, g._elements);
-                } while (g != _lastGrouping);
-            }
-        }
-
         public IEnumerable<TResult> ApplyResultSelector<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
         {
             var g = _lastGrouping;
@@ -202,38 +188,7 @@ namespace System.Linq.Internal
                 } while (g != _lastGrouping);
             }
         }
-
-        internal static Lookup<TKey, TElement> Create<TSource>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
-        {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-            Debug.Assert(elementSelector != null);
-
-            var lookup = new Lookup<TKey, TElement>(comparer);
-            foreach (var item in source)
-            {
-                lookup.GetGrouping(keySelector(item), create: true)
-                      .Add(elementSelector(item));
-            }
-
-            return lookup;
-        }
-
-        internal static Lookup<TKey, TElement> Create(IEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
-        {
-            Debug.Assert(source != null);
-            Debug.Assert(keySelector != null);
-
-            var lookup = new Lookup<TKey, TElement>(comparer);
-            foreach (var item in source)
-            {
-                lookup.GetGrouping(keySelector(item), create: true)
-                      .Add(item);
-            }
-
-            return lookup;
-        }
-
+        
         internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             Debug.Assert(source != null);
@@ -273,23 +228,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static Lookup<TKey, TElement> CreateForJoin(IEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
-        {
-            var lookup = new Lookup<TKey, TElement>(comparer);
-            foreach (var item in source)
-            {
-                var key = keySelector(item);
-                if (key != null)
-                {
-                    lookup.GetGrouping(key, create: true)
-                          .Add(item);
-                }
-            }
-
-            return lookup;
-        }
-
-        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+         internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetEnumerator())
@@ -358,25 +297,6 @@ namespace System.Linq.Internal
             return (key == null) ? 0 : _comparer.GetHashCode(key) & 0x7FFFFFFF;
         }
 
-        internal TResult[] ToArray<TResult>(Func<TKey, IEnumerable<TElement>, TResult> resultSelector)
-        {
-            var array = new TResult[Count];
-            var index = 0;
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    g.Trim();
-                    array[index] = resultSelector(g._key, g._elements);
-                    ++index;
-                } while (g != _lastGrouping);
-            }
-
-            return array;
-        }
-
         internal TResult[] ToArray<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
         {
             var array = new TResult[Count];
@@ -394,24 +314,6 @@ namespace System.Linq.Internal
             }
 
             return array;
-        }
-
-
-        internal List<TResult> ToList<TResult>(Func<TKey, IEnumerable<TElement>, TResult> resultSelector)
-        {
-            var list = new List<TResult>(Count);
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    g.Trim();
-                    list.Add(resultSelector(g._key, g._elements));
-                } while (g != _lastGrouping);
-            }
-
-            return list;
         }
 
         internal List<TResult> ToList<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
@@ -501,12 +403,38 @@ namespace System.Linq.Internal
 
         Task<List<IAsyncGrouping<TKey, TElement>>> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    list.Add(g);
+                }
+                while (g != _lastGrouping);
+            }
+
+            return Task.FromResult(list);
         }
 
         Task<IAsyncGrouping<TKey, TElement>[]> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var array = new IAsyncGrouping<TKey, TElement>[Count];
+            var index = 0;
+            var g = _lastGrouping;
+            if (g != null)
+            {
+                do
+                {
+                    g = g._next;
+                    array[index] = g;
+                    ++index;
+                }
+                while (g != _lastGrouping);
+            }
+
+            return Task.FromResult(array);
         }
 
     }
