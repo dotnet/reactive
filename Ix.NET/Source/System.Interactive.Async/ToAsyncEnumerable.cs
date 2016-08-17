@@ -115,8 +115,6 @@ namespace System.Linq
                     return Task.FromResult(true);
                 }
 
-                Dispose();
-
                 return Task.FromResult(false);
             }
 
@@ -273,7 +271,6 @@ namespace System.Linq
                     current = enumerator.Current;
                     return Task.FromResult(true);
                 }
-                Dispose();
 
                 return Task.FromResult(false);
             }

@@ -86,6 +86,8 @@ namespace System.Linq
                 {
                     try
                     {
+                        var result = false;
+
                         // Short circuit and don't even call MoveNexCore
                         cancellationToken.ThrowIfCancellationRequested();
 
@@ -99,15 +101,16 @@ namespace System.Linq
 
                         if (state == AsyncIteratorState.Iterating)
                         {
-                            var result = await MoveNextCore(cts.Token)
+                            result = await MoveNextCore(cts.Token)
                                              .ConfigureAwait(false);
 
                             currentIsInvalid = !result; // if move next is false, invalid otherwise valid
-
-                            return result;
                         }
 
-                        return false;
+                        if (!result)
+                            Dispose();
+
+                        return result;
                     }
                     catch
                     {

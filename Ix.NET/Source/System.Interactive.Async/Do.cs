@@ -137,8 +137,6 @@ namespace System.Linq
 
                 onCompleted?.Invoke();
 
-                Dispose();
-
                 return false;
             }
 

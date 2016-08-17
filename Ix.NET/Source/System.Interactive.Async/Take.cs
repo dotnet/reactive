@@ -99,7 +99,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -182,7 +181,6 @@ namespace System.Linq
                     break; // while
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -242,7 +240,6 @@ namespace System.Linq
                     }
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -305,7 +302,6 @@ namespace System.Linq
                     }
                 }
 
-                Dispose();
                 return false;
             }
 

@@ -97,8 +97,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
-
                 return false;
             }
 
@@ -156,8 +154,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
-
                 return false;
             }
 
@@ -213,8 +209,6 @@ namespace System.Linq
                     current = selector(enumerator.Current);
                     return Task.FromResult(true);
                 }
-
-                Dispose();
 
                 return Task.FromResult(false);
             }

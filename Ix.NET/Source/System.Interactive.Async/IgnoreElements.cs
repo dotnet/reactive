@@ -54,7 +54,6 @@ namespace System.Linq
                     // Do nothing, we're ignoring these elements
                 }
 
-                Dispose();
                 return false;
             }
 

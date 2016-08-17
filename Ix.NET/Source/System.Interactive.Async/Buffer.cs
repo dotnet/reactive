@@ -115,7 +115,6 @@ namespace System.Linq
                     break; // exit the while
                 }
 
-                Dispose();
                 return false;
             }
 

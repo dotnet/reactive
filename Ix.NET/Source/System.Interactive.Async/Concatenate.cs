@@ -116,8 +116,6 @@ namespace System.Linq
 
                 }
 
-                Dispose();
-
                 return false;
             }
 
@@ -257,7 +255,6 @@ namespace System.Linq
                         continue;
                     }
 
-                    Dispose();
                     break;
                 }
 

@@ -135,9 +135,6 @@ namespace System.Linq
                         goto case State_Source; // loop
                 }
 
-
-
-                Dispose();
                 return false;
             }
 
@@ -223,7 +220,6 @@ namespace System.Linq
                         goto case State_Source; // loop
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -316,7 +312,6 @@ namespace System.Linq
                         goto case State_Source; // loop
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -402,8 +397,6 @@ namespace System.Linq
                         goto case State_Source; // loop
                 }
 
-
-                Dispose();
                 return false;
             }
 

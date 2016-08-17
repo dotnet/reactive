@@ -104,9 +104,6 @@ namespace System.Linq
 
                 } while (moveNext);
 
-
-                Dispose();
-
                 return false;
             }
 

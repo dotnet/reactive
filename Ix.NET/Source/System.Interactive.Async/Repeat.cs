@@ -127,8 +127,6 @@ namespace System.Linq
                     enumerator = null;
                 }
 
-                Dispose();
-
                 return false;
             }
 

@@ -69,7 +69,6 @@ namespace System.Linq
                     return TaskExt.True;
                 }
 
-                Dispose();
                 return TaskExt.False;
             }
 

@@ -185,7 +185,6 @@ namespace System.Linq
                     }
                 }
 
-                Dispose();
                 return false;
             }
 
@@ -284,8 +283,6 @@ namespace System.Linq
                     }
                 }
 
-
-                Dispose();
                 return false;
             }
 
@@ -366,8 +363,6 @@ namespace System.Linq
                     }
                 }
 
-
-                Dispose();
                 return false;
             }
 
@@ -435,7 +430,6 @@ namespace System.Linq
                     }
                 }
 
-                Dispose();
                 return false;
             }
 

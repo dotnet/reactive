@@ -154,8 +154,6 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
-
                 return false;
             }
 

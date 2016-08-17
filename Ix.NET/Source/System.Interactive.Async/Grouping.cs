@@ -167,8 +167,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
-
                 return false;
             }
 
@@ -250,8 +248,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
-
                 return false;
             }
             
@@ -328,8 +324,6 @@ namespace System.Linq
                     current = (IAsyncGrouping<TKey, TSource>)enumerator.Current;
                     return true;
                 }
-
-                Dispose();
 
                 return false;
             }

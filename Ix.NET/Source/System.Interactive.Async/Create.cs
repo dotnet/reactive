@@ -102,8 +102,6 @@ namespace System.Linq
                     return true;
                 }
 
-                Dispose();
-
                 return false;
             }
 
