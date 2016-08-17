@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +98,55 @@ namespace Tests
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
+
+        [Fact]
+        public void ToAsyncEnumerable5()
+        {
+            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+
+            var xs = set.ToAsyncEnumerable();
+            var e = xs.GetEnumerator();
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 4);
+            NoNext(e);
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable6()
+        {
+            var set = new HashSet<int>(new[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+
+            var xs = set.ToAsyncEnumerable();
+
+            var arr = await xs.ToArray();
+
+            Assert.True(set.SetEquals(arr));
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable7()
+        {
+            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var xs = set.ToAsyncEnumerable();
+
+            var arr = await xs.ToList();
+
+            Assert.True(set.SetEquals(arr));
+        }
+
+        [Fact]
+        public async Task ToAsyncEnumerable8()
+        {
+            var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
+            var xs = set.ToAsyncEnumerable();
+
+            var c = await xs.Count();
+
+            Assert.Equal(set.Count, c);
+        }
+
 
         [Fact]
         public void ToAsyncEnumerable_With_Completed_Task()
