@@ -1045,6 +1045,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task ToArray4()
+        {
+            var xs = await AsyncEnumerable.Range(5,50).Take(10).ToArray();
+            var ex = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+
+            Assert.True(ex.SequenceEqual(xs));
+        }
+
+        [Fact]
         public async Task ToDictionary_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToDictionary<int, int>(null, x => 0));
