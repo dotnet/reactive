@@ -1342,6 +1342,33 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Reverse5()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.Reverse();
+
+            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToArray());
+        }
+
+        [Fact]
+        public async Task Reverse6()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.Reverse();
+
+            Assert.Equal(new[] { 3, 2, 1 }, await ys.ToList());
+        }
+
+        [Fact]
+        public async Task Reverse7()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.Reverse();
+
+            Assert.Equal(3, await ys.Count());
+        }
+
+        [Fact]
         public void OrderBy_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(null, x => x));
