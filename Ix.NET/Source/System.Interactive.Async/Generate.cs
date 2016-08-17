@@ -56,33 +56,29 @@ namespace System.Linq
 
             protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (started)
                 {
-                    case AsyncIteratorState.Allocated:
-                        started = false;
-                        currentState = initialState;
+                    currentState = iterate(currentState);
+                }
 
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                started = true;
 
-                    case AsyncIteratorState.Iterating:
-                        if (started)
-                        {
-                            currentState = iterate(currentState);
-                        }
-
-                        started = true;
-
-                        if (condition(currentState))
-                        {
-                            current = resultSelector(currentState);
-                            return TaskExt.True;
-                        }
-                        break;
+                if (condition(currentState))
+                {
+                    current = resultSelector(currentState);
+                    return TaskExt.True;
                 }
 
                 Dispose();
                 return TaskExt.False;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                started = false;
+                currentState = initialState;
+
+                return TaskExt.True;
             }
         }
     }

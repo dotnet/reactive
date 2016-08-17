@@ -48,25 +48,20 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            // Do nothing, we're ignoring these elements
-                        }
-
-                        break; // case
+                    // Do nothing, we're ignoring these elements
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                return TaskExt.True;
             }
         }
     }

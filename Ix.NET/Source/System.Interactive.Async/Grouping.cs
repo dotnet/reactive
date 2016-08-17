@@ -161,24 +161,13 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                        enumerator = lookup.ApplyResultSelector(resultSelector).GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = enumerator.Current;
+                    return true;
                 }
+
+                Dispose();
 
                 return false;
             }
@@ -205,6 +194,12 @@ namespace System.Linq
                 var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
 
                 return lookup.Count;
+            }
+
+            protected override async Task Initialize(CancellationToken ct)
+            {
+                lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, ct).ConfigureAwait(false);
+                enumerator = lookup.ApplyResultSelector(resultSelector).GetEnumerator();
             }
         }
 
@@ -249,24 +244,13 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = (IAsyncGrouping<TKey, TElement>)enumerator.Current;
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = (IAsyncGrouping<TKey, TElement>)enumerator.Current;
+                    return true;
                 }
+
+                Dispose();
 
                 return false;
             }
@@ -293,6 +277,12 @@ namespace System.Linq
                 var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
 
                 return lookup.Count;
+            }
+
+            protected override async Task Initialize(CancellationToken ct)
+            {
+                lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, ct).ConfigureAwait(false);
+                enumerator = lookup.GetEnumerator();
             }
         }
 
@@ -333,24 +323,13 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                        enumerator = lookup.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = (IAsyncGrouping<TKey, TSource>)enumerator.Current;
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = (IAsyncGrouping<TKey, TSource>)enumerator.Current;
+                    return true;
                 }
+
+                Dispose();
 
                 return false;
             }
@@ -377,6 +356,12 @@ namespace System.Linq
                 var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
 
                 return lookup.Count;
+            }
+
+            protected override async Task Initialize(CancellationToken cancellationToken)
+            {
+                lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                enumerator = lookup.GetEnumerator();
             }
         }
 

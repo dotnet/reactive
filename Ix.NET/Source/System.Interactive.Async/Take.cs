@@ -89,31 +89,25 @@ namespace System.Linq
                 base.Dispose();
             }
 
-
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (currentCount > 0 && await enumerator.MoveNext(cancellationToken)
+                                                        .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (currentCount > 0 && await enumerator.MoveNext(cancellationToken)
-                                                                .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            currentCount--;
-                            return true;
-                        }
-
-                        break;
+                    current = enumerator.Current;
+                    currentCount--;
+                    return true;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
 
@@ -151,60 +145,54 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (true)
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        queue = new Queue<TSource>();
-                        isDone = false;
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-
-                    case AsyncIteratorState.Iterating:
-                        while (true)
+                    if (!isDone)
+                    {
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
                         {
-                            if (!isDone)
+                            if (count > 0)
                             {
-                                if (await enumerator.MoveNext(cancellationToken)
-                                                    .ConfigureAwait(false))
+                                var item = enumerator.Current;
+                                if (queue.Count >= count)
                                 {
-                                    if (count > 0)
-                                    {
-                                        var item = enumerator.Current;
-                                        if (queue.Count >= count)
-                                        {
-                                            queue.Dequeue();
-                                        }
-                                        queue.Enqueue(item);
-                                    }
+                                    queue.Dequeue();
                                 }
-                                else
-                                {
-                                    isDone = true;
-                                    // Dispose early here as we can
-                                    enumerator.Dispose();
-                                    enumerator = null;
-                                }
-
-                                continue; // loop until queue is drained
+                                queue.Enqueue(item);
                             }
-
-                            if (queue.Count > 0)
-                            {
-                                current = queue.Dequeue();
-                                return true;
-                            }
-
-                            break; // while
+                        }
+                        else
+                        {
+                            isDone = true;
+                            // Dispose early here as we can
+                            enumerator.Dispose();
+                            enumerator = null;
                         }
 
-                        break; // case
+                        continue; // loop until queue is drained
+                    }
+
+                    if (queue.Count > 0)
+                    {
+                        current = queue.Dequeue();
+                        return true;
+                    }
+
+                    break; // while
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                queue = new Queue<TSource>();
+                isDone = false;
+
+                return TaskExt.True;
             }
         }
 
@@ -242,33 +230,27 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (await enumerator.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                    var item = enumerator.Current;
 
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-
-                    case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            if (!predicate(item))
-                            {
-                                break;
-                            }
-                            current = item;
-                            return true;
-                        }
-
-                        break;
+                    if (predicate(item))
+                    {
+                        current = item;
+                        return true;
+                    }
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
 
@@ -307,38 +289,32 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (await enumerator.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        index = -1;
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                    var item = enumerator.Current;
+                    checked
+                    {
+                        index++;
+                    }
 
-
-                    case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            checked
-                            {
-                                index++;
-                            }
-
-                            if (!predicate(item, index))
-                            {
-                                break;
-                            }
-                            current = item;
-                            return true;
-                        }
-
-                        break;
+                    if (predicate(item, index))
+                    {
+                        current = item;
+                        return true;
+                    }
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                index = -1;
+
+                return TaskExt.True;
             }
         }
     }

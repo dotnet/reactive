@@ -109,25 +109,22 @@ namespace System.Linq
 
             protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = enumerator.Current;
-                            return Task.FromResult(true);
-                        }
-
-                        Dispose();
-                        break;
+                    current = enumerator.Current;
+                    return Task.FromResult(true);
                 }
-                
+
+                Dispose();
+
                 return Task.FromResult(false);
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
@@ -177,22 +174,10 @@ namespace System.Linq
 
             protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = enumerator.Current;
-                            return Task.FromResult(true);
-                        }
-
-                        Dispose();
-                        break;
+                    current = enumerator.Current;
+                    return Task.FromResult(true);
                 }
 
                 return Task.FromResult(false);
@@ -218,6 +203,13 @@ namespace System.Linq
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 return Task.FromResult(source.Count);
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
 
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
@@ -273,25 +265,19 @@ namespace System.Linq
                 }
                 base.Dispose();
             }
+
             protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (enumerator.MoveNext())
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-                    case AsyncIteratorState.Iterating:
-                        if (enumerator.MoveNext())
-                        {
-                            current = enumerator.Current;
-                            return Task.FromResult(true);
-                        }
-                        Dispose();
-                        break;
+                    current = enumerator.Current;
+                    return Task.FromResult(true);
                 }
+                Dispose();
+
                 return Task.FromResult(false);
             }
+
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
@@ -306,6 +292,14 @@ namespace System.Linq
             {
                 return Task.FromResult(source.Count);
             }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
+            }
+
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
             void ICollection<T>.Add(T item) => source.Add(item);

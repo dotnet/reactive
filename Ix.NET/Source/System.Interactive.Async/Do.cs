@@ -114,42 +114,39 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                try
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                    if (await enumerator.MoveNext(cancellationToken)
+                                        .ConfigureAwait(false))
+                    {
+                        current = enumerator.Current;
+                        onNext(current);
 
-                    case AsyncIteratorState.Iterating:
-                        try
-                        {
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
-                            {
-                                current = enumerator.Current;
-                                onNext(current);
-
-                                return true;
-                            }
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            throw;
-                        }
-                        catch (Exception ex)
-                        {
-                            onError?.Invoke(ex);
-                            throw;
-                        }
-
-                        onCompleted?.Invoke();
-
-                        Dispose();
-                        break;
+                        return true;
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    onError?.Invoke(ex);
+                    throw;
                 }
 
+                onCompleted?.Invoke();
+
+                Dispose();
+
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
     }

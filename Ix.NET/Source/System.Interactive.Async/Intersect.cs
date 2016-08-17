@@ -75,53 +75,48 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                bool moveNext;
+                do
                 {
-                    case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetEnumerator();
-                        set = new Set<TSource>(comparer);
-                        setFilled = false;
-                        fillSetTask = FillSet(cancellationToken);
+                    if (!setFilled)
+                    {
+                        // This is here so we don't need to call Task.WhenAll each time after the set is filled
+                        var moveNextTask = firstEnumerator.MoveNext(cancellationToken);
+                        await Task.WhenAll(moveNextTask, fillSetTask)
+                                  .ConfigureAwait(false);
+                        setFilled = true;
+                        moveNext = moveNextTask.Result;
+                    }
+                    else
+                    {
+                        moveNext = await firstEnumerator.MoveNext(cancellationToken)
+                                                        .ConfigureAwait(false);
+                    }
 
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-
-                        bool moveNext;
-                        do
+                    if (moveNext)
+                    {
+                        var item = firstEnumerator.Current;
+                        if (set.Remove(item))
                         {
-                            if (!setFilled)
-                            {
-                                // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                                var moveNextTask = firstEnumerator.MoveNext(cancellationToken);
-                                await Task.WhenAll(moveNextTask, fillSetTask)
-                                          .ConfigureAwait(false);
-                                setFilled = true;
-                                moveNext = moveNextTask.Result;
-                            }
-                            else
-                            {
-                                moveNext = await firstEnumerator.MoveNext(cancellationToken)
-                                                                .ConfigureAwait(false);
-                            }
+                            current = item;
+                            return true;
+                        }
+                    }
+                } while (moveNext);
 
-                            if (moveNext)
-                            {
-                                var item = firstEnumerator.Current;
-                                if (set.Remove(item))
-                                {
-                                    current = item;
-                                    return true;
-                                }
-                            }
-                        } while (moveNext);
-
-                        Dispose();
-                        break;
-                }
+                Dispose();
 
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken ct)
+            {
+                firstEnumerator = first.GetEnumerator();
+                set = new Set<TSource>(comparer);
+                setFilled = false;
+                fillSetTask = FillSet(ct);
+
+                return TaskExt.True;
             }
 
             private async Task FillSet(CancellationToken cancellationToken)

@@ -93,29 +93,22 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (index != -1)
                 {
-                    case AsyncIteratorState.Allocated:
-                        items = await source.ToArray(cancellationToken)
-                                            .ConfigureAwait(false);
-                        index = items.Length - 1;
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (index != -1)
-                        {
-                            current = items[index];
-                            --index;
-                            return true;
-                        }
-
-                        break;
+                    current = items[index];
+                    --index;
+                    return true;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override async Task Initialize(CancellationToken cancellationToken)
+            {
+                items = await source.ToArray(cancellationToken)
+                                            .ConfigureAwait(false);
+                index = items.Length - 1;
             }
         }
     }

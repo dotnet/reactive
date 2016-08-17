@@ -96,24 +96,20 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (await moveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (await moveNext(cancellationToken).ConfigureAwait(false))
-                        {
-                            current = currentFunc();
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = currentFunc();
+                    return true;
                 }
 
+                Dispose();
+
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                return TaskExt.True;
             }
         }
     }

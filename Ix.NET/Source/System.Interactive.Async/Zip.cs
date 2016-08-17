@@ -63,34 +63,29 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                // We kick these off and join so they can potentially run in parallel
+                var ft = firstEnumerator.MoveNext(cancellationToken);
+                var st = secondEnumerator.MoveNext(cancellationToken);
+                await Task.WhenAll(ft, st)
+                          .ConfigureAwait(false);
+
+                if (ft.Result && st.Result)
                 {
-                    case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetEnumerator();
-                        secondEnumerator = second.GetEnumerator();
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-
-                        // We kick these off and join so they can potentially run in parallel
-                        var ft = firstEnumerator.MoveNext(cancellationToken);
-                        var st = secondEnumerator.MoveNext(cancellationToken);
-                        await Task.WhenAll(ft, st)
-                                  .ConfigureAwait(false);
-
-                        if (ft.Result && st.Result)
-                        {
-                            current = selector(firstEnumerator.Current, secondEnumerator.Current);
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = selector(firstEnumerator.Current, secondEnumerator.Current);
+                    return true;
                 }
 
+                Dispose();
+
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken ct)
+            {
+                firstEnumerator = first.GetEnumerator();
+                secondEnumerator = second.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
     }

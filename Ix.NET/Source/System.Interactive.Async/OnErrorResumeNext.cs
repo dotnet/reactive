@@ -79,52 +79,46 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (true)
                 {
-                    case AsyncIteratorState.Allocated:
-                        sourcesEnumerator = sources.GetEnumerator();
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (true)
+                    if (enumerator == null)
+                    {
+                        if (!sourcesEnumerator.MoveNext())
                         {
-                            if (enumerator == null)
-                            {
-                                if (!sourcesEnumerator.MoveNext())
-                                {
-                                    break; // while -- done, nothing else to do
-                                }
-
-                                enumerator = sourcesEnumerator.Current.GetEnumerator();
-                            }
-
-                            try
-                            {
-                                if (await enumerator.MoveNext(cancellationToken)
-                                                    .ConfigureAwait(false))
-                                {
-                                    current = enumerator.Current;
-                                    return true;
-                                }
-                            }
-                            catch
-                            {
-                                // Ignore
-                            }
-
-                            // Done with the current one, go to the next
-                            enumerator.Dispose();
-                            enumerator = null;
+                            break; // while -- done, nothing else to do
                         }
 
-                        break; // case
-                        
+                        enumerator = sourcesEnumerator.Current.GetEnumerator();
+                    }
+
+                    try
+                    {
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
+                        {
+                            current = enumerator.Current;
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore
+                    }
+
+                    // Done with the current one, go to the next
+                    enumerator.Dispose();
+                    enumerator = null;
                 }
-                
+
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                sourcesEnumerator = sources.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
     }

@@ -61,26 +61,23 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = enumerable.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
-
-                        Dispose();
-                        break;
+                    current = enumerator.Current;
+                    return true;
                 }
 
+                Dispose();
+
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = enumerable.GetEnumerator();
+
+                return TaskExt.True;
             }
 
             protected override void OnGetEnumerator()

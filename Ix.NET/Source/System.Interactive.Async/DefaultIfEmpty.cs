@@ -34,6 +34,7 @@ namespace System.Linq
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly TSource defaultValue;
+            private bool hasValue = false;
             private IAsyncEnumerator<TSource> enumerator;
 
             public DefaultIfEmptyAsyncIterator(IAsyncEnumerable<TSource> source, TSource defaultValue)
@@ -61,38 +62,34 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (await enumerator.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            state = AsyncIteratorState.Iterating;
-                        }
-                        else
-                        {
-                            current = defaultValue;
-                            enumerator.Dispose();
-                            enumerator = null;
+                    hasValue = true;
+                    current = enumerator.Current;
 
-                            state = AsyncIteratorState.Disposed; 
-                        }
-                        return true;
+                    return true;
+                }
 
-                    case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
-                        break;
+                if (!hasValue)
+                {
+                    current = defaultValue;
+                    enumerator.Dispose();
+                    enumerator = null;
+
+                    state = AsyncIteratorState.Disposed;
+
+                    return true;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                return TaskExt.True;
             }
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)

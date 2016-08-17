@@ -63,6 +63,11 @@ namespace System.Linq
                 current = element;
                 return TaskExt.True;
             }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                return TaskExt.True;
+            }
         }
 
         private sealed class RepeatSequenceAsyncIterator<TSource> : AsyncIterator<TSource>
@@ -101,39 +106,35 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (true)
                 {
-                    case AsyncIteratorState.Allocated:
-
-                        if (enumerator != null)
-                        {
-                            enumerator.Dispose();
-                            enumerator = null;
-                        }
-
+                    if (enumerator == null)
+                    {
                         if (!isInfinite && currentCount-- == 0)
                             break;
 
                         enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                    }
 
-                    case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            current = enumerator.Current;
-                            return true;
-                        }
+                    if (await enumerator.MoveNext(cancellationToken)
+                                        .ConfigureAwait(false))
+                    {
+                        current = enumerator.Current;
+                        return true;
+                    }
 
-                        goto case AsyncIteratorState.Allocated;
-                        
+                    enumerator.Dispose();
+                    enumerator = null;
                 }
-
 
                 Dispose();
 
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                return TaskExt.True;
             }
         }
     }

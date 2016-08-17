@@ -174,41 +174,27 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        if (!await enumerator.MoveNext(cancellationToken)
-                                             .ConfigureAwait(false))
-                        {
-                            Dispose();
-                            return false;
-                        }
-
-                        var element = enumerator.Current;
-                        set = new Set<TKey>(comparer);
-                        set.Add(keySelector(element));
+                    var element = enumerator.Current;
+                    if (set.Add(keySelector(element)))
+                    {
                         current = element;
-                        state = AsyncIteratorState.Iterating;
                         return true;
-
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            element = enumerator.Current;
-                            if (set.Add(keySelector(element)))
-                            {
-                                current = element;
-                                return true;
-                            }
-                        }
-
-                        break;
+                    }
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                set = new Set<TKey>(comparer);
+
+                return TaskExt.True;
             }
 
             private async Task<List<TSource>> FillSet(CancellationToken cancellationToken)
@@ -287,41 +273,28 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        if (!await enumerator.MoveNext(cancellationToken)
-                                             .ConfigureAwait(false))
-                        {
-                            Dispose();
-                            return false;
-                        }
-
-                        var element = enumerator.Current;
-                        set = new Set<TSource>(comparer);
-                        set.Add(element);
+                    var element = enumerator.Current;
+                    if (set.Add(element))
+                    {
                         current = element;
-                        state = AsyncIteratorState.Iterating;
                         return true;
-
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            element = enumerator.Current;
-                            if (set.Add(element))
-                            {
-                                current = element;
-                                return true;
-                            }
-                        }
-
-                        break;
+                    }
                 }
+
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                set = new Set<TSource>(comparer);
+
+                return TaskExt.True;
             }
 
             private async Task<Set<TSource>> FillSet(CancellationToken cancellationToken)
@@ -374,38 +347,35 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                    var item = enumerator.Current;
+                    var comparerEquals = false;
 
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                            .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            var comparerEquals = false;
-
-                            if (hasCurrentValue)
-                            {
-                                comparerEquals = comparer.Equals(currentValue, item);
-                            }
-                            if (!hasCurrentValue || !comparerEquals)
-                            {
-                                hasCurrentValue = true;
-                                currentValue = item;
-                                current = item;
-                                return true;
-                            }
-                        }
-
-                        break;
+                    if (hasCurrentValue)
+                    {
+                        comparerEquals = comparer.Equals(currentValue, item);
+                    }
+                    if (!hasCurrentValue || !comparerEquals)
+                    {
+                        hasCurrentValue = true;
+                        currentValue = item;
+                        current = item;
+                        return true;
+                    }
                 }
+
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
 
@@ -445,39 +415,35 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
+                    var item = enumerator.Current;
+                    var key = keySelector(item);
+                    var comparerEquals = false;
 
-                    case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            var key = keySelector(item);
-                            var comparerEquals = false;
-
-                            if (hasCurrentKey)
-                            {
-                                comparerEquals = comparer.Equals(currentKeyValue, key);
-                            }
-                            if (!hasCurrentKey || !comparerEquals)
-                            {
-                                hasCurrentKey = true;
-                                currentKeyValue = key;
-                                current = item;
-                                return true;
-                            }
-                        }
-
-                        break; // case
+                    if (hasCurrentKey)
+                    {
+                        comparerEquals = comparer.Equals(currentKeyValue, key);
+                    }
+                    if (!hasCurrentKey || !comparerEquals)
+                    {
+                        hasCurrentKey = true;
+                        currentKeyValue = key;
+                        current = item;
+                        return true;
+                    }
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+
+                return TaskExt.True;
             }
         }
     }

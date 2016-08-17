@@ -58,8 +58,6 @@ namespace System.Linq
 
             private IAsyncEnumerator<TOuter> outerEnumerator;
  
-
-
             public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(outer != null);
@@ -107,70 +105,66 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                switch (mode)
                 {
-                    case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetEnumerator();
-                        mode = State_Begin;
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        switch (mode)
+                    case State_Begin:
+                        if (await outerEnumerator.MoveNext(cancellationToken)
+                                                 .ConfigureAwait(false))
                         {
-                            case State_Begin:
-                                if (await outerEnumerator.MoveNext(cancellationToken)
-                                                         .ConfigureAwait(false))
-                                {
-                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
-                                    if (lookup.Count != 0)
-                                    {
-                                        mode = State_DoLoop;
-                                        goto case State_DoLoop;   
-                                    }
-                                }
-
-                                break;
-                            case State_DoLoop:
-                                item = outerEnumerator.Current;
-                                var g = lookup.GetGrouping(outerKeySelector(item), create: false);
-                                if (g != null)
-                                {
-                                    count = g._count;
-                                    elements = g._elements;
-                                    index = 0;
-                                    mode = State_For;
-                                    goto case State_For;
-                                }
-
-                                break;
-
-                            case State_For:
-                                current = resultSelector(item, elements[index]);
-                                index++;
-                                if (index == count)
-                                {
-                                    mode = State_While;
-                                }
-                                return true;
-
-                            case State_While:
-                                var hasNext = await outerEnumerator.MoveNext(cancellationToken).ConfigureAwait(false);
-                                if (hasNext)
-                                {
-                                    goto case State_DoLoop;
-                                }
-
-                             
-                                break;
+                            lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                            if (lookup.Count != 0)
+                            {
+                                mode = State_DoLoop;
+                                goto case State_DoLoop;
+                            }
                         }
 
-                        Dispose();
+                        break;
+                    case State_DoLoop:
+                        item = outerEnumerator.Current;
+                        var g = lookup.GetGrouping(outerKeySelector(item), create: false);
+                        if (g != null)
+                        {
+                            count = g._count;
+                            elements = g._elements;
+                            index = 0;
+                            mode = State_For;
+                            goto case State_For;
+                        }
+
+                        break;
+
+                    case State_For:
+                        current = resultSelector(item, elements[index]);
+                        index++;
+                        if (index == count)
+                        {
+                            mode = State_While;
+                        }
+                        return true;
+
+                    case State_While:
+                        var hasNext = await outerEnumerator.MoveNext(cancellationToken).ConfigureAwait(false);
+                        if (hasNext)
+                        {
+                            goto case State_DoLoop;
+                        }
+
 
                         break;
                 }
 
+                Dispose();
+
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken ct)
+            {
+                outerEnumerator = outer.GetEnumerator();
+                mode = State_Begin;
+
+                return TaskExt.True;
             }
         }
     }

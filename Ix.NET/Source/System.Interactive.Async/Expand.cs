@@ -56,51 +56,46 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (true)
                 {
-                    case AsyncIteratorState.Allocated:
-                        queue = new Queue<IAsyncEnumerable<TSource>>();
-                        queue.Enqueue(source);
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (true)
+                    if (enumerator == null)
+                    {
+                        if (queue.Count > 0)
                         {
-                            if (enumerator == null)
-                            {
-                                if (queue.Count > 0)
-                                {
-                                    var src = queue.Dequeue();
+                            var src = queue.Dequeue();
 
-                                    enumerator?.Dispose();
-                                    enumerator = src.GetEnumerator();
+                            enumerator?.Dispose();
+                            enumerator = src.GetEnumerator();
 
-                                    continue; // loop
-                                }
-
-                                break; // while
-                            }
-
-                            if (await enumerator.MoveNext(cancellationToken)
-                                                .ConfigureAwait(false))
-                            {
-                                var item = enumerator.Current;
-                                var next = selector(item);
-                                queue.Enqueue(next);
-                                current = item;
-                                return true;
-                            }
-                            enumerator.Dispose();
-                            enumerator = null;
+                            continue; // loop
                         }
 
-                        break; // case
+                        break; // while
+                    }
+
+                    if (await enumerator.MoveNext(cancellationToken)
+                                        .ConfigureAwait(false))
+                    {
+                        var item = enumerator.Current;
+                        var next = selector(item);
+                        queue.Enqueue(next);
+                        current = item;
+                        return true;
+                    }
+                    enumerator.Dispose();
+                    enumerator = null;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                queue = new Queue<IAsyncEnumerable<TSource>>();
+                queue.Enqueue(source);
+
+                return TaskExt.True;
             }
         }
     }

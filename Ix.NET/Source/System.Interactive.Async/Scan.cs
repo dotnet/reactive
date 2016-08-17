@@ -67,31 +67,25 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                if (await enumerator.MoveNext(cancellationToken)
+                                    .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        accumulated = seed;
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
-                                             .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            accumulated = accumulator(accumulated, item);
-                            current = accumulated;
-                            return true;
-                        }
-
-                        break;
-                        
+                    var item = enumerator.Current;
+                    accumulated = accumulator(accumulated, item);
+                    current = accumulated;
+                    return true;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken ct)
+            {
+                enumerator = source.GetEnumerator();
+                accumulated = seed;
+
+                return TaskExt.True;
             }
         }
 
@@ -129,40 +123,33 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (await enumerator.MoveNext(cancellationToken)
+                                       .ConfigureAwait(false))
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        hasSeed = false;
-                        accumulated = default(TSource);
+                    var item = enumerator.Current;
+                    if (!hasSeed)
+                    {
+                        hasSeed = true;
+                        accumulated = item;
+                        continue; // loop
+                    }
 
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-
-                        while (await enumerator.MoveNext(cancellationToken)
-                                               .ConfigureAwait(false))
-                        {
-                            var item = enumerator.Current;
-                            if (!hasSeed)
-                            {
-                                hasSeed = true;
-                                accumulated = item;
-                                continue; // loop
-                            }
-
-                            accumulated = accumulator(accumulated, item);
-                            current = accumulated;
-                            return true;
-                        }
-
-                        break; // case
-
+                    accumulated = accumulator(accumulated, item);
+                    current = accumulated;
+                    return true;
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                hasSeed = false;
+                accumulated = default(TSource);
+
+                return TaskExt.True;
             }
         }
     }

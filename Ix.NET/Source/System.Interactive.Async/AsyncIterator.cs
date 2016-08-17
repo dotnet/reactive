@@ -45,7 +45,6 @@ namespace System.Linq
                 return enumerator;
             }
 
-
             public virtual void Dispose()
             {
                 if (cancellationTokenSource != null)
@@ -90,12 +89,25 @@ namespace System.Linq
                         // Short circuit and don't even call MoveNexCore
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        var result = await MoveNextCore(cts.Token)
-                                         .ConfigureAwait(false);
+                        if (state == AsyncIteratorState.Allocated)
+                        {
+                            await this.Initialize(cts.Token);
 
-                        currentIsInvalid = !result; // if move next is false, invalid otherwise valid
+                            if (state == AsyncIteratorState.Allocated)
+                                state = AsyncIteratorState.Iterating;
+                        }
 
-                        return result;
+                        if (state == AsyncIteratorState.Iterating)
+                        {
+                            var result = await MoveNextCore(cts.Token)
+                                             .ConfigureAwait(false);
+
+                            currentIsInvalid = !result; // if move next is false, invalid otherwise valid
+
+                            return result;
+                        }
+
+                        return false;
                     }
                     catch
                     {
@@ -123,6 +135,8 @@ namespace System.Linq
             protected virtual void OnGetEnumerator()
             {
             }
+
+            protected abstract Task Initialize(CancellationToken cancellationToken);
         }
 
         internal enum AsyncIteratorState

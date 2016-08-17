@@ -72,66 +72,61 @@ namespace System.Linq
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
-                switch (state)
+                while (true)
                 {
-                    case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
-                        buffers = new Queue<IList<TSource>>();
-                        index = 0;
-                        stopped = false;
-
-                        state = AsyncIteratorState.Iterating;
-                        goto case AsyncIteratorState.Iterating;
-
-                    case AsyncIteratorState.Iterating:
-                        while (true)
+                    if (!stopped)
+                    {
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
                         {
-                            if (!stopped)
+                            var item = enumerator.Current;
+                            if (index++ % skip == 0)
                             {
-                                if (await enumerator.MoveNext(cancellationToken)
-                                                    .ConfigureAwait(false))
-                                {
-                                    var item = enumerator.Current;
-                                    if (index++ % skip == 0)
-                                    {
-                                        buffers.Enqueue(new List<TSource>(count));
-                                    }
-
-                                    foreach (var buffer in buffers)
-                                    {
-                                        buffer.Add(item);
-                                    }
-
-                                    if (buffers.Count > 0 && buffers.Peek()
-                                                                    .Count == count)
-                                    {
-                                        current = buffers.Dequeue();
-                                        return true;
-                                    }
-
-                                    continue; // loop
-                                }
-                                stopped = true;
-                                enumerator.Dispose();
-                                enumerator = null;
-
-                                continue; // loop
+                                buffers.Enqueue(new List<TSource>(count));
                             }
 
-                            if (buffers.Count > 0)
+                            foreach (var buffer in buffers)
+                            {
+                                buffer.Add(item);
+                            }
+
+                            if (buffers.Count > 0 && buffers.Peek()
+                                                            .Count == count)
                             {
                                 current = buffers.Dequeue();
                                 return true;
                             }
 
-                            break; // exit the while
+                            continue; // loop
                         }
+                        stopped = true;
+                        enumerator.Dispose();
+                        enumerator = null;
 
-                        break; // case
+                        continue; // loop
+                    }
+
+                    if (buffers.Count > 0)
+                    {
+                        current = buffers.Dequeue();
+                        return true;
+                    }
+
+                    break; // exit the while
                 }
 
                 Dispose();
                 return false;
+            }
+
+            protected override Task Initialize(CancellationToken cancellationToken)
+            {
+                enumerator = source.GetEnumerator();
+                buffers = new Queue<IList<TSource>>();
+                index = 0;
+                stopped = false;
+
+                return TaskExt.True;
             }
         }
     }
