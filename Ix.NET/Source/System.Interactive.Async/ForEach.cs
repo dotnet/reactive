@@ -19,8 +19,7 @@ namespace System.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            source.ForEachAsync(action)
-                  .Wait();
+            source.ForEach(action, CancellationToken.None);
         }
 
         public static void ForEach<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource, int> action)
@@ -30,8 +29,7 @@ namespace System.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            source.ForEachAsync(action)
-                  .Wait();
+            source.ForEach(action, CancellationToken.None);
         }
 
 
