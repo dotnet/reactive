@@ -92,7 +92,7 @@ namespace System.Linq
                 return (!@descending ? buffer.OrderBy(keySelector, comparer) : buffer.OrderByDescending(keySelector, comparer));
             }
 
-            return (await parent.GetOrderedEnumerable(cancellationToken)).CreateOrderedEnumerable(keySelector, comparer, @descending);
+            return (await parent.GetOrderedEnumerable(cancellationToken).ConfigureAwait(false)).CreateOrderedEnumerable(keySelector, comparer, @descending);
         }
     }
 }

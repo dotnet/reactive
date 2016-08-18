@@ -93,7 +93,8 @@ namespace System.Linq
 
                         if (state == AsyncIteratorState.Allocated)
                         {
-                            await this.Initialize(cts.Token);
+                            await this.Initialize(cts.Token)
+                                .ConfigureAwait(false);
 
                             if (state == AsyncIteratorState.Allocated)
                                 state = AsyncIteratorState.Iterating;
@@ -102,7 +103,7 @@ namespace System.Linq
                         if (state == AsyncIteratorState.Iterating)
                         {
                             result = await MoveNextCore(cts.Token)
-                                             .ConfigureAwait(false);
+                                .ConfigureAwait(false);
 
                             currentIsInvalid = !result; // if move next is false, invalid otherwise valid
                         }
