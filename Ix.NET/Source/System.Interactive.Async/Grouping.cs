@@ -185,14 +185,14 @@ namespace System.Linq
 
             public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return lookup.ToArray(resultSelector);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return l.ToArray(resultSelector);
             }
 
             public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
             {
-                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return lookup.ToList(resultSelector);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return l.ToList(resultSelector);
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
@@ -202,9 +202,9 @@ namespace System.Linq
                     return -1;
                 }
 
-                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
 
-                return lookup.Count;
+                return l.Count;
             }
         }
 
@@ -274,14 +274,14 @@ namespace System.Linq
             
             public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await lookup.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await lookup.ToListAsync(cancellationToken).ConfigureAwait(false);
+                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
@@ -291,9 +291,9 @@ namespace System.Linq
                     return -1;
                 }
 
-                var lookup = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
 
-                return lookup.Count;
+                return l.Count;
             }
         }
 
@@ -359,14 +359,14 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await lookup.ToArrayAsync(cancellationToken).ConfigureAwait(false);
+                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
-                return await lookup.ToListAsync(cancellationToken).ConfigureAwait(false);
+                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
@@ -376,9 +376,9 @@ namespace System.Linq
                     return -1;
                 }
 
-                var lookup = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                var l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
 
-                return lookup.Count;
+                return l.Count;
             }
         }
 
