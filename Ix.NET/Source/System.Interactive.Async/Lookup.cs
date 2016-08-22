@@ -373,7 +373,6 @@ namespace System.Linq.Internal
             return Task.FromResult(array);
         }
 
-
         public Task<List<IGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<IGrouping<TKey, TElement>>(Count);
