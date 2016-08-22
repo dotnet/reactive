@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,6 +64,9 @@ namespace System.Linq
 
             public CatchAsyncIterator(IAsyncEnumerable<TSource> source, Func<TException, IAsyncEnumerable<TSource>> handler)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(handler != null);
+
                 this.source = source;
                 this.handler = handler;
             }
@@ -145,6 +147,7 @@ namespace System.Linq
         private sealed class CatchAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IEnumerable<IAsyncEnumerable<TSource>> sources;
+
             private IAsyncEnumerator<TSource> enumerator;
             private ExceptionDispatchInfo error;
 
@@ -152,6 +155,8 @@ namespace System.Linq
 
             public CatchAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
             {
+                Debug.Assert(sources != null);
+
                 this.sources = sources;
             }
 

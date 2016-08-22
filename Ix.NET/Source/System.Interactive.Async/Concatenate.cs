@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,6 +51,8 @@ namespace System.Linq
 
             public ConcatEnumerableAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> source)
             {
+                Debug.Assert(source != null);
+
                 this.source = source;
             }
 
@@ -79,9 +79,9 @@ namespace System.Linq
             }
 
             // State machine vars
-            IEnumerator<IAsyncEnumerable<TSource>> outerEnumerator;
-            IAsyncEnumerator<TSource> currentEnumerator;
-            int mode;
+            private IEnumerator<IAsyncEnumerable<TSource>> outerEnumerator;
+            private IAsyncEnumerator<TSource> currentEnumerator;
+            private int mode;
 
             const int State_OuterNext = 1;
             const int State_While = 4;
@@ -140,7 +140,8 @@ namespace System.Linq
 
             internal Concat2AsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
             {
-                Debug.Assert(first != null && second != null);
+                Debug.Assert(first != null);
+                Debug.Assert(second != null);
 
                 this.first = first;
                 this.second = second;
