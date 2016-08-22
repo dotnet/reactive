@@ -23,8 +23,7 @@ namespace System.Linq
 
         private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
-            var self = default(IAsyncEnumerator<T>);
-            self = new AnonymousAsyncIterator<T>(
+            var self = new AnonymousAsyncIterator<T>(
                 async ct =>
                 {
                     var tcs = new TaskCompletionSource<bool>();
