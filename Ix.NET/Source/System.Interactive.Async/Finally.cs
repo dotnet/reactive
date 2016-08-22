@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,6 +30,9 @@ namespace System.Linq
 
             public FinallyAsyncIterator(IAsyncEnumerable<TSource> source, Action finallyAction)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(finallyAction != null);
+
                 this.source = source;
                 this.finallyAction = finallyAction;
             }

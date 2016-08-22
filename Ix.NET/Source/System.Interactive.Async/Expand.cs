@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,12 +25,16 @@ namespace System.Linq
         {
             private readonly Func<TSource, IAsyncEnumerable<TSource>> selector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private IAsyncEnumerator<TSource> enumerator;
 
             private Queue<IAsyncEnumerable<TSource>> queue;
 
             public ExpandAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TSource>> selector)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(selector != null);
+
                 this.source = source;
                 this.selector = selector;
             }

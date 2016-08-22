@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,12 +29,17 @@ namespace System.Linq
             private readonly TState initialState;
             private readonly Func<TState, TState> iterate;
             private readonly Func<TState, TResult> resultSelector;
+
             private TState currentState;
 
             private bool started;
 
             public GenerateAsyncIterator(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
             {
+                Debug.Assert(condition != null);
+                Debug.Assert(iterate != null);
+                Debug.Assert(resultSelector != null);
+
                 this.initialState = initialState;
                 this.condition = condition;
                 this.iterate = iterate;

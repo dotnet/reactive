@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -127,14 +126,15 @@ namespace System.Linq
             private readonly Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector;
             private readonly IEqualityComparer<TKey> comparer;
 
-            Internal.Lookup<TKey, TSource> lookup;
-            IEnumerator<TResult> enumerator;
+            private Internal.Lookup<TKey, TSource> lookup;
+            private IEnumerator<TResult> enumerator;
 
             public GroupedResultAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, IAsyncEnumerable<TSource>, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
-                if (source == null) throw new ArgumentNullException(nameof(source));
-                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
-                if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
+                Debug.Assert(source != null);
+                Debug.Assert(keySelector != null);
+                Debug.Assert(resultSelector != null);
+                Debug.Assert(comparer != null);
 
                 this.source = source;
                 this.keySelector = keySelector;
@@ -220,9 +220,10 @@ namespace System.Linq
 
             public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
             {
-                if (source == null) throw new ArgumentNullException(nameof(source));
-                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
-                if (elementSelector == null) throw new ArgumentNullException(nameof(elementSelector));
+                Debug.Assert(source != null);
+                Debug.Assert(keySelector != null);
+                Debug.Assert(elementSelector != null);
+                Debug.Assert(comparer != null);
 
                 this.source = source;
                 this.keySelector = keySelector;
@@ -307,8 +308,9 @@ namespace System.Linq
 
             public GroupedAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
-                if (source == null) throw new ArgumentNullException(nameof(source));
-                if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+                Debug.Assert(source != null);
+                Debug.Assert(keySelector != null);
+                Debug.Assert(comparer != null);
 
                 this.source = source;
                 this.keySelector = keySelector;

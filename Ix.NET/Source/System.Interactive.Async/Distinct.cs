@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -110,6 +108,8 @@ namespace System.Linq
             public DistinctAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
             {
                 Debug.Assert(source != null);
+                Debug.Assert(keySelector != null);
+                Debug.Assert(comparer != null);
 
                 this.source = source;
                 this.keySelector = keySelector;
@@ -344,13 +344,16 @@ namespace System.Linq
         {
             private readonly IEqualityComparer<TSource> comparer;
             private readonly IAsyncEnumerable<TSource> source;
-            private TSource currentValue;
 
+            private TSource currentValue;
             private IAsyncEnumerator<TSource> enumerator;
             private bool hasCurrentValue;
 
             public DistinctUntilChangedAsyncIterator(IAsyncEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
             {
+                Debug.Assert(comparer != null);
+                Debug.Assert(source != null);
+
                 this.source = source;
                 this.comparer = comparer;
             }

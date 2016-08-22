@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,6 +48,10 @@ namespace System.Linq
 
             public ExceptAsyncIterator(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
             {
+                Debug.Assert(first != null);
+                Debug.Assert(second != null);
+                Debug.Assert(comparer != null);
+
                 this.first = first;
                 this.second = second;
                 this.comparer = comparer;
