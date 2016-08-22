@@ -20,13 +20,13 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
 
             // optimize these adapters for lists and collections
-            var ilist = source as IList<TSource>;
-            if (ilist != null)
-                return new AsyncIListEnumerableAdapter<TSource>(ilist);
+            var list = source as IList<TSource>;
+            if (list != null)
+                return new AsyncIListEnumerableAdapter<TSource>(list);
 
-            var icoll = source as ICollection<TSource>;
-            if (icoll != null)
-                return new AsyncICollectionEnumerableAdapter<TSource>(icoll);
+            var collection = source as ICollection<TSource>;
+            if (collection != null)
+                return new AsyncICollectionEnumerableAdapter<TSource>(collection);
 
             return new AsyncEnumerableAdapter<TSource>(source);
         }
@@ -156,6 +156,7 @@ namespace System.Linq
             public AsyncIListEnumerableAdapter(IList<T> source)
             {
                 Debug.Assert(source != null);
+
                 this.source = source;
             }
 
@@ -258,12 +259,15 @@ namespace System.Linq
             public AsyncICollectionEnumerableAdapter(ICollection<T> source)
             {
                 Debug.Assert(source != null);
+
                 this.source = source;
             }
+
             public override AsyncIterator<T> Clone()
             {
                 return new AsyncEnumerableAdapter<T>(source);
             }
+
             public override void Dispose()
             {
                 if (enumerator != null)
@@ -273,6 +277,7 @@ namespace System.Linq
                 }
                 base.Dispose();
             }
+
             protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
             {
                 switch (state)
@@ -292,28 +297,40 @@ namespace System.Linq
                 }
                 return Task.FromResult(false);
             }
+
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
             // and short circuit as appropriate
             public Task<T[]> ToArrayAsync(CancellationToken cancellationToken)
             {
                 return Task.FromResult(source.ToArray());
             }
+
             public Task<List<T>> ToListAsync(CancellationToken cancellationToken)
             {
                 return Task.FromResult(source.ToList());
             }
+
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
                 return Task.FromResult(source.Count);
             }
+
             IEnumerator<T> IEnumerable<T>.GetEnumerator() => source.GetEnumerator();
+
             IEnumerator IEnumerable.GetEnumerator() => source.GetEnumerator();
+
             void ICollection<T>.Add(T item) => source.Add(item);
+
             void ICollection<T>.Clear() => source.Clear();
+
             bool ICollection<T>.Contains(T item) => source.Contains(item);
+
             void ICollection<T>.CopyTo(T[] array, int arrayIndex) => source.CopyTo(array, arrayIndex);
+
             bool ICollection<T>.Remove(T item) => source.Remove(item);
+
             int ICollection<T>.Count => source.Count;
+
             bool ICollection<T>.IsReadOnly => source.IsReadOnly;
         }
     }
