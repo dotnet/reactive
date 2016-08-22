@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,6 +34,10 @@ namespace System.Linq
 
             public ZipAsyncIterator(IAsyncEnumerable<TFirst> first, IAsyncEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> selector)
             {
+                Debug.Assert(first != null);
+                Debug.Assert(second != null);
+                Debug.Assert(selector != null);
+
                 this.first = first;
                 this.second = second;
                 this.selector = selector;
