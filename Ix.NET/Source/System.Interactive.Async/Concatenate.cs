@@ -47,7 +47,6 @@ namespace System.Linq
             return new ConcatEnumerableAsyncIterator<TSource>(sources);
         }
 
-
         private sealed class ConcatEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly IEnumerable<IAsyncEnumerable<TSource>> source;
@@ -127,7 +126,6 @@ namespace System.Linq
                         }
 
                         Dispose();
-
                         break;
                 }
 

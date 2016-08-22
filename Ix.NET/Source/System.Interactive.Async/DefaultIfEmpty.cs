@@ -38,9 +38,10 @@ namespace System.Linq
 
             public DefaultIfEmptyAsyncIterator(IAsyncEnumerable<TSource> source, TSource defaultValue)
             {
+                Debug.Assert(source != null);
+
                 this.source = source;
                 this.defaultValue = defaultValue;
-                Debug.Assert(source != null);
             }
 
             public override AsyncIterator<TSource> Clone()

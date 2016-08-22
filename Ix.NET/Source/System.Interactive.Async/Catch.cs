@@ -228,8 +228,7 @@ namespace System.Linq
 
                         break; // case
                 }
-
-
+                
                 Dispose();
                 return false;
             }

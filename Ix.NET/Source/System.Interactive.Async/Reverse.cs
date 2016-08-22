@@ -67,7 +67,7 @@ namespace System.Linq
                     var listProv = source as IIListProvider<TSource>;
                     if (listProv != null)
                     {
-                        return listProv.GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken);
+                        return listProv.GetCountAsync(onlyIfCheap, cancellationToken);
                     }
 
                     if (!(source is ICollection<TSource>) && !(source is ICollection))
