@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,8 +17,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
-
-
+            
             var iterator = source as AsyncIterator<TSource>;
             if (iterator != null)
             {
@@ -47,7 +44,6 @@ namespace System.Linq
         }
 
         private static Func<TSource, TResult> CombineSelectors<TSource, TMiddle, TResult>(Func<TSource, TMiddle> selector1, Func<TMiddle, TResult> selector2)
-
         {
             return x => selector2(selector1(x));
         }
@@ -56,6 +52,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, TResult> selector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private IAsyncEnumerator<TSource> enumerator;
 
             public SelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)

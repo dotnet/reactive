@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,12 +23,14 @@ namespace System.Linq
         private sealed class ReverseAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
         {
             private readonly IAsyncEnumerable<TSource> source;
+
             private int index;
             private TSource[] items;
 
             public ReverseAsyncIterator(IAsyncEnumerable<TSource> source)
             {
                 Debug.Assert(source != null);
+
                 this.source = source;
             }
 
@@ -67,7 +67,7 @@ namespace System.Linq
                     var listProv = source as IIListProvider<TSource>;
                     if (listProv != null)
                     {
-                        return listProv.GetCountAsync(onlyIfCheap, cancellationToken);
+                        return listProv.GetCountAsync(true, cancellationToken);
                     }
 
                     if (!(source is ICollection<TSource>) && !(source is ICollection))

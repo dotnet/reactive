@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,6 +42,9 @@ namespace System.Linq
 
             public ScanAsyncEnumerable(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(accumulator != null);
+
                 this.source = source;
                 this.seed = seed;
                 this.accumulator = accumulator;
@@ -99,6 +101,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, TSource, TSource> accumulator;
             private readonly IAsyncEnumerable<TSource> source;
+
             private TSource accumulated;
             private IAsyncEnumerator<TSource> enumerator;
 
@@ -106,6 +109,9 @@ namespace System.Linq
 
             public ScanAsyncEnumerable(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(accumulator != null);
+
                 this.source = source;
                 this.accumulator = accumulator;
             }

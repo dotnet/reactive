@@ -70,15 +70,19 @@ namespace System.Linq
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
+
             private readonly Func<TSource, IAsyncEnumerable<TResult>> selector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private int mode;
             private IAsyncEnumerator<TResult> resultEnumerator;
-
             private IAsyncEnumerator<TSource> sourceEnumerator;
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(selector != null);
+
                 this.source = source;
                 this.selector = selector;
             }
@@ -155,9 +159,11 @@ namespace System.Linq
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
+
             private readonly Func<TSource, IAsyncEnumerable<TCollection>> collectionSelector;
             private readonly Func<TSource, TCollection, TResult> resultSelector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private TSource currentSource;
             private int mode;
             private IAsyncEnumerator<TCollection> resultEnumerator;
@@ -165,6 +171,10 @@ namespace System.Linq
 
             public SelectManyAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(collectionSelector != null);
+                Debug.Assert(resultSelector != null);
+
                 this.source = source;
                 this.collectionSelector = collectionSelector;
                 this.resultSelector = resultSelector;
