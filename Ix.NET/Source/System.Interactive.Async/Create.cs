@@ -84,7 +84,7 @@ namespace System.Linq
 
             public override AsyncIterator<T> Clone()
             {
-                throw new NotSupportedException("Iterator only");
+                throw new NotSupportedException("AnonymousAsyncIterator cannot be cloned. It is only intended for use as an iterator.");
             }
 
             public override void Dispose()
