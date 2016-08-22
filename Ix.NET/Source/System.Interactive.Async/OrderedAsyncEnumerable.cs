@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,21 +27,20 @@ namespace System.Linq
         private readonly IComparer<TKey> comparer;
         private readonly bool descending;
         private readonly Func<TElement, TKey> keySelector;
-
+        private readonly OrderedAsyncEnumerable<TElement> parent;
 
         private IEnumerator<TElement> enumerator;
-
-        private readonly OrderedAsyncEnumerable<TElement> parent;
         private IAsyncEnumerator<TElement> parentEnumerator;
-
 
         public OrderedAsyncEnumerable(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IComparer<TKey> comparer, bool descending, OrderedAsyncEnumerable<TElement> parent)
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+            Debug.Assert(source != null);
+            Debug.Assert(keySelector != null);
+            Debug.Assert(comparer != null);
+
             this.source = source;
             this.keySelector = keySelector;
-            this.comparer = comparer ?? Comparer<TKey>.Default;
+            this.comparer = comparer;
             this.descending = descending;
             this.parent = parent;
         }
