@@ -351,7 +351,7 @@ namespace System.Linq.Internal
 
         IAsyncEnumerator<IGrouping<TKey, TElement>> IAsyncEnumerable<IGrouping<TKey, TElement>>.GetEnumerator()
         {
-            return this.ToAsyncEnumerable<IGrouping<TKey, TElement>>().GetEnumerator();
+            return this.ToAsyncEnumerable().GetEnumerator();
         }
 
         public Task<IGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)

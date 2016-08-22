@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,8 +55,6 @@ namespace System.Linq
             private readonly IEqualityComparer<TKey> comparer;
 
             private IAsyncEnumerator<TOuter> outerEnumerator;
- 
-
 
             public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
             {
@@ -67,6 +63,7 @@ namespace System.Linq
                 Debug.Assert(outerKeySelector != null);
                 Debug.Assert(innerKeySelector != null);
                 Debug.Assert(resultSelector != null);
+                Debug.Assert(comparer != null);
 
                 this.outer = outer;
                 this.inner = inner;
