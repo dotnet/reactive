@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -119,6 +117,7 @@ namespace System.Linq
         {
             private readonly Func<TSource, int, bool> predicate;
             private readonly IAsyncEnumerable<TSource> source;
+
             private IAsyncEnumerator<TSource> enumerator;
             private int index;
 
@@ -185,6 +184,7 @@ namespace System.Linq
             private readonly Func<TSource, bool> predicate;
             private readonly Func<TSource, TResult> selector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private IAsyncEnumerator<TSource> enumerator;
 
             public WhereSelectEnumerableAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, Func<TSource, TResult> selector)

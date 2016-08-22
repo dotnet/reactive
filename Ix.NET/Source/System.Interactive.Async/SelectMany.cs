@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -246,9 +245,11 @@ namespace System.Linq
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
+
             private readonly Func<TSource, int, IAsyncEnumerable<TCollection>> collectionSelector;
             private readonly Func<TSource, TCollection, TResult> resultSelector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private TSource currentSource;
             private int index;
             private int mode;
@@ -257,6 +258,10 @@ namespace System.Linq
 
             public SelectManyWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(collectionSelector != null);
+                Debug.Assert(resultSelector != null);
+
                 this.source = source;
                 this.collectionSelector = collectionSelector;
                 this.resultSelector = resultSelector;
@@ -344,8 +349,10 @@ namespace System.Linq
         {
             private const int State_Source = 1;
             private const int State_Result = 2;
+
             private readonly Func<TSource, int, IAsyncEnumerable<TResult>> selector;
             private readonly IAsyncEnumerable<TSource> source;
+
             private int index;
             private int mode;
             private IAsyncEnumerator<TResult> resultEnumerator;
@@ -353,6 +360,9 @@ namespace System.Linq
 
             public SelectManyWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, IAsyncEnumerable<TResult>> selector)
             {
+                Debug.Assert(source != null);
+                Debug.Assert(selector != null);
+
                 this.source = source;
                 this.selector = selector;
             }

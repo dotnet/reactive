@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,11 +61,14 @@ namespace System.Linq
         {
             private readonly int count;
             private readonly IAsyncEnumerable<TSource> source;
+
             private int currentCount;
             private IAsyncEnumerator<TSource> enumerator;
 
             public TakeAsyncIterator(IAsyncEnumerable<TSource> source, int count)
             {
+                Debug.Assert(source != null);
+
                 this.source = source;
                 this.count = count;
                 currentCount = count;
@@ -121,12 +122,15 @@ namespace System.Linq
         {
             private readonly int count;
             private readonly IAsyncEnumerable<TSource> source;
+
             private IAsyncEnumerator<TSource> enumerator;
             private bool isDone;
             private Queue<TSource> queue;
 
             public TakeLastAsyncIterator(IAsyncEnumerable<TSource> source, int count)
             {
+                Debug.Assert(source != null);
+
                 this.source = source;
                 this.count = count;
             }

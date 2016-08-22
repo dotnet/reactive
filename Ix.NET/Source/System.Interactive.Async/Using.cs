@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,13 +25,16 @@ namespace System.Linq
         {
             private readonly Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory;
             private readonly Func<TResource> resourceFactory;
+
             private IAsyncEnumerable<TSource> enumerable;
             private IAsyncEnumerator<TSource> enumerator;
-
             private TResource resource;
 
             public UsingAsyncIterator(Func<TResource> resourceFactory, Func<TResource, IAsyncEnumerable<TSource>> enumerableFactory)
             {
+                Debug.Assert(resourceFactory != null);
+                Debug.Assert(enumerableFactory != null);
+
                 this.resourceFactory = resourceFactory;
                 this.enumerableFactory = enumerableFactory;
             }
