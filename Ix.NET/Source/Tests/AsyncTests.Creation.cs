@@ -143,6 +143,14 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Repeat4()
+        {
+            var xs = AsyncEnumerable.Repeat(2).Take(5);
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
         public void Defer_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer<int>(null));

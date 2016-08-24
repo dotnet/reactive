@@ -172,7 +172,7 @@ namespace Tests
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
             var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
 
-            var c = AsyncEnumerable.Concat(xs, ys, zs);
+            var c = xs.Concat(ys).Concat(zs);
 
             var res = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
             Assert.True(res.SequenceEqual(await c.ToArray()));
@@ -185,7 +185,7 @@ namespace Tests
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
             var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
 
-            var c = AsyncEnumerable.Concat(xs, ys, zs);
+            var c = xs.Concat(ys).Concat(zs);
 
             var res = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
             Assert.True(res.SequenceEqual(await c.ToList()));
@@ -198,7 +198,7 @@ namespace Tests
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
             var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
 
-            var c = AsyncEnumerable.Concat(xs, ys, zs);
+            var c = xs.Concat(ys).Concat(zs);
 
             Assert.Equal(8, await c.Count());
         }

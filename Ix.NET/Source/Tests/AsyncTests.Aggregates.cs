@@ -786,6 +786,13 @@ namespace Tests
         }
 
         [Fact]
+        public void Single11()
+        {
+            var res = new int[0].ToAsyncEnumerable().Single();
+            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+        }
+
+        [Fact]
         public async Task SingleOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefault<int>(null));
@@ -874,6 +881,13 @@ namespace Tests
         {
             var res = new[] { 42, 45, 90 }.ToAsyncEnumerable().SingleOrDefault(x => true);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+        }
+
+        [Fact]
+        public void SingleOrDefault12()
+        {
+            var res = new int[0].ToAsyncEnumerable().SingleOrDefault();
+            Assert.Equal(0, res.Result);
         }
 
         [Fact]

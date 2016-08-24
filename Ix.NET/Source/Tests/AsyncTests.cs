@@ -8,8 +8,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
+
 
 namespace Tests
 {
@@ -63,83 +66,24 @@ namespace Tests
 
         public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
         {
-            Assert.True(await enumerable.SequenceEqual(enumerable, SequenceIdentityComparer<T>.Instance));
-        }
+            var en1 = enumerable.GetEnumerator();
+            var en2 = enumerable.GetEnumerator();
 
-        private class SequenceIdentityComparer<T> : IEqualityComparer<T>
-        {
-            readonly IEqualityComparer<T> innerComparer = EqualityComparer<T>.Default;
-            public SequenceIdentityComparer()
-            {
-                var itemType = GetAnyElementType(typeof(T));
+            Assert.Equal(en1.GetType(), en2.GetType());
 
-                // if not the same as T, then it's a list
-                if (itemType != typeof(T))
-                {
-                    // invoke the Instance method of the type we need
+            en1.Dispose();
+            en2.Dispose();
 
-                    var eqType = typeof(SequenceIdentityComparer<,>).MakeGenericType(typeof(T), itemType);
-                    innerComparer = (IEqualityComparer<T>)eqType.GetRuntimeProperty("Instance").GetValue(null);
-                }
-            }
+            var e1t = enumerable.ToList();
+            var e2t = enumerable.ToList();
+
+            await Task.WhenAll(e1t, e2t);
 
 
-            public static SequenceIdentityComparer<T> Instance => new SequenceIdentityComparer<T>();
-            public bool Equals(T x, T y)
-            {
-                return innerComparer.Equals(x, y);
-            }
+            var e1Result = e1t.Result;
+            var e2Result = e2t.Result;
 
-            public int GetHashCode(T obj)
-            {
-                return innerComparer.GetHashCode(obj);
-            }
-
-            static Type GetAnyElementType(Type type)
-            {
-                // Type is Array
-                // short-circuit if you expect lots of arrays 
-                if (typeof(Array).IsAssignableFrom(type))
-                    return type.GetElementType();
-
-                // type is IEnumerable<T>;
-                if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                    return type.GetGenericArguments()[0];
-
-                // type implements/extends IEnumerable<T>;
-                var enumType = type.GetInterfaces()
-                                        .Where(t => t.GetTypeInfo().IsGenericType &&
-                                               t.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                                        .Select(t => t.GenericTypeArguments[0]).FirstOrDefault();
-                return enumType ?? type;
-            }
-        
-        }
-
-
-        private class SequenceIdentityComparer<TList, TItem> : IEqualityComparer<TList> where TList : IEnumerable<TItem>
-        {
-            readonly IEqualityComparer<TItem> innerComparer = EqualityComparer<TItem>.Default;
-
-
-            public static IEqualityComparer<TList> Instance => new SequenceIdentityComparer<TList, TItem>();
-            public bool Equals(TList x, TList y)
-            {
-                return x.SequenceEqual(y);
-            }
-
-            public int GetHashCode(TList obj)
-            {
-                return obj.Aggregate(0, (i, item) =>
-                                        {
-                                            unchecked
-                                            {
-                                                i += innerComparer.GetHashCode(item);
-                                            }
-                                            return i;
-                                        }
-                                        );
-            }
+            e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
     }
 }
