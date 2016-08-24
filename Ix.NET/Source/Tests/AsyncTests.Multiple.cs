@@ -165,6 +165,45 @@ namespace Tests
             await SequenceIdentity(res);
         }
 
+        [Fact]
+        public async Task Concat10()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5 }.ToAsyncEnumerable();
+            var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+
+            var c = AsyncEnumerable.Concat(xs, ys, zs);
+
+            var res = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+            Assert.True(res.SequenceEqual(await c.ToArray()));
+        }
+
+        [Fact]
+        public async Task Concat11()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5 }.ToAsyncEnumerable();
+            var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+
+            var c = AsyncEnumerable.Concat(xs, ys, zs);
+
+            var res = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+            Assert.True(res.SequenceEqual(await c.ToList()));
+        }
+
+        [Fact]
+        public async Task Concat12()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5 }.ToAsyncEnumerable();
+            var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+
+            var c = AsyncEnumerable.Concat(xs, ys, zs);
+
+            Assert.Equal(8, await c.Count());
+        }
+
+
         static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable();
