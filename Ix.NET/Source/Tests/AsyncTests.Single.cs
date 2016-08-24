@@ -4,14 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using Xunit;
 using System.Threading;
 using System.Threading.Tasks;
-
 namespace Tests
 {
+
     public partial class AsyncTests
     {
         [Fact]
@@ -2452,6 +2453,14 @@ namespace Tests
             Assert.True(e.Current.SequenceEqual(new[] { 4, 5 }));
 
             Assert.False(e.MoveNext().Result);
+        }
+
+        [Fact]
+        public async Task Buffer4()
+        {
+            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(3, 2);
+
+            await SequenceIdentity(xs);
         }
 
         [Fact]

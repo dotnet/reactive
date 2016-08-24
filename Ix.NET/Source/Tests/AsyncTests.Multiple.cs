@@ -115,6 +115,56 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
 
+        [Fact]
+        public void Concat7()
+        {
+            var ws = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var xs = new[] { 4, 5 }.ToAsyncEnumerable();
+            var ys = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+            var zs = new[] { 9, 10, 11 }.ToAsyncEnumerable();
+
+            var res = ws.Concat(xs).Concat(ys).Concat(zs);
+
+            var e = res.GetEnumerator();
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 4);
+            HasNext(e, 5);
+            HasNext(e, 6);
+            HasNext(e, 7);
+            HasNext(e, 8);
+            HasNext(e, 9);
+            HasNext(e, 10);
+            HasNext(e, 11);
+            NoNext(e);
+        }
+
+        [Fact]
+        public async Task Concat8()
+        {
+            var ws = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var xs = new[] { 4, 5 }.ToAsyncEnumerable();
+            var ys = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+            var zs = new[] { 9, 10, 11 }.ToAsyncEnumerable();
+
+            var res = ws.Concat(xs).Concat(ys).Concat(zs);
+
+            await SequenceIdentity(res);
+        }
+
+        [Fact]
+        public async Task Concat9()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5 }.ToAsyncEnumerable();
+            var zs = new[] { 6, 7, 8 }.ToAsyncEnumerable();
+
+            var res = AsyncEnumerable.Concat(xs, ys, zs);
+
+            await SequenceIdentity(res);
+        }
+
         static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
         {
             yield return new[] { 1, 2, 3 }.ToAsyncEnumerable();

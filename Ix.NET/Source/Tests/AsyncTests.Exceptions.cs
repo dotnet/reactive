@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Xunit;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -268,6 +269,19 @@ namespace Tests
 
             var e = res.GetEnumerator();
             NoNext(e);
+        }
+
+        [Fact]
+        public async Task Catch13()
+        {
+            var ex = new InvalidOperationException("Bang!");
+
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
+
+            var res = AsyncEnumerable.Catch(new[] { xs, xs, ys, ys });
+
+            await SequenceIdentity(res);
         }
 
         [Fact]
