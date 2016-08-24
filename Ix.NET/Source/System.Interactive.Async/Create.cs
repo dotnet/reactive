@@ -13,11 +13,19 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<T> CreateEnumerable<T>(Func<IAsyncEnumerator<T>> getEnumerator)
         {
+            if (getEnumerator == null)
+                throw new ArgumentNullException(nameof(getEnumerator));
+
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
         public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
+            if (moveNext == null)
+                throw new ArgumentNullException(nameof(moveNext));
+
+            // Note: Many methods pass null in for the second two params. We're assuming
+            // That the caller is responsible and knows what they're doing
             return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
 
@@ -52,6 +60,8 @@ namespace System.Linq
 
             public AnonymousAsyncEnumerable(Func<IAsyncEnumerator<T>> getEnumerator)
             {
+                Debug.Assert(getEnumerator != null);
+
                 this.getEnumerator = getEnumerator;
             }
 
@@ -71,8 +81,6 @@ namespace System.Linq
             public AnonymousAsyncIterator(Func<CancellationToken, Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
             {
                 Debug.Assert(moveNext != null);
-                Debug.Assert(currentFunc != null);
-                Debug.Assert(dispose != null);
 
                 this.moveNext = moveNext;
                 this.currentFunc = currentFunc;
