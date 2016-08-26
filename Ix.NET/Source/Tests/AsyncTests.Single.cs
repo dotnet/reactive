@@ -1514,6 +1514,16 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Reverse9()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
+
+            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
+        }
+
+
+        [Fact]
         public void OrderBy_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(null, x => x));
