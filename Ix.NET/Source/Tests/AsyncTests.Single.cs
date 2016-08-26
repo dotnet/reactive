@@ -1505,6 +1505,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Reverse8()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.Reverse();
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
         public void OrderBy_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OrderBy<int, int>(null, x => x));
@@ -2476,6 +2485,46 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task GroupBy34()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
+
+            var arr = new[] { "0 - 0369", "1 - 147", "2 - 258" };
+
+            Assert.Equal(arr, await ys.ToArray());
+        }
+
+        [Fact]
+        public async Task GroupBy35()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
+
+            var arr = new List<string> { "0 - 0369", "1 - 147", "2 - 258" };
+
+            Assert.Equal(arr, await ys.ToList());
+        }
+
+        [Fact]
+        public async Task GroupBy36()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
+
+            Assert.Equal(3, await ys.Count());
+        }
+
+        [Fact]
+        public async Task GroupBy37()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
 
             await SequenceIdentity(ys);
         }
