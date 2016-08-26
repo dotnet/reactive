@@ -12,6 +12,14 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+
+        [Fact]
+        public void AppendPrepend_Null()
+        {
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Append(null, 42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Prepend(null, 42));
+        }
+
         [Fact]
         public void Append1()
         {
@@ -328,6 +336,17 @@ namespace Tests
 
 
         [Fact]
+        public async Task Prepend8()
+        {
+            var xs = AsyncEnumerable.Range(1, 3)
+                                    .Where(i => true);
+
+            var res = xs.Prepend(4);
+
+            await SequenceIdentity(res);
+        }
+
+        [Fact]
         public void PrependN1()
         {
             var xs = new[] {1, 2, 3}.ToAsyncEnumerable();
@@ -587,6 +606,34 @@ namespace Tests
             Assert.Equal(10, await res.Count());
         }
 
+        [Fact]
+        public void AppendPrepend8()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
+            var res = xs.Append(4)
+                        .Prepend(5);
+
+            var e = res.GetEnumerator();
+            
+            HasNext(e, 5);
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 4);
+            NoNext(e);
+        }
+
+        [Fact]
+        public async Task AppendPrepend9()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
+            var res = xs.Append(4)
+                        .Prepend(5);
+
+            await SequenceIdentity(res);
+        }
 
     }
 }

@@ -1522,6 +1522,34 @@ namespace Tests
             Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
         }
 
+        [Fact]
+        public async Task Reverse10()
+        {
+            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
+
+            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
+        }
+
+        [Fact]
+        public async Task Reverse11()
+        {
+            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
+
+            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToList());
+        }
+
+
+        [Fact]
+        public async Task Reverse12()
+        {
+            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var ys = xs.Reverse().Prepend(4).Prepend(5); // to trigger onlyIfCheap
+
+            Assert.Equal(new[] { 5, 4, 3, 2, 1 }, await ys.ToArray());
+        }
+
 
         [Fact]
         public void OrderBy_Null()
