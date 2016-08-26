@@ -499,7 +499,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Cast()
+        public void Cast1()
         {
             var xs = new object[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Cast<int>();
@@ -510,6 +510,15 @@ namespace Tests
             HasNext(e, 3);
             HasNext(e, 4);
             NoNext(e);
+        }
+
+        [Fact]
+        public void Cast2()
+        {
+            var xs = new [] { new EventArgs(), new EventArgs(), new EventArgs() }.ToAsyncEnumerable();
+            var ys = xs.Cast<EventArgs>();
+
+            Assert.Same(xs, ys);
         }
 
         [Fact]
@@ -2229,6 +2238,246 @@ namespace Tests
             var res = ys.GroupBy(x => x.Item/10);
 
             await SequenceIdentity(res);
+        }
+
+
+        [Fact]
+        public async Task GroupBy20()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
+
+            var arr = new[] { "0 - adgj", "1 - beh", "2 - cfi" };
+
+            Assert.Equal(arr, await ys.ToArray());
+        }
+
+        [Fact]
+        public async Task GroupBy21()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
+
+            var arr = new List<string> { "0 - adgj", "1 - beh", "2 - cfi" };
+
+            Assert.Equal(arr, await ys.ToList());
+        }
+
+        [Fact]
+        public async Task GroupBy22()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
+            
+            Assert.Equal(3, await ys.Count());
+        }
+
+        [Fact]
+        public async Task GroupBy23()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task GroupBy24()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var g1a = new[] { 'a', 'd', 'g', 'j' };
+            var g2a = new[] { 'b', 'e', 'h' };
+            var g3a = new[] { 'c', 'f', 'i' };
+
+            var gar = await ys.ToArray();
+
+            Assert.Equal(3, gar.Length);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToArray();
+            
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToArray();
+
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToArray();
+            Assert.Equal(g3a, gg3a); 
+        }
+
+        [Fact]
+        public async Task GroupBy25()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var g1a = new List<char> { 'a', 'd', 'g', 'j' };
+            var g2a = new List<char> { 'b', 'e', 'h' };
+            var g3a = new List<char> { 'c', 'f', 'i' };
+
+            var gar = await ys.ToList();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToList();
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToList();
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToList();
+            Assert.Equal(g3a, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy26()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+            
+            var gar = await ys.ToList();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.Count();
+            Assert.Equal(4, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.Count();
+            Assert.Equal(3, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.Count();
+            Assert.Equal(3, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy27()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            var gar = await ys.Count();
+
+            Assert.Equal(3, gar);
+        }
+
+        [Fact]
+        public async Task GroupBy28()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task GroupBy29()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, new EqMod(3));
+
+            var g1a = new List<int> { 0, 3, 6, 9 };
+            var g2a = new List<int> { 1, 4, 7 };
+            var g3a = new List<int> { 2, 5, 8 };
+
+            var gar = await ys.ToList();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToList();
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToList();
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToList();
+            Assert.Equal(g3a, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy30()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, new EqMod(3));
+
+
+            var gar = await ys.ToList();
+
+            Assert.Equal(3, gar.Count);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.Count();
+            Assert.Equal(4, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.Count();
+            Assert.Equal(3, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.Count();
+            Assert.Equal(3, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy31()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, new EqMod(3));
+
+            var g1a = new[] { 0, 3, 6, 9 };
+            var g2a = new[] { 1, 4, 7 };
+            var g3a = new[] { 2, 5, 8 };
+
+            var gar = await ys.ToArray();
+
+            Assert.Equal(3, gar.Length);
+
+            var gg1 = gar[0];
+            var gg1a = await gg1.ToArray();
+
+            Assert.Equal(g1a, gg1a);
+
+            var gg2 = gar[1];
+            var gg2a = await gg2.ToArray();
+
+            Assert.Equal(g2a, gg2a);
+
+            var gg3 = gar[2];
+            var gg3a = await gg3.ToArray();
+            Assert.Equal(g3a, gg3a);
+        }
+
+        [Fact]
+        public async Task GroupBy32()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, new EqMod(3));
+
+            var gar = await ys.Count();
+
+            Assert.Equal(3, gar);
+        }
+
+        [Fact]
+        public async Task GroupBy33()
+        {
+            var xs = AsyncEnumerable.Range(0, 10);
+            var ys = xs.GroupBy(x => x, new EqMod(3));
+
+            await SequenceIdentity(ys);
         }
 
         class Kvp : IEquatable<Kvp>
