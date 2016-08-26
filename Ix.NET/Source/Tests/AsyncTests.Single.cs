@@ -1129,6 +1129,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task TakeWhile11()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.TakeWhile((x, i) => i < 2);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
         public void Skip_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Skip<int>(null, 5));
@@ -1486,6 +1495,41 @@ namespace Tests
             Assert.Equal(4, await xs.Count());
         }
 
+        [Fact]
+        public async Task DefaultIfEmpty15()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty16()
+        {
+            var xs = new CancellationTestAsyncEnumerable(10)
+                .Take(5)
+                .Reverse() // so we have an ilist provider 
+                .DefaultIfEmpty(24)
+                .Append(5); // for the onlyIsCheap to true
+
+            var r = new[] { 4, 3, 2, 1, 0, 5 };
+
+            Assert.Equal(r, await xs.ToArray());
+        }
+
+        [Fact]
+        public async Task DefaultIfEmpty17()
+        {
+            var xs = new CancellationTestAsyncEnumerable(10)
+                .Take(5)
+                .DefaultIfEmpty(24)
+                .Append(5); // for the onlyIsCheap to true
+
+            var r = new[] { 0, 1, 2, 3, 4, 5};
+
+            Assert.Equal(r, await xs.ToArray());
+        }
+
 
         [Fact]
         public void Distinct_Null()
@@ -1493,6 +1537,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null, new Eq()));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(AsyncEnumerable.Return(42), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int, int>(AsyncEnumerable.Return(42), (Func<int, int>)null));
         }
 
         [Fact]
@@ -1589,6 +1634,26 @@ namespace Tests
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
             await SequenceIdentity(xs);
+        }
+
+        [Fact]
+        public void Distinct11()
+        {
+            var xs = AsyncEnumerable.Empty<int>().Distinct(k => k);
+
+            var e = xs.GetEnumerator();
+            
+            NoNext(e);
+        }
+
+        [Fact]
+        public void Distinct12()
+        {
+            var xs = AsyncEnumerable.Empty<int>().Distinct();
+
+            var e = xs.GetEnumerator();
+
+            NoNext(e);
         }
 
         [Fact]
@@ -3427,6 +3492,20 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(2);
 
             await SequenceIdentity(xs);
+        }
+
+        [Fact]
+        public void SkipLast4()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(0);
+
+            var e = xs.GetEnumerator();
+
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 4);
+            NoNext(e);
         }
     }
 }
