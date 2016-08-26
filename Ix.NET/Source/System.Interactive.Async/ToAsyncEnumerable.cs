@@ -162,7 +162,7 @@ namespace System.Linq
 
             public override AsyncIterator<T> Clone()
             {
-                return new AsyncEnumerableAdapter<T>(source);
+                return new AsyncIListEnumerableAdapter<T>(source);
             }
 
             public override void Dispose()
@@ -265,7 +265,7 @@ namespace System.Linq
 
             public override AsyncIterator<T> Clone()
             {
-                return new AsyncEnumerableAdapter<T>(source);
+                return new AsyncICollectionEnumerableAdapter<T>(source);
             }
 
             public override void Dispose()
