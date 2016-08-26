@@ -120,7 +120,7 @@ namespace System.Linq
 
 namespace System.Linq.Internal
 {
-    internal class Lookup<TKey, TElement> : ILookup<TKey, TElement>, IIListProvider<IGrouping<TKey, TElement>>, IIListProvider<IAsyncGrouping<TKey, TElement>>
+    internal class Lookup<TKey, TElement> : ILookup<TKey, TElement>, IIListProvider<IAsyncGrouping<TKey, TElement>>
     {
         private readonly IEqualityComparer<TKey> _comparer;
         private Grouping<TKey, TElement>[] _groupings;
@@ -228,7 +228,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-         internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetEnumerator())
@@ -348,47 +348,7 @@ namespace System.Linq.Internal
 
             _groupings = newGroupings;
         }
-
-        IAsyncEnumerator<IGrouping<TKey, TElement>> IAsyncEnumerable<IGrouping<TKey, TElement>>.GetEnumerator()
-        {
-            return this.ToAsyncEnumerable().GetEnumerator();
-        }
-
-        public Task<IGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
-        {
-            var array = new IGrouping<TKey, TElement>[Count];
-            var index = 0;
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    array[index] = g;
-                    ++index;
-                }
-                while (g != _lastGrouping);
-            }
-
-            return Task.FromResult(array);
-        }
-
-        public Task<List<IGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
-        {
-            var list = new List<IGrouping<TKey, TElement>>(Count);
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    list.Add(g);
-                }
-                while (g != _lastGrouping);
-            }
-
-            return Task.FromResult(list);
-        }
+        
 
         public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
         {
