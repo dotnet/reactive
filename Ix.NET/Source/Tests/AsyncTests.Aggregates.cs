@@ -946,7 +946,7 @@ namespace Tests
         [Fact]
         public async Task ElementAt7()
         {
-            var en = new CancellationTestAsyncEnumerable();
+            var en = new CancellationTestAsyncEnumerable(10);
 
             var res = en.ElementAt(1);
             Assert.Equal(1, await res);

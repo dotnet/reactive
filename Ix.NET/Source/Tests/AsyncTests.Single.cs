@@ -106,7 +106,7 @@ namespace Tests
         [Fact]
         public void Select6()
         {
-            var xs = new CancellationTestAsyncEnumerable();
+            var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
 
             var e = ys.GetEnumerator();
@@ -137,7 +137,7 @@ namespace Tests
         [Fact]
         public void SelectWhere1()
         {
-            var xs = new CancellationTestAsyncEnumerable();
+            var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
 
             var e = ys.GetEnumerator();
@@ -149,7 +149,7 @@ namespace Tests
         [Fact]
         public void WhereSelect1()
         {
-            var xs = new CancellationTestAsyncEnumerable();
+            var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
 
             var e = ys.GetEnumerator();
@@ -199,7 +199,7 @@ namespace Tests
         [Fact]
         public async Task WhereSelect4()
         {
-            var xs = new CancellationTestAsyncEnumerable().Take(5);
+            var xs = new CancellationTestAsyncEnumerable(10).Take(5);
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
 
             await SequenceIdentity(ys);
@@ -1690,7 +1690,7 @@ namespace Tests
         [Fact]
         public async Task Reverse10()
         {
-            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
             var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
 
             Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
@@ -1699,7 +1699,7 @@ namespace Tests
         [Fact]
         public async Task Reverse11()
         {
-            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
             var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
 
             Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToList());
@@ -1709,7 +1709,7 @@ namespace Tests
         [Fact]
         public async Task Reverse12()
         {
-            var xs = new CancellationTestAsyncEnumerable().Skip(1).Take(3);
+            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
             var ys = xs.Reverse().Prepend(4).Prepend(5); // to trigger onlyIfCheap
 
             Assert.Equal(new[] { 5, 4, 3, 2, 1 }, await ys.ToArray());
