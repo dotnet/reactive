@@ -116,6 +116,25 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Select7()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Select(x => (char)('a' + x));
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task Select8()
+        {
+            var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
+            var ys = xs.Select((x, i) => (char)('a' + i));
+
+            await SequenceIdentity(ys);
+        }
+
+
+        [Fact]
         public void SelectWhere1()
         {
             var xs = new CancellationTestAsyncEnumerable();
@@ -163,6 +182,27 @@ namespace Tests
             HasNext(e, 2);
             HasNext(e, 4);
             NoNext(e);
+        }
+
+        [Fact]
+        public void WhereSelect3()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2).Select(i => i + 2);
+
+            var e = ys.GetEnumerator();
+            HasNext(e, 4);
+            HasNext(e, 6);
+            NoNext(e);
+        }
+
+        [Fact]
+        public async Task WhereSelect4()
+        {
+            var xs = new CancellationTestAsyncEnumerable().Take(5);
+            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
+
+            await SequenceIdentity(ys);
         }
 
         [Fact]
@@ -252,6 +292,37 @@ namespace Tests
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
+
+
+        [Fact]
+        public void Where7()
+        {
+            var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
+            var ys = xs.Where(x => x % 2 == 0).Where(x => x > 5);
+            var e = ys.GetEnumerator();
+            HasNext(e, 8);
+            HasNext(e, 6);
+            NoNext(e);
+        }
+
+        [Fact]
+        public async Task Where8()
+        {
+            var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
+            var ys = xs.Where(x => x % 2 == 0);
+            
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task Where9()
+        {
+            var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
+            var ys = xs.Where((x, i) => i % 2 == 0);
+
+            await SequenceIdentity(ys);
+        }
+
 
         [Fact]
         public void SelectMany_Null()
@@ -475,6 +546,42 @@ namespace Tests
         }
 
         [Fact]
+        public async Task SelectMany13()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task SelectMany14()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 5, x).ToAsyncEnumerable());
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task SelectMany15()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.SelectMany(x => Enumerable.Range(3, x).ToAsyncEnumerable(), (x, y) => x * y);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task SelectMany16()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 3, x).ToAsyncEnumerable(), (x, y) => x * y);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
         public void OfType_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(null));
@@ -670,6 +777,18 @@ namespace Tests
 
             Assert.False(hasv);
             Assert.Same(exa, ex);
+        }
+
+        [Fact]
+        public async Task Do7()
+        {
+            var sum = 0;
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Do(x => sum += x);
+
+            await SequenceIdentity(ys);
+
+            Assert.Equal(20, sum);
         }
 
         [Fact]
@@ -876,6 +995,15 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Take5()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Take(2);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
         public void TakeWhile_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.TakeWhile<int>(null, x => true));
@@ -990,6 +1118,16 @@ namespace Tests
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
+
+        [Fact]
+        public async Task TakeWhile10()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.TakeWhile(x => x < 3);
+
+            await SequenceIdentity(ys);
+        }
+
         [Fact]
         public void Skip_Null()
         {
@@ -1051,6 +1189,15 @@ namespace Tests
 
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        [Fact]
+        public async Task Skip5()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.Skip(2);
+
+            await SequenceIdentity(ys);
         }
 
         [Fact]
@@ -1169,6 +1316,24 @@ namespace Tests
 
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        [Fact]
+        public async Task SkipWhile10()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.SkipWhile(x => x < 3);
+
+            await SequenceIdentity(ys);
+        }
+
+        [Fact]
+        public async Task SkipWhile11()
+        {
+            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
+            var ys = xs.SkipWhile((x, i) => false);
+
+            await SequenceIdentity(ys);
         }
 
         [Fact]
@@ -2822,6 +2987,14 @@ namespace Tests
         }
 
         [Fact]
+        public async Task IgnoreElements5()
+        {
+            var xs = AsyncEnumerable.Range(0, 10).IgnoreElements();
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
         public void StartWith_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.StartWith(default(IAsyncEnumerable<int>), new[] { 1 }));
@@ -3122,6 +3295,14 @@ namespace Tests
         public async Task Scan5()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => x + y);
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
+        public async Task Scan6()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y) => x + y);
 
             await SequenceIdentity(xs);
         }

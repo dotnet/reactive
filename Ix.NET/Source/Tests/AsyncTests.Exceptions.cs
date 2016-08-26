@@ -285,6 +285,20 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Catch14()
+        {
+            var err = false;
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
+
+            var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
+
+            await SequenceIdentity(res);
+
+            Assert.False(err);
+        }
+
+        [Fact]
         public void Finally_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Finally(default(IAsyncEnumerable<int>), () => { }));
@@ -398,6 +412,17 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Finally7()
+        {
+            var i = 0;
+            var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { i++; });
+
+            await SequenceIdentity(xs);
+            Assert.Equal(2, i);
+        }
+    
+
+    [Fact]
         public void OnErrorResumeNext_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
@@ -515,6 +540,17 @@ namespace Tests
 
             var e = res.GetEnumerator();
             NoNext(e);
+        }
+
+        [Fact]
+        public async Task OnErrorResumeNext13()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
+
+            var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
+
+            await SequenceIdentity(res);
         }
 
         [Fact]

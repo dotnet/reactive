@@ -14,6 +14,27 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+
+        [Fact]
+        public void Create_Null()
+        {
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => {}));
+       
+        }
+
+        [Fact]
+        public void Create_Iterator_Throws()
+        {
+     
+           var iter = AsyncEnumerable.CreateEnumerator<int>(c => Task.FromResult(true), () => 3, () => { });
+
+            var enu = (IAsyncEnumerable<int>)iter;
+
+            AssertThrows<NotSupportedException>(() => enu.GetEnumerator());
+        }
+
+
         [Fact]
         public void Return()
         {
@@ -30,6 +51,13 @@ namespace Tests
             Assert.False(e.MoveNext().IsCompleted); // Very rudimentary check
             AssertThrows<InvalidOperationException>(() => Nop(e.Current));
             e.Dispose();
+        }
+
+        [Fact]
+        public async Task Empty_Null()
+        {
+           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null));
+           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null, CancellationToken.None));
         }
 
         [Fact]
@@ -232,6 +260,14 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Generate5()
+        {
+            var xs = AsyncEnumerable.Generate(0, x => x < 5, x => x + 1, x => x * x);
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
         public void Using_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(null, _ => null));
@@ -396,6 +432,24 @@ namespace Tests
 
             Assert.True(disposed.Task.IsCompleted);
             Assert.True(await disposed.Task);
+        }
+
+        [Fact]
+        public async Task Using7()
+        {
+            var i = 0;
+            var d = 0;
+
+            var xs = AsyncEnumerable.Using(
+                () =>
+                {
+                    i++;
+                    return new MyD(() => { d++; });
+                },
+                _ => AsyncEnumerable.Return(42)
+            );
+
+            await SequenceIdentity(xs);
         }
 
         class MyD : IDisposable

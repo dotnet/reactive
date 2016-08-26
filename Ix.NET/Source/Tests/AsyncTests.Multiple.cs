@@ -298,6 +298,16 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Zip7()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
+            var res = xs.Zip(ys, (x, y) => x * y);
+
+            await SequenceIdentity(res);
+        }
+
+        [Fact]
         public void Union_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Union<int>(null, AsyncEnumerable.Return(42)));
@@ -378,6 +388,17 @@ namespace Tests
         }
 
         [Fact]
+        public async Task Intersect3()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var res = xs.Intersect(ys);
+
+            await SequenceIdentity(res);
+        }
+
+
+        [Fact]
         public void Except_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(null, AsyncEnumerable.Return(42)));
@@ -410,6 +431,16 @@ namespace Tests
             var e = res.GetEnumerator();
             HasNext(e, 2);
             NoNext(e);
+        }
+
+        [Fact]
+        public async Task Except3()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var res = xs.Except(ys);
+
+            await SequenceIdentity(res);
         }
 
         [Fact]
@@ -847,6 +878,18 @@ namespace Tests
             var e = res.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
+
+        [Fact]
+        public async Task Join10()
+        {
+            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
+
+            var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
+
+            await SequenceIdentity(res);
+        }
+
 
         [Fact]
         public void SelectManyMultiple_Null()
