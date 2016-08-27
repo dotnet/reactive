@@ -30,8 +30,8 @@
     "System.Reactive.Experimental": { "target": "project" },
     "System.Reactive.Providers": { "target": "project" },
     "System.Reactive.Observable.Aliases": { "target": "project" },
-    "xunit": "2.2.0-beta2-build3300",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "xunit": "2.2.0-beta3-build3340",
+    "dotnet-test-xunit": "2.2.0-preview3-build1035",
     "System.Reflection.TypeExtensions": "4.1.0",
     "System.Diagnostics.StackTrace": "4.0.1"
   },
