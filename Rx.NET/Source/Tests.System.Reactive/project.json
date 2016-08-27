@@ -31,6 +31,7 @@
     "System.Reactive.Providers": { "target": "project" },
     "System.Reactive.Observable.Aliases": { "target": "project" },
     "xunit": "2.2.0-beta3-build3340",
+    "xunit.runner.reporters": "2.2.0-beta3-build3340",
     "dotnet-test-xunit": "2.2.0-preview3-build1035",
     "System.Reflection.TypeExtensions": "4.1.0",
     "System.Diagnostics.StackTrace": "4.0.1"
