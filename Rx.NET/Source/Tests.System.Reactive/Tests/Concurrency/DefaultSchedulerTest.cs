@@ -95,7 +95,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 #if DESKTOPCLR
-        [Fact(Skip="Fails on CI")]
+        [Trait("SkipCI", "true")]
         public void No_ThreadPool_Starvation_Dispose()
         {
             var bwt = default(int);
