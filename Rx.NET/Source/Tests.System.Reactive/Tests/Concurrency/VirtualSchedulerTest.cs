@@ -129,6 +129,7 @@ namespace ReactiveTests.Tests
 #endif
 
         [Fact]
+        [Trait("SkipCI", "true")]
         public void Virtual_ThreadSafety()
         {
             for (var i = 0; i < 10; i++)

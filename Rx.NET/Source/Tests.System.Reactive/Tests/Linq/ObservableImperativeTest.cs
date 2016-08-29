@@ -492,7 +492,8 @@ namespace ReactiveTests.Tests
         }
 
 #if !NO_THREAD
-        [Fact(Skip = "Hangs CI. See https://github.com/Reactive-Extensions/Rx.NET/issues/272")]
+        [Fact]
+        [Trait("SkipCI", "true")]
         public void ForEachAsync_DisposeThrows()
         {
             //
