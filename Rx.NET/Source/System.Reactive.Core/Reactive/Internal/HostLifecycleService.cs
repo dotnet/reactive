@@ -76,7 +76,9 @@ namespace System.Reactive.PlatformServices
 
         private static IHostLifecycleNotifications InitializeNotifications()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<IHostLifecycleNotifications>();
+#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 

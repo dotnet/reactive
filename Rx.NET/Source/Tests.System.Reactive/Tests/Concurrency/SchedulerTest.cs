@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if NET45
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,9 +56,11 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.CurrentThread.Schedule(DateTimeOffset.MaxValue, default(Action)));
+#if DESKTOPCLR
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DispatcherScheduler.Instance.Schedule(DateTimeOffset.MaxValue, default(Action)));
+#endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.Immediate.Schedule(DateTimeOffset.MaxValue, default(Action)));
@@ -216,6 +217,8 @@ namespace ReactiveTests.Tests
         #region ISchedulerLongRunning
 
 #if !NO_PERF
+
+#if !WINDOWS && !NO_THREAD
         [Fact]
         public void Scheduler_LongRunning_ArgumentChecking()
         {
@@ -238,6 +241,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(-1), _ => _));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.SchedulePeriodic<int>(ThreadPoolScheduler.Instance, 42, TimeSpan.FromSeconds(1), default(Func<int, int>)));
         }
+#endif
 
         [Fact]
         public void Scheduler_Stopwatch_Emulation()
@@ -295,6 +299,8 @@ namespace ReactiveTests.Tests
         #region ISchedulerPeriodic
 
 #if !NO_PERF
+
+#if !WINDOWS && !NO_THREAD
         [Fact]
         public void Scheduler_Periodic1()
         {
@@ -328,6 +334,7 @@ namespace ReactiveTests.Tests
             e.WaitOne();
             d.Dispose();
         }
+#endif
 
 #if DESKTOPCLR
         [Fact]
@@ -427,7 +434,7 @@ namespace ReactiveTests.Tests
 
 #endif
 
-        #endregion
+#endregion
 
         #region DisableOptimizations
 
@@ -437,8 +444,9 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(default(IScheduler), new Type[0]));
+#if !WINDOWS && !NO_THREAD
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(ThreadPoolScheduler.Instance, default(Type[])));
-
+#endif
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, default(Func<IScheduler, int, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
@@ -1517,4 +1525,3 @@ namespace ReactiveTests.Tests
 #endif
     }
 }
-#endif

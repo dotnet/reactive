@@ -17,7 +17,9 @@ namespace System.Reactive
 
         private static ITaskServices Initialize()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<ITaskServices>() ?? new DefaultTaskServices();
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         public static bool TrySetCanceled<T>(this TaskCompletionSource<T> tcs, CancellationToken token)

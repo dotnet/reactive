@@ -19,7 +19,9 @@ namespace System.Reactive.Concurrency
 
         private static IConcurrencyAbstractionLayer Initialize()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             return PlatformEnlightenmentProvider.Current.GetService<IConcurrencyAbstractionLayer>() ?? new DefaultConcurrencyAbstractionLayer();
+#pragma warning restore CS0618 // Type or member is obsolete
         }
     }
 
