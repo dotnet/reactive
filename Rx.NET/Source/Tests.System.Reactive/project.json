@@ -30,9 +30,9 @@
     "System.Reactive.Experimental": { "target": "project" },
     "System.Reactive.Providers": { "target": "project" },
     "System.Reactive.Observable.Aliases": { "target": "project" },
-    "xunit": "2.2.0-beta3-build3340",
-    "xunit.runner.reporters": "2.2.0-beta3-build3340",
-    "dotnet-test-xunit": "2.2.0-preview3-build1035",
+    "xunit": "2.2.0-beta3-build3342",
+    "xunit.runner.reporters": "2.2.0-beta3-build3342",
+    "dotnet-test-xunit": "2.2.0-preview3-build1038",
     "System.Reflection.TypeExtensions": "4.1.0",
     "System.Diagnostics.StackTrace": "4.0.1"
   },
@@ -40,31 +40,31 @@
   "testRunner": "xunit",
   
   "frameworks": {
-    "netcoreapp1.0": {
-      "buildOptions": {
-        "define": [
-          "NO_EVENTARGS_CONSTRAINT",
-          "HAS_EDI",
-          "HAS_WINRT",
-          "HAS_PROGRESS",
-          "PREFER_ASYNC",
-          "HAS_AWAIT",
-          "HAS_APTCA",
-          "NO_REMOTING",
-          "NO_SERIALIZABLE",
-          "CRIPPLED_REFLECTION",
-          "PLIB",
-          "USE_TIMER_SELF_ROOT",
-          "XUNIT"
-        ]
-      },
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.0.0",
-          "type": "platform"
-        }
-      }
-    },
+    //"netcoreapp1.0": {
+    //  "buildOptions": {
+    //    "define": [
+    //      "NO_EVENTARGS_CONSTRAINT",
+    //      "HAS_EDI",
+    //      "HAS_WINRT",
+    //      "HAS_PROGRESS",
+    //      "PREFER_ASYNC",
+    //      "HAS_AWAIT",
+    //      "HAS_APTCA",
+    //      "NO_REMOTING",
+    //      "NO_SERIALIZABLE",
+    //      "CRIPPLED_REFLECTION",
+    //      "PLIB",
+    //      "USE_TIMER_SELF_ROOT",
+    //      "XUNIT"
+    //    ]
+    //  },
+    //  "dependencies": {
+    //    "Microsoft.NETCore.App": {
+    //      "version": "1.0.0",
+    //      "type": "platform"
+    //    }
+    //  }
+    //},
     "net461": {
       "buildOptions": {
         "define": [
