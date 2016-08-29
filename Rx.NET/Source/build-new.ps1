@@ -117,5 +117,7 @@ else
      &$outPutPath/index.htm
 }
 
-Write-Host "Reverting AssemblyInfo's" -Foreground Green
-gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
+if ($env:CI -ne 'True') {
+  Write-Host "Reverting AssemblyInfo's" -Foreground Green
+  gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
+}

@@ -81,7 +81,7 @@ Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests"  
 
 # Execute OpenCover with a target of "dotnet test"
-.\packages\OpenCover\tools\OpenCover.Console.exe  -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test $testDirectory -c $configuration" -output:"$outputFile" -skipautoprops -returntargetcode "-excludebyattribute:System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests]* -[xunit.*]*" 
+.\packages\OpenCover\tools\OpenCover.Console.exe  -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test $testDirectory -c $configuration -notrait SkipCI=true" -output:"$outputFile" -skipautoprops -returntargetcode "-excludebyattribute:System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests]* -[xunit.*]*" 
 
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with tests" -Foreground Red
@@ -102,6 +102,7 @@ else
      &$outPutPath/index.htm
 }
 
-Write-Host "Reverting AssemblyInfo's" -Foreground Green
-gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
-
+if ($env:CI -ne 'True') {
+  Write-Host "Reverting AssemblyInfo's" -Foreground Green
+  gci $scriptPath -re -in AssemblyInfo.cs | %{ git checkout $_ } 
+}
