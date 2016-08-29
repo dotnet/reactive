@@ -5,6 +5,7 @@ $configuration = "Release"
 $nuspecDir = Join-Path $scriptPath "NuSpecs"
 $isAppVeyor = Test-Path -Path env:\APPVEYOR
 $outputLocation = Join-Path $scriptPath "testResults"
+$openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
 
 #remove any old coverage file
 md -Force $outputLocation | Out-Null
@@ -96,7 +97,7 @@ Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
 # Execute OpenCover with a target of "dotnet test"
-.\packages\OpenCover\tools\OpenCover.Console.exe  -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test $testDirectory -notrait SkipCI=true -c $configuration" -output:"$outputFile" -skipautoprops -returntargetcode "-excludebyattribute:System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
+& $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test $testDirectory -c $configuration -notrait SkipCI=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
 
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with tests" -Foreground Red
