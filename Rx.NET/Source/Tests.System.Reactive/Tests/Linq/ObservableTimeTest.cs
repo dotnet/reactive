@@ -2815,8 +2815,8 @@ namespace ReactiveTests.Tests
                 OnNext(250, 3),
                 OnNext(300, 5), /* CHECK: boundary of sampling */
                 OnNext(350, 6),
-                OnNext(400, 7), /* Sample in last bucket */
-                OnCompleted<int>(400)
+                OnNext(390, 7), /* Sample in last bucket */
+                OnCompleted<int>(390)
             );
 
             xs.Subscriptions.AssertEqual(
@@ -2848,8 +2848,8 @@ namespace ReactiveTests.Tests
                 OnNext(250, 3),
                 OnNext(300, 5), /* CHECK: boundary of sampling */
                 OnNext(350, 6),
-                OnNext(400, 7), /* Sample in last bucket */
-                OnCompleted<int>(400)
+                OnNext(390, 7), /* Sample in last bucket */
+                OnCompleted<int>(390)
             );
 
             xs.Subscriptions.AssertEqual(
@@ -2858,7 +2858,7 @@ namespace ReactiveTests.Tests
 
 #if !WINDOWS
             scheduler.Timers.AssertEqual(
-                new TimerRun(200, 400) { 250, 300, 350, 400 }
+                new TimerRun(200, 390) { 250, 300, 350 }
             );
 #endif
         }
@@ -2980,7 +2980,7 @@ namespace ReactiveTests.Tests
 
 #if !WINDOWS
             scheduler.Timers.AssertEqual(
-                new TimerRun(200, 300) { 250, 300 }
+                new TimerRun(200, 300) { 250 }
             );
 #endif
         }
