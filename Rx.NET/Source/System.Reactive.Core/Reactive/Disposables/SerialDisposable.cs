@@ -46,7 +46,7 @@ namespace System.Reactive.Disposables
                 // Don't leak the DISPOSED sentinel
                 if (a == BooleanDisposable.True)
                 {
-                    a = DefaultDisposable.Instance;
+                    a = null;
                 }
                 return a;
             }
