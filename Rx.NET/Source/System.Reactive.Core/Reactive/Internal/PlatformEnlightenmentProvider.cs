@@ -35,7 +35,7 @@ namespace System.Reactive.PlatformServices
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class PlatformEnlightenmentProvider
     {
-        private static readonly IPlatformEnlightenmentProvider s_current = CreatePlatformProvider();
+        private static IPlatformEnlightenmentProvider s_current = CreatePlatformProvider();
 
         /// <summary>
         /// (Infrastructure) Gets the current enlightenment provider. If none is loaded yet, accessing this property triggers provider resolution.
@@ -43,11 +43,17 @@ namespace System.Reactive.PlatformServices
         /// <remarks>
         /// This member is used by the Rx infrastructure and not meant for public consumption or implementation.
         /// </remarks>
+        [Obsolete("This mechanism will be removed in the next major version", false)]
         public static IPlatformEnlightenmentProvider Current
         {
             get
             {
                 return s_current;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+                s_current = value;
             }
             
         }
