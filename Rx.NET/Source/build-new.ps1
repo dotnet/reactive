@@ -99,7 +99,7 @@ foreach ($nuspec in $nuspecs)
 
 if($hasSignClientSecret) {
   Write-Host "Signing Packages" -Foreground Green
-  $nupgks = ls .\artifacts\*.nupkg | Select -ExpandProperty FullName
+  $nupgks = ls .\artifacts\*React*.nupkg | Select -ExpandProperty FullName
 
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
