@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,59 +41,94 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return CreateEnumerable(
-                () =>
+            return new OnErrorResumeNextAsyncIterator<TSource>(sources);
+        }
+
+        private sealed class OnErrorResumeNextAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> sources;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private IEnumerator<IAsyncEnumerable<TSource>> sourcesEnumerator;
+
+            public OnErrorResumeNextAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
+            {
+                Debug.Assert(sources != null);
+
+                this.sources = sources;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new OnErrorResumeNextAsyncIterator<TSource>(sources);
+            }
+
+            public override void Dispose()
+            {
+                if (sourcesEnumerator != null)
                 {
-                    var se = sources.GetEnumerator();
-                    var e = default(IAsyncEnumerator<TSource>);
+                    sourcesEnumerator.Dispose();
+                    sourcesEnumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var a = new AssignableDisposable();
-                    var d = Disposable.Create(cts, se, a);
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+                base.Dispose();
+            }
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        sourcesEnumerator = sources.GetEnumerator();
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
                         {
-                            if (e == null)
+                            if (enumerator == null)
                             {
-                                var b = false;
-                                b = se.MoveNext();
-                                if (b)
-                                    e = se.Current.GetEnumerator();
-                                else
+                                if (!sourcesEnumerator.MoveNext())
                                 {
-                                    return false;
+                                    break; // while -- done, nothing else to do
                                 }
 
-                                a.Disposable = e;
+                                enumerator = sourcesEnumerator.Current.GetEnumerator();
                             }
 
                             try
                             {
-                                if (await e.MoveNext(ct)
-                                           .ConfigureAwait(false))
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
                                 {
+                                    current = enumerator.Current;
                                     return true;
                                 }
                             }
                             catch
                             {
-                                // ignore
+                                // Ignore
                             }
 
-                            e.Dispose();
-                            e = null;
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        };
+                            // Done with the current one, go to the next
+                            enumerator.Dispose();
+                            enumerator = null;
+                        }
 
-                    return CreateEnumerator(
-                        f,
-                        () => e.Current,
-                        d.Dispose,
-                        a
-                    );
-                });
+                        break; // case
+                        
+                }
+                
+                Dispose();
+                return false;
+            }
         }
     }
 }

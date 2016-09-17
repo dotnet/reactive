@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,100 +15,26 @@ namespace System.Linq
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
 
-            return CreateEnumerable(
-                () =>
-                {
-                    var e = source.GetEnumerator();
-                    var n = count;
+            if (count <= 0)
+            {
+                return Empty<TSource>();
+            }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
-
-                    return CreateEnumerator(
-                        async ct =>
-                        {
-                            if (n == 0)
-                                return false;
-
-                            var result = await e.MoveNext(cts.Token)
-                                                .ConfigureAwait(false);
-
-                            --n;
-
-                            if (n == 0)
-                                e.Dispose();
-
-                            return result;
-                        },
-                        () => e.Current,
-                        d.Dispose,
-                        e
-                    );
-                });
+            return new TakeAsyncIterator<TSource>(source, count);
         }
 
         public static IAsyncEnumerable<TSource> TakeLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count));
 
-            return CreateEnumerable(
-                () =>
-                {
-                    var e = source.GetEnumerator();
+            if (count <= 0)
+            {
+                return Empty<TSource>();
+            }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
-
-                    var q = new Queue<TSource>(count);
-                    var done = false;
-                    var current = default(TSource);
-
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
-                        {
-                            if (!done)
-                            {
-                                if (await e.MoveNext(ct)
-                                           .ConfigureAwait(false))
-                                {
-                                    if (count > 0)
-                                    {
-                                        var item = e.Current;
-                                        if (q.Count >= count)
-                                            q.Dequeue();
-                                        q.Enqueue(item);
-                                    }
-                                }
-                                else
-                                {
-                                    done = true;
-                                    e.Dispose();
-                                }
-
-                                return await f(ct)
-                                           .ConfigureAwait(false);
-                            }
-                            if (q.Count > 0)
-                            {
-                                current = q.Dequeue();
-                                return true;
-                            }
-                            return false;
-                        };
-
-                    return CreateEnumerator(
-                        f,
-                        () => current,
-                        d.Dispose,
-                        e
-                    );
-                });
+            return new TakeLastAsyncIterator<TSource>(source, count);
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -119,29 +44,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return CreateEnumerable(
-                () =>
-                {
-                    var e = source.GetEnumerator();
-
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
-
-                    return CreateEnumerator(
-                        async ct =>
-                        {
-                            if (await e.MoveNext(cts.Token)
-                                       .ConfigureAwait(false))
-                            {
-                                return predicate(e.Current);
-                            }
-                            return false;
-                        },
-                        () => e.Current,
-                        d.Dispose,
-                        e
-                    );
-                });
+            return new TakeWhileAsyncIterator<TSource>(source, predicate);
         }
 
         public static IAsyncEnumerable<TSource> TakeWhile<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -151,30 +54,296 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return CreateEnumerable(
-                () =>
+            return new TakeWhileWithIndexAsyncIterator<TSource>(source, predicate);
+        }
+
+        private sealed class TakeAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly int count;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private int currentCount;
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public TakeAsyncIterator(IAsyncEnumerable<TSource> source, int count)
+            {
+                Debug.Assert(source != null);
+
+                this.source = source;
+                this.count = count;
+                currentCount = count;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new TakeAsyncIterator<TSource>(source, count);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
-                    var index = 0;
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                base.Dispose();
+            }
 
-                    return CreateEnumerator(
-                        async ct =>
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (currentCount > 0 && await enumerator.MoveNext(cancellationToken)
+                                                                .ConfigureAwait(false))
                         {
-                            if (await e.MoveNext(cts.Token)
-                                       .ConfigureAwait(false))
+                            current = enumerator.Current;
+                            currentCount--;
+                            return true;
+                        }
+
+                        break;
+                }
+
+                Dispose();
+                return false;
+            }
+        }
+
+        private sealed class TakeLastAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly int count;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private bool isDone;
+            private Queue<TSource> queue;
+
+            public TakeLastAsyncIterator(IAsyncEnumerable<TSource> source, int count)
+            {
+                Debug.Assert(source != null);
+
+                this.source = source;
+                this.count = count;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new TakeLastAsyncIterator<TSource>(source, count);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
+                queue = null; // release the memory
+
+                base.Dispose();
+            }
+
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        queue = new Queue<TSource>();
+                        isDone = false;
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
+                        {
+                            if (!isDone)
                             {
-                                return predicate(e.Current, checked(index++));
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
+                                {
+                                    if (count > 0)
+                                    {
+                                        var item = enumerator.Current;
+                                        if (queue.Count >= count)
+                                        {
+                                            queue.Dequeue();
+                                        }
+                                        queue.Enqueue(item);
+                                    }
+                                }
+                                else
+                                {
+                                    isDone = true;
+                                    // Dispose early here as we can
+                                    enumerator.Dispose();
+                                    enumerator = null;
+                                }
+
+                                continue; // loop until queue is drained
                             }
-                            return false;
-                        },
-                        () => e.Current,
-                        d.Dispose,
-                        e
-                    );
-                });
+
+                            if (queue.Count > 0)
+                            {
+                                current = queue.Dequeue();
+                                return true;
+                            }
+
+                            break; // while
+                        }
+
+                        break; // case
+                }
+
+                Dispose();
+                return false;
+            }
+        }
+
+        private sealed class TakeWhileAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, bool> predicate;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public TakeWhileAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
+            {
+                Debug.Assert(predicate != null);
+                Debug.Assert(source != null);
+
+                this.source = source;
+                this.predicate = predicate;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new TakeWhileAsyncIterator<TSource>(source, predicate);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
+
+                base.Dispose();
+            }
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+
+                    case AsyncIteratorState.Iterating:
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
+                        {
+                            var item = enumerator.Current;
+                            if (!predicate(item))
+                            {
+                                break;
+                            }
+                            current = item;
+                            return true;
+                        }
+
+                        break;
+                }
+
+                Dispose();
+                return false;
+            }
+        }
+
+        private sealed class TakeWhileWithIndexAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, int, bool> predicate;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private int index;
+
+            public TakeWhileWithIndexAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, int, bool> predicate)
+            {
+                Debug.Assert(predicate != null);
+                Debug.Assert(source != null);
+
+                this.source = source;
+                this.predicate = predicate;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new TakeWhileWithIndexAsyncIterator<TSource>(source, predicate);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
+
+                base.Dispose();
+            }
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        index = -1;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+
+                    case AsyncIteratorState.Iterating:
+                        if (await enumerator.MoveNext(cancellationToken)
+                                            .ConfigureAwait(false))
+                        {
+                            var item = enumerator.Current;
+                            checked
+                            {
+                                index++;
+                            }
+
+                            if (!predicate(item, index))
+                            {
+                                break;
+                            }
+                            current = item;
+                            return true;
+                        }
+
+                        break;
+                }
+
+                Dispose();
+                return false;
+            }
         }
     }
 }

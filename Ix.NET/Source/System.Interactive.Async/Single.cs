@@ -89,6 +89,17 @@ namespace System.Linq
 
         private static async Task<TSource> Single_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
+            var list = source as IList<TSource>;
+            if (list != null)
+            {
+                switch (list.Count)
+                {
+                    case 0: throw new InvalidOperationException(Strings.NO_ELEMENTS);
+                    case 1: return list[0];
+                }
+                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+            }
+
             using (var e = source.GetEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
@@ -108,6 +119,17 @@ namespace System.Linq
 
         private static async Task<TSource> SingleOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
+            var list = source as IList<TSource>;
+            if (list != null)
+            {
+                switch (list.Count)
+                {
+                    case 0: return default(TSource);
+                    case 1: return list[0];
+                }
+                throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
+            }
+
             using (var e = source.GetEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)

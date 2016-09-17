@@ -786,6 +786,13 @@ namespace Tests
         }
 
         [Fact]
+        public void Single11()
+        {
+            var res = new int[0].ToAsyncEnumerable().Single();
+            AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
+        }
+
+        [Fact]
         public async Task SingleOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.SingleOrDefault<int>(null));
@@ -877,6 +884,13 @@ namespace Tests
         }
 
         [Fact]
+        public void SingleOrDefault12()
+        {
+            var res = new int[0].ToAsyncEnumerable().SingleOrDefault();
+            Assert.Equal(0, res.Result);
+        }
+
+        [Fact]
         public async Task ElementAt_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(null, 0));
@@ -927,6 +941,15 @@ namespace Tests
             var ex = new Exception("Bang!");
             var res = AsyncEnumerable.Throw<int>(ex).ElementAt(15);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        [Fact]
+        public async Task ElementAt7()
+        {
+            var en = new CancellationTestAsyncEnumerable(10);
+
+            var res = en.ElementAt(1);
+            Assert.Equal(1, await res);
         }
 
         [Fact]
@@ -1042,6 +1065,27 @@ namespace Tests
             var ex = new Exception("Bang!");
             var res = AsyncEnumerable.Throw<int>(ex).ToArray();
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        [Fact]
+        public async Task ToArray4()
+        {
+            var xs = await AsyncEnumerable.Range(5,50).Take(10).ToArray();
+            var ex = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+
+            Assert.True(ex.SequenceEqual(xs));
+        }
+
+        [Fact]
+        public async Task ToArray5()
+        {
+            var res = new[] { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+            var xs = new HashSet<int>(res);
+
+            var arr = await xs.ToAsyncEnumerable().ToArray();
+            
+
+            Assert.True(res.SequenceEqual(arr));
         }
 
         [Fact]

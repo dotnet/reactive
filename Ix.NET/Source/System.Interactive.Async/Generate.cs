@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -20,44 +20,74 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return CreateEnumerable(
-                () =>
+            return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
+        }
+
+        private sealed class GenerateAsyncIterator<TState, TResult> : AsyncIterator<TResult>
+        {
+            private readonly Func<TState, bool> condition;
+            private readonly TState initialState;
+            private readonly Func<TState, TState> iterate;
+            private readonly Func<TState, TResult> resultSelector;
+
+            private TState currentState;
+
+            private bool started;
+
+            public GenerateAsyncIterator(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
+            {
+                Debug.Assert(condition != null);
+                Debug.Assert(iterate != null);
+                Debug.Assert(resultSelector != null);
+
+                this.initialState = initialState;
+                this.condition = condition;
+                this.iterate = iterate;
+                this.resultSelector = resultSelector;
+            }
+
+            public override AsyncIterator<TResult> Clone()
+            {
+                return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
+            }
+
+            public override void Dispose()
+            {
+                currentState = default(TState);
+
+                base.Dispose();
+            }
+
+            protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
                 {
-                    var i = initialState;
-                    var started = false;
-                    var current = default(TResult);
+                    case AsyncIteratorState.Allocated:
+                        started = false;
+                        currentState = initialState;
 
-                    return CreateEnumerator(
-                        ct =>
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (started)
                         {
-                            var b = false;
-                            try
-                            {
-                                if (started)
-                                    i = iterate(i);
+                            currentState = iterate(currentState);
+                        }
 
-                                b = condition(i);
+                        started = true;
 
-                                if (b)
-                                    current = resultSelector(i);
-                            }
-                            catch (Exception ex)
-                            {
-                                return TaskExt.Throw<bool>(ex);
-                            }
-
-                            if (!b)
-                                return TaskExt.False;
-
-                            if (!started)
-                                started = true;
-
+                        if (condition(currentState))
+                        {
+                            current = resultSelector(currentState);
                             return TaskExt.True;
-                        },
-                        () => current,
-                        () => { }
-                    );
-                });
+                        }
+                        break;
+                }
+
+                Dispose();
+                return TaskExt.False;
+            }
         }
     }
 }

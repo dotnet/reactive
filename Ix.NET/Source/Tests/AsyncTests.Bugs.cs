@@ -99,7 +99,7 @@ namespace Tests
 #endif
 
         [Fact]
-        public void CorrectDispose()
+        public async void CorrectDispose()
         {
             var disposed = new TaskCompletionSource<bool>();
 
@@ -111,11 +111,19 @@ namespace Tests
             var ys = xs.Select(x => x + 1);
 
             var e = ys.GetEnumerator();
+
+            // We have to call move next because otherwise the internal enumerator is never allocated
+            await e.MoveNext();
             e.Dispose();
+
+            await disposed.Task;
 
             Assert.True(disposed.Task.Result);
 
             Assert.False(e.MoveNext().Result);
+
+            var next = await e.MoveNext();
+            Assert.False(next);
         }
 
         [Fact]
@@ -134,18 +142,19 @@ namespace Tests
             var e = ys.GetEnumerator();
             await Assert.ThrowsAsync<Exception>(() => e.MoveNext());
 
-            Assert.True(disposed.Task.Result);
+            var result = await disposed.Task;
+            Assert.True(result);
         }
 
         [Fact]
-        public void CorrectCancel()
+        public async Task CorrectCancel()
         {
             var disposed = new TaskCompletionSource<bool>();
 
-            var xs = new[] { 1, 2, 3 }.WithDispose(() =>
+            var xs = new CancellationTestAsyncEnumerable().WithDispose(() =>
             {
-                disposed.SetResult(true);
-            }).ToAsyncEnumerable();
+                disposed.TrySetResult(true);
+            });
 
             var ys = xs.Select(x => x + 1).Where(x => true);
 
@@ -171,16 +180,18 @@ namespace Tests
                 // it. This design is chosen because cancelling a MoveNext call leaves
                 // the enumerator in an indeterminate state. Further interactions with
                 // it should be forbidden.
-                Assert.True(disposed.Task.Result);
+
+                var result = await disposed.Task;
+                Assert.True(result);
             }
 
-            Assert.False(e.MoveNext().Result);
+            Assert.False(await e.MoveNext());
         }
 
         [Fact]
         public void CanCancelMoveNext()
         {
-            var xs = new CancellationTestEnumerable().Select(x => x).Where(x => true);
+            var xs = new CancellationTestAsyncEnumerable().Select(x => x).Where(x => true);
 
             var e = xs.GetEnumerator();
             var cts = new CancellationTokenSource();
@@ -202,24 +213,96 @@ namespace Tests
         /// <summary>
         /// Waits WaitTimeoutMs or until cancellation is requested. If cancellation was not requested, MoveNext returns true.
         /// </summary>
-        private sealed class CancellationTestEnumerable : IAsyncEnumerable<object>
+        internal sealed class CancellationTestAsyncEnumerable : IAsyncEnumerable<int>
         {
-            public IAsyncEnumerator<object> GetEnumerator() => new TestEnumerator();
+            private readonly int iterationsBeforeDelay;
 
-            private sealed class TestEnumerator : IAsyncEnumerator<object>
+            public CancellationTestAsyncEnumerable(int iterationsBeforeDelay = 0)
             {
+                this.iterationsBeforeDelay = iterationsBeforeDelay;
+            }
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetEnumerator() => GetEnumerator();
+
+            public TestEnumerator GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
+
+
+            internal sealed class TestEnumerator : IAsyncEnumerator<int>
+            {
+                private readonly int iterationsBeforeDelay;
+
+                public TestEnumerator(int iterationsBeforeDelay)
+                {
+                    this.iterationsBeforeDelay = iterationsBeforeDelay;
+                }
+                int i = -1;
                 public void Dispose()
                 {
                 }
-                
-                public object Current { get; }
+
+                public CancellationToken LastToken { get; private set; }
+                public bool MoveNextWasCalled { get; private set; }
+
+                public int Current => i;
                 
                 public async Task<bool> MoveNext(CancellationToken cancellationToken)
                 {
-                    await Task.Delay(WaitTimeoutMs, cancellationToken);
+                    LastToken = cancellationToken;
+                    MoveNextWasCalled = true;
+                  
+                    i++;
+                    if (Current >= iterationsBeforeDelay)
+                    {
+                        await Task.Delay(WaitTimeoutMs, cancellationToken);
+                    }
                     cancellationToken.ThrowIfCancellationRequested();
                     return true;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Waits WaitTimeoutMs or until cancellation is requested. If cancellation was not requested, MoveNext returns true.
+        /// </summary>
+        private sealed class CancellationTestEnumerable<T> : IEnumerable<T>
+        {
+            public CancellationTestEnumerable()
+            {
+            }
+            public IEnumerator<T> GetEnumerator() => new TestEnumerator();
+
+            private sealed class TestEnumerator : IEnumerator<T>
+            {
+                private readonly CancellationTokenSource cancellationTokenSource;
+
+                public TestEnumerator()
+                {
+                    cancellationTokenSource = new CancellationTokenSource();
+                }
+                public void Dispose()
+                {
+                    cancellationTokenSource.Cancel();
+                }
+
+                public void Reset()
+                {
+                  
+                }
+
+                object IEnumerator.Current => Current;
+
+                public T Current { get; }
+
+                public bool MoveNext()
+                {
+                    Task.Delay(WaitTimeoutMs, cancellationTokenSource.Token).Wait();
+                    cancellationTokenSource.Token.ThrowIfCancellationRequested();
+                    return true;
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
             }
         }
 
@@ -232,21 +315,33 @@ namespace Tests
 
             var e = xs.GetEnumerator();
             var cts = new CancellationTokenSource();
-            var t = e.MoveNext(cts.Token);
+
+
+            Task<bool> t = null;
+            var tMoveNext =Task.Run(
+                () =>
+                {
+                    // This call *will* block
+                    t = e.MoveNext(cts.Token);
+                });
+         
 
             isRunningEvent.WaitOne();
             cts.Cancel();
 
             try
             {
-                t.Wait(0);
+                tMoveNext.Wait(0);
                 Assert.False(t.IsCanceled);
             }
             catch
             {
-                Assert.False(true);
+                // T will still be null
+                Assert.Null(t);
             }
 
+
+            // enable it to finish
             evt.Set();
         }
 
@@ -258,7 +353,7 @@ namespace Tests
         }
 
         [Fact]
-        public void TakeOneFromSelectMany()
+        public async Task TakeOneFromSelectMany()
         {
             var enumerable = AsyncEnumerable
                 .Return(0)
@@ -266,7 +361,7 @@ namespace Tests
                 .Take(1)
                 .Do(_ => { });
 
-            Assert.Equal("Check", enumerable.First().Result);
+            Assert.Equal("Check", await enumerable.First());
         }
 
         [Fact]
@@ -289,6 +384,13 @@ namespace Tests
 
             Assert.Equal(0, result.Count);
             Assert.True(disposes.All(d => d.DisposeCount == 1));
+        }
+
+        [Fact]
+        public void DisposeAfterCreation()
+        {
+            var enumerable = AsyncEnumerable.Return(0) as IDisposable;
+            enumerable?.Dispose();
         }
 
         private class DisposeCounter : IAsyncEnumerable<object>
@@ -332,6 +434,15 @@ namespace Tests
             {
                 var e = source.GetEnumerator();
                 return new Enumerator<T>(e.MoveNext, () => e.Current, () => { e.Dispose(); a(); });
+            });
+        }
+
+        public static IAsyncEnumerable<T> WithDispose<T>(this IAsyncEnumerable<T> source, Action a)
+        {
+            return AsyncEnumerable.CreateEnumerable<T>(() =>
+            {
+                var e = source.GetEnumerator();
+                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNext, () => e.Current, () => { e.Dispose(); a(); });
             });
         }
 

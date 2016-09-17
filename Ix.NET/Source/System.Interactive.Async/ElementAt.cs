@@ -51,6 +51,12 @@ namespace System.Linq
 
         private static async Task<TSource> ElementAt_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
+            var list = source as IList<TSource>;
+            if (list != null)
+            {
+                return list[index];
+            }
+
             if (index >= 0)
             {
                 using (var e = source.GetEnumerator())

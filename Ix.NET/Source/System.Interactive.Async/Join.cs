@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,133 +26,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return CreateEnumerable(
-                () =>
-                {
-                    var oe = outer.GetEnumerator();
-                    var ie = inner.GetEnumerator();
-
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, oe, ie);
-
-                    var current = default(TResult);
-                    var useOuter = true;
-                    var outerMap = new Dictionary<TKey, List<TOuter>>(comparer);
-                    var innerMap = new Dictionary<TKey, List<TInner>>(comparer);
-                    var q = new Queue<TResult>();
-
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
-                        {
-                            if (q.Count > 0)
-                            {
-                                current = q.Dequeue();
-                                return true;
-                            }
-
-                            var b = useOuter;
-                            if (ie == null && oe == null)
-                            {
-                                return false;
-                            }
-                            if (ie == null)
-                                b = true;
-                            else if (oe == null)
-                                b = false;
-                            useOuter = !useOuter;
-
-                            var enqueue = new Func<TOuter, TInner, bool>(
-                                (o, i) =>
-                                {
-                                    var result = resultSelector(o, i);
-                                    q.Enqueue(result);
-                                    return true;
-                                });
-
-                            if (b)
-                            {
-                                if (await oe.MoveNext(ct)
-                                            .ConfigureAwait(false))
-                                {
-                                    var element = oe.Current;
-                                    var key = default(TKey);
-
-                                    key = outerKeySelector(element);
-
-                                    var outerList = default(List<TOuter>);
-                                    if (!outerMap.TryGetValue(key, out outerList))
-                                    {
-                                        outerList = new List<TOuter>();
-                                        outerMap.Add(key, outerList);
-                                    }
-
-                                    outerList.Add(element);
-
-                                    var innerList = default(List<TInner>);
-                                    if (!innerMap.TryGetValue(key, out innerList))
-                                    {
-                                        innerList = new List<TInner>();
-                                        innerMap.Add(key, innerList);
-                                    }
-
-                                    foreach (var v in innerList)
-                                    {
-                                        if (!enqueue(element, v))
-                                            return false;
-                                    }
-
-                                    return await f(ct)
-                                               .ConfigureAwait(false);
-                                }
-                                oe.Dispose();
-                                oe = null;
-                                return await f(ct)
-                                           .ConfigureAwait(false);
-                            }
-                            if (await ie.MoveNext(ct)
-                                        .ConfigureAwait(false))
-                            {
-                                var element = ie.Current;
-                                var key = innerKeySelector(element);
-
-                                var innerList = default(List<TInner>);
-                                if (!innerMap.TryGetValue(key, out innerList))
-                                {
-                                    innerList = new List<TInner>();
-                                    innerMap.Add(key, innerList);
-                                }
-
-                                innerList.Add(element);
-
-                                var outerList = default(List<TOuter>);
-                                if (!outerMap.TryGetValue(key, out outerList))
-                                {
-                                    outerList = new List<TOuter>();
-                                    outerMap.Add(key, outerList);
-                                }
-
-                                foreach (var v in outerList)
-                                {
-                                    if (!enqueue(v, element))
-                                        return false;
-                                }
-
-                                return await f(ct)
-                                           .ConfigureAwait(false);
-                            }
-                            ie.Dispose();
-                            ie = null;
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        };
-
-                    return CreateEnumerator(
-                        f,
-                        () => current,
-                        d.Dispose,
-                        ie
-                    );
-                });
+            return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
 
         public static IAsyncEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector)
@@ -169,7 +42,133 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return outer.Join(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new JoinAsyncIterator<TOuter,TInner,TKey,TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
+        }
+
+        internal sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
+        {
+            private readonly IAsyncEnumerable<TOuter> outer;
+            private readonly IAsyncEnumerable<TInner> inner;
+            private readonly Func<TOuter, TKey> outerKeySelector;
+            private readonly Func<TInner, TKey> innerKeySelector;
+            private readonly Func<TOuter, TInner, TResult> resultSelector;
+            private readonly IEqualityComparer<TKey> comparer;
+
+            private IAsyncEnumerator<TOuter> outerEnumerator;
+
+            public JoinAsyncIterator(IAsyncEnumerable<TOuter> outer, IAsyncEnumerable<TInner> inner, Func<TOuter, TKey> outerKeySelector, Func<TInner, TKey> innerKeySelector, Func<TOuter, TInner, TResult> resultSelector, IEqualityComparer<TKey> comparer)
+            {
+                Debug.Assert(outer != null);
+                Debug.Assert(inner != null);
+                Debug.Assert(outerKeySelector != null);
+                Debug.Assert(innerKeySelector != null);
+                Debug.Assert(resultSelector != null);
+                Debug.Assert(comparer != null);
+
+                this.outer = outer;
+                this.inner = inner;
+                this.outerKeySelector = outerKeySelector;
+                this.innerKeySelector = innerKeySelector;
+                this.resultSelector = resultSelector;
+                this.comparer = comparer;
+            }
+
+            public override AsyncIterator<TResult> Clone()
+            {
+                return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
+            }
+
+            public override void Dispose()
+            {
+                if (outerEnumerator != null)
+                {
+                    outerEnumerator.Dispose();
+                    outerEnumerator = null;
+                }
+
+                base.Dispose();
+            }
+
+            // State machine vars
+            Internal.Lookup<TKey, TInner> lookup;
+            int count;
+            TInner[] elements;
+            int index;
+            TOuter item;
+            private int mode;
+
+            const int State_Begin = 1;
+            const int State_DoLoop = 2;
+            const int State_For = 3;
+            const int State_While = 4;
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        outerEnumerator = outer.GetEnumerator();
+                        mode = State_Begin;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        switch (mode)
+                        {
+                            case State_Begin:
+                                if (await outerEnumerator.MoveNext(cancellationToken)
+                                                         .ConfigureAwait(false))
+                                {
+                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                                    if (lookup.Count != 0)
+                                    {
+                                        mode = State_DoLoop;
+                                        goto case State_DoLoop;   
+                                    }
+                                }
+
+                                break;
+                            case State_DoLoop:
+                                item = outerEnumerator.Current;
+                                var g = lookup.GetGrouping(outerKeySelector(item), create: false);
+                                if (g != null)
+                                {
+                                    count = g._count;
+                                    elements = g._elements;
+                                    index = 0;
+                                    mode = State_For;
+                                    goto case State_For;
+                                }
+
+                                break;
+
+                            case State_For:
+                                current = resultSelector(item, elements[index]);
+                                index++;
+                                if (index == count)
+                                {
+                                    mode = State_While;
+                                }
+                                return true;
+
+                            case State_While:
+                                var hasNext = await outerEnumerator.MoveNext(cancellationToken).ConfigureAwait(false);
+                                if (hasNext)
+                                {
+                                    goto case State_DoLoop;
+                                }
+
+                             
+                                break;
+                        }
+
+                        Dispose();
+
+                        break;
+                }
+
+                return false;
+            }
         }
     }
 }

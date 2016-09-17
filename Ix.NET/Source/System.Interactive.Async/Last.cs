@@ -91,6 +91,16 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
+            var list = source as IList<TSource>;
+            if (list != null)
+            {
+                var count = list.Count;
+                if (count > 0)
+                {
+                    return list[count - 1];
+                }
+            }
+
             using (var e = source.GetEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
@@ -109,6 +119,16 @@ namespace System.Linq
         {
             var last = default(TSource);
             var hasLast = false;
+
+            var list = source as IList<TSource>;
+            if (list != null)
+            {
+                var count = list.Count;
+                if (count > 0)
+                {
+                    return list[count - 1];
+                }
+            }
 
             using (var e = source.GetEnumerator())
             {

@@ -26,7 +26,8 @@
     "System.Interactive.Providers": { "target": "project" },
     "System.Interactive.Async.Providers": { "target": "project" },
     "xunit": "2.2.0-beta3-build3342",
-    "dotnet-test-xunit": "2.2.0-preview3-build1039"
+    "dotnet-test-xunit": "2.2.0-preview3-build1039",
+    "FluentAssertions": "4.13.0"
   },
 
   "testRunner": "xunit",

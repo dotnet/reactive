@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace System.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return DoHelper(source, onNext, _ => { }, () => { });
+            return DoHelper(source, onNext, null, null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
@@ -31,7 +30,7 @@ namespace System.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return DoHelper(source, onNext, _ => { }, onCompleted);
+            return DoHelper(source, onNext, null, onCompleted);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
@@ -43,7 +42,7 @@ namespace System.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return DoHelper(source, onNext, onError, () => { });
+            return DoHelper(source, onNext, onError, null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
@@ -72,52 +71,84 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> DoHelper<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return CreateEnumerable(
-                () =>
+            return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
+        }
+
+        private sealed class DoAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Action onCompleted;
+            private readonly Action<Exception> onError;
+            private readonly Action<TSource> onNext;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public DoAsyncIterator(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(onNext != null);
+
+                this.source = source;
+                this.onNext = onNext;
+                this.onError = onError;
+                this.onCompleted = onCompleted;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                base.Dispose();
+            }
 
-                    var current = default(TSource);
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+                    case AsyncIteratorState.Iterating:
+                        try
                         {
-                            try
+                            if (await enumerator.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
                             {
-                                var result = await e.MoveNext(ct)
-                                                    .ConfigureAwait(false);
-                                if (!result)
-                                {
-                                    onCompleted();
-                                }
-                                else
-                                {
-                                    current = e.Current;
-                                    onNext(current);
-                                }
-                                return result;
-                            }
-                            catch (OperationCanceledException)
-                            {
-                                throw;
-                            }
-                            catch (Exception ex)
-                            {
-                                onError(ex);
-                                throw;
-                            }
-                        };
+                                current = enumerator.Current;
+                                onNext(current);
 
-                    return CreateEnumerator(
-                        f,
-                        () => current,
-                        d.Dispose,
-                        e
-                    );
-                });
+                                return true;
+                            }
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke(ex);
+                            throw;
+                        }
+
+                        onCompleted?.Invoke();
+
+                        Dispose();
+                        break;
+                }
+
+                return false;
+            }
         }
     }
 }

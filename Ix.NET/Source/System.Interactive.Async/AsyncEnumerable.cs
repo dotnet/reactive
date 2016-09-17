@@ -24,9 +24,7 @@ namespace System.Linq
         {
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
-                    ct => TaskExt.False,
-                    () => { throw new InvalidOperationException(); },
-                    () => { })
+                    ct => TaskExt.False, null, null)
             );
         }
 
@@ -51,8 +49,8 @@ namespace System.Linq
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
                     (ct, tcs) => tcs.Task,
-                    () => { throw new InvalidOperationException(); },
-                    () => { })
+                    null,
+                    null)
             );
         }
 
@@ -69,9 +67,14 @@ namespace System.Linq
 
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
-                    ct => TaskExt.Throw<bool>(exception),
-                    () => { throw new InvalidOperationException(); },
-                    () => { })
+                    ct =>
+                    {
+                        var tcs = new TaskCompletionSource<bool>();
+                        tcs.TrySetException(exception);
+                        return tcs.Task;
+                    },
+                    null,
+                    null)
             );
         }
 

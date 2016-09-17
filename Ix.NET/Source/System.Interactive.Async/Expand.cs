@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,59 +18,93 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return CreateEnumerable(
-                () =>
+            return new ExpandAsyncIterator<TSource>(source, selector);
+        }
+
+        private sealed class ExpandAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, IAsyncEnumerable<TSource>> selector;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+
+            private Queue<IAsyncEnumerable<TSource>> queue;
+
+            public ExpandAsyncIterator(IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TSource>> selector)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(selector != null);
+
+                this.source = source;
+                this.selector = selector;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new ExpandAsyncIterator<TSource>(source, selector);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = default(IAsyncEnumerator<TSource>);
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var a = new AssignableDisposable();
-                    var d = Disposable.Create(cts, a);
+                queue = null;
 
-                    var queue = new Queue<IAsyncEnumerable<TSource>>();
-                    queue.Enqueue(source);
+                base.Dispose();
+            }
 
-                    var current = default(TSource);
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        queue = new Queue<IAsyncEnumerable<TSource>>();
+                        queue.Enqueue(source);
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
                         {
-                            if (e == null)
+                            if (enumerator == null)
                             {
                                 if (queue.Count > 0)
                                 {
                                     var src = queue.Dequeue();
 
-                                    e = src.GetEnumerator();
+                                    enumerator?.Dispose();
+                                    enumerator = src.GetEnumerator();
 
-                                    a.Disposable = e;
-                                    return await f(ct)
-                                               .ConfigureAwait(false);
+                                    continue; // loop
                                 }
-                                return false;
-                            }
-                            if (await e.MoveNext(ct)
-                                       .ConfigureAwait(false))
-                            {
-                                var item = e.Current;
-                                var next = selector(item);
 
+                                break; // while
+                            }
+
+                            if (await enumerator.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
+                            {
+                                var item = enumerator.Current;
+                                var next = selector(item);
                                 queue.Enqueue(next);
                                 current = item;
                                 return true;
                             }
-                            e = null;
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        };
+                            enumerator.Dispose();
+                            enumerator = null;
+                        }
 
-                    return CreateEnumerator(
-                        f,
-                        () => current,
-                        d.Dispose,
-                        e
-                    );
-                });
+                        break; // case
+                }
+
+                Dispose();
+                return false;
+            }
         }
     }
 }

@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@ namespace System.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return source.Buffer_(count, count);
+            return new BufferAsyncIterator<TSource>(source, count, count);
         }
 
         public static IAsyncEnumerable<IList<TSource>> Buffer<TSource>(this IAsyncEnumerable<TSource> source, int count, int skip)
@@ -31,41 +30,78 @@ namespace System.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return source.Buffer_(count, skip);
+            return new BufferAsyncIterator<TSource>(source, count, skip);
         }
 
-        private static IAsyncEnumerable<IList<TSource>> Buffer_<TSource>(this IAsyncEnumerable<TSource> source, int count, int skip)
+        private sealed class BufferAsyncIterator<TSource> : AsyncIterator<IList<TSource>>
         {
-            return CreateEnumerable(
-                () =>
+            private readonly int count;
+            private readonly int skip;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private Queue<IList<TSource>> buffers;
+            private IAsyncEnumerator<TSource> enumerator;
+            private int index;
+            private bool stopped;
+
+            public BufferAsyncIterator(IAsyncEnumerable<TSource> source, int count, int skip)
+            {
+                Debug.Assert(source != null);
+
+                this.source = source;
+                this.count = count;
+                this.skip = skip;
+            }
+
+            public override AsyncIterator<IList<TSource>> Clone()
+            {
+                return new BufferAsyncIterator<TSource>(source, count, skip);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                buffers = null;
 
-                    var buffers = new Queue<IList<TSource>>();
+                base.Dispose();
+            }
 
-                    var i = 0;
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        buffers = new Queue<IList<TSource>>();
+                        index = 0;
+                        stopped = false;
 
-                    var current = default(IList<TSource>);
-                    var stopped = false;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+                    case AsyncIteratorState.Iterating:
+                        while (true)
                         {
                             if (!stopped)
                             {
-                                if (await e.MoveNext(ct)
-                                           .ConfigureAwait(false))
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
                                 {
-                                    var item = e.Current;
-
-                                    if (i++%skip == 0)
+                                    var item = enumerator.Current;
+                                    if (index++ % skip == 0)
+                                    {
                                         buffers.Enqueue(new List<TSource>(count));
+                                    }
 
                                     foreach (var buffer in buffers)
+                                    {
                                         buffer.Add(item);
+                                    }
 
                                     if (buffers.Count > 0 && buffers.Peek()
                                                                     .Count == count)
@@ -73,30 +109,31 @@ namespace System.Linq
                                         current = buffers.Dequeue();
                                         return true;
                                     }
-                                    return await f(ct)
-                                               .ConfigureAwait(false);
+
+                                    continue; // loop
                                 }
                                 stopped = true;
-                                e.Dispose();
+                                enumerator.Dispose();
+                                enumerator = null;
 
-                                return await f(ct)
-                                           .ConfigureAwait(false);
+                                continue; // loop
                             }
+
                             if (buffers.Count > 0)
                             {
                                 current = buffers.Dequeue();
                                 return true;
                             }
-                            return false;
-                        };
 
-                    return CreateEnumerator(
-                        f,
-                        () => current,
-                        d.Dispose,
-                        e
-                    );
-                });
+                            break; // exit the while
+                        }
+
+                        break; // case
+                }
+
+                Dispose();
+                return false;
+            }
         }
     }
 }

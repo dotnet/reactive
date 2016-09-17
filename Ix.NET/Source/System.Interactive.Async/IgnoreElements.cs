@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,34 +16,59 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return CreateEnumerable(
-                () =>
+            return new IgnoreElementsAsyncIterator<TSource>(source);
+        }
+
+        private sealed class IgnoreElementsAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly IAsyncEnumerable<TSource> source;
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public IgnoreElementsAsyncIterator(IAsyncEnumerable<TSource> source)
+            {
+                Debug.Assert(source != null);
+
+                this.source = source;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new IgnoreElementsAsyncIterator<TSource>(source);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var e = source.GetEnumerator();
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var d = Disposable.Create(cts, e);
+                base.Dispose();
+            }
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (await enumerator.MoveNext(cancellationToken)
+                                               .ConfigureAwait(false))
                         {
-                            if (!await e.MoveNext(ct)
-                                        .ConfigureAwait(false))
-                            {
-                                return false;
-                            }
+                            // Do nothing, we're ignoring these elements
+                        }
 
-                            return await f(ct)
-                                       .ConfigureAwait(false);
-                        };
+                        break; // case
+                }
 
-                    return CreateEnumerator<TSource>(
-                        f,
-                        () => { throw new InvalidOperationException(); },
-                        d.Dispose,
-                        e
-                    );
-                });
+                Dispose();
+                return false;
+            }
         }
     }
 }

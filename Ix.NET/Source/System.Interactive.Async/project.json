@@ -54,6 +54,7 @@
       "buildOptions": {
         "define": [
           "NO_ARRAY_EMPTY",
+          "NO_CODE_COVERAGE_ATTRIBUTE",
           "CRIPPLED_REFLECTION",
           "PLIB"
         ]
@@ -63,6 +64,7 @@
       "buildOptions": {
         "define": [
           "CRIPPLED_REFLECTION",
+          "NO_CODE_COVERAGE_ATTRIBUTE",
           "PLIB"
         ]
       }

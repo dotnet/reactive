@@ -3,14 +3,19 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
+
 
 namespace Tests
 {
-    
     public partial class AsyncTests
     {
         public void AssertThrows<E>(Action a)
@@ -57,6 +62,28 @@ namespace Tests
         {
             Assert.True(e.MoveNext().Result);
             Assert.Equal(value, e.Current);
+        }
+
+        public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
+        {
+            var en1 = enumerable.GetEnumerator();
+            var en2 = enumerable.GetEnumerator();
+
+            Assert.Equal(en1.GetType(), en2.GetType());
+
+            en1.Dispose();
+            en2.Dispose();
+
+            var e1t = enumerable.ToList();
+            var e2t = enumerable.ToList();
+
+            await Task.WhenAll(e1t, e2t);
+
+
+            var e1Result = e1t.Result;
+            var e2Result = e2t.Result;
+
+            e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
     }
 }

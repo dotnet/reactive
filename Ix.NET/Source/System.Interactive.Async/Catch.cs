@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,51 +20,7 @@ namespace System.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return CreateEnumerable(
-                () =>
-                {
-                    var e = source.GetEnumerator();
-
-                    var cts = new CancellationTokenDisposable();
-                    var a = new AssignableDisposable
-                    {
-                        Disposable = e
-                    };
-                    var d = Disposable.Create(cts, a);
-                    var done = false;
-
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
-                        {
-                            if (!done)
-                            {
-                                try
-                                {
-                                    return await e.MoveNext(ct)
-                                                  .ConfigureAwait(false);
-                                }
-                                catch (TException ex)
-                                {
-                                    var err = handler(ex)
-                                        .GetEnumerator();
-                                    e = err;
-                                    a.Disposable = e;
-                                    done = true;
-                                    return await f(ct)
-                                               .ConfigureAwait(false);
-                                }
-                            }
-                            return await e.MoveNext(ct)
-                                          .ConfigureAwait(false);
-                        };
-
-                    return CreateEnumerator(
-                        f,
-                        () => e.Current,
-                        d.Dispose,
-                        a
-                    );
-                });
+            return new CatchAsyncIterator<TSource, TException>(source, handler);
         }
 
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -96,60 +51,192 @@ namespace System.Linq
 
         private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
-            return CreateEnumerable(
-                () =>
+            return new CatchAsyncIterator<TSource>(sources);
+        }
+
+        private sealed class CatchAsyncIterator<TSource, TException> : AsyncIterator<TSource> where TException : Exception
+        {
+            private readonly Func<TException, IAsyncEnumerable<TSource>> handler;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private bool isDone;
+
+            public CatchAsyncIterator(IAsyncEnumerable<TSource> source, Func<TException, IAsyncEnumerable<TSource>> handler)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(handler != null);
+
+                this.source = source;
+                this.handler = handler;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new CatchAsyncIterator<TSource, TException>(source, handler);
+            }
+
+            public override void Dispose()
+            {
+                if (enumerator != null)
                 {
-                    var se = sources.GetEnumerator();
-                    var e = default(IAsyncEnumerator<TSource>);
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
 
-                    var cts = new CancellationTokenDisposable();
-                    var a = new AssignableDisposable();
-                    var d = Disposable.Create(cts, se, a);
+                base.Dispose();
+            }
 
-                    var error = default(ExceptionDispatchInfo);
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetEnumerator();
+                        isDone = false;
 
-                    var f = default(Func<CancellationToken, Task<bool>>);
-                    f = async ct =>
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
                         {
-                            if (e == null)
+                            if (!isDone)
                             {
-                                if (se.MoveNext())
+                                try
                                 {
-                                    e = se.Current.GetEnumerator();
+                                    if (await enumerator.MoveNext(cancellationToken)
+                                                        .ConfigureAwait(false))
+                                    {
+                                        current = enumerator.Current;
+                                        return true;
+                                    }
                                 }
-                                else
+                                catch (TException ex)
                                 {
+                                    // Note: Ideally we'd dipose of the previous enumerator before
+                                    // invoking the handler, but we use this order to preserve
+                                    // current behavior
+                                    var err = handler(ex)
+                                        .GetEnumerator();
+                                    enumerator?.Dispose();
+                                    enumerator = err;
+                                    isDone = true;
+                                    continue; // loop so we hit the catch state
+                                }
+                            }
+
+                            if (await enumerator.MoveNext(cancellationToken)
+                                                .ConfigureAwait(false))
+                            {
+                                current = enumerator.Current;
+                                return true;
+                            }
+
+                            break; // while
+                        }
+
+                        break; // case
+                }
+
+                Dispose();
+                return false;
+            }
+        }
+
+        private sealed class CatchAsyncIterator<TSource> : AsyncIterator<TSource>
+        {
+            private readonly IEnumerable<IAsyncEnumerable<TSource>> sources;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private ExceptionDispatchInfo error;
+
+            private IEnumerator<IAsyncEnumerable<TSource>> sourcesEnumerator;
+
+            public CatchAsyncIterator(IEnumerable<IAsyncEnumerable<TSource>> sources)
+            {
+                Debug.Assert(sources != null);
+
+                this.sources = sources;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new CatchAsyncIterator<TSource>(sources);
+            }
+
+            public override void Dispose()
+            {
+                if (sourcesEnumerator != null)
+                {
+                    sourcesEnumerator.Dispose();
+                    sourcesEnumerator = null;
+                }
+
+                if (enumerator != null)
+                {
+                    enumerator.Dispose();
+                    enumerator = null;
+                }
+
+                error = null;
+
+                base.Dispose();
+            }
+
+            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        sourcesEnumerator = sources.GetEnumerator();
+
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (true)
+                        {
+                            if (enumerator == null)
+                            {
+                                if (!sourcesEnumerator.MoveNext())
+                                {
+                                    // only throw if we have an error on the last one
                                     error?.Throw();
-                                    return false;
+                                    break; // done, nothing else to do
                                 }
 
                                 error = null;
-
-                                a.Disposable = e;
+                                enumerator = sourcesEnumerator.Current.GetEnumerator();
                             }
 
                             try
                             {
-                                return await e.MoveNext(ct)
-                                              .ConfigureAwait(false);
+                                if (await enumerator.MoveNext(cancellationToken)
+                                                    .ConfigureAwait(false))
+                                {
+                                    current = enumerator.Current;
+                                    return true;
+                                }
                             }
-                            catch (Exception exception)
+                            catch (Exception ex)
                             {
-                                e.Dispose();
-                                e = null;
-                                error = ExceptionDispatchInfo.Capture(exception);
-                                return await f(ct)
-                                           .ConfigureAwait(false);
+                                // Done with the current one, go to the next
+                                enumerator.Dispose();
+                                enumerator = null;
+                                error = ExceptionDispatchInfo.Capture(ex);
+                                continue;
                             }
-                        };
 
-                    return CreateEnumerator(
-                        f,
-                        () => e.Current,
-                        d.Dispose,
-                        a
-                    );
-                });
+                            break; // while
+                        }
+
+                        break; // case
+                }
+                
+                Dispose();
+                return false;
+            }
         }
     }
 }
