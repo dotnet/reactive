@@ -5,6 +5,7 @@
 #if !NO_PERF
 using System;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -42,9 +43,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private volatile bool _hasLatest;
             private TSecond _latest;
 
+            private object _latestGate;
+
             public IDisposable Run()
             {
                 _gate = new object();
+                _latestGate = new object();
 
                 var sndSubscription = new SingleAssignmentDisposable();
 
@@ -88,11 +92,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_parent._hasLatest) // Volatile read
                     {
+
+                        TSecond latest;
+
+                        lock (_parent._latestGate)
+                        {
+                            latest = _parent._latest;
+                        }
+
                         var res = default(TResult);
 
                         try
                         {
-                            res = _parent._parent._resultSelector(value, _parent._latest);
+                            res = _parent._parent._resultSelector(value, latest);
                         }
                         catch (Exception ex)
                         {
@@ -140,8 +152,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSecond value)
                 {
-                    _parent._latest = value;
-                    _parent._hasLatest = true; // Volatile write
+                    lock (_parent._latestGate)
+                    {
+                        _parent._latest = value;
+                    }
+
+                    if (!_parent._hasLatest)
+                    {
+                        _parent._hasLatest = true;
+                    }
                 }
             }
         }
