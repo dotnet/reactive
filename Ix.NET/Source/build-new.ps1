@@ -44,7 +44,12 @@ $tag = $versionObj.PreReleaseLabel
 $preRelNum = $versionObj.CommitsSinceVersionSourcePadded
 
 if($tag -ne ""){
-  $version = "$version-$tag-$preRelNum"
+  if($preRelNum -ne "00000" {
+    $version = "$version-$tag-$preRelNum"
+  }
+  else {
+    $version = "$version-$tag"
+  }
 }
 
 Write-Host "Version: $version"
