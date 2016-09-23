@@ -13,6 +13,8 @@ only_commits:
     - Rx.NET/**/*
     - '*'
 
+skip_tags: true
+
 skip_commits:
   files:
     - '**/*.md'
