@@ -44,7 +44,7 @@ $tag = $versionObj.PreReleaseLabel
 $preRelNum = $versionObj.CommitsSinceVersionSourcePadded
 
 if($tag -ne ""){
-  if($preRelNum -ne "00000" {
+  if($preRelNum -ne "00000") {
     $version = "$version-$tag-$preRelNum"
   }
   else {
