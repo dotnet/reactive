@@ -28,7 +28,7 @@ $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get tools
 .\nuget.exe install -excludeversion gitversion.commandline -outputdirectory packages
-.\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta3 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion OpenCover -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
