@@ -3,7 +3,7 @@
   <metadata>
     <id>Microsoft.Reactive.Testing</id>
     <version>$version$</version>
-    <title>Reactive Extensions - Testing Library</title>
+    <title>Reactive Extensions (Rx) - Testing Library</title>
     <authors>.NET Foundation and Contributors</authors>
     <owners>Microsoft,RxTeam</owners>
     <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>

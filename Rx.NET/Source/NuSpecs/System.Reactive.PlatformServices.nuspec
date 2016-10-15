@@ -10,7 +10,7 @@
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Reactive Extensions Platform Services Library used to access platform-specific functionality and enlightenment services.</description>
+    <description>Reactive Extensions (Rx) Platform Services Library used to access platform-specific functionality and enlightenment services.</description>
     <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>

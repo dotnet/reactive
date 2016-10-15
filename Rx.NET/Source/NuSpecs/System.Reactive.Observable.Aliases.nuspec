@@ -10,7 +10,7 @@
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Reactive Extensions provides the aliases Map, FlatMap, and Filter.</description>
+    <description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter.</description>
     <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>

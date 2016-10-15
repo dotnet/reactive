@@ -2,6 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>System.Interactive.Async</id>
+    <title>System.Interactive.Async (Ix Async)</title>
     <version>$version$</version>
     <authors>.NET Foundation and Contributors</authors>
     <owners>Microsoft,RxTeam</owners>
@@ -9,7 +10,7 @@
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</description>
+    <description>Interactive Extensions (Ix) Async Library used to express queries over asynchronous enumerable sequences.</description>
     <copyright>Copyright (c) .NET Foundation and Contributors. All Rights Reserved</copyright>
     <language>en-US</language>
     <tags>Ix Interactive Extensions Enumerable Asynchronous</tags>

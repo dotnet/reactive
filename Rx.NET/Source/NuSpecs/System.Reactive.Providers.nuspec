@@ -3,14 +3,14 @@
   <metadata>
     <id>System.Reactive.Providers</id>
     <version>$version$</version>
-    <title>Reactive Extensions - Providers Library</title>
+    <title>Reactive Extensions (Rx) - Providers Library</title>
     <authors>.NET Foundation and Contributors</authors>
     <owners>Microsoft,RxTeam</owners>
     <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
     <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
     <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Reactive Extensions Providers Library used to build query providers and express complex event processing queries over those.</description>
+    <description>Reactive Extensions (Rx) Providers Library used to build query providers and express complex event processing queries over those.</description>
     <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
