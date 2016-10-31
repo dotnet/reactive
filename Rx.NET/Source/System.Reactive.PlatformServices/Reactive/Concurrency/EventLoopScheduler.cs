@@ -82,6 +82,11 @@ namespace System.Reactive.Concurrency
         /// </summary>
         private bool _disposed;
 
+        /// <summary>
+        /// Field to cache the unique instance id. Use <see cref="GetInstanceId"/> to obtain the instance id.
+        /// </summary>
+        private string _cachedInstanceId;
+
         #endregion
 
         #region Constructors
@@ -166,7 +171,7 @@ namespace System.Reactive.Concurrency
             lock (_gate)
             {
                 if (_disposed)
-                    throw new ObjectDisposedException("");
+                    throw new ObjectDisposedException(GetInstanceId());
 
                 if (dueTime <= TimeSpan.Zero)
                 {
@@ -346,8 +351,23 @@ namespace System.Reactive.Concurrency
                 {
                     foreach (var item in ready)
                     {
-                        if (!item.IsCanceled)
-                            item.Invoke();
+                        if (!item.IsCanceled) 
+                        {
+                            try 
+                            {
+                                item.Invoke();
+                            } 
+                            catch (ObjectDisposedException ex) 
+                            {
+                                /* Check if the scheduler has been disposed with 
+                                 * non-empty working queue.
+                                 */
+                                if (ex.ObjectName == GetInstanceId())
+                                    break;
+
+                                throw;
+                            }
+                        }
                     }
                 }
 
@@ -380,6 +400,18 @@ namespace System.Reactive.Concurrency
                     _evt.Release();
                 }
             }
+        }
+
+        private string GetInstanceId() {
+            if (_cachedInstanceId != null)
+                return _cachedInstanceId;
+
+            var instance_id = GetType().Name 
+                + "/" 
+                + Guid.NewGuid();
+
+            Interlocked.CompareExchange(ref _cachedInstanceId, instance_id, null);
+            return _cachedInstanceId;
         }
 
         #endregion

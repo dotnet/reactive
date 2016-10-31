@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -133,6 +135,44 @@ namespace ReactiveTests.Tests
             results.AssertEqual(0, 1);
 
             Assert.Equal(2, d);
+        }
+
+        [Fact]
+        public void EventLoop_SchedulerDisposedDuringLongRunningAction() {
+            
+            var handledEvents = new List<string>();
+            var longRunningActionStarted = new ManualResetEvent(false);
+            var schedulerHasBeenDisposed = new ManualResetEvent(false);
+            var eventStream = new Subject<string>();
+            var maxWaitTime = TimeSpan.FromSeconds(5);
+            
+            var subscription = Observable.Using(
+                resourceFactory: () => new EventLoopScheduler(),
+                observableFactory: scheduler => eventStream
+                    .ObserveOn(scheduler)
+                    .Do(@event => {
+                        handledEvents.Add(@event);
+                        longRunningActionStarted.Set();
+                        schedulerHasBeenDisposed.WaitOne(maxWaitTime);
+
+                }))
+                .Subscribe();
+            
+            eventStream.OnNext("#1 long running action");
+            eventStream.OnNext("#2 long running action");
+            longRunningActionStarted.WaitOne(maxWaitTime);
+
+            subscription.Dispose();
+            schedulerHasBeenDisposed.Set();
+
+            /* Wait for EventLoopScheduler's worker thread:
+             * without fix https://github.com/Reactive-Extensions/Rx.NET/issues/286
+             * this will throw an unhandled exception => test runner dies.
+             */
+            longRunningActionStarted.WaitOne(TimeSpan.FromSeconds(1));
+
+            Assert.Contains("#1 long running action", handledEvents);
+            Assert.DoesNotContain("#2 long running action", handledEvents);
         }
 
         [Fact]
