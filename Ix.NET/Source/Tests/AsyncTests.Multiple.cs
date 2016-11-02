@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -962,6 +963,7 @@ namespace Tests
             public string CustomerId { get; set; }
         }
 
+        [DebuggerDisplay("CustomerId = {CustomerId}, OrderId = {OrderId}")]
         public class CustomerOrder : IEquatable<CustomerOrder>
         {
             public bool Equals(CustomerOrder other)
