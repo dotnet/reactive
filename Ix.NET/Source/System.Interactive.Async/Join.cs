@@ -97,7 +97,7 @@ namespace System.Linq
             TOuter item;
             private int mode;
 
-            const int State_Begin = 1;
+            const int State_If = 1;
             const int State_DoLoop = 2;
             const int State_For = 3;
             const int State_While = 4;
@@ -108,18 +108,19 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         outerEnumerator = outer.GetEnumerator();
-                        mode = State_Begin;
+                        mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
                         switch (mode)
                         {
-                            case State_Begin:
+                            case State_If:
                                 if (await outerEnumerator.MoveNext(cancellationToken)
                                                          .ConfigureAwait(false))
                                 {
                                     lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+
                                     if (lookup.Count != 0)
                                     {
                                         mode = State_DoLoop;
@@ -140,7 +141,9 @@ namespace System.Linq
                                     goto case State_For;
                                 }
 
-                                break;
+                                // advance to while
+                                mode = State_While;
+                                goto case State_While;
 
                             case State_For:
                                 current = resultSelector(item, elements[index]);

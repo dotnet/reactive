@@ -925,6 +925,39 @@ namespace Tests
             NoNext(e);
         }
 
+        [Fact]
+        public void Join12()
+        {
+            var customers = new List<Customer>
+            {
+                new Customer {CustomerId = "ANANT"},
+                new Customer {CustomerId = "ALFKI"},
+                new Customer {CustomerId = "FISSA"}
+            };
+            var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = "ALFKI"},
+                new Order { OrderId = 2, CustomerId = "ALFKI"},
+                new Order { OrderId = 3, CustomerId = "ALFKI"},
+                new Order { OrderId = 4, CustomerId = "FISSA"},
+                new Order { OrderId = 5, CustomerId = "FISSA"},
+                new Order { OrderId = 6, CustomerId = "FISSA"},
+            };
+
+            var asyncResult = customers.ToAsyncEnumerable()
+                                       .Join(orders.ToAsyncEnumerable(), c => c.CustomerId, o => o.CustomerId,
+                                            (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
+
+            var e = asyncResult.GetEnumerator();
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
+            NoNext(e);
+        }
+
 
         [Fact]
         public void SelectManyMultiple_Null()
