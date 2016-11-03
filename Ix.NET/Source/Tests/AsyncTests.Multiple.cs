@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -892,6 +893,73 @@ namespace Tests
 
 
         [Fact]
+        public void Join11()
+        {
+            var customers = new List<Customer>
+            {
+                new Customer {CustomerId = "ALFKI"},
+                new Customer {CustomerId = "ANANT"},
+                new Customer {CustomerId = "FISSA"}
+            };
+            var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = "ALFKI"},
+                new Order { OrderId = 2, CustomerId = "ALFKI"},
+                new Order { OrderId = 3, CustomerId = "ALFKI"},
+                new Order { OrderId = 4, CustomerId = "FISSA"},
+                new Order { OrderId = 5, CustomerId = "FISSA"},
+                new Order { OrderId = 6, CustomerId = "FISSA"},
+            };
+
+            var asyncResult = customers.ToAsyncEnumerable()
+                                       .Join(orders.ToAsyncEnumerable(), c => c.CustomerId, o => o.CustomerId,
+                                            (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
+
+            var e = asyncResult.GetEnumerator();
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
+            NoNext(e);
+        }
+
+        [Fact]
+        public void Join12()
+        {
+            var customers = new List<Customer>
+            {
+                new Customer {CustomerId = "ANANT"},
+                new Customer {CustomerId = "ALFKI"},
+                new Customer {CustomerId = "FISSA"}
+            };
+            var orders = new List<Order>
+            {
+                new Order { OrderId = 1, CustomerId = "ALFKI"},
+                new Order { OrderId = 2, CustomerId = "ALFKI"},
+                new Order { OrderId = 3, CustomerId = "ALFKI"},
+                new Order { OrderId = 4, CustomerId = "FISSA"},
+                new Order { OrderId = 5, CustomerId = "FISSA"},
+                new Order { OrderId = 6, CustomerId = "FISSA"},
+            };
+
+            var asyncResult = customers.ToAsyncEnumerable()
+                                       .Join(orders.ToAsyncEnumerable(), c => c.CustomerId, o => o.CustomerId,
+                                            (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
+
+            var e = asyncResult.GetEnumerator();
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
+            HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 4 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 5 });
+            HasNext(e, new CustomerOrder { CustomerId = "FISSA", OrderId = 6 });
+            NoNext(e);
+        }
+
+
+        [Fact]
         public void SelectManyMultiple_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
@@ -915,5 +983,58 @@ namespace Tests
             HasNext(e, 4);
             NoNext(e);
         }
+
+
+        public class Customer
+        {
+            public string CustomerId { get; set; }
+        }
+
+        public class Order
+        {
+            public int OrderId { get; set; }
+            public string CustomerId { get; set; }
+        }
+
+        [DebuggerDisplay("CustomerId = {CustomerId}, OrderId = {OrderId}")]
+        public class CustomerOrder : IEquatable<CustomerOrder>
+        {
+            public bool Equals(CustomerOrder other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return OrderId == other.OrderId && string.Equals(CustomerId, other.CustomerId);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((CustomerOrder)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (OrderId * 397) ^ (CustomerId != null ? CustomerId.GetHashCode() : 0);
+                }
+            }
+
+            public static bool operator ==(CustomerOrder left, CustomerOrder right)
+            {
+                return Equals(left, right);
+            }
+
+            public static bool operator !=(CustomerOrder left, CustomerOrder right)
+            {
+                return !Equals(left, right);
+            }
+
+            public int OrderId { get; set; }
+            public string CustomerId { get; set; }
+        }
+
     }
 }
