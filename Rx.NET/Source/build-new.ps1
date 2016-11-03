@@ -42,10 +42,14 @@ $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFr
 $version = $versionObj.MajorMinorPatch
 $tag = $versionObj.PreReleaseLabel
 $preRelNum = $versionObj.CommitsSinceVersionSourcePadded
+$preRelNum2 = $versionObj.PreReleaseNumber
 
 if($tag -ne ""){
   if($preRelNum -ne "00000") {
     $version = "$version-$tag-$preRelNum"
+  }
+  else if ($preRelNum2 -ne "0") {
+    $version = "$version-$tag$preRelNum2"
   }
   else {
     $version = "$version-$tag"

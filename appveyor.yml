@@ -28,7 +28,6 @@ deploy:
   provider: NuGet
   server: https://dotnet.myget.org/F/rx/api/v2/package
   on:
-    branch: master 
     appveyor_repo_tag: true
   api_key:
     secure: 5qZfZf9XVtN+h/UHwocrEBZjaZCajJg9fZbLDPigoew1NG7PzWQxMv1kLQJW6eWE
