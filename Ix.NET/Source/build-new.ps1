@@ -48,7 +48,7 @@ if($tag -ne ""){
   if($preRelNum -ne "00000") {
     $version = "$version-$tag-$preRelNum"
   }
-  else if ($preRelNum2 -ne "0") {
+  elseif ($preRelNum2 -ne "0") {
     $version = "$version-$tag$preRelNum2"
   }
   else {
