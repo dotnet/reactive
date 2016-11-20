@@ -27,8 +27,7 @@
   },
 
   "dependencies": {
-    "System.Reactive.Linq": { "target": "project" },
-    "System.Linq.Queryable": "4.0.1"
+    "System.Reactive.Linq": { "target": "project" }
   },
   
   "frameworks": {
@@ -87,6 +86,9 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
+      },
+      "dependencies": {
+        "System.Linq.Queryable": "4.0.1"
       }
     },
     "netstandard1.3": {
@@ -107,6 +109,9 @@
           "PLIB",
           "USE_TIMER_SELF_ROOT"
         ]
+      },
+      "dependencies": {
+        "System.Linq.Queryable": "4.0.1"
       }
     }
   }

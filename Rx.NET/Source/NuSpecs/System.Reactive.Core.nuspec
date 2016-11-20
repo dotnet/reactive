@@ -14,8 +14,11 @@
     <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
-    <dependencies>   
-      <group>
+    <dependencies>
+      <group targetFramework="net45">
+        <dependency id="System.Reactive.Interfaces" version="$version$" />
+      </group>   
+      <group targetFramework="netstandard1.0">
         <dependency id="System.Reactive.Interfaces" version="$version$" />
         <dependency id="System.ComponentModel" version="4.0.1" />
         <dependency id="System.Diagnostics.Contracts" version="4.0.1" />

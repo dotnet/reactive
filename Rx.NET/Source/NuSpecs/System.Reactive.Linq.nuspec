@@ -15,8 +15,13 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <dependency id="System.Reactive.Core" version="$version$" />
-      <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
+      <group targetFramework="net45">
+        <dependency id="System.Reactive.Core" version="$version$" />
+      </group>  
+      <group targetFramework="netstandard1.0">
+        <dependency id="System.Reactive.Core" version="$version$" />
+        <dependency id="System.Runtime.InteropServices.WindowsRuntime" version="4.0.1" />
+      </group>      
     </dependencies>
   </metadata>
   <files>

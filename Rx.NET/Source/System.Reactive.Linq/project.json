@@ -33,8 +33,7 @@
   },
 
   "dependencies": {
-    "System.Reactive.Core": { "target": "project" },
-    "System.Runtime.InteropServices.WindowsRuntime": "4.0.1"
+    "System.Reactive.Core": { "target": "project" }
   },
 
   "frameworks": {
@@ -93,6 +92,9 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
+      },
+      "dependencies": {
+        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1"
       }
     },
     "netstandard1.1": {
@@ -112,6 +114,9 @@
           "USE_TIMER_SELF_ROOT",
           "PLIB"
         ]
+      },
+      "dependencies": {
+        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1"
       }
     },
     "netstandard1.3": {
@@ -132,6 +137,9 @@
           "PLIB",
           "USE_TIMER_SELF_ROOT"
         ]
+      },
+      "dependencies": {
+        "System.Runtime.InteropServices.WindowsRuntime": "4.0.1"
       }
     }
   }
