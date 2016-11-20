@@ -15,7 +15,10 @@
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable LINQ Events</tags>
     <dependencies>
-      <dependency id="NETStandard.Library" version="1.6.0" />
+     <group targetFramework="netstandard1.0">       
+        <dependency id="NETStandard.Library" version="1.6.0" />
+     </group>
+     <group targetFramework="net45" />
     </dependencies>
   </metadata>
   <files>
