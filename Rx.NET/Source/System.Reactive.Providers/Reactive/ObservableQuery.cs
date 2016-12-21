@@ -502,19 +502,4 @@ namespace System.Reactive
             }
         }
     }
-
-#if (CRIPPLED_REFLECTION && HAS_WINRT)
-    static class Helpers
-    {
-        public static MethodInfo GetMethod(this Type type, string name)
-        {
-            return type.GetTypeInfo().GetDeclaredMethod(name);
-        }
-
-        public static bool IsAssignableFrom(this Type type1, Type type2)
-        {
-            return type1.GetTypeInfo().IsAssignableFrom(type2.GetTypeInfo());
-        }
-    }
-#endif
 }

@@ -60,37 +60,9 @@ namespace System.Reactive.PlatformServices
 
         private static IPlatformEnlightenmentProvider CreatePlatformProvider()
         {
-            //
-            // TODO: Investigate whether we can simplify this logic to just use "System.Reactive.PlatformServices.PlatformEnlightenmentProvider, System.Reactive.PlatformServices".
-            //       It turns out this doesn't quite work on Silverlight. On the other hand, in .NET Compact Framework 3.5, we mysteriously have to use that path.
-            //
-
-#if NETCF35
-            var name = "System.Reactive.PlatformServices.CurrentPlatformEnlightenmentProvider, System.Reactive.PlatformServices";
-#else
-#if CRIPPLED_REFLECTION && HAS_WINRT
-            var ifType = typeof(IPlatformEnlightenmentProvider).GetTypeInfo();
-#else
-            var ifType = typeof(IPlatformEnlightenmentProvider);
-#endif
-            var asm = new AssemblyName(ifType.Assembly.FullName);
-            asm.Name = "System.Reactive.PlatformServices";
-            var name = "System.Reactive.PlatformServices.CurrentPlatformEnlightenmentProvider, " + asm.FullName;
-#endif
-
-            var t = Type.GetType(name, false);
-            if (t != null)
-                return (IPlatformEnlightenmentProvider)Activator.CreateInstance(t);
-            else
-                return new DefaultPlatformEnlightenmentProvider();
+            return new CurrentPlatformEnlightenmentProvider();
         }
     }
 
-    class DefaultPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
-    {
-        public T GetService<T>(object[] args) where T : class
-        {
-            return null;
-        }
-    }
+
 }

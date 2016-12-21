@@ -34,11 +34,44 @@
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Core\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Core\Strings_Core.Generated.cs" />
+    <Compile Include="..\System.Reactive.Core\Observable.Extensions.cs" />
+    <Compile Include="..\System.Reactive.Core\Observer.Extensions.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Core\**\*.resx" />
+  </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.PlatformServices\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.PlatformServices\Strings_PlatformServices.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />
+  </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Providers\Reactive\**\*.cs" Exclude="..\System.Reactive.Providers\Reactive\Internal\*.cs" />
+    <Compile Include="..\System.Reactive.Providers\Strings_Providers.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />
+  </ItemGroup>
+<!--  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Observable.Aliases\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Observable.Aliases\Observable.Aliases.cs" />
+    <Compile Include="..\System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs" />
+  </ItemGroup>
+-->
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Linq\Reactive\**\*.cs" Exclude="..\System.Reactive.Linq\Reactive\Internal\Observers.cs;..\System.Reactive.Linq\Reactive\Observer.Extensions.cs;..\System.Reactive.Linq\Reactive\Internal\Producer.cs;..\System.Reactive.Linq\Reactive\Internal\ImmutableList.cs" />
+    <Compile Include="..\System.Reactive.Linq\Strings_Linq.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Linq\**\*.resx" />
+  </ItemGroup>  
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="NETStandard.Library" Version="1.6.1" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />    
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
