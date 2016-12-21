@@ -337,7 +337,11 @@ namespace System.Reactive.Threading.Tasks
             private void Cancel()
             {
                 this._disposable.Dispose();
+#if HAS_TPL46
                 this._tcs.TrySetCanceled(this._ct);
+#else
+                this._tcs.TrySetCanceled();
+#endif
             }
         }
 

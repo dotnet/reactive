@@ -56,7 +56,11 @@ namespace System.Reactive.Linq
             {
                 ctr = cancellationToken.Register(() =>
                 {
+#if HAS_TPL46
                     tcs.TrySetCanceled(cancellationToken);
+#else
+                    tcs.TrySetCanceled();
+#endif
                     subscription.Dispose();
                 });
             }
@@ -131,9 +135,9 @@ namespace System.Reactive.Linq
         }
 #endif
 
-        #endregion
+#endregion
 
-        #region + Case +
+                #region + Case +
 
         public virtual IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources)
         {
