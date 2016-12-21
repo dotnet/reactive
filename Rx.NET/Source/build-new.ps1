@@ -27,7 +27,7 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get version
-.\nuget.exe install -excludeversion gitversion.commandline -outputdirectory packages
+.\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
 .\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion OpenCover -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
