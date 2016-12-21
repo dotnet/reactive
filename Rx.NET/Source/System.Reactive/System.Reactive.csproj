@@ -33,40 +33,30 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>    
-    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />
-  </ItemGroup>
-  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />   
     <Compile Include="..\System.Reactive.Core\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Core\Strings_Core.Generated.cs" />
     <Compile Include="..\System.Reactive.Core\Observable.Extensions.cs" />
     <Compile Include="..\System.Reactive.Core\Observer.Extensions.cs" />
     <EmbeddedResource Include="..\System.Reactive.Core\**\*.resx" />
-  </ItemGroup>
-  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Linq\Reactive\**\*.cs" Exclude="..\System.Reactive.Linq\Reactive\Internal\Observers.cs;..\System.Reactive.Linq\Reactive\Observer.Extensions.cs;..\System.Reactive.Linq\Reactive\Internal\Producer.cs;..\System.Reactive.Linq\Reactive\Internal\ImmutableList.cs" />
+    <Compile Include="..\System.Reactive.Linq\Strings_Linq.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Linq\**\*.resx" />
     <Compile Include="..\System.Reactive.PlatformServices\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.PlatformServices\Strings_PlatformServices.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />
-  </ItemGroup>
-  <ItemGroup>    
+    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />    
     <Compile Include="..\System.Reactive.Providers\Reactive\**\*.cs" Exclude="..\System.Reactive.Providers\Reactive\Internal\*.cs" />
     <Compile Include="..\System.Reactive.Providers\Strings_Providers.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />
-  </ItemGroup>
-  <ItemGroup>    
-    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />
-  </ItemGroup>
-  <ItemGroup>    
+    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />   
+    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />    
     <Compile Include="..\System.Reactive.Experimental\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Experimental\ExperimentalAttribute.cs" />
   </ItemGroup>  
-<!--  <ItemGroup>    
-    <Compile Include="..\System.Reactive.Observable.Aliases\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Observable.Aliases\Observable.Aliases.cs" />
-    <Compile Include="..\System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs" />
-  </ItemGroup>
--->
   <ItemGroup>
     <None Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
     <None Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
@@ -75,11 +65,6 @@
     <None Include="..\System.Reactive.Windows.Threading\**\*.resx" />
     <None Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
   </ItemGroup>
-  <ItemGroup>    
-    <Compile Include="..\System.Reactive.Linq\Reactive\**\*.cs" Exclude="..\System.Reactive.Linq\Reactive\Internal\Observers.cs;..\System.Reactive.Linq\Reactive\Observer.Extensions.cs;..\System.Reactive.Linq\Reactive\Internal\Producer.cs;..\System.Reactive.Linq\Reactive\Internal\ImmutableList.cs" />
-    <Compile Include="..\System.Reactive.Linq\Strings_Linq.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Linq\**\*.resx" />
-  </ItemGroup>  
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="NETStandard.Library" Version="1.6.1" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
