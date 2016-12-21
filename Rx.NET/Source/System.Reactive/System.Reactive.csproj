@@ -54,12 +54,27 @@
     <Compile Include="..\System.Reactive.Providers\Strings_Providers.Generated.cs" />
     <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />
   </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>    
+    <Compile Include="..\System.Reactive.Experimental\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Experimental\ExperimentalAttribute.cs" />
+  </ItemGroup>  
 <!--  <ItemGroup>    
     <Compile Include="..\System.Reactive.Observable.Aliases\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Observable.Aliases\Observable.Aliases.cs" />
     <Compile Include="..\System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs" />
   </ItemGroup>
 -->
+  <ItemGroup>
+    <None Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
+    <None Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
+    <None Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
+    <None Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
+    <None Include="..\System.Reactive.Windows.Threading\**\*.resx" />
+    <None Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
+  </ItemGroup>
   <ItemGroup>    
     <Compile Include="..\System.Reactive.Linq\Reactive\**\*.cs" Exclude="..\System.Reactive.Linq\Reactive\Internal\Observers.cs;..\System.Reactive.Linq\Reactive\Observer.Extensions.cs;..\System.Reactive.Linq\Reactive\Internal\Producer.cs;..\System.Reactive.Linq\Reactive\Internal\ImmutableList.cs" />
     <Compile Include="..\System.Reactive.Linq\Strings_Linq.Generated.cs" />
@@ -79,9 +94,21 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform " Version="5.2.2" />
+    <Compile Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
+    <Compile Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    <Compile Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
+    <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
+    <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
   </ItemGroup>
 </Project>
