@@ -64,7 +64,7 @@ if($hasSignClientSecret) {
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
-vstest.console "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" /TestAdapterPath:"$testDirectory\bin\$configuration\net46\" /Parallel
+vstest.console "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" /TestAdapterPath:"$testDirectory\bin\$configuration\net46" /Parallel
 
 
 exit # TODO 
