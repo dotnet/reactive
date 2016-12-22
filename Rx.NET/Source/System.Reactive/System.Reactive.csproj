@@ -20,15 +20,15 @@
     <Description>Reactive Extensions (Rx) for .NET</Description>
   </PropertyGroup>  
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;PLIB</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;PLIB</DefineConstants>
     <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR45</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR45</DefineConstants>
     <AssemblyVersion>4.0.1000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR46</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR46</DefineConstants>
     <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
@@ -39,13 +39,12 @@
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>    
     <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;HAS_PROGRESS;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_EDI;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
     <AssemblyVersion>4.0.4000.0</AssemblyVersion>    
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
-    <EmbeddedResource Include="Properties\*.xml" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
@@ -86,7 +85,6 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">    
     <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
   </ItemGroup>

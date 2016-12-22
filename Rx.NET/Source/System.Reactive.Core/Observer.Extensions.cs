@@ -277,8 +277,7 @@ namespace System.Reactive
             return new ObserveOnObserver<T>(new SynchronizationContextScheduler(context), observer, null);
         }
 #endif
-
-#if HAS_PROGRESS
+        
         /// <summary>
         /// Converts an observer to a progress object.
         /// </summary>
@@ -341,6 +340,5 @@ namespace System.Reactive
 
             return new AnonymousObserver<T>(progress.Report);
         }
-#endif
     }
 }
