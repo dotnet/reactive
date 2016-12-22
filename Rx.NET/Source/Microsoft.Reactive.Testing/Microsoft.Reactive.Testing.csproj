@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;netstandard1.3;uap10.0</TargetFrameworks>    
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>    
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinClientVersion>2.12</MinClientVersion>
@@ -31,21 +31,6 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
     <AssemblyVersion>4.0.1000.0</AssemblyVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46</DefineConstants>
-    <AssemblyVersion>4.0.3000.0</AssemblyVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
-    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>    
-    <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
-    <AssemblyVersion>4.0.4000.0</AssemblyVersion>    
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
