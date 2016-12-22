@@ -20,15 +20,15 @@
     <Description>Reactive Extensions (Rx) for .NET</Description>
   </PropertyGroup>  
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;PLIB</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;PLIB</DefineConstants>
     <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR45</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR45</DefineConstants>
     <AssemblyVersion>4.0.1000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR46</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;HAS_DISPATCHER_PRIORITY;HAS_WINFORMS;DESKTOPCLR;DESKTOPCLR46</DefineConstants>
     <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
@@ -39,7 +39,7 @@
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>    
     <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;HAS_AWAIT;HAS_APTCA;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
     <AssemblyVersion>4.0.4000.0</AssemblyVersion>    
   </PropertyGroup>
   <ItemGroup>
