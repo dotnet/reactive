@@ -238,7 +238,7 @@ namespace ReactiveTests.Tests
             Application.Exit();
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void SchedulePeriodic_Nested()
         {
             var evt = new ManualResetEvent(false);
