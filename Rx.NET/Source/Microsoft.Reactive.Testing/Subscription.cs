@@ -11,9 +11,7 @@ namespace Microsoft.Reactive.Testing
     /// <summary>
     /// Records information about subscriptions to and unsubscriptions from observable sequences.
     /// </summary>
-#if !NO_DEBUGGER_ATTRIBUTES
     [DebuggerDisplay("({Subscribe}, {Unsubscribe})")]
-#endif
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif

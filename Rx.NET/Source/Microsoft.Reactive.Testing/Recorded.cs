@@ -13,9 +13,7 @@ namespace Microsoft.Reactive.Testing
     /// Record of a value including the virtual time it was produced on.
     /// </summary>
     /// <typeparam name="T">Type of the value.</typeparam>
-#if !NO_DEBUGGER_ATTRIBUTES
     [DebuggerDisplay("{Value}@{Time}")]
-#endif
 #if !NO_SERIALIZABLE
     [Serializable]
 #endif
