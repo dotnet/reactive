@@ -302,7 +302,7 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if HAS_AWAIT
+
 #if !NO_THREAD
         [Fact]
         public void Await_Blocking()
@@ -317,7 +317,6 @@ namespace ReactiveTests.Tests
             var s = new AsyncSubject<int>();
             GetResult_Blocking_Throw(s.GetAwaiter());
         }
-#endif
 #endif
 
         [Fact]
@@ -397,8 +396,7 @@ namespace ReactiveTests.Tests
             Assert.True(s.IsCompleted);
         }
 #endif
-
-#if HAS_AWAIT
+        
         [Fact]
         public void GetResult_Context()
         {
@@ -436,7 +434,6 @@ namespace ReactiveTests.Tests
                 d(state);
             }
         }
-#endif
 
         [Fact]
         public void HasObservers()

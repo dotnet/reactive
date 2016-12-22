@@ -18,9 +18,8 @@ using Microsoft.Reactive.Testing;
 using System.Windows.Forms;
 #endif
 
-#if HAS_AWAIT
 using System.Threading.Tasks;
-#endif
+
 
 namespace ReactiveTests.Tests
 {
@@ -175,23 +174,18 @@ namespace ReactiveTests.Tests
                 e.WaitOne();
             }
 
-            if (!Utils.IsRunningWithPortableLibraryBinaries())
-            {
-                Scheduler_Builtins_NoPlib();
-            }
+            Scheduler_Builtins_NoPlib();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void Scheduler_Builtins_NoPlib()
         {
-#if !PLIB
             // ThreadPool
             {
                 var e = new ManualResetEvent(false);
                 Scheduler.ThreadPool.Schedule(() => e.Set());
                 e.WaitOne();
             }
-#endif
 
 #if !NO_THREAD
             // NewThread
@@ -1093,9 +1087,7 @@ namespace ReactiveTests.Tests
         }
 
         #endregion
-
-#if HAS_AWAIT
-
+        
         [Fact]
         public void SchedulerAsync_Yield_ArgumentChecking()
         {
@@ -1521,7 +1513,6 @@ namespace ReactiveTests.Tests
         }
 
 #endif
-
-#endif
+        
     }
 }

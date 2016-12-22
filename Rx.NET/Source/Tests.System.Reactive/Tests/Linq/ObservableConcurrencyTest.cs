@@ -11,7 +11,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-#if NET45 || DNX451
+#if NET46
 using System.Windows.Threading;
 #endif
 using Microsoft.Reactive.Testing;

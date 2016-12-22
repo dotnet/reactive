@@ -819,9 +819,7 @@ namespace ReactiveTests.Tests
                 Task.Run(() => d(state));
             }
         }
-
-#if HAS_PROGRESS
-
+        
         [Fact]
         public void Observer_ToProgress_ArgumentChecking()
         {
@@ -904,6 +902,5 @@ namespace ReactiveTests.Tests
                 _report(value);
             }
         }
-#endif
     }
 }

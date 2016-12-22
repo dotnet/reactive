@@ -326,32 +326,31 @@ namespace ReactiveTests.Tests
         [Fact]
         public void Cant_Locate_Scheduler()
         {
-            if (!Utils.IsRunningWithPortableLibraryBinaries())
-            {
+           
                 Cant_Locate_Scheduler_NoPlib();
-            }
+           
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private void Cant_Locate_Scheduler_NoPlib()
         {
-            var e = new MarshalByRefCell<Exception>();
+            var e = new MarshalByRefCell<bool>();
             _domain.SetData("state", e);
 
             Run(() =>
             {
-                var state = (MarshalByRefCell<Exception>)_domain.GetData("state");
+                var state = (MarshalByRefCell<bool>)_domain.GetData("state");
                 try
                 {
-                    Scheduler.TaskPool.Schedule(() => { });
+                    state.Value = Scheduler.TaskPool != null;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    state.Value = ex;
+                    state.Value = false;
                 }
             });
 
-            Assert.True(e.Value != null && e.Value is NotSupportedException);
+            Assert.True(e.Value);
         }
 #endif
 

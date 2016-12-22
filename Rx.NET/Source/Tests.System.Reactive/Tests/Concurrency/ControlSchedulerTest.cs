@@ -197,7 +197,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => s.SchedulePeriodic(42, TimeSpan.FromMilliseconds(1).Subtract(TimeSpan.FromTicks(1)), x => x));
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void SchedulePeriodic()
         {
             var evt = new ManualResetEvent(false);

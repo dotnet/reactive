@@ -3,9 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-#if NETCOREAPP1_0
+#if NETCOREAPP1_0 || NET46
 using System.Threading;
-#elif !WINDOWS_UWP
+#endif
+#if HAS_DISPATCHER
 using System.Windows.Threading;
 #endif
 
