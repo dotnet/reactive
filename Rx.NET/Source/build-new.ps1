@@ -28,6 +28,7 @@ if (!(Test-Path .\nuget.exe)) {
 .\nuget.exe install -excludeversion OpenCover -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
+.\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
@@ -73,7 +74,11 @@ if($hasSignClientSecret) {
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
-vstest.console "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" /TestAdapterPath:"$testDirectory\bin\$configuration\net46" /Parallel
+Write-Host "Running .NET Core App 1.0 Tests" -Foreground Green
+dotnet vstest "$testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll" 
+
+Write-Host "Running .NET 4.6 Tests" -Foreground Green
+.\packages\xunit.runner.console\tools\xunit.console.exe "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" 
 
 
 exit # TODO 
