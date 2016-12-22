@@ -32,7 +32,11 @@ if (!(Test-Path .\nuget.exe)) {
 New-Item -ItemType Directory -Force -Path $artifacts
 
 Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
+# msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
+msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:restore /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:restore /p:Configuration=$configuration 
+msbuild "$scriptPath\Tests.System.Reactive\Tests.System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
