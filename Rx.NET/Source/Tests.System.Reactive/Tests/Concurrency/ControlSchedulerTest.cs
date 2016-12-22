@@ -47,7 +47,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => s.Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void Schedule()
         {
             var evt = new ManualResetEvent(false);
@@ -64,7 +64,7 @@ namespace ReactiveTests.Tests
             Application.Exit();
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void ScheduleError()
         {
             var evt = new ManualResetEvent(false);
@@ -83,13 +83,13 @@ namespace ReactiveTests.Tests
             Application.Exit();
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void ScheduleRelative()
         {
             ScheduleRelative_(TimeSpan.FromSeconds(0.1));
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void ScheduleRelative_Zero()
         {
             ScheduleRelative_(TimeSpan.Zero);
@@ -121,7 +121,7 @@ namespace ReactiveTests.Tests
             Application.Exit();
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void ScheduleRelative_Nested()
         {
             var evt = new ManualResetEvent(false);
@@ -151,7 +151,7 @@ namespace ReactiveTests.Tests
             Application.Exit();
         }
 
-        [Fact]
+        [Fact(Skip="Run Locally")]
         public void ScheduleRelative_Cancel()
         {
             var evt = new ManualResetEvent(false);
