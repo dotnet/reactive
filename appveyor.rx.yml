@@ -23,7 +23,9 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
-- ps: .\Rx.NET\source\build-new.ps1
+  - cmd: '"%ProgramFiles(x86)%\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\sn.exe" -Vr *'
+  - cmd: '"%ProgramFiles(x86)%\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\x64\sn.exe" -Vr *'
+  - ps: .\Rx.NET\source\build-new.ps1
 
 test: off
 artifacts:
