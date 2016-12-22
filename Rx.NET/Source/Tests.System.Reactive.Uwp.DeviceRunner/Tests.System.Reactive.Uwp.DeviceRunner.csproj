@@ -359,9 +359,6 @@
     <Compile Include="..\Tests.System.Reactive\TestTaskScheduler.cs">
       <Link>TestTaskScheduler.cs</Link>
     </Compile>
-    <Compile Include="..\Tests.System.Reactive\Utils.cs">
-      <Link>Utils.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
