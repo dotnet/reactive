@@ -30,12 +30,10 @@ namespace System.Reactive.PlatformServices
         {
             var t = typeof(T);
 
-#if HAS_EDI
             if (t == typeof(IExceptionServices))
             {
                 return (T)(object)new ExceptionServicesImpl();
             }
-#endif
 
 #if !NO_THREAD || WINDOWS
             if (t == typeof(IConcurrencyAbstractionLayer))
