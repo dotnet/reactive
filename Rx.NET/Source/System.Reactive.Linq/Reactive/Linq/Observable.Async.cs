@@ -4,10 +4,8 @@
 
 using System.Reactive.Concurrency;
 using System.Threading;
-
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
+
 
 namespace System.Reactive.Linq
 {
@@ -1198,7 +1196,6 @@ namespace System.Reactive.Linq
 
         #region FromAsync
 
-#if !NO_TPL
 
         #region Func
 
@@ -1344,7 +1341,7 @@ namespace System.Reactive.Linq
 
         #endregion
 
-#endif
+
 
         #endregion
 

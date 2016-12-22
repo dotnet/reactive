@@ -313,12 +313,10 @@ namespace System.Reactive.Linq
 
         #region * Awaiter *
 
-#if HAS_AWAIT
         AsyncSubject<TSource> GetAwaiter<TSource>(IObservable<TSource> source);
         AsyncSubject<TSource> GetAwaiter<TSource>(IConnectableObservable<TSource> source);
         AsyncSubject<TSource> RunAsync<TSource>(IObservable<TSource> source, CancellationToken cancellationToken);
         AsyncSubject<TSource> RunAsync<TSource>(IConnectableObservable<TSource> source, CancellationToken cancellationToken);
-#endif
 
         #endregion
 

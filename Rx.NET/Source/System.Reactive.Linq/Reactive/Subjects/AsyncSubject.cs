@@ -14,10 +14,7 @@ namespace System.Reactive.Subjects
     /// The last value before the OnCompleted notification, or the error received through OnError, is sent to all subscribed observers.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
-    public sealed class AsyncSubject<T> : SubjectBase<T>, IDisposable
-#if HAS_AWAIT
-        , INotifyCompletion
-#endif
+    public sealed class AsyncSubject<T> : SubjectBase<T>, IDisposable, INotifyCompletion
     {
         #region Fields
 
@@ -270,7 +267,6 @@ namespace System.Reactive.Subjects
 
         #region Await support
 
-#if HAS_AWAIT
         /// <summary>
         /// Gets an awaitable object for the current AsyncSubject.
         /// </summary>
@@ -292,7 +288,6 @@ namespace System.Reactive.Subjects
 
             OnCompleted(continuation, true);
         }
-#endif
 
         private void OnCompleted(Action continuation, bool originalContext)
         {
@@ -304,20 +299,14 @@ namespace System.Reactive.Subjects
 
         class AwaitObserver : IObserver<T>
         {
-#if HAS_AWAIT
             private readonly SynchronizationContext _context;
-#endif
             private readonly Action _callback;
 
             public AwaitObserver(Action callback, bool originalContext)
             {
-#if HAS_AWAIT
                 if (originalContext)
                     _context = SynchronizationContext.Current;
-#else
-                System.Diagnostics.Debug.Assert(!originalContext);
-#endif
-
+                
                 _callback = callback;
             }
 
@@ -337,7 +326,6 @@ namespace System.Reactive.Subjects
 
             private void InvokeOnOriginalContext()
             {
-#if HAS_AWAIT
                 if (_context != null)
                 {
                     //
@@ -350,7 +338,6 @@ namespace System.Reactive.Subjects
                     _context.Post(c => ((Action)c)(), _callback);
                 }
                 else
-#endif
                 {
                     _callback();
                 }
