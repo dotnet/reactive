@@ -110,4 +110,10 @@
     <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
     <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
   </ItemGroup>
+  <!-- Workaround for https://github.com/Microsoft/msbuild/issues/1474 -->
+  <Target Name="AdjustReferringTargetFrameworkForUAP" BeforeTargets="GetTargetFrameworkProperties">
+    <PropertyGroup Condition="'$(ReferringTargetFramework)' == '.NETCore,Version=v5.0'">
+      <ReferringTargetFramework>UAP,Version=v10.0</ReferringTargetFramework>
+    </PropertyGroup>
+  </Target>
 </Project>

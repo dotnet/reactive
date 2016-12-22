@@ -390,38 +390,19 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Reactive.Testing">
-      <HintPath>..\Microsoft.Reactive.Testing\bin\$(Configuration)\uap10.0\Microsoft.Reactive.Testing.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Core">
-      <HintPath>..\System.Reactive.Core\bin\$(Configuration)\uap10.0\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Experimental">
-      <HintPath>..\System.Reactive.Experimental\bin\$(Configuration)\netstandard1.3\System.Reactive.Experimental.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces">
-      <HintPath>..\System.Reactive.Interfaces\bin\$(Configuration)\netstandard1.0\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq">
-      <HintPath>..\System.Reactive.Linq\bin\$(Configuration)\netstandard1.3\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Observable.Aliases">
-      <HintPath>..\System.Reactive.Observable.Aliases\bin\$(Configuration)\netstandard1.3\System.Reactive.Observable.Aliases.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices">
-      <HintPath>..\System.Reactive.PlatformServices\bin\$(Configuration)\uap10.0\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Providers">
-      <HintPath>..\System.Reactive.Providers\bin\$(Configuration)\netstandard1.3\System.Reactive.Providers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Windows.Threading">
-      <HintPath>..\System.Reactive.Windows.Threading\bin\$(Configuration)\uap10.0\System.Reactive.Windows.Threading.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.WindowsRuntime">
-      <HintPath>..\System.Reactive.WindowsRuntime\bin\$(Configuration)\uap10.0\System.Reactive.WindowsRuntime.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj">
+      <Project>{cb5e4ffa-f510-43f1-b378-b3d7ba7c8396}</Project>
+      <Name>System.Reactive.Observable.Aliases</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj">
+      <Project>{01706a0f-8a63-4fd6-af45-0bc0bed3c0d9}</Project>
+      <Name>System.Reactive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
+      <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>
+      <Name>Microsoft.Reactive.Testing</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
