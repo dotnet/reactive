@@ -34,8 +34,13 @@ New-Item -ItemType Directory -Force -Path $artifacts
 Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
 
-Write-Host "Building $scriptPath\System.Reactive\System.Reactive.csproj" -Foreground Green
+Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
+msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
+
+Write-Host "Building Packages" -Foreground Green
 msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
+msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
+msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
 
 
 if($hasSignClientSecret) {
