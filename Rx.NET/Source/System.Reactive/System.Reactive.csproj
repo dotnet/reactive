@@ -20,18 +20,15 @@
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>Reactive Extensions (Rx) for .NET</Description>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
-    <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
-    <AssemblyVersion>4.0.1000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46</DefineConstants>
-    <AssemblyVersion>4.0.3000.0</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
@@ -39,10 +36,9 @@
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>    
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
-    <AssemblyVersion>4.0.4000.0</AssemblyVersion>    
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\*.cs" />
@@ -51,8 +47,8 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>    
-    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />   
+  <ItemGroup>
+    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Core\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Core\Strings_Core.Generated.cs" />
     <Compile Include="..\System.Reactive.Core\Observable.Extensions.cs" />
@@ -63,14 +59,14 @@
     <EmbeddedResource Include="..\System.Reactive.Linq\**\*.resx" />
     <Compile Include="..\System.Reactive.PlatformServices\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.PlatformServices\Strings_PlatformServices.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />    
+    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />
     <Compile Include="..\System.Reactive.Providers\Reactive\**\*.cs" Exclude="..\System.Reactive.Providers\Reactive\Internal\*.cs" />
     <Compile Include="..\System.Reactive.Providers\Strings_Providers.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />   
-    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />    
+    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />
+    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Experimental\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Experimental\ExperimentalAttribute.cs" />
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
     <None Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
@@ -82,10 +78,10 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="NETStandard.Library" Version="1.6.1" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
-    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />    
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">    
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
