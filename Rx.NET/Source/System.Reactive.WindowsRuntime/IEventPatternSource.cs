@@ -12,6 +12,7 @@ namespace System.Reactive
     /// </summary>
     /// <typeparam name="TSender">Sender type.</typeparam>
     /// <typeparam name="TEventArgs">Event arguments type.</typeparam>
+    [CLSCompliant(false)]
     public interface IEventPatternSource<TSender, TEventArgs>
     {
         /// <summary>

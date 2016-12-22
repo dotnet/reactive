@@ -12,6 +12,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Provides a set of extension methods for scheduling actions performed through observable sequences on UI dispatchers.
     /// </summary>
+    [CLSCompliant(false)]
     public static class DispatcherObservable
     {
         #region ObserveOn[Dispatcher]

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="**\*.cs" />
     <EmbeddedResource Include="**\*.resx" />
+    <EmbeddedResource Include="Properties\*.xml" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>

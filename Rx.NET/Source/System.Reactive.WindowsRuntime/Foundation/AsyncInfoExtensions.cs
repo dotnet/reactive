@@ -14,6 +14,7 @@ namespace System.Reactive.Windows.Foundation
     /// <summary>
     /// Provides conversions from Windows Runtime asynchronous actions and operations to observable sequences.
     /// </summary>
+    [CLSCompliant(false)]
     public static class AsyncInfoObservableExtensions
     {
         #region IAsyncAction and IAsyncActionWithProgress

@@ -16,6 +16,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Provides a set of extension methods to expose observable sequences as Windows Runtime asynchronous actions and operations.
     /// </summary>
+    [CLSCompliant(false)]
     public static class AsyncInfoObservable
     {
         #region IAsyncAction

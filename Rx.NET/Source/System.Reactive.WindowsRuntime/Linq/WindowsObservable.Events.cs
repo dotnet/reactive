@@ -11,6 +11,7 @@ namespace System.Reactive.Linq
     /// <summary>
     /// Provides a set of static methods for importing typed events from Windows Runtime APIs.
     /// </summary>
+    [CLSCompliant(false)]
     public static partial class WindowsObservable
     {
         /// <summary>

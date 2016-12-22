@@ -18,6 +18,7 @@ namespace System.Reactive.Concurrency
     /// <remarks>
     /// This scheduler type is typically used indirectly through the <see cref="System.Reactive.Linq.DispatcherObservable.ObserveOnDispatcher&lt;TSource&gt;(IObservable&lt;TSource&gt;)"/> and <see cref="System.Reactive.Linq.DispatcherObservable.SubscribeOnDispatcher&lt;TSource&gt;(IObservable&lt;TSource&gt;)"/> methods that use the current Dispatcher.
     /// </remarks>
+    [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
         private readonly CoreDispatcher _dispatcher;
