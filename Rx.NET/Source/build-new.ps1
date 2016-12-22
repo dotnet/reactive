@@ -5,7 +5,8 @@ $configuration = "Release"
 $isAppVeyor = Test-Path -Path env:\APPVEYOR
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
-$artifacts = Join-Path $scriptPath "artifacts"
+$rootPath = (Resolve-Path .).Path
+$artifacts = Join-Path $rootPath "artifacts"
 
 $signClientSettings = Join-Path (Join-Path (Get-Item $scriptPath).Parent.Parent.FullName "scripts") "SignClientSettings.json"
 $hasSignClientSecret = !([string]::IsNullOrEmpty($env:SignClientSecret))
@@ -28,18 +29,18 @@ if (!(Test-Path .\nuget.exe)) {
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
 
-New-Item -ItemType Directory -Force -Path .\artifacts
+New-Item -ItemType Directory -Force -Path $artifacts
 
 Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
 
 Write-Host "Building $scriptPath\System.Reactive\System.Reactive.csproj" -Foreground Green
-msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=.\artifacts
+msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
 
 
 if($hasSignClientSecret) {
   Write-Host "Signing Packages" -Foreground Green
-  $nupgks = ls .\artifacts\*React*.nupkg | Select -ExpandProperty FullName
+  $nupgks = ls $artifacts\*React*.nupkg | Select -ExpandProperty FullName
 
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
