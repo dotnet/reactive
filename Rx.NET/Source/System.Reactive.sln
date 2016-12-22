@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26014.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive", "System.Reactive\System.Reactive.csproj", "{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Reactive.Testing", "Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj", "{73078FB5-6038-4674-B4C4-32FD81B88055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}.Release|x64.Build.0 = Release|x64
 		{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}.Release|x86.ActiveCfg = Release|x86
 		{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}.Release|x86.Build.0 = Release|x86
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|x64.ActiveCfg = Debug|x64
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|x64.Build.0 = Debug|x64
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|x86.ActiveCfg = Debug|x86
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Debug|x86.Build.0 = Debug|x86
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|x64.ActiveCfg = Release|x64
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|x64.Build.0 = Release|x64
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|x86.ActiveCfg = Release|x86
+		{73078FB5-6038-4674-B4C4-32FD81B88055}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

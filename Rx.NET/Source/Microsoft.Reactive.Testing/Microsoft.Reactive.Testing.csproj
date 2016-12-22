@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFrameworks>net45;net46;netstandard1.3;uap10.0</TargetFrameworks>    
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinClientVersion>2.12</MinClientVersion>
+    <Description>Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.</Description>
+    <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
+    <AssemblyTitle>Microsoft.Reactive.Testing - Testing Helper Library</AssemblyTitle>
+    <Authors>.NET Foundation and Contributors</Authors>
+    <DefineConstants>$(DefineConstants);PLATFORM_DOTNET;XUNIT_VISIBILITY_INTERNAL</DefineConstants>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Product>Microsoft.Reactive.Testing ($(TargetFramework))</Product>
+    <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
+    <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
+    <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
+    <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <IncludeSymbols>true</IncludeSymbols>
+    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
+    <AssemblyVersion>4.0.3000.0</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
+    <AssemblyVersion>4.0.1000.0</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46</DefineConstants>
+    <AssemblyVersion>4.0.3000.0</AssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>    
+    <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
+    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
+    <AssemblyVersion>4.0.4000.0</AssemblyVersion>    
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" />
+    <EmbeddedResource Include="**\*.resx" />
+    <EmbeddedResource Include="Properties\*.xml" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.assert.source" Version="2.2.0-beta4-build3444" />    
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+</Project>
