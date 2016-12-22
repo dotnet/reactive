@@ -25,11 +25,8 @@ namespace System.Reactive.Concurrency
             get
             {
                 return new DispatcherScheduler(
-#if USE_SL_DISPATCHER
-                    System.Windows.Deployment.Current.Dispatcher
-#else
+
                     System.Windows.Threading.Dispatcher.CurrentDispatcher
-#endif
                 );
             }
         }
@@ -41,23 +38,18 @@ namespace System.Reactive.Concurrency
         {
             get
             {
-#if USE_SL_DISPATCHER
-                return new DispatcherScheduler(System.Windows.Deployment.Current.Dispatcher);
-#else
                 var dispatcher = System.Windows.Threading.Dispatcher.FromThread(Thread.CurrentThread);
                 if (dispatcher == null)
                     throw new InvalidOperationException(Strings_WindowsThreading.NO_DISPATCHER_CURRENT_THREAD);
 
                 return new DispatcherScheduler(dispatcher);
-#endif
+
             }
         }
 
         System.Windows.Threading.Dispatcher _dispatcher;
-
-#if HAS_DISPATCHER_PRIORITY
         System.Windows.Threading.DispatcherPriority _priority;
-#endif
+
 
         /// <summary>
         /// Constructs a DispatcherScheduler that schedules units of work on the given <see cref="System.Windows.Threading.Dispatcher"/>.
@@ -70,12 +62,10 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(dispatcher));
 
             _dispatcher = dispatcher;
-#if HAS_DISPATCHER_PRIORITY
             _priority = Windows.Threading.DispatcherPriority.Normal;
-#endif
-        }
 
-#if HAS_DISPATCHER_PRIORITY
+        }
+        
         /// <summary>
         /// Constructs a DispatcherScheduler that schedules units of work on the given <see cref="System.Windows.Threading.Dispatcher"/> at the given priority.
         /// </summary>
@@ -90,7 +80,7 @@ namespace System.Reactive.Concurrency
             _dispatcher = dispatcher;
             _priority = priority;
         }
-#endif
+
 
         /// <summary>
         /// Gets the <see cref="System.Windows.Threading.Dispatcher"/> associated with the DispatcherScheduler.
@@ -99,8 +89,7 @@ namespace System.Reactive.Concurrency
         {
             get { return _dispatcher; }
         }
-
-#if HAS_DISPATCHER_PRIORITY
+        
         /// <summary>
         /// Gets the priority at which work items will be dispatched.
         /// </summary>
@@ -108,7 +97,7 @@ namespace System.Reactive.Concurrency
         {
             get { return _priority; }
         }
-#endif
+
 
         /// <summary>
         /// Schedules an action to be executed on the dispatcher.
@@ -131,9 +120,7 @@ namespace System.Reactive.Concurrency
                     if (!d.IsDisposed)
                         d.Disposable = action(this, state);
                 })
-#if HAS_DISPATCHER_PRIORITY
                 , _priority
-#endif
             );
 
             return d;
@@ -160,11 +147,7 @@ namespace System.Reactive.Concurrency
             var d = new MultipleAssignmentDisposable();
 
             var timer = new System.Windows.Threading.DispatcherTimer(
-#if HAS_DISPATCHER_PRIORITY
                 _priority, _dispatcher
-#elif DESKTOPCLR40 // BACKWARDS COMPATIBILITY with v1.x
-                System.Windows.Threading.DispatcherPriority.Background, _dispatcher
-#endif
             );
 
             timer.Tick += (s, e) =>
@@ -218,11 +201,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             var timer = new System.Windows.Threading.DispatcherTimer(
-#if HAS_DISPATCHER_PRIORITY
                 _priority, _dispatcher
-#elif DESKTOPCLR40 // BACKWARDS COMPATIBILITY with v1.x
-                System.Windows.Threading.DispatcherPriority.Background, _dispatcher
-#endif
             );
 
             var state1 = state;
