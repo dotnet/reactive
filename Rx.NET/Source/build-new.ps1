@@ -76,11 +76,12 @@ Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
 Write-Host "Running .NET Core App 1.0 Tests" -Foreground Green
-#dotnet vstest "$testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll" 
+dotnet vstest "$testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll" 
 
 Write-Host "Running .NET 4.6 Tests" -Foreground Green
 #.\packages\xunit.runner.console\tools\xunit.console.exe "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" 
 
+exit
 
 # Execute OpenCover with a target of "dotnet test"
 #& $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"vstest $testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll --TestCaseFilter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
