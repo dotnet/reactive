@@ -39,7 +39,7 @@
     </PackageReference>
     <!-- https://github.com/NuGet/Home/issues/4143 
      <PackageReference Include="xunit.assert.source" Version="2.2.0-beta4-build3444" /> -->
-    <PackageReference Include="xunit.assert" Version="2.2.0-beta4-build3465" />
+    <PackageReference Include="xunit.assert" Version="2.2.0-beta4-build3466" />
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>
