@@ -190,7 +190,7 @@ namespace System.Linq
                                          {
                                              if (t.IsFaulted)
                                              {
-                                                 observer.OnError(t.Exception);
+                                                 observer.OnError(t.Exception.InnerExceptions.Single());
                                                  e.Dispose();
                                              }
                                              else if (t.IsCanceled)
