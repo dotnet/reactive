@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Threading;
+
 namespace System.Reactive.Disposables
 {
     /// <summary>
@@ -9,9 +11,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SerialDisposable : ICancelable
     {
-        private readonly object _gate = new object();
-        private IDisposable _current;
-        private bool _disposed;
+        private ISerialCancelable _current = new ActiveSerialDisposable();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.SerialDisposable"/> class.
@@ -23,16 +23,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get
-            {
-                lock (_gate)
-                {
-                    return _disposed;
-                }
-            }
-        }
+        public bool IsDisposed => _current.IsDisposed;
 
         /// <summary>
         /// Gets or sets the underlying disposable.
@@ -40,29 +31,8 @@ namespace System.Reactive.Disposables
         /// <remarks>If the SerialDisposable has already been disposed, assignment to this property causes immediate disposal of the given disposable object. Assigning this property disposes the previous disposable object.</remarks>
         public IDisposable Disposable
         {
-            get
-            {
-                return _current;
-            }
-
-            set
-            {
-                var shouldDispose = false;
-                var old = default(IDisposable);
-                lock (_gate)
-                {
-                    shouldDispose = _disposed;
-                    if (!shouldDispose)
-                    {
-                        old = _current;
-                        _current = value;
-                    }
-                }
-                if (old != null)
-                    old.Dispose();
-                if (shouldDispose && value != null)
-                    value.Dispose();
-            }
+            get { return _current.Disposable; }
+            set { _current.Disposable = value; }
         }
 
         /// <summary>
@@ -70,20 +40,66 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var old = default(IDisposable);
+            var old = Interlocked.Exchange(ref _current, DisposedSerialDisposable.Instance);
+            old.Dispose();
+        }
 
-            lock (_gate)
+        /// <summary>
+        /// Private interface to allow substitution of two implementations based on the state of the serial disposable.
+        /// </summary>
+        private interface ISerialCancelable : ICancelable
+        {
+            IDisposable Disposable { get; set; }
+        }
+        
+        /// <summary>
+        /// Internal implementation of a <see cref="SerialDisposable"/> that has been disposed.
+        /// </summary>
+        /// <remarks>
+        /// Is a singleton implementation as it does not maintain any state.
+        /// </remarks>
+        private sealed class DisposedSerialDisposable : ISerialCancelable
+        {
+            public static readonly DisposedSerialDisposable Instance = new DisposedSerialDisposable();
+
+            private DisposedSerialDisposable()
+            { }
+
+            public bool IsDisposed => true;
+
+            public IDisposable Disposable
             {
-                if (!_disposed)
+                get { return null; }
+                set { value?.Dispose(); }
+            }
+
+            public void Dispose()
+            { }
+        }
+
+        /// <summary>
+        /// Internal implementation of a <see cref="SerialDisposable"/> that is still active.
+        /// </summary>
+        private sealed class ActiveSerialDisposable : ISerialCancelable
+        {
+            private IDisposable _disposable;
+
+            public bool IsDisposed => false;
+
+            public IDisposable Disposable
+            {
+                get { return _disposable; }
+                set
                 {
-                    _disposed = true;
-                    old = _current;
-                    _current = null;
+                    var old = Interlocked.Exchange(ref _disposable, value);
+                    old?.Dispose();
                 }
             }
 
-            if (old != null)
-                old.Dispose();
+            public void Dispose()
+            {
+                _disposable?.Dispose();
+            }
         }
     }
 }
