@@ -49,7 +49,7 @@ namespace System.Reactive.Linq
                 var cancellable = new CancellationDisposable();
 
                 var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
+                var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, Stubs.Nop);
                 var subscription = taskObservable.Subscribe(taskCompletionObserver);
 
                 return StableCompositeDisposable.Create(cancellable, subscription);
