@@ -90,7 +90,7 @@ namespace System.Linq
                     try
                     {
                         // Short circuit and don't even call MoveNexCore
-                        cancellationToken.ThrowIfCancellationRequested();
+                        cts.Token.ThrowIfCancellationRequested();
 
                         var result = await MoveNextCore(cts.Token)
                                          .ConfigureAwait(false);
@@ -101,8 +101,16 @@ namespace System.Linq
                     }
                     catch
                     {
+                        // preserve this before calling Dispose, which will always set IsCancellationRequested
+                        var cxlRequested = cts.IsCancellationRequested;
+
                         currentIsInvalid = true;
                         Dispose();
+
+                        // throw a cxl if it was from an incoming request
+                        if(cxlRequested)
+                            cts.Token.ThrowIfCancellationRequested();
+
                         throw;
                     }
                 }
