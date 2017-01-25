@@ -40,6 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private object _gate;
 
             private IDisposable _sourceSubscription;
+            private IDisposable _periodicSchedulerSubscription;
 
             private bool _hasValue;
             private TSource _value;
@@ -166,6 +167,7 @@ namespace System.Reactive.Linq.ObservableImpl
         class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Sample<TSource> _parent;
+            private IDisposable _periodicSchedulerSubscription;
 
             public _(Sample<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -236,6 +238,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     _atEnd = true;
+                    Tick();
                     _sourceSubscription.Dispose();
                 }
             }
