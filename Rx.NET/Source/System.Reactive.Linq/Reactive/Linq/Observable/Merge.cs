@@ -194,7 +194,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _isStopped;
             private SingleAssignmentDisposable _sourceSubscription;
             private CompositeDisposable _group;
-            private int _activeCount = 0;
+            private int _activeCount;
+            private int _wip;
 
             public IDisposable Run()
             {
@@ -215,14 +216,15 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
+                    _q.Enqueue(value);
                     if (_activeCount < _parent._maxConcurrent)
                     {
                         _activeCount++;
-                        Subscribe(value);
+                        Subscribe();
                     }
-                    else
-                        _q.Enqueue(value);
+
                 }
+
             }
 
             public void OnError(Exception error)
@@ -251,11 +253,26 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            private void Subscribe(IObservable<TSource> innerSource)
+            private void Subscribe()
             {
-                var subscription = new SingleAssignmentDisposable();
-                _group.Add(subscription);
-                subscription.Disposable = innerSource.SubscribeSafe(new Iter(this, subscription));
+                if (_wip++ == 0)
+                {
+                    for (;;)
+                    {
+                        if (_q.Count != 0)
+                        {
+                            IObservable<TSource> innerSource = _q.Dequeue();
+
+                            var subscription = new SingleAssignmentDisposable();
+                            _group.Add(subscription);
+                            subscription.Disposable = innerSource.SubscribeSafe(new Iter(this, subscription));
+                        }
+                        if (--_wip == 0)
+                        {
+                            return;
+                        }
+                    }
+                }
             }
 
             class Iter : IObserver<TSource>
@@ -291,8 +308,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_parent._q.Count > 0)
                         {
-                            var s = _parent._q.Dequeue();
-                            _parent.Subscribe(s);
+                            _parent.Subscribe();
                         }
                         else
                         {
