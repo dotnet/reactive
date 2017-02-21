@@ -119,7 +119,7 @@ namespace System.Linq
 
                 if (tcs != null)
                 {
-                    tcs.SetResult(false);
+                    tcs.TrySetResult(false);
                 }
             }
 
@@ -140,7 +140,7 @@ namespace System.Linq
 
                 if (tcs != null)
                 {
-                    tcs.SetException(error);
+                    tcs.TrySetException(error);
                 }
             }
 
@@ -165,7 +165,7 @@ namespace System.Linq
 
                 if (tcs != null)
                 {
-                    tcs.SetResult(true);
+                    tcs.TrySetResult(true);
                 }
             }
         }
