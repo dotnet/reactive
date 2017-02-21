@@ -33,26 +33,23 @@ namespace System.Reactive
             return _items[left].CompareTo(_items[right]) < 0;
         }
 
-        private void Percolate(int index)
+        private int Percolate(int index)
         {
             if (index >= _size || index < 0)
-                return;
+                return index;
             var parent = (index - 1) / 2;
             if (parent < 0 || parent == index)
-                return;
+                return index;
 
             if (IsHigherPriority(index, parent))
             {
                 var temp = _items[index];
                 _items[index] = _items[parent];
                 _items[parent] = temp;
-                Percolate(parent);
+                return Percolate(parent);
             }
-        }
 
-        private void Heapify()
-        {
-            Heapify(0);
+            return index;
         }
 
         private void Heapify(int index)
@@ -91,7 +88,8 @@ namespace System.Reactive
         {
             _items[index] = _items[--_size];
             _items[_size] = default(IndexedItem);
-            Heapify();
+            if (Percolate(index) == index)
+                Heapify(index);
             if (_size < _items.Length / 4)
             {
                 var temp = _items;
