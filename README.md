@@ -76,7 +76,7 @@ Interactive Extensions
 -----------------------
 * __Ix.NET__: *(included in this repository)* The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable<T>.
 * [IxJS](https://github.com/ReactiveX/IxJS): An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.
-* [IxCpp](https://github.com/Reactive-Extensions/RxCpp): An implantation of LINQ for Native Developers in C++
+* [IxCpp](https://github.com/Reactive-Extensions/RxCpp): An implementation of LINQ for Native Developers in C++
 
 Applications
 -------------
