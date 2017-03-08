@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
@@ -14,15 +14,14 @@
     <Product>Microsoft.Reactive.Testing ($(TargetFramework))</Product>
     <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <IncludeSymbols>true</IncludeSymbols>
     <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
     <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
@@ -31,15 +30,9 @@
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
-    <EmbeddedResource Include="**\*.resx" />
     <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <!-- https://github.com/NuGet/Home/issues/4143 
-     <PackageReference Include="xunit.assert.source" Version="2.2.0-beta4-build3444" /> -->
-    <PackageReference Include="xunit.assert" Version="2.2.0-beta4-build3466" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
+    <PackageReference Include="xunit.assert.source" Version="2.2.0" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>

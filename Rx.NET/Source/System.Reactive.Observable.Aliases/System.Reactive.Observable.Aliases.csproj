@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
     <Product>System.Reactive.Observable.Aliases ($(TargetFramework))</Product>
@@ -12,15 +12,14 @@
     <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <IncludeSymbols>true</IncludeSymbols>
     <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
@@ -29,11 +28,7 @@
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
-    <EmbeddedResource Include="**\*.resx" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>

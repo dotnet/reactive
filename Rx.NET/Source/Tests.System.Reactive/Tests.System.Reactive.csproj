@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
     <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
@@ -16,28 +16,24 @@
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;DESKTOPCLR;HAS_WINFORMS;HAS_DISPATCHER</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
     <Content Include="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="**\*.resx" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
-    <PackageReference Include="Microsoft.NETCore.App" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20161216-01" />
-    <PackageReference Include="xunit" Version="2.2.0-beta4-build3466" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta4-build1209" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>

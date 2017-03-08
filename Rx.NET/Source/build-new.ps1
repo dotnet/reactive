@@ -26,7 +26,7 @@ if (!(Test-Path .\nuget.exe)) {
 
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
-.\nuget.exe install -excludeversion OpenCover -Version 4.6.589 -outputdirectory packages
+#.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
@@ -34,19 +34,19 @@ if (!(Test-Path .\nuget.exe)) {
 New-Item -ItemType Directory -Force -Path $artifacts
 
 Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
-# msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
-msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
-msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:restore /p:Configuration=$configuration 
-msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:restore /p:Configuration=$configuration 
-msbuild "$scriptPath\Tests.System.Reactive\Tests.System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /t:restore /p:Configuration=$configuration 
+# msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
+# msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:restore /p:Configuration=$configuration 
+# msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:restore /p:Configuration=$configuration 
+# msbuild "$scriptPath\Tests.System.Reactive\Tests.System.Reactive.csproj" /t:restore /p:Configuration=$configuration 
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
 
 Write-Host "Building Packages" -Foreground Green
-msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
-msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
-msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts
+msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 
 
 if($hasSignClientSecret) {
@@ -79,12 +79,12 @@ Write-Host "Running .NET Core App 1.0 Tests" -Foreground Green
 dotnet vstest "$testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll" 
 
 Write-Host "Running .NET 4.6 Tests" -Foreground Green
-#.\packages\xunit.runner.console\tools\xunit.console.exe "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" 
+.\packages\xunit.runner.console\tools\xunit.console.exe "$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll" 
 
 exit
 
 # Execute OpenCover with a target of "dotnet test"
-#& $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"vstest $testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll --TestCaseFilter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
+& $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"vstest $testDirectory\bin\$configuration\netcoreapp1.0\Tests.System.Reactive.dll --TestCaseFilter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
 & $openCoverPath -register:user -oldStyle -mergeoutput -target:$xUnitConsolePath -targetdir:"$testDirectory" -targetargs:"$testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll -notrait SkipCI=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
 
 if ($LastExitCode -ne 0) { 

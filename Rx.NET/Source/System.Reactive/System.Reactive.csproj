@@ -1,25 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
     <Product>System.Reactive ($(TargetFramework))</Product>
     <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
     <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <IncludeSymbols>true</IncludeSymbols>
     <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>Reactive Extensions (Rx) for .NET</Description>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
@@ -31,23 +29,14 @@
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
-    <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets</LanguageTargets>
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
-    <EmbeddedResource Include="**\*.resx" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1119-1208">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectCapability Include="ShowFilesOutsideOfProject" />
     <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Core\Reactive\**\*.cs" />
     <Compile Include="..\System.Reactive.Core\Strings_Core.Generated.cs" />
@@ -75,8 +64,7 @@
     <None Include="..\System.Reactive.Windows.Threading\**\*.resx" />
     <None Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">
-    <PackageReference Include="NETStandard.Library" Version="1.6.1" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">    
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
@@ -95,8 +83,6 @@
     <Compile Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
@@ -106,10 +92,5 @@
     <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
     <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
   </ItemGroup>
-  <!-- Workaround for https://github.com/Microsoft/msbuild/issues/1474 -->
-  <Target Name="AdjustReferringTargetFrameworkForUAP" BeforeTargets="GetTargetFrameworkProperties">
-    <PropertyGroup Condition="'$(ReferringTargetFramework)' == '.NETCore,Version=v5.0'">
-      <ReferringTargetFramework>UAP,Version=v10.0</ReferringTargetFramework>
-    </PropertyGroup>
-  </Target>
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>
