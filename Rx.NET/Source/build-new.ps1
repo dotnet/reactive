@@ -82,19 +82,11 @@ else
 {
 	$dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
 	#.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="c:\program files\dotnet\dotnet.exe" /targetworkingdir=".\Tests.System.Reactive" /targetarguments="test --no-build --filter:SkipCI!=true" /output=.\testResults.dvcr /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters
-	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyze /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test --no-build --filter:SkipCI!=true" /ReportType=DetailedXML /output=$outputFile /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /HideAutoProperties
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyze /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test --no-build --filter:SkipCI!=true" /ReportType=DetailedXML /output="$outputFile" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /HideAutoProperties /ReturnTargetExitCode
 
-	 .\packages\ReportGenerator\tools\ReportGenerator.exe -reports:"$outputFile" -targetdir:"$outputPath"
-     &$outPutPath/index.htm
+	.\packages\ReportGenerator\tools\ReportGenerator.exe -reports:"$outputFile" -targetdir:"$outputPath"
+    &"$outPutPath/index.htm"
 }
-
-
-
-# We bail out here because OpenCover isn't properly reporting coverage 
-exit
-
-# Execute OpenCover with a target of "dotnet test"
-# & $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test --no-build --filter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
 
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with tests" -Foreground Red
@@ -102,6 +94,14 @@ if ($LastExitCode -ne 0) {
       $host.SetShouldExit($LastExitCode)
     }  
 }
+
+# We bail out here because OpenCover isn't properly reporting coverage 
+exit
+
+# Execute OpenCover with a target of "dotnet test"
+# & $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test --no-build --filter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
+
+
 
 # Either display or publish the results
 if ($env:CI -eq 'True')
