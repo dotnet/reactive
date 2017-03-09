@@ -16,6 +16,7 @@ $signClientAppPath = Join-Path (Join-Path (Join-Path .\Packages "SignClient") "T
 #remove any old coverage file
 md -Force $outputLocation | Out-Null
 $outputPath = (Resolve-Path $outputLocation).Path
+$outputFileDotCover = Join-Path $outputPath -childpath 'coverage-rx.dcvr'
 $outputFile = Join-Path $outputPath -childpath 'coverage-rx.xml'
 Remove-Item $outputPath -Force -Recurse
 md -Force $outputLocation | Out-Null
@@ -26,8 +27,9 @@ if (!(Test-Path .\nuget.exe)) {
 
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
-#.\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
+.\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
 
 New-Item -ItemType Directory -Force -Path $artifacts
@@ -70,13 +72,29 @@ if($hasSignClientSecret) {
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
-dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build --filter:SkipCI!=true
+# OpenCover and Coveralls isn't working currently. So run tests on CI and coverage with JetBrains locally
+
+if($env:CI -eq 'True')
+{
+	dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build --filter:SkipCI!=true
+}
+else
+{
+	$dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
+	#.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="c:\program files\dotnet\dotnet.exe" /targetworkingdir=".\Tests.System.Reactive" /targetarguments="test --no-build --filter:SkipCI!=true" /output=.\testResults.dvcr /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyze /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test --no-build --filter:SkipCI!=true" /ReportType=DetailedXML /output=$outputFile /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /HideAutoProperties
+
+	 .\packages\ReportGenerator\tools\ReportGenerator.exe -reports:"$outputFile" -targetdir:"$outputPath"
+     &$outPutPath/index.htm
+}
+
+
 
 # We bail out here because OpenCover isn't properly reporting coverage 
 exit
 
 # Execute OpenCover with a target of "dotnet test"
-& $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test --no-build --filter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
+# & $openCoverPath -register:user -oldStyle -mergeoutput -target:dotnet.exe -targetdir:"$testDirectory" -targetargs:"test --no-build --filter:SkipCI!=true" -output:"$outputFile" -skipautoprops -returntargetcode -excludebyattribute:"System.Diagnostics.DebuggerNonUserCodeAttribute;System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" -nodefaultfilters  -hideskipped:All -filter:"+[*]* -[*.Tests]* -[Tests.*]* -[xunit.*]* -[*]Xunit.*" 
 
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with tests" -Foreground Red
