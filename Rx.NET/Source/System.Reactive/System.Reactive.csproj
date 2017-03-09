@@ -35,34 +35,13 @@
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectCapability Include="ShowFilesOutsideOfProject" />
-    <Compile Include="..\System.Reactive.Interfaces\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Core\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Core\Strings_Core.Generated.cs" />
-    <Compile Include="..\System.Reactive.Core\Observable.Extensions.cs" />
-    <Compile Include="..\System.Reactive.Core\Observer.Extensions.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Core\**\*.resx" />
-    <Compile Include="..\System.Reactive.Linq\Reactive\**\*.cs" Exclude="..\System.Reactive.Linq\Reactive\Internal\Observers.cs;..\System.Reactive.Linq\Reactive\Observer.Extensions.cs;..\System.Reactive.Linq\Reactive\Internal\Producer.cs;..\System.Reactive.Linq\Reactive\Internal\ImmutableList.cs" />
-    <Compile Include="..\System.Reactive.Linq\Strings_Linq.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Linq\**\*.resx" />
-    <Compile Include="..\System.Reactive.PlatformServices\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.PlatformServices\Strings_PlatformServices.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.PlatformServices\**\*.resx" />
-    <Compile Include="..\System.Reactive.Providers\Reactive\**\*.cs" Exclude="..\System.Reactive.Providers\Reactive\Internal\*.cs" />
-    <Compile Include="..\System.Reactive.Providers\Strings_Providers.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Providers\**\*.resx" />
-    <Compile Include="..\System.Reactive.Debugger\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Experimental\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Experimental\ExperimentalAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
-    <None Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
-    <None Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
-    <None Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
-    <None Include="..\System.Reactive.Windows.Threading\**\*.resx" />
-    <None Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
+  <ItemGroup>    
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'uap10.0' ">    
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
@@ -75,22 +54,42 @@
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
+  
+  <!-- UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">  
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform " Version="5.2.2" />
-    <Compile Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
-    <Compile Include="..\System.Reactive.WindowsRuntime\*.cs;..\System.Reactive.WindowsRuntime\Foundation\**\*.cs;..\System.Reactive.WindowsRuntime\Linq\**\*.cs" />
+    <Compile Include="Platforms\UWP\**\*.cs" />
   </ItemGroup>
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'uap10.0'">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+    <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_WindowsThreading.resx" />
+    <EmbeddedResource Update="Platforms\Windows\Strings_WindowsThreading.resx" Generator="ResXFileCodeGenerator" CustomToolNamespace="System.Reactive" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+  
+  <!-- Desktop -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
-    <Compile Include="..\System.Reactive.Runtime.Remoting\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Windows.Forms\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Windows.Threading\Reactive\**\*.cs" />
-    <Compile Include="..\System.Reactive.Windows.Threading\Strings_WindowsThreading.Generated.cs" />
-    <EmbeddedResource Include="..\System.Reactive.Windows.Threading\**\*.resx" />
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>
+  
+  <!-- Designer support -->
+  <ItemGroup>
+    <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
+    <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="true" AutoGen="true" DependentUpon="CombineLatest.Generated.tt" />
+    <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="true" AutoGen="true" DependentUpon="Zip.Generated.tt" />
+    <Compile Update="Strings_Core.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Core.resx" />
+    <Compile Update="Strings_Linq.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Linq.resx" />
+    <Compile Update="Strings_PlatformServices.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_PlatformServices.resx" />
+    <Compile Update="Strings_Providers.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Providers.resx" />
+    <EmbeddedResource Update="Strings_Core.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Core.Designer.cs" />
+    <EmbeddedResource Update="Strings_Linq.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Linq.Designer.cs" />
+    <EmbeddedResource Update="Strings_PlatformServices.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <EmbeddedResource Update="Strings_Providers.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Providers.Designer.cs" />    
   </ItemGroup>
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>
