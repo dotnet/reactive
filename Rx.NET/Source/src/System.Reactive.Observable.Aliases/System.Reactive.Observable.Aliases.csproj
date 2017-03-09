@@ -1,34 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-    <Product>System.Reactive.Observable.Aliases ($(TargetFramework))</Product>
-    <Title>Reactive Extensions - Aliases</Title>
-    <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <MinClientVersion>2.12</MinClientVersion>
-    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
-    <Authors>.NET Foundation and Contributors</Authors>
-    <AssemblyOriginatorKeyFile>../../ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>    
+    <Title>Reactive Extensions - Aliases</Title>    
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
-    <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
-    <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
-    <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
+    <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>    
+  </PropertyGroup>  
+  <ItemGroup>    
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>

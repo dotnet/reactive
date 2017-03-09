@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\GlobalAssemblyVersion.cs" Link="GlobalAssemblyVersion.cs" />
+  </ItemGroup>
+</Project>

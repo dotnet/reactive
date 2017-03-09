@@ -16,11 +16,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{870348D0-C0A0-4352-8A02-E00AB0CCB919}"
 	ProjectSection(SolutionItems) = preProject
 		build-new.ps1 = build-new.ps1
+		Directory.build.targets = Directory.build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D324579D-CBE6-4867-8980-D7842C7C45A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F39260-B8F8-4FCB-9679-0ED917A22BDF}"
+	ProjectSection(SolutionItems) = preProject
+		facades\Directory.build.props = facades\Directory.build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Interfaces", "facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj", "{3AAA3D7D-1342-48F2-9562-52E4ABAF69E1}"
 EndProject
