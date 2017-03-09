@@ -42,7 +42,6 @@
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.INotifySystemClockChanged))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.IPlatformEnlightenmentProvider))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.ISystemClock))]
-[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.ITaskServices))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.PeriodicTimerSystemClockMonitor))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.PlatformEnlightenmentProvider))]
 [assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.SystemClock))]

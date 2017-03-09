@@ -10,7 +10,7 @@ using System.Reflection;
 [assembly: AssemblyVersion("3.0.2000.0")]
 #elif NETSTANDARD1_3 || NET46
 [assembly: AssemblyVersion("3.0.3000.0")]
-#elif NETSTANDARD1_4 || UAP10_0 || NETCORE50 || NET461
+#elif NETSTANDARD1_4 || UAP10_0 || WINDOWS_UWP || NETCORE50 || NET461
 [assembly: AssemblyVersion("3.0.4000.0")]
 #elif NETSTANDARD1_5 || NET462
 [assembly: AssemblyVersion("3.0.5000.0")]

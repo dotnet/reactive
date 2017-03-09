@@ -409,6 +409,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
+    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\ReactiveX.snk</AssemblyOriginatorKeyFile>
