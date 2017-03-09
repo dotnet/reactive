@@ -75,7 +75,7 @@ if($hasSignClientSecret) {
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
 
-dotnet.exe test "$testDirectory\Tests.System.Reactive.csproj" --no-build --filter:SkipCI!=true
+dotnet.exe test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build --filter:SkipCI!=true
 
 exit
 
