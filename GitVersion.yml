@@ -29,4 +29,4 @@ branches:
     mode: ContinuousDeployment
   develop:
     mode: ContinuousDeployment
-    tag: dev
+    tag: alpha
