@@ -7,7 +7,7 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../ReactiveX.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>

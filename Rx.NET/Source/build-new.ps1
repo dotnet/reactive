@@ -41,9 +41,9 @@ Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
 
 Write-Host "Building Packages" -Foreground Green
-msbuild "$scriptPath\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+msbuild "$scriptPath\src\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true /p:NuGetBuildTasksPackTargets="workaround"
+msbuild "$scriptPath\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+msbuild "$scriptPath\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 
 
 if($hasSignClientSecret) {
@@ -70,7 +70,7 @@ if($hasSignClientSecret) {
 
 
 Write-Host "Running tests" -Foreground Green
-$testDirectory = Join-Path $scriptPath "Tests.System.Reactive"
+$testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 # OpenCover and Coveralls isn't working currently. So run tests on CI and coverage with JetBrains locally
 

@@ -1,24 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-    <Product>System.Reactive.Observable.Aliases ($(TargetFramework))</Product>
-    <Title>Reactive Extensions - Aliases</Title>
-    <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinClientVersion>2.12</MinClientVersion>
-    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Description>Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.</Description>
+    <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
+    <AssemblyTitle>Microsoft.Reactive.Testing - Testing Helper Library</AssemblyTitle>
     <Authors>.NET Foundation and Contributors</Authors>
-    <AssemblyOriginatorKeyFile>../ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
+    <DefineConstants>$(DefineConstants);PLATFORM_DOTNET;XUNIT_VISIBILITY_INTERNAL</DefineConstants>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Product>Microsoft.Reactive.Testing ($(TargetFramework))</Product>
+    <AssemblyOriginatorKeyFile>../../ReactiveX.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>
+    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
@@ -28,7 +30,9 @@
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\*.xml" />
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="all" />
+    <PackageReference Include="xunit.assert.source" Version="2.2.0" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>
