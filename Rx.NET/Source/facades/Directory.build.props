@@ -1,4 +1,5 @@
 <Project>
+  <Import Project="..\Directory.build.props" />
   <PropertyGroup>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
