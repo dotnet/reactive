@@ -15,7 +15,8 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <DefaultLanguage>en-US</DefaultLanguage>    
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
   </PropertyGroup>
     
 </Project>
