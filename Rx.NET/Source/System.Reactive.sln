@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{870348D0-C0A0-4352-8A02-E00AB0CCB919}"
 	ProjectSection(SolutionItems) = preProject
 		build-new.ps1 = build-new.ps1
+		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
 	EndProjectSection
 EndProject
@@ -26,25 +27,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F3
 		facades\Directory.build.props = facades\Directory.build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Interfaces", "facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj", "{3AAA3D7D-1342-48F2-9562-52E4ABAF69E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Interfaces", "facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj", "{3AAA3D7D-1342-48F2-9562-52E4ABAF69E1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Core", "facades\System.Reactive.Core\System.Reactive.Core.csproj", "{296C5140-7945-439D-B090-AB6250DEEE51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Experimental", "facades\System.Reactive.Experimental\System.Reactive.Experimental.csproj", "{3EEB4F40-002A-4F72-9DDF-8E6FE3847B82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Experimental", "facades\System.Reactive.Experimental\System.Reactive.Experimental.csproj", "{3EEB4F40-002A-4F72-9DDF-8E6FE3847B82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Linq", "facades\System.Reactive.Linq\System.Reactive.Linq.csproj", "{68B8D2CD-BB8F-4033-90B0-C282304C2B2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Linq", "facades\System.Reactive.Linq\System.Reactive.Linq.csproj", "{68B8D2CD-BB8F-4033-90B0-C282304C2B2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.PlatformServices", "facades\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj", "{BA291C8D-1ECB-4C87-9C50-10474F3A15A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.PlatformServices", "facades\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj", "{BA291C8D-1ECB-4C87-9C50-10474F3A15A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Providers", "facades\System.Reactive.Providers\System.Reactive.Providers.csproj", "{79C55CAE-E1B8-4808-9970-73D893627B99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Providers", "facades\System.Reactive.Providers\System.Reactive.Providers.csproj", "{79C55CAE-E1B8-4808-9970-73D893627B99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Runtime.Remoting", "facades\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj", "{D2303705-01E6-404E-9034-F9CCE502DF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Runtime.Remoting", "facades\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj", "{D2303705-01E6-404E-9034-F9CCE502DF00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Windows.Forms", "facades\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj", "{15585B53-9F85-4439-9D80-D827F1AD91E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Windows.Forms", "facades\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj", "{15585B53-9F85-4439-9D80-D827F1AD91E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.Windows.Threading", "facades\System.Reactive.Windows.Threading\System.Reactive.Windows.Threading.csproj", "{4DCC120A-FD19-409B-A0E6-A049C4D0B663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Windows.Threading", "facades\System.Reactive.Windows.Threading\System.Reactive.Windows.Threading.csproj", "{4DCC120A-FD19-409B-A0E6-A049C4D0B663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Reactive.WindowsRuntime", "facades\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj", "{E9BB350B-D4EF-42E1-B4E2-14058AC6809B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.WindowsRuntime", "facades\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj", "{E9BB350B-D4EF-42E1-B4E2-14058AC6809B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
