@@ -18,5 +18,13 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
   </PropertyGroup>
-    
+  
+    <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="All" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.1.0-b412" PrivateAssets="All" /> 
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.1.0-b412" /> 
+  </ItemGroup>
+  
+  
 </Project>

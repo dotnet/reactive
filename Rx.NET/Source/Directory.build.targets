@@ -1,9 +1,10 @@
 <Project>  
-
+  <!-- This has to be set in targets as the default props will overwrite -->
   <PropertyGroup>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   
+  <!-- This props all need to be set in targets as they depend on the values set earlier -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
   </PropertyGroup>
@@ -19,12 +20,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0' or '$(TargetFramework)' == 'netcoreapp1.1'">
     <DefineConstants>$(DefineConstants);NO_EVENTARGS_CONSTRAINT;HAS_WINRT;PREFER_ASYNC;USE_TIMER_SELF_ROOT;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>    
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="All" />
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-
+  
   <!-- UWP -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform " Version="5.2.2" />
