@@ -17,6 +17,7 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
+    <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
   
     <ItemGroup>
