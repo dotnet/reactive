@@ -17,10 +17,5 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>    
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="All" />
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
-  
+    
 </Project>
