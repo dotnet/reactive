@@ -35,7 +35,7 @@ if (!(Test-Path .\nuget.exe)) {
 
 
 #update version
-# .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
+.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
