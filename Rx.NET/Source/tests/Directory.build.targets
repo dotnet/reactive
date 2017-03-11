@@ -1,3 +1,6 @@
 <Project>  
   <Import Project="..\Directory.build.targets" />
+  <PropertyGroup>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
 </Project>
