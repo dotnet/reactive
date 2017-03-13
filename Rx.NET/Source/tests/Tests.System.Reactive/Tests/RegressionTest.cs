@@ -18,7 +18,7 @@ namespace ReactiveTests.Tests
     
     public class RegressionTest : ReactiveTest
     {
-#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46
+#if NET45 || NET46
         [Fact]
         public void Bug_ConcurrentMerge()
         {

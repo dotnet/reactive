@@ -380,7 +380,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new CompositeDisposable().Remove(null));
         }
 
-#if DESKTOPCLR40 || DESKTOPCLR45 || DESKTOPCLR46 
+#if NET45 || NET46 
         [Fact]
         public void CancellationDisposable_Ctor_Null()
         {
