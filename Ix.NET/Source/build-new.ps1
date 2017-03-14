@@ -27,7 +27,7 @@ $msbuild = Get-ItemProperty "hklm:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\14.0
 $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 # get tools
-# .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
+.\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
 .\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion OpenCover -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
@@ -35,9 +35,9 @@ $msbuildExe = Join-Path $msbuild.MSBuildToolsPath "msbuild.exe"
 
 
 #update version
-# .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
+.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver /updateassemblyinfo
 
-# $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
+$versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json 
 
 $version = $versionObj.MajorMinorPatch
 $tag = $versionObj.PreReleaseLabel
