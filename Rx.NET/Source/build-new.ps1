@@ -95,7 +95,24 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 if($env:CI -eq 'True')
 {
-	dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build --filter:SkipCI!=true
+	# Run .NET Core only for now until perf improves on the runner for .net desktop
+	dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build -f netcoreapp1.0 --filter:SkipCI!=true
+
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
+
+	# run .net desktop tests
+	& $xUnitConsolePath $testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll -notrait SkipCI=true
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
 }
 else
 {
@@ -127,12 +144,7 @@ else
     &"$outPutPath/index.htm"
 }
 
-if ($LastExitCode -ne 0) { 
-    Write-Host "Error with tests" -Foreground Red
-    if($isAppVeyor) {
-      $host.SetShouldExit($LastExitCode)
-    }  
-}
+
 
 # We bail out here because OpenCover isn't properly reporting coverage 
 exit
