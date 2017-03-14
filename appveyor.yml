@@ -1,5 +1,8 @@
 image: Visual Studio 2015
 
+init:
+  - git config --global core.autocrlf input
+
 environment:
   COVERALLS_REPO_TOKEN:
     secure: DOSlU041NY0WKjv9njrNqj14CLEzrF4ogZsbvqIXnNLd492oNlQf4dD5yr7TSK/S
@@ -18,7 +21,7 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
-- ps: .\build.ps1
+  - ps: ls C:\projects\rx-net\Rx.NET\
 
 test: off
 artifacts:

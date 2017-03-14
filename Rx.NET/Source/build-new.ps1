@@ -1,3 +1,8 @@
+if ($env:APPVEYOR){
+    echo "APPVEYOR_BUILD_FOLDER: $env:APPVEYOR_BUILD_FOLDER"
+		ls $env:APPVEYOR_BUILD_FOLDER\Rx.NET\
+}
+
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
