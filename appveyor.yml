@@ -21,7 +21,8 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
-- ps: .\build.ps1
+# - ps: .\build.ps1
+  - ps: ls C:\projects\rx-net-la3i\Rx.NET\
 
 test: off
 artifacts:
