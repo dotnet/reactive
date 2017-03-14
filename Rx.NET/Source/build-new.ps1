@@ -16,6 +16,8 @@ $signClientAppPath = Join-Path (Join-Path (Join-Path .\Packages "SignClient") "T
 #remove any old coverage file
 md -Force $outputLocation | Out-Null
 $outputPath = (Resolve-Path $outputLocation).Path
+$outputFileDotCover1 = Join-Path $outputPath -childpath 'coverage-rx1.dcvr'
+$outputFileDotCover2 = Join-Path $outputPath -childpath 'coverage-rx2.dcvr'
 $outputFileDotCover = Join-Path $outputPath -childpath 'coverage-rx.dcvr'
 $outputFile = Join-Path $outputPath -childpath 'coverage-rx.xml'
 Remove-Item $outputPath -Force -Recurse
@@ -28,7 +30,8 @@ if (!(Test-Path .\nuget.exe)) {
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-# .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
+#.\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
+.\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
@@ -92,24 +95,56 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 if($env:CI -eq 'True')
 {
-	dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build --filter:SkipCI!=true
+	# Run .NET Core only for now until perf improves on the runner for .net desktop
+	dotnet test "$testDirectory\Tests.System.Reactive.csproj" -c $configuration --no-build -f netcoreapp1.0 --filter:SkipCI!=true
+
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
+
+	# run .net desktop tests
+	& $xUnitConsolePath $testDirectory\bin\$configuration\net46\Tests.System.Reactive.dll -notrait SkipCI=true
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
 }
 else
 {
 	$dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-	#.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="c:\program files\dotnet\dotnet.exe" /targetworkingdir=".\Tests.System.Reactive" /targetarguments="test --no-build --filter:SkipCI!=true" /output=.\testResults.dvcr /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters
-	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyze /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --filter:SkipCI!=true" /ReportType=DetailedXML /output="$outputFile" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /HideAutoProperties /ReturnTargetExitCode
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build -f netcoreapp1.0 --filter:SkipCI!=true" /output="$outputFileDotCover1" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
+
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
+
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$xUnitConsolePath" /targetworkingdir="$testDirectory\bin\$configuration\net46\" /targetarguments="Tests.System.Reactive.dll -notrait SkipCI=true" /output="$outputFileDotCover2" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
+
+	if ($LastExitCode -ne 0) { 
+		Write-Host "Error with tests" -Foreground Red
+		if($isAppVeyor) {
+		  $host.SetShouldExit($LastExitCode)
+		}  
+	}
+
+	#.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyze /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --filter:SkipCI!=true" /ReportType=DetailedXML /output="$outputFile" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /HideAutoProperties /ReturnTargetExitCode
+
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe merge /Source="$outputFileDotCover1;$outputFileDotCover2" /Output="$outputFileDotCover"
+	.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe report /Source="$outputFileDotCover" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
 
 	.\packages\ReportGenerator\tools\ReportGenerator.exe -reports:"$outputFile" -targetdir:"$outputPath"
     &"$outPutPath/index.htm"
 }
 
-if ($LastExitCode -ne 0) { 
-    Write-Host "Error with tests" -Foreground Red
-    if($isAppVeyor) {
-      $host.SetShouldExit($LastExitCode)
-    }  
-}
+
 
 # We bail out here because OpenCover isn't properly reporting coverage 
 exit
