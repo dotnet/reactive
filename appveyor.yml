@@ -18,6 +18,7 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
+- git config core.ignorecase false
 - ps: .\build.ps1
 
 test: off
