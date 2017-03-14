@@ -21,7 +21,7 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
-# - ps: .\build.ps1
+  - git version
   - ps: ls C:\projects\rx-net-la3i\Rx.NET\
 
 test: off
