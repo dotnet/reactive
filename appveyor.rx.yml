@@ -26,7 +26,7 @@ nuget:
   disable_publish_on_pr: true
 
 build_script:
-  - ps: .\Rx.NET\source\build-new.ps1
+  - ps: .\Rx.NET\Source\build-new.ps1
 
 test: off
 artifacts:
