@@ -6,6 +6,9 @@ environment:
   SignClientSecret:
     secure: oR9TMOkkvP/prmXyMT+p6mQhjyw3JDLbuywezBABvXzkvNsdNZgi2yPaHhgaofrb
 
+init:
+  - git config --global core.autocrlf input
+
 skip_branch_with_pr: true
 
 skip_tags: true
