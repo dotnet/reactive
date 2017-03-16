@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive", "src\System.Reactive\System.Reactive.csproj", "{01706A0F-8A63-4FD6-AF45-0BC0BED3C0D9}"
 EndProject
@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Facades", "Facades", "{A0F39260-B8F8-4FCB-9679-0ED917A22BDF}"
 	ProjectSection(SolutionItems) = preProject
 		facades\Directory.build.props = facades\Directory.build.props
+		facades\System.Reactive.Compatibility.nuspec = facades\System.Reactive.Compatibility.nuspec
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Reactive.Interfaces", "facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj", "{3AAA3D7D-1342-48F2-9562-52E4ABAF69E1}"

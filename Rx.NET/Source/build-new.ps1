@@ -40,6 +40,8 @@ if (!(Test-Path .\nuget.exe)) {
 
 #update version
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
+$versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json
+$packageSemVer = $versionObj.FullSemVer
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
@@ -65,6 +67,7 @@ msbuild "$scriptPath\facades\System.Reactive.Windows.Forms\System.Reactive.Windo
 msbuild "$scriptPath\facades\System.Reactive.Windows.Threading\System.Reactive.Windows.Threading.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true /p:NuGetBuildTasksPackTargets="workaround"
 msbuild "$scriptPath\facades\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true /p:NuGetBuildTasksPackTargets="workaround"
 
+.\nuget.exe pack "$scriptPath\facades\System.Reactive.Compatibility.nuspec" -Version $packageSemVer -MinClientVersion 2.12 -nopackageanalysis -outputdirectory "$artifacts" 
 
 if($hasSignClientSecret) {
   Write-Host "Signing Packages" -Foreground Green
