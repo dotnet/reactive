@@ -130,7 +130,7 @@ if ($LastExitCode -ne 0) {
 # Either display or publish the results
 if ($env:CI -eq 'True')
 {
-  .\packages\coveralls.io.dotcover\tools\coveralls.net.exe  -p DotCover "$outputFile" --full-sources
+  .\packages\coveralls.io.dotcover\tools\coveralls.net.exe  -p DotCover "$outputFile"
 }
 else
 {
