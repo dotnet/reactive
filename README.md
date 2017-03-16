@@ -15,7 +15,7 @@ Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
 
-### <span id="v4.0">v4.0 changes</span>
+### v4.0 changes
 Due to the [overwhelming](https://github.com/Reactive-Extensions/Rx.NET/issues/299) [pain](https://github.com/Reactive-Extensions/Rx.NET/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/Reactive-Extensions/Rx.NET/issues/205), we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
 
 #### Supported Platforms
