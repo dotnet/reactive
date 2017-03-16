@@ -88,11 +88,16 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.devices" Version="2.2.0-rc1" />
+    <PackageReference Include="FluentAssertions" Version="4.19.2" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="..\ReactiveX.snk">
       <Link>ReactiveX.snk</Link>
     </None>
-    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Tests\AssertEx.cs">

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Providers Library used to build query providers and express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
+    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\System.Interactive.Providers.rd.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+  </ItemGroup>
+
+
+</Project>
