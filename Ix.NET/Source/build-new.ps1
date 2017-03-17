@@ -24,7 +24,7 @@ Remove-Item $outputPath -Force -Recurse
 md -Force $outputLocation | Out-Null
 
 if (!(Test-Path .\nuget.exe)) {
-    wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
+    wget "https://dist.nuget.org/win-x86-commandline/v4.0.0/nuget.exe" -outfile .\nuget.exe
 }
 
 # get tools
@@ -45,7 +45,7 @@ New-Item -ItemType Directory -Force -Path $artifacts
 
 
 Write-Host "Restoring packages for $scriptPath\Ix.NET.sln" -Foreground Green
-msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
+.\nuget.exe restore "$scriptPath\Ix.NET.sln" 
 
 Write-Host "Building $scriptPath\Ix.NET.sln" -Foreground Green
 msbuild "$scriptPath\Ix.NET.sln" /m /t:build /p:Configuration=$configuration 
