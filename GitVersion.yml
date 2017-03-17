@@ -1,4 +1,3 @@
-assembly-versioning-scheme: None
 mode: ContinuousDeployment
 tag-prefix: '[vV]'
 continuous-delivery-fallback-tag: ci

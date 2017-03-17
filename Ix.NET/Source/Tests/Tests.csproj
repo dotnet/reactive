@@ -23,4 +23,14 @@
     <PackageReference Include="FluentAssertions" Version="4.19.2 " />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AsyncQueryableTests.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryableTests.Generated.cs" />
+    <Compile Update="AsyncQueryableTests.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableTests.Generated.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
 </Project>

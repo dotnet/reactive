@@ -1,6 +1,6 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(ProjectDir)\..\packages\Ix-Async.1.2.5\lib\net45\System.Interactive.Async.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Interactive.Async\bin\$(Configuration)\net45\System.Interactive.Async.dll" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Threading" #>

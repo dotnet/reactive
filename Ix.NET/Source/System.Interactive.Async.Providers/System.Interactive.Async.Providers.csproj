@@ -19,4 +19,12 @@
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AsyncQueryable.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryable.Generated.cs" />
+    <Compile Update="AsyncQueryable.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryable.Generated.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
 </Project>
