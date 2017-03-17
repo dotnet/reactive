@@ -88,7 +88,7 @@ $testDirectory = Join-Path $scriptPath "Tests"
 
 # Run .NET Core only for now until perf improves on the runner for .net desktop
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build -f netcoreapp1.0 --filter:SkipCI!=true" /output="$outputFileDotCover1" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build -f netcoreapp1.0" /output="$outputFileDotCover1" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
@@ -98,7 +98,7 @@ if ($LastExitCode -ne 0) {
 }
 
 # run .net desktop tests
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$xUnitConsolePath" /targetworkingdir="$testDirectory\bin\$configuration\net46\" /targetarguments="Tests.System.Reactive.dll -notrait SkipCI=true" /output="$outputFileDotCover2" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$xUnitConsolePath" /targetworkingdir="$testDirectory\bin\$configuration\net461\" /targetarguments="Tests.dll" /output="$outputFileDotCover2" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
