@@ -1,0 +1,10 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <CopyReferencedAssembliesToWorkspace>True</CopyReferencedAssembliesToWorkspace>
+    <HiddenComponentWarnings>
+      <Value>AllowPartiallyTrustedCallers</Value>
+      <Value>CopyReferencedAssembliesToWorkspaceIsOn</Value>
+    </HiddenComponentWarnings>
+    <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
+  </Settings>
+</ProjectConfiguration>

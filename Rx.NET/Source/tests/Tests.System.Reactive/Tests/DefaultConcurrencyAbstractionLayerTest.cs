@@ -23,51 +23,7 @@ namespace ReactiveTests.Tests
         {
             if (_domain == null)
             {
-                var cur = AppDomain.CurrentDomain.BaseDirectory;
-                var sub = Path.Combine(cur, "NoCAL");
-
-                if (!Directory.Exists(sub))
-                {
-                    Directory.CreateDirectory(sub);
-                }
-
-                //
-                // We want to replace the files to make the debugging experience
-                // better. If the directory already exists, a recompilation does
-                // not get rid of it. At some point, we should revisit this whole
-                // directory creation during the test run and try to do away with
-                // it by making it part of the build process.
-                //
-
-                foreach (var file in Directory.GetFiles(cur))
-                {
-                    var fn = Path.GetFileName(file);
-                    if (!file.Contains("PlatformServices"))
-                    {
-                        var dest = Path.Combine(sub, fn);
-
-                        if (File.Exists(dest))
-                        {
-                            try
-                            {
-                                File.Delete(dest);
-                            }
-                            catch (UnauthorizedAccessException)
-                            {
-                                //
-                                // File in use; expected after first pass.
-                                //
-                            }
-                        }
-
-                        if (!File.Exists(dest))
-                        {
-                            File.Copy(Path.Combine(cur, fn), Path.Combine(sub, fn));
-                        }
-                    }
-                }
-
-                _domain = AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = sub });
+                _domain = AppDomain.CreateDomain("Default_CAL", null, new AppDomainSetup { ApplicationBase = AppDomain.CurrentDomain.BaseDirectory });
             }
         }
 

@@ -19,6 +19,7 @@
     <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+    <GetVersion Condition=" '$(NCrunch)' != '' ">false</GetVersion>
   </PropertyGroup>
   
   <ItemGroup>
