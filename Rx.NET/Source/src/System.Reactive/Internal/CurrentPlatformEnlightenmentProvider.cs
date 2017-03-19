@@ -85,18 +85,16 @@ namespace System.Reactive.PlatformServices
                 //
                 if (Debugger.IsAttached)
                 {
-#if NETCF35
-                    var name = "System.Reactive.Linq.QueryDebugger, System.Reactive.Debugger";
-#else
+
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
                     var ifType = t.GetTypeInfo();
 #else
                     var ifType = t;
 #endif
                     var asm = new AssemblyName(ifType.Assembly.FullName);
-                    asm.Name = "System.Reactive.Debugger";
+                    asm.Name = "System.Reactive";
                     var name = "System.Reactive.Linq.QueryDebugger, " + asm.FullName;
-#endif
+
                     var dbg = Type.GetType(name, false);
                     if (dbg != null)
                         return (T)(object)Activator.CreateInstance(dbg);
