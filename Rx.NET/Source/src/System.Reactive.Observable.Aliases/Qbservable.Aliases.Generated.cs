@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
+using System.Diagnostics.CodeAnalysis;
 #if !NO_TPL
 using System.Threading.Tasks;
 #endif
@@ -26,6 +27,7 @@ using System.Runtime.Remoting.Lifetime;
 
 namespace System.Reactive.Linq
 {
+    [ExcludeFromCodeCoverage]
     public static partial class QbservableAliases
     {
         /// <summary>
