@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(NCrunch)' == '1'">netstandard1.3;net45;net46</TargetFrameworks>
-    <TargetFrameworks Condition="'$(NCrunch)' != '1'">netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
