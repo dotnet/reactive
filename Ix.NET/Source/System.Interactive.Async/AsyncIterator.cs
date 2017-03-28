@@ -84,7 +84,6 @@ namespace System.Linq
                     return false;
                 }
 
-                using (cancellationToken.Register(Dispose))
                 using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
                 {
                     try
@@ -95,6 +94,7 @@ namespace System.Linq
                         var result = await MoveNextCore(cts.Token)
                                          .ConfigureAwait(false);
 
+                        cancellationToken.ThrowIfCancellationRequested();
                         currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 
                         return result;
