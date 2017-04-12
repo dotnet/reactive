@@ -31,4 +31,19 @@
     <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.0.2" />
   </ItemGroup>
   
+    <!-- Workaround -->
+  <Target Name="GetPackagingOutputs" />
+   <PropertyGroup>
+    <GitVersionTaskVersion>4.0.0-beta0011</GitVersionTaskVersion>
+  </PropertyGroup>
+
+  <!-- https://github.com/NuGet/Home/issues/4337 -->
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
+    <Import Project="$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets"
+            Condition="Exists('$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets')" />
+  </ImportGroup>
+  <Target Name="FixupVersion"
+      BeforeTargets="_GenerateRestoreProjectSpec"
+      DependsOnTargets="GetVersion"
+      Condition=" '$(GitVersion_Task_targets_Imported)' == 'True' " />
 </Project>

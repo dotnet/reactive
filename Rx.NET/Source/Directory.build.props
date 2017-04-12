@@ -35,4 +35,17 @@
   <!-- Workaround -->
   <Target Name="GetPackagingOutputs" />
   
+  <!-- https://github.com/NuGet/Home/issues/4337 -->
+ <PropertyGroup>
+    <GitVersionTaskVersion>4.0.0-beta0011</GitVersionTaskVersion>
+  </PropertyGroup>
+
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
+    <Import Project="$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets"
+            Condition="Exists('$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets')" />
+  </ImportGroup>
+  <Target Name="FixupVersion"
+      BeforeTargets="_GenerateRestoreProjectSpec"
+      DependsOnTargets="GetVersion"
+      Condition=" '$(GitVersion_Task_targets_Imported)' == 'True' " />
 </Project>
