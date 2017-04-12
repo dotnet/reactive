@@ -32,4 +32,7 @@
     <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.0.2" />
   </ItemGroup>
   
+  <!-- Workaround -->
+  <Target Name="GetPackagingOutputs" />
+  
 </Project>
