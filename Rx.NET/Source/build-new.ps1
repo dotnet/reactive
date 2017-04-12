@@ -48,6 +48,9 @@ New-Item -ItemType Directory -Force -Path $artifacts
 Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
 
+# Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
+msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
+
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
 msbuild "$scriptPath\System.Reactive.sln" /m /t:build /p:Configuration=$configuration 
 

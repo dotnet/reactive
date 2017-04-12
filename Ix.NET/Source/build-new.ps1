@@ -45,7 +45,9 @@ New-Item -ItemType Directory -Force -Path $artifacts
 
 
 Write-Host "Restoring packages for $scriptPath\Ix.NET.sln" -Foreground Green
-.\nuget.exe restore "$scriptPath\Ix.NET.sln" 
+msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
+# Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
+msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
 
 Write-Host "Building $scriptPath\Ix.NET.sln" -Foreground Green
 msbuild "$scriptPath\Ix.NET.sln" /m /t:build /p:Configuration=$configuration 
