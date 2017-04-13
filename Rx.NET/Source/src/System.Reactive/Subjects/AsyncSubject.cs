@@ -297,7 +297,7 @@ namespace System.Reactive.Subjects
             this.Subscribe/*Unsafe*/(new AwaitObserver(continuation, originalContext));
         }
 
-        class AwaitObserver : IObserver<T>
+        private sealed class AwaitObserver : IObserver<T>
         {
             private readonly SynchronizationContext _context;
             private readonly Action _callback;

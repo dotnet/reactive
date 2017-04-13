@@ -19,7 +19,7 @@ namespace Tests.System.Reactive.Tests
         }
 
 #pragma warning disable 1998
-        private async Observable<int> ManOrBoy_Return()
+        private async ITaskObservable<int> ManOrBoy_Return()
         {
             return 42;
         }
@@ -32,7 +32,7 @@ namespace Tests.System.Reactive.Tests
         }
 
 #pragma warning disable 1998
-        private async Observable<int> ManOrBoy_Throw(int n, int d)
+        private async ITaskObservable<int> ManOrBoy_Throw(int n, int d)
         {
             return n / d;
         }
@@ -45,7 +45,7 @@ namespace Tests.System.Reactive.Tests
         }
 
 #pragma warning disable 1998
-        private async Observable<int> ManOrBoy_Basics()
+        private async ITaskObservable<int> ManOrBoy_Basics()
         {
             var res = 0;
 
