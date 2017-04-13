@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if STRESS && !NO_TPL && !NO_TASK_DELAY
+#if STRESS && !NO_TPL
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
