@@ -138,7 +138,6 @@ namespace ReactiveTests.Tests
             Assert.True(flag);
         }
 
-#if !SILVERLIGHTM7
 #if !NO_THREAD
         static IEnumerable<int> Bug_1333_Enumerable(AsyncSubject<IDisposable> s, Semaphore sema)
         {
@@ -148,8 +147,7 @@ namespace ReactiveTests.Tests
             t.Join();
             yield return 1;
         }
-#endif
-#if !NO_THREAD
+
         [Fact]
         //[Timeout(1000)]
         public void Bug_1333()
@@ -161,7 +159,6 @@ namespace ReactiveTests.Tests
             d.OnCompleted();
             sema.WaitOne();
         }
-#endif
 #endif
 
         [Fact]

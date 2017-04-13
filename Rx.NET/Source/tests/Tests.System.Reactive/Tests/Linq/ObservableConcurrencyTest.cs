@@ -22,16 +22,12 @@ using ReactiveTests.Dummies;
 using System.Windows.Forms;
 #endif
 
-#if SILVERLIGHT && !SILVERLIGHTM7
-using Microsoft.Silverlight.Testing;
-#endif
-
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableConcurrencyTest : TestBase
     {
-#region + ObserveOn +
+        #region + ObserveOn +
 
         [Fact]
         public void ObserveOn_ArgumentChecking()
@@ -226,9 +222,9 @@ namespace ReactiveTests.Tests
             });
         }
 #endif
-#endregion
+        #endregion
 
-#region SubscribeOn
+        #region SubscribeOn
 
         [Fact]
         public void SubscribeOn_ArgumentChecking()
@@ -426,9 +422,9 @@ namespace ReactiveTests.Tests
             });
         }
 #endif
-#endregion
+        #endregion
 
-#region + Synchronize +
+        #region + Synchronize +
 
         [Fact]
         public void Synchronize_ArgumentChecking()
@@ -539,13 +535,13 @@ namespace ReactiveTests.Tests
             Assert.Equal(Enumerable.Range(0, 200).Sum(), sum);
         }
 #endif
-#endregion
+        #endregion
     }
 
-    
+
     public class ObservableConcurrencyReactiveTest : ReactiveTest
     {
-#region + ObserveOn +
+        #region + ObserveOn +
 
         [Fact]
         public void ObserveOn_Scheduler_ArgumentChecking()
@@ -560,7 +556,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
-                OnNext( 90, 1),
+                OnNext(90, 1),
                 OnNext(120, 2),
                 OnNext(230, 3),
                 OnNext(240, 4),
@@ -969,9 +965,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
-#region SubscribeOn
+        #region SubscribeOn
 
         [Fact]
         public void SubscribeOn_Scheduler_ArgumentChecking()
@@ -1105,9 +1101,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
-#region |> Helpers <|
+        #region |> Helpers <|
 
 #if !NO_SYNCCTX
         class MyCtx : SynchronizationContext
@@ -1126,6 +1122,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
     }
 }

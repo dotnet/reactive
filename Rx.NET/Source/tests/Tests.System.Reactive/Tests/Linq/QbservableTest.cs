@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 #define DEBUG // so that the Debug.WriteLines aren't compiled out
 
-#if !SILVERLIGHTM7
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -2150,5 +2148,3 @@ namespace ReactiveTests.Tests
         }
     }
 }
-
-#endif
