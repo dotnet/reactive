@@ -240,11 +240,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), null, Scheduler.Default));
             ReactiveAssert.Throws</**/ArgumentNullException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "foo", default(IScheduler)));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E1"));
-#if !NO_EVENTARGS_CONSTRAINT
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E2"));
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E3"));
-            ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E4"));
-#endif
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E5"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "E6"));
             ReactiveAssert.Throws<InvalidOperationException>(() => Observable.FromEventPattern(new FromEventPattern_ArgCheck(), "foo"));
@@ -340,11 +335,7 @@ namespace ReactiveTests.Tests
             var e1 = new CancelEventArgs();
             var e2 = new CancelEventArgs();
 
-#if !NO_EVENTARGS_CONSTRAINT
-            var lst = new List<EventPattern<EventArgs>>();
-#else
             var lst = new List<EventPattern<object>>();
-#endif
             using (es.Subscribe(e => lst.Add(e)))
             {
                 src.OnE2(e1);
