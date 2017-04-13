@@ -231,7 +231,6 @@ namespace System.Reactive.Concurrency
             return StableCompositeDisposable.Create(d, gate);
         }
 
-#if !NO_STOPWATCH
         /// <summary>
         /// Starts a new stopwatch object.
         /// </summary>
@@ -245,7 +244,6 @@ namespace System.Reactive.Concurrency
             //
             return new StopwatchImpl();
         }
-#endif
 
         /// <summary>
         /// Ends the thread associated with this scheduler. All remaining work in the scheduler queue is abandoned.

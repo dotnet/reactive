@@ -177,7 +177,6 @@ namespace System.Reactive.Concurrency
             }
         }
 
-#if !NO_STOPWATCH
         /// <summary>
         /// Starts a new stopwatch object.
         /// </summary>
@@ -191,6 +190,5 @@ namespace System.Reactive.Concurrency
             //
             return new StopwatchImpl();
         }
-#endif
     }
 }

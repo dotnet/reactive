@@ -94,7 +94,6 @@ namespace System.Reactive.Concurrency
             return s_newBackgroundThread.Value.ScheduleLongRunning(state, action);
         }
 
-#if !NO_STOPWATCH
         /// <summary>
         /// Starts a new stopwatch object.
         /// </summary>
@@ -108,7 +107,6 @@ namespace System.Reactive.Concurrency
             //
             return new StopwatchImpl();
         }
-#endif
 
         /// <summary>
         /// Schedules a periodic piece of work, using a System.Threading.Timer object.

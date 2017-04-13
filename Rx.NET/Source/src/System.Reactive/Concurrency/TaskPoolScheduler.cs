@@ -150,7 +150,6 @@ namespace System.Reactive.Concurrency
             return d;
         }
 
-#if !NO_STOPWATCH
         /// <summary>
         /// Gets a new stopwatch ob ject.
         /// </summary>
@@ -164,7 +163,6 @@ namespace System.Reactive.Concurrency
             //
             return new StopwatchImpl();
         }
-#endif
 
         /// <summary>
         /// Schedules a periodic piece of work by running a platform-specific timer to create tasks periodically.

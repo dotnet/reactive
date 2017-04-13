@@ -273,13 +273,11 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !NO_PERF
-#if !NO_STOPWATCH
         [Fact]
         public void Stopwatch()
         {
             StopwatchTest.Run(new EventLoopScheduler());
         }
-#endif
 #endif
 
 #if !NO_CDS

@@ -109,13 +109,11 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !NO_PERF
-#if !NO_STOPWATCH
         [Fact]
         public void Stopwatch()
         {
             StopwatchTest.Run(TaskPoolScheduler.Default);
         }
-#endif
 #endif
 
         [Fact]

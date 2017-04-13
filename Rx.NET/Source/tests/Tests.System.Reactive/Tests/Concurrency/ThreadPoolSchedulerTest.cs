@@ -189,8 +189,6 @@ namespace ReactiveTests.Tests
             Assert.True(n >= 10);
         }
 
-#if !NO_STOPWATCH
-
         [Fact]
         public void Stopwatch()
         {
@@ -204,8 +202,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(s1 > s0);
         }
-
-#endif
 
         [Fact]
         public void Periodic_ArgumentChecking()
