@@ -226,7 +226,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !SILVERLIGHT
         [Fact(Skip ="")]
         public void EventLoop_ScheduleActionDue()
         {
@@ -270,7 +269,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
         }
-#endif
 
 #if !NO_PERF
         [Fact]

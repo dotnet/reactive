@@ -81,8 +81,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !SILVERLIGHT
-
         [Fact(Skip ="")]
         public void CurrentThread_ScheduleActionDue()
         {
@@ -114,7 +112,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
         }
-#endif
 #endif
         [Fact]
         public void CurrentThread_EnsureTrampoline()

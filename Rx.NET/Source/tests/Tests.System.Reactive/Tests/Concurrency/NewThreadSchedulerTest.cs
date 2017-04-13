@@ -44,7 +44,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-#if !SILVERLIGHT
         [Fact(Skip = "")]
         public void NewThread_ScheduleActionDue()
         {
@@ -57,7 +56,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
         }
-#endif
 #endif
 
 #if !NO_PERF

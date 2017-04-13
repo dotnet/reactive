@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if !SILVERLIGHT // MethodAccessException
 using System;
-using System.Threading.Tasks;
 using System.Reactive.Concurrency;
 using System.Reflection;
 using Xunit;
@@ -133,4 +131,3 @@ namespace ReactiveTests.Tests
         }
     }
 }
-#endif

@@ -97,8 +97,7 @@ namespace ReactiveTests.Tests
             Assert.True(ms.Count == 1);
         }
 
-#if !SILVERLIGHT
-        [Fact]        
+        [Fact]
         public void SynchronizationContext_ScheduleActionDue()
         {
             var ms = new MySync();
@@ -112,7 +111,6 @@ namespace ReactiveTests.Tests
             Assert.True(sw.ElapsedMilliseconds > 180, "due " + sw.ElapsedMilliseconds);
             Assert.True(ms.Count == 1);
         }
-#endif
 
         class MySync : SynchronizationContext
         {
