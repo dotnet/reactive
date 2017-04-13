@@ -8,10 +8,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-#if NO_SEMAPHORE
-using System.Reactive.Threading;
-#endif
-
 namespace System.Reactive.Linq.ObservableImpl
 {
     class Delay<TSource> : Producer<TSource>
