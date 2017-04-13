@@ -18,9 +18,7 @@ using System.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
 using System.Diagnostics.CodeAnalysis;
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 #if !NO_REMOTING
 using System.Runtime.Remoting.Lifetime;
 #endif
@@ -2965,7 +2963,6 @@ namespace System.Reactive.Linq
             );
         }
 
-#if !NO_TPL
         /// <summary>
         /// Concatenates all task results, as long as the previous task terminated successfully.
         /// </summary>
@@ -2992,7 +2989,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Determines whether an observable sequence contains a specified element by using the default equality comparer.
@@ -3185,7 +3181,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3218,9 +3213,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3251,9 +3244,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3286,9 +3277,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3319,9 +3308,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3354,9 +3341,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3387,7 +3372,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Returns the elements of the specified sequence or the type parameter's default value in a singleton sequence if the sequence is empty.
@@ -3473,7 +3457,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
         /// </summary>
@@ -3504,9 +3487,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
         /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3539,7 +3520,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
 
         /// <summary>
         /// Time shifts the observable sequence to start propagating notifications at the specified absolute time.
@@ -4769,7 +4749,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
@@ -4798,9 +4777,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
@@ -4833,9 +4810,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
@@ -4866,9 +4841,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
@@ -4903,9 +4876,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
@@ -4935,9 +4906,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
@@ -4969,9 +4938,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
@@ -5005,9 +4972,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
@@ -5043,7 +5008,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Converts an Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -9187,7 +9151,6 @@ namespace System.Reactive.Linq
             );
         }
 
-#if !NO_TPL
         /// <summary>
         /// Merges results from all source tasks into a single observable sequence.
         /// </summary>
@@ -9214,7 +9177,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Merges elements from all of the specified observable sequences into a single observable sequence.
@@ -11891,7 +11853,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11923,9 +11884,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11957,9 +11916,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11991,9 +11948,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support and merges all of the task results into one observable sequence.
         /// </summary>
@@ -12025,9 +11980,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12064,9 +12017,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12103,9 +12054,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12142,9 +12091,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12181,7 +12128,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Determines whether two sequences are equal by comparing the elements pairwise.
@@ -12977,7 +12923,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
@@ -13016,9 +12961,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
@@ -13061,9 +13004,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13112,9 +13053,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13167,9 +13106,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
@@ -13209,9 +13146,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13261,9 +13196,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
@@ -13307,9 +13240,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13363,7 +13294,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Prepends a sequence of values to an observable sequence.
@@ -14174,7 +14104,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Transforms an observable sequence of tasks into an observable sequence 
         /// producing values only from the most recent observable sequence.
@@ -14203,7 +14132,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Synchronizes the observable sequence such that observer notifications cannot be delivered concurrently.
@@ -16433,7 +16361,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is obtained and used through asynchronous methods.
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
@@ -16472,7 +16399,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Filters the elements of an observable sequence based on a predicate.

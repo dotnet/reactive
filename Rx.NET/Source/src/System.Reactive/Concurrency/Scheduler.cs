@@ -117,7 +117,6 @@ namespace System.Reactive.Concurrency
             }
         }
 
-#if !NO_TPL
         private static Lazy<IScheduler> s_taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
 
         /// <summary>
@@ -131,7 +130,6 @@ namespace System.Reactive.Concurrency
                 return s_taskPool.Value;
             }
         }
-#endif
 
         private static IScheduler Initialize(string name)
         {

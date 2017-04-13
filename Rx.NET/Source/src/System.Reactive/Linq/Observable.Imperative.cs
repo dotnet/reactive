@@ -5,10 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
-
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -16,7 +13,6 @@ namespace System.Reactive.Linq
     {
         #region + ForEachAsync +
 
-#if !NO_TPL
         /// <summary>
         /// Invokes an action for each element in the observable sequence, and returns a Task object that will get signaled when the sequence terminates.
         /// </summary>
@@ -96,7 +92,6 @@ namespace System.Reactive.Linq
 
             return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
         }
-#endif
 
         #endregion
 

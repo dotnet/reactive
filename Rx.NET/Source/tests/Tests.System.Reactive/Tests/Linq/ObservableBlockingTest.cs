@@ -10,13 +10,10 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
-
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {

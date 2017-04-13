@@ -5,11 +5,8 @@
 #if !NO_PERF
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-
-#if !NO_TPL
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -22,6 +19,9 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelectorEI;
         private readonly Func<TSource, TCollection, TResult> _resultSelector;
         private readonly Func<TSource, int, TCollection, int, TResult> _resultSelectorI;
+        private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelectorT;
+        private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelectorTI;
+        private readonly Func<TSource, int, TCollection, TResult> _resultSelectorTI;
 
         public SelectMany(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
@@ -51,11 +51,6 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelectorI = resultSelector;
         }
 
-#if !NO_TPL
-        private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelectorT;
-        private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelectorTI;
-        private readonly Func<TSource, int, TCollection, TResult> _resultSelectorTI;
-
         public SelectMany(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             _source = source;
@@ -69,7 +64,6 @@ namespace System.Reactive.Linq.ObservableImpl
             _collectionSelectorTI = collectionSelector;
             _resultSelectorTI = resultSelector;
         }
-#endif
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -85,7 +79,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 setSink(sink);
                 return sink.Run();
             }
-#if !NO_TPL
             else if (_collectionSelectorT != null)
             {
                 var sink = new SelectManyImpl(this, observer, cancel);
@@ -98,7 +91,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 setSink(sink);
                 return sink.Run();
             }
-#endif
             else if (_collectionSelectorE != null)
             {
                 var sink = new NoSelectorImpl(this, observer, cancel);
@@ -586,7 +578,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-#if !NO_TPL
         class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TCollection, TResult> _parent;
@@ -857,7 +848,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-#endif
     }
 
     class SelectMany<TSource, TResult> : Producer<TResult>
@@ -869,6 +859,8 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly Func<IObservable<TResult>> _selectorOnCompleted;
         private readonly Func<TSource, IEnumerable<TResult>> _selectorE;
         private readonly Func<TSource, int, IEnumerable<TResult>> _selectorEI;
+        private readonly Func<TSource, CancellationToken, Task<TResult>> _selectorT;
+        private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selectorTI;
 
         public SelectMany(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {
@@ -910,22 +902,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _selectorEI = selector;
         }
 
-#if !NO_TPL
-        private readonly Func<TSource, CancellationToken, Task<TResult>> _selectorT;
-        private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selectorTI;
-
         public SelectMany(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
             _source = source;
             _selectorT = selector;
         }
-        
+
         public SelectMany(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
         {
             _source = source;
             _selectorTI = selector;
         }
-#endif
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -941,7 +928,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 setSink(sink);
                 return sink.Run();
             }
-#if !NO_TPL
             else if (_selectorT != null)
             {
                 var sink = new SelectManyImpl(this, observer, cancel);
@@ -954,7 +940,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 setSink(sink);
                 return sink.Run();
             }
-#endif
             else if (_selectorE != null)
             {
                 var sink = new NoSelectorImpl(this, observer, cancel);
@@ -1510,7 +1495,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-#if !NO_TPL
         class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TResult> _parent;
@@ -1731,7 +1715,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-#endif
     }
 }
 #endif

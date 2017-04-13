@@ -4,12 +4,9 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-
-#if !NO_TPL
 using System.Reactive.Threading.Tasks; // needed for doc comments
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -813,7 +810,6 @@ namespace System.Reactive.Linq
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task and merges all of the task results into one observable sequence.
         /// </summary>
@@ -893,7 +889,6 @@ namespace System.Reactive.Linq
 
             return s_impl.SelectMany<TSource, TResult>(source, selector);
         }
-#endif
 
         /// <summary>
         /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
@@ -941,7 +936,6 @@ namespace System.Reactive.Linq
             return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -1037,7 +1031,6 @@ namespace System.Reactive.Linq
 
             return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
-#endif
 
         /// <summary>
         /// Projects each notification of an observable sequence to an observable sequence and merges the resulting observable sequences into one observable sequence.

@@ -11,14 +11,11 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
-
-#if !NO_TPL
-using System.Threading;
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {
@@ -13964,7 +13961,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance, ((Func<int, int, int>)null)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, IObservable<int>>.Instance, DummyFunc<int, int, int>.Instance).Subscribe(null));
 
-#if !NO_TPL
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int, int>(DummyFunc<int, Task<int>>.Instance, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, Task<int>>)null, DummyFunc<int, int, int>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany(DummyFunc<int, Task<int>>.Instance, ((Func<int, int, int>)null)));
@@ -13978,7 +13974,6 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => ((IObservable<int>)null).SelectMany<int, int>(DummyFunc<int, CancellationToken, Task<int>>.Instance));
             ReactiveAssert.Throws<ArgumentNullException>(() => DummyObservable<int>.Instance.SelectMany((Func<int, CancellationToken, Task<int>>)null));
-#endif
         }
 
         [Fact]
@@ -16038,8 +16033,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_TPL
-
         [Fact]
         public void SelectMany_Task_ArgumentChecking()
         {
@@ -17839,8 +17832,6 @@ namespace ReactiveTests.Tests
             Assert.Equal(2, n);
             Assert.Equal(0, m);
         }
-
-#endif
 
         #endregion
 

@@ -135,7 +135,6 @@ namespace System
 
         #region Subscribe overloads with CancellationToken
 
-#if !NO_TPL
         /// <summary>
         /// Subscribes an observer to an observable sequence, using a CancellationToken to support unsubscription.
         /// </summary>
@@ -287,7 +286,6 @@ namespace System
                 source.Subscribe(observer);
             }
         }
-#endif
 
         #endregion
 

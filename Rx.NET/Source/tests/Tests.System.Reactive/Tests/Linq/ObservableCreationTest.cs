@@ -12,15 +12,12 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
-using System.Runtime.CompilerServices;
-
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {
@@ -373,8 +370,6 @@ namespace ReactiveTests.Tests
         #endregion
 
         #region - CreateAsync -
-
-#if !NO_TPL
 
         [Fact]
         public void CreateAsync_ArgumentChecking()
@@ -1057,8 +1052,6 @@ namespace ReactiveTests.Tests
             Assert.True(lst.Take(10).SequenceEqual(Enumerable.Repeat(42, 10)));
         }
 
-#endif
-
         #endregion
 
         #region + Defer +
@@ -1193,8 +1186,6 @@ namespace ReactiveTests.Tests
 
         #region - DeferAsync -
 
-#if !NO_TPL
-
         [Fact]
         public void DeferAsync_ArgumentChecking()
         {
@@ -1249,8 +1240,6 @@ namespace ReactiveTests.Tests
                 Assert.False(called);
             }
         }
-
-#endif
 
         #endregion
 
@@ -2457,8 +2446,6 @@ namespace ReactiveTests.Tests
 
         #region - UsingAsync -
 
-#if !NO_TPL
-
         [Fact]
         public void UsingAsync_ArgumentChecking()
         {
@@ -2586,8 +2573,6 @@ namespace ReactiveTests.Tests
                 Assert.False(called, i.ToString());
             }
         }
-
-#endif
 
         #endregion
     }

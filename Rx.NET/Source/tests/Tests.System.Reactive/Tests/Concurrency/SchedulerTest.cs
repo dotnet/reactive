@@ -66,11 +66,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => NewThreadScheduler.Default.Schedule(DateTimeOffset.MaxValue, default(Action)));
-#if !NO_TPL
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => TaskPoolScheduler.Default.Schedule(DateTimeOffset.MaxValue, default(Action)));
-#endif
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(TimeSpan.Zero, default(Action)));
             ReactiveAssert.Throws<ArgumentNullException>(() => DefaultScheduler.Instance.Schedule(DateTimeOffset.MaxValue, default(Action)));
@@ -196,14 +194,12 @@ namespace ReactiveTests.Tests
             }
 #endif
 
-#if !NO_TPL
             // TaskPool
             {
                 var e = new ManualResetEvent(false);
                 Scheduler.TaskPool.Schedule(() => e.Set());
                 e.WaitOne();
             }
-#endif
         }
 
         #endregion
@@ -243,7 +239,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.StartStopwatch(null));
         }
 
-#if !NO_TPL
         [Fact]
         public void Scheduler_LongRunning1()
         {
@@ -285,7 +280,6 @@ namespace ReactiveTests.Tests
 
             e.WaitOne();
         }
-#endif
 #endif
 
         #endregion
@@ -446,7 +440,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Scheduler.DisableOptimizations(Scheduler.Default).Schedule(42, DateTimeOffset.Now, default(Func<IScheduler, int, IDisposable>)));
         }
 
-#if !NO_TPL
         [Fact]
         public void DisableOptimizations1()
         {
@@ -578,7 +571,6 @@ namespace ReactiveTests.Tests
             });
             e2.WaitOne();
         }
-#endif
 #endif
 
         [Fact]
