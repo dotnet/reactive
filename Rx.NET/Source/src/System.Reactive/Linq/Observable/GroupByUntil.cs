@@ -277,7 +277,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-#if !NO_CDS
     class Map<TKey, TValue>
     {
         // Taken from ConcurrentDictionary in the BCL.
@@ -351,60 +350,5 @@ namespace System.Reactive.Linq.ObservableImpl
             return _map.TryRemove(key, out value);
         }
     }
-#else
-    class Map<TKey, TValue>
-    {
-        private readonly Dictionary<TKey, TValue> _map;
-
-        public Map(int? capacity, IEqualityComparer<TKey> comparer)
-        {
-            if (capacity.HasValue)
-            {
-                _map = new Dictionary<TKey, TValue>(capacity.Value, comparer);
-            }
-            else
-            {
-                _map = new Dictionary<TKey, TValue>(comparer);
-            }
-        }
-
-        public TValue GetOrAdd(TKey key, Func<TValue> valueFactory, out bool added)
-        {
-            lock (_map)
-            {
-                added = false;
-
-                var value = default(TValue);
-                if (!_map.TryGetValue(key, out value))
-                {
-                    value = valueFactory();
-                    _map.Add(key, value);
-                    added = true;
-                }
-
-                return value;
-            }
-        }
-
-        public IEnumerable<TValue> Values
-        {
-            get
-            {
-                lock (_map)
-                {
-                    return _map.Values.ToArray();
-                }
-            }
-        }
-
-        public bool Remove(TKey key)
-        {
-            lock (_map)
-            {
-                return _map.Remove(key);
-            }
-        }
-    }
-#endif
 }
 #endif

@@ -125,7 +125,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !SILVERLIGHTM7
         [Fact]
         public void SubscribeToEnumerable_DefaultScheduler()
         {
@@ -151,7 +150,6 @@ namespace ReactiveTests.Tests
                 results1.AssertEqual(results2);
             }
         }
-#endif
 
         #endregion
 
@@ -485,10 +483,8 @@ namespace ReactiveTests.Tests
             src.OnCompleted();
             Assert.Equal(2, num);
 
-#if !SILVERLIGHT // FieldAccessException
             var tbl = GetSubscriptionTable(evt);
             Assert.True(tbl.Count == 0);
-#endif
         }
 
         [Fact]
@@ -514,10 +510,8 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws(ex, () => src.OnError(ex));
 
-#if !SILVERLIGHT // FieldAccessException
             var tbl = GetSubscriptionTable(evt);
             Assert.True(tbl.Count == 0);
-#endif
         }
 
         [Fact]
@@ -535,10 +529,8 @@ namespace ReactiveTests.Tests
 
                 Assert.Equal(0, num);
 
-#if !SILVERLIGHT // FieldAccessException
                 var tbl = GetSubscriptionTable(evt);
                 Assert.True(tbl.Count == 0);
-#endif
             }
         }
 

@@ -12,10 +12,6 @@ using System.Windows.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
-#if SILVERLIGHT && !SILVERLIGHTM7
-using Microsoft.Silverlight.Testing;
-#endif
-
 namespace ReactiveTests.Tests
 {
     
@@ -102,18 +98,13 @@ namespace ReactiveTests.Tests
                 var sch = new DispatcherScheduler(disp);
                 sch.Schedule(() =>
                 {
-#if SILVERLIGHT
-                    Assert.Equal(id, Thread.CurrentThread.ManagedThreadId); // Single-threaded test framework
-#else
                     Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId);
-#endif
                     disp.InvokeShutdown();
                     evt.Set();
                 });
             });
         }
 
-#if !USE_SL_DISPATCHER
         [Fact]
         public void ScheduleError()
         {
@@ -258,7 +249,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
             disp.InvokeShutdown();
         }
-#endif
     }
 }
 #endif

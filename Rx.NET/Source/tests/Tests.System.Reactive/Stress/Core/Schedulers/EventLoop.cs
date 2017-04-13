@@ -58,11 +58,7 @@ namespace ReactiveTests.Stress.Schedulers
 
         private static int CurrentCount(this EventLoopScheduler scheduler)
         {
-#if !NO_CDS
             return ((SemaphoreSlim)semaphore.GetValue(scheduler)).CurrentCount;
-#else
-            return 0;
-#endif
         }
     }
 }

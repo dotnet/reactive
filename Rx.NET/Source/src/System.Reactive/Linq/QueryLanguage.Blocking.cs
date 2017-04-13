@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerator<TSource> GetEnumerator<TSource>(IObservable<TSource> source)
         {
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
             var e = new GetEnumerator<TSource>();
             return e.Run(source);
 #else
@@ -459,7 +459,7 @@ namespace System.Reactive.Linq
 
         #region |> Helpers <|
 
-#if NO_CDS || NO_PERF
+#if NO_PERF
         private static IEnumerator<TResult> PushToPull<TSource, TResult>(IObservable<TSource> source, Action<Notification<TSource>> push, Func<Notification<TResult>> pull)
         {
             var subscription = new SingleAssignmentDisposable();

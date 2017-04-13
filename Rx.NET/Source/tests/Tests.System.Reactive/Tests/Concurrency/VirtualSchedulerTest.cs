@@ -112,7 +112,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => new HistoricalScheduler().ScheduleRelative(42, TimeSpan.FromSeconds(1), default(Func<IScheduler, int, IDisposable>)));
         }
 
-#if !SILVERLIGHT && !NO_THREAD
+#if !NO_THREAD
         [Fact(Skip = "Ignored")]
         public void Virtual_ScheduleActionDue()
         {

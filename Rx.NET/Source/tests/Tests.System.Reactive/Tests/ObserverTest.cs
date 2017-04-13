@@ -643,7 +643,6 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_CDS
         [Fact]
         public void Observer_Synchronize_OnCompleted()
         {
@@ -720,7 +719,6 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(n, N * M);
         }
-#endif
 
         [Fact]
         public void NotifyOn_Null()

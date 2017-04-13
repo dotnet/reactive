@@ -144,8 +144,8 @@ namespace ReactiveTests.Tests
             });
         }
 
-#if !SILVERLIGHT && !NO_THREAD
-        [Fact(Skip="Ignored")]        
+#if !NO_THREAD
+        [Fact(Skip="Ignored")]
         public void Immediate_ScheduleActionDue()
         {
             var id = Thread.CurrentThread.ManagedThreadId;

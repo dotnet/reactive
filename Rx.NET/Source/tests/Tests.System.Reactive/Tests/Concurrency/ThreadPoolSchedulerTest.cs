@@ -42,7 +42,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-#if !NO_CDS
         [Fact]
         public void ProperRooting_NoGC_SingleShot()
         {
@@ -97,9 +96,7 @@ namespace ReactiveTests.Tests
 
             cts.Cancel();
         }
-#endif
 
-#if !SILVERLIGHT
         [Fact]
         public void ScheduleActionDueRelative()
         {
@@ -129,7 +126,6 @@ namespace ReactiveTests.Tests
             nt.Schedule(DateTimeOffset.UtcNow + TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
-#endif
 
         [Fact]
         public void ScheduleActionCancel()

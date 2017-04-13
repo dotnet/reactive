@@ -226,7 +226,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran);
         }
 
-#if !SILVERLIGHT
         [Fact(Skip ="")]
         public void EventLoop_ScheduleActionDue()
         {
@@ -270,7 +269,6 @@ namespace ReactiveTests.Tests
             Assert.True(ran, "ran");
             Assert.True(sw.ElapsedMilliseconds > 380, "due " + sw.ElapsedMilliseconds);
         }
-#endif
 
 #if !NO_PERF
         [Fact]
@@ -280,7 +278,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_CDS
         [Fact]
         public void EventLoop_Immediate()
         {
@@ -361,7 +358,6 @@ namespace ReactiveTests.Tests
                 }
             }
         }
-#endif
 
         [Fact]
         public void EventLoop_Periodic()
@@ -393,7 +389,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_CDS && DESKTOPCLR
+#if DESKTOPCLR
         [Fact]
         public void EventLoop_CorrectWorkStealing()
         {
