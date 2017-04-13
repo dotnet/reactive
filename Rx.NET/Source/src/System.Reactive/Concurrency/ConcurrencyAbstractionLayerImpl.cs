@@ -61,11 +61,7 @@ namespace System.Reactive.Concurrency
 
         public IStopwatch StartStopwatch()
         {
-#if !NO_STOPWATCH
             return new StopwatchImpl();
-#else
-            return new DefaultStopwatch();
-#endif
         }
 
         public bool SupportsLongRunning

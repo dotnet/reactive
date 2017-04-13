@@ -310,7 +310,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_PERF && !NO_STOPWATCH
+#if !NO_PERF
         [Fact]
         public void Stopwatch()
         {

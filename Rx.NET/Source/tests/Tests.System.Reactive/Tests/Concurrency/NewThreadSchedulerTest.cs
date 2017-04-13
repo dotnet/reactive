@@ -61,13 +61,11 @@ namespace ReactiveTests.Tests
 #endif
 
 #if !NO_PERF
-#if !NO_STOPWATCH
         [Fact]
         public void Stopwatch()
         {
             StopwatchTest.Run(NewThreadScheduler.Default);
         }
-#endif
 #endif
 
         [Fact]
