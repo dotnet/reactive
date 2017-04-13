@@ -11,11 +11,7 @@ namespace System.Reactive.Subjects
     /// The type of the elements in the sequence.
     /// This type parameter is covariant. That is, you can use either the type you specified or any type that is more derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.
     /// </typeparam>
-#if !NO_VARIANCE
     public interface IConnectableObservable<out T> : IObservable<T>
-#else
-    public interface IConnectableObservable<T> : IObservable<T>
-#endif
     {
         /// <summary>
         /// Connects the observable wrapper to its source. All subscribed observers will receive values from the underlying observable sequence as long as the connection is established.

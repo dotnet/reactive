@@ -118,11 +118,7 @@ namespace System.Reactive.Linq
 #endif
         {
             return new EventPatternSource<TEventArgs>(
-#if !NO_VARIANCE
                 source,
-#else
-                source.Select(x => (EventPattern<object, TEventArgs>)x),
-#endif
                 (h, evt) => h(evt.Sender, evt.EventArgs)
             );
         }

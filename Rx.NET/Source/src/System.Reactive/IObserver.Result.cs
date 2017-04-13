@@ -15,11 +15,7 @@ namespace System.Reactive
     /// The type of the result returned from the observer's notification handlers.
     /// This type parameter is covariant. That is, you can use either the type you specified or any type that is more derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.
     /// </typeparam>
-#if !NO_VARIANCE
     public interface IObserver<in TValue, out TResult>
-#else
-    public interface IObserver<TValue, TResult>
-#endif
     {
         /// <summary>
         /// Notifies the observer of a new element in the sequence.

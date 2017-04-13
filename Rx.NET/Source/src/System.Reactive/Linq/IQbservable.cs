@@ -15,11 +15,7 @@ namespace System.Reactive.Linq
     /// This type parameter is covariant. That is, you can use either the type you specified or any type that is more derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.
     /// </typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Qbservable", Justification = "What a pleasure to write 'by design' here.")]
-    public interface IQbservable<
-#if !NO_VARIANCE
-        out
-#endif
-        T> : IQbservable, IObservable<T>
+    public interface IQbservable<out T> : IQbservable, IObservable<T>
     {
     }
 
