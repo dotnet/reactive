@@ -5,8 +5,6 @@
 
 #pragma warning disable 1591
 
-#if !NO_EXPRESSIONS
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -426,8 +424,6 @@ namespace System.Reactive.Linq
         
     }
 }
-
-#endif
 
 #pragma warning restore 1591
 

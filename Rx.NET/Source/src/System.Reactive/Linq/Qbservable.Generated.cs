@@ -5,8 +5,6 @@
 
 #pragma warning disable 1591
 
-#if !NO_EXPRESSIONS
-
 using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
@@ -23204,8 +23202,6 @@ namespace System.Reactive.Linq
         
     }
 }
-
-#endif
 
 #pragma warning restore 1591
 
