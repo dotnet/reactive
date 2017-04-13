@@ -45,9 +45,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Aggregate<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -79,9 +79,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TAccumulate> Aggregate<TSource, TAccumulate>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
@@ -116,11 +116,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator, Expression<Func<TAccumulate, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -151,9 +151,9 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> All<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -181,9 +181,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Amb<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -211,9 +211,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Amb<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -241,9 +241,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Amb<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -271,7 +271,7 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> Any<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -299,9 +299,9 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> Any<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -330,7 +330,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Average(this IQbservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -357,7 +357,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average(this IQbservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -385,7 +385,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average(this IQbservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -413,7 +413,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average(this IQbservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -441,7 +441,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Average(this IQbservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -468,7 +468,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average(this IQbservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -496,7 +496,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average(this IQbservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -524,7 +524,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average(this IQbservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -551,7 +551,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Average(this IQbservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -578,7 +578,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Average(this IQbservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -608,9 +608,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -640,9 +640,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -672,9 +672,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -705,9 +705,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -738,9 +738,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -771,9 +771,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -803,9 +803,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -835,9 +835,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -868,9 +868,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -901,9 +901,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -933,7 +933,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -964,7 +964,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, int count, int skip)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1000,7 +1000,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1037,7 +1037,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1076,9 +1076,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1116,9 +1116,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1162,7 +1162,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1207,9 +1207,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1240,9 +1240,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferBoundary>(this IQbservable<TSource> source, IObservable<TBufferBoundary> bufferBoundaries)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferBoundaries == null)
-                throw new ArgumentNullException("bufferBoundaries");
+                throw new ArgumentNullException(nameof(bufferBoundaries));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1271,9 +1271,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferClosing>(this IQbservable<TSource> source, Expression<Func<IObservable<TBufferClosing>>> bufferClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferClosingSelector == null)
-                throw new ArgumentNullException("bufferClosingSelector");
+                throw new ArgumentNullException(nameof(bufferClosingSelector));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1304,11 +1304,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(this IQbservable<TSource> source, IObservable<TBufferOpening> bufferOpenings, Expression<Func<TBufferOpening, IObservable<TBufferClosing>>> bufferClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (bufferOpenings == null)
-                throw new ArgumentNullException("bufferOpenings");
+                throw new ArgumentNullException(nameof(bufferOpenings));
             if (bufferClosingSelector == null)
-                throw new ArgumentNullException("bufferClosingSelector");
+                throw new ArgumentNullException(nameof(bufferClosingSelector));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1339,11 +1339,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1375,13 +1375,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (defaultSource == null)
-                throw new ArgumentNullException("defaultSource");
+                throw new ArgumentNullException(nameof(defaultSource));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1414,13 +1414,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1449,7 +1449,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Cast<TResult>(this IQbservable<object> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1476,9 +1476,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Catch<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1506,9 +1506,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Catch<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1536,9 +1536,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Catch<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1568,9 +1568,9 @@ namespace System.Reactive.Linq
             where TException : Exception
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (handler == null)
-                throw new ArgumentNullException("handler");
+                throw new ArgumentNullException(nameof(handler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -1598,7 +1598,7 @@ namespace System.Reactive.Linq
         public static IQueryable<IList<TSource>> Chunkify<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return ((IQueryProvider)source.Provider).CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1629,13 +1629,13 @@ namespace System.Reactive.Linq
         public static IQueryable<TResult> Collect<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TResult>> getInitialCollector, Expression<Func<TResult, TSource, TResult>> merge, Expression<Func<TResult, TResult>> getNewCollector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (getInitialCollector == null)
-                throw new ArgumentNullException("getInitialCollector");
+                throw new ArgumentNullException(nameof(getInitialCollector));
             if (merge == null)
-                throw new ArgumentNullException("merge");
+                throw new ArgumentNullException(nameof(merge));
             if (getNewCollector == null)
-                throw new ArgumentNullException("getNewCollector");
+                throw new ArgumentNullException(nameof(getNewCollector));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TResult>(
                 Expression.Call(
@@ -1668,11 +1668,11 @@ namespace System.Reactive.Linq
         public static IQueryable<TResult> Collect<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TResult>> newCollector, Expression<Func<TResult, TSource, TResult>> merge)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (newCollector == null)
-                throw new ArgumentNullException("newCollector");
+                throw new ArgumentNullException(nameof(newCollector));
             if (merge == null)
-                throw new ArgumentNullException("merge");
+                throw new ArgumentNullException(nameof(merge));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TResult>(
                 Expression.Call(
@@ -1701,9 +1701,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> CombineLatest<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1731,9 +1731,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> CombineLatest<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -1763,11 +1763,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource, TResult>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, Expression<Func<IList<TSource>, TResult>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1799,11 +1799,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IObservable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1837,13 +1837,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Expression<Func<TSource1, TSource2, TSource3, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1880,15 +1880,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1929,17 +1929,17 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -1984,19 +1984,19 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2044,21 +2044,21 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2109,23 +2109,23 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2179,25 +2179,25 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2254,27 +2254,27 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2334,29 +2334,29 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2419,31 +2419,31 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2509,33 +2509,33 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2604,35 +2604,35 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2704,37 +2704,37 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2809,39 +2809,39 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (source16 == null)
-                throw new ArgumentNullException("source16");
+                throw new ArgumentNullException(nameof(source16));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -2885,9 +2885,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2915,9 +2915,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Concat<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2945,9 +2945,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Concat<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -2974,7 +2974,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3002,7 +3002,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3031,7 +3031,7 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> Contains<TSource>(this IQbservable<TSource> source, TSource value)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -3061,9 +3061,9 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> Contains<TSource>(this IQbservable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -3093,7 +3093,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Count<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -3121,9 +3121,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Count<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -3156,9 +3156,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, IDisposable>> subscribe)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribe == null)
-                throw new ArgumentNullException("subscribe");
+                throw new ArgumentNullException(nameof(subscribe));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3191,9 +3191,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Action>> subscribe)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribe == null)
-                throw new ArgumentNullException("subscribe");
+                throw new ArgumentNullException(nameof(subscribe));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3225,9 +3225,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, CancellationToken, Task>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3258,9 +3258,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3293,9 +3293,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, CancellationToken, Task<IDisposable>>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3326,9 +3326,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task<IDisposable>>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3361,9 +3361,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, CancellationToken, Task<Action>>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3394,9 +3394,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task<Action>>> subscribeAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (subscribeAsync == null)
-                throw new ArgumentNullException("subscribeAsync");
+                throw new ArgumentNullException(nameof(subscribeAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3424,7 +3424,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DefaultIfEmpty<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3451,7 +3451,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DefaultIfEmpty<TSource>(this IQbservable<TSource> source, TSource defaultValue)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3479,9 +3479,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Defer<TResult>(this IQbservableProvider provider, Expression<Func<IObservable<TResult>>> observableFactory)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (observableFactory == null)
-                throw new ArgumentNullException("observableFactory");
+                throw new ArgumentNullException(nameof(observableFactory));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3511,9 +3511,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Defer<TResult>(this IQbservableProvider provider, Expression<Func<Task<IObservable<TResult>>>> observableFactoryAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (observableFactoryAsync == null)
-                throw new ArgumentNullException("observableFactoryAsync");
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3546,9 +3546,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> DeferAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<IObservable<TResult>>>> observableFactoryAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (observableFactoryAsync == null)
-                throw new ArgumentNullException("observableFactoryAsync");
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -3590,7 +3590,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3632,9 +3632,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3678,7 +3678,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3725,9 +3725,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3757,9 +3757,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource, TDelay>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TDelay>>> delayDurationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (delayDurationSelector == null)
-                throw new ArgumentNullException("delayDurationSelector");
+                throw new ArgumentNullException(nameof(delayDurationSelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3789,11 +3789,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Delay<TSource, TDelay>(this IQbservable<TSource> source, IObservable<TDelay> subscriptionDelay, Expression<Func<TSource, IObservable<TDelay>>> delayDurationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (subscriptionDelay == null)
-                throw new ArgumentNullException("subscriptionDelay");
+                throw new ArgumentNullException(nameof(subscriptionDelay));
             if (delayDurationSelector == null)
-                throw new ArgumentNullException("delayDurationSelector");
+                throw new ArgumentNullException(nameof(delayDurationSelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3830,7 +3830,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DelaySubscription<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3867,9 +3867,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DelaySubscription<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3908,7 +3908,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DelaySubscription<TSource>(this IQbservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3947,9 +3947,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DelaySubscription<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -3977,7 +3977,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Dematerialize<TSource>(this IQbservable<Notification<TSource>> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4004,7 +4004,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Distinct<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4032,9 +4032,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Distinct<TSource>(this IQbservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4064,9 +4064,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Distinct<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4097,11 +4097,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Distinct<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4129,7 +4129,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DistinctUntilChanged<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4156,9 +4156,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DistinctUntilChanged<TSource>(this IQbservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4187,9 +4187,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DistinctUntilChanged<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4219,11 +4219,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DistinctUntilChanged<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4253,9 +4253,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, IObserver<TSource> observer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (observer == null)
-                throw new ArgumentNullException("observer");
+                throw new ArgumentNullException(nameof(observer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4284,9 +4284,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4316,11 +4316,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4351,11 +4351,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4387,13 +4387,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError, Expression<Action> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4423,9 +4423,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> DoWhile<TSource>(this IQbservable<TSource> source, Expression<Func<bool>> condition)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4456,7 +4456,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ElementAt<TSource>(this IQbservable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4486,7 +4486,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4511,7 +4511,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4538,9 +4538,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4569,9 +4569,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, IScheduler scheduler, TResult witness)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4598,7 +4598,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, TResult witness)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4626,9 +4626,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Finally<TSource>(this IQbservable<TSource> source, Expression<Action> finallyAction)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (finallyAction == null)
-                throw new ArgumentNullException("finallyAction");
+                throw new ArgumentNullException(nameof(finallyAction));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4656,7 +4656,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> FirstAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4684,9 +4684,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> FirstAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4713,7 +4713,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4740,9 +4740,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -4772,11 +4772,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> For<TSource, TResult>(this IQbservableProvider provider, IEnumerable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4805,9 +4805,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -4837,11 +4837,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -4873,9 +4873,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -4907,11 +4907,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -4942,9 +4942,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -4976,9 +4976,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -5009,11 +5009,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -5047,11 +5047,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -5102,11 +5102,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromEvent(this IQbservableProvider provider, Expression<Action<Action>> addHandler, Expression<Action<Action>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -5153,13 +5153,13 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> FromEvent(this IQbservableProvider provider, Expression<Action<Action>> addHandler, Expression<Action<Action>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -5212,11 +5212,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5265,13 +5265,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5325,13 +5325,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<Action<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (conversion == null)
-                throw new ArgumentNullException("conversion");
+                throw new ArgumentNullException(nameof(conversion));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5382,15 +5382,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<Action<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (conversion == null)
-                throw new ArgumentNullException("conversion");
+                throw new ArgumentNullException(nameof(conversion));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5443,11 +5443,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TEventArgs>(this IQbservableProvider provider, Expression<Action<Action<TEventArgs>>> addHandler, Expression<Action<Action<TEventArgs>>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5495,13 +5495,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TEventArgs> FromEvent<TEventArgs>(this IQbservableProvider provider, Expression<Action<Action<TEventArgs>>> addHandler, Expression<Action<Action<TEventArgs>>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TEventArgs>(
                 Expression.Call(
@@ -5554,11 +5554,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -5609,11 +5609,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -5663,13 +5663,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -5718,13 +5718,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -5780,11 +5780,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -5837,11 +5837,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, object target, string eventName)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -5893,13 +5893,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -5950,13 +5950,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -6012,11 +6012,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -6069,11 +6069,11 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -6125,13 +6125,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<EventArgs>>(
                 Expression.Call(
@@ -6182,13 +6182,13 @@ namespace System.Reactive.Linq
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<object>>(
                 Expression.Call(
@@ -6246,11 +6246,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6303,13 +6303,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6367,13 +6367,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (conversion == null)
-                throw new ArgumentNullException("conversion");
+                throw new ArgumentNullException(nameof(conversion));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6428,15 +6428,15 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (conversion == null)
-                throw new ArgumentNullException("conversion");
+                throw new ArgumentNullException(nameof(conversion));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6495,11 +6495,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -6553,13 +6553,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -6613,11 +6613,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6667,13 +6667,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (addHandler == null)
-                throw new ArgumentNullException("addHandler");
+                throw new ArgumentNullException(nameof(addHandler));
             if (removeHandler == null)
-                throw new ArgumentNullException("removeHandler");
+                throw new ArgumentNullException(nameof(removeHandler));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6731,11 +6731,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6789,13 +6789,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6853,11 +6853,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6911,13 +6911,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TEventArgs>>(
                 Expression.Call(
@@ -6976,11 +6976,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -7035,13 +7035,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -7100,11 +7100,11 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -7159,13 +7159,13 @@ namespace System.Reactive.Linq
 #endif
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             if (eventName == null)
-                throw new ArgumentNullException("eventName");
+                throw new ArgumentNullException(nameof(eventName));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<EventPattern<TSender, TEventArgs>>(
                 Expression.Call(
@@ -7199,13 +7199,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7241,15 +7241,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7286,15 +7286,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, TimeSpan>> timeSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (timeSelector == null)
-                throw new ArgumentNullException("timeSelector");
+                throw new ArgumentNullException(nameof(timeSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7331,15 +7331,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, DateTimeOffset>> timeSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (timeSelector == null)
-                throw new ArgumentNullException("timeSelector");
+                throw new ArgumentNullException(nameof(timeSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7377,17 +7377,17 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, TimeSpan>> timeSelector, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (timeSelector == null)
-                throw new ArgumentNullException("timeSelector");
+                throw new ArgumentNullException(nameof(timeSelector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7426,17 +7426,17 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, DateTimeOffset>> timeSelector, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (iterate == null)
-                throw new ArgumentNullException("iterate");
+                throw new ArgumentNullException(nameof(iterate));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             if (timeSelector == null)
-                throw new ArgumentNullException("timeSelector");
+                throw new ArgumentNullException(nameof(timeSelector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -7470,9 +7470,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7504,9 +7504,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, int capacity)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7540,11 +7540,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7576,11 +7576,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7612,11 +7612,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -7651,11 +7651,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, int capacity)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -7692,13 +7692,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -7733,13 +7733,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -7777,11 +7777,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7821,11 +7821,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, int capacity)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7867,13 +7867,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7913,13 +7913,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TSource>>(
                 Expression.Call(
@@ -7959,13 +7959,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -8008,13 +8008,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, int capacity)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -8059,15 +8059,15 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -8110,15 +8110,15 @@ namespace System.Reactive.Linq
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (durationSelector == null)
-                throw new ArgumentNullException("durationSelector");
+                throw new ArgumentNullException(nameof(durationSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IGroupedObservable<TKey, TElement>>(
                 Expression.Call(
@@ -8156,15 +8156,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IQbservable<TLeft> left, IObservable<TRight> right, Expression<Func<TLeft, IObservable<TLeftDuration>>> leftDurationSelector, Expression<Func<TRight, IObservable<TRightDuration>>> rightDurationSelector, Expression<Func<TLeft, IObservable<TRight>, TResult>> resultSelector)
         {
             if (left == null)
-                throw new ArgumentNullException("left");
+                throw new ArgumentNullException(nameof(left));
             if (right == null)
-                throw new ArgumentNullException("right");
+                throw new ArgumentNullException(nameof(right));
             if (leftDurationSelector == null)
-                throw new ArgumentNullException("leftDurationSelector");
+                throw new ArgumentNullException(nameof(leftDurationSelector));
             if (rightDurationSelector == null)
-                throw new ArgumentNullException("rightDurationSelector");
+                throw new ArgumentNullException(nameof(rightDurationSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return left.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -8197,11 +8197,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -8233,13 +8233,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource, IObservable<TResult> elseSource)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
             if (elseSource == null)
-                throw new ArgumentNullException("elseSource");
+                throw new ArgumentNullException(nameof(elseSource));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -8272,13 +8272,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (thenSource == null)
-                throw new ArgumentNullException("thenSource");
+                throw new ArgumentNullException(nameof(thenSource));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -8307,7 +8307,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> IgnoreElements<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8339,7 +8339,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Interval(this IQbservableProvider provider, TimeSpan period)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -8375,9 +8375,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Interval(this IQbservableProvider provider, TimeSpan period, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -8405,7 +8405,7 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> IsEmpty<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -8439,15 +8439,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IQbservable<TLeft> left, IObservable<TRight> right, Expression<Func<TLeft, IObservable<TLeftDuration>>> leftDurationSelector, Expression<Func<TRight, IObservable<TRightDuration>>> rightDurationSelector, Expression<Func<TLeft, TRight, TResult>> resultSelector)
         {
             if (left == null)
-                throw new ArgumentNullException("left");
+                throw new ArgumentNullException(nameof(left));
             if (right == null)
-                throw new ArgumentNullException("right");
+                throw new ArgumentNullException(nameof(right));
             if (leftDurationSelector == null)
-                throw new ArgumentNullException("leftDurationSelector");
+                throw new ArgumentNullException(nameof(leftDurationSelector));
             if (rightDurationSelector == null)
-                throw new ArgumentNullException("rightDurationSelector");
+                throw new ArgumentNullException(nameof(rightDurationSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return left.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -8478,7 +8478,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> LastAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8506,9 +8506,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> LastAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8535,7 +8535,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8562,9 +8562,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8591,7 +8591,7 @@ namespace System.Reactive.Linq
         public static IQueryable<TSource> Latest<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
@@ -8619,7 +8619,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> LongCount<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -8647,9 +8647,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> LongCount<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -8676,7 +8676,7 @@ namespace System.Reactive.Linq
         public static IQbservable<Notification<TSource>> Materialize<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<Notification<TSource>>(
                 Expression.Call(
@@ -8702,7 +8702,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Max(this IQbservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -8728,7 +8728,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Max(this IQbservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -8754,7 +8754,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Max(this IQbservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -8780,7 +8780,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Max(this IQbservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -8806,7 +8806,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Max(this IQbservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -8832,7 +8832,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Max(this IQbservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -8858,7 +8858,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Max(this IQbservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -8884,7 +8884,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Max(this IQbservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -8910,7 +8910,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Max(this IQbservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -8936,7 +8936,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Max(this IQbservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -8963,7 +8963,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Max<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -8991,9 +8991,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Max<TSource>(this IQbservable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9022,9 +9022,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -9053,9 +9053,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -9084,9 +9084,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -9115,9 +9115,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -9146,9 +9146,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -9177,9 +9177,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -9208,9 +9208,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -9239,9 +9239,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -9270,9 +9270,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -9301,9 +9301,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -9333,9 +9333,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Max<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -9366,11 +9366,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Max<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector, IComparer<TResult> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -9401,9 +9401,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> MaxBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -9434,11 +9434,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> MaxBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -9467,9 +9467,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9498,11 +9498,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<TSource> first, IObservable<TSource> second, IScheduler scheduler)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9532,11 +9532,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IScheduler scheduler, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9565,9 +9565,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9594,7 +9594,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9622,7 +9622,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9650,9 +9650,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9682,7 +9682,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<IObservable<TSource>> sources, int maxConcurrent)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9713,9 +9713,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, int maxConcurrent)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9748,11 +9748,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, int maxConcurrent, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9783,11 +9783,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -9815,7 +9815,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Min(this IQbservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -9841,7 +9841,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Min(this IQbservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -9867,7 +9867,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Min(this IQbservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -9893,7 +9893,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Min(this IQbservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -9919,7 +9919,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Min(this IQbservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -9945,7 +9945,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Min(this IQbservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -9971,7 +9971,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Min(this IQbservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -9997,7 +9997,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Min(this IQbservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -10023,7 +10023,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Min(this IQbservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -10049,7 +10049,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Min(this IQbservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -10076,7 +10076,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Min<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10104,9 +10104,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Min<TSource>(this IQbservable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10135,9 +10135,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -10166,9 +10166,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -10197,9 +10197,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -10228,9 +10228,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -10259,9 +10259,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -10290,9 +10290,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -10321,9 +10321,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -10352,9 +10352,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -10383,9 +10383,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -10414,9 +10414,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -10446,9 +10446,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Min<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10479,11 +10479,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Min<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector, IComparer<TResult> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10514,9 +10514,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> MinBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -10547,11 +10547,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> MinBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -10582,7 +10582,7 @@ namespace System.Reactive.Linq
         public static IQueryable<TSource> MostRecent<TSource>(this IQbservable<TSource> source, TSource initialValue)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
@@ -10615,11 +10615,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IQbservable<TSource> source, Expression<Func<ISubject<TSource, TIntermediate>>> subjectSelector, Expression<Func<IObservable<TIntermediate>, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (subjectSelector == null)
-                throw new ArgumentNullException("subjectSelector");
+                throw new ArgumentNullException(nameof(subjectSelector));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10645,7 +10645,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Never<TResult>(this IQbservableProvider provider)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10670,7 +10670,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Never<TResult>(this IQbservableProvider provider, TResult witness)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10699,7 +10699,7 @@ namespace System.Reactive.Linq
         public static IQueryable<TSource> Next<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
@@ -10730,9 +10730,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ObserveOn<TSource>(this IQbservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10764,9 +10764,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ObserveOn<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10793,7 +10793,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> OfType<TResult>(this IQbservable<object> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10820,9 +10820,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10850,9 +10850,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10880,9 +10880,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -10913,9 +10913,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10947,9 +10947,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TSource initialValue)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -10981,9 +10981,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> PublishLast<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11011,7 +11011,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Range(this IQbservableProvider provider, int start, int count)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<int>(
                 Expression.Call(
@@ -11043,9 +11043,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Range(this IQbservableProvider provider, int start, int count, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<int>(
                 Expression.Call(
@@ -11075,9 +11075,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11103,7 +11103,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11132,7 +11132,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, int repeatCount)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11165,9 +11165,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, int repeatCount, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11198,9 +11198,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11228,7 +11228,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Repeat<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11257,7 +11257,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Repeat<TSource>(this IQbservable<TSource> source, int repeatCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11288,9 +11288,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11324,9 +11324,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11362,11 +11362,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11405,9 +11405,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11447,11 +11447,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11486,11 +11486,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11525,9 +11525,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11563,11 +11563,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11596,7 +11596,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Retry<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11625,7 +11625,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Retry<TSource>(this IQbservable<TSource> source, int retryCount)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11651,7 +11651,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Return<TResult>(this IQbservableProvider provider, TResult value)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11680,9 +11680,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Return<TResult>(this IQbservableProvider provider, TResult value, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11718,7 +11718,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Sample<TSource>(this IQbservable<TSource> source, TimeSpan interval)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11754,9 +11754,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Sample<TSource>(this IQbservable<TSource> source, TimeSpan interval, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11787,9 +11787,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Sample<TSource, TSample>(this IQbservable<TSource> source, IObservable<TSample> sampler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (sampler == null)
-                throw new ArgumentNullException("sampler");
+                throw new ArgumentNullException(nameof(sampler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11818,9 +11818,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Scan<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -11851,9 +11851,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TAccumulate> Scan<TSource, TAccumulate>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (accumulator == null)
-                throw new ArgumentNullException("accumulator");
+                throw new ArgumentNullException(nameof(accumulator));
             
             return source.Provider.CreateQuery<TAccumulate>(
                 Expression.Call(
@@ -11883,9 +11883,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Select<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11914,9 +11914,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Select<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, TResult>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11948,11 +11948,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -11985,11 +11985,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12021,11 +12021,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12057,11 +12057,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (collectionSelector == null)
-                throw new ArgumentNullException("collectionSelector");
+                throw new ArgumentNullException(nameof(collectionSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12091,9 +12091,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TOther> SelectMany<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TOther>(
                 Expression.Call(
@@ -12124,13 +12124,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> onNext, Expression<Func<Exception, IObservable<TResult>>> onError, Expression<Func<IObservable<TResult>>> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12163,13 +12163,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TResult>>> onNext, Expression<Func<Exception, IObservable<TResult>>> onError, Expression<Func<IObservable<TResult>>> onCompleted)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (onNext == null)
-                throw new ArgumentNullException("onNext");
+                throw new ArgumentNullException(nameof(onNext));
             if (onError == null)
-                throw new ArgumentNullException("onError");
+                throw new ArgumentNullException(nameof(onError));
             if (onCompleted == null)
-                throw new ArgumentNullException("onCompleted");
+                throw new ArgumentNullException(nameof(onCompleted));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12201,9 +12201,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12233,9 +12233,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12264,9 +12264,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12295,9 +12295,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12328,9 +12328,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12362,9 +12362,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12396,9 +12396,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12430,9 +12430,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TResult>>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12466,11 +12466,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
+                throw new ArgumentNullException(nameof(taskSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12505,11 +12505,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
+                throw new ArgumentNullException(nameof(taskSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12544,11 +12544,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
+                throw new ArgumentNullException(nameof(taskSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12583,11 +12583,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (taskSelector == null)
-                throw new ArgumentNullException("taskSelector");
+                throw new ArgumentNullException(nameof(taskSelector));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -12618,9 +12618,9 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -12649,9 +12649,9 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IEnumerable<TSource> second)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -12681,11 +12681,11 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IObservable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -12716,11 +12716,11 @@ namespace System.Reactive.Linq
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return first.Provider.CreateQuery<bool>(
                 Expression.Call(
@@ -12749,7 +12749,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SingleAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12777,9 +12777,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SingleAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12807,7 +12807,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12835,9 +12835,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12867,7 +12867,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Skip<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12907,7 +12907,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Skip<TSource>(this IQbservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12948,9 +12948,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Skip<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -12985,7 +12985,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipLast<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13020,7 +13020,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipLast<TSource>(this IQbservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13056,9 +13056,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipLast<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13090,7 +13090,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset startTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13122,9 +13122,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13154,9 +13154,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipUntil<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13184,9 +13184,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13215,9 +13215,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SkipWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13254,9 +13254,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> Start(this IQbservableProvider provider, Expression<Action> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13294,11 +13294,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> Start(this IQbservableProvider provider, Expression<Action> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13337,9 +13337,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Start<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13378,11 +13378,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Start<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13421,9 +13421,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13463,11 +13463,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13517,9 +13517,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13569,11 +13569,11 @@ namespace System.Reactive.Linq
         public static IQbservable<Unit> StartAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (actionAsync == null)
-                throw new ArgumentNullException("actionAsync");
+                throw new ArgumentNullException(nameof(actionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<Unit>(
                 Expression.Call(
@@ -13614,9 +13614,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13666,9 +13666,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13709,11 +13709,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13765,11 +13765,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> StartAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (functionAsync == null)
-                throw new ArgumentNullException("functionAsync");
+                throw new ArgumentNullException(nameof(functionAsync));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -13800,11 +13800,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IScheduler scheduler, params TSource[] values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13834,11 +13834,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13867,9 +13867,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, params TSource[] values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13897,9 +13897,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IEnumerable<TSource> values)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13932,9 +13932,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SubscribeOn<TSource>(this IQbservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13967,9 +13967,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> SubscribeOn<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -13997,7 +13997,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Sum(this IQbservable<decimal> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -14023,7 +14023,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Sum(this IQbservable<double> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -14050,7 +14050,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Sum(this IQbservable<int> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -14077,7 +14077,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Sum(this IQbservable<long> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -14104,7 +14104,7 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Sum(this IQbservable<decimal?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -14130,7 +14130,7 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Sum(this IQbservable<double?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -14157,7 +14157,7 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Sum(this IQbservable<int?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -14184,7 +14184,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Sum(this IQbservable<long?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -14210,7 +14210,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Sum(this IQbservable<float?> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -14236,7 +14236,7 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Sum(this IQbservable<float> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -14264,9 +14264,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double?>(
                 Expression.Call(
@@ -14295,9 +14295,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float?>(
                 Expression.Call(
@@ -14327,9 +14327,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal?>(
                 Expression.Call(
@@ -14359,9 +14359,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int?>(
                 Expression.Call(
@@ -14391,9 +14391,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long?>(
                 Expression.Call(
@@ -14422,9 +14422,9 @@ namespace System.Reactive.Linq
         public static IQbservable<double> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<double>(
                 Expression.Call(
@@ -14453,9 +14453,9 @@ namespace System.Reactive.Linq
         public static IQbservable<float> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<float>(
                 Expression.Call(
@@ -14485,9 +14485,9 @@ namespace System.Reactive.Linq
         public static IQbservable<decimal> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<decimal>(
                 Expression.Call(
@@ -14517,9 +14517,9 @@ namespace System.Reactive.Linq
         public static IQbservable<int> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<int>(
                 Expression.Call(
@@ -14549,9 +14549,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (selector == null)
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             
             return source.Provider.CreateQuery<long>(
                 Expression.Call(
@@ -14581,7 +14581,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Switch<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14611,7 +14611,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Switch<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return sources.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14643,7 +14643,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Synchronize<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14671,9 +14671,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Synchronize<TSource>(this IQbservable<TSource> source, object gate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (gate == null)
-                throw new ArgumentNullException("gate");
+                throw new ArgumentNullException(nameof(gate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14703,7 +14703,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14734,9 +14734,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, int count, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14772,7 +14772,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14808,9 +14808,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14845,7 +14845,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeLast<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14880,9 +14880,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeLast<TSource>(this IQbservable<TSource> source, int count, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14918,7 +14918,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeLast<TSource>(this IQbservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14954,9 +14954,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeLast<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -14994,11 +14994,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeLast<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler timerScheduler, IScheduler loopScheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (timerScheduler == null)
-                throw new ArgumentNullException("timerScheduler");
+                throw new ArgumentNullException(nameof(timerScheduler));
             if (loopScheduler == null)
-                throw new ArgumentNullException("loopScheduler");
+                throw new ArgumentNullException(nameof(loopScheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15034,7 +15034,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> TakeLastBuffer<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -15068,7 +15068,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> TakeLastBuffer<TSource>(this IQbservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -15103,9 +15103,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> TakeLastBuffer<TSource>(this IQbservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -15134,7 +15134,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset endTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15163,9 +15163,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15195,9 +15195,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeUntil<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15225,9 +15225,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15256,9 +15256,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> TakeWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15303,7 +15303,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Throttle<TSource>(this IQbservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15349,9 +15349,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Throttle<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15388,9 +15388,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Throttle<TSource, TThrottle>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TThrottle>>> throttleDurationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (throttleDurationSelector == null)
-                throw new ArgumentNullException("throttleDurationSelector");
+                throw new ArgumentNullException(nameof(throttleDurationSelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15418,9 +15418,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -15449,11 +15449,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -15484,11 +15484,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, IScheduler scheduler, TResult witness)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -15519,9 +15519,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, TResult witness)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (exception == null)
-                throw new ArgumentNullException("exception");
+                throw new ArgumentNullException(nameof(exception));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -15549,7 +15549,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TimeInterval<TSource>> TimeInterval<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TimeInterval<TSource>>(
                 Expression.Call(
@@ -15576,9 +15576,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TimeInterval<TSource>> TimeInterval<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TimeInterval<TSource>>(
                 Expression.Call(
@@ -15613,7 +15613,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15648,9 +15648,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15687,11 +15687,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15729,9 +15729,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15777,7 +15777,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, TimeSpan dueTime)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15822,9 +15822,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15871,11 +15871,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15923,9 +15923,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15957,11 +15957,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, IObservable<TTimeout> firstTimeout, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (firstTimeout == null)
-                throw new ArgumentNullException("firstTimeout");
+                throw new ArgumentNullException(nameof(firstTimeout));
             if (timeoutDurationSelector == null)
-                throw new ArgumentNullException("timeoutDurationSelector");
+                throw new ArgumentNullException(nameof(timeoutDurationSelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -15994,13 +15994,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, IObservable<TTimeout> firstTimeout, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector, IObservable<TSource> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (firstTimeout == null)
-                throw new ArgumentNullException("firstTimeout");
+                throw new ArgumentNullException(nameof(firstTimeout));
             if (timeoutDurationSelector == null)
-                throw new ArgumentNullException("timeoutDurationSelector");
+                throw new ArgumentNullException(nameof(timeoutDurationSelector));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16032,9 +16032,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (timeoutDurationSelector == null)
-                throw new ArgumentNullException("timeoutDurationSelector");
+                throw new ArgumentNullException(nameof(timeoutDurationSelector));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16065,11 +16065,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector, IObservable<TSource> other)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (timeoutDurationSelector == null)
-                throw new ArgumentNullException("timeoutDurationSelector");
+                throw new ArgumentNullException(nameof(timeoutDurationSelector));
             if (other == null)
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16095,7 +16095,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16123,7 +16123,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, TimeSpan period)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16155,9 +16155,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, TimeSpan period, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16187,9 +16187,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16215,7 +16215,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16243,7 +16243,7 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, TimeSpan period)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16275,9 +16275,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, TimeSpan period, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16307,9 +16307,9 @@ namespace System.Reactive.Linq
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<long>(
                 Expression.Call(
@@ -16337,7 +16337,7 @@ namespace System.Reactive.Linq
         public static IQbservable<Timestamped<TSource>> Timestamp<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<Timestamped<TSource>>(
                 Expression.Call(
@@ -16364,9 +16364,9 @@ namespace System.Reactive.Linq
         public static IQbservable<Timestamped<TSource>> Timestamp<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<Timestamped<TSource>>(
                 Expression.Call(
@@ -16394,7 +16394,7 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource[]> ToArray<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<TSource[]>(
                 Expression.Call(
@@ -16423,9 +16423,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<IDictionary<TKey, TSource>>(
                 Expression.Call(
@@ -16456,11 +16456,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IDictionary<TKey, TSource>>(
                 Expression.Call(
@@ -16493,11 +16493,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             
             return source.Provider.CreateQuery<IDictionary<TKey, TElement>>(
                 Expression.Call(
@@ -16531,13 +16531,13 @@ namespace System.Reactive.Linq
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<IDictionary<TKey, TElement>>(
                 Expression.Call(
@@ -16567,7 +16567,7 @@ namespace System.Reactive.Linq
         public static IQueryable<TSource> ToQueryable<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return ((IQueryProvider)source.Provider).CreateQuery<TSource>(
                 Expression.Call(
@@ -16594,7 +16594,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> ToList<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -16623,9 +16623,9 @@ namespace System.Reactive.Linq
         public static IQbservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             
             return source.Provider.CreateQuery<ILookup<TKey, TSource>>(
                 Expression.Call(
@@ -16656,11 +16656,11 @@ namespace System.Reactive.Linq
         public static IQbservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<ILookup<TKey, TSource>>(
                 Expression.Call(
@@ -16693,11 +16693,11 @@ namespace System.Reactive.Linq
         public static IQbservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             
             return source.Provider.CreateQuery<ILookup<TKey, TElement>>(
                 Expression.Call(
@@ -16731,13 +16731,13 @@ namespace System.Reactive.Linq
         public static IQbservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             if (elementSelector == null)
-                throw new ArgumentNullException("elementSelector");
+                throw new ArgumentNullException(nameof(elementSelector));
             if (comparer == null)
-                throw new ArgumentNullException("comparer");
+                throw new ArgumentNullException(nameof(comparer));
             
             return source.Provider.CreateQuery<ILookup<TKey, TElement>>(
                 Expression.Call(
@@ -16767,9 +16767,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToObservable<TSource>(this IQbservableProvider provider, IEnumerable<TSource> source)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16798,11 +16798,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> ToObservable<TSource>(this IQbservableProvider provider, IEnumerable<TSource> source, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16834,11 +16834,11 @@ namespace System.Reactive.Linq
             where TResource : IDisposable
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (resourceFactory == null)
-                throw new ArgumentNullException("resourceFactory");
+                throw new ArgumentNullException(nameof(resourceFactory));
             if (observableFactory == null)
-                throw new ArgumentNullException("observableFactory");
+                throw new ArgumentNullException(nameof(observableFactory));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -16874,11 +16874,11 @@ namespace System.Reactive.Linq
             where TResource : IDisposable
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (resourceFactoryAsync == null)
-                throw new ArgumentNullException("resourceFactoryAsync");
+                throw new ArgumentNullException(nameof(resourceFactoryAsync));
             if (observableFactoryAsync == null)
-                throw new ArgumentNullException("observableFactoryAsync");
+                throw new ArgumentNullException(nameof(observableFactoryAsync));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -16908,9 +16908,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Where<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16938,9 +16938,9 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> Where<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -16969,11 +16969,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TSource> While<TSource>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TSource> source)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (condition == null)
-                throw new ArgumentNullException("condition");
+                throw new ArgumentNullException(nameof(condition));
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return provider.CreateQuery<TSource>(
                 Expression.Call(
@@ -17004,7 +17004,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17035,7 +17035,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, int count, int skip)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17071,7 +17071,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17108,7 +17108,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17147,9 +17147,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17187,9 +17187,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17233,7 +17233,7 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17278,9 +17278,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17311,9 +17311,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(this IQbservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowBoundaries == null)
-                throw new ArgumentNullException("windowBoundaries");
+                throw new ArgumentNullException(nameof(windowBoundaries));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17342,9 +17342,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowClosing>(this IQbservable<TSource> source, Expression<Func<IObservable<TWindowClosing>>> windowClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowClosingSelector == null)
-                throw new ArgumentNullException("windowClosingSelector");
+                throw new ArgumentNullException(nameof(windowClosingSelector));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17375,11 +17375,11 @@ namespace System.Reactive.Linq
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this IQbservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Expression<Func<TWindowOpening, IObservable<TWindowClosing>>> windowClosingSelector)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (windowOpenings == null)
-                throw new ArgumentNullException("windowOpenings");
+                throw new ArgumentNullException(nameof(windowOpenings));
             if (windowClosingSelector == null)
-                throw new ArgumentNullException("windowClosingSelector");
+                throw new ArgumentNullException(nameof(windowClosingSelector));
             
             return source.Provider.CreateQuery<IObservable<TSource>>(
                 Expression.Call(
@@ -17411,11 +17411,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IQbservable<TFirst> first, IObservable<TSecond> second, Expression<Func<TFirst, TSecond, TResult>> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17444,9 +17444,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Zip<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -17474,9 +17474,9 @@ namespace System.Reactive.Linq
         public static IQbservable<IList<TSource>> Zip<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             
             return provider.CreateQuery<IList<TSource>>(
                 Expression.Call(
@@ -17506,11 +17506,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource, TResult>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, Expression<Func<IList<TSource>, TResult>> resultSelector)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (sources == null)
-                throw new ArgumentNullException("sources");
+                throw new ArgumentNullException(nameof(sources));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17542,11 +17542,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IObservable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17578,11 +17578,11 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IEnumerable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
             if (first == null)
-                throw new ArgumentNullException("first");
+                throw new ArgumentNullException(nameof(first));
             if (second == null)
-                throw new ArgumentNullException("second");
+                throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17616,13 +17616,13 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Expression<Func<TSource1, TSource2, TSource3, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17659,15 +17659,15 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17708,17 +17708,17 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17763,19 +17763,19 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17823,21 +17823,21 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17888,23 +17888,23 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -17958,25 +17958,25 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18033,27 +18033,27 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18113,29 +18113,29 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18198,31 +18198,31 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18288,33 +18288,33 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18383,35 +18383,35 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18483,37 +18483,37 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18588,39 +18588,39 @@ namespace System.Reactive.Linq
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector)
         {
             if (source1 == null)
-                throw new ArgumentNullException("source1");
+                throw new ArgumentNullException(nameof(source1));
             if (source2 == null)
-                throw new ArgumentNullException("source2");
+                throw new ArgumentNullException(nameof(source2));
             if (source3 == null)
-                throw new ArgumentNullException("source3");
+                throw new ArgumentNullException(nameof(source3));
             if (source4 == null)
-                throw new ArgumentNullException("source4");
+                throw new ArgumentNullException(nameof(source4));
             if (source5 == null)
-                throw new ArgumentNullException("source5");
+                throw new ArgumentNullException(nameof(source5));
             if (source6 == null)
-                throw new ArgumentNullException("source6");
+                throw new ArgumentNullException(nameof(source6));
             if (source7 == null)
-                throw new ArgumentNullException("source7");
+                throw new ArgumentNullException(nameof(source7));
             if (source8 == null)
-                throw new ArgumentNullException("source8");
+                throw new ArgumentNullException(nameof(source8));
             if (source9 == null)
-                throw new ArgumentNullException("source9");
+                throw new ArgumentNullException(nameof(source9));
             if (source10 == null)
-                throw new ArgumentNullException("source10");
+                throw new ArgumentNullException(nameof(source10));
             if (source11 == null)
-                throw new ArgumentNullException("source11");
+                throw new ArgumentNullException(nameof(source11));
             if (source12 == null)
-                throw new ArgumentNullException("source12");
+                throw new ArgumentNullException(nameof(source12));
             if (source13 == null)
-                throw new ArgumentNullException("source13");
+                throw new ArgumentNullException(nameof(source13));
             if (source14 == null)
-                throw new ArgumentNullException("source14");
+                throw new ArgumentNullException(nameof(source14));
             if (source15 == null)
-                throw new ArgumentNullException("source15");
+                throw new ArgumentNullException(nameof(source15));
             if (source16 == null)
-                throw new ArgumentNullException("source16");
+                throw new ArgumentNullException(nameof(source16));
             if (resultSelector == null)
-                throw new ArgumentNullException("resultSelector");
+                throw new ArgumentNullException(nameof(resultSelector));
             
             return source1.Provider.CreateQuery<TResult>(
                 Expression.Call(
@@ -18663,9 +18663,9 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<Unit>> ToAsync(this IQbservableProvider provider, Expression<Action> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync(default(IQbservableProvider), default(Expression<Action>)));
@@ -18696,11 +18696,11 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<Unit>> ToAsync(this IQbservableProvider provider, Expression<Action> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync(default(IQbservableProvider), default(Expression<Action>), default(IScheduler)));
@@ -18732,9 +18732,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<Unit>> ToAsync<TArg1>(this IQbservableProvider provider, Expression<Action<TArg1>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1>(default(IQbservableProvider), default(Expression<Action<TArg1>>)));
@@ -18767,11 +18767,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<Unit>> ToAsync<TArg1>(this IQbservableProvider provider, Expression<Action<TArg1>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1>(default(IQbservableProvider), default(Expression<Action<TArg1>>), default(IScheduler)));
@@ -18805,9 +18805,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<Unit>> ToAsync<TArg1, TArg2>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2>>)));
@@ -18842,11 +18842,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<Unit>> ToAsync<TArg1, TArg2>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2>>), default(IScheduler)));
@@ -18882,9 +18882,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3>>)));
@@ -18921,11 +18921,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3>>), default(IScheduler)));
@@ -18963,9 +18963,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4>>)));
@@ -19004,11 +19004,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4>>), default(IScheduler)));
@@ -19049,9 +19049,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>>)));
@@ -19092,11 +19092,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>>), default(IScheduler)));
@@ -19138,9 +19138,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>>)));
@@ -19183,11 +19183,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>>), default(IScheduler)));
@@ -19231,9 +19231,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>>)));
@@ -19278,11 +19278,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>>), default(IScheduler)));
@@ -19328,9 +19328,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>>)));
@@ -19377,11 +19377,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>>), default(IScheduler)));
@@ -19429,9 +19429,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>>)));
@@ -19480,11 +19480,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>>), default(IScheduler)));
@@ -19534,9 +19534,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>>)));
@@ -19587,11 +19587,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>>), default(IScheduler)));
@@ -19643,9 +19643,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>>)));
@@ -19698,11 +19698,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>>), default(IScheduler)));
@@ -19756,9 +19756,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>>)));
@@ -19813,11 +19813,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>>), default(IScheduler)));
@@ -19873,9 +19873,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>>)));
@@ -19932,11 +19932,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>>), default(IScheduler)));
@@ -19994,9 +19994,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>>)));
@@ -20055,11 +20055,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>>), default(IScheduler)));
@@ -20119,9 +20119,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>>)));
@@ -20182,11 +20182,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>>), default(IScheduler)));
@@ -20248,9 +20248,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>> action)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>>)));
@@ -20313,11 +20313,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>> action, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(default(IQbservableProvider), default(Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>>), default(IScheduler)));
@@ -20366,9 +20366,9 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<TResult>> ToAsync<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TResult>(default(IQbservableProvider), default(Expression<Func<TResult>>)));
@@ -20400,11 +20400,11 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<TResult>> ToAsync<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TResult>(default(IQbservableProvider), default(Expression<Func<TResult>>), default(IScheduler)));
@@ -20437,9 +20437,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<TResult>> ToAsync<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TResult>>)));
@@ -20473,11 +20473,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<TResult>> ToAsync<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TResult>>), default(IScheduler)));
@@ -20512,9 +20512,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<TResult>> ToAsync<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TResult>>)));
@@ -20550,11 +20550,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<TResult>> ToAsync<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TResult>>), default(IScheduler)));
@@ -20591,9 +20591,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TResult>>)));
@@ -20631,11 +20631,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TResult>>), default(IScheduler)));
@@ -20674,9 +20674,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>>)));
@@ -20716,11 +20716,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>>), default(IScheduler)));
@@ -20762,9 +20762,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>>)));
@@ -20806,11 +20806,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>>), default(IScheduler)));
@@ -20853,9 +20853,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>>)));
@@ -20899,11 +20899,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>>), default(IScheduler)));
@@ -20948,9 +20948,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>>)));
@@ -20996,11 +20996,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>>), default(IScheduler)));
@@ -21047,9 +21047,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>>)));
@@ -21097,11 +21097,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>>), default(IScheduler)));
@@ -21150,9 +21150,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>>)));
@@ -21202,11 +21202,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>>), default(IScheduler)));
@@ -21257,9 +21257,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>>)));
@@ -21311,11 +21311,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>>), default(IScheduler)));
@@ -21368,9 +21368,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>>)));
@@ -21424,11 +21424,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>>), default(IScheduler)));
@@ -21483,9 +21483,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>>)));
@@ -21541,11 +21541,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>>), default(IScheduler)));
@@ -21602,9 +21602,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>>)));
@@ -21662,11 +21662,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>>), default(IScheduler)));
@@ -21725,9 +21725,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>>)));
@@ -21787,11 +21787,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>>), default(IScheduler)));
@@ -21852,9 +21852,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>>)));
@@ -21916,11 +21916,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>>), default(IScheduler)));
@@ -21983,9 +21983,9 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>> function)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>>)));
@@ -22049,11 +22049,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>> function, IScheduler scheduler)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (function == null)
-                throw new ArgumentNullException("function");
+                throw new ArgumentNullException(nameof(function));
             if (scheduler == null)
-                throw new ArgumentNullException("scheduler");
+                throw new ArgumentNullException(nameof(scheduler));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>>), default(IScheduler)));
@@ -22107,11 +22107,11 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<Unit>> FromAsyncPattern(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern(default(IQbservableProvider), default(Expression<Func<AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22148,11 +22148,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<Unit>> FromAsyncPattern<TArg1>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1>(default(IQbservableProvider), default(Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22191,11 +22191,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22237,11 +22237,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22284,11 +22284,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22333,11 +22333,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22384,11 +22384,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22437,11 +22437,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22492,11 +22492,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22549,11 +22549,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22608,11 +22608,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22669,11 +22669,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22732,11 +22732,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22797,11 +22797,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22864,11 +22864,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Action<IAsyncResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>>), default(Expression<Action<IAsyncResult>>)));
@@ -22920,11 +22920,11 @@ namespace System.Reactive.Linq
         public static Func<IQbservable<TResult>> FromAsyncPattern<TResult>(this IQbservableProvider provider, Expression<Func<AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TResult>(default(IQbservableProvider), default(Expression<Func<AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -22962,11 +22962,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, IQbservable<TResult>> FromAsyncPattern<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23006,11 +23006,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23053,11 +23053,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23101,11 +23101,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23151,11 +23151,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23203,11 +23203,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23257,11 +23257,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23313,11 +23313,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23371,11 +23371,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23431,11 +23431,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23493,11 +23493,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23557,11 +23557,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23623,11 +23623,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
@@ -23691,11 +23691,11 @@ namespace System.Reactive.Linq
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>> begin, Expression<Func<IAsyncResult, TResult>>end)
         {
             if (provider == null)
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             if (begin == null)
-                throw new ArgumentNullException("begin");
+                throw new ArgumentNullException(nameof(begin));
             if (end == null)
-                throw new ArgumentNullException("end");
+                throw new ArgumentNullException(nameof(end));
             
 #if CRIPPLED_REFLECTION
             var m = InfoOf(() => Qbservable.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(default(IQbservableProvider), default(Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, AsyncCallback, object, IAsyncResult>>), default(Expression<Func<IAsyncResult, TResult>>)));
