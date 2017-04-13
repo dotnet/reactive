@@ -100,9 +100,7 @@ namespace System.Reactive.PlatformServices
             var diff = now - (_lastTime + _period);
             if (Math.Abs(diff.TotalMilliseconds) >= MAXERROR)
             {
-                var scc = _systemClockChanged;
-                if (scc != null)
-                    scc(this, new SystemClockChangedEventArgs(_lastTime + _period, now));
+                _systemClockChanged?.Invoke(this, new SystemClockChangedEventArgs(_lastTime + _period, now));
 
                 NewTimer();
             }

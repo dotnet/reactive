@@ -37,11 +37,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var dispose = Interlocked.Exchange(ref _dispose, null);
-            if (dispose != null)
-            {
-                dispose();
-            }
+            Interlocked.Exchange(ref _dispose, null)?.Invoke();
         }
     }
 }
