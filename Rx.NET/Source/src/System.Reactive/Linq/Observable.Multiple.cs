@@ -294,7 +294,6 @@ namespace System.Reactive.Linq
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(source1, source2, source3, source4, resultSelector);
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -979,8 +978,6 @@ namespace System.Reactive.Linq
             return s_impl.CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, source16, resultSelector);
         }
 
-#endif
-
         #endregion
 
 #endif
@@ -1650,7 +1647,6 @@ namespace System.Reactive.Linq
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TResult>(source1, source2, source3, source4, resultSelector);
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -2334,8 +2330,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13, source14, source15, source16, resultSelector);
         }
-
-#endif
 
         #endregion
 

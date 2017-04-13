@@ -172,7 +172,6 @@ namespace System.Reactive.Joins
         {
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Creates a pattern that matches when all five observable sequences have an available element.
         /// </summary>
@@ -196,7 +195,6 @@ namespace System.Reactive.Joins
             );
 
         }
-#endif
 
         /// <summary>
         /// Matches when all observable sequences have an available element and projects the elements by invoking the selector function.
@@ -224,7 +222,6 @@ namespace System.Reactive.Joins
 
     }
 
-#if !NO_LARGEARITY
     /// <summary>
     /// Represents a join pattern over five observable sequences.
     /// </summary>
@@ -1046,8 +1043,6 @@ namespace System.Reactive.Joins
         }
 
     }
-
-#endif
 
     #endregion
 }

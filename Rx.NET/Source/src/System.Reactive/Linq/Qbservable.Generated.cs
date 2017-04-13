@@ -1907,7 +1907,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -1958,9 +1957,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2016,9 +2013,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2079,9 +2074,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2147,9 +2140,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2220,9 +2211,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2298,9 +2287,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2381,9 +2368,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2469,9 +2454,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2562,9 +2545,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2660,9 +2641,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2763,9 +2742,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
@@ -2871,7 +2848,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Concatenates the second observable sequence to the first observable sequence upon successful termination of the first.
@@ -17288,7 +17264,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17339,9 +17314,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17397,9 +17370,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17460,9 +17431,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17528,9 +17497,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17601,9 +17568,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17679,9 +17644,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17762,9 +17725,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17850,9 +17811,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -17943,9 +17902,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -18041,9 +17998,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -18144,9 +18099,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
@@ -18252,7 +18205,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
@@ -18634,7 +18586,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
@@ -19955,7 +19906,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#endif
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
@@ -20346,7 +20296,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
@@ -21691,7 +21640,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#endif
         
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
@@ -21819,7 +21767,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
@@ -22504,7 +22451,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#endif
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
@@ -22634,7 +22580,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
@@ -23331,7 +23276,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#endif
     }
 }
 

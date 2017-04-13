@@ -120,7 +120,6 @@ namespace System.Reactive.Linq
             };
         }
 
-#if !NO_LARGEARITY
         public virtual Func<T1, T2, T3, IObservable<TResult>> FromAsyncPattern<T1, T2, T3, TResult>(Func<T1, T2, T3, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
             return (x, y, z) =>
@@ -504,7 +503,6 @@ namespace System.Reactive.Linq
                 return subject.AsObservable();
             };
         }
-#endif
 
         #endregion
 
@@ -537,7 +535,6 @@ namespace System.Reactive.Linq
             });
         }
 
-#if !NO_LARGEARITY
         public virtual Func<T1, T2, T3, IObservable<Unit>> FromAsyncPattern<T1, T2, T3>(Func<T1, T2, T3, AsyncCallback, object, IAsyncResult> begin, Action<IAsyncResult> end)
         {
             return FromAsyncPattern(begin, iar =>
@@ -645,7 +642,6 @@ namespace System.Reactive.Linq
                 return Unit.Default;
             });
         }
-#endif
 
         #endregion
 
@@ -1046,8 +1042,6 @@ namespace System.Reactive.Linq
             };
         }
 
-#if !NO_LARGEARITY
-
         public virtual Func<T1, T2, T3, T4, T5, IObservable<TResult>> ToAsync<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, TResult> function)
         {
             return ToAsync(function, SchedulerDefaults.AsyncConversions);
@@ -1396,8 +1390,6 @@ namespace System.Reactive.Linq
             };
         }
 
-#endif
-
         #endregion
 
         #region Action
@@ -1542,8 +1534,6 @@ namespace System.Reactive.Linq
                 return subject.AsObservable();
             };
         }
-
-#if !NO_LARGEARITY
 
         public virtual Func<T1, T2, T3, T4, T5, IObservable<Unit>> ToAsync<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action)
         {
@@ -1880,8 +1870,6 @@ namespace System.Reactive.Linq
                 return subject.AsObservable();
             };
         }
-
-#endif
 
         #endregion
 

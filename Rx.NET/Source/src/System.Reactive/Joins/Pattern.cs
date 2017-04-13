@@ -169,7 +169,6 @@ namespace System.Reactive.Joins
         internal IObservable<TSource3> Third { get; private set; }
         internal IObservable<TSource4> Fourth { get; private set; }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Creates a pattern that matches when all five observable sequences have an available element.
         /// </summary>
@@ -184,7 +183,6 @@ namespace System.Reactive.Joins
 
             return new Pattern<TSource1, TSource2, TSource3, TSource4, TSource5>(First, Second, Third, Fourth, other);
         }
-#endif
 
         /// <summary>
         /// Matches when all observable sequences have an available element and projects the elements by invoking the selector function.
@@ -203,7 +201,6 @@ namespace System.Reactive.Joins
 
     }
 
-#if !NO_LARGEARITY
     /// <summary>
     /// Represents a join pattern over five observable sequences.
     /// </summary>
@@ -1070,8 +1067,6 @@ namespace System.Reactive.Joins
         }
 
     }
-
-#endif
 
     #endregion
 }

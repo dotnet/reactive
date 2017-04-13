@@ -237,7 +237,6 @@ namespace System.Reactive.Joins
         }
     }
 
-#if !NO_LARGEARITY
     internal class Plan<T1, T2, T3, T4, T5, TResult> : Plan<TResult>
     {
         internal Pattern<T1, T2, T3, T4, T5> Expression { get; private set; }
@@ -1167,5 +1166,4 @@ namespace System.Reactive.Joins
            return activePlan;
        }
    }
-#endif
 }
