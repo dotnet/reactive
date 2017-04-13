@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
             // for more information.
             //
             if (period < TimeSpan.FromMilliseconds(1))
-                throw new ArgumentOutOfRangeException("period", Strings_PlatformServices.WINRT_NO_SUB1MS_TIMERS);
+                throw new ArgumentOutOfRangeException(nameof(period), Strings_PlatformServices.WINRT_NO_SUB1MS_TIMERS);
 
             var res = global::Windows.System.Threading.ThreadPoolTimer.CreatePeriodicTimer(
                 tpt =>

@@ -32,7 +32,7 @@ namespace System.Reactive.Concurrency
         public CoreDispatcherScheduler(CoreDispatcher dispatcher)
         {
             if (dispatcher == null)
-                throw new ArgumentNullException("dispatcher");
+                throw new ArgumentNullException(nameof(dispatcher));
 
             _dispatcher = dispatcher;
             _priority = CoreDispatcherPriority.Normal;
@@ -47,7 +47,7 @@ namespace System.Reactive.Concurrency
         public CoreDispatcherScheduler(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (dispatcher == null)
-                throw new ArgumentNullException("dispatcher");
+                throw new ArgumentNullException(nameof(dispatcher));
 
             _dispatcher = dispatcher;
             _priority = priority;
@@ -95,7 +95,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var d = new SingleAssignmentDisposable();
 
@@ -151,7 +151,7 @@ namespace System.Reactive.Concurrency
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
@@ -211,9 +211,9 @@ namespace System.Reactive.Concurrency
             // Empirical observation - negative values seem to be normalized to TimeSpan.Zero, but let's not go there.
             //
             if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("period");
+                throw new ArgumentOutOfRangeException(nameof(period));
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var timer = new DispatcherTimer();
 

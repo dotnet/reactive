@@ -113,7 +113,7 @@ namespace System.Collections.Concurrent
             {
                 throw new ArgumentOutOfRangeException("capacity");
             }
-            if (comparer == null) throw new ArgumentNullException("comparer");
+            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // The capacity should be at least as large as the concurrency level. Otherwise, we would have locks that don't guard
             // any buckets.
@@ -139,14 +139,14 @@ namespace System.Collections.Concurrent
 
         public bool TryAdd(TKey key, TValue value)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null) throw new ArgumentNullException(nameof(key));
             TValue dummy;
             return TryAddInternal(key, value, false, true, out dummy);
         }
 
         public bool TryRemove(TKey key, out TValue value)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null) throw new ArgumentNullException(nameof(key));
 
             return TryRemoveInternal(key, out value, false, default(TValue));
         }
@@ -210,7 +210,7 @@ namespace System.Collections.Concurrent
         [SuppressMessage("Microsoft.Concurrency", "CA8001", Justification = "Reviewed for thread safety")]
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null) throw new ArgumentNullException(nameof(key));
 
             int bucketNo, lockNoUnused;
 
