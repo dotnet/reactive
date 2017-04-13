@@ -3,9 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if NO_THREAD
-using System;
-using System.Threading;
-
 namespace System.Reactive.Concurrency
 {
     class Thread

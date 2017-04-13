@@ -25,7 +25,7 @@ namespace System.Reactive.Concurrency
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
-            
+
             _context = context;
             _alwaysPost = true;
         }

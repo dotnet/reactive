@@ -7,7 +7,6 @@
 //
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reflection;
