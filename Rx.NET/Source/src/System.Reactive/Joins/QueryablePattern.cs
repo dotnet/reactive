@@ -58,7 +58,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource3));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource3));
             return new QueryablePattern<TSource1, TSource2, TSource3>(
                 Expression.Call(
                     Expression,
@@ -82,7 +82,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -121,7 +121,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource4));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource4));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4>(
                 Expression.Call(
                     Expression,
@@ -145,7 +145,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -185,7 +185,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource5));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource5));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5>(
                 Expression.Call(
                     Expression,
@@ -209,7 +209,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -250,7 +250,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource6));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource6));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>(
                 Expression.Call(
                     Expression,
@@ -274,7 +274,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -316,7 +316,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource7));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource7));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>(
                 Expression.Call(
                     Expression,
@@ -340,7 +340,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -383,7 +383,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource8));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource8));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>(
                 Expression.Call(
                     Expression,
@@ -407,7 +407,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -451,7 +451,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource9));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource9));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>(
                 Expression.Call(
                     Expression,
@@ -475,7 +475,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -520,7 +520,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource10));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource10));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>(
                 Expression.Call(
                     Expression,
@@ -544,7 +544,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -590,7 +590,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource11));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource11));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>(
                 Expression.Call(
                     Expression,
@@ -614,7 +614,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -661,7 +661,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource12));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource12));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>(
                 Expression.Call(
                     Expression,
@@ -685,7 +685,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -733,7 +733,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource13));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource13));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>(
                 Expression.Call(
                     Expression,
@@ -757,7 +757,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -806,7 +806,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource14));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource14));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>(
                 Expression.Call(
                     Expression,
@@ -830,7 +830,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -880,7 +880,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource15));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource15));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>(
                 Expression.Call(
                     Expression,
@@ -904,7 +904,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -955,7 +955,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(other));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>);
-            var m = t.GetMethod("And").MakeGenericMethod(typeof(TSource16));
+            var m = t.GetMethod(nameof(And)).MakeGenericMethod(typeof(TSource16));
             return new QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16>(
                 Expression.Call(
                     Expression,
@@ -979,7 +979,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,
@@ -1031,7 +1031,7 @@ namespace System.Reactive.Joins
                 throw new ArgumentNullException(nameof(selector));
 
             var t = typeof(QueryablePattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16>);
-            var m = t.GetMethod("Then").MakeGenericMethod(typeof(TResult));
+            var m = t.GetMethod(nameof(Then)).MakeGenericMethod(typeof(TResult));
             return new QueryablePlan<TResult>(
                 Expression.Call(
                     Expression,

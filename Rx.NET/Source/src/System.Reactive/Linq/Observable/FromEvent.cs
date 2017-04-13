@@ -181,7 +181,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             if (_conversion == null)
             {
-                handler = ReflectionUtils.CreateDelegate<TDelegate>(onNext, typeof(Action<TEventArgs>).GetMethod("Invoke"));
+                handler = ReflectionUtils.CreateDelegate<TDelegate>(onNext, typeof(Action<TEventArgs>).GetMethod(nameof(Action<TEventArgs>.Invoke)));
             }
             else
             {
