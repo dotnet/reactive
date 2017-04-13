@@ -22,17 +22,14 @@ namespace System.Reactive.Windows.Foundation
 
             _subject = new AsyncSubject<TResult>();
 
-            if (onProgress != null)
+            onProgress?.Invoke(info, (iai, p) =>
             {
-                onProgress(info, (iai, p) =>
-                {
-                    if (multiValue && getResult != null)
-                        _subject.OnNext(getResult(iai));
+                if (multiValue && getResult != null)
+                    _subject.OnNext(getResult(iai));
 
-                    if (progress != null)
-                        progress.Report(p);
-                });
-            }
+                if (progress != null)
+                    progress.Report(p);
+            });
 
             Done(info, info.Status, true);
         }

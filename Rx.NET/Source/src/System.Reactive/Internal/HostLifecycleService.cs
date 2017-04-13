@@ -62,16 +62,12 @@ namespace System.Reactive.PlatformServices
 
         private static void OnSuspending(object sender, HostSuspendingEventArgs e)
         {
-            var suspending = Suspending;
-            if (suspending != null)
-                suspending(sender, e);
+            Suspending?.Invoke(sender, e);
         }
 
         private static void OnResuming(object sender, HostResumingEventArgs e)
         {
-            var resuming = Resuming;
-            if (resuming != null)
-                resuming(sender, e);
+            Resuming?.Invoke(sender, e);
         }
 
         private static IHostLifecycleNotifications InitializeNotifications()

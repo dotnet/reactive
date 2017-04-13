@@ -151,9 +151,7 @@ namespace System.Reactive.Concurrency
             if (w != null)
                 w.Dispose();
 
-            var c = _continuation;
-            if (c != null)
-                c();
+            _continuation?.Invoke();
         }
     }
 }
