@@ -50,7 +50,6 @@ namespace System.Reactive.Concurrency
             });
         }
 
-#if !NO_SYNCCTX
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the specified synchronization context.
         /// </summary>
@@ -81,7 +80,6 @@ namespace System.Reactive.Concurrency
                 return subscription;
             });
         }
-#endif
 
         #endregion
 
@@ -109,7 +107,6 @@ namespace System.Reactive.Concurrency
 #endif
         }
 
-#if !NO_SYNCCTX
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the specified synchronization context.
         /// </summary>
@@ -152,7 +149,6 @@ namespace System.Reactive.Concurrency
             });
 #endif
         }
-#endif
 
         #endregion
 

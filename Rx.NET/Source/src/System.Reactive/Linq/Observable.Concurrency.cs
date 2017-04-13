@@ -33,7 +33,6 @@ namespace System.Reactive.Linq
             return s_impl.ObserveOn<TSource>(source, scheduler);
         }
 
-#if !NO_SYNCCTX
         /// <summary>
         /// Wraps the source sequence in order to run its observer callbacks on the specified synchronization context.
         /// </summary>
@@ -55,7 +54,6 @@ namespace System.Reactive.Linq
 
             return s_impl.ObserveOn<TSource>(source, context);
         }
-#endif
 
         #endregion
 
@@ -84,7 +82,6 @@ namespace System.Reactive.Linq
             return s_impl.SubscribeOn<TSource>(source, scheduler);
         }
 
-#if !NO_SYNCCTX
         /// <summary>
         /// Wraps the source sequence in order to run its subscription and unsubscription logic on the specified synchronization context. This operation is not commonly used;
         /// see the remarks section for more information on the distinction between SubscribeOn and ObserveOn.
@@ -107,7 +104,6 @@ namespace System.Reactive.Linq
 
             return s_impl.SubscribeOn<TSource>(source, context);
         }
-#endif
 
         #endregion
 
