@@ -44,17 +44,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler)
-        {
-            if (addHandler == null)
-                throw new ArgumentNullException(nameof(addHandler));
-            if (removeHandler == null)
-                throw new ArgumentNullException(nameof(removeHandler));
-
-            return s_impl.FromEventPattern(addHandler, removeHandler);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler)
         {
             if (addHandler == null)
@@ -64,7 +53,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromEventPattern(addHandler, removeHandler);
         }
-#endif
 
         /// <summary>
         /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler"/>, to an observable sequence.
@@ -92,19 +80,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
-        {
-            if (addHandler == null)
-                throw new ArgumentNullException(nameof(addHandler));
-            if (removeHandler == null)
-                throw new ArgumentNullException(nameof(removeHandler));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return s_impl.FromEventPattern(addHandler, removeHandler, scheduler);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
             if (addHandler == null)
@@ -116,7 +91,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromEventPattern(addHandler, removeHandler, scheduler);
         }
-#endif
 
         #endregion
 
@@ -154,9 +128,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -195,9 +166,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -242,9 +210,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (conversion == null)
                 throw new ArgumentNullException(nameof(conversion));
@@ -286,9 +251,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (conversion == null)
                 throw new ArgumentNullException(nameof(conversion));
@@ -335,9 +297,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -377,9 +336,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -425,9 +381,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -464,9 +417,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (addHandler == null)
                 throw new ArgumentNullException(nameof(addHandler));
@@ -517,17 +467,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName)
-        {
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-
-            return s_impl.FromEventPattern(target, eventName);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName)
         {
             if (target == null)
@@ -537,7 +476,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromEventPattern(target, eventName);
         }
-#endif
 
         /// <summary>
         /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs"/> parameter, to an observable sequence.
@@ -567,19 +505,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName, IScheduler scheduler)
-        {
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return s_impl.FromEventPattern(target, eventName, scheduler);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(object target, string eventName, IScheduler scheduler)
         {
             if (target == null)
@@ -591,7 +516,6 @@ namespace System.Reactive.Linq
             
             return s_impl.FromEventPattern(target, eventName, scheduler);
         }
-#endif
 
         /// <summary>
         /// Converts an instance .NET event, conforming to the standard .NET event pattern with strongly typed event arguments, to an observable sequence.
@@ -626,9 +550,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -668,9 +589,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -716,9 +634,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -759,9 +674,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -808,17 +720,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName)
-        {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-
-            return s_impl.FromEventPattern(type, eventName);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName)
         {
             if (type == null)
@@ -828,7 +729,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromEventPattern(type, eventName);
         }
-#endif
 
         /// <summary>
         /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs"/> parameter, to an observable sequence.
@@ -858,19 +758,6 @@ namespace System.Reactive.Linq
         /// </para>
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
-#if !NO_EVENTARGS_CONSTRAINT
-        public static IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
-        {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            return s_impl.FromEventPattern(type, eventName, scheduler);
-        }
-#else
         public static IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
         {
             if (type == null)
@@ -882,7 +769,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromEventPattern(type, eventName, scheduler);
         }
-#endif
 
         /// <summary>
         /// Converts a static .NET event, conforming to the standard .NET event pattern with strongly typed event arguments, to an observable sequence.
@@ -917,9 +803,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
@@ -959,9 +842,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
@@ -1007,9 +887,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
@@ -1050,9 +927,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern"/>
         public static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));

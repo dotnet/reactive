@@ -397,11 +397,7 @@ namespace System.Reactive.Linq
         IEnumerable<TSource> ToEnumerable<TSource>(IObservable<TSource> source);
         IEventSource<Unit> ToEvent(IObservable<Unit> source);
         IEventSource<TSource> ToEvent<TSource>(IObservable<TSource> source);
-#if !NO_EVENTARGS_CONSTRAINT
-        IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(IObservable<EventPattern<TEventArgs>> source) where TEventArgs : EventArgs;
-#else
         IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(IObservable<EventPattern<TEventArgs>> source);
-#endif
         IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source);
         IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source, IScheduler scheduler);
 
@@ -453,30 +449,6 @@ namespace System.Reactive.Linq
 
         #region * Events *
 
-#if !NO_EVENTARGS_CONSTRAINT
-        IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler);
-        IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler);
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName);
-        IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName, IScheduler scheduler);
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName);
-        IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName, IScheduler scheduler);
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName) where TEventArgs : EventArgs;
-        IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs;
-#else
         IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler);
         IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler);
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler);
@@ -499,7 +471,7 @@ namespace System.Reactive.Linq
         IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler);
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName);
         IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler);
-#endif
+
         IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler);
         IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler);
         IObservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler);

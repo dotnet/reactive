@@ -19,9 +19,6 @@ namespace System.Reactive.Linq.ObservableImpl
     class FromEventPattern
     {
         public class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             private readonly Func<EventHandler<TEventArgs>, TDelegate> _conversion;
 
@@ -55,9 +52,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
 
         public class Impl<TDelegate, TSender, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TSender, TEventArgs>>
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)

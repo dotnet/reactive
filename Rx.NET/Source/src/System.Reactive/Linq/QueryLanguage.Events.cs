@@ -31,17 +31,6 @@ namespace System.Reactive.Linq
 
         #region Action<EventHandler>
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler)
-        {
-            return FromEventPattern_(addHandler, removeHandler, GetSchedulerForCurrentContext());
-        }
-
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
-        {
-            return FromEventPattern_(addHandler, removeHandler, scheduler);
-        }
-#else
         public virtual IObservable<EventPattern<object>> FromEventPattern(Action<EventHandler> addHandler, Action<EventHandler> removeHandler)
         {
             return FromEventPattern_(addHandler, removeHandler, GetSchedulerForCurrentContext());
@@ -51,21 +40,9 @@ namespace System.Reactive.Linq
         {
             return FromEventPattern_(addHandler, removeHandler, scheduler);
         }
-#endif
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<EventArgs>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
-        {
-#if !NO_PERF
-            return new FromEventPattern.Impl<EventHandler, EventArgs>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
-#else
-            var res = Observable.FromEventPattern<EventHandler, EventArgs>(e => new EventHandler(e), addHandler, removeHandler);
-            return SynchronizeEvents(res, scheduler);
-#endif
-        }
-#else
         private static IObservable<EventPattern<object>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
 #if !NO_PERF
@@ -75,7 +52,6 @@ namespace System.Reactive.Linq
             return SynchronizeEvents(res, scheduler);
 #endif
         }
-#endif
 
         #endregion
 
@@ -83,31 +59,19 @@ namespace System.Reactive.Linq
 
         #region Action<TDelegate>
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#endif
         {
             return FromEventPattern_<TDelegate, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
 #if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
@@ -126,31 +90,19 @@ namespace System.Reactive.Linq
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#endif
         {
             return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
 #if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
@@ -168,31 +120,19 @@ namespace System.Reactive.Linq
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
-#endif
         {
             return FromEventPattern_<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
-#endif
         {
 #if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
@@ -215,31 +155,19 @@ namespace System.Reactive.Linq
 
         #region Action<EventHandler<TEventArgs>>
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler)
-#endif
         {
             return FromEventPattern_<TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
-        #if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
-#endif
         {
 #if !NO_PERF
             return new FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
@@ -259,17 +187,6 @@ namespace System.Reactive.Linq
 
         #region Instance events
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName)
-        {
-            return FromEventPattern_(target, eventName, GetSchedulerForCurrentContext());
-        }
-
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(object target, string eventName, IScheduler scheduler)
-        {
-            return FromEventPattern_(target, eventName, scheduler);
-        }
-#else
         public virtual IObservable<EventPattern<object>> FromEventPattern(object target, string eventName)
         {
             return FromEventPattern_(target, eventName, GetSchedulerForCurrentContext());
@@ -279,80 +196,48 @@ namespace System.Reactive.Linq
         {
             return FromEventPattern_(target, eventName, scheduler);
         }
-#endif
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<EventArgs>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
-        {
-            return FromEventPattern_<object, EventArgs, EventPattern<EventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<EventArgs>(sender, args), scheduler);
-        }
-#else
         private static IObservable<EventPattern<object>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
         }
-#endif
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName)
-#endif
         {
             return FromEventPattern_<TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(object target, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TEventArgs>(target, eventName, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
         }
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs>(target, eventName, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
         }
@@ -363,17 +248,6 @@ namespace System.Reactive.Linq
 
         #region Static events
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName)
-        {
-            return FromEventPattern_(type, eventName, GetSchedulerForCurrentContext());
-        }
-
-        public virtual IObservable<EventPattern<EventArgs>> FromEventPattern(Type type, string eventName, IScheduler scheduler)
-        {
-            return FromEventPattern_(type, eventName, scheduler);
-        }
-#else
         public virtual IObservable<EventPattern<object>> FromEventPattern(Type type, string eventName)
         {
             return FromEventPattern_(type, eventName, GetSchedulerForCurrentContext());
@@ -383,80 +257,48 @@ namespace System.Reactive.Linq
         {
             return FromEventPattern_(type, eventName, scheduler);
         }
-#endif
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<EventArgs>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
-        {
-            return FromEventPattern_<object, EventArgs, EventPattern<EventArgs>>(type, null, eventName, (sender, args) => new EventPattern<EventArgs>(sender, args), scheduler);
-        }
-#else
         private static IObservable<EventPattern<object>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
         {
             return FromEventPattern_<object, object, EventPattern<object>>(type, null, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
         }
-#endif
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName)
-#endif
         {
             return FromEventPattern_<TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TEventArgs>(type, eventName, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
         }
 
         #endregion
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
-#if !NO_EVENTARGS_CONSTRAINT
-        public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         public virtual IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs>(type, eventName, scheduler);
         }
 
         #region Implementation
 
-#if !NO_EVENTARGS_CONSTRAINT
-        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler) where TEventArgs : EventArgs
-#else
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
-#endif
         {
             return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
         }
@@ -468,9 +310,6 @@ namespace System.Reactive.Linq
         #region Helper methods
 
         private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
- where TEventArgs : EventArgs
-#endif
         {
             var addMethod = default(MethodInfo);
             var removeMethod = default(MethodInfo);

@@ -5519,62 +5519,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
-        /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
-        /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// If no SynchronizationContext is present at the point of calling FromEventPattern, add and remove handler invocations are made synchronously on the thread
-        /// making the Subscribe or Dispose call, respectively.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions due to the free-threaded nature of Reactive Extensions. Doing so
-        /// makes the captured SynchronizationContext predictable. This best practice also reduces clutter of bridging code inside queries, making the query expressions
-        /// more concise and easier to understand.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (addHandler == null)
-                throw new ArgumentNullException(nameof(addHandler));
-            if (removeHandler == null)
-                throw new ArgumentNullException(nameof(removeHandler));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(Expression<Action<EventHandler>>), default(Expression<Action<EventHandler>>))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    addHandler,
-                    removeHandler
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -5629,64 +5573,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
-        /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
-        /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// Add and remove handler invocations are run on the specified scheduler. This behavior allows add and remove handler operations for thread-affine events to be
-        /// accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions. This best practice reduces clutter of bridging code inside queries,
-        /// making the query expressions more concise and easier to understand. This has additional benefits for overloads of FromEventPattern that omit the IScheduler
-        /// parameter. For more information, see the remarks section on those overloads.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler, IScheduler scheduler)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (addHandler == null)
-                throw new ArgumentNullException(nameof(addHandler));
-            if (removeHandler == null)
-                throw new ArgumentNullException(nameof(removeHandler));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(Expression<Action<EventHandler>>), default(Expression<Action<EventHandler>>), default(IScheduler))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    addHandler,
-                    removeHandler,
-                    Expression.Constant(scheduler, typeof(IScheduler))
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -5741,66 +5628,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// Reflection is used to discover the event based on the target object type and the specified event name.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="target">Object instance that exposes the event to convert.</param>
-        /// <param name="eventName">Name of the event to convert.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="target" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
-        /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// If no SynchronizationContext is present at the point of calling FromEventPattern, add and remove handler invocations are made synchronously on the thread
-        /// making the Subscribe or Dispose call, respectively.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions due to the free-threaded nature of Reactive Extensions. Doing so
-        /// makes the captured SynchronizationContext predictable. This best practice also reduces clutter of bridging code inside queries, making the query expressions
-        /// more concise and easier to understand.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(object), default(string))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    Expression.Constant(target, typeof(object)),
-                    Expression.Constant(eventName, typeof(string))
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -5857,66 +5685,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// Reflection is used to discover the event based on the target object type and the specified event name.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="target">Object instance that exposes the event to convert.</param>
-        /// <param name="eventName">Name of the event to convert.</param>
-        /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="target" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// Add and remove handler invocations are run on the specified scheduler. This behavior allows add and remove handler operations for thread-affine events to be
-        /// accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions. This best practice reduces clutter of bridging code inside queries,
-        /// making the query expressions more concise and easier to understand. This has additional benefits for overloads of FromEventPattern that omit the IScheduler
-        /// parameter. For more information, see the remarks section on those overloads.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(object), default(string), default(IScheduler))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    Expression.Constant(target, typeof(object)),
-                    Expression.Constant(eventName, typeof(string)),
-                    Expression.Constant(scheduler, typeof(IScheduler))
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -5973,66 +5742,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// Reflection is used to discover the event based on the specified type and the specified event name.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="type">Type that exposes the static event to convert.</param>
-        /// <param name="eventName">Name of the event to convert.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="type" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
-        /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// If no SynchronizationContext is present at the point of calling FromEventPattern, add and remove handler invocations are made synchronously on the thread
-        /// making the Subscribe or Dispose call, respectively.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions due to the free-threaded nature of Reactive Extensions. Doing so
-        /// makes the captured SynchronizationContext predictable. This best practice also reduces clutter of bridging code inside queries, making the query expressions
-        /// more concise and easier to understand.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(Type), default(string))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    Expression.Constant(type, typeof(Type)),
-                    Expression.Constant(eventName, typeof(string))
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -6089,66 +5799,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_EVENTARGS_CONSTRAINT
-        /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
-        /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
-        /// Reflection is used to discover the event based on the specified type and the specified event name.
-        /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
-        /// </summary>
-        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
-        /// <param name="type">Type that exposes the static event to convert.</param>
-        /// <param name="eventName">Name of the event to convert.</param>
-        /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
-        /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="type" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
-        /// <remarks>
-        /// <para>
-        /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
-        /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
-        /// </para>
-        /// <para>
-        /// Add and remove handler invocations are run on the specified scheduler. This behavior allows add and remove handler operations for thread-affine events to be
-        /// accessed from the same context, as required by some UI frameworks.
-        /// </para>
-        /// <para>
-        /// It's recommended to lift FromEventPattern calls outside event stream query expressions. This best practice reduces clutter of bridging code inside queries,
-        /// making the query expressions more concise and easier to understand. This has additional benefits for overloads of FromEventPattern that omit the IScheduler
-        /// parameter. For more information, see the remarks section on those overloads.
-        /// </para>
-        /// </remarks>
-        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
-        public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
-        {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (eventName == null)
-                throw new ArgumentNullException(nameof(eventName));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            
-            return provider.CreateQuery<EventPattern<EventArgs>>(
-                Expression.Call(
-                    null,
-#if CRIPPLED_REFLECTION
-                    InfoOf(() => Qbservable.FromEventPattern(default(IQbservableProvider), default(Type), default(string), default(IScheduler))),
-#else
-                    (MethodInfo)MethodInfo.GetCurrentMethod(),
-#endif
-                    Expression.Constant(provider, typeof(IQbservableProvider)),
-                    Expression.Constant(type, typeof(Type)),
-                    Expression.Constant(eventName, typeof(string)),
-                    Expression.Constant(scheduler, typeof(IScheduler))
-                )
-            );
-        }
-#else
         /// <summary>
         /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -6205,7 +5856,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Converts a .NET event, conforming to the standard .NET event pattern based on a supplied event delegate type, to an observable sequence.
@@ -6241,9 +5891,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6298,9 +5945,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6362,9 +6006,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<EventHandler<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6423,9 +6064,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<EventHandler<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6490,9 +6128,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6548,9 +6183,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6608,9 +6240,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Expression<Action<EventHandler<TEventArgs>>> addHandler, Expression<Action<EventHandler<TEventArgs>>> removeHandler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6662,9 +6291,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Expression<Action<EventHandler<TEventArgs>>> addHandler, Expression<Action<EventHandler<TEventArgs>>> removeHandler, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6726,9 +6352,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, object target, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6784,9 +6407,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6848,9 +6468,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Type type, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6906,9 +6523,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -6971,9 +6585,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, object target, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -7030,9 +6641,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -7095,9 +6703,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, Type type, string eventName)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
@@ -7154,9 +6759,6 @@ namespace System.Reactive.Linq
         /// </remarks>
         /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (provider == null)
                 throw new ArgumentNullException(nameof(provider));
