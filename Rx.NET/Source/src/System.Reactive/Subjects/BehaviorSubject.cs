@@ -28,7 +28,7 @@ namespace System.Reactive.Subjects
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/> class which creates a subject that caches its last value and starts with the specified value.
+        /// Initializes a new instance of the <see cref="BehaviorSubject{T}"/> class which creates a subject that caches its last value and starts with the specified value.
         /// </summary>
         /// <param name="value">Initial value sent to observers when no other value has been received by the subject yet.</param>
         public BehaviorSubject(T value)

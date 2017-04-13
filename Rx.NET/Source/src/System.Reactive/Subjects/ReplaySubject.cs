@@ -30,7 +30,7 @@ namespace System.Reactive.Subjects
         #region All
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class.
         /// </summary>
         public ReplaySubject()
             : this(int.MaxValue)
@@ -38,7 +38,7 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified scheduler.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified scheduler.
         /// </summary>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
@@ -52,7 +52,7 @@ namespace System.Reactive.Subjects
         #region Count
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified buffer size.
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
@@ -73,7 +73,7 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and scheduler.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified buffer size and scheduler.
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
@@ -89,7 +89,7 @@ namespace System.Reactive.Subjects
         #region Time
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified window.
         /// </summary>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
@@ -99,7 +99,7 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified window and scheduler.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified window and scheduler.
         /// </summary>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
@@ -115,7 +115,7 @@ namespace System.Reactive.Subjects
         #region Count & Time
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size and window.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified buffer size and window.
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
@@ -126,7 +126,7 @@ namespace System.Reactive.Subjects
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;" /> class with the specified buffer size, window and scheduler.
+        /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified buffer size, window and scheduler.
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
@@ -219,7 +219,7 @@ namespace System.Reactive.Subjects
         #region IDisposable implementation
 
         /// <summary>
-        /// Releases all resources used by the current instance of the <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/> class and unsubscribe all observers.
+        /// Releases all resources used by the current instance of the <see cref="ReplaySubject{T}"/> class and unsubscribe all observers.
         /// </summary>
         public override void Dispose()
         {

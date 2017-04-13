@@ -24,9 +24,9 @@ namespace System.Reactive.Linq
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribe"/> is null.</exception>
         /// <remarks>
-        /// Use of this operator is preferred over manual implementation of the IObservable&lt;T&gt; interface. In case
-        /// you need a type implementing IObservable&lt;T&gt; rather than an anonymous implementation, consider using
-        /// the <see cref="System.Reactive.ObservableBase&lt;T&gt;"/> abstract base class.
+        /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
+        /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
+        /// the <see cref="ObservableBase{T}"/> abstract base class.
         /// </remarks>
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, IDisposable> subscribe)
         {
@@ -44,9 +44,9 @@ namespace System.Reactive.Linq
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="subscribe"/> is null.</exception>
         /// <remarks>
-        /// Use of this operator is preferred over manual implementation of the IObservable&lt;T&gt; interface. In case
-        /// you need a type implementing IObservable&lt;T&gt; rather than an anonymous implementation, consider using
-        /// the <see cref="System.Reactive.ObservableBase&lt;T&gt;"/> abstract base class.
+        /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
+        /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
+        /// the <see cref="ObservableBase{T}"/> abstract base class.
         /// </remarks>
         public static IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Action> subscribe)
         {
@@ -230,7 +230,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <returns>An observable sequence with no elements.</returns>
         public static IObservable<TResult> Empty<TResult>()
         {
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
         public static IObservable<TResult> Empty<TResult>(TResult witness)
@@ -251,7 +251,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence, using the specified scheduler to send out the single OnCompleted message.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="scheduler">Scheduler to send the termination call on.</param>
         /// <returns>An observable sequence with no elements.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
@@ -266,7 +266,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence, using the specified scheduler to send out the single OnCompleted message.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="scheduler">Scheduler to send the termination call on.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
@@ -339,7 +339,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns a non-terminating observable sequence, which can be used to denote an infinite duration (e.g. when using reactive joins).
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IObservable<TResult> Never<TResult>()
         {
@@ -349,7 +349,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns a non-terminating observable sequence, which can be used to denote an infinite duration (e.g. when using reactive joins).
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IObservable<TResult> Never<TResult>(TResult witness)
@@ -367,7 +367,7 @@ namespace System.Reactive.Linq
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="M:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
         public static IObservable<int> Range(int start, int count)
         {
             var max = ((long)start) + count - 1;
@@ -384,7 +384,7 @@ namespace System.Reactive.Linq
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <param name="scheduler">Scheduler to run the generator loop on.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="M:System.Int32.MaxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="count"/> is less than zero. -or- <paramref name="start"/> + <paramref name="count"/> - 1 is larger than <see cref="Int32.MaxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
         public static IObservable<int> Range(int start, int count, IScheduler scheduler)
         {
@@ -503,7 +503,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="exception"/> is null.</exception>
@@ -518,7 +518,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
@@ -534,7 +534,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception, using the specified scheduler to send out the single OnError message.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="scheduler">Scheduler to send the exceptional termination call on.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
@@ -552,7 +552,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception, using the specified scheduler to send out the single OnError message.
         /// </summary>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="scheduler">Scheduler to send the exceptional termination call on.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult"/> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>

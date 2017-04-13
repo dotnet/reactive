@@ -9,7 +9,7 @@ using System.Threading;
 namespace System.Reactive.Disposables
 {
     /// <summary>
-    /// Represents a disposable resource whose disposal invocation will be posted to the specified <seealso cref="T:System.Threading.SynchronizationContext"/>.
+    /// Represents a disposable resource whose disposal invocation will be posted to the specified <seealso cref="SynchronizationContext"/>.
     /// </summary>
     public sealed class ContextDisposable : ICancelable
     {
@@ -17,7 +17,7 @@ namespace System.Reactive.Disposables
         private volatile IDisposable _disposable;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.ContextDisposable"/> class that uses the specified <see cref="T:System.Threading.SynchronizationContext"/> on which to dispose the specified disposable resource.
+        /// Initializes a new instance of the <see cref="ContextDisposable"/> class that uses the specified <see cref="SynchronizationContext"/> on which to dispose the specified disposable resource.
         /// </summary>
         /// <param name="context">Context to perform disposal on.</param>
         /// <param name="disposable">Disposable whose Dispose operation to run on the given synchronization context.</param>
@@ -34,7 +34,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets the provided <see cref="T:System.Threading.SynchronizationContext"/>.
+        /// Gets the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         public SynchronizationContext Context
         {
@@ -50,7 +50,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Disposes the underlying disposable on the provided <see cref="T:System.Threading.SynchronizationContext"/>.
+        /// Disposes the underlying disposable on the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         public void Dispose()
         {

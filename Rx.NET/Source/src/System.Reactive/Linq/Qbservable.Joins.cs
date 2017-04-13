@@ -80,7 +80,7 @@ namespace System.Reactive.Linq
         /// Joins together the results from several patterns.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained from the specified patterns.</typeparam>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="plans">A series of plans created by use of the Then operator on patterns.</param>
         /// <returns>An observable sequence with the results from matching several patterns.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="provider"/> or <paramref name="plans"/> is null.</exception>
@@ -112,7 +112,7 @@ namespace System.Reactive.Linq
         /// Joins together the results from several patterns.
         /// </summary>
         /// <typeparam name="TResult">The type of the elements in the result sequence, obtained from the specified patterns.</typeparam>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="plans">A series of plans created by use of the Then operator on patterns.</param>
         /// <returns>An observable sequence with the results form matching several patterns.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="provider"/> or <paramref name="plans"/> is null.</exception>

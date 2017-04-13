@@ -63,14 +63,14 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence.
-        /// This operator is a specialization of Multicast using a regular <see cref="System.Reactive.Subjects.Subject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a regular <see cref="Subject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <returns>A connectable observable sequence that shares a single subscription to the underlying sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>Subscribers will receive all notifications of the source from the time of the subscription on.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.Subject&lt;T&gt;"/>
+        /// <seealso cref="Subject{T}"/>
         public static IConnectableObservable<TSource> Publish<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
-        /// This operator is a specialization of Multicast using a regular <see cref="System.Reactive.Subjects.Subject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a regular <see cref="Subject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all notifications of the source from the time of the subscription on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <seealso cref="System.Reactive.Subjects.Subject&lt;T&gt;"/>
+        /// <seealso cref="Subject{T}"/>
         public static IObservable<TResult> Publish<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="BehaviorSubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq
         /// <returns>A connectable observable sequence that shares a single subscription to the underlying sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>Subscribers will receive immediately receive the initial value, followed by all notifications of the source from the time of the subscription on.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/>
+        /// <seealso cref="BehaviorSubject{T}"/>
         public static IConnectableObservable<TSource> Publish<TSource>(this IObservable<TSource> source, TSource initialValue)
         {
             if (source == null)
@@ -121,7 +121,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="BehaviorSubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq
         /// <param name="initialValue">Initial value received by observers upon subscription.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <seealso cref="System.Reactive.Subjects.BehaviorSubject&lt;T&gt;"/>
+        /// <seealso cref="BehaviorSubject{T}"/>
         public static IObservable<TResult> Publish<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TSource initialValue)
         {
             if (source == null)
@@ -147,14 +147,14 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.AsyncSubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="AsyncSubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <returns>A connectable observable sequence that shares a single subscription to the underlying sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>Subscribers will only receive the last notification of the source.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.AsyncSubject&lt;T&gt;"/>
+        /// <seealso cref="AsyncSubject{T}"/>
         public static IConnectableObservable<TSource> PublishLast<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -165,7 +165,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.AsyncSubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="AsyncSubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -173,7 +173,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will only receive the last notification of the source.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <seealso cref="System.Reactive.Subjects.AsyncSubject&lt;T&gt;"/>
+        /// <seealso cref="AsyncSubject{T}"/>
         public static IObservable<TResult> PublishLast<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
@@ -209,14 +209,14 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <returns>A connectable observable sequence that shares a single subscription to the underlying sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -235,7 +235,7 @@ namespace System.Reactive.Linq
         /// <returns>A connectable observable sequence that shares a single subscription to the underlying sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
@@ -248,7 +248,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -256,7 +256,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all the notifications of the source.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector)
         {
             if (source == null)
@@ -269,7 +269,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -278,7 +278,7 @@ namespace System.Reactive.Linq
         /// <param name="scheduler">Scheduler where connected observers within the selector function will be invoked on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> or <paramref name="scheduler"/> is null.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, IScheduler scheduler)
         {
             if (source == null)
@@ -293,7 +293,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -302,7 +302,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, TimeSpan window)
         {
             if (source == null)
@@ -315,7 +315,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -325,7 +325,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TimeSpan window)
         {
             if (source == null)
@@ -340,7 +340,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -350,7 +350,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -365,7 +365,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -376,7 +376,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> or <paramref name="scheduler"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -393,7 +393,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying bufferSize notifications.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -403,7 +403,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
@@ -418,7 +418,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -429,7 +429,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> or <paramref name="scheduler"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
@@ -446,7 +446,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -455,7 +455,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize)
         {
             if (source == null)
@@ -468,7 +468,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -478,7 +478,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize)
         {
             if (source == null)
@@ -493,7 +493,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -504,7 +504,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, TimeSpan window)
         {
             if (source == null)
@@ -519,7 +519,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -531,7 +531,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
@@ -548,7 +548,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
@@ -560,7 +560,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
         /// <remarks>Subscribers will receive all the notifications of the source subject to the specified replay buffer trimming policy.</remarks>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IConnectableObservable<TSource> Replay<TSource>(this IObservable<TSource> source, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -577,7 +577,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>.
+        /// This operator is a specialization of Multicast using a <see cref="ReplaySubject{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -590,7 +590,7 @@ namespace System.Reactive.Linq
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> or <paramref name="scheduler"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="System.Reactive.Subjects.ReplaySubject&lt;T&gt;"/>
+        /// <seealso cref="ReplaySubject{T}"/>
         public static IObservable<TResult> Replay<TSource, TResult>(this IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)

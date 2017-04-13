@@ -54,32 +54,32 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
-        /// Determines whether the two specified Recorded&lt;T&gt; values have the same Time and Value.
+        /// Determines whether the two specified <see cref="Recorded{T}"/> values have the same Time and Value.
         /// </summary>
-        /// <param name="left">The first Recorded&lt;T&gt; value to compare.</param>
-        /// <param name="right">The second Recorded&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first Recorded&lt;T&gt; value has the same Time and Value as the second Recorded&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Recorded{T}"/> value to compare.</param>
+        /// <param name="right">The second <see cref="Recorded{T}"/> value to compare.</param>
+        /// <returns>true if the first <see cref="Recorded{T}"/> value has the same Time and Value as the second <see cref="Recorded{T}"/> value; otherwise, false.</returns>
         public static bool operator ==(Recorded<T> left, Recorded<T> right)
         {
             return left.Equals(right);
         }
 
         /// <summary>
-        /// Determines whether the two specified Recorded&lt;T&gt; values don't have the same Time and Value.
+        /// Determines whether the two specified <see cref="Recorded{T}"/> values don't have the same Time and Value.
         /// </summary>
-        /// <param name="left">The first Recorded&lt;T&gt; value to compare.</param>
-        /// <param name="right">The second Recorded&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first Recorded&lt;T&gt; value has a different Time or Value as the second Recorded&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Recorded{T}"/> value to compare.</param>
+        /// <param name="right">The second <see cref="Recorded{T}"/> value to compare.</param>
+        /// <returns>true if the first <see cref="Recorded{T}"/> value has a different Time or Value as the second <see cref="Recorded{T}"/> value; otherwise, false.</returns>
         public static bool operator !=(Recorded<T> left, Recorded<T> right)
         {
             return !left.Equals(right);
         }
 
         /// <summary>
-        /// Determines whether the specified System.Object is equal to the current Recorded&lt;T&gt; value.
+        /// Determines whether the specified System.Object is equal to the current <see cref="Recorded{T}"/> value.
         /// </summary>
-        /// <param name="obj">The System.Object to compare with the current Recorded&lt;T&gt; value.</param>
-        /// <returns>true if the specified System.Object is equal to the current Recorded&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="obj">The System.Object to compare with the current <see cref="Recorded{T}"/> value.</param>
+        /// <returns>true if the specified System.Object is equal to the current <see cref="Recorded{T}"/> value; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (obj is Recorded<T>)
@@ -88,18 +88,18 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
-        /// Returns the hash code for the current Recorded&lt;T&gt; value.
+        /// Returns the hash code for the current <see cref="Recorded{T}"/> value.
         /// </summary>
-        /// <returns>A hash code for the current Recorded&lt;T&gt; value.</returns>
+        /// <returns>A hash code for the current <see cref="Recorded{T}"/> value.</returns>
         public override int GetHashCode()
         {
             return Time.GetHashCode() + EqualityComparer<T>.Default.GetHashCode(Value);
         }
 
         /// <summary>
-        /// Returns a string representation of the current Recorded&lt;T&gt; value.
+        /// Returns a string representation of the current <see cref="Recorded{T}"/> value.
         /// </summary>
-        /// <returns>String representation of the current Recorded&lt;T&gt; value.</returns>
+        /// <returns>String representation of the current <see cref="Recorded{T}"/> value.</returns>
         public override string ToString()
         {
             return Value.ToString() + "@" + Time.ToString(CultureInfo.CurrentCulture);

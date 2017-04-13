@@ -8,14 +8,14 @@ namespace System.Reactive.Disposables
 {
     /// <summary>
     /// Represents a disposable resource which only allows a single assignment of its underlying disposable resource.
-    /// If an underlying disposable resource has already been set, future attempts to set the underlying disposable resource will throw an <see cref="T:System.InvalidOperationException"/>.
+    /// If an underlying disposable resource has already been set, future attempts to set the underlying disposable resource will throw an <see cref="InvalidOperationException"/>.
     /// </summary>
     public sealed class SingleAssignmentDisposable : ICancelable
     {
         private volatile IDisposable _current;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.SingleAssignmentDisposable"/> class.
+        /// Initializes a new instance of the <see cref="SingleAssignmentDisposable"/> class.
         /// </summary>
         public SingleAssignmentDisposable()
         {

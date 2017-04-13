@@ -14,7 +14,7 @@ namespace System.Reactive.Disposables
         private IDisposable _current;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.MultipleAssignmentDisposable"/> class with no current underlying disposable.
+        /// Initializes a new instance of the <see cref="MultipleAssignmentDisposable"/> class with no current underlying disposable.
         /// </summary>
         public MultipleAssignmentDisposable()
         {

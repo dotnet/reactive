@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
 {
     /// <summary>
     /// The <b>System.Reactive.Linq</b> namespace contains interfaces and classes that support expressing queries over observable sequences, using Language Integrated Query (LINQ).
-    /// Query operators are made available as extension methods for IObservable&lt;T&gt; and IQbservable&lt;T&gt; defined on the Observable and Qbservable classes, respectively.
+    /// Query operators are made available as extension methods for <see cref="IObservable{T}"/> and <see cref="IQbservable{T}"/> defined on the Observable and Qbservable classes, respectively.
     /// </summary>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute]
     class NamespaceDoc
@@ -54,7 +54,7 @@ namespace System.Reactive.Linq
 namespace System.Reactive.Subjects
 {
     /// <summary>
-    /// The <b>System.Reactive.Subjects</b> namespace contains interfaces and classes to represent subjects, which are objects implementing both IObservable&lt;T&gt; and IObserver&lt;T&gt;.
+    /// The <b>System.Reactive.Subjects</b> namespace contains interfaces and classes to represent subjects, which are objects implementing both <see cref="IObservable{T}"/> and <see cref="IObserver{T}"/>.
     /// Subjects are often used as sources of events, allowing one party to raise events and allowing another party to write queries over the event stream. Because of their ability to
     /// have multiple registered observers, subjects are also used as a facility to provide multicast behavior for event streams in queries.
     /// </summary>

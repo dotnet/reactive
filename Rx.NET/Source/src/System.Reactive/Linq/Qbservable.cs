@@ -20,12 +20,12 @@ namespace System.Reactive.Linq
     public static partial class Qbservable
     {
         /// <summary>
-        /// Returns the input typed as an IObservable&lt;TSource&gt;.
+        /// Returns the input typed as an <see cref="IObservable{TSource}"/>.
         /// This operator is used to separate the part of the query that's captured as an expression tree from the part that's executed locally.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An IQbservable&lt;TSource&gt; sequence to convert to an IObservable&lt;TSource&gt; sequence.</param>
-        /// <returns>The original source object, but typed as an IObservable&lt;TSource&gt;.</returns>
+        /// <param name="source">An <see cref="IQbservable{TSource}"/> sequence to convert to an <see cref="IObservable{TSource}"/> sequence.</param>
+        /// <returns>The original source object, but typed as an <see cref="IObservable{TSource}"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IObservable<TSource> AsObservable<TSource>(this IQbservable<TSource> source)
         {

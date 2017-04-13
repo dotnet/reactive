@@ -17,7 +17,7 @@ namespace System.Reactive.Disposables
         private volatile bool _isDisposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.BooleanDisposable"/> class.
+        /// Initializes a new instance of the <see cref="BooleanDisposable"/> class.
         /// </summary>
         public BooleanDisposable()
         {

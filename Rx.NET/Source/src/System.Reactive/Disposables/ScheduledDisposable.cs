@@ -8,7 +8,7 @@ using System.Threading;
 namespace System.Reactive.Disposables
 {
     /// <summary>
-    /// Represents a disposable resource whose disposal invocation will be scheduled on the specified <seealso cref="T:System.Reactive.Concurrency.IScheduler"/>.
+    /// Represents a disposable resource whose disposal invocation will be scheduled on the specified <seealso cref="IScheduler"/>.
     /// </summary>
     public sealed class ScheduledDisposable : ICancelable
     {
@@ -16,7 +16,7 @@ namespace System.Reactive.Disposables
         private volatile IDisposable _disposable;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.ScheduledDisposable"/> class that uses an <see cref="T:System.Reactive.Concurrency.IScheduler"/> on which to dispose the disposable.
+        /// Initializes a new instance of the <see cref="ScheduledDisposable"/> class that uses an <see cref="IScheduler"/> on which to dispose the disposable.
         /// </summary>
         /// <param name="scheduler">Scheduler where the disposable resource will be disposed on.</param>
         /// <param name="disposable">Disposable resource to dispose on the given scheduler.</param>

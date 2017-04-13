@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 namespace System.Reactive
 {
     /// <summary>
-    /// Class to create an IObservable&lt;T&gt; instance from a delegate-based implementation of the Subscribe method.
+    /// Class to create an <see cref="IObservable{T}"/> instance from a delegate-based implementation of the Subscribe method.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     public sealed class AnonymousObservable<T> : ObservableBase<T>

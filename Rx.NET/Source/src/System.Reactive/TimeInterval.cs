@@ -48,42 +48,42 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Determines whether the current TimeInterval&lt;T&gt; value has the same Value and Interval as a specified TimeInterval&lt;T&gt; value.
+        /// Determines whether the current <see cref="TimeInterval{T}"/> value has the same Value and Interval as a specified <see cref="TimeInterval{T}"/> value.
         /// </summary>
-        /// <param name="other">An object to compare to the current TimeInterval&lt;T&gt; value.</param>
-        /// <returns>true if both TimeInterval&lt;T&gt; values have the same Value and Interval; otherwise, false.</returns>
+        /// <param name="other">An object to compare to the current <see cref="TimeInterval{T}"/> value.</param>
+        /// <returns>true if both <see cref="TimeInterval{T}"/> values have the same Value and Interval; otherwise, false.</returns>
         public bool Equals(TimeInterval<T> other)
         {
             return other.Interval.Equals(Interval) && EqualityComparer<T>.Default.Equals(Value, other.Value);
         }
 
         /// <summary>
-        /// Determines whether the two specified TimeInterval&lt;T&gt; values have the same Value and Interval.
+        /// Determines whether the two specified <see cref="TimeInterval{T}"/> values have the same Value and Interval.
         /// </summary>
-        /// <param name="first">The first TimeInterval&lt;T&gt; value to compare.</param>
-        /// <param name="second">The second TimeInterval&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first TimeInterval&lt;T&gt; value has the same Value and Interval as the second TimeInterval&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="first">The first <see cref="TimeInterval{T}"/> value to compare.</param>
+        /// <param name="second">The second <see cref="TimeInterval{T}"/> value to compare.</param>
+        /// <returns>true if the first <see cref="TimeInterval{T}"/> value has the same Value and Interval as the second <see cref="TimeInterval{T}"/> value; otherwise, false.</returns>
         public static bool operator ==(TimeInterval<T> first, TimeInterval<T> second)
         {
             return first.Equals(second);
         }
 
         /// <summary>
-        /// Determines whether the two specified TimeInterval&lt;T&gt; values don't have the same Value and Interval.
+        /// Determines whether the two specified <see cref="TimeInterval{T}"/> values don't have the same Value and Interval.
         /// </summary>
-        /// <param name="first">The first TimeInterval&lt;T&gt; value to compare.</param>
-        /// <param name="second">The second TimeInterval&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first TimeInterval&lt;T&gt; value has a different Value or Interval as the second TimeInterval&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="first">The first <see cref="TimeInterval{T}"/> value to compare.</param>
+        /// <param name="second">The second <see cref="TimeInterval{T}"/> value to compare.</param>
+        /// <returns>true if the first <see cref="TimeInterval{T}"/> value has a different Value or Interval as the second <see cref="TimeInterval{T}"/> value; otherwise, false.</returns>
         public static bool operator !=(TimeInterval<T> first, TimeInterval<T> second)
         {
             return !first.Equals(second);
         }
 
         /// <summary>
-        /// Determines whether the specified System.Object is equal to the current TimeInterval&lt;T&gt;.
+        /// Determines whether the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>.
         /// </summary>
-        /// <param name="obj">The System.Object to compare with the current TimeInterval&lt;T&gt;.</param>
-        /// <returns>true if the specified System.Object is equal to the current TimeInterval&lt;T&gt;; otherwise, false.</returns>
+        /// <param name="obj">The System.Object to compare with the current <see cref="TimeInterval{T}"/>.</param>
+        /// <returns>true if the specified System.Object is equal to the current <see cref="TimeInterval{T}"/>; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is TimeInterval<T>))
@@ -94,9 +94,9 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Returns the hash code for the current TimeInterval&lt;T&gt; value.
+        /// Returns the hash code for the current <see cref="TimeInterval{T}"/> value.
         /// </summary>
-        /// <returns>A hash code for the current TimeInterval&lt;T&gt; value.</returns>
+        /// <returns>A hash code for the current <see cref="TimeInterval{T}"/> value.</returns>
         public override int GetHashCode()
         {
             var valueHashCode = Value == null ? 1963 : Value.GetHashCode();
@@ -105,9 +105,9 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Returns a string representation of the current TimeInterval&lt;T&gt; value.
+        /// Returns a string representation of the current <see cref="TimeInterval{T}"/> value.
         /// </summary>
-        /// <returns>String representation of the current TimeInterval&lt;T&gt; value.</returns>
+        /// <returns>String representation of the current <see cref="TimeInterval{T}"/> value.</returns>
         public override string ToString()
         {
             return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Interval);

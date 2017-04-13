@@ -74,7 +74,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether one specified ScheduledItem&lt;TAbsolute&gt; object is due before a second specified ScheduledItem&lt;TAbsolute&gt; object.
+        /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due before a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
@@ -86,7 +86,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether one specified ScheduledItem&lt;TAbsolute&gt; object is due before or at the same of a second specified ScheduledItem&lt;TAbsolute&gt; object.
+        /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due before or at the same of a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
@@ -98,7 +98,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether one specified ScheduledItem&lt;TAbsolute&gt; object is due after a second specified ScheduledItem&lt;TAbsolute&gt; object.
+        /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due after a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
@@ -110,7 +110,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether one specified ScheduledItem&lt;TAbsolute&gt; object is due after or at the same time of a second specified ScheduledItem&lt;TAbsolute&gt; object.
+        /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due after or at the same time of a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
@@ -126,11 +126,11 @@ namespace System.Reactive.Concurrency
         #region Equality
 
         /// <summary>
-        /// Determines whether two specified ScheduledItem&lt;TAbsolute, TValue&gt; objects are equal.
+        /// Determines whether two specified <see cref="ScheduledItem{TAbsolute, TValue}" /> objects are equal.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if both ScheduledItem&lt;TAbsolute, TValue&gt; are equal; otherwise, false.</returns>
+        /// <returns>true if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are equal; otherwise, false.</returns>
         /// <remarks>This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</remarks>
         public static bool operator ==(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
         {
@@ -138,11 +138,11 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether two specified ScheduledItem&lt;TAbsolute, TValue&gt; objects are inequal.
+        /// Determines whether two specified <see cref="ScheduledItem{TAbsolute, TValue}" /> objects are inequal.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if both ScheduledItem&lt;TAbsolute, TValue&gt; are inequal; otherwise, false.</returns>
+        /// <returns>true if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are inequal; otherwise, false.</returns>
         /// <remarks>This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</remarks>
         public static bool operator !=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
         {
@@ -150,17 +150,17 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Determines whether a ScheduledItem&lt;TAbsolute&gt; object is equal to the specified object.
+        /// Determines whether a <see cref="ScheduledItem{TAbsolute}" /> object is equal to the specified object.
         /// </summary>
-        /// <param name="obj">The object to compare to the current ScheduledItem&lt;TAbsolute&gt; object.</param>
-        /// <returns>true if the obj parameter is a ScheduledItem&lt;TAbsolute&gt; object and is equal to the current ScheduledItem&lt;TAbsolute&gt; object; otherwise, false.</returns>
+        /// <param name="obj">The object to compare to the current <see cref="ScheduledItem{TAbsolute}" /> object.</param>
+        /// <returns>true if the obj parameter is a <see cref="ScheduledItem{TAbsolute}" /> object and is equal to the current <see cref="ScheduledItem{TAbsolute}" /> object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             return object.ReferenceEquals(this, obj);
         }
 
         /// <summary>
-        /// Returns the hash code for the current ScheduledItem&lt;TAbsolute&gt; object.
+        /// Returns the hash code for the current <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()

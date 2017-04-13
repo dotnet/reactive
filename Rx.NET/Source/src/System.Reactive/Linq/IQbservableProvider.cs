@@ -14,9 +14,9 @@ namespace System.Reactive.Linq
     public interface IQbservableProvider
     {
         /// <summary>
-        /// Constructs an IQbservable&gt;TResult&lt; object that can evaluate the query represented by a specified expression tree.
+        /// Constructs an <see cref="IQbservable{T}"/> object that can evaluate the query represented by a specified expression tree.
         /// </summary>
-        /// <typeparam name="TResult">The type of the elements of the System.Reactive.Linq.IQbservable&lt;T&gt; that is returned.</typeparam>
+        /// <typeparam name="TResult">The type of the elements of the <see cref="IQbservable{T}"/> that is returned.</typeparam>
         /// <param name="expression">Expression tree representing the query.</param>
         /// <returns>IQbservable object that can evaluate the given query expression.</returns>
         IQbservable<TResult> CreateQuery<TResult>(Expression expression);

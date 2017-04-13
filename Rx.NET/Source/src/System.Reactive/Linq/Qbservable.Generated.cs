@@ -32,15 +32,15 @@ namespace System.Reactive.Linq
     {
         /// <summary>
         /// Applies an accumulator function over an observable sequence, returning the result of the aggregation as a single element in the result sequence.
-        /// For aggregation behavior with incremental intermediate results, see <see cref="M:System.Reactive.Linq.Observable.Scan``1(System.IObservable{``0},System.Func{``0,``0,``0})" />.
+        /// For aggregation behavior with incremental intermediate results, see <see cref="Observable.Scan{TSource}(IObservable{TSource},Func{TSource,TSource,TSource})" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An observable sequence to aggregate over.</param>
         /// <param name="accumulator">An accumulator function to be invoked on each element.</param>
         /// <returns>An observable sequence containing a single element with the final accumulator value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="accumulator" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource> Aggregate<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
@@ -62,10 +62,10 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Applies an accumulator function over an observable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with incremental intermediate results, see <see cref="M:System.Reactive.Linq.Observable.Scan``2(System.IObservable{``0},``1,System.Func{``1,``0,``1})" />.
+        /// For aggregation behavior with incremental intermediate results, see <see cref="Observable.Scan{TSource, TAccumulate}(IObservable{TAccumulate},TAccumulate,Func{TAccumulate,TSource,TAccumulate})" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
         /// <param name="seed">The initial accumulator value.</param>
         /// <param name="accumulator">An accumulator function to be invoked on each element.</param>
         /// <returns>An observable sequence containing a single element with the final accumulator value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="accumulator" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TAccumulate> Aggregate<TSource, TAccumulate>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq
         /// <param name="accumulator">An accumulator function to be invoked on each element.</param>
         /// <param name="resultSelector">A function to transform the final accumulator value into the result value.</param>
         /// <returns>An observable sequence containing a single element with the final accumulator value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="accumulator" /> or <paramref name="resultSelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TResult> Aggregate<TSource, TAccumulate, TResult>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator, Expression<Func<TAccumulate, TResult>> resultSelector)
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence whose elements to apply the predicate to.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence containing a single element determining whether all elements in the source sequence pass the test in the specified predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> All<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
@@ -176,7 +176,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence.</param>
         /// <param name="second">Second observable sequence.</param>
         /// <returns>An observable sequence that surfaces either of the given sequences, whichever reacted first.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         public static IQbservable<TSource> Amb<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
@@ -202,11 +202,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Propagates the observable sequence that reacts first.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Amb<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -232,11 +232,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Propagates the observable sequence that reacts first.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sources competing to react first.</param>
         /// <returns>An observable sequence that surfaces any of the given sequences, whichever reacted first.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Amb<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to check for non-emptiness.</param>
         /// <returns>An observable sequence containing a single element determining whether the source sequence contains any elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> Any<TSource>(this IQbservable<TSource> source)
@@ -293,7 +293,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence whose elements to apply the predicate to.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence containing a single element determining whether any elements in the source sequence pass the test in the specified predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> Any<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
@@ -318,14 +318,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Decimal" /> values.
+        /// Computes the average of an observable sequence of <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="Decimal" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Average(this IQbservable<decimal> source)
         {
@@ -346,13 +346,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Double" /> values.
+        /// Computes the average of an observable sequence of <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average(this IQbservable<double> source)
         {
@@ -373,14 +373,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Int32" /> values.
+        /// Computes the average of an observable sequence of <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average(this IQbservable<int> source)
         {
@@ -401,14 +401,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Int64" /> values.
+        /// Computes the average of an observable sequence of <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average(this IQbservable<long> source)
         {
@@ -429,14 +429,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Decimal" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Average(this IQbservable<decimal?> source)
         {
@@ -457,13 +457,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Double" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Average(this IQbservable<double?> source)
         {
@@ -484,15 +484,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Int32" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         public static IQbservable<double?> Average(this IQbservable<int?> source)
         {
             if (source == null)
@@ -512,14 +512,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Int64" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Average(this IQbservable<long?> source)
         {
@@ -540,13 +540,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Single" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Average(this IQbservable<float?> source)
         {
@@ -567,13 +567,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Single" /> values.
+        /// Computes the average of an observable sequence of <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Average(this IQbservable<float> source)
         {
@@ -594,16 +594,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
@@ -627,15 +627,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
         {
@@ -659,15 +659,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
         {
@@ -691,16 +691,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
@@ -724,16 +724,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="T:System.Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
@@ -757,16 +757,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
@@ -790,15 +790,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
         {
@@ -822,15 +822,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
         {
@@ -854,16 +854,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
@@ -887,16 +887,16 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="T:System.Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Average<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
@@ -926,9 +926,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce buffers over.</param>
         /// <param name="count">Length of each buffer.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than or equal to zero.</exception>
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, int count)
         {
@@ -957,9 +957,9 @@ namespace System.Reactive.Linq
         /// <param name="count">Length of each buffer.</param>
         /// <param name="skip">Number of elements to skip between creation of consecutive buffers.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> or <paramref name="skip" /> is less than or equal to zero.</exception>
         public static IQbservable<IList<TSource>> Buffer<TSource>(this IQbservable<TSource> source, int count, int skip)
         {
@@ -988,9 +988,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce buffers over.</param>
         /// <param name="timeSpan">Length of each buffer.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create buffers as fast as it can.
@@ -1025,9 +1025,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Maximum time length of a window.</param>
         /// <param name="count">Maximum element count of a window.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero. -or- <paramref name="count" /> is less than or equal to zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create buffers as fast as it can.
@@ -1064,9 +1064,9 @@ namespace System.Reactive.Linq
         /// <param name="count">Maximum element count of a buffer.</param>
         /// <param name="scheduler">Scheduler to run buffering timers on.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero. -or- <paramref name="count" /> is less than or equal to zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create buffers as fast as it can.
@@ -1104,9 +1104,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Length of each buffer.</param>
         /// <param name="scheduler">Scheduler to run buffering timers on.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create buffers as fast as it can.
@@ -1143,9 +1143,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Length of each buffer.</param>
         /// <param name="timeShift">Interval between creation of consecutive buffers.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> or <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -1188,9 +1188,9 @@ namespace System.Reactive.Linq
         /// <param name="timeShift">Interval between creation of consecutive buffers.</param>
         /// <param name="scheduler">Scheduler to run buffering timers on.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> or <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -1235,7 +1235,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce buffers over.</param>
         /// <param name="bufferBoundaries">Sequence of buffer boundary markers. The current buffer is closed and a new buffer is opened upon receiving a boundary marker.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="bufferBoundaries" /> is null.</exception>
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferBoundary>(this IQbservable<TSource> source, IObservable<TBufferBoundary> bufferBoundaries)
         {
@@ -1266,7 +1266,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce buffers over.</param>
         /// <param name="bufferClosingSelector">A function invoked to define the boundaries of the produced buffers. A new buffer is started when the previous one is closed.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="bufferClosingSelector" /> is null.</exception>
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferClosing>(this IQbservable<TSource> source, Expression<Func<IObservable<TBufferClosing>>> bufferClosingSelector)
         {
@@ -1299,7 +1299,7 @@ namespace System.Reactive.Linq
         /// <param name="bufferOpenings">Observable sequence whose elements denote the creation of new buffers.</param>
         /// <param name="bufferClosingSelector">A function invoked to define the closing of each produced buffer.</param>
         /// <returns>An observable sequence of buffers.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="bufferOpenings" /> or <paramref name="bufferClosingSelector" /> is null.</exception>
         public static IQbservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(this IQbservable<TSource> source, IObservable<TBufferOpening> bufferOpenings, Expression<Func<TBufferOpening, IObservable<TBufferClosing>>> bufferClosingSelector)
         {
@@ -1328,13 +1328,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Uses <paramref name="selector" /> to determine which source in <paramref name="sources" /> to return, choosing an empty sequence if no match is found.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TValue">The type of the value returned by the selector function, used to look up the resulting source.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="selector">Selector function invoked to determine the source to lookup in the <paramref name="sources" /> dictionary.</param>
         /// <param name="sources">Dictionary of sources to select from based on the <paramref name="selector" /> invocation result.</param>
         /// <returns>The observable sequence retrieved from the <paramref name="sources" /> dictionary based on the <paramref name="selector" /> invocation result, or an empty sequence if no match is found.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources)
         {
@@ -1363,14 +1363,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Uses <paramref name="selector" /> to determine which source in <paramref name="sources" /> to return, choosing <paramref name="defaultSource" /> if no match is found.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TValue">The type of the value returned by the selector function, used to look up the resulting source.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="selector">Selector function invoked to determine the source to lookup in the <paramref name="sources" /> dictionary.</param>
         /// <param name="sources">Dictionary of sources to select from based on the <paramref name="selector" /> invocation result.</param>
         /// <param name="defaultSource">Default source to select in case no matching source in <paramref name="sources" /> is found.</param>
         /// <returns>The observable sequence retrieved from the <paramref name="sources" /> dictionary based on the <paramref name="selector" /> invocation result, or <paramref name="defaultSource" /> if no match is found.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> or <paramref name="defaultSource" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource)
         {
@@ -1402,14 +1402,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Uses <paramref name="selector" /> to determine which source in <paramref name="sources" /> to return, choosing an empty sequence on the specified scheduler if no match is found.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TValue">The type of the value returned by the selector function, used to look up the resulting source.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="selector">Selector function invoked to determine the source to lookup in the <paramref name="sources" /> dictionary.</param>
         /// <param name="sources">Dictionary of sources to select from based on the <paramref name="selector" /> invocation result.</param>
         /// <param name="scheduler">Scheduler to generate an empty sequence on in case no matching source in <paramref name="sources" /> is found.</param>
         /// <returns>The observable sequence retrieved from the <paramref name="sources" /> dictionary based on the <paramref name="selector" /> invocation result, or an empty sequence if no match is found.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="selector" /> or <paramref name="sources" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Case<TValue, TResult>(this IQbservableProvider provider, Expression<Func<TValue>> selector, IDictionary<TValue, IObservable<TResult>> sources, IScheduler scheduler)
         {
@@ -1444,7 +1444,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type to convert the elements in the source sequence to.</typeparam>
         /// <param name="source">The observable sequence that contains the elements to be converted.</param>
         /// <returns>An observable sequence that contains each element of the source sequence converted to the specified type.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TResult> Cast<TResult>(this IQbservable<object> source)
         {
@@ -1471,7 +1471,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence whose exception (if any) is caught.</param>
         /// <param name="second">Second observable sequence used to produce results when an error occurred in the first sequence.</param>
         /// <returns>An observable sequence containing the first sequence's elements, followed by the elements of the second sequence in case an exception occurred.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         public static IQbservable<TSource> Catch<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
@@ -1497,11 +1497,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Continues an observable sequence that is terminated by an exception with the next observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source and handler sequences.</typeparam>
         /// <param name="sources">Observable sequences to catch exceptions for.</param>
         /// <returns>An observable sequence containing elements from consecutive source sequences until a source sequence terminates successfully.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Catch<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -1527,11 +1527,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Continues an observable sequence that is terminated by an exception with the next observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source and handler sequences.</typeparam>
         /// <param name="sources">Observable sequences to catch exceptions for.</param>
         /// <returns>An observable sequence containing elements from consecutive source sequences until a source sequence terminates successfully.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Catch<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -1558,11 +1558,11 @@ namespace System.Reactive.Linq
         /// Continues an observable sequence that is terminated by an exception of the specified type with the observable sequence produced by the handler.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and sequences returned by the exception handler function.</typeparam>
-        /// <typeparam name="TException">The type of the exception to catch and handle. Needs to derive from <see cref="T:System.Exception" />.</typeparam>
+        /// <typeparam name="TException">The type of the exception to catch and handle. Needs to derive from <see cref="Exception" />.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="handler">Exception handler function, producing another observable sequence.</param>
         /// <returns>An observable sequence containing the source sequence's elements, followed by the elements produced by the handler's resulting observable sequence in case an exception occurred.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="handler" /> is null.</exception>
         public static IQbservable<TSource> Catch<TSource, TException>(this IQbservable<TSource> source, Expression<Func<TException, IObservable<TSource>>> handler)
             where TException : Exception
@@ -1592,7 +1592,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>The enumerable sequence that returns consecutive (possibly empty) chunks upon each iteration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<IList<TSource>> Chunkify<TSource>(this IQbservable<TSource> source)
@@ -1623,7 +1623,7 @@ namespace System.Reactive.Linq
         /// <param name="merge">Merges a sequence element with the current collector.</param>
         /// <param name="getNewCollector">Factory to replace the current collector by a new collector.</param>
         /// <returns>The enumerable sequence that returns collected/aggregated elements from the source sequence upon each iteration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="getInitialCollector" /> or <paramref name="merge" /> or <paramref name="getNewCollector" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<TResult> Collect<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TResult>> getInitialCollector, Expression<Func<TResult, TSource, TResult>> merge, Expression<Func<TResult, TResult>> getNewCollector)
@@ -1662,7 +1662,7 @@ namespace System.Reactive.Linq
         /// <param name="newCollector">Factory to create a new collector object.</param>
         /// <param name="merge">Merges a sequence element with the current collector.</param>
         /// <returns>The enumerable sequence that returns collected/aggregated elements from the source sequence upon each iteration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="newCollector" /> or <paramref name="merge" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<TResult> Collect<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TResult>> newCollector, Expression<Func<TResult, TSource, TResult>> merge)
@@ -1692,11 +1692,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by emitting a list with the latest source elements whenever any of the observable sequences produces an element.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences, and in the lists in the result sequence.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of the latest elements of the sources.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<IList<TSource>> CombineLatest<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -1722,11 +1722,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by emitting a list with the latest source elements whenever any of the observable sequences produces an element.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences, and in the lists in the result sequence.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of the latest elements of the sources.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<IList<TSource>> CombineLatest<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -1752,13 +1752,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever any of the observable sequences produces an element.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element. For efficiency, the input list is reused after the selector returns. Either aggregate or copy the values during the function call.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource, TResult>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, Expression<Func<IList<TSource>, TResult>> resultSelector)
         {
@@ -1794,7 +1794,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever either of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of both sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IObservable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
@@ -1832,7 +1832,7 @@ namespace System.Reactive.Linq
         /// <param name="source3">Third observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Expression<Func<TSource1, TSource2, TSource3, TResult>> resultSelector)
         {
@@ -1875,7 +1875,7 @@ namespace System.Reactive.Linq
         /// <param name="source4">Fourth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>> resultSelector)
         {
@@ -1924,7 +1924,7 @@ namespace System.Reactive.Linq
         /// <param name="source5">Fifth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>> resultSelector)
         {
@@ -1979,7 +1979,7 @@ namespace System.Reactive.Linq
         /// <param name="source6">Sixth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>> resultSelector)
         {
@@ -2039,7 +2039,7 @@ namespace System.Reactive.Linq
         /// <param name="source7">Seventh observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>> resultSelector)
         {
@@ -2104,7 +2104,7 @@ namespace System.Reactive.Linq
         /// <param name="source8">Eighth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>> resultSelector)
         {
@@ -2174,7 +2174,7 @@ namespace System.Reactive.Linq
         /// <param name="source9">Ninth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>> resultSelector)
         {
@@ -2249,7 +2249,7 @@ namespace System.Reactive.Linq
         /// <param name="source10">Tenth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>> resultSelector)
         {
@@ -2329,7 +2329,7 @@ namespace System.Reactive.Linq
         /// <param name="source11">Eleventh observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>> resultSelector)
         {
@@ -2414,7 +2414,7 @@ namespace System.Reactive.Linq
         /// <param name="source12">Twelfth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>> resultSelector)
         {
@@ -2504,7 +2504,7 @@ namespace System.Reactive.Linq
         /// <param name="source13">Thirteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector)
         {
@@ -2599,7 +2599,7 @@ namespace System.Reactive.Linq
         /// <param name="source14">Fourteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector)
         {
@@ -2699,7 +2699,7 @@ namespace System.Reactive.Linq
         /// <param name="source15">Fifteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="source15" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector)
         {
@@ -2804,7 +2804,7 @@ namespace System.Reactive.Linq
         /// <param name="source16">Sixteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke whenever any of the sources produces an element.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="source15" /> or <paramref name="source16" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> CombineLatest<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector)
         {
@@ -2880,7 +2880,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence.</param>
         /// <param name="second">Second observable sequence.</param>
         /// <returns>An observable sequence that contains the elements of the first sequence, followed by those of the second the sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
@@ -2906,11 +2906,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Concatenates all of the specified observable sequences, as long as the previous observable sequence terminated successfully.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
         /// <returns>An observable sequence that contains the elements of each given sequence, in sequential order.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Concat<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -2936,11 +2936,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Concatenates all observable sequences in the given enumerable sequence, as long as the previous observable sequence terminated successfully.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
         /// <returns>An observable sequence that contains the elements of each given sequence, in sequential order.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Concat<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -2969,7 +2969,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence of inner observable sequences.</param>
         /// <returns>An observable sequence that contains the elements of each observed inner sequence, in sequential order.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
@@ -2988,7 +2988,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
 #if !NO_TPL
         /// <summary>
         /// Concatenates all task results, as long as the previous task terminated successfully.
@@ -2996,9 +2996,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the results produced by the tasks.</typeparam>
         /// <param name="sources">Observable sequence of tasks.</param>
         /// <returns>An observable sequence that contains the results of each task, in sequential order.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
-        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="M:System.Reactive.Linq.Observable.FromAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})" />, followed by a concatenation operation using <see cref="M:System.Reactive.Linq.Observable.Concat``1(System.IObservable{System.IObservable{``0}})" />.</remarks>
+        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="Observable.FromAsync{TSource}(Func{CancellationToken,Task{TSource}})" />, followed by a concatenation operation using <see cref="Observable.Concat{TSource}(IObservable{IObservable{TSource}})" />.</remarks>
         public static IQbservable<TSource> Concat<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
@@ -3025,7 +3025,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence in which to locate a value.</param>
         /// <param name="value">The value to locate in the source sequence.</param>
         /// <returns>An observable sequence containing a single element determining whether the source sequence contains an element that has the specified value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> Contains<TSource>(this IQbservable<TSource> source, TSource value)
@@ -3048,14 +3048,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Determines whether an observable sequence contains a specified element by using a specified System.Collections.Generic.IEqualityComparer&lt;T&gt;.
+        /// Determines whether an observable sequence contains a specified element by using a specified <see cref="IEqualityComparer{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence in which to locate a value.</param>
         /// <param name="value">The value to locate in the source sequence.</param>
         /// <param name="comparer">An equality comparer to compare elements.</param>
         /// <returns>An observable sequence containing a single element determining whether the source sequence contains an element that has the specified value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> Contains<TSource>(this IQbservable<TSource> source, TSource value, IEqualityComparer<TSource> comparer)
@@ -3081,14 +3081,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="T:System.Int32" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="Int32" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
         /// <returns>An observable sequence containing a single element with the number of elements in the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The number of elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The number of elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Count<TSource>(this IQbservable<TSource> source)
         {
@@ -3109,13 +3109,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="T:System.Int32" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="Int32" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence containing a single element with a number that represents how many elements in the input sequence satisfy the condition in the predicate function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Count<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
@@ -3142,16 +3142,16 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Creates an observable sequence from a specified Subscribe method implementation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribe">Implementation of the resulting observable sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribe" /> is null.</exception>
         /// <remarks>
-        /// Use of this operator is preferred over manual implementation of the IObservable&lt;T&gt; interface. In case
-        /// you need a type implementing IObservable&lt;T&gt; rather than an anonymous implementation, consider using
-        /// the <see cref="T:System.Reactive.ObservableBase`1" /> abstract base class.
+        /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
+        /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
+        /// the <see cref="Reactive.ObservableBase`1" /> abstract base class.
         /// </remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, IDisposable>> subscribe)
         {
@@ -3177,16 +3177,16 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Creates an observable sequence from a specified Subscribe method implementation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribe">Implementation of the resulting observable sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribe" /> is null.</exception>
         /// <remarks>
-        /// Use of this operator is preferred over manual implementation of the IObservable&lt;T&gt; interface. In case
-        /// you need a type implementing IObservable&lt;T&gt; rather than an anonymous implementation, consider using
-        /// the <see cref="T:System.Reactive.ObservableBase`1" /> abstract base class.
+        /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
+        /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
+        /// the <see cref="Reactive.ObservableBase`1" /> abstract base class.
         /// </remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Action>> subscribe)
         {
@@ -3214,11 +3214,11 @@ namespace System.Reactive.Linq
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to produce elements.</param>
         /// <returns>The observable sequence surfacing the elements produced by the asynchronous method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous subscribe function will be signaled.</remarks>
@@ -3248,11 +3248,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to produce elements.</param>
         /// <returns>The observable sequence surfacing the elements produced by the asynchronous method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task>> subscribeAsync)
@@ -3282,11 +3282,11 @@ namespace System.Reactive.Linq
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous subscribe function will be signaled.</remarks>
@@ -3316,11 +3316,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task<IDisposable>>> subscribeAsync)
@@ -3350,11 +3350,11 @@ namespace System.Reactive.Linq
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous subscribe function will be signaled.</remarks>
@@ -3384,11 +3384,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="subscribeAsync">Asynchronous method used to implement the resulting sequence's Subscribe method, returning an Action delegate that will be wrapped in an IDisposable.</param>
         /// <returns>The observable sequence with the specified implementation for the Subscribe method.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="subscribeAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Task<Action>>> subscribeAsync)
@@ -3419,7 +3419,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence (if any), whose default value will be taken if the sequence is empty.</typeparam>
         /// <param name="source">The sequence to return a default value for if it is empty.</param>
         /// <returns>An observable sequence that contains the default value for the TSource type if the source is empty; otherwise, the elements of the source itself.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> DefaultIfEmpty<TSource>(this IQbservable<TSource> source)
         {
@@ -3446,7 +3446,7 @@ namespace System.Reactive.Linq
         /// <param name="source">The sequence to return the specified value for if it is empty.</param>
         /// <param name="defaultValue">The value to return if the sequence is empty.</param>
         /// <returns>An observable sequence that contains the specified default value if the source is empty; otherwise, the elements of the source itself.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> DefaultIfEmpty<TSource>(this IQbservable<TSource> source, TSource defaultValue)
         {
@@ -3470,11 +3470,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that invokes the specified factory function whenever a new observer subscribes.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
         /// <param name="observableFactory">Observable factory function to invoke for each observer that subscribes to the resulting sequence.</param>
         /// <returns>An observable sequence whose observers trigger an invocation of the given observable factory function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="observableFactory" /> is null.</exception>
         public static IQbservable<TResult> Defer<TResult>(this IQbservableProvider provider, Expression<Func<IObservable<TResult>>> observableFactory)
         {
@@ -3501,11 +3501,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
         /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
         /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="observableFactoryAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         public static IQbservable<TResult> Defer<TResult>(this IQbservableProvider provider, Expression<Func<Task<IObservable<TResult>>>> observableFactoryAsync)
@@ -3535,11 +3535,11 @@ namespace System.Reactive.Linq
         /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
         /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the sequence returned by the factory function, and in the resulting sequence.</typeparam>
         /// <param name="observableFactoryAsync">Asynchronous factory function to start for each observer that subscribes to the resulting sequence.</param>
         /// <returns>An observable sequence whose observers trigger the given asynchronous observable factory function to be started.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="observableFactoryAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous observable factory function will be signaled.</remarks>
@@ -3564,7 +3564,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
         /// <summary>
         /// Time shifts the observable sequence to start propagating notifications at the specified absolute time.
         /// The relative time intervals between the values are preserved.
@@ -3573,18 +3573,18 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to delay values for.</param>
         /// <param name="dueTime">Absolute time used to shift the observable sequence; the relative time shift gets computed upon subscription. If this value is less than or equal to DateTimeOffset.UtcNow, the scheduler will dispatch observer callbacks as soon as possible.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is less efficient than <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.DateTimeOffset)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
+        /// This operator is less efficient than <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},DateTimeOffset)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
         /// </para>
         /// <para>
         /// Observer callbacks for the resulting sequence will be run on the default scheduler. This effect is similar to using ObserveOn.
         /// </para>
         /// <para>
         /// Exceptions signaled by the source sequence through an OnError callback are forwarded immediately to the result sequence. Any OnNext notifications that were in the queue at the point of the OnError callback will be dropped.
-        /// In order to delay error propagation, consider using the <see cref="M:System.Reactive.Linq.Observable.Materialize``1(System.IObservable{``0})">Observable.Materialize</see> and <see cref="M:System.Reactive.Linq.Observable.Dematerialize``1(System.IObservable{System.Reactive.Notification{``0}})">Observable.Dematerialize</see> operators, or use <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.DateTimeOffset)">DelaySubscription</see>.
+        /// In order to delay error propagation, consider using the <see cref="Observable.Materialize{TSource}(IObservable{TSource})">Observable.Materialize</see> and <see cref="Observable.Dematerialize{TSource}(IObservable{Notification{TSource}})">Observable.Dematerialize</see> operators, or use <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},DateTimeOffset)">DelaySubscription</see>.
         /// </para>
         /// </remarks>
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime)
@@ -3605,7 +3605,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Time shifts the observable sequence to start propagating notifications at the specified absolute time, using the specified scheduler to run timers.
         /// The relative time intervals between the values are preserved.
@@ -3615,18 +3615,18 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Absolute time used to shift the observable sequence; the relative time shift gets computed upon subscription. If this value is less than or equal to DateTimeOffset.UtcNow, the scheduler will dispatch observer callbacks as soon as possible.</param>
         /// <param name="scheduler">Scheduler to run the delay timers on.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is less efficient than <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.DateTimeOffset,System.Reactive.Concurrency.IScheduler)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
+        /// This operator is less efficient than <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},DateTimeOffset,IScheduler)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
         /// </para>
         /// <para>
         /// Observer callbacks for the resulting sequence will be run on the specified scheduler. This effect is similar to using ObserveOn.
         /// </para>
         /// <para>
         /// Exceptions signaled by the source sequence through an OnError callback are forwarded immediately to the result sequence. Any OnNext notifications that were in the queue at the point of the OnError callback will be dropped.
-        /// In order to delay error propagation, consider using the <see cref="M:System.Reactive.Linq.Observable.Materialize``1(System.IObservable{``0})">Observable.Materialize</see> and <see cref="M:System.Reactive.Linq.Observable.Dematerialize``1(System.IObservable{System.Reactive.Notification{``0}})">Observable.Dematerialize</see> operators, or use <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.DateTimeOffset,System.Reactive.Concurrency.IScheduler)">DelaySubscription</see>.
+        /// In order to delay error propagation, consider using the <see cref="Observable.Materialize{TSource}(IObservable{TSource})">Observable.Materialize</see> and <see cref="Observable.Dematerialize{TSource}(IObservable{Notification{TSource}})">Observable.Dematerialize</see> operators, or use <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},DateTimeOffset,IScheduler)">DelaySubscription</see>.
         /// </para>
         /// </remarks>
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
@@ -3659,20 +3659,20 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to delay values for.</param>
         /// <param name="dueTime">Relative time by which to shift the observable sequence. If this value is equal to TimeSpan.Zero, the scheduler will dispatch observer callbacks as soon as possible.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is less efficient than <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.TimeSpan)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
+        /// This operator is less efficient than <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},TimeSpan)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
         /// </para>
         /// <para>
         /// Observer callbacks for the resulting sequence will be run on the default scheduler. This effect is similar to using ObserveOn.
         /// </para>
         /// <para>
         /// Exceptions signaled by the source sequence through an OnError callback are forwarded immediately to the result sequence. Any OnNext notifications that were in the queue at the point of the OnError callback will be dropped.
-        /// In order to delay error propagation, consider using the <see cref="M:System.Reactive.Linq.Observable.Materialize``1(System.IObservable{``0})">Observable.Materialize</see> and <see cref="M:System.Reactive.Linq.Observable.Dematerialize``1(System.IObservable{System.Reactive.Notification{``0}})">Observable.Dematerialize</see> operators, or use <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.TimeSpan)">DelaySubscription</see>.
+        /// In order to delay error propagation, consider using the <see cref="Observable.Materialize{TSource}(IObservable{TSource})">Observable.Materialize</see> and <see cref="Observable.Dematerialize{TSource}(IObservable{Notification{TSource}})">Observable.Dematerialize</see> operators, or use <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},TimeSpan)">DelaySubscription</see>.
         /// </para>
         /// </remarks>
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, TimeSpan dueTime)
@@ -3693,7 +3693,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Time shifts the observable sequence by the specified relative time duration, using the specified scheduler to run timers.
         /// The relative time intervals between the values are preserved.
@@ -3703,13 +3703,13 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Relative time by which to shift the observable sequence. If this value is equal to TimeSpan.Zero, the scheduler will dispatch observer callbacks as soon as possible.</param>
         /// <param name="scheduler">Scheduler to run the delay timers on.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is less efficient than <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.TimeSpan,System.Reactive.Concurrency.IScheduler)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
+        /// This operator is less efficient than <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},TimeSpan,IScheduler)">DelaySubscription</see> because it records all notifications and time-delays those. This allows for immediate propagation of errors.
         /// </para>
         /// <para>
         /// Observer callbacks for the resulting sequence will be run on the specified scheduler. This effect is similar to using ObserveOn.
@@ -3719,7 +3719,7 @@ namespace System.Reactive.Linq
         /// </para>
         /// <para>
         /// Exceptions signaled by the source sequence through an OnError callback are forwarded immediately to the result sequence. Any OnNext notifications that were in the queue at the point of the OnError callback will be dropped.
-        /// In order to delay error propagation, consider using the <see cref="M:System.Reactive.Linq.Observable.Materialize``1(System.IObservable{``0})">Observable.Materialize</see> and <see cref="M:System.Reactive.Linq.Observable.Dematerialize``1(System.IObservable{System.Reactive.Notification{``0}})">Observable.Dematerialize</see> operators, or use <see cref="M:System.Reactive.Linq.Observable.DelaySubscription``1(System.IObservable{``0},System.TimeSpan,System.Reactive.Concurrency.IScheduler)">DelaySubscription</see>.
+        /// In order to delay error propagation, consider using the <see cref="Observable.Materialize{TSource}(IObservable{TSource})">Observable.Materialize</see> and <see cref="Observable.Dematerialize{TSource}(IObservable{Notification{TSource}})">Observable.Dematerialize</see> operators, or use <see cref="Observable.DelaySubscription{TSource}(IObservable{TSource},TimeSpan,IScheduler)">DelaySubscription</see>.
         /// </para>
         /// </remarks>
         public static IQbservable<TSource> Delay<TSource>(this IQbservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
@@ -3752,7 +3752,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to delay values for.</param>
         /// <param name="delayDurationSelector">Selector function to retrieve a sequence indicating the delay for each given element.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="delayDurationSelector" /> is null.</exception>
         public static IQbservable<TSource> Delay<TSource, TDelay>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TDelay>>> delayDurationSelector)
         {
@@ -3784,7 +3784,7 @@ namespace System.Reactive.Linq
         /// <param name="subscriptionDelay">Sequence indicating the delay for the subscription to the source.</param>
         /// <param name="delayDurationSelector">Selector function to retrieve a sequence indicating the delay for each given element.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="subscriptionDelay" /> or <paramref name="delayDurationSelector" /> is null.</exception>
         public static IQbservable<TSource> Delay<TSource, TDelay>(this IQbservable<TSource> source, IObservable<TDelay> subscriptionDelay, Expression<Func<TSource, IObservable<TDelay>>> delayDurationSelector)
         {
@@ -3809,7 +3809,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Time shifts the observable sequence by delaying the subscription to the specified absolute time.
         /// </summary>
@@ -3817,11 +3817,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to delay subscription for.</param>
         /// <param name="dueTime">Absolute time to perform the subscription at.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is more efficient than <see cref="M:System.Reactive.Linq.Observable.Delay``1(System.IObservable{``0},System.DateTimeOffset)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
+        /// This operator is more efficient than <see cref="Observable.Delay{TSource}(IObservable{TSource},DateTimeOffset)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
         /// </para>
         /// <para>
         /// The side-effects of subscribing to the source sequence will be run on the default scheduler. Observer callbacks will not be affected.
@@ -3854,11 +3854,11 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Absolute time to perform the subscription at.</param>
         /// <param name="scheduler">Scheduler to run the subscription delay timer on.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is more efficient than <see cref="M:System.Reactive.Linq.Observable.Delay``1(System.IObservable{``0},System.DateTimeOffset,System.Reactive.Concurrency.IScheduler)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
+        /// This operator is more efficient than <see cref="Observable.Delay{TSource}(IObservable{TSource},DateTimeOffset,IScheduler)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
         /// </para>
         /// <para>
         /// The side-effects of subscribing to the source sequence will be run on the specified scheduler. Observer callbacks will not be affected.
@@ -3893,13 +3893,13 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to delay subscription for.</param>
         /// <param name="dueTime">Relative time shift of the subscription.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is more efficient than <see cref="M:System.Reactive.Linq.Observable.Delay``1(System.IObservable{``0},System.TimeSpan)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
+        /// This operator is more efficient than <see cref="Observable.Delay{TSource}(IObservable{TSource},TimeSpan)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
         /// </para>
         /// <para>
         /// The side-effects of subscribing to the source sequence will be run on the default scheduler. Observer callbacks will not be affected.
@@ -3932,13 +3932,13 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Relative time shift of the subscription.</param>
         /// <param name="scheduler">Scheduler to run the subscription delay timer on.</param>
         /// <returns>Time-shifted sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// This operator is more efficient than <see cref="M:System.Reactive.Linq.Observable.Delay``1(System.IObservable{``0},System.TimeSpan,System.Reactive.Concurrency.IScheduler)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
+        /// This operator is more efficient than <see cref="Observable.Delay{TSource}(IObservable{TSource},TimeSpan,IScheduler)">Delay</see> but postpones all side-effects of subscription and affects error propagation timing.
         /// </para>
         /// <para>
         /// The side-effects of subscribing to the source sequence will be run on the specified scheduler. Observer callbacks will not be affected.
@@ -3972,7 +3972,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements materialized in the source sequence notification objects.</typeparam>
         /// <param name="source">An observable sequence containing explicit notification values which have to be turned into implicit notifications.</param>
         /// <returns>An observable sequence exhibiting the behavior corresponding to the source sequence's notification values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> Dematerialize<TSource>(this IQbservable<Notification<TSource>> source)
         {
@@ -3998,7 +3998,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to retain distinct elements for.</param>
         /// <returns>An observable sequence only containing the distinct elements from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IQbservable<TSource> Distinct<TSource>(this IQbservable<TSource> source)
@@ -4026,7 +4026,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to retain distinct elements for.</param>
         /// <param name="comparer">Equality comparer for source elements.</param>
         /// <returns>An observable sequence only containing the distinct elements from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IQbservable<TSource> Distinct<TSource>(this IQbservable<TSource> source, IEqualityComparer<TSource> comparer)
@@ -4058,7 +4058,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to retain distinct elements for.</param>
         /// <param name="keySelector">A function to compute the comparison key for each element.</param>
         /// <returns>An observable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IQbservable<TSource> Distinct<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
@@ -4091,7 +4091,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to compute the comparison key for each element.</param>
         /// <param name="comparer">Equality comparer for source elements.</param>
         /// <returns>An observable sequence only containing the distinct elements, based on a computed key value, from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>Usage of this operator should be considered carefully due to the maintenance of an internal lookup structure which can grow large.</remarks>
         public static IQbservable<TSource> Distinct<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -4124,7 +4124,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to retain distinct contiguous elements for.</param>
         /// <returns>An observable sequence only containing the distinct contiguous elements from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> DistinctUntilChanged<TSource>(this IQbservable<TSource> source)
         {
@@ -4151,7 +4151,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to retain distinct contiguous elements for.</param>
         /// <param name="comparer">Equality comparer for source elements.</param>
         /// <returns>An observable sequence only containing the distinct contiguous elements from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<TSource> DistinctUntilChanged<TSource>(this IQbservable<TSource> source, IEqualityComparer<TSource> comparer)
         {
@@ -4182,7 +4182,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to retain distinct contiguous elements for, based on a computed key value.</param>
         /// <param name="keySelector">A function to compute the comparison key for each element.</param>
         /// <returns>An observable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         public static IQbservable<TSource> DistinctUntilChanged<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
@@ -4214,7 +4214,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to compute the comparison key for each element.</param>
         /// <param name="comparer">Equality comparer for computed key values.</param>
         /// <returns>An observable sequence only containing the distinct contiguous elements, based on a computed key value, from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<TSource> DistinctUntilChanged<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
@@ -4248,7 +4248,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="observer">Observer whose methods to invoke as part of the source sequence's observation.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="observer" /> is null.</exception>
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, IObserver<TSource> observer)
         {
@@ -4279,7 +4279,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> is null.</exception>
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext)
         {
@@ -4311,7 +4311,7 @@ namespace System.Reactive.Linq
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> or <paramref name="onCompleted" /> is null.</exception>
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action> onCompleted)
         {
@@ -4346,7 +4346,7 @@ namespace System.Reactive.Linq
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> or <paramref name="onError" /> is null.</exception>
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError)
         {
@@ -4382,7 +4382,7 @@ namespace System.Reactive.Linq
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <returns>The source sequence with the side-effecting behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> or <paramref name="onError" /> or <paramref name="onCompleted" /> is null.</exception>
         public static IQbservable<TSource> Do<TSource>(this IQbservable<TSource> source, Expression<Action<TSource>> onNext, Expression<Action<Exception>> onError, Expression<Action> onCompleted)
         {
@@ -4418,7 +4418,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source to repeat as long as the <paramref name="condition" /> function evaluates to true.</param>
         /// <param name="condition">Condition that will be evaluated upon the completion of an iteration through the <paramref name="source" />, to determine whether repetition of the source is required.</param>
         /// <returns>The observable sequence obtained by concatenating the <paramref name="source" /> sequence as long as the <paramref name="condition" /> holds.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="condition" /> is null.</exception>
         public static IQbservable<TSource> DoWhile<TSource>(this IQbservable<TSource> source, Expression<Func<bool>> condition)
         {
@@ -4448,11 +4448,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable sequence to return the element from.</param>
         /// <param name="index">The zero-based index of the element to retrieve.</param>
         /// <returns>An observable sequence that produces the element at the specified position in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index" /> is less than zero.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">(Asynchronous) <paramref name="index" /> is greater than or equal to the number of elements in the source sequence.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">(Asynchronous) <paramref name="index" /> is greater than or equal to the number of elements in the source sequence.</exception>
         public static IQbservable<TSource> ElementAt<TSource>(this IQbservable<TSource> source, int index)
         {
             if (source == null)
@@ -4479,9 +4479,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable sequence to return the element from.</param>
         /// <param name="index">The zero-based index of the element to retrieve.</param>
         /// <returns>An observable sequence that produces the element at the specified position in the source sequence, or a default value if the index is outside the bounds of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index" /> is less than zero.</exception>
         public static IQbservable<TSource> ElementAtOrDefault<TSource>(this IQbservable<TSource> source, int index)
         {
@@ -4505,8 +4505,8 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <returns>An observable sequence with no elements.</returns>
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider)
         {
@@ -4529,11 +4529,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence, using the specified scheduler to send out the single OnCompleted message.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="scheduler">Scheduler to send the termination call on.</param>
         /// <returns>An observable sequence with no elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, IScheduler scheduler)
         {
@@ -4559,12 +4559,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence, using the specified scheduler to send out the single OnCompleted message.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="scheduler">Scheduler to send the termination call on.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult" /> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, IScheduler scheduler, TResult witness)
         {
@@ -4591,8 +4591,8 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an empty observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult" /> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence with no elements.</returns>
         public static IQbservable<TResult> Empty<TResult>(this IQbservableProvider provider, TResult witness)
@@ -4621,7 +4621,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="finallyAction">Action to invoke after the source observable sequence terminates.</param>
         /// <returns>Source sequence with the action-invoking termination behavior applied.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="finallyAction" /> is null.</exception>
         public static IQbservable<TSource> Finally<TSource>(this IQbservable<TSource> source, Expression<Action> finallyAction)
         {
@@ -4650,9 +4650,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         public static IQbservable<TSource> FirstAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
@@ -4678,9 +4678,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence that satisfies the condition in the predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static IQbservable<TSource> FirstAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
@@ -4708,7 +4708,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
@@ -4735,7 +4735,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the first element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> FirstOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
@@ -4761,13 +4761,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Concatenates the observable sequences obtained by running the <paramref name="resultSelector" /> for each element in the given enumerable <paramref name="source" />.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the enumerable source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the observable result sequence.</typeparam>
         /// <param name="source">Enumerable source for which each element will be mapped onto an observable source that will be concatenated in the result sequence.</param>
         /// <param name="resultSelector">Function to select an observable source for each element in the <paramref name="source" />.</param>
         /// <returns>The observable sequence obtained by concatenating the sources returned by <paramref name="resultSelector" /> for each element in the <paramref name="source" />.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> For<TSource, TResult>(this IQbservableProvider provider, IEnumerable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> resultSelector)
         {
@@ -4797,10 +4797,10 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null.</exception>
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync)
         {
@@ -4828,11 +4828,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<Task>> actionAsync, IScheduler scheduler)
         {
@@ -4864,11 +4864,11 @@ namespace System.Reactive.Linq
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null.</exception>
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync)
         {
@@ -4897,12 +4897,12 @@ namespace System.Reactive.Linq
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to convert.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<Unit> FromAsync(this IQbservableProvider provider, Expression<Func<CancellationToken, Task>> actionAsync, IScheduler scheduler)
         {
@@ -4933,11 +4933,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
         /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null.</exception>
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync)
         {
@@ -4966,11 +4966,11 @@ namespace System.Reactive.Linq
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
         /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null.</exception>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync)
@@ -4999,12 +4999,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<Task<TResult>>> functionAsync, IScheduler scheduler)
         {
@@ -5036,12 +5036,12 @@ namespace System.Reactive.Linq
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to convert.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing the result of invoking the function, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous function will be signaled.</remarks>
         public static IQbservable<TResult> FromAsync<TResult>(this IQbservableProvider provider, Expression<Func<CancellationToken, Task<TResult>>> functionAsync, IScheduler scheduler)
@@ -5073,11 +5073,11 @@ namespace System.Reactive.Linq
         /// Converts an Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5085,7 +5085,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5098,7 +5098,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<Unit> FromEvent(this IQbservableProvider provider, Expression<Action<Action>> addHandler, Expression<Action<Action>> removeHandler)
         {
             if (provider == null)
@@ -5127,12 +5127,12 @@ namespace System.Reactive.Linq
         /// Converts an Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5149,7 +5149,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<Unit> FromEvent(this IQbservableProvider provider, Expression<Action<Action>> addHandler, Expression<Action<Action>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5181,13 +5181,13 @@ namespace System.Reactive.Linq
         /// Converts a .NET event to an observable sequence, using a supplied event delegate type. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5195,7 +5195,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5208,7 +5208,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
         {
             if (provider == null)
@@ -5237,14 +5237,14 @@ namespace System.Reactive.Linq
         /// Converts a .NET event to an observable sequence, using a supplied event delegate type. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5261,7 +5261,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5293,14 +5293,14 @@ namespace System.Reactive.Linq
         /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="conversion">A function used to convert the given event handler to a delegate compatible with the underlying .NET event. The resulting delegate is used in calls to the addHandler and removeHandler action parameters.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="conversion" /> or <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5308,7 +5308,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5321,7 +5321,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<Action<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
         {
             if (provider == null)
@@ -5353,7 +5353,7 @@ namespace System.Reactive.Linq
         /// Converts a .NET event to an observable sequence, using a conversion function to obtain the event delegate. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="conversion">A function used to convert the given event handler to a delegate compatible with the underlying .NET event. The resulting delegate is used in calls to the addHandler and removeHandler action parameters.</param>
@@ -5361,7 +5361,7 @@ namespace System.Reactive.Linq
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="conversion" /> or <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5378,7 +5378,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<Action<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5413,12 +5413,12 @@ namespace System.Reactive.Linq
         /// Converts a generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5426,7 +5426,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5439,7 +5439,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TEventArgs>(this IQbservableProvider provider, Expression<Action<Action<TEventArgs>>> addHandler, Expression<Action<Action<TEventArgs>>> removeHandler)
         {
             if (provider == null)
@@ -5468,13 +5468,13 @@ namespace System.Reactive.Linq
         /// Converts a generic Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events conforming to the standard .NET event pattern, use any of the FromEventPattern overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains the event argument objects passed to the invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5491,7 +5491,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEvent(System.IObservable{System.Reactive.Unit})" />
+        /// <seealso cref="Observable.ToEvent(IObservable{Reactive.Unit})" />
         public static IQbservable<TEventArgs> FromEvent<TEventArgs>(this IQbservableProvider provider, Expression<Action<Action<TEventArgs>>> addHandler, Expression<Action<Action<TEventArgs>>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5521,15 +5521,15 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5537,7 +5537,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5550,7 +5550,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler)
         {
             if (provider == null)
@@ -5576,15 +5576,15 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5592,7 +5592,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5605,7 +5605,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler)
         {
             if (provider == null)
@@ -5633,16 +5633,16 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5659,7 +5659,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5688,16 +5688,16 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -5714,7 +5714,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Expression<Action<EventHandler>> addHandler, Expression<Action<EventHandler>> removeHandler, IScheduler scheduler)
         {
             if (provider == null)
@@ -5745,25 +5745,25 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5776,7 +5776,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName)
         {
             if (provider == null)
@@ -5802,25 +5802,25 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5833,7 +5833,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, object target, string eventName)
         {
             if (provider == null)
@@ -5861,19 +5861,19 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -5889,7 +5889,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
         {
             if (provider == null)
@@ -5918,19 +5918,19 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts an instance .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -5946,7 +5946,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
         {
             if (provider == null)
@@ -5977,25 +5977,25 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6008,7 +6008,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName)
         {
             if (provider == null)
@@ -6034,25 +6034,25 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6065,7 +6065,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName)
         {
             if (provider == null)
@@ -6093,19 +6093,19 @@ namespace System.Reactive.Linq
         
 #if !NO_EVENTARGS_CONSTRAINT
         /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -6121,7 +6121,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<EventArgs>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
         {
             if (provider == null)
@@ -6150,19 +6150,19 @@ namespace System.Reactive.Linq
         }
 #else
         /// <summary>
-        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="T:System.EventArgs" /> parameter, to an observable sequence.
+        /// Converts a static .NET event, conforming to the standard .NET event pattern with an <see cref="EventArgs" /> parameter, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -6178,7 +6178,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<object>> FromEventPattern(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
         {
             if (provider == null)
@@ -6212,13 +6212,13 @@ namespace System.Reactive.Linq
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6226,7 +6226,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6239,7 +6239,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6272,14 +6272,14 @@ namespace System.Reactive.Linq
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6296,7 +6296,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6328,18 +6328,18 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="conversion">A function used to convert the given event handler to a delegate compatible with the underlying .NET event. The resulting delegate is used in calls to the addHandler and removeHandler action parameters.</param>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="conversion" /> or <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6347,7 +6347,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6360,7 +6360,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<EventHandler<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6392,11 +6392,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="conversion">A function used to convert the given event handler to a delegate compatible with the underlying .NET event. The resulting delegate is used in calls to the addHandler and removeHandler action parameters.</param>
@@ -6404,7 +6404,7 @@ namespace System.Reactive.Linq
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="conversion" /> or <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6421,7 +6421,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TDelegate, TEventArgs>(this IQbservableProvider provider, Expression<Func<EventHandler<TEventArgs>, TDelegate>> conversion, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6460,14 +6460,14 @@ namespace System.Reactive.Linq
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6475,7 +6475,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6488,7 +6488,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6521,7 +6521,7 @@ namespace System.Reactive.Linq
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TDelegate">The delegate type of the event to be converted.</typeparam>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
@@ -6529,7 +6529,7 @@ namespace System.Reactive.Linq
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="addHandler" /> or <paramref name="removeHandler" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <para>
@@ -6546,7 +6546,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TDelegate, TSender, TEventArgs>(this IQbservableProvider provider, Expression<Action<TDelegate>> addHandler, Expression<Action<TDelegate>> removeHandler, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6578,11 +6578,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
@@ -6593,7 +6593,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6606,7 +6606,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Expression<Action<EventHandler<TEventArgs>>> addHandler, Expression<Action<EventHandler<TEventArgs>>> removeHandler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6635,11 +6635,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="T:System.EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="addHandler">Action that attaches the given event handler to the underlying .NET event.</param>
         /// <param name="removeHandler">Action that detaches the given event handler from the underlying .NET event.</param>
@@ -6660,7 +6660,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Expression<Action<EventHandler<TEventArgs>>> addHandler, Expression<Action<EventHandler<TEventArgs>>> removeHandler, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6697,21 +6697,21 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6724,7 +6724,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, object target, string eventName)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6758,15 +6758,15 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -6782,7 +6782,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6819,21 +6819,21 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6846,7 +6846,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Type type, string eventName)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6880,15 +6880,15 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -6904,7 +6904,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TEventArgs>> FromEventPattern<TEventArgs>(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -6941,22 +6941,22 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6969,7 +6969,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, object target, string eventName)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -7003,16 +7003,16 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the target object type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="target">Object instance that exposes the event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="target" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -7028,7 +7028,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, object target, string eventName, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -7065,22 +7065,22 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="T:System.Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -7093,7 +7093,7 @@ namespace System.Reactive.Linq
         /// more concise and easier to understand.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, Type type, string eventName)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -7127,16 +7127,16 @@ namespace System.Reactive.Linq
         /// Reflection is used to discover the event based on the specified type and the specified event name.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSender">The type of the sender that raises the event.</typeparam>
         /// <typeparam name="TEventArgs">The type of the event data generated by the event.</typeparam>
         /// <param name="type">Type that exposes the static event to convert.</param>
         /// <param name="eventName">Name of the event to convert.</param>
         /// <param name="scheduler">The scheduler to run the add and remove event handler logic on.</param>
         /// <returns>The observable sequence that contains data representations of invocations of the underlying .NET event.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="type" /> or <paramref name="eventName" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
+        /// <exception cref="InvalidOperationException">The event could not be found. -or- The event does not conform to the standard .NET event pattern. -or- The event's first argument type is not assignable to TSender. -or- The event's second argument type is not assignable to TEventArgs.</exception>
         /// <remarks>
         /// <para>
         /// Add and remove handler invocations are made whenever the number of observers grows beyond zero.
@@ -7152,7 +7152,7 @@ namespace System.Reactive.Linq
         /// parameter. For more information, see the remarks section on those overloads.
         /// </para>
         /// </remarks>
-        /// <seealso cref="M:System.Reactive.Linq.Observable.ToEventPattern``1(System.IObservable{System.Reactive.EventPattern{``0}})" />
+        /// <seealso cref="Observable.ToEventPattern{TEventArgs}(IObservable{EventPattern{TEventArgs}})" />
         public static IQbservable<EventPattern<TSender, TEventArgs>> FromEventPattern<TSender, TEventArgs>(this IQbservableProvider provider, Type type, string eventName, IScheduler scheduler)
 #if !NO_EVENTARGS_CONSTRAINT
             where TEventArgs : EventArgs
@@ -7186,7 +7186,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven loop producing the sequence's elements.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7194,7 +7194,7 @@ namespace System.Reactive.Linq
         /// <param name="iterate">Iteration step function.</param>
         /// <param name="resultSelector">Selector function for results produced in the sequence.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector)
         {
@@ -7227,7 +7227,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven loop producing the sequence's elements, using the specified scheduler to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7236,7 +7236,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Selector function for results produced in the sequence.</param>
         /// <param name="scheduler">Scheduler on which to run the generator loop.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, IScheduler scheduler)
         {
@@ -7272,7 +7272,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7281,7 +7281,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Selector function for results produced in the sequence.</param>
         /// <param name="timeSelector">Time selector function to control the speed of values being produced each iteration.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> or <paramref name="timeSelector" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, TimeSpan>> timeSelector)
         {
@@ -7317,7 +7317,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7326,7 +7326,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">Selector function for results produced in the sequence.</param>
         /// <param name="timeSelector">Time selector function to control the speed of values being produced each iteration.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> or <paramref name="timeSelector" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, DateTimeOffset>> timeSelector)
         {
@@ -7362,7 +7362,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements, using the specified scheduler to run timers and to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7372,7 +7372,7 @@ namespace System.Reactive.Linq
         /// <param name="timeSelector">Time selector function to control the speed of values being produced each iteration.</param>
         /// <param name="scheduler">Scheduler on which to run the generator loop.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> or <paramref name="timeSelector" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, TimeSpan>> timeSelector, IScheduler scheduler)
         {
@@ -7411,7 +7411,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence by running a state-driven and temporal loop producing the sequence's elements, using the specified scheduler to run timers and to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TState">The type of the state used in the generator loop.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="initialState">Initial state.</param>
@@ -7421,7 +7421,7 @@ namespace System.Reactive.Linq
         /// <param name="timeSelector">Time selector function to control the speed of values being produced each iteration.</param>
         /// <param name="scheduler">Scheduler on which to run the generator loop.</param>
         /// <returns>The generated sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="iterate" /> or <paramref name="resultSelector" /> or <paramref name="timeSelector" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Generate<TState, TResult>(this IQbservableProvider provider, TState initialState, Expression<Func<TState, bool>> condition, Expression<Func<TState, TState>> iterate, Expression<Func<TState, TResult>> resultSelector, Expression<Func<TState, DateTimeOffset>> timeSelector, IScheduler scheduler)
         {
@@ -7465,7 +7465,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence whose elements to group.</param>
         /// <param name="keySelector">A function to extract the key for each element.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
         {
@@ -7497,9 +7497,9 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract the key for each element.</param>
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, int capacity)
         {
@@ -7533,9 +7533,9 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, int capacity, IEqualityComparer<TKey> comparer)
         {
@@ -7571,7 +7571,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract the key for each element.</param>
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
         {
@@ -7607,7 +7607,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract the key for each element.</param>
         /// <param name="elementSelector">A function to map each source element to an element in an observable group.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
         {
@@ -7644,9 +7644,9 @@ namespace System.Reactive.Linq
         /// <param name="elementSelector">A function to map each source element to an element in an observable group.</param>
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, int capacity)
         {
@@ -7685,9 +7685,9 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="comparer" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
@@ -7728,7 +7728,7 @@ namespace System.Reactive.Linq
         /// <param name="elementSelector">A function to map each source element to an element in an observable group.</param>
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupBy<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
         {
@@ -7772,7 +7772,7 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector)
         {
@@ -7814,9 +7814,9 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, int capacity)
         {
@@ -7860,9 +7860,9 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
@@ -7908,7 +7908,7 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>>> durationSelector, IEqualityComparer<TKey> comparer)
         {
@@ -7954,7 +7954,7 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector)
         {
@@ -8001,9 +8001,9 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, int capacity)
         {
@@ -8052,9 +8052,9 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="capacity" /> is less than 0.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, int capacity, IEqualityComparer<TKey> comparer)
         {
@@ -8105,7 +8105,7 @@ namespace System.Reactive.Linq
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
         /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
         public static IQbservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, Expression<Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>>> durationSelector, IEqualityComparer<TKey> comparer)
         {
@@ -8151,7 +8151,7 @@ namespace System.Reactive.Linq
         /// <param name="rightDurationSelector">A function to select the duration of each element of the right observable sequence, used to determine overlap.</param>
         /// <param name="resultSelector">A function invoked to compute a result element for any element of the left sequence with overlapping elements from the right observable sequence.</param>
         /// <returns>An observable sequence that contains result elements computed from source elements that have an overlapping duration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="left" /> or <paramref name="right" /> or <paramref name="leftDurationSelector" /> or <paramref name="rightDurationSelector" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IQbservable<TLeft> left, IObservable<TRight> right, Expression<Func<TLeft, IObservable<TLeftDuration>>> leftDurationSelector, Expression<Func<TRight, IObservable<TRightDuration>>> rightDurationSelector, Expression<Func<TLeft, IObservable<TRight>, TResult>> resultSelector)
         {
@@ -8186,13 +8186,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// If the specified <paramref name="condition" /> evaluates true, select the <paramref name="thenSource" /> sequence. Otherwise, return an empty sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="condition">Condition evaluated to decide which sequence to return.</param>
         /// <param name="thenSource">Sequence returned in case <paramref name="condition" /> evaluates true.</param>
         /// <returns>
         /// <paramref name="thenSource" /> if <paramref name="condition" /> evaluates true; an empty sequence otherwise.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="thenSource" /> is null.</exception>
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource)
         {
@@ -8221,14 +8221,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// If the specified <paramref name="condition" /> evaluates true, select the <paramref name="thenSource" /> sequence. Otherwise, select the <paramref name="elseSource" /> sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="condition">Condition evaluated to decide which sequence to return.</param>
         /// <param name="thenSource">Sequence returned in case <paramref name="condition" /> evaluates true.</param>
         /// <param name="elseSource">Sequence returned in case <paramref name="condition" /> evaluates false.</param>
         /// <returns>
         /// <paramref name="thenSource" /> if <paramref name="condition" /> evaluates true; <paramref name="elseSource" /> otherwise.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="thenSource" /> or <paramref name="elseSource" /> is null.</exception>
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource, IObservable<TResult> elseSource)
         {
@@ -8260,14 +8260,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// If the specified <paramref name="condition" /> evaluates true, select the <paramref name="thenSource" /> sequence. Otherwise, return an empty sequence generated on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="condition">Condition evaluated to decide which sequence to return.</param>
         /// <param name="thenSource">Sequence returned in case <paramref name="condition" /> evaluates true.</param>
         /// <param name="scheduler">Scheduler to generate an empty sequence on in case <paramref name="condition" /> evaluates false.</param>
         /// <returns>
         /// <paramref name="thenSource" /> if <paramref name="condition" /> evaluates true; an empty sequence otherwise.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="thenSource" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> If<TResult>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TResult> thenSource, IScheduler scheduler)
         {
@@ -8302,7 +8302,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>An empty observable sequence that signals termination, successful or exceptional, of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> IgnoreElements<TSource>(this IQbservable<TSource> source)
         {
@@ -8321,21 +8321,20 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Returns an observable sequence that produces a value after each period.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="period">Period for producing the values in the resulting sequence. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <returns>An observable sequence that produces a value after each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Intervals are measured between the start of subsequent notifications, not between the end of the previous and the start of the next notification.
         /// If the observer takes longer than the interval period to handle the message, the subsequent notification will be delivered immediately after the
         /// current one has been handled. In case you need to control the time between the end and the start of consecutive notifications, consider using the
-        /// <see cref="M:System.Reactive.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.TimeSpan})" />
-        /// operator instead.
+        /// <see cref="Observable.Generate{T, R}(T,Func{T,Boolean},Func{T,T},Func{T,R},Func{T,TimeSpan})" /> operator instead.
         /// </remarks>
         public static IQbservable<long> Interval(this IQbservableProvider provider, TimeSpan period)
         {
@@ -8355,24 +8354,23 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Returns an observable sequence that produces a value after each period, using the specified scheduler to run timers and to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="period">Period for producing the values in the resulting sequence. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence that produces a value after each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// Intervals are measured between the start of subsequent notifications, not between the end of the previous and the start of the next notification.
         /// If the observer takes longer than the interval period to handle the message, the subsequent notification will be delivered immediately after the
         /// current one has been handled. In case you need to control the time between the end and the start of consecutive notifications, consider using the
-        /// <see cref="M:System.Reactive.Linq.Observable.Generate``2(``0,System.Func{``0,System.Boolean},System.Func{``0,``0},System.Func{``0,``1},System.Func{``0,System.TimeSpan},System.Reactive.Concurrency.IScheduler)" />
-        /// operator instead.
+        /// <see cref="Observable.Generate{T, R}(T,Func{T,Boolean},Func{T,T},Func{T,R},Func{T,TimeSpan},IScheduler)" /> operator instead.
         /// </remarks>
         public static IQbservable<long> Interval(this IQbservableProvider provider, TimeSpan period, IScheduler scheduler)
         {
@@ -8402,7 +8400,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to check for emptiness.</param>
         /// <returns>An observable sequence containing a single element determining whether the source sequence is empty.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<bool> IsEmpty<TSource>(this IQbservable<TSource> source)
         {
@@ -8436,7 +8434,7 @@ namespace System.Reactive.Linq
         /// <param name="rightDurationSelector">A function to select the duration of each element of the right observable sequence, used to determine overlap.</param>
         /// <param name="resultSelector">A function invoked to compute a result element for any two overlapping elements of the left and right observable sequences.</param>
         /// <returns>An observable sequence that contains result elements computed from source elements that have an overlapping duration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="left" /> or <paramref name="right" /> or <paramref name="leftDurationSelector" /> or <paramref name="rightDurationSelector" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(this IQbservable<TLeft> left, IObservable<TRight> right, Expression<Func<TLeft, IObservable<TLeftDuration>>> leftDurationSelector, Expression<Func<TRight, IObservable<TRightDuration>>> rightDurationSelector, Expression<Func<TLeft, TRight, TResult>> resultSelector)
         {
@@ -8474,9 +8472,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
         public static IQbservable<TSource> LastAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
@@ -8502,9 +8500,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence that satisfies the condition in the predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static IQbservable<TSource> LastAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
@@ -8532,7 +8530,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
@@ -8559,7 +8557,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the last element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> LastOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
@@ -8609,14 +8607,14 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="T:System.Int64" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="Int64" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
         /// <returns>An observable sequence containing a single element with the number of elements in the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The number of elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The number of elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> LongCount<TSource>(this IQbservable<TSource> source)
         {
@@ -8637,13 +8635,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="T:System.Int64" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="Int64" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence containing a single element with a number that represents how many elements in the input sequence satisfy the condition in the predicate function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> LongCount<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
@@ -8673,7 +8671,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to get notification values for.</param>
         /// <returns>An observable sequence containing the materialized notification values from the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<Notification<TSource>> Materialize<TSource>(this IQbservable<TSource> source)
         {
@@ -8694,11 +8692,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="T:System.Decimal" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="Decimal" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Max(this IQbservable<decimal> source)
@@ -8720,11 +8718,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="T:System.Double" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="Double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Max(this IQbservable<double> source)
@@ -8746,11 +8744,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="T:System.Int32" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Max(this IQbservable<int> source)
@@ -8772,11 +8770,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="T:System.Int64" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Max(this IQbservable<long> source)
@@ -8798,11 +8796,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="T:System.Decimal" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Max(this IQbservable<decimal?> source)
@@ -8824,11 +8822,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="T:System.Double" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Max(this IQbservable<double?> source)
@@ -8850,11 +8848,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="T:System.Int32" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Max(this IQbservable<int?> source)
@@ -8876,11 +8874,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="T:System.Int64" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Max(this IQbservable<long?> source)
@@ -8902,11 +8900,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="T:System.Single" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Max(this IQbservable<float?> source)
@@ -8928,11 +8926,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="T:System.Single" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="Single" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Max(this IQbservable<float> source)
@@ -8959,7 +8957,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to determine the maximum element of.</param>
         /// <returns>An observable sequence containing a single element with the maximum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource> Max<TSource>(this IQbservable<TSource> source)
@@ -8987,7 +8985,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to determine the maximum element of.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the maximum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource> Max<TSource>(this IQbservable<TSource> source, IComparer<TSource> comparer)
@@ -9012,13 +9010,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Decimal" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Decimal" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
@@ -9043,13 +9041,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int32" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Int32" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
@@ -9074,13 +9072,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int64" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Int64" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
@@ -9105,13 +9103,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="T:System.Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Double&gt;" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Double}" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
@@ -9136,13 +9134,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="T:System.Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Single" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Single&gt;" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Single}" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
@@ -9167,13 +9165,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="T:System.Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Decimal&gt;" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Decimal}" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
@@ -9198,13 +9196,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="T:System.Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int32" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Int32&gt;" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Int32}" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
@@ -9229,13 +9227,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="T:System.Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int64" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Int64&gt;" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Int64}" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
@@ -9260,13 +9258,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Double" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
@@ -9291,13 +9289,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="T:System.Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Single" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Single" /> that corresponds to the maximum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Max<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
@@ -9329,7 +9327,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to determine the mimimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TResult> Max<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
@@ -9362,7 +9360,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TResult> Max<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector, IComparer<TResult> comparer)
@@ -9397,7 +9395,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to get the maximum elements for.</param>
         /// <param name="keySelector">Key selector function.</param>
         /// <returns>An observable sequence containing a list of zero or more elements that have a maximum key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IList<TSource>> MaxBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
@@ -9430,7 +9428,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">Key selector function.</param>
         /// <param name="comparer">Comparer used to compare key values.</param>
         /// <returns>An observable sequence containing a list of zero or more elements that have a maximum key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IList<TSource>> MaxBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
@@ -9464,7 +9462,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence.</param>
         /// <param name="second">Second observable sequence.</param>
         /// <returns>The observable sequence that merges the elements of the given sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
@@ -9495,7 +9493,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence.</param>
         /// <param name="scheduler">Scheduler used to introduce concurrency for making subscriptions to the given sequences.</param>
         /// <returns>The observable sequence that merges the elements of the given sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<TSource> first, IObservable<TSource> second, IScheduler scheduler)
         {
@@ -9524,12 +9522,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all of the specified observable sequences into a single observable sequence, using the specified scheduler for enumeration of and subscription to the sources.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences.</param>
         /// <param name="scheduler">Scheduler to run the enumeration of the sequence of sources on.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> or <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IScheduler scheduler, params IObservable<TSource>[] sources)
         {
@@ -9558,11 +9556,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Enumerable sequence of observable sequences.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -9591,7 +9589,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence of inner observable sequences.</param>
         /// <returns>The observable sequence that merges the elements of the inner sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
@@ -9610,7 +9608,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
 #if !NO_TPL
         /// <summary>
         /// Merges results from all source tasks into a single observable sequence.
@@ -9618,9 +9616,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the results produced by the source tasks.</typeparam>
         /// <param name="sources">Observable sequence of tasks.</param>
         /// <returns>The observable sequence that merges the results of the source tasks.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
-        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="M:System.Reactive.Linq.Observable.FromAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})" />, followed by a merge operation using <see cref="M:System.Reactive.Linq.Observable.Merge``1(System.IObservable{System.IObservable{``0}})" />.</remarks>
+        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="Observable.FromAsync{TSource}(Func{CancellationToken,Task{TSource}})" />, followed by a merge operation using <see cref="Observable.Merge{TSource}(IObservable{IObservable{TSource}})" />.</remarks>
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
@@ -9643,11 +9641,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all of the specified observable sequences into a single observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -9677,9 +9675,9 @@ namespace System.Reactive.Linq
         /// <param name="sources">Observable sequence of inner observable sequences.</param>
         /// <param name="maxConcurrent">Maximum number of inner observable sequences being subscribed to concurrently.</param>
         /// <returns>The observable sequence that merges the elements of the inner sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="maxConcurrent" /> is less than or equal to zero.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservable<IObservable<TSource>> sources, int maxConcurrent)
         {
@@ -9703,14 +9701,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence, limiting the number of concurrent subscriptions to inner sequences.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Enumerable sequence of observable sequences.</param>
         /// <param name="maxConcurrent">Maximum number of observable sequences being subscribed to concurrently.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="maxConcurrent" /> is less than or equal to zero.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, int maxConcurrent)
         {
@@ -9737,15 +9735,15 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence, limiting the number of concurrent subscriptions to inner sequences, and using the specified scheduler for enumeration of and subscription to the sources.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Enumerable sequence of observable sequences.</param>
         /// <param name="maxConcurrent">Maximum number of observable sequences being subscribed to concurrently.</param>
         /// <param name="scheduler">Scheduler to run the enumeration of the sequence of sources on.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="maxConcurrent" /> is less than or equal to zero.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, int maxConcurrent, IScheduler scheduler)
         {
@@ -9775,12 +9773,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges elements from all observable sequences in the given enumerable sequence into a single observable sequence, using the specified scheduler for enumeration of and subscription to the sources.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Enumerable sequence of observable sequences.</param>
         /// <param name="scheduler">Scheduler to run the enumeration of the sequence of sources on.</param>
         /// <returns>The observable sequence that merges the elements of the observable sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TSource> Merge<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, IScheduler scheduler)
         {
@@ -9807,11 +9805,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="T:System.Decimal" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="Decimal" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Min(this IQbservable<decimal> source)
@@ -9833,11 +9831,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="T:System.Double" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="Double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Min(this IQbservable<double> source)
@@ -9859,11 +9857,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="T:System.Int32" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Min(this IQbservable<int> source)
@@ -9885,11 +9883,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="T:System.Int64" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Min(this IQbservable<long> source)
@@ -9911,11 +9909,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="T:System.Decimal" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Min(this IQbservable<decimal?> source)
@@ -9937,11 +9935,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="T:System.Double" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Min(this IQbservable<double?> source)
@@ -9963,11 +9961,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="T:System.Int32" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Min(this IQbservable<int?> source)
@@ -9989,11 +9987,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="T:System.Int64" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Min(this IQbservable<long?> source)
@@ -10015,11 +10013,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="T:System.Single" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Min(this IQbservable<float?> source)
@@ -10041,11 +10039,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="T:System.Single" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="Single" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Min(this IQbservable<float> source)
@@ -10072,7 +10070,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to determine the mimimum element of.</param>
         /// <returns>An observable sequence containing a single element with the minimum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource> Min<TSource>(this IQbservable<TSource> source)
@@ -10100,7 +10098,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to determine the mimimum element of.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the minimum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource> Min<TSource>(this IQbservable<TSource> source, IComparer<TSource> comparer)
@@ -10125,13 +10123,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="T:System.Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Double" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
@@ -10156,13 +10154,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="T:System.Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Single" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Single" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
@@ -10187,13 +10185,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="T:System.Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Decimal" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Decimal" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
@@ -10218,13 +10216,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="T:System.Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int32" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Int32" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
@@ -10249,13 +10247,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="T:System.Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int64" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Int64" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
@@ -10280,13 +10278,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="T:System.Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Double&gt;" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Double}" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
@@ -10311,13 +10309,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="T:System.Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Single" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Single&gt;" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Single}" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
@@ -10342,13 +10340,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="T:System.Decimal" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Decimal" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Decimal&gt;" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Decimal}" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
@@ -10373,13 +10371,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="T:System.Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int32" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Int32&gt;" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Int32}" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
@@ -10404,13 +10402,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="T:System.Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int64" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="T:System.Nullable&lt;System.Int64&gt;" /> that corresponds to the minimum value in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="Nullable{Int64}" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Min<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
@@ -10442,7 +10440,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to determine the mimimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TResult> Min<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
@@ -10475,7 +10473,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TResult> Min<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector, IComparer<TResult> comparer)
@@ -10510,7 +10508,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to get the minimum elements for.</param>
         /// <param name="keySelector">Key selector function.</param>
         /// <returns>An observable sequence containing a list of zero or more elements that have a minimum key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IList<TSource>> MinBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
@@ -10543,7 +10541,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">Key selector function.</param>
         /// <param name="comparer">Comparer used to compare key values.</param>
         /// <returns>An observable sequence containing a list of zero or more elements that have a minimum key value.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IList<TSource>> MinBy<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IComparer<TKey> comparer)
@@ -10578,7 +10576,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="initialValue">Initial value that will be yielded by the enumerable sequence if no element has been sampled yet.</param>
         /// <returns>The enumerable sequence that returns the last sampled element upon each iteration.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<TSource> MostRecent<TSource>(this IQbservable<TSource> source, TSource initialValue)
@@ -10612,7 +10610,7 @@ namespace System.Reactive.Linq
         /// <param name="subjectSelector">Factory function to create an intermediate subject through which the source sequence's elements will be multicast to the selector function.</param>
         /// <param name="selector">Selector function which can use the multicasted source sequence subject to the policies enforced by the created subject.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="subjectSelector" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> Multicast<TSource, TIntermediate, TResult>(this IQbservable<TSource> source, Expression<Func<ISubject<TSource, TIntermediate>>> subjectSelector, Expression<Func<IObservable<TIntermediate>, IObservable<TResult>>> selector)
         {
@@ -10641,8 +10639,8 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns a non-terminating observable sequence, which can be used to denote an infinite duration (e.g. when using reactive joins).
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IQbservable<TResult> Never<TResult>(this IQbservableProvider provider)
         {
@@ -10665,8 +10663,8 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns a non-terminating observable sequence, which can be used to denote an infinite duration (e.g. when using reactive joins).
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult" /> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IQbservable<TResult> Never<TResult>(this IQbservableProvider provider, TResult witness)
@@ -10695,7 +10693,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>The enumerable sequence that blocks upon each iteration until the next element in the observable source sequence becomes available.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<TSource> Next<TSource>(this IQbservable<TSource> source)
@@ -10723,11 +10721,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="context">Synchronization context to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified synchronization context.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="context" /> is null.</exception>
         /// <remarks>
         /// This only invokes observer callbacks on a synchronization context. In case the subscription and/or unsubscription actions have side-effects
-        /// that require to be run on a synchronization context, use <see cref="M:System.Reactive.Linq.Observable.SubscribeOn``1(System.IObservable{``0},System.Threading.SynchronizationContext)" />.
+        /// that require to be run on a synchronization context, use <see cref="Observable.SubscribeOn{TSource}(IObservable{TSource},SynchronizationContext)" />.
         /// </remarks>
         public static IQbservable<TSource> ObserveOn<TSource>(this IQbservable<TSource> source, SynchronizationContext context)
         {
@@ -10757,11 +10755,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="scheduler">Scheduler to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified scheduler.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// This only invokes observer callbacks on a scheduler. In case the subscription and/or unsubscription actions have side-effects
-        /// that require to be run on a scheduler, use <see cref="M:System.Reactive.Linq.Observable.SubscribeOn``1(System.IObservable{``0},System.Reactive.Concurrency.IScheduler)" />.
+        /// that require to be run on a scheduler, use <see cref="Observable.SubscribeOn{TSource}(IObservable{TSource},IScheduler)" />.
         /// </remarks>
         public static IQbservable<TSource> ObserveOn<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
@@ -10790,7 +10788,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type to filter the elements in the source sequence on.</typeparam>
         /// <param name="source">The observable sequence that contains the elements to be filtered.</param>
         /// <returns>An observable sequence that contains elements from the input sequence of type TResult.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TResult> OfType<TResult>(this IQbservable<object> source)
         {
@@ -10817,7 +10815,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence whose exception (if any) is caught.</param>
         /// <param name="second">Second observable sequence used to produce results after the first sequence terminates.</param>
         /// <returns>An observable sequence that concatenates the first and second sequence, even if the first sequence terminates exceptionally.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
         {
@@ -10843,11 +10841,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Concatenates all of the specified observable sequences, even if the previous observable sequence terminated exceptionally.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
         /// <returns>An observable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -10873,11 +10871,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Concatenates all observable sequences in the given enumerable sequence, even if the previous observable sequence terminated exceptionally.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequences to concatenate.</param>
         /// <returns>An observable sequence that concatenates the source sequences, even if a sequence terminates exceptionally.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> OnErrorResumeNext<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -10902,16 +10900,16 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
-        /// This operator is a specialization of Multicast using a regular <see cref="T:System.Reactive.Subjects.Subject`1" />.
+        /// This operator is a specialization of Multicast using a regular <see cref="Reactive.Subjects.Subject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all notifications of the source from the time of the subscription on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.Subject`1" />
+        /// <seealso cref="Reactive.Subjects.Subject`1" />
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -10935,7 +10933,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.BehaviorSubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.BehaviorSubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10943,9 +10941,9 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive immediately receive the initial value, followed by all notifications of the source from the time of the subscription on.</param>
         /// <param name="initialValue">Initial value received by observers upon subscription.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.BehaviorSubject`1" />
+        /// <seealso cref="Reactive.Subjects.BehaviorSubject`1" />
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TSource initialValue)
         {
             if (source == null)
@@ -10970,16 +10968,16 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.AsyncSubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.AsyncSubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will only receive the last notification of the source.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.AsyncSubject`1" />
+        /// <seealso cref="Reactive.Subjects.AsyncSubject`1" />
         public static IQbservable<TResult> PublishLast<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -11004,12 +11002,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence of integral numbers within a specified range.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// <paramref name="count" /> is less than zero. -or- <paramref name="start" /> + <paramref name="count" /> - 1 is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count" /> is less than zero. -or- <paramref name="start" /> + <paramref name="count" /> - 1 is larger than <see cref="Int32.MaxValue" />.</exception>
         public static IQbservable<int> Range(this IQbservableProvider provider, int start, int count)
         {
             if (provider == null)
@@ -11033,14 +11031,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence of integral numbers within a specified range, using the specified scheduler to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="start">The value of the first integer in the sequence.</param>
         /// <param name="count">The number of sequential integers to generate.</param>
         /// <param name="scheduler">Scheduler to run the generator loop on.</param>
         /// <returns>An observable sequence that contains a range of sequential integral numbers.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// <paramref name="count" /> is less than zero. -or- <paramref name="start" /> + <paramref name="count" /> - 1 is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count" /> is less than zero. -or- <paramref name="start" /> + <paramref name="count" /> - 1 is larger than <see cref="Int32.MaxValue" />.</exception>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<int> Range(this IQbservableProvider provider, int start, int count, IScheduler scheduler)
         {
@@ -11068,11 +11066,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Connectable observable sequence.</param>
         /// <returns>An observable sequence that stays connected to the source as long as there is at least one subscription to the observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> RefCount<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source)
         {
@@ -11098,7 +11096,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence that repeats the given element infinitely.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be repeated in the produced sequence.</typeparam>
         /// <param name="value">Element to repeat.</param>
         /// <returns>An observable sequence that repeats the given element infinitely.</returns>
@@ -11124,12 +11122,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence that repeats the given element the specified number of times.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be repeated in the produced sequence.</typeparam>
         /// <param name="value">Element to repeat.</param>
         /// <param name="repeatCount">Number of times to repeat the element.</param>
         /// <returns>An observable sequence that repeats the given element the specified number of times.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="repeatCount" /> is less than zero.</exception>
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, int repeatCount)
         {
@@ -11154,15 +11152,15 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence that repeats the given element the specified number of times, using the specified scheduler to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be repeated in the produced sequence.</typeparam>
         /// <param name="value">Element to repeat.</param>
         /// <param name="repeatCount">Number of times to repeat the element.</param>
         /// <param name="scheduler">Scheduler to run the producer loop on.</param>
         /// <returns>An observable sequence that repeats the given element the specified number of times.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="repeatCount" /> is less than zero.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, int repeatCount, IScheduler scheduler)
         {
@@ -11190,12 +11188,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Generates an observable sequence that repeats the given element infinitely, using the specified scheduler to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be repeated in the produced sequence.</typeparam>
         /// <param name="value">Element to repeat.</param>
         /// <param name="scheduler">Scheduler to run the producer loop on.</param>
         /// <returns>An observable sequence that repeats the given element infinitely.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Repeat<TResult>(this IQbservableProvider provider, TResult value, IScheduler scheduler)
         {
@@ -11225,7 +11223,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to repeat.</param>
         /// <returns>The observable sequence producing the elements of the given sequence repeatedly and sequentially.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> Repeat<TSource>(this IQbservable<TSource> source)
         {
@@ -11252,9 +11250,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable sequence to repeat.</param>
         /// <param name="repeatCount">Number of times to repeat the sequence.</param>
         /// <returns>The observable sequence producing the elements of the given sequence repeatedly.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="repeatCount" /> is less than zero.</exception>
         public static IQbservable<TSource> Repeat<TSource>(this IQbservable<TSource> source, int repeatCount)
         {
@@ -11277,16 +11275,16 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
         /// <param name="source">Source sequence whose elements will be multicasted through a single shared subscription.</param>
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all the notifications of the source.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -11310,7 +11308,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11318,11 +11316,11 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all the notifications of the source subject to the specified replay buffer trimming policy.</param>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize)
         {
             if (source == null)
@@ -11347,7 +11345,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11356,11 +11354,11 @@ namespace System.Reactive.Linq
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="scheduler">Scheduler where connected observers within the selector function will be invoked on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
@@ -11388,7 +11386,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11397,13 +11395,13 @@ namespace System.Reactive.Linq
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
@@ -11429,7 +11427,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11439,13 +11437,13 @@ namespace System.Reactive.Linq
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <param name="scheduler">Scheduler where connected observers within the selector function will be invoked on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -11474,7 +11472,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11482,9 +11480,9 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all the notifications of the source.</param>
         /// <param name="scheduler">Scheduler where connected observers within the selector function will be invoked on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, IScheduler scheduler)
         {
             if (source == null)
@@ -11511,7 +11509,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11519,11 +11517,11 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function which can use the multicasted source sequence as many times as needed, without causing multiple subscriptions to the source sequence. Subscribers to the given source will receive all the notifications of the source subject to the specified replay buffer trimming policy.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window)
         {
             if (source == null)
@@ -11548,7 +11546,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="T:System.Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11557,11 +11555,11 @@ namespace System.Reactive.Linq
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <param name="scheduler">Scheduler where connected observers within the selector function will be invoked on.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="T:System.Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -11593,7 +11591,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to repeat until it successfully terminates.</param>
         /// <returns>An observable sequence producing the elements of the given sequence repeatedly until it terminates successfully.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> Retry<TSource>(this IQbservable<TSource> source)
         {
@@ -11620,9 +11618,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Observable sequence to repeat until it successfully terminates.</param>
         /// <param name="retryCount">Number of times to repeat the sequence.</param>
         /// <returns>An observable sequence producing the elements of the given sequence repeatedly until it terminates successfully.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="retryCount" /> is less than zero.</exception>
         public static IQbservable<TSource> Retry<TSource>(this IQbservable<TSource> source, int retryCount)
         {
@@ -11646,7 +11644,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that contains a single element.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be returned in the produced sequence.</typeparam>
         /// <param name="value">Single element in the resulting observable sequence.</param>
         /// <returns>An observable sequence containing the single specified element.</returns>
@@ -11672,12 +11670,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that contains a single element, using the specified scheduler to send out observer messages.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the element that will be returned in the produced sequence.</typeparam>
         /// <param name="value">Single element in the resulting observable sequence.</param>
         /// <param name="scheduler">Scheduler to send the single element on.</param>
         /// <returns>An observable sequence containing the single specified element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Return<TResult>(this IQbservableProvider provider, TResult value, IScheduler scheduler)
         {
@@ -11709,9 +11707,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to sample.</param>
         /// <param name="interval">Interval at which to sample. If this value is equal to TimeSpan.Zero, the scheduler will continuously sample the stream.</param>
         /// <returns>Sampled observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="interval" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="interval" /> doesn't guarantee all source sequence elements will be preserved. This is a side-effect
@@ -11745,9 +11743,9 @@ namespace System.Reactive.Linq
         /// <param name="interval">Interval at which to sample. If this value is equal to TimeSpan.Zero, the scheduler will continuously sample the stream.</param>
         /// <param name="scheduler">Scheduler to run the sampling timer on.</param>
         /// <returns>Sampled observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="interval" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="interval" /> doesn't guarantee all source sequence elements will be preserved. This is a side-effect
@@ -11784,7 +11782,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to sample.</param>
         /// <param name="sampler">Sampling tick sequence.</param>
         /// <returns>Sampled observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="sampler" /> is null.</exception>
         public static IQbservable<TSource> Sample<TSource, TSample>(this IQbservable<TSource> source, IObservable<TSample> sampler)
         {
@@ -11806,16 +11804,16 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Applies an accumulator function over an observable sequence and returns each intermediate result.
-        /// For aggregation behavior with no intermediate results, see <see cref="M:System.Reactive.Linq.Observable.Aggregate``1(System.IObservable{``0},System.Func{``0,``0,``0})" />.
+        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate{TSource}(IObservable{TSource},Func{TSource,TSource,TSource})" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An observable sequence to accumulate over.</param>
         /// <param name="accumulator">An accumulator function to be invoked on each element.</param>
         /// <returns>An observable sequence containing the accumulated values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="accumulator" /> is null.</exception>
         public static IQbservable<TSource> Scan<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, TSource, TSource>> accumulator)
         {
@@ -11837,10 +11835,10 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Applies an accumulator function over an observable sequence and returns each intermediate result. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with no intermediate results, see <see cref="M:System.Reactive.Linq.Observable.Aggregate``2(System.IObservable{``0},``1,System.Func{``1,``0,``1})" />.
+        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate{TSource,TAccumulate}(IObservable{TSource},TAccumulate,Func{TAccumulate,TSource,TAccumulate})" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -11848,7 +11846,7 @@ namespace System.Reactive.Linq
         /// <param name="seed">The initial accumulator value.</param>
         /// <param name="accumulator">An accumulator function to be invoked on each element.</param>
         /// <returns>An observable sequence containing the accumulated values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="accumulator" /> is null.</exception>
         public static IQbservable<TAccumulate> Scan<TSource, TAccumulate>(this IQbservable<TSource> source, TAccumulate seed, Expression<Func<TAccumulate, TSource, TAccumulate>> accumulator)
         {
@@ -11880,7 +11878,7 @@ namespace System.Reactive.Linq
         /// <param name="source">A sequence of elements to invoke a transform function on.</param>
         /// <param name="selector">A transform function to apply to each source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the transform function on each element of source.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> Select<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, TResult>> selector)
         {
@@ -11911,7 +11909,7 @@ namespace System.Reactive.Linq
         /// <param name="source">A sequence of elements to invoke a transform function on.</param>
         /// <param name="selector">A transform function to apply to each source element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the transform function on each element of source.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> Select<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, TResult>> selector)
         {
@@ -11944,9 +11942,9 @@ namespace System.Reactive.Linq
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
@@ -11981,9 +11979,9 @@ namespace System.Reactive.Linq
         /// <param name="collectionSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element and the fourth parameter represents the index of the intermediate element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
             if (source == null)
@@ -12018,7 +12016,7 @@ namespace System.Reactive.Linq
         /// <param name="collectionSelector">A transform function to apply to each element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
@@ -12054,7 +12052,7 @@ namespace System.Reactive.Linq
         /// <param name="collectionSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element and the fourth parameter represents the index of the intermediate element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
@@ -12088,7 +12086,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="other">An observable sequence to project each element from the source sequence onto.</param>
         /// <returns>An observable sequence whose elements are the result of projecting each source element onto the other sequence and merging all the resulting sequences together.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> is null.</exception>
         public static IQbservable<TOther> SelectMany<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
@@ -12121,7 +12119,7 @@ namespace System.Reactive.Linq
         /// <param name="onError">A transform function to apply when an error occurs in the source sequence.</param>
         /// <param name="onCompleted">A transform function to apply when the end of the source sequence is reached.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function corresponding to each notification in the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> or <paramref name="onError" /> or <paramref name="onCompleted" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> onNext, Expression<Func<Exception, IObservable<TResult>>> onError, Expression<Func<IObservable<TResult>>> onCompleted)
         {
@@ -12160,7 +12158,7 @@ namespace System.Reactive.Linq
         /// <param name="onError">A transform function to apply when an error occurs in the source sequence.</param>
         /// <param name="onCompleted">A transform function to apply when the end of the source sequence is reached.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function corresponding to each notification in the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="onNext" /> or <paramref name="onError" /> or <paramref name="onCompleted" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TResult>>> onNext, Expression<Func<Exception, IObservable<TResult>>> onError, Expression<Func<IObservable<TResult>>> onCompleted)
         {
@@ -12197,9 +12195,9 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -12229,9 +12227,9 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -12261,7 +12259,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TResult>>> selector)
         {
@@ -12292,7 +12290,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IObservable<TResult>>> selector)
         {
@@ -12324,8 +12322,8 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TResult>>> selector)
         {
@@ -12358,8 +12356,8 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TResult>>> selector)
         {
@@ -12392,8 +12390,8 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TResult>>> selector)
         {
@@ -12426,8 +12424,8 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TResult>>> selector)
         {
@@ -12462,9 +12460,9 @@ namespace System.Reactive.Linq
         /// <param name="taskSelector">A transform function to apply to each element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
@@ -12501,9 +12499,9 @@ namespace System.Reactive.Linq
         /// <param name="taskSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
@@ -12540,9 +12538,9 @@ namespace System.Reactive.Linq
         /// <param name="taskSelector">A transform function to apply to each element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
@@ -12579,9 +12577,9 @@ namespace System.Reactive.Linq
         /// <param name="taskSelector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             if (source == null)
@@ -12614,7 +12612,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence to compare.</param>
         /// <param name="second">Second observable sequence to compare.</param>
         /// <returns>An observable sequence that contains a single element which indicates whether both sequences are of equal length and their corresponding elements are equal according to the default equality comparer for their type.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IObservable<TSource> second)
@@ -12645,7 +12643,7 @@ namespace System.Reactive.Linq
         /// <param name="first">First observable sequence to compare.</param>
         /// <param name="second">Second observable sequence to compare.</param>
         /// <returns>An observable sequence that contains a single element which indicates whether both sequences are of equal length and their corresponding elements are equal according to the default equality comparer for their type.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IEnumerable<TSource> second)
@@ -12677,7 +12675,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence to compare.</param>
         /// <param name="comparer">Comparer used to compare elements of both sequences.</param>
         /// <returns>An observable sequence that contains a single element which indicates whether both sequences are of equal length and their corresponding elements are equal according to the specified equality comparer.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IObservable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -12712,7 +12710,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence to compare.</param>
         /// <param name="comparer">Comparer used to compare elements of both sequences.</param>
         /// <returns>An observable sequence that contains a single element which indicates whether both sequences are of equal length and their corresponding elements are equal according to the specified equality comparer.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<bool> SequenceEqual<TSource>(this IQbservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
@@ -12745,9 +12743,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the single element in the observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence contains more than one element. -or- The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element. -or- The source sequence is empty.</exception>
         public static IQbservable<TSource> SingleAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
@@ -12773,9 +12771,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the single element in the observable sequence that satisfies the condition in the predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) No element satisfies the condition in the predicate. -or- More than one element satisfies the condition in the predicate. -or- The source sequence is empty.</exception>
         public static IQbservable<TSource> SingleAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
@@ -12803,9 +12801,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source observable sequence.</param>
         /// <returns>Sequence containing the single element in the observable sequence, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence contains more than one element.</exception>
         public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source)
         {
             if (source == null)
@@ -12831,9 +12829,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source observable sequence.</param>
         /// <param name="predicate">A predicate function to evaluate for elements in the source sequence.</param>
         /// <returns>Sequence containing the single element in the observable sequence that satisfies the condition in the predicate, or a default value if no such element exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
-        /// <exception cref="T:System.InvalidOperationException">(Asynchronous) The sequence contains more than one element that satisfies the condition in the predicate.</exception>
+        /// <exception cref="InvalidOperationException">(Asynchronous) The sequence contains more than one element that satisfies the condition in the predicate.</exception>
         public static IQbservable<TSource> SingleOrDefaultAsync<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
             if (source == null)
@@ -12862,9 +12860,9 @@ namespace System.Reactive.Linq
         /// <param name="source">The sequence to take elements from.</param>
         /// <param name="count">The number of elements to skip before returning the remaining elements.</param>
         /// <returns>An observable sequence that contains the elements that occur after the specified index in the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         public static IQbservable<TSource> Skip<TSource>(this IQbservable<TSource> source, int count)
         {
@@ -12892,9 +12890,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to skip elements for.</param>
         /// <param name="duration">Duration for skipping elements from the start of the sequence.</param>
         /// <returns>An observable sequence with the elements skipped during the specified duration from the start of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -12933,9 +12931,9 @@ namespace System.Reactive.Linq
         /// <param name="duration">Duration for skipping elements from the start of the sequence.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements skipped during the specified duration from the start of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -12976,9 +12974,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="count">Number of elements to bypass at the end of the source sequence.</param>
         /// <returns>An observable sequence containing the source sequence elements except for the bypassed ones at the end.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         /// <remarks>
         /// This operator accumulates a queue with a length enough to store the first <paramref name="count" /> elements. As more elements are
@@ -13010,9 +13008,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to skip elements for.</param>
         /// <param name="duration">Duration for skipping elements from the end of the sequence.</param>
         /// <returns>An observable sequence with the elements skipped during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a queue with a length enough to store elements received during the initial <paramref name="duration" /> window.
@@ -13046,9 +13044,9 @@ namespace System.Reactive.Linq
         /// <param name="duration">Duration for skipping elements from the end of the sequence.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements skipped during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a queue with a length enough to store elements received during the initial <paramref name="duration" /> window.
@@ -13084,7 +13082,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to skip elements for.</param>
         /// <param name="startTime">Time to start taking elements from the source sequence. If this value is less than or equal to DateTimeOffset.UtcNow, no elements will be skipped.</param>
         /// <returns>An observable sequence with the elements skipped until the specified start time.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>
         /// Errors produced by the source sequence are always forwarded to the result sequence, even if the error occurs before the <paramref name="startTime" />.
@@ -13116,7 +13114,7 @@ namespace System.Reactive.Linq
         /// <param name="startTime">Time to start taking elements from the source sequence. If this value is less than or equal to DateTimeOffset.UtcNow, no elements will be skipped.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements skipped until the specified start time.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// Errors produced by the source sequence are always forwarded to the result sequence, even if the error occurs before the <paramref name="startTime" />.
@@ -13151,7 +13149,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to propagate elements for.</param>
         /// <param name="other">Observable sequence that triggers propagation of elements of the source sequence.</param>
         /// <returns>An observable sequence containing the elements of the source sequence starting from the point the other sequence triggered propagation.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> is null.</exception>
         public static IQbservable<TSource> SkipUntil<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
@@ -13181,7 +13179,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to return elements from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence that contains the elements from the input sequence starting at the first element in the linear series that does not pass the test specified by predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> SkipWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
@@ -13212,7 +13210,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to return elements from.</param>
         /// <param name="predicate">A function to test each element for a condition; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence that contains the elements from the input sequence starting at the first element in the linear series that does not pass the test specified by predicate.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> SkipWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
@@ -13238,10 +13236,10 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the action asynchronously, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="action">Action to run asynchronously.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13277,11 +13275,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the action asynchronously on the specified scheduler, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="action">Action to run asynchronously.</param>
         /// <param name="scheduler">Scheduler to run the action on.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13320,11 +13318,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the specified function asynchronously, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to run asynchronously.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13360,12 +13358,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the specified function asynchronously on the specified scheduler, surfacing the result through an observable sequence
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to run asynchronously.</param>
         /// <param name="scheduler">Scheduler to run the function on.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13405,10 +13403,10 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to run.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13446,11 +13444,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to run.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13492,10 +13490,10 @@ namespace System.Reactive.Linq
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to run.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13543,11 +13541,11 @@ namespace System.Reactive.Linq
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="actionAsync">Asynchronous action to run.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing a Unit value upon completion of the action, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="actionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13597,11 +13595,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13640,11 +13638,11 @@ namespace System.Reactive.Linq
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13691,12 +13689,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13738,12 +13736,12 @@ namespace System.Reactive.Linq
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the asynchronous function.</typeparam>
         /// <param name="functionAsync">Asynchronous function to run.</param>
         /// <param name="scheduler">Scheduler on which to notify observers.</param>
         /// <returns>An observable sequence exposing the function's result value, or an exception.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="functionAsync" /> is null or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// <list type="bullet">
@@ -13797,7 +13795,7 @@ namespace System.Reactive.Linq
         /// <param name="scheduler">Scheduler to emit the prepended values on.</param>
         /// <param name="values">Values to prepend to the specified sequence.</param>
         /// <returns>The source sequence prepended with the specified values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> or <paramref name="values" /> is null.</exception>
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IScheduler scheduler, params TSource[] values)
         {
@@ -13831,7 +13829,7 @@ namespace System.Reactive.Linq
         /// <param name="scheduler">Scheduler to emit the prepended values on.</param>
         /// <param name="values">Values to prepend to the specified sequence.</param>
         /// <returns>The source sequence prepended with the specified values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> or <paramref name="values" /> is null.</exception>
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IScheduler scheduler, IEnumerable<TSource> values)
         {
@@ -13864,7 +13862,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to prepend values to.</param>
         /// <param name="values">Values to prepend to the specified sequence.</param>
         /// <returns>The source sequence prepended with the specified values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="values" /> is null.</exception>
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, params TSource[] values)
         {
@@ -13894,7 +13892,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to prepend values to.</param>
         /// <param name="values">Values to prepend to the specified sequence.</param>
         /// <returns>The source sequence prepended with the specified values.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="values" /> is null.</exception>
         public static IQbservable<TSource> StartWith<TSource>(this IQbservable<TSource> source, IEnumerable<TSource> values)
         {
@@ -13925,11 +13923,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="context">Synchronization context to perform subscription and unsubscription actions on.</param>
         /// <returns>The source sequence whose subscriptions and unsubscriptions happen on the specified synchronization context.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="context" /> is null.</exception>
         /// <remarks>
         /// This only performs the side-effects of subscription and unsubscription on the specified synchronization context. In order to invoke observer
-        /// callbacks on a synchronization context, use <see cref="M:System.Reactive.Linq.Observable.ObserveOn``1(System.IObservable{``0},System.Threading.SynchronizationContext)" />.
+        /// callbacks on a synchronization context, use <see cref="Observable.ObserveOn{TSource}(IObservable{TSource},SynchronizationContext)" />.
         /// </remarks>
         public static IQbservable<TSource> SubscribeOn<TSource>(this IQbservable<TSource> source, SynchronizationContext context)
         {
@@ -13960,11 +13958,11 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="scheduler">Scheduler to perform subscription and unsubscription actions on.</param>
         /// <returns>The source sequence whose subscriptions and unsubscriptions happen on the specified scheduler.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
         /// This only performs the side-effects of subscription and unsubscription on the specified scheduler. In order to invoke observer
-        /// callbacks on a scheduler, use <see cref="M:System.Reactive.Linq.Observable.ObserveOn``1(System.IObservable{``0},System.Reactive.Concurrency.IScheduler)" />.
+        /// callbacks on a scheduler, use <see cref="Observable.ObserveOn{TSource}(IObservable{TSource},IScheduler)" />.
         /// </remarks>
         public static IQbservable<TSource> SubscribeOn<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
@@ -13988,13 +13986,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Decimal" /> values.
+        /// Computes the sum of a sequence of <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Decimal" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="Decimal" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Sum(this IQbservable<decimal> source)
         {
@@ -14015,11 +14013,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Double" /> values.
+        /// Computes the sum of a sequence of <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Sum(this IQbservable<double> source)
@@ -14041,13 +14039,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Int32" /> values.
+        /// Computes the sum of a sequence of <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int32.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Sum(this IQbservable<int> source)
         {
@@ -14068,13 +14066,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Int64" /> values.
+        /// Computes the sum of a sequence of <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Sum(this IQbservable<long> source)
         {
@@ -14095,13 +14093,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Decimal" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="Decimal" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Decimal" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Decimal" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Sum(this IQbservable<decimal?> source)
         {
@@ -14122,11 +14120,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Double" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="Double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Sum(this IQbservable<double?> source)
@@ -14148,13 +14146,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Int32" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int32.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Sum(this IQbservable<int?> source)
         {
@@ -14175,13 +14173,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Int64" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Sum(this IQbservable<long?> source)
         {
@@ -14202,11 +14200,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Single" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="T:System.Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Sum(this IQbservable<float?> source)
@@ -14228,11 +14226,11 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Single" /> values.
+        /// Computes the sum of a sequence of <see cref="Single" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="T:System.Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Sum(this IQbservable<float> source)
@@ -14254,13 +14252,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double?>> selector)
@@ -14285,13 +14283,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float?>> selector)
@@ -14316,15 +14314,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal?>> selector)
         {
@@ -14348,15 +14346,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int32.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int?>> selector)
         {
@@ -14380,15 +14378,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="T:System.Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long?> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long?>> selector)
         {
@@ -14412,13 +14410,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<double> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, double>> selector)
@@ -14443,13 +14441,13 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<float> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, float>> selector)
@@ -14474,15 +14472,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="Decimal" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Decimal.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Decimal.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<decimal> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, decimal>> selector)
         {
@@ -14506,15 +14504,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int32.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int32.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<int> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int>> selector)
         {
@@ -14538,15 +14536,15 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="T:System.Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <exception cref="T:System.OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="M:System.Int64.MaxValue" />.</exception>
+        /// <exception cref="OverflowException">(Asynchronous) The sum of the projected values for the elements in the source sequence is larger than <see cref="Int64.MaxValue" />.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<long> Sum<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, long>> selector)
         {
@@ -14578,7 +14576,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence of inner observable sequences.</param>
         /// <returns>The observable sequence that at any point in time produces the elements of the most recent inner observable sequence that has been received.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<TSource> Switch<TSource>(this IQbservable<IObservable<TSource>> sources)
         {
@@ -14607,9 +14605,9 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the results produced by the source tasks.</typeparam>
         /// <param name="sources">Observable sequence of tasks.</param>
         /// <returns>The observable sequence that at any point in time produces the result of the most recent task that has been received.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
-        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="M:System.Reactive.Linq.Observable.FromAsync``1(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{``0}})" />, followed by a switch operation using <see cref="M:System.Reactive.Linq.Observable.Switch``1(System.IObservable{System.IObservable{``0}})" />.</remarks>
+        /// <remarks>If the tasks support cancellation, consider manual conversion of the tasks using <see cref="Observable.FromAsync{TSource}(Func{CancellationToken,Task{TSource}})" />, followed by a switch operation using <see cref="Observable.Switch{TSource}(IObservable{IObservable{TSource}})" />.</remarks>
         public static IQbservable<TSource> Switch<TSource>(this IQbservable<Task<TSource>> sources)
         {
             if (sources == null)
@@ -14636,7 +14634,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>The source sequence whose outgoing calls to observers are synchronized.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>
         /// It's invalid behavior - according to the observer grammar - for a sequence to exhibit concurrent callbacks on a given observer.
@@ -14668,7 +14666,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="gate">Gate object to synchronize each observer call on.</param>
         /// <returns>The source sequence whose outgoing calls to observers are synchronized on the given gate object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="gate" /> is null.</exception>
         public static IQbservable<TSource> Synchronize<TSource>(this IQbservable<TSource> source, object gate)
         {
@@ -14698,9 +14696,9 @@ namespace System.Reactive.Linq
         /// <param name="source">The sequence to take elements from.</param>
         /// <param name="count">The number of elements to return.</param>
         /// <returns>An observable sequence that contains the specified number of elements from the start of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, int count)
         {
@@ -14729,9 +14727,9 @@ namespace System.Reactive.Linq
         /// <param name="count">The number of elements to return.</param>
         /// <param name="scheduler">Scheduler used to produce an OnCompleted message in case <paramref name="count">count</paramref> is set to 0.</param>
         /// <returns>An observable sequence that contains the specified number of elements from the start of the input sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         public static IQbservable<TSource> Take<TSource>(this IQbservable<TSource> source, int count, IScheduler scheduler)
         {
@@ -14762,9 +14760,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to take elements from.</param>
         /// <param name="duration">Duration for taking elements from the start of the sequence.</param>
         /// <returns>An observable sequence with the elements taken during the specified duration from the start of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="duration" /> doesn't guarantee an empty sequence will be returned. This is a side-effect
@@ -14798,9 +14796,9 @@ namespace System.Reactive.Linq
         /// <param name="duration">Duration for taking elements from the start of the sequence.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements taken during the specified duration from the start of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="duration" /> doesn't guarantee an empty sequence will be returned. This is a side-effect
@@ -14836,9 +14834,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="count">Number of elements to take from the end of the source sequence.</param>
         /// <returns>An observable sequence containing the specified number of elements from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements <paramref name="count" /> elements. Upon completion of
@@ -14871,9 +14869,9 @@ namespace System.Reactive.Linq
         /// <param name="count">Number of elements to take from the end of the source sequence.</param>
         /// <param name="scheduler">Scheduler used to drain the queue upon completion of the source sequence.</param>
         /// <returns>An observable sequence containing the specified number of elements from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements <paramref name="count" /> elements. Upon completion of
@@ -14908,9 +14906,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to take elements from.</param>
         /// <param name="duration">Duration for taking elements from the end of the sequence.</param>
         /// <returns>An observable sequence with the elements taken during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements for any <paramref name="duration" /> window during the lifetime of
@@ -14944,9 +14942,9 @@ namespace System.Reactive.Linq
         /// <param name="duration">Duration for taking elements from the end of the sequence.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements taken during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements for any <paramref name="duration" /> window during the lifetime of
@@ -14984,9 +14982,9 @@ namespace System.Reactive.Linq
         /// <param name="timerScheduler">Scheduler to run the timer on.</param>
         /// <param name="loopScheduler">Scheduler to drain the collected elements.</param>
         /// <returns>An observable sequence with the elements taken during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="timerScheduler" /> or <paramref name="loopScheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements for any <paramref name="duration" /> window during the lifetime of
@@ -15025,9 +15023,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence.</param>
         /// <param name="count">Number of elements to take from the end of the source sequence.</param>
         /// <returns>An observable sequence containing a single list with the specified number of elements from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store <paramref name="count" /> elements. Upon completion of the
@@ -15059,9 +15057,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to take elements from.</param>
         /// <param name="duration">Duration for taking elements from the end of the sequence.</param>
         /// <returns>An observable sequence containing a single list with the elements taken during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements for any <paramref name="duration" /> window during the lifetime of
@@ -15094,9 +15092,9 @@ namespace System.Reactive.Linq
         /// <param name="duration">Duration for taking elements from the end of the sequence.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence containing a single list with the elements taken during the specified duration from the end of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="duration" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// This operator accumulates a buffer with a length enough to store elements for any <paramref name="duration" /> window during the lifetime of
@@ -15131,7 +15129,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to take elements from.</param>
         /// <param name="endTime">Time to stop taking elements from the source sequence. If this value is less than or equal to DateTimeOffset.UtcNow, the result stream will complete immediately.</param>
         /// <returns>An observable sequence with the elements taken until the specified end time.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset endTime)
         {
@@ -15160,7 +15158,7 @@ namespace System.Reactive.Linq
         /// <param name="endTime">Time to stop taking elements from the source sequence. If this value is less than or equal to DateTimeOffset.UtcNow, the result stream will complete immediately.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence with the elements taken until the specified end time.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TSource> TakeUntil<TSource>(this IQbservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
@@ -15192,7 +15190,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to propagate elements for.</param>
         /// <param name="other">Observable sequence that terminates propagation of elements of the source sequence.</param>
         /// <returns>An observable sequence containing the elements of the source sequence up to the point the other sequence interrupted further propagation.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> is null.</exception>
         public static IQbservable<TSource> TakeUntil<TSource, TOther>(this IQbservable<TSource> source, IObservable<TOther> other)
         {
@@ -15222,7 +15220,7 @@ namespace System.Reactive.Linq
         /// <param name="source">A sequence to return elements from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>An observable sequence that contains the elements from the input sequence that occur before the element at which the test no longer passes.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> TakeWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
@@ -15253,7 +15251,7 @@ namespace System.Reactive.Linq
         /// <param name="source">A sequence to return elements from.</param>
         /// <param name="predicate">A function to test each element for a condition; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence that contains the elements from the input sequence that occur before the element at which the test no longer passes.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> TakeWhile<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
@@ -15283,9 +15281,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to throttle.</param>
         /// <param name="dueTime">Throttling duration for each element.</param>
         /// <returns>The throttled sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -15329,9 +15327,9 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Throttling duration for each element.</param>
         /// <param name="scheduler">Scheduler to run the throttle timers on.</param>
         /// <returns>The throttled sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -15378,7 +15376,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to throttle.</param>
         /// <param name="throttleDurationSelector">Selector function to retrieve a sequence indicating the throttle duration for each given element.</param>
         /// <returns>The throttled sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="throttleDurationSelector" /> is null.</exception>
         /// <remarks>
         /// This operator throttles the source sequence by holding on to each element for the duration denoted by <paramref name="throttleDurationSelector" />.
@@ -15411,11 +15409,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="exception" /> is null.</exception>
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception)
         {
@@ -15441,12 +15439,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception, using the specified scheduler to send out the single OnError message.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="scheduler">Scheduler to send the exceptional termination call on.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="exception" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, IScheduler scheduler)
         {
@@ -15475,13 +15473,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception, using the specified scheduler to send out the single OnError message.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="scheduler">Scheduler to send the exceptional termination call on.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult" /> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="exception" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, IScheduler scheduler, TResult witness)
         {
@@ -15511,12 +15509,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that terminates with an exception.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
-        /// <typeparam name="TResult">The type used for the IObservable&lt;T&gt; type parameter of the resulting sequence.</typeparam>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
+        /// <typeparam name="TResult">The type used for the <see cref="IObservable{T}"/> type parameter of the resulting sequence.</typeparam>
         /// <param name="exception">Exception object used for the sequence's termination.</param>
         /// <param name="witness">Object solely used to infer the type of the <typeparamref name="TResult" /> type parameter. This parameter is typically used when creating a sequence of anonymously typed elements.</param>
         /// <returns>The observable sequence that terminates exceptionally with the specified exception object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="exception" /> is null.</exception>
         public static IQbservable<TResult> Throw<TResult>(this IQbservableProvider provider, Exception exception, TResult witness)
         {
@@ -15546,7 +15544,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to record time intervals for.</param>
         /// <returns>An observable sequence with time interval information on elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TimeInterval<TSource>> TimeInterval<TSource>(this IQbservable<TSource> source)
         {
@@ -15573,7 +15571,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to record time intervals for.</param>
         /// <param name="scheduler">Scheduler used to compute time intervals.</param>
         /// <returns>An observable sequence with time interval information on elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TimeInterval<TSource>> TimeInterval<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
@@ -15595,7 +15593,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Applies a timeout policy to the observable sequence based on an absolute time.
         /// If the sequence doesn't terminate before the specified absolute due time, a TimeoutException is propagated to the observer.
@@ -15604,13 +15602,13 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to perform a timeout for.</param>
         /// <param name="dueTime">Time when a timeout occurs. If this value is less than or equal to DateTimeOffset.UtcNow, the timeout occurs immediately.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.TimeoutException">(Asynchronous) If the sequence hasn't terminated before <paramref name="dueTime" />.</exception>
+        /// <exception cref="TimeoutException">(Asynchronous) If the sequence hasn't terminated before <paramref name="dueTime" />.</exception>
         /// <remarks>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </remarks>
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime)
         {
@@ -15630,7 +15628,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Applies a timeout policy to the observable sequence based on an absolute time.
         /// If the sequence doesn't terminate before the specified absolute due time, the other observable sequence is used to produce future messages from that point on.
@@ -15640,12 +15638,12 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Time when a timeout occurs. If this value is less than or equal to DateTimeOffset.UtcNow, the timeout occurs immediately.</param>
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> is null.</exception>
         /// <remarks>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </remarks>
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other)
         {
@@ -15679,12 +15677,12 @@ namespace System.Reactive.Linq
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <param name="scheduler">Scheduler to run the timeout timers on.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> or <paramref name="scheduler" /> is null.</exception>
         /// <remarks>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </remarks>
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
@@ -15720,13 +15718,13 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Time when a timeout occurs. If this value is less than or equal to DateTimeOffset.UtcNow, the timeout occurs immediately.</param>
         /// <param name="scheduler">Scheduler to run the timeout timers on.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.TimeoutException">(Asynchronous) If the sequence hasn't terminated before <paramref name="dueTime" />.</exception>
+        /// <exception cref="TimeoutException">(Asynchronous) If the sequence hasn't terminated before <paramref name="dueTime" />.</exception>
         /// <remarks>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </remarks>
         public static IQbservable<TSource> Timeout<TSource>(this IQbservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
@@ -15758,16 +15756,16 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to perform a timeout for.</param>
         /// <param name="dueTime">Maximum duration between values before a timeout occurs.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="T:System.TimeoutException">(Asynchronous) If no element is produced within <paramref name="dueTime" /> from the previous element.</exception>
+        /// <exception cref="TimeoutException">(Asynchronous) If no element is produced within <paramref name="dueTime" /> from the previous element.</exception>
         /// <remarks>
         /// <para>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </para>
         /// <para>
         /// Specifying a TimeSpan.Zero value for <paramref name="dueTime" /> is not recommended but supported, causing timeout timers to be scheduled that are due
@@ -15804,15 +15802,15 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Maximum duration between values before a timeout occurs.</param>
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </para>
         /// <para>
         /// Specifying a TimeSpan.Zero value for <paramref name="dueTime" /> is not recommended but supported, causing timeout timers to be scheduled that are due
@@ -15853,15 +15851,15 @@ namespace System.Reactive.Linq
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <param name="scheduler">Scheduler to run the timeout timers on.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="other" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </para>
         /// <para>
         /// Specifying a TimeSpan.Zero value for <paramref name="dueTime" /> is not recommended but supported, causing timeout timers to be scheduled that are due
@@ -15904,16 +15902,16 @@ namespace System.Reactive.Linq
         /// <param name="dueTime">Maximum duration between values before a timeout occurs.</param>
         /// <param name="scheduler">Scheduler to run the timeout timers on.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="dueTime" /> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="T:System.TimeoutException">(Asynchronous) If no element is produced within <paramref name="dueTime" /> from the previous element.</exception>
+        /// <exception cref="TimeoutException">(Asynchronous) If no element is produced within <paramref name="dueTime" /> from the previous element.</exception>
         /// <remarks>
         /// <para>
-        /// In case you only want to timeout on the first element, consider using the <see cref="M:System.Reactive.Linq.Observable.Amb``1(System.IObservable{``0},System.IObservable{``0})" />
-        /// operator applied to the source sequence and a delayed <see cref="M:System.Reactive.Linq.Observable.Throw``1(System.Exception)" /> sequence. Alternatively, the general-purpose overload
-        /// of Timeout, <see cref="M:System.Reactive.Linq.Observable.Timeout``2(System.IObservable{``0},System.IObservable{``1},System.Func{``0,System.IObservable{``1}})" /> can be used.
+        /// In case you only want to timeout on the first element, consider using the <see cref="Observable.Amb{TSource}(IObservable{TSource},IObservable{TSource})" />
+        /// operator applied to the source sequence and a delayed <see cref="Observable.Throw{TSource}(Exception)" /> sequence. Alternatively, the general-purpose overload
+        /// of Timeout, <see cref="Observable.Timeout{TSource,TTimeout}(IObservable{TSource},IObservable{TTimeout},Func{TSource,IObservable{TTimeout}})" /> can be used.
         /// </para>
         /// <para>
         /// Specifying a TimeSpan.Zero value for <paramref name="dueTime" /> is not recommended but supported, causing timeout timers to be scheduled that are due
@@ -15954,7 +15952,7 @@ namespace System.Reactive.Linq
         /// <param name="firstTimeout">Observable sequence that represents the timeout for the first element.</param>
         /// <param name="timeoutDurationSelector">Selector to retrieve an observable sequence that represents the timeout between the current element and the next element.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="firstTimeout" /> or <paramref name="timeoutDurationSelector" /> is null.</exception>
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, IObservable<TTimeout> firstTimeout, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector)
         {
@@ -15991,7 +15989,7 @@ namespace System.Reactive.Linq
         /// <param name="timeoutDurationSelector">Selector to retrieve an observable sequence that represents the timeout between the current element and the next element.</param>
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="firstTimeout" /> or <paramref name="timeoutDurationSelector" /> or <paramref name="other" /> is null.</exception>
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, IObservable<TTimeout> firstTimeout, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector, IObservable<TSource> other)
         {
@@ -16029,7 +16027,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to perform a timeout for.</param>
         /// <param name="timeoutDurationSelector">Selector to retrieve an observable sequence that represents the timeout between the current element and the next element.</param>
         /// <returns>The source sequence with a TimeoutException in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="timeoutDurationSelector" /> is null.</exception>
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector)
         {
@@ -16062,7 +16060,7 @@ namespace System.Reactive.Linq
         /// <param name="timeoutDurationSelector">Selector to retrieve an observable sequence that represents the timeout between the current element and the next element.</param>
         /// <param name="other">Sequence to return in case of a timeout.</param>
         /// <returns>The source sequence switching to the other sequence in case of a timeout.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="timeoutDurationSelector" /> or <paramref name="other" /> is null.</exception>
         public static IQbservable<TSource> Timeout<TSource, TTimeout>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TTimeout>>> timeoutDurationSelector, IObservable<TSource> other)
         {
@@ -16091,7 +16089,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that produces a single value at the specified absolute due time.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Absolute time at which to produce the value. If this value is less than or equal to DateTimeOffset.UtcNow, the timer will fire as soon as possible.</param>
         /// <returns>An observable sequence that produces a value at due time.</returns>
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime)
@@ -16116,11 +16114,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that periodically produces a value starting at the specified initial absolute due time.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Absolute time at which to produce the first value. If this value is less than or equal to DateTimeOffset.UtcNow, the timer will fire as soon as possible.</param>
         /// <param name="period">Period to produce subsequent values. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <returns>An observable sequence that produces a value at due time and then after each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, TimeSpan period)
         {
@@ -16145,14 +16143,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that periodically produces a value starting at the specified initial absolute due time, using the specified scheduler to run timers.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Absolute time at which to produce the first value. If this value is less than or equal to DateTimeOffset.UtcNow, the timer will fire as soon as possible.</param>
         /// <param name="period">Period to produce subsequent values. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <param name="scheduler">Scheduler to run timers on.</param>
         /// <returns>An observable sequence that produces a value at due time and then after each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, TimeSpan period, IScheduler scheduler)
         {
@@ -16180,11 +16178,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that produces a single value at the specified absolute due time, using the specified scheduler to run the timer.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Absolute time at which to produce the value. If this value is less than or equal to DateTimeOffset.UtcNow, the timer will fire as soon as possible.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence that produces a value at due time.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, DateTimeOffset dueTime, IScheduler scheduler)
         {
@@ -16211,7 +16209,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that produces a single value after the specified relative due time has elapsed.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Relative time at which to produce the value. If this value is less than or equal to TimeSpan.Zero, the timer will fire as soon as possible.</param>
         /// <returns>An observable sequence that produces a value after the due time has elapsed.</returns>
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime)
@@ -16236,11 +16234,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that periodically produces a value after the specified initial relative due time has elapsed.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Relative time at which to produce the first value. If this value is less than or equal to TimeSpan.Zero, the timer will fire as soon as possible.</param>
         /// <param name="period">Period to produce subsequent values. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <returns>An observable sequence that produces a value after due time has elapsed and then after each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, TimeSpan period)
         {
@@ -16265,14 +16263,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that periodically produces a value after the specified initial relative due time has elapsed, using the specified scheduler to run timers.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Relative time at which to produce the first value. If this value is less than or equal to TimeSpan.Zero, the timer will fire as soon as possible.</param>
         /// <param name="period">Period to produce subsequent values. If this value is equal to TimeSpan.Zero, the timer will recur as fast as possible.</param>
         /// <param name="scheduler">Scheduler to run timers on.</param>
         /// <returns>An observable sequence that produces a value after due time has elapsed and then each period.</returns>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="period" /> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, TimeSpan period, IScheduler scheduler)
         {
@@ -16300,11 +16298,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Returns an observable sequence that produces a single value after the specified relative due time has elapsed, using the specified scheduler to run the timer.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="dueTime">Relative time at which to produce the value. If this value is less than or equal to TimeSpan.Zero, the timer will fire as soon as possible.</param>
         /// <param name="scheduler">Scheduler to run the timer on.</param>
         /// <returns>An observable sequence that produces a value after the due time has elapsed.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<long> Timer(this IQbservableProvider provider, TimeSpan dueTime, IScheduler scheduler)
         {
@@ -16334,7 +16332,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence to timestamp elements for.</param>
         /// <returns>An observable sequence with timestamp information on elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<Timestamped<TSource>> Timestamp<TSource>(this IQbservable<TSource> source)
         {
@@ -16361,7 +16359,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to timestamp elements for.</param>
         /// <param name="scheduler">Scheduler used to compute timestamps.</param>
         /// <returns>An observable sequence with timestamp information on elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<Timestamped<TSource>> Timestamp<TSource>(this IQbservable<TSource> source, IScheduler scheduler)
         {
@@ -16390,7 +16388,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">The source observable sequence to get an array of elements for.</param>
         /// <returns>An observable sequence containing a single element with an array containing all the elements of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<TSource[]> ToArray<TSource>(this IQbservable<TSource> source)
@@ -16419,7 +16417,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to create a dictionary for.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <returns>An observable sequence containing a single element with a dictionary mapping unique key values onto the corresponding source sequence's element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
@@ -16452,7 +16450,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="comparer">An equality comparer to compare keys.</param>
         /// <returns>An observable sequence containing a single element with a dictionary mapping unique key values onto the corresponding source sequence's element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TSource>> ToDictionary<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -16489,7 +16487,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <returns>An observable sequence containing a single element with a dictionary mapping unique key values onto the corresponding source sequence's element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
@@ -16527,7 +16525,7 @@ namespace System.Reactive.Linq
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <param name="comparer">An equality comparer to compare keys.</param>
         /// <returns>An observable sequence containing a single element with a dictionary mapping unique key values onto the corresponding source sequence's element.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IDictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
@@ -16563,7 +16561,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence to convert to an enumerable sequence.</param>
         /// <returns>The enumerable sequence containing the elements in the observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>This operator requires the source's <see cref="IQbservableProvider"/> object (see <see cref="IQbservable.Provider"/>) to implement <see cref="IQueryProvider"/>.</remarks>
         public static IQueryable<TSource> ToQueryable<TSource>(this IQbservable<TSource> source)
@@ -16590,7 +16588,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">The source observable sequence to get a list of elements for.</param>
         /// <returns>An observable sequence containing a single element with a list containing all the elements of the source sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<IList<TSource>> ToList<TSource>(this IQbservable<TSource> source)
@@ -16619,7 +16617,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence to create a lookup for.</param>
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <returns>An observable sequence containing a single element with a lookup mapping unique key values onto the corresponding source sequence's elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector)
@@ -16652,7 +16650,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="comparer">An equality comparer to compare keys.</param>
         /// <returns>An observable sequence containing a single element with a lookup mapping unique key values onto the corresponding source sequence's elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<ILookup<TKey, TSource>> ToLookup<TSource, TKey>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -16689,7 +16687,7 @@ namespace System.Reactive.Linq
         /// <param name="keySelector">A function to extract a key from each element.</param>
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <returns>An observable sequence containing a single element with a lookup mapping unique key values onto the corresponding source sequence's elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector)
@@ -16727,7 +16725,7 @@ namespace System.Reactive.Linq
         /// <param name="elementSelector">A transform function to produce a result element value from each element.</param>
         /// <param name="comparer">An equality comparer to compare keys.</param>
         /// <returns>An observable sequence containing a single element with a lookup mapping unique key values onto the corresponding source sequence's elements.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="comparer" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IQbservable<ILookup<TKey, TElement>> ToLookup<TSource, TKey, TElement>(this IQbservable<TSource> source, Expression<Func<TSource, TKey>> keySelector, Expression<Func<TSource, TElement>> elementSelector, IEqualityComparer<TKey> comparer)
@@ -16760,11 +16758,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts an enumerable sequence to an observable sequence.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
         /// <returns>The observable sequence whose elements are pulled from the given enumerable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> ToObservable<TSource>(this IQbservableProvider provider, IEnumerable<TSource> source)
         {
@@ -16790,12 +16788,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts an enumerable sequence to an observable sequence, using the specified scheduler to run the enumeration loop.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Enumerable sequence to convert to an observable sequence.</param>
         /// <param name="scheduler">Scheduler to run the enumeration of the input sequence on.</param>
         /// <returns>The observable sequence whose elements are pulled from the given enumerable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
         public static IQbservable<TSource> ToObservable<TSource>(this IQbservableProvider provider, IEnumerable<TSource> source, IScheduler scheduler)
         {
@@ -16824,13 +16822,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="T:System.IDisposable" />.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable" />.</typeparam>
         /// <param name="resourceFactory">Factory function to obtain a resource object.</param>
         /// <param name="observableFactory">Factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="resourceFactory" /> or <paramref name="observableFactory" /> is null.</exception>
         public static IQbservable<TResult> Using<TResult, TResource>(this IQbservableProvider provider, Expression<Func<TResource>> resourceFactory, Expression<Func<TResource, IObservable<TResult>>> observableFactory)
             where TResource : IDisposable
@@ -16862,13 +16860,13 @@ namespace System.Reactive.Linq
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is obtained and used through asynchronous methods.
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
-        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="T:System.IDisposable" />.</typeparam>
+        /// <typeparam name="TResource">The type of the resource used during the generation of the resulting sequence. Needs to implement <see cref="IDisposable" />.</typeparam>
         /// <param name="resourceFactoryAsync">Asynchronous factory function to obtain a resource object.</param>
         /// <param name="observableFactoryAsync">Asynchronous factory function to obtain an observable sequence that depends on the obtained resource.</param>
         /// <returns>An observable sequence whose lifetime controls the lifetime of the dependent resource object.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="resourceFactoryAsync" /> or <paramref name="observableFactoryAsync" /> is null.</exception>
         /// <remarks>This operator is especially useful in conjunction with the asynchronous programming features introduced in C# 5.0 and Visual Basic 11.</remarks>
         /// <remarks>When a subscription to the resulting sequence is disposed, the CancellationToken that was fed to the asynchronous resource factory and observable factory functions will be signaled.</remarks>
@@ -16905,7 +16903,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence whose elements to filter.</param>
         /// <param name="predicate">A function to test each source element for a condition.</param>
         /// <returns>An observable sequence that contains elements from the input sequence that satisfy the condition.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> Where<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, bool>> predicate)
         {
@@ -16935,7 +16933,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence whose elements to filter.</param>
         /// <param name="predicate">A function to test each source element for a conditio; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence that contains elements from the input sequence that satisfy the condition.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>
         public static IQbservable<TSource> Where<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, int, bool>> predicate)
         {
@@ -16961,12 +16959,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Repeats the given <paramref name="source" /> as long as the specified <paramref name="condition" /> holds, where the <paramref name="condition" /> is evaluated before each repeated <paramref name="source" /> is subscribed to.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source to repeat as long as the <paramref name="condition" /> function evaluates to true.</param>
         /// <param name="condition">Condition that will be evaluated before subscription to the <paramref name="source" />, to determine whether repetition of the source is required.</param>
         /// <returns>The observable sequence obtained by concatenating the <paramref name="source" /> sequence as long as the <paramref name="condition" /> holds.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="condition" /> or <paramref name="source" /> is null.</exception>
         public static IQbservable<TSource> While<TSource>(this IQbservableProvider provider, Expression<Func<bool>> condition, IObservable<TSource> source)
         {
@@ -16999,9 +16997,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce windows over.</param>
         /// <param name="count">Length of each window.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> is less than or equal to zero.</exception>
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, int count)
         {
@@ -17030,9 +17028,9 @@ namespace System.Reactive.Linq
         /// <param name="count">Length of each window.</param>
         /// <param name="skip">Number of elements to skip between creation of consecutive windows.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count" /> or <paramref name="skip" /> is less than or equal to zero.</exception>
         public static IQbservable<IObservable<TSource>> Window<TSource>(this IQbservable<TSource> source, int count, int skip)
         {
@@ -17061,9 +17059,9 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce windows over.</param>
         /// <param name="timeSpan">Length of each window.</param>
         /// <returns>The sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create windows as fast as it can.
@@ -17098,9 +17096,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Maximum time length of a window.</param>
         /// <param name="count">Maximum element count of a window.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero. -or- <paramref name="count" /> is less than or equal to zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create windows as fast as it can.
@@ -17137,9 +17135,9 @@ namespace System.Reactive.Linq
         /// <param name="count">Maximum element count of a window.</param>
         /// <param name="scheduler">Scheduler to run windowing timers on.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero. -or- <paramref name="count" /> is less than or equal to zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create windows as fast as it can.
@@ -17177,9 +17175,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Length of each window.</param>
         /// <param name="scheduler">Scheduler to run windowing timers on.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// Specifying a TimeSpan.Zero value for <paramref name="timeSpan" /> is not recommended but supported, causing the scheduler to create windows as fast as it can.
@@ -17216,9 +17214,9 @@ namespace System.Reactive.Linq
         /// <param name="timeSpan">Length of each window.</param>
         /// <param name="timeShift">Interval between creation of consecutive windows.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> or <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -17261,9 +17259,9 @@ namespace System.Reactive.Linq
         /// <param name="timeShift">Interval between creation of consecutive windows.</param>
         /// <param name="scheduler">Scheduler to run windowing timers on.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="timeSpan" /> or <paramref name="timeSpan" /> is less than TimeSpan.Zero.</exception>
         /// <remarks>
         /// <para>
@@ -17308,7 +17306,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce windows over.</param>
         /// <param name="windowBoundaries">Sequence of window boundary markers. The current window is closed and a new window is opened upon receiving a boundary marker.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="windowBoundaries" /> is null.</exception>
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(this IQbservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries)
         {
@@ -17339,7 +17337,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence to produce windows over.</param>
         /// <param name="windowClosingSelector">A function invoked to define the boundaries of the produced windows. A new window is started when the previous one is closed.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="windowClosingSelector" /> is null.</exception>
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowClosing>(this IQbservable<TSource> source, Expression<Func<IObservable<TWindowClosing>>> windowClosingSelector)
         {
@@ -17372,7 +17370,7 @@ namespace System.Reactive.Linq
         /// <param name="windowOpenings">Observable sequence whose elements denote the creation of new windows.</param>
         /// <param name="windowClosingSelector">A function invoked to define the closing of each produced window.</param>
         /// <returns>An observable sequence of windows.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="windowOpenings" /> or <paramref name="windowClosingSelector" /> is null.</exception>
         public static IQbservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(this IQbservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Expression<Func<TWindowOpening, IObservable<TWindowClosing>>> windowClosingSelector)
         {
@@ -17408,7 +17406,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable source.</param>
         /// <param name="resultSelector">Function to invoke for each element from the first source combined with the latest element from the second source, if any.</param>
         /// <returns>An observable sequence containing the result of combining each element of the first source with the latest element from the second source, if any, using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IQbservable<TFirst> first, IObservable<TSecond> second, Expression<Func<TFirst, TSecond, TResult>> resultSelector)
         {
@@ -17437,11 +17435,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by emitting a list with the elements of the observable sequences at corresponding indexes.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences, and in the lists in the result sequence.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of elements at corresponding indexes.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<IList<TSource>> Zip<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
         {
@@ -17467,11 +17465,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by emitting a list with the elements of the observable sequences at corresponding indexes.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences, and in the lists in the result sequence.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <returns>An observable sequence containing lists of elements at corresponding indexes.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         public static IQbservable<IList<TSource>> Zip<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
         {
@@ -17497,13 +17495,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Merges the specified observable sequences into one observable sequence by using the selector function whenever all of the observable sequences have produced an element at a corresponding index.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence, returned by the selector function.</typeparam>
         /// <param name="sources">Observable sources.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource, TResult>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources, Expression<Func<IList<TSource>, TResult>> resultSelector)
         {
@@ -17539,7 +17537,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable source.</param>
         /// <param name="resultSelector">Function to invoke for each consecutive pair of elements from the first and second source.</param>
         /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IObservable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
@@ -17575,7 +17573,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second enumerable source.</param>
         /// <param name="resultSelector">Function to invoke for each consecutive pair of elements from the first and second source.</param>
         /// <returns>An observable sequence containing the result of pairwise combining the elements of the first and second source using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IEnumerable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
         {
@@ -17613,7 +17611,7 @@ namespace System.Reactive.Linq
         /// <param name="source3">Third observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, Expression<Func<TSource1, TSource2, TSource3, TResult>> resultSelector)
         {
@@ -17656,7 +17654,7 @@ namespace System.Reactive.Linq
         /// <param name="source4">Fourth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, Expression<Func<TSource1, TSource2, TSource3, TSource4, TResult>> resultSelector)
         {
@@ -17705,7 +17703,7 @@ namespace System.Reactive.Linq
         /// <param name="source5">Fifth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>> resultSelector)
         {
@@ -17760,7 +17758,7 @@ namespace System.Reactive.Linq
         /// <param name="source6">Sixth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>> resultSelector)
         {
@@ -17820,7 +17818,7 @@ namespace System.Reactive.Linq
         /// <param name="source7">Seventh observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>> resultSelector)
         {
@@ -17885,7 +17883,7 @@ namespace System.Reactive.Linq
         /// <param name="source8">Eighth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>> resultSelector)
         {
@@ -17955,7 +17953,7 @@ namespace System.Reactive.Linq
         /// <param name="source9">Ninth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>> resultSelector)
         {
@@ -18030,7 +18028,7 @@ namespace System.Reactive.Linq
         /// <param name="source10">Tenth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>> resultSelector)
         {
@@ -18110,7 +18108,7 @@ namespace System.Reactive.Linq
         /// <param name="source11">Eleventh observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>> resultSelector)
         {
@@ -18195,7 +18193,7 @@ namespace System.Reactive.Linq
         /// <param name="source12">Twelfth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>> resultSelector)
         {
@@ -18285,7 +18283,7 @@ namespace System.Reactive.Linq
         /// <param name="source13">Thirteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>> resultSelector)
         {
@@ -18380,7 +18378,7 @@ namespace System.Reactive.Linq
         /// <param name="source14">Fourteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>> resultSelector)
         {
@@ -18480,7 +18478,7 @@ namespace System.Reactive.Linq
         /// <param name="source15">Fifteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="source15" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>> resultSelector)
         {
@@ -18585,7 +18583,7 @@ namespace System.Reactive.Linq
         /// <param name="source16">Sixteenth observable source.</param>
         /// <param name="resultSelector">Function to invoke for each series of elements at corresponding indexes in the sources.</param>
         /// <returns>An observable sequence containing the result of combining elements of the sources using the specified result selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source1" /> or <paramref name="source2" /> or <paramref name="source3" /> or <paramref name="source4" /> or <paramref name="source5" /> or <paramref name="source6" /> or <paramref name="source7" /> or <paramref name="source8" /> or <paramref name="source9" /> or <paramref name="source10" /> or <paramref name="source11" /> or <paramref name="source12" /> or <paramref name="source13" /> or <paramref name="source14" /> or <paramref name="source15" /> or <paramref name="source16" /> or <paramref name="resultSelector" /> is null.</exception>
         public static IQbservable<TResult> Zip<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>(this IQbservable<TSource1> source1, IObservable<TSource2> source2, IObservable<TSource3> source3, IObservable<TSource4> source4, IObservable<TSource5> source5, IObservable<TSource6> source6, IObservable<TSource7> source7, IObservable<TSource8> source8, IObservable<TSource9> source9, IObservable<TSource10> source10, IObservable<TSource11> source11, IObservable<TSource12> source12, IObservable<TSource13> source13, IObservable<TSource14> source14, IObservable<TSource15> source15, IObservable<TSource16> source16, Expression<Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>> resultSelector)
         {
@@ -18657,10 +18655,10 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<IQbservable<Unit>> ToAsync(this IQbservableProvider provider, Expression<Action> action)
         {
@@ -18689,11 +18687,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<IQbservable<Unit>> ToAsync(this IQbservableProvider provider, Expression<Action> action, IScheduler scheduler)
         {
@@ -18725,11 +18723,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, IQbservable<Unit>> ToAsync<TArg1>(this IQbservableProvider provider, Expression<Action<TArg1>> action)
         {
@@ -18759,12 +18757,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, IQbservable<Unit>> ToAsync<TArg1>(this IQbservableProvider provider, Expression<Action<TArg1>> action, IScheduler scheduler)
         {
@@ -18797,12 +18795,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, IQbservable<Unit>> ToAsync<TArg1, TArg2>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2>> action)
         {
@@ -18833,13 +18831,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, IQbservable<Unit>> ToAsync<TArg1, TArg2>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2>> action, IScheduler scheduler)
         {
@@ -18873,13 +18871,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3>> action)
         {
@@ -18911,14 +18909,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3>> action, IScheduler scheduler)
         {
@@ -18953,14 +18951,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
         /// <typeparam name="TArg4">The type of the fourth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4>> action)
         {
@@ -18993,7 +18991,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19001,7 +18999,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4>> action, IScheduler scheduler)
         {
@@ -19038,7 +19036,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19046,7 +19044,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg5">The type of the fifth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>> action)
         {
@@ -19080,7 +19078,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19089,7 +19087,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5>> action, IScheduler scheduler)
         {
@@ -19126,7 +19124,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19135,7 +19133,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg6">The type of the sixth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>> action)
         {
@@ -19170,7 +19168,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19180,7 +19178,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>> action, IScheduler scheduler)
         {
@@ -19218,7 +19216,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19228,7 +19226,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg7">The type of the seventh argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>> action)
         {
@@ -19264,7 +19262,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19275,7 +19273,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>> action, IScheduler scheduler)
         {
@@ -19314,7 +19312,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19325,7 +19323,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg8">The type of the eighth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>> action)
         {
@@ -19362,7 +19360,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19374,7 +19372,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>> action, IScheduler scheduler)
         {
@@ -19414,7 +19412,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19426,7 +19424,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg9">The type of the ninth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>> action)
         {
@@ -19464,7 +19462,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19477,7 +19475,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>> action, IScheduler scheduler)
         {
@@ -19518,7 +19516,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19531,7 +19529,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg10">The type of the tenth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>> action)
         {
@@ -19570,7 +19568,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19584,7 +19582,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>> action, IScheduler scheduler)
         {
@@ -19626,7 +19624,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19640,7 +19638,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg11">The type of the eleventh argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>> action)
         {
@@ -19680,7 +19678,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19695,7 +19693,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>> action, IScheduler scheduler)
         {
@@ -19738,7 +19736,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19753,7 +19751,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg12">The type of the twelfth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>> action)
         {
@@ -19794,7 +19792,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19810,7 +19808,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>> action, IScheduler scheduler)
         {
@@ -19854,7 +19852,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19870,7 +19868,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg13">The type of the thirteenth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>> action)
         {
@@ -19912,7 +19910,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19929,7 +19927,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>> action, IScheduler scheduler)
         {
@@ -19974,7 +19972,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -19991,7 +19989,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg14">The type of the fourteenth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>> action)
         {
@@ -20034,7 +20032,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -20052,7 +20050,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>> action, IScheduler scheduler)
         {
@@ -20098,7 +20096,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -20116,7 +20114,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg15">The type of the fifteenth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>> action)
         {
@@ -20160,7 +20158,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -20179,7 +20177,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>> action, IScheduler scheduler)
         {
@@ -20226,7 +20224,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -20245,7 +20243,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TArg16">The type of the sixteenth argument passed to the action.</typeparam>
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>> action)
         {
@@ -20290,7 +20288,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the action.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the action.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the action.</typeparam>
@@ -20310,7 +20308,7 @@ namespace System.Reactive.Linq
         /// <param name="action">Action to convert to an asynchronous action.</param>
         /// <param name="scheduler">Scheduler to invoke the original action on.</param>
         /// <returns>Asynchronous action.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="action" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<Unit>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(this IQbservableProvider provider, Expression<Action<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>> action, IScheduler scheduler)
         {
@@ -20359,11 +20357,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<IQbservable<TResult>> ToAsync<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function)
         {
@@ -20392,12 +20390,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<IQbservable<TResult>> ToAsync<TResult>(this IQbservableProvider provider, Expression<Func<TResult>> function, IScheduler scheduler)
         {
@@ -20429,12 +20427,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, IQbservable<TResult>> ToAsync<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TResult>> function)
         {
@@ -20464,13 +20462,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, IQbservable<TResult>> ToAsync<TArg1, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TResult>> function, IScheduler scheduler)
         {
@@ -20503,13 +20501,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, IQbservable<TResult>> ToAsync<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TResult>> function)
         {
@@ -20540,14 +20538,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, IQbservable<TResult>> ToAsync<TArg1, TArg2, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TResult>> function, IScheduler scheduler)
         {
@@ -20581,14 +20579,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TResult>> function)
         {
@@ -20620,7 +20618,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20628,7 +20626,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TResult>> function, IScheduler scheduler)
         {
@@ -20663,7 +20661,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20671,7 +20669,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>> function)
         {
@@ -20704,7 +20702,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20713,7 +20711,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TResult>> function, IScheduler scheduler)
         {
@@ -20750,7 +20748,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20759,7 +20757,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>> function)
         {
@@ -20793,7 +20791,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20803,7 +20801,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>> function, IScheduler scheduler)
         {
@@ -20840,7 +20838,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20850,7 +20848,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>> function)
         {
@@ -20885,7 +20883,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20896,7 +20894,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>> function, IScheduler scheduler)
         {
@@ -20934,7 +20932,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20945,7 +20943,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>> function)
         {
@@ -20981,7 +20979,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -20993,7 +20991,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>> function, IScheduler scheduler)
         {
@@ -21032,7 +21030,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21044,7 +21042,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>> function)
         {
@@ -21081,7 +21079,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21094,7 +21092,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>> function, IScheduler scheduler)
         {
@@ -21134,7 +21132,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21147,7 +21145,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>> function)
         {
@@ -21185,7 +21183,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21199,7 +21197,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>> function, IScheduler scheduler)
         {
@@ -21240,7 +21238,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21254,7 +21252,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>> function)
         {
@@ -21293,7 +21291,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21308,7 +21306,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>> function, IScheduler scheduler)
         {
@@ -21350,7 +21348,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21365,7 +21363,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>> function)
         {
@@ -21405,7 +21403,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21421,7 +21419,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>> function, IScheduler scheduler)
         {
@@ -21464,7 +21462,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21480,7 +21478,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>> function)
         {
@@ -21521,7 +21519,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21538,7 +21536,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>> function, IScheduler scheduler)
         {
@@ -21582,7 +21580,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21599,7 +21597,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>> function)
         {
@@ -21641,7 +21639,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21659,7 +21657,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>> function, IScheduler scheduler)
         {
@@ -21704,7 +21702,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21722,7 +21720,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>> function)
         {
@@ -21765,7 +21763,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21784,7 +21782,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>> function, IScheduler scheduler)
         {
@@ -21830,7 +21828,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21849,7 +21847,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>> function)
         {
@@ -21893,7 +21891,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21913,7 +21911,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>> function, IScheduler scheduler)
         {
@@ -21960,7 +21958,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -21980,7 +21978,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="TResult">The type of the result returned by the function.</typeparam>
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>> function)
         {
@@ -22025,7 +22023,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function on the specified scheduler.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the function.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the function.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the function.</typeparam>
@@ -22046,7 +22044,7 @@ namespace System.Reactive.Linq
         /// <param name="function">Function to convert to an asynchronous function.</param>
         /// <param name="scheduler">Scheduler to invoke the original function on.</param>
         /// <returns>Asynchronous function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="function" /> or <paramref name="scheduler" /> is null.</exception>
         public static Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, IQbservable<TResult>> ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(this IQbservableProvider provider, Expression<Func<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>> function, IScheduler scheduler)
         {
@@ -22096,11 +22094,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22136,12 +22134,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22178,13 +22176,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22223,14 +22221,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22269,7 +22267,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22277,7 +22275,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22317,7 +22315,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22326,7 +22324,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22367,7 +22365,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22377,7 +22375,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22419,7 +22417,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22430,7 +22428,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22473,7 +22471,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22485,7 +22483,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22529,7 +22527,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22542,7 +22540,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22587,7 +22585,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22601,7 +22599,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22647,7 +22645,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22662,7 +22660,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22709,7 +22707,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22725,7 +22723,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22773,7 +22771,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22790,7 +22788,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22839,7 +22837,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -22857,7 +22855,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result (represented as a Unit value) as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22908,12 +22906,12 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the result returned by the end delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22949,13 +22947,13 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the end delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -22992,14 +22990,14 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TResult">The type of the result returned by the end delegate.</typeparam>
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23038,7 +23036,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23046,7 +23044,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23085,7 +23083,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23094,7 +23092,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23134,7 +23132,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23144,7 +23142,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23185,7 +23183,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23196,7 +23194,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23238,7 +23236,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23250,7 +23248,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23293,7 +23291,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23306,7 +23304,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23350,7 +23348,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23364,7 +23362,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23409,7 +23407,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23424,7 +23422,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23470,7 +23468,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23486,7 +23484,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23533,7 +23531,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23550,7 +23548,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23598,7 +23596,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23616,7 +23614,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC
@@ -23665,7 +23663,7 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TArg1">The type of the first argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg2">The type of the second argument passed to the begin delegate.</typeparam>
         /// <typeparam name="TArg3">The type of the third argument passed to the begin delegate.</typeparam>
@@ -23684,7 +23682,7 @@ namespace System.Reactive.Linq
         /// <param name="begin">The delegate that begins the asynchronous operation.</param>
         /// <param name="end">The delegate that ends the asynchronous operation.</param>
         /// <returns>Function that can be used to start the asynchronous operation and retrieve the result as an observable sequence.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="begin" /> or <paramref name="end" /> is null.</exception>
         /// <remarks>Each invocation of the resulting function will cause the asynchronous operation to be started. Subscription to the resulting sequence has no observable side-effect, and each subscription will produce the asynchronous operation's result.</remarks>
 #if PREFERASYNC

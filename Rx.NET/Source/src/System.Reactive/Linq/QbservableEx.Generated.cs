@@ -32,10 +32,10 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Subscribes to each observable sequence returned by the iteratorMethod in sequence and produces a Unit value on the resulting sequence for each step of the iteration.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <param name="iteratorMethod">Iterator method that drives the resulting observable sequence.</param>
         /// <returns>An observable sequence obtained by running the iterator and returning Unit values for each iteration step.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="iteratorMethod" /> is null.</exception>
         [Experimental]
         public static IQbservable<Unit> Create(this IQbservableProvider provider, Expression<Func<IEnumerable<IObservable<object>>>> iteratorMethod)
@@ -64,11 +64,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Subscribes to each observable sequence returned by the iteratorMethod in sequence and returns the observable sequence of values sent to the observer given to the iteratorMethod.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TResult">The type of the elements in the produced sequence.</typeparam>
         /// <param name="iteratorMethod">Iterator method that produces elements in the resulting sequence by calling the given observer.</param>
         /// <returns>An observable sequence obtained by running the iterator and returning the elements that were sent to the observer.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="iteratorMethod" /> is null.</exception>
         [Experimental]
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, IEnumerable<IObservable<object>>>> iteratorMethod)
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence with the initial elements.</param>
         /// <param name="selector">Selector function to invoke for each produced element, resulting in another sequence to which the selector will be invoked recursively again.</param>
         /// <returns>An observable sequence containing all the elements produced by the recursive expansion.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         [Experimental]
         public static IQbservable<TSource> Expand<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TSource>>> selector)
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">Selector function to invoke for each produced element, resulting in another sequence to which the selector will be invoked recursively again.</param>
         /// <param name="scheduler">Scheduler on which to perform the expansion by enumerating the internal queue of obtained sequences.</param>
         /// <returns>An observable sequence containing all the elements produced by the recursive expansion.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
         [Experimental]
         public static IQbservable<TSource> Expand<TSource>(this IQbservable<TSource> source, Expression<Func<TSource, IObservable<TSource>>> selector, IScheduler scheduler)
@@ -167,11 +167,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Runs all specified observable sequences in parallel and collects their last elements.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence to collect the last elements for.</param>
         /// <returns>An observable sequence with an array collecting the last elements of all the input sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         [Experimental]
         public static IQbservable<TSource[]> ForkJoin<TSource>(this IQbservableProvider provider, params IObservable<TSource>[] sources)
@@ -200,11 +200,11 @@ namespace System.Reactive.Linq
         /// <summary>
         /// Runs all observable sequences in the enumerable sources sequence in parallel and collect their last elements.
         /// </summary>
-        /// <param name="provider">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>
+        /// <param name="provider">Query provider used to construct the <see cref="IQbservable{T}"/> data source.</param>
         /// <typeparam name="TSource">The type of the elements in the source sequences.</typeparam>
         /// <param name="sources">Observable sequence to collect the last elements for.</param>
         /// <returns>An observable sequence with an array collecting the last elements of all the input sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="sources" /> is null.</exception>
         [Experimental]
         public static IQbservable<TSource[]> ForkJoin<TSource>(this IQbservableProvider provider, IEnumerable<IObservable<TSource>> sources)
@@ -240,7 +240,7 @@ namespace System.Reactive.Linq
         /// <param name="second">Second observable sequence.</param>
         /// <param name="resultSelector">Result selector function to invoke with the last elements of both sequences.</param>
         /// <returns>An observable sequence with the result of calling the selector function with the last elements of both input sequences.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="first" /> or <paramref name="second" /> or <paramref name="resultSelector" /> is null.</exception>
         [Experimental]
         public static IQbservable<TResult> ForkJoin<TSource1, TSource2, TResult>(this IQbservable<TSource1> first, IObservable<TSource2> second, Expression<Func<TSource1, TSource2, TResult>> resultSelector)
@@ -278,7 +278,7 @@ namespace System.Reactive.Linq
         /// <param name="source">Source sequence that will be shared in the selector function.</param>
         /// <param name="selector">Selector function which can use the source sequence as many times as needed, without sharing subscriptions to the source sequence.</param>
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         [Experimental]
         public static IQbservable<TResult> Let<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)

@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 namespace System.Reactive
 {
     /// <summary>
-    /// Abstract base class for implementations of the IObservable&lt;T&gt; interface.
+    /// Abstract base class for implementations of the <see cref="IObservable{T}"/> interface.
     /// </summary>
     /// <remarks>
     /// If you don't need a named type to create an observable sequence (i.e. you rather need
