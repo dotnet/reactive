@@ -931,7 +931,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_SYNCCTX
         [Fact]
         public void ObserveOn_SynchronizationContext_Simple()
         {
@@ -963,7 +962,6 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 531)
             );
         }
-#endif
 
         #endregion
 
@@ -1067,7 +1065,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_SYNCCTX
         [Fact]
         public void SubscribeOn_SynchronizationContext_Simple()
         {
@@ -1099,13 +1096,11 @@ namespace ReactiveTests.Tests
                 Subscribe(201, 531)
             );
         }
-#endif
 
         #endregion
 
         #region |> Helpers <|
 
-#if !NO_SYNCCTX
         class MyCtx : SynchronizationContext
         {
             private IScheduler scheduler;
@@ -1120,7 +1115,6 @@ namespace ReactiveTests.Tests
                 scheduler.Schedule(state, (self, s) => { d(s); return Disposable.Empty; });
             }
         }
-#endif
 
         #endregion
     }

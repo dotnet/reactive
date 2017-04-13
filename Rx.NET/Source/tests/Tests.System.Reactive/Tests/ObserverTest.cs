@@ -725,11 +725,8 @@ namespace ReactiveTests.Tests
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(default(IObserver<int>), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(new MyObserver(), default(IScheduler)));
-
-#if !NO_SYNCCTX
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(default(IObserver<int>), new MySyncCtx()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(new MyObserver(), default(SynchronizationContext)));
-#endif
         }
 
 #if !NO_THREAD
