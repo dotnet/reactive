@@ -88,17 +88,13 @@ namespace System.Reactive.Disposables
 
             public override void Dispose()
             {
-#pragma warning disable 0420
                 var old1 = Interlocked.Exchange(ref _disposable1, null);
-#pragma warning restore 0420
                 if (old1 != null)
                 {
                     old1.Dispose();
                 }
 
-#pragma warning disable 0420
                 var old2 = Interlocked.Exchange(ref _disposable2, null);
-#pragma warning restore 0420
                 if (old2 != null)
                 {
                     old2.Dispose();
@@ -136,9 +132,7 @@ namespace System.Reactive.Disposables
 
             public override void Dispose()
             {
-#pragma warning disable 0420
                 var old = Interlocked.Exchange(ref _disposables, null);
-#pragma warning restore 0420
                 if (old != null)
                 {
                     foreach (var d in old)

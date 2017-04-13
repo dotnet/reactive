@@ -138,7 +138,6 @@ namespace System.Reactive
         {
             var isOwner = false;
 
-#pragma warning disable 0420
             while (true)
             {
                 var old = Interlocked.CompareExchange(ref _state, RUNNING, STOPPED);
@@ -177,7 +176,6 @@ namespace System.Reactive
                 if (old == PENDING || old == RUNNING && Interlocked.CompareExchange(ref _state, PENDING, RUNNING) == RUNNING)
                     break;
             }
-#pragma warning restore 0420
 
             if (isOwner)
             {
@@ -187,7 +185,6 @@ namespace System.Reactive
 
         private void Run(object state, Action<object> recurse)
         {
-#pragma warning disable 0420
             var next = default(T);
             while (!_queue.TryDequeue(out next))
             {
@@ -254,17 +251,13 @@ namespace System.Reactive
 
             Interlocked.Exchange(ref _state, RUNNING);
 
-#pragma warning restore 0420
-
             try
             {
                 _observer.OnNext(next);
             }
             catch
             {
-#pragma warning disable 0420
                 Interlocked.Exchange(ref _state, FAULTED);
-#pragma warning restore 0420
 
                 var nop = default(T);
                 while (_queue.TryDequeue(out nop))

@@ -37,9 +37,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-#pragma warning disable 0420
             var dispose = Interlocked.Exchange(ref _dispose, null);
-#pragma warning restore 0420
             if (dispose != null)
             {
                 dispose();

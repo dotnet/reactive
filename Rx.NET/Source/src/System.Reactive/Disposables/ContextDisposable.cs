@@ -54,9 +54,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-#pragma warning disable 0420
             var disposable = Interlocked.Exchange(ref _disposable, BooleanDisposable.True);
-#pragma warning restore 0420
 
             if (disposable != BooleanDisposable.True)
             {
