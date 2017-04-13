@@ -8,19 +8,15 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
-
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {
 
     public partial class ObservableAsyncTest : ReactiveTest
     {
-#if !NO_TPL
         private Task<int> doneTask;
 
         public ObservableAsyncTest()
@@ -30,7 +26,6 @@ namespace ReactiveTests.Tests
             doneTask = tcs.Task;
         }
 
-#endif
         #region FromAsyncPattern
 
         [Fact]
@@ -1291,8 +1286,6 @@ namespace ReactiveTests.Tests
 
         #region StartAsync
 
-#if !NO_TPL
-
         #region Func
 
         [Fact]
@@ -1684,13 +1677,9 @@ namespace ReactiveTests.Tests
 
         #endregion
 
-#endif
-
         #endregion
 
         #region FromAsync
-
-#if !NO_TPL
 
         #region Func
 
@@ -2061,8 +2050,6 @@ namespace ReactiveTests.Tests
 #endif
 
         #endregion
-
-#endif
 
         #endregion
 

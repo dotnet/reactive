@@ -927,7 +927,6 @@ namespace System.Reactive.Linq
             return s_impl.Start<TResult>(function, scheduler);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
@@ -1033,7 +1032,6 @@ namespace System.Reactive.Linq
 
             return s_impl.StartAsync<TResult>(functionAsync, scheduler);
         }
-#endif
 
         #endregion
 
@@ -1082,7 +1080,6 @@ namespace System.Reactive.Linq
             return s_impl.Start(action, scheduler);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
@@ -1184,7 +1181,6 @@ namespace System.Reactive.Linq
 
             return s_impl.StartAsync(actionAsync, scheduler);
         }
-#endif
 
         #endregion
 

@@ -4,12 +4,8 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-
-
-#if !NO_TPL
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -880,7 +876,6 @@ namespace System.Reactive.Linq
             return SelectMany_<TSource, TResult>(source, selector);
         }
 
-#if !NO_TPL
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
 #if !NO_PERF
@@ -916,7 +911,6 @@ namespace System.Reactive.Linq
             return SelectMany_<TSource, TResult>(source, (x, i) => FromAsync(ct => selector(x, i, ct)));
 #endif
         }
-#endif
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
@@ -928,7 +922,6 @@ namespace System.Reactive.Linq
             return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
-#if !NO_TPL
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
 #if !NO_PERF
@@ -964,7 +957,6 @@ namespace System.Reactive.Linq
             return SelectMany_<TSource, TTaskResult, TResult>(source, (x, i) => FromAsync(ct => taskSelector(x, i, ct)), (x, i, t, _) => resultSelector(x, i, t));
 #endif
         }
-#endif
 
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {

@@ -10,14 +10,11 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Reactive.Subjects;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
-
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {
@@ -6626,7 +6623,6 @@ namespace ReactiveTests.Tests
 #endif
 #endif
 
-#if !NO_TPL
         [Fact]
         public void Concat_Task()
         {
@@ -6636,7 +6632,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(res.SequenceEqual(new[] { 1, 2, 3 }));
         }
-#endif
 
         #endregion
 
@@ -6659,10 +6654,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge(new IObservable<int>[0], default(IScheduler)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<IObservable<int>>)null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge(DummyScheduler.Instance, (IObservable<int>[])null));
-
-#if !NO_TPL
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<System.Threading.Tasks.Task<int>>)null));
-#endif
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge((IObservable<Task<int>>)null));
         }
 
         [Fact]
@@ -7728,10 +7720,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Merge(default(IObservable<IObservable<int>>), 1));
             ReactiveAssert.Throws<ArgumentOutOfRangeException>(() => Observable.Merge(DummyObservable<IObservable<int>>.Instance, 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(default(IObservable<IObservable<int>>)));
-
-#if !NO_TPL
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(default(IObservable<System.Threading.Tasks.Task<int>>)));
-#endif
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Concat(default(IObservable<Task<int>>)));
         }
 
         [Fact]
@@ -8335,7 +8324,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_TPL
         [Fact]
         public void Merge_Task()
         {
@@ -8587,7 +8575,6 @@ namespace ReactiveTests.Tests
 
             Assert.Same(ex, err);
         }
-#endif
 
         #endregion
 
@@ -9683,10 +9670,7 @@ namespace ReactiveTests.Tests
         public void Switch_ArgumentChecking()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Switch((IObservable<IObservable<int>>)null));
-
-#if !NO_TPL
-            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Switch((IObservable<System.Threading.Tasks.Task<int>>)null));
-#endif
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Switch((IObservable<Task<int>>)null));
         }
 
         [Fact]
@@ -9983,7 +9967,6 @@ namespace ReactiveTests.Tests
 #endif
         }
 
-#if !NO_TPL
         [Fact]
         public void Switch_Task()
         {
@@ -9993,7 +9976,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(res.Zip(res.Skip(1), (l, r) => r > l).All(b => b));
         }
-#endif
 
         #endregion
 

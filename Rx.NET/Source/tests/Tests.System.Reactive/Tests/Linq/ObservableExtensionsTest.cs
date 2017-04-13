@@ -9,7 +9,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.Reactive.Testing;
 using Xunit;
-using System.Collections.Generic;
 
 namespace ReactiveTests.Tests
 {
@@ -119,8 +118,6 @@ namespace ReactiveTests.Tests
         #endregion
 
         #region Subscribe with CancellationToken
-
-#if !NO_TPL
 
         [Fact]
         public void Subscribe_CT_ArgumentChecking()
@@ -386,8 +383,6 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 220)
             );
         }
-
-#endif
 
         #endregion
     }

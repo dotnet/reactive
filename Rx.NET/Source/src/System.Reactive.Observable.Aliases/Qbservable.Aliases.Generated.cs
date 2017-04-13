@@ -8,19 +8,17 @@
 #if !NO_EXPRESSIONS
 
 using System;
-using System.Reactive.Concurrency;
 using System.Collections.Generic;
-using System.Reactive.Joins;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Joins;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
-using System.Reactive;
-using System.Reactive.Subjects;
-using System.Diagnostics.CodeAnalysis;
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 #if !NO_REMOTING
 using System.Runtime.Remoting.Lifetime;
 #endif
@@ -218,7 +216,6 @@ namespace System.Reactive.Linq
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task and merges all of the task results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -235,9 +232,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index and merges all of the task results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -254,9 +249,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support and merges all of the task results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -273,9 +266,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support and merges all of the task results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -292,7 +283,6 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
-#endif
         
         /// <summary>
         /// Projects each element of an observable sequence to an enumerable sequence and concatenates the resulting enumerable sequences into one observable sequence.
@@ -328,7 +318,6 @@ namespace System.Reactive.Linq
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
         }
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -347,9 +336,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -368,9 +355,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -389,9 +374,7 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -410,7 +393,6 @@ namespace System.Reactive.Linq
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
         }
-#endif
         
         /// <summary>
         /// Projects each element of an observable sequence into a new form. Synonym for the method 'Select'

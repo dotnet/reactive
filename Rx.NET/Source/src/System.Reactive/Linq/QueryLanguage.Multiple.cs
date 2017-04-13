@@ -9,11 +9,8 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-
-#if !NO_TPL
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -713,12 +710,10 @@ namespace System.Reactive.Linq
             return Concat_<TSource>(sources);
         }
 
-#if !NO_TPL
         public virtual IObservable<TSource> Concat<TSource>(IObservable<Task<TSource>> sources)
         {
             return Concat_<TSource>(Select(sources, TaskObservableExtensions.ToObservable));
         }
-#endif
 
         private IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
         {
@@ -734,7 +729,6 @@ namespace System.Reactive.Linq
             return Merge_<TSource>(sources);
         }
 
-#if !NO_TPL
         public virtual IObservable<TSource> Merge<TSource>(IObservable<Task<TSource>> sources)
         {
 #if !NO_PERF
@@ -743,7 +737,6 @@ namespace System.Reactive.Linq
             return Merge_<TSource>(Select(sources, TaskObservableExtensions.ToObservable));
 #endif
         }
-#endif
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
@@ -1064,12 +1057,10 @@ namespace System.Reactive.Linq
             return Switch_<TSource>(sources);
         }
 
-#if !NO_TPL
         public virtual IObservable<TSource> Switch<TSource>(IObservable<Task<TSource>> sources)
         {
             return Switch_<TSource>(Select(sources, TaskObservableExtensions.ToObservable));
         }
-#endif
 
         private IObservable<TSource> Switch_<TSource>(IObservable<IObservable<TSource>> sources)
         {

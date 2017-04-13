@@ -9,13 +9,10 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
-
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
 
 namespace ReactiveTests.Tests
 {
@@ -1947,7 +1944,6 @@ namespace ReactiveTests.Tests
             Assert.True(xs.Count == 2);
         }
 
-#if !NO_TPL
         [Fact]
         public void FastImmediateObserver_Ownership1()
         {
@@ -2022,7 +2018,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(xs.Count == 3);
         }
-#endif
 
         private IEnumerable<Recorded<Notification<int>>> FastImmediateObserverTest(Action<IScheduledObserver<int>> f)
         {

@@ -8,14 +8,8 @@ using System.Reactive.Concurrency;
 using System.Reactive.Joins;
 using System.Reactive.Subjects;
 using System.Threading;
-
-#if !NO_REMOTING
-
-#endif
-
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
+
 
 namespace System.Reactive.Linq
 {
@@ -199,24 +193,19 @@ namespace System.Reactive.Linq
         IObservable<TSource> Start<TSource>(Func<TSource> function);
         IObservable<TSource> Start<TSource>(Func<TSource> function, IScheduler scheduler);
 
-#if !NO_TPL
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync);
         IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler);
         IObservable<TSource> StartAsync<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler);
-#endif
 
         IObservable<Unit> Start(Action action);
         IObservable<Unit> Start(Action action, IScheduler scheduler);
 
-#if !NO_TPL
         IObservable<Unit> StartAsync(Func<Task> actionAsync);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync);
         IObservable<Unit> StartAsync(Func<Task> actionAsync, IScheduler scheduler);
         IObservable<Unit> StartAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
-#endif
 
-#if !NO_TPL
         IObservable<TResult> FromAsync<TResult>(Func<Task<TResult>> functionAsync);
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync);
         IObservable<Unit> FromAsync(Func<Task> actionAsync);
@@ -225,7 +214,6 @@ namespace System.Reactive.Linq
         IObservable<TResult> FromAsync<TResult>(Func<CancellationToken, Task<TResult>> functionAsync, IScheduler scheduler);
         IObservable<Unit> FromAsync(Func<Task> actionAsync, IScheduler scheduler);
         IObservable<Unit> FromAsync(Func<CancellationToken, Task> actionAsync, IScheduler scheduler);
-#endif
 
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function);
         Func<IObservable<TResult>> ToAsync<TResult>(Func<TResult> function, IScheduler scheduler);
@@ -395,22 +383,17 @@ namespace System.Reactive.Linq
 
         IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, IDisposable> subscribe);
         IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, Action> subscribe);
-
-#if !NO_TPL
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync);
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task> subscribeAsync);
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync);
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<IDisposable>> subscribeAsync);
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync);
         IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<Action>> subscribeAsync);
-#endif
 
         IObservable<TValue> Defer<TValue>(Func<IObservable<TValue>> observableFactory);
 
-#if !NO_TPL
         IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync);
         IObservable<TValue> Defer<TValue>(Func<CancellationToken, Task<IObservable<TValue>>> observableFactoryAsync);
-#endif
 
         IObservable<TResult> Empty<TResult>();
         IObservable<TResult> Empty<TResult>(IScheduler scheduler);
@@ -428,10 +411,7 @@ namespace System.Reactive.Linq
         IObservable<TResult> Throw<TResult>(Exception exception);
         IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler);
         IObservable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IObservable<TSource>> observableFactory) where TResource : IDisposable;
-
-#if !NO_TPL
         IObservable<TSource> Using<TSource, TResource>(Func<CancellationToken, Task<TResource>> resourceFactoryAsync, Func<TResource, CancellationToken, Task<IObservable<TSource>>> observableFactoryAsync) where TResource : IDisposable;
-#endif
 
         #endregion
 
@@ -473,12 +453,10 @@ namespace System.Reactive.Linq
 
         #region * Imperative *
 
-#if !NO_TPL
         Task ForEachAsync<TSource>(IObservable<TSource> source, Action<TSource> onNext);
         Task ForEachAsync<TSource>(IObservable<TSource> source, Action<TSource> onNext, CancellationToken cancellationToken);
         Task ForEachAsync<TSource>(IObservable<TSource> source, Action<TSource, int> onNext);
         Task ForEachAsync<TSource>(IObservable<TSource> source, Action<TSource, int> onNext, CancellationToken cancellationToken);
-#endif
 
         IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource);
         IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources, IScheduler scheduler);
@@ -587,11 +565,9 @@ namespace System.Reactive.Linq
 
         IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector);
 
-#if !NO_TPL
         IObservable<TSource> Concat<TSource>(IObservable<Task<TSource>> sources);
         IObservable<TSource> Merge<TSource>(IObservable<Task<TSource>> sources);
         IObservable<TSource> Switch<TSource>(IObservable<Task<TSource>> sources);
-#endif
 
         #endregion
 
@@ -683,7 +659,6 @@ namespace System.Reactive.Linq
         IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate);
         IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate);
 
-#if !NO_TPL
         IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, Task<TResult>> selector);
         IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector);
         IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector);
@@ -692,7 +667,6 @@ namespace System.Reactive.Linq
         IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector);
         IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector);
         IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector);
-#endif
 
         #endregion
 

@@ -3,15 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
-using System.Linq;
-
-#if !NO_TPL
 using System.Reactive.Threading.Tasks;
+using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -41,7 +38,6 @@ namespace System.Reactive.Linq
 
         #region - CreateAsync -
 
-#if !NO_TPL
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
         {
             return new AnonymousObservable<TResult>(observer =>
@@ -110,7 +106,6 @@ namespace System.Reactive.Linq
         {
             return Create<TResult>((observer, token) => subscribeAsync(observer));
         }
-#endif
 
         #endregion
 
@@ -142,7 +137,6 @@ namespace System.Reactive.Linq
 
         #region + DeferAsync +
 
-#if !NO_TPL
         public virtual IObservable<TValue> Defer<TValue>(Func<Task<IObservable<TValue>>> observableFactoryAsync)
         {
             return Defer(() => StartAsync(observableFactoryAsync).Merge());
@@ -152,7 +146,6 @@ namespace System.Reactive.Linq
         {
             return Defer(() => StartAsync(observableFactoryAsync).Merge());
         }
-#endif
 
         #endregion
 
@@ -444,8 +437,6 @@ namespace System.Reactive.Linq
 
         #region - UsingAsync -
 
-#if !NO_TPL
-
         public virtual IObservable<TSource> Using<TSource, TResource>(Func<CancellationToken, Task<TResource>> resourceFactoryAsync, Func<TResource, CancellationToken, Task<IObservable<TSource>>> observableFactoryAsync) where TResource : IDisposable
         {
             return Observable.FromAsync<TResource>(resourceFactoryAsync)
@@ -456,8 +447,6 @@ namespace System.Reactive.Linq
                     )
                 );
         }
-
-#endif
 
         #endregion
     }

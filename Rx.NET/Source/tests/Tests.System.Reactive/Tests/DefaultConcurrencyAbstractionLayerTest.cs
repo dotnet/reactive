@@ -278,7 +278,6 @@ namespace ReactiveTests.Tests
             Assert.True(string.IsNullOrEmpty(r.Value));
         }
 
-#if !NO_TPL
         [Fact]
         public void Cant_Locate_Scheduler()
         {
@@ -308,7 +307,6 @@ namespace ReactiveTests.Tests
 
             Assert.True(e.Value);
         }
-#endif
 
 #if !NO_PERF
         [Fact]

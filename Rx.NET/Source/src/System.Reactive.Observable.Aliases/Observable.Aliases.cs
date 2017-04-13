@@ -8,12 +8,9 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive;
-
-#if !NO_TPL
 using System.Reactive.Threading.Tasks; // needed for doc comments
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 /*
  * Note: these methods just call methods in Observable.StandardSequenceOperators.cs
@@ -108,7 +105,6 @@ namespace System.Reactive.Observable.Aliases
             return source.SelectMany<TSource, TResult>(selector);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task and merges all of the task results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -172,7 +168,6 @@ namespace System.Reactive.Observable.Aliases
         {
             return source.SelectMany<TSource, TResult>(selector);
         }
-#endif
 
         /// <summary>
         /// Projects each element of an observable sequence to an observable sequence, invokes the result selector for the source element and each of the corresponding inner sequence's elements, and merges the results into one observable sequence.
@@ -208,7 +203,6 @@ namespace System.Reactive.Observable.Aliases
             return source.SelectMany<TSource, TCollection, TResult>(collectionSelector, resultSelector);
         }
 
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// Synonym for the method 'SelectMany'
@@ -280,7 +274,6 @@ namespace System.Reactive.Observable.Aliases
         {
             return source.SelectMany<TSource, TTaskResult, TResult>(taskSelector, resultSelector);
         }
-#endif
 
         /// <summary>
         /// Projects each notification of an observable sequence to an observable sequence and merges the resulting observable sequences into one observable sequence.

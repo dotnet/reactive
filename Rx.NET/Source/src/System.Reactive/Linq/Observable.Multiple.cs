@@ -4,11 +4,8 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
-
-#if !NO_TPL
 using System.Threading; // Used in XML doc comments
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -1098,8 +1095,6 @@ namespace System.Reactive.Linq
             return s_impl.Concat<TSource>(sources);
         }
 
-#if !NO_TPL
-
         /// <summary>
         /// Concatenates all task results, as long as the previous task terminated successfully.
         /// </summary>
@@ -1115,8 +1110,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Concat<TSource>(sources);
         }
-
-#endif
 
         #endregion
 
@@ -1137,8 +1130,6 @@ namespace System.Reactive.Linq
             return s_impl.Merge<TSource>(sources);
         }
 
-#if !NO_TPL
-
         /// <summary>
         /// Merges results from all source tasks into a single observable sequence.
         /// </summary>
@@ -1154,8 +1145,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Merge<TSource>(sources);
         }
-
-#endif
 
         /// <summary>
         /// Merges elements from all inner observable sequences into a single observable sequence, limiting the number of concurrent subscriptions to inner sequences.
@@ -1419,8 +1408,6 @@ namespace System.Reactive.Linq
             return s_impl.Switch<TSource>(sources);
         }
 
-#if !NO_TPL
-
         /// <summary>
         /// Transforms an observable sequence of tasks into an observable sequence 
         /// producing values only from the most recent observable sequence.
@@ -1438,8 +1425,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Switch<TSource>(sources);
         }
-
-#endif
 
         #endregion
 

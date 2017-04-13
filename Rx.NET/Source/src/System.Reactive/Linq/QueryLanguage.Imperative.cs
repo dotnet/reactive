@@ -7,10 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading;
-
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -22,7 +19,6 @@ namespace System.Reactive.Linq
     {
         #region ForEachAsync
 
-#if !NO_TPL
         public virtual Task ForEachAsync<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
             return ForEachAsync_(source, onNext, CancellationToken.None);
@@ -133,11 +129,10 @@ namespace System.Reactive.Linq
 
             return tcs.Task;
         }
-#endif
 
-#endregion
+        #endregion
 
-                #region + Case +
+        #region + Case +
 
         public virtual IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources)
         {
