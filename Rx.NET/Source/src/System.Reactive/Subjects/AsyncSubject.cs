@@ -270,10 +270,7 @@ namespace System.Reactive.Subjects
         /// Gets an awaitable object for the current AsyncSubject.
         /// </summary>
         /// <returns>Object that can be awaited.</returns>
-        public AsyncSubject<T> GetAwaiter()
-        {
-            return this;
-        }
+        public AsyncSubject<T> GetAwaiter() => this;
 
         /// <summary>
         /// Specifies a callback action that will be invoked when the subject completes.
@@ -346,13 +343,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Gets whether the AsyncSubject has completed.
         /// </summary>
-        public bool IsCompleted
-        {
-            get
-            {
-                return _isStopped;
-            }
-        }
+        public bool IsCompleted => _isStopped;
 
         /// <summary>
         /// Gets the last element of the subject, potentially blocking until the subject completes successfully or exceptionally.

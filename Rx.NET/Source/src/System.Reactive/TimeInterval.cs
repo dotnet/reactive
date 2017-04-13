@@ -17,9 +17,6 @@ namespace System.Reactive
 #endif
     public struct TimeInterval<T> : IEquatable<TimeInterval<T>>
     {
-        private readonly TimeSpan _interval;
-        private readonly T _value;
-
         /// <summary>
         /// Constructs a time interval value.
         /// </summary>
@@ -27,25 +24,19 @@ namespace System.Reactive
         /// <param name="interval">Time interval associated with the value.</param>
         public TimeInterval(T value, TimeSpan interval)
         {
-            _interval = interval;
-            _value = value;
+            Interval = interval;
+            Value = value;
         }
 
         /// <summary>
         /// Gets the value.
         /// </summary>
-        public T Value
-        {
-            get { return _value; }
-        }
+        public T Value { get; }
 
         /// <summary>
         /// Gets the interval.
         /// </summary>
-        public TimeSpan Interval
-        {
-            get { return _interval; }
-        }
+        public TimeSpan Interval { get; }
 
         /// <summary>
         /// Determines whether the current <see cref="TimeInterval{T}"/> value has the same Value and Interval as a specified <see cref="TimeInterval{T}"/> value.
@@ -99,9 +90,7 @@ namespace System.Reactive
         /// <returns>A hash code for the current <see cref="TimeInterval{T}"/> value.</returns>
         public override int GetHashCode()
         {
-            var valueHashCode = Value == null ? 1963 : Value.GetHashCode();
-
-            return Interval.GetHashCode() ^ valueHashCode;
+            return Interval.GetHashCode() ^ (Value?.GetHashCode() ?? 1963);
         }
 
         /// <summary>

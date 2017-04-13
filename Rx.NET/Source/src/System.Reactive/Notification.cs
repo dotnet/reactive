@@ -30,7 +30,7 @@ namespace System.Reactive
         /// <summary>
         /// Represents an OnCompleted notification.
         /// </summary>
-        OnCompleted
+        OnCompleted,
     }
 
     /// <summary>
@@ -53,34 +53,22 @@ namespace System.Reactive
         /// <summary>
         /// Returns the value of an OnNext notification or throws an exception.
         /// </summary>
-        public abstract T Value
-        {
-            get;
-        }
+        public abstract T Value { get; }
 
         /// <summary>
         /// Returns a value that indicates whether the notification has a value.
         /// </summary>
-        public abstract bool HasValue
-        {
-            get;
-        }
+        public abstract bool HasValue { get; }
 
         /// <summary>
-        /// Returns the exception of an OnError notification or returns null.
+        /// Returns the exception of an OnError notification or returns <c>null</c>.
         /// </summary>
-        public abstract Exception Exception
-        {
-            get;
-        }
+        public abstract Exception Exception { get; }
 
         /// <summary>
         /// Gets the kind of notification that is represented.
         /// </summary>
-        public abstract NotificationKind Kind
-        {
-            get;
-        }
+        public abstract NotificationKind Kind { get; }
 
         /// <summary>
         /// Represents an OnNext notification to an observer.
@@ -93,43 +81,38 @@ namespace System.Reactive
 #endif
         internal sealed class OnNextNotification : Notification<T>
         {
-            T value;
-
             /// <summary>
             /// Constructs a notification of a new value.
             /// </summary>
             public OnNextNotification(T value)
             {
-                this.value = value;
+                Value = value;
             }
 
             /// <summary>
             /// Returns the value of an OnNext notification.
             /// </summary>
-            public override T Value { get { return value; } }
+            public override T Value { get; }
 
             /// <summary>
-            /// Returns null.
+            /// Returns <c>null</c>.
             /// </summary>
-            public override Exception Exception { get { return null; } }
+            public override Exception Exception => null;
 
             /// <summary>
-            /// Returns true.
+            /// Returns <c>true</c>.
             /// </summary>
-            public override bool HasValue { get { return true; } }
+            public override bool HasValue => true;
 
             /// <summary>
-            /// Returns NotificationKind.OnNext.
+            /// Returns <see cref="NotificationKind.OnNext"/>.
             /// </summary>
-            public override NotificationKind Kind { get { return NotificationKind.OnNext; } }
+            public override NotificationKind Kind => NotificationKind.OnNext;
 
             /// <summary>
             /// Returns the hash code for this instance.
             /// </summary>
-            public override int GetHashCode()
-            {
-                return EqualityComparer<T>.Default.GetHashCode(Value);
-            }
+            public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Value);
 
             /// <summary>
             /// Indicates whether this instance and a specified object are equal.
@@ -148,10 +131,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString()
-            {
-                return String.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
-            }
+            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnNext({0})", Value);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -227,43 +207,38 @@ namespace System.Reactive
 #endif
         internal sealed class OnErrorNotification : Notification<T>
         {
-            Exception exception;
-
             /// <summary>
             /// Constructs a notification of an exception.
             /// </summary>
             public OnErrorNotification(Exception exception)
             {
-                this.exception = exception;
+                Exception = exception;
             }
 
             /// <summary>
             /// Throws the exception.
             /// </summary>
-            public override T Value { get { exception.Throw(); return default(T); } }
+            public override T Value { get { Exception.Throw(); return default(T); } }
 
             /// <summary>
             /// Returns the exception.
             /// </summary>
-            public override Exception Exception { get { return exception; } }
+            public override Exception Exception { get; }
 
             /// <summary>
-            /// Returns false.
+            /// Returns <c>false</c>.
             /// </summary>
-            public override bool HasValue { get { return false; } }
+            public override bool HasValue => false;
 
             /// <summary>
-            /// Returns NotificationKind.OnError.
+            /// Returns <see cref="NotificationKind.OnError"/>.
             /// </summary>
-            public override NotificationKind Kind { get { return NotificationKind.OnError; } }
+            public override NotificationKind Kind => NotificationKind.OnError;
 
             /// <summary>
             /// Returns the hash code for this instance.
             /// </summary>
-            public override int GetHashCode()
-            {
-                return Exception.GetHashCode();
-            }
+            public override int GetHashCode() => Exception.GetHashCode();
 
             /// <summary>
             /// Indicates whether this instance and other are equal.
@@ -282,10 +257,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString()
-            {
-                return String.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
-            }
+            public override string ToString() => String.Format(CultureInfo.CurrentCulture, "OnError({0})", Exception.GetType().FullName);
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -369,32 +341,29 @@ namespace System.Reactive
             }
 
             /// <summary>
-            /// Throws an InvalidOperationException.
+            /// Throws an <see cref="InvalidOperationException"/>.
             /// </summary>
             public override T Value { get { throw new InvalidOperationException(Strings_Core.COMPLETED_NO_VALUE); } }
 
             /// <summary>
-            /// Returns null.
+            /// Returns <c>null</c>.
             /// </summary>
-            public override Exception Exception { get { return null; } }
+            public override Exception Exception => null;
 
             /// <summary>
-            /// Returns false.
+            /// Returns <c>false</c>.
             /// </summary>
-            public override bool HasValue { get { return false; } }
+            public override bool HasValue => false;
 
             /// <summary>
-            /// Returns NotificationKind.OnCompleted.
+            /// Returns <see cref="NotificationKind.OnCompleted"/>.
             /// </summary>
-            public override NotificationKind Kind { get { return NotificationKind.OnCompleted; } }
+            public override NotificationKind Kind => NotificationKind.OnCompleted;
 
             /// <summary>
             /// Returns the hash code for this instance.
             /// </summary>
-            public override int GetHashCode()
-            {
-                return typeof(T).GetHashCode() ^ 8510;
-            }
+            public override int GetHashCode() => typeof(T).GetHashCode() ^ 8510;
 
             /// <summary>
             /// Indicates whether this instance and other are equal.
@@ -411,10 +380,7 @@ namespace System.Reactive
             /// <summary>
             /// Returns a string representation of this instance.
             /// </summary>
-            public override string ToString()
-            {
-                return "OnCompleted()";
-            }
+            public override string ToString() => "OnCompleted()";
 
             /// <summary>
             /// Invokes the observer's method corresponding to the notification.
@@ -524,10 +490,7 @@ namespace System.Reactive
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
         /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent a different observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
-        public static bool operator !=(Notification<T> left, Notification<T> right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Notification<T> left, Notification<T> right) => !(left == right);
 
         /// <summary>
         /// Determines whether the specified System.Object is equal to the current <see cref="Notification{T}"/>.
@@ -539,10 +502,7 @@ namespace System.Reactive
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
         /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as Notification<T>);
-        }
+        public override bool Equals(object obj) => Equals(obj as Notification<T>);
 
         /// <summary>
         /// Invokes the observer's method corresponding to the notification.
@@ -580,10 +540,7 @@ namespace System.Reactive
         /// Returns an observable sequence with a single notification, using the immediate scheduler.
         /// </summary>
         /// <returns>The observable sequence that surfaces the behavior of the notification upon subscription.</returns>
-        public IObservable<T> ToObservable()
-        {
-            return this.ToObservable(ImmediateScheduler.Instance);
-        }
+        public IObservable<T> ToObservable() => ToObservable(ImmediateScheduler.Instance);
 
         /// <summary>
         /// Returns an observable sequence with a single notification.

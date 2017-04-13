@@ -31,10 +31,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _isDisposed; }
-        }
+        public bool IsDisposed => _isDisposed;
 
         /// <summary>
         /// Sets the status to disposed, which can be observer through the <see cref="IsDisposed"/> property.
