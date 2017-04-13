@@ -280,8 +280,7 @@ namespace System.Reactive.Linq.ObservableImpl
 #if !NO_CDS
     class Map<TKey, TValue>
     {
-#if !NO_CDS_COLLECTIONS
-        // Taken from Rx\NET\Source\System.Reactive.Core\Reactive\Internal\ConcurrentDictionary.cs
+        // Taken from ConcurrentDictionary in the BCL.
 
         // The default concurrency level is DEFAULT_CONCURRENCY_MULTIPLIER * #CPUs. The higher the
         // DEFAULT_CONCURRENCY_MULTIPLIER, the more concurrent writes can take place without interference
@@ -294,7 +293,6 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             get { return DEFAULT_CONCURRENCY_MULTIPLIER * Environment.ProcessorCount; }
         }
-#endif
 
         private readonly System.Collections.Concurrent.ConcurrentDictionary<TKey, TValue> _map;
 
@@ -302,11 +300,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             if (capacity.HasValue)
             {
-#if NO_CDS_COLLECTIONS
-                _map = new System.Collections.Concurrent.ConcurrentDictionary<TKey, TValue>(capacity.Value, comparer);
-#else
                 _map = new System.Collections.Concurrent.ConcurrentDictionary<TKey, TValue>(DefaultConcurrencyLevel, capacity.Value, comparer);
-#endif
             }
             else
             {
