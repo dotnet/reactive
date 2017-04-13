@@ -42,7 +42,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-#if !NO_CDS
         [Fact]
         public void ProperRooting_NoGC_SingleShot()
         {
@@ -97,7 +96,6 @@ namespace ReactiveTests.Tests
 
             cts.Cancel();
         }
-#endif
 
 #if !SILVERLIGHT
         [Fact]

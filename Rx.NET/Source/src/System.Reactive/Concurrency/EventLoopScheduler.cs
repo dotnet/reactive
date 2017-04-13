@@ -49,11 +49,7 @@ namespace System.Reactive.Concurrency
         /// Semaphore to count requests to re-evaluate the queue, from either Schedule requests or when a timer
         /// expires and moves on to the next item in the queue.
         /// </summary>
-#if !NO_CDS
         private readonly SemaphoreSlim _evt;
-#else
-        private readonly Semaphore _evt;
-#endif
 
         /// <summary>
         /// Queue holding work items. Protected by the gate.
@@ -113,11 +109,7 @@ namespace System.Reactive.Concurrency
 
             _gate = new object();
 
-#if !NO_CDS
             _evt = new SemaphoreSlim(0);
-#else
-            _evt = new Semaphore(0, int.MaxValue);
-#endif
             _queue = new SchedulerQueue<TimeSpan>();
             _readyList = new Queue<ScheduledItem<TimeSpan>>();
 
@@ -285,11 +277,7 @@ namespace System.Reactive.Concurrency
         {
             while (true)
             {
-#if !NO_CDS
                 _evt.Wait();
-#else
-                _evt.WaitOne();
-#endif
 
                 var ready = default(ScheduledItem<TimeSpan>[]);
 
@@ -299,11 +287,7 @@ namespace System.Reactive.Concurrency
                     // Bug fix that ensures the number of calls to Release never greatly exceeds the number of calls to Wait.
                     // See work item #37: https://rx.codeplex.com/workitem/37
                     //
-#if !NO_CDS
                     while (_evt.CurrentCount > 0) _evt.Wait();
-#else
-                    while (_evt.WaitOne(TimeSpan.Zero)) { }
-#endif
 
                     //
                     // The event could have been set by a call to Dispose. This takes priority over anything else. We quit the

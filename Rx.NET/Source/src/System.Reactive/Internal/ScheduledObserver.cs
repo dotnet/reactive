@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive
 {
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
     using System.Collections.Concurrent;
     using System.Diagnostics;
 

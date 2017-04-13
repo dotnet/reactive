@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

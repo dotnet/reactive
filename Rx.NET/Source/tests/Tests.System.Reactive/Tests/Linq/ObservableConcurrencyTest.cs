@@ -581,7 +581,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(531)
             );
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
             // BREAKING CHANGE v2 > v1.x -> More aggressive disposal behavior
             xs.Subscriptions.AssertEqual(
                 Subscribe(200, 531)
@@ -626,7 +626,7 @@ namespace ReactiveTests.Tests
                 OnError<int>(531, ex)
             );
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
             // BREAKING CHANGE v2 > v1.x -> More aggressive disposal behavior
             xs.Subscriptions.AssertEqual(
                 Subscribe(200, 531)
@@ -754,7 +754,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
         [Fact]
         public void ObserveOn_LongRunning_Simple()
         {
