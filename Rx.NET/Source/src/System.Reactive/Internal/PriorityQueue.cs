@@ -9,11 +9,7 @@ namespace System.Reactive
 {
     internal class PriorityQueue<T> where T : IComparable<T>
     {
-#if !NO_INTERLOCKED_64
         private static long _count = long.MinValue;
-#else
-        private static int _count = int.MinValue;
-#endif
         private IndexedItem[] _items;
         private int _size;
 
@@ -138,11 +134,7 @@ namespace System.Reactive
         struct IndexedItem : IComparable<IndexedItem>
         {
             public T Value;
-#if !NO_INTERLOCKED_64
             public long Id;
-#else
-            public int Id;
-#endif
 
             public int CompareTo(IndexedItem other)
             {
