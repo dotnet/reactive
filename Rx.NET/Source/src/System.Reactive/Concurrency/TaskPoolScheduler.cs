@@ -107,7 +107,6 @@ namespace System.Reactive.Concurrency
             if (dt.Ticks == 0)
                 return Schedule(state, action);
 
-#if !NO_TASK_DELAY
             var d = new MultipleAssignmentDisposable();
 
             var ct = new CancellationDisposable();
@@ -120,9 +119,6 @@ namespace System.Reactive.Concurrency
             }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion, taskFactory.Scheduler);
 
             return d;
-#else
-            return DefaultScheduler.Instance.Schedule(state, dt, (_, state1) => Schedule(state1, action));
-#endif
         }
 
         /// <summary>
@@ -181,7 +177,6 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-#if !NO_TASK_DELAY
             var cancel = new CancellationDisposable();
 
             var state1 = state;
@@ -207,23 +202,6 @@ namespace System.Reactive.Concurrency
             moveNext();
 
             return StableCompositeDisposable.Create(cancel, gate);
-#else
-            var state1 = state;
-            var gate = new AsyncLock();
-
-            var timer = ConcurrencyAbstractionLayer.Current.StartPeriodicTimer(() =>
-            {
-                taskFactory.StartNew(() =>
-                {
-                    gate.Wait(() =>
-                    {
-                        state1 = action(state1);
-                    });
-                });
-            }, period);
-
-            return StableCompositeDisposable.Create(timer, gate);
-#endif
         }
     }
 }
