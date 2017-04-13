@@ -273,39 +273,4 @@ namespace System.Reactive.PlatformServices
         }
     }
 #endif
-
-#if NO_HASHSET
-    class HashSet<T> : IEnumerable<T>
-    {
-        private readonly Dictionary<T, object> _dictionary = new Dictionary<T, object>();
-
-        public int Count
-        {
-            get
-            {
-                return _dictionary.Count;
-            }
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _dictionary.Keys.GetEnumerator();
-        }
-
-        public void Add(T value)
-        {
-            _dictionary.Add(value, null);
-        }
-
-        public void Remove(T value)
-        {
-            _dictionary.Remove(value);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
-#endif
 }
