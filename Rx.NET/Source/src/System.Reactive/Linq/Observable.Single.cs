@@ -421,7 +421,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Applies an accumulator function over an observable sequence and returns each intermediate result. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate&lt;TSource, Accumulate&gt;"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate{TSource, Accumulate}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -442,7 +442,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Applies an accumulator function over an observable sequence and returns each intermediate result.
-        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate&lt;TSource&gt;"/>.
+        /// For aggregation behavior with no intermediate results, see <see cref="Observable.Aggregate{TSource}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence and the result of the aggregation.</typeparam>
         /// <param name="source">An observable sequence to accumulate over.</param>

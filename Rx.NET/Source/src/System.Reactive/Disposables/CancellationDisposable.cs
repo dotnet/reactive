@@ -8,16 +8,16 @@ using System.Threading;
 namespace System.Reactive.Disposables
 {
     /// <summary>
-    /// Represents a disposable resource that has an associated <seealso cref="T:System.Threading.CancellationToken"/> that will be set to the cancellation requested state upon disposal.
+    /// Represents a disposable resource that has an associated <seealso cref="CancellationToken"/> that will be set to the cancellation requested state upon disposal.
     /// </summary>
     public sealed class CancellationDisposable : ICancelable
     {
         private readonly CancellationTokenSource _cts;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.CancellationDisposable"/> class that uses an existing <seealso cref="T:System.Threading.CancellationTokenSource"/>.
+        /// Initializes a new instance of the <see cref="CancellationDisposable"/> class that uses an existing <seealso cref="CancellationTokenSource"/>.
         /// </summary>
-        /// <param name="cts"><seealso cref="T:System.Threading.CancellationTokenSource"/> used for cancellation.</param>
+        /// <param name="cts"><seealso cref="CancellationTokenSource"/> used for cancellation.</param>
         /// <exception cref="ArgumentNullException"><paramref name="cts"/> is null.</exception>
         public CancellationDisposable(CancellationTokenSource cts)
         {
@@ -28,7 +28,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.CancellationDisposable"/> class that uses a new <seealso cref="T:System.Threading.CancellationTokenSource"/>.
+        /// Initializes a new instance of the <see cref="CancellationDisposable"/> class that uses a new <seealso cref="CancellationTokenSource"/>.
         /// </summary>
         public CancellationDisposable()
             : this(new CancellationTokenSource())
@@ -36,7 +36,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets the <see cref="T:System.Threading.CancellationToken"/> used by this CancellationDisposable.
+        /// Gets the <see cref="CancellationToken"/> used by this CancellationDisposable.
         /// </summary>
         public CancellationToken Token
         {
@@ -44,7 +44,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Cancels the underlying <seealso cref="T:System.Threading.CancellationTokenSource"/>.
+        /// Cancels the underlying <seealso cref="CancellationTokenSource"/>.
         /// </summary>
         public void Dispose()
         {

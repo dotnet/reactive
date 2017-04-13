@@ -480,27 +480,27 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Determines whether the current Notification&lt;T&gt; object has the same observer message payload as a specified Notification&lt;T&gt; value.
+        /// Determines whether the current <see cref="Notification{T}"/> object has the same observer message payload as a specified <see cref="Notification{T}"/> value.
         /// </summary>
-        /// <param name="other">An object to compare to the current Notification&lt;T&gt; object.</param>
-        /// <returns>true if both Notification&lt;T&gt; objects have the same observer message payload; otherwise, false.</returns>
+        /// <param name="other">An object to compare to the current <see cref="Notification{T}"/> object.</param>
+        /// <returns>true if both <see cref="Notification{T}"/> objects have the same observer message payload; otherwise, false.</returns>
         /// <remarks>
-        /// Equality of Notification&lt;T&gt; objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
-        /// This means two Notification&lt;T&gt; objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
-        /// In case one wants to determine whether two Notification&lt;T&gt; objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
+        /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
+        /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
+        /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
         public abstract bool Equals(Notification<T> other);
 
         /// <summary>
-        /// Determines whether the two specified Notification&lt;T&gt; objects have the same observer message payload.
+        /// Determines whether the two specified <see cref="Notification{T}"/> objects have the same observer message payload.
         /// </summary>
-        /// <param name="left">The first Notification&lt;T&gt; to compare, or null.</param>
-        /// <param name="right">The second Notification&lt;T&gt; to compare, or null.</param>
-        /// <returns>true if the first Notification&lt;T&gt; value has the same observer message payload as the second Notification&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or null.</param>
+        /// <returns>true if the first <see cref="Notification{T}"/> value has the same observer message payload as the second <see cref="Notification{T}"/> value; otherwise, false.</returns>
         /// <remarks>
-        /// Equality of Notification&lt;T&gt; objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
-        /// This means two Notification&lt;T&gt; objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
-        /// In case one wants to determine whether two Notification&lt;T&gt; objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
+        /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
+        /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
+        /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
         public static bool operator ==(Notification<T> left, Notification<T> right)
         {
@@ -514,15 +514,15 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Determines whether the two specified Notification&lt;T&gt; objects have a different observer message payload.
+        /// Determines whether the two specified <see cref="Notification{T}"/> objects have a different observer message payload.
         /// </summary>
-        /// <param name="left">The first Notification&lt;T&gt; to compare, or null.</param>
-        /// <param name="right">The second Notification&lt;T&gt; to compare, or null.</param>
-        /// <returns>true if the first Notification&lt;T&gt; value has a different observer message payload as the second Notification&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or null.</param>
+        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or null.</param>
+        /// <returns>true if the first <see cref="Notification{T}"/> value has a different observer message payload as the second <see cref="Notification{T}"/> value; otherwise, false.</returns>
         /// <remarks>
-        /// Equality of Notification&lt;T&gt; objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
-        /// This means two Notification&lt;T&gt; objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
-        /// In case one wants to determine whether two Notification&lt;T&gt; objects represent a different observer method call, use Object.ReferenceEquals identity equality instead.
+        /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
+        /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
+        /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent a different observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
         public static bool operator !=(Notification<T> left, Notification<T> right)
         {
@@ -530,14 +530,14 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Determines whether the specified System.Object is equal to the current Notification&lt;T&gt;.
+        /// Determines whether the specified System.Object is equal to the current <see cref="Notification{T}"/>.
         /// </summary>
-        /// <param name="obj">The System.Object to compare with the current Notification&lt;T&gt;.</param>
-        /// <returns>true if the specified System.Object is equal to the current Notification&lt;T&gt;; otherwise, false.</returns>
+        /// <param name="obj">The System.Object to compare with the current <see cref="Notification{T}"/>.</param>
+        /// <returns>true if the specified System.Object is equal to the current <see cref="Notification{T}"/>; otherwise, false.</returns>
         /// <remarks>
-        /// Equality of Notification&lt;T&gt; objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
-        /// This means two Notification&lt;T&gt; objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
-        /// In case one wants to determine whether two Notification&lt;T&gt; objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
+        /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
+        /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
+        /// In case one wants to determine whether two <see cref="Notification{T}"/> objects represent the same observer method call, use Object.ReferenceEquals identity equality instead.
         /// </remarks>
         public override bool Equals(object obj)
         {

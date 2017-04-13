@@ -49,42 +49,42 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Determines whether the current Timestamped&lt;T&gt; value has the same Value and Timestamp as a specified Timestamped&lt;T&gt; value.
+        /// Determines whether the current <see cref="Timestamped{T}" /> value has the same Value and Timestamp as a specified <see cref="Timestamped{T}" /> value.
         /// </summary>
-        /// <param name="other">An object to compare to the current Timestamped&lt;T&gt; value.</param>
-        /// <returns>true if both Timestamped&lt;T&gt; values have the same Value and Timestamp; otherwise, false.</returns>
+        /// <param name="other">An object to compare to the current <see cref="Timestamped{T}" /> value.</param>
+        /// <returns>true if both <see cref="Timestamped{T}" /> values have the same Value and Timestamp; otherwise, false.</returns>
         public bool Equals(Timestamped<T> other)
         {
             return other.Timestamp.Equals(Timestamp) && EqualityComparer<T>.Default.Equals(Value, other.Value);
         }
 
         /// <summary>
-        /// Determines whether the two specified Timestamped&lt;T&gt; values have the same Value and Timestamp.
+        /// Determines whether the two specified <see cref="Timestamped{T}" /> values have the same Value and Timestamp.
         /// </summary>
-        /// <param name="first">The first Timestamped&lt;T&gt; value to compare.</param>
-        /// <param name="second">The second Timestamped&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first Timestamped&lt;T&gt; value has the same Value and Timestamp as the second Timestamped&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="first">The first <see cref="Timestamped{T}" /> value to compare.</param>
+        /// <param name="second">The second <see cref="Timestamped{T}" /> value to compare.</param>
+        /// <returns>true if the first <see cref="Timestamped{T}" /> value has the same Value and Timestamp as the second <see cref="Timestamped{T}" /> value; otherwise, false.</returns>
         public static bool operator ==(Timestamped<T> first, Timestamped<T> second)
         {
             return first.Equals(second);
         }
 
         /// <summary>
-        /// Determines whether the two specified Timestamped&lt;T&gt; values don't have the same Value and Timestamp.
+        /// Determines whether the two specified <see cref="Timestamped{T}" /> values don't have the same Value and Timestamp.
         /// </summary>
-        /// <param name="first">The first Timestamped&lt;T&gt; value to compare.</param>
-        /// <param name="second">The second Timestamped&lt;T&gt; value to compare.</param>
-        /// <returns>true if the first Timestamped&lt;T&gt; value has a different Value or Timestamp as the second Timestamped&lt;T&gt; value; otherwise, false.</returns>
+        /// <param name="first">The first <see cref="Timestamped{T}" /> value to compare.</param>
+        /// <param name="second">The second <see cref="Timestamped{T}" /> value to compare.</param>
+        /// <returns>true if the first <see cref="Timestamped{T}" /> value has a different Value or Timestamp as the second <see cref="Timestamped{T}" /> value; otherwise, false.</returns>
         public static bool operator !=(Timestamped<T> first, Timestamped<T> second)
         {
             return !first.Equals(second);
         }
 
         /// <summary>
-        /// Determines whether the specified System.Object is equal to the current Timestamped&lt;T&gt;.
+        /// Determines whether the specified System.Object is equal to the current <see cref="Timestamped{T}" />.
         /// </summary>
-        /// <param name="obj">The System.Object to compare with the current Timestamped&lt;T&gt;.</param>
-        /// <returns>true if the specified System.Object is equal to the current Timestamped&lt;T&gt;; otherwise, false.</returns>
+        /// <param name="obj">The System.Object to compare with the current <see cref="Timestamped{T}" />.</param>
+        /// <returns>true if the specified System.Object is equal to the current <see cref="Timestamped{T}" />; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is Timestamped<T>))
@@ -95,9 +95,9 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Returns the hash code for the current Timestamped&lt;T&gt; value.
+        /// Returns the hash code for the current <see cref="Timestamped{T}" /> value.
         /// </summary>
-        /// <returns>A hash code for the current Timestamped&lt;T&gt; value.</returns>
+        /// <returns>A hash code for the current <see cref="Timestamped{T}" /> value.</returns>
         public override int GetHashCode()
         {
             var valueHashCode = Value == null ? 1979 : Value.GetHashCode();
@@ -106,9 +106,9 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Returns a string representation of the current Timestamped&lt;T&gt; value.
+        /// Returns a string representation of the current <see cref="Timestamped{T}" /> value.
         /// </summary>
-        /// <returns>String representation of the current Timestamped&lt;T&gt; value.</returns>
+        /// <returns>String representation of the current <see cref="Timestamped{T}" /> value.</returns>
         public override string ToString()
         {
             return String.Format(CultureInfo.CurrentCulture, "{0}@{1}", Value, Timestamp);
@@ -116,12 +116,12 @@ namespace System.Reactive
     }
 
     /// <summary>
-    /// A helper class with a factory method for creating Timestamped&lt;T&gt; instances.
+    /// A helper class with a factory method for creating <see cref="Timestamped{T}" /> instances.
     /// </summary>
     public static class Timestamped
     {
         /// <summary>
-        /// Creates an instance of a Timestamped&lt;T&gt;.  This is syntactic sugar that uses type inference
+        /// Creates an instance of a <see cref="Timestamped{T}" />.  This is syntactic sugar that uses type inference
         /// to avoid specifying a type in a constructor call, which is very useful when using anonymous types.
         /// </summary>
         /// <param name="value">The value to be annotated with a timestamp.</param>

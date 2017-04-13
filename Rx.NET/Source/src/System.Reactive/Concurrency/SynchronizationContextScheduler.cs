@@ -9,7 +9,7 @@ using System.Threading;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Represents an object that schedules units of work on a provided <seealso cref="T:System.Threading.SynchronizationContext"/>.
+    /// Represents an object that schedules units of work on a provided <seealso cref="SynchronizationContext"/>.
     /// </summary>
     public class SynchronizationContextScheduler : LocalScheduler
     {
@@ -17,7 +17,7 @@ namespace System.Reactive.Concurrency
         private readonly bool _alwaysPost;
 
         /// <summary>
-        /// Creates an object that schedules units of work on the provided <see cref="T:System.Threading.SynchronizationContext"/>.
+        /// Creates an object that schedules units of work on the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         /// <param name="context">Synchronization context to schedule units of work on.</param>
         /// <exception cref="ArgumentNullException"><paramref name="context"/> is null.</exception>
@@ -31,7 +31,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Creates an object that schedules units of work on the provided <see cref="T:System.Threading.SynchronizationContext"/>.
+        /// Creates an object that schedules units of work on the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         /// <param name="context">Synchronization context to schedule units of work on.</param>
         /// <param name="alwaysPost">Configures whether scheduling always posts to the synchronization context, regardless whether the caller is on the same synchronization context.</param>

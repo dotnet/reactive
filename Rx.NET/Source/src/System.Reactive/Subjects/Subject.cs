@@ -230,7 +230,7 @@ namespace System.Reactive.Subjects
         #region IDisposable implementation
 
         /// <summary>
-        /// Releases all resources used by the current instance of the <see cref="System.Reactive.Subjects.Subject&lt;T&gt;"/> class and unsubscribes all observers.
+        /// Releases all resources used by the current instance of the <see cref="Subject{T}"/> class and unsubscribes all observers.
         /// </summary>
         public override void Dispose()
         {

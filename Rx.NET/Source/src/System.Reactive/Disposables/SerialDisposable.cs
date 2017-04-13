@@ -14,7 +14,7 @@ namespace System.Reactive.Disposables
         private bool _disposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.SerialDisposable"/> class.
+        /// Initializes a new instance of the <see cref="SerialDisposable"/> class.
         /// </summary>
         public SerialDisposable()
         {

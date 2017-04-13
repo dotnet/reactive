@@ -7,7 +7,7 @@ using System.Threading;
 namespace System.Reactive
 {
     /// <summary>
-    /// Abstract base class for implementations of the IObserver&lt;T&gt; interface.
+    /// Abstract base class for implementations of the <see cref="IObserver{T}"/> interface.
     /// </summary>
     /// <remarks>This base class enforces the grammar of observers where OnError and OnCompleted are terminal messages.</remarks>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>

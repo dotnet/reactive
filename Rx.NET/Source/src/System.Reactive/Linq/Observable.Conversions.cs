@@ -74,7 +74,7 @@ namespace System.Reactive.Linq
         #region ToEvent
 
         /// <summary>
-        /// Exposes an observable sequence as an object with an Action-based .NET event.
+        /// Exposes an observable sequence as an object with an <see cref="Action"/>-based .NET event.
         /// </summary>
         /// <param name="source">Observable source sequence.</param>
         /// <returns>The event source object.</returns>
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Exposes an observable sequence as an object with an Action&lt;TSource&gt;-based .NET event.
+        /// Exposes an observable sequence as an object with an <see cref="Action{TSource}"/>-based .NET event.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable source sequence.</param>

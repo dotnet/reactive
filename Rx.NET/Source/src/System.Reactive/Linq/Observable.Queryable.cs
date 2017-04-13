@@ -25,11 +25,11 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts an in-memory observable sequence into an IQbservable&lt;T&gt; sequence with an expression tree representing the source sequence.
+        /// Converts an in-memory observable sequence into an <see cref="IQbservable{T}"/> sequence with an expression tree representing the source sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <returns>IQbservable&lt;T&gt; sequence representing the given observable source sequence.</returns>
+        /// <returns><see cref="IQbservable{T}"/> sequence representing the given observable source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IQbservable<TSource> AsQbservable<TSource>(this IObservable<TSource> source)
         {

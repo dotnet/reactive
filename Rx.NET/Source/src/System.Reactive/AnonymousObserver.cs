@@ -5,7 +5,7 @@
 namespace System.Reactive
 {
     /// <summary>
-    /// Class to create an IObserver&lt;T&gt; instance from delegate-based implementations of the On* methods.
+    /// Class to create an <see cref="IObserver{T}"/> instance from delegate-based implementations of the On* methods.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     public sealed class AnonymousObserver<T> : ObserverBase<T>

@@ -210,7 +210,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler&lt;TEventArgs&gt;"/>, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}"/>, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler&lt;TEventArgs&gt;"/>, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}"/>, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -396,7 +396,7 @@ namespace System.Reactive.Linq
         #region Action<EventHandler<TEventArgs>>
 
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler&lt;TEventArgs&gt;"/>, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}"/>, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -438,7 +438,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler&lt;TEventArgs&gt;"/>, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}"/>, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>

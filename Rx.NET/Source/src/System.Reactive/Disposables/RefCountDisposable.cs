@@ -19,7 +19,7 @@ namespace System.Reactive.Disposables
         private int _count;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.RefCountDisposable"/> class with the specified disposable.
+        /// Initializes a new instance of the <see cref="RefCountDisposable"/> class with the specified disposable.
         /// </summary>
         /// <param name="disposable">Underlying disposable.</param>
         /// <exception cref="ArgumentNullException"><paramref name="disposable"/> is null.</exception>
@@ -29,7 +29,7 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.RefCountDisposable"/> class with the specified disposable.
+        /// Initializes a new instance of the <see cref="RefCountDisposable"/> class with the specified disposable.
         /// </summary>
         /// <param name="disposable">Underlying disposable.</param>
         /// <param name="throwWhenDisposed">Indicates whether subsequent calls to <see cref="GetDisposable"/> should throw when this instance is disposed.</param>
