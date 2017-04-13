@@ -111,7 +111,7 @@ namespace ReactiveTests.Tests
             {
                 try
                 {
-                    instance.GetType().GetMethod("Wait").Invoke(instance, new object[] { action });
+                    instance.GetType().GetMethod(nameof(AsyncLock.Wait)).Invoke(instance, new object[] { action });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -123,7 +123,7 @@ namespace ReactiveTests.Tests
             {
                 try
                 {
-                    instance.GetType().GetMethod("Dispose").Invoke(instance, new object[0]);
+                    instance.GetType().GetMethod(nameof(AsyncLock.Dispose)).Invoke(instance, new object[0]);
                 }
                 catch (TargetInvocationException ex)
                 {

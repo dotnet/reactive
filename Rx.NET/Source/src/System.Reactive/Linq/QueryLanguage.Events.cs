@@ -79,7 +79,7 @@ namespace System.Reactive.Linq
             var res = new AnonymousObservable<EventPattern<TEventArgs>>(observer =>
             {
                 Action<object, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(new EventPattern<TEventArgs>(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<object, TEventArgs>).GetMethod("Invoke"));
+                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<object, TEventArgs>).GetMethod(nameof(Action<object, TEventArgs>.Invoke)));
                 addHandler(d);
                 return Disposable.Create(() => removeHandler(d));
             });
@@ -140,7 +140,7 @@ namespace System.Reactive.Linq
             var res = new AnonymousObservable<EventPattern<TSender, TEventArgs>>(observer =>
             {
                 Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(new EventPattern<TSender, TEventArgs>(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TSender, TEventArgs>).GetMethod("Invoke"));
+                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
                 addHandler(d);
                 return Disposable.Create(() => removeHandler(d));
             });
@@ -326,7 +326,7 @@ namespace System.Reactive.Linq
                 return new AnonymousObservable<TResult>(observer =>
                 {
                     Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(getResult(sender, eventArgs));
-                    var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod("Invoke"));
+                    var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
                     var token = addMethod.Invoke(target, new object[] { d });
                     return Disposable.Create(() => removeMethod.Invoke(target, new object[] { token }));
                 });
@@ -340,7 +340,7 @@ namespace System.Reactive.Linq
             var res = new AnonymousObservable<TResult>(observer =>
             {
                 Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(getResult(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod("Invoke"));
+                var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
                 addMethod.Invoke(target, new object[] { d });
                 return Disposable.Create(() => removeMethod.Invoke(target, new object[] { d }));
             });
@@ -407,7 +407,7 @@ namespace System.Reactive.Linq
             var res = new AnonymousObservable<TEventArgs>(observer =>
             {
                 Action<TEventArgs> handler = observer.OnNext;
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TEventArgs>).GetMethod("Invoke"));
+                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TEventArgs>).GetMethod(nameof(Action<TEventArgs>.Invoke)));
                 addHandler(d);
                 return Disposable.Create(() => removeHandler(d));
             });

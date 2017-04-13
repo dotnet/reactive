@@ -155,12 +155,12 @@ namespace ReactiveTests.Tests
 
         public override int GetHashCode()
         {
-            return (int)_value.GetType().GetMethod("GetHashCode").Invoke(_value, null);
+            return (int)_value.GetType().GetMethod(nameof(GetHashCode)).Invoke(_value, null);
         }
 
         public override string ToString()
         {
-            return (string)_value.GetType().GetMethod("ToString").Invoke(_value, null);
+            return (string)_value.GetType().GetMethod(nameof(ToString)).Invoke(_value, null);
         }
     }
 
@@ -169,7 +169,7 @@ namespace ReactiveTests.Tests
         public static Either<TLeft, TRight> CreateLeft(TLeft value)
         {
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
-            var mth = tpe.GetMethod("CreateLeft");
+            var mth = tpe.GetMethod(nameof(CreateLeft));
             var res = mth.Invoke(null, new object[] { value });
             return new Either<TLeft, TRight>.Left(res);
         }
@@ -177,20 +177,20 @@ namespace ReactiveTests.Tests
         public static Either<TLeft, TRight> CreateRight(TRight value)
         {
             var tpe = typeof(Observable).GetTypeInfo().Assembly.GetTypes().Single(t => t.Name == "Either`2").MakeGenericType(typeof(TLeft), typeof(TRight));
-            var mth = tpe.GetMethod("CreateRight");
+            var mth = tpe.GetMethod(nameof(CreateRight));
             var res = mth.Invoke(null, new object[] { value });
             return new Either<TLeft, TRight>.Right(res);
         }
 
         public TResult Switch<TResult>(Func<TLeft, TResult> caseLeft, Func<TRight, TResult> caseRight)
         {
-            var mth = _value.GetType().GetMethods().Where(m => m.Name == "Switch" && m.ReturnType != typeof(void)).Single().MakeGenericMethod(typeof(TResult));
+            var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType != typeof(void)).Single().MakeGenericMethod(typeof(TResult));
             return (TResult)mth.Invoke(_value, new object[] { caseLeft, caseRight });
         }
 
         public void Switch(Action<TLeft> caseLeft, Action<TRight> caseRight)
         {
-            var mth = _value.GetType().GetMethods().Where(m => m.Name == "Switch" && m.ReturnType == typeof(void)).Single();
+            var mth = _value.GetType().GetMethods().Where(m => m.Name == nameof(Switch) && m.ReturnType == typeof(void)).Single();
             mth.Invoke(_value, new object[] { caseLeft, caseRight });
         }
 
@@ -200,7 +200,7 @@ namespace ReactiveTests.Tests
             {
                 get
                 {
-                    return (TLeft)_value.GetType().GetProperty("Value").GetValue(_value, null);
+                    return (TLeft)_value.GetType().GetProperty(nameof(Value)).GetValue(_value, null);
                 }
             }
 
@@ -211,7 +211,7 @@ namespace ReactiveTests.Tests
 
             public bool Equals(Left other)
             {
-                var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType != typeof(object)).Single();
+                var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
                 return (bool)equ.Invoke(_value, new object[] { other == null ? null : other._value });
             }
         }
@@ -222,7 +222,7 @@ namespace ReactiveTests.Tests
             {
                 get
                 {
-                    return (TRight)_value.GetType().GetProperty("Value").GetValue(_value, null);
+                    return (TRight)_value.GetType().GetProperty(nameof(Value)).GetValue(_value, null);
                 }
             }
 
@@ -233,7 +233,7 @@ namespace ReactiveTests.Tests
 
             public bool Equals(Right other)
             {
-                var equ = _value.GetType().GetMethods().Where(m => m.Name == "Equals" && m.GetParameters()[0].ParameterType != typeof(object)).Single();
+                var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
                 return (bool)equ.Invoke(_value, new object[] { other == null ? null : other._value });
             }
         }
