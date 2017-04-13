@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_PERF
-using System;
 using System.Collections.Generic;
-using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive
 {

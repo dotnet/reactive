@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.ComponentModel;
-using System.Reflection;
 
 namespace System.Reactive.PlatformServices
 {
@@ -63,6 +62,4 @@ namespace System.Reactive.PlatformServices
             return new CurrentPlatformEnlightenmentProvider();
         }
     }
-
-
 }

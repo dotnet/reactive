@@ -3,10 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_SYNCCTX
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace System.Reactive.Concurrency

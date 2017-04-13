@@ -5,7 +5,6 @@
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Runtime.CompilerServices;
-using System.Reactive.Concurrency;
 
 namespace System.Reactive.Subjects
 {

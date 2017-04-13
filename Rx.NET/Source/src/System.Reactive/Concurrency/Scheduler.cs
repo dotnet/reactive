@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
-using System.Reactive.Disposables;
 using System.Reactive.PlatformServices;
 using System.Globalization;
 
@@ -19,7 +17,6 @@ namespace System.Reactive.Concurrency
 
         // HACK: Causes race condition with Locks in DefaultScheduler's static ctor chain
         // private static DefaultScheduler s_default = DefaultScheduler.Instance;
-        
 
         /// <summary>
         /// Gets the current time according to the local machine's system clock.
