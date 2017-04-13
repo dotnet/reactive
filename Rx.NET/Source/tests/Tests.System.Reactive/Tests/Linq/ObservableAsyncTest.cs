@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableAsyncTest : ReactiveTest
     {
 #if !NO_TPL
@@ -42,7 +42,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>(null, iar => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>(null, iar => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int>(null, iar => 0));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int>(null, iar => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int>(null, iar => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int>(null, iar => { }));
@@ -67,14 +66,12 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(null, iar => 0));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int>(null, iar => { }));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(null, iar => 0));
-#endif
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern((cb, o) => null, default(Action<IAsyncResult>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int>((cb, o) => null, default(Func<IAsyncResult, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int>((a, cb, o) => null, default(Action<IAsyncResult>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>((a, cb, o) => null, default(Func<IAsyncResult, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int>((a, b, cb, o) => null, default(Action<IAsyncResult>)));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int>((a, b, cb, o) => null, default(Func<IAsyncResult, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int>((a, b, c, cb, o) => null, default(Action<IAsyncResult>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int>((a, b, c, cb, o) => null, default(Func<IAsyncResult, int>)));
@@ -100,7 +97,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, cb, o) => null, default(Func<IAsyncResult, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, o) => null, default(Action<IAsyncResult>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.FromAsyncPattern<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, cb, o) => null, default(Func<IAsyncResult, int>)));
-#endif
         }
 
         [Fact]
@@ -275,7 +271,6 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void FromAsyncPattern3()
         {
@@ -1175,7 +1170,6 @@ namespace ReactiveTests.Tests
             Assert.True(res.SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
 
-#endif
         class Result : IAsyncResult
         {
             public object AsyncState
@@ -1199,9 +1193,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-#endregion
+        #endregion
 
-#region Start
+        #region Start
 
         [Fact]
         public void Start_ArgumentChecking()
@@ -1293,13 +1287,13 @@ namespace ReactiveTests.Tests
             }));
         }
 
-#endregion
+        #endregion
 
-#region StartAsync
+        #region StartAsync
 
 #if !NO_TPL
 
-#region Func
+        #region Func
 
         [Fact]
         public void StartAsync_Func_ArgumentChecking()
@@ -1500,9 +1494,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
-#region Action
+        #region Action
 
         [Fact]
         public void StartAsync_Action_ArgumentChecking()
@@ -1688,17 +1682,17 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
 #endif
 
-#endregion
+        #endregion
 
-#region FromAsync
+        #region FromAsync
 
 #if !NO_TPL
 
-#region Func
+        #region Func
 
         [Fact]
         public void FromAsync_Func_ArgumentChecking()
@@ -1886,9 +1880,9 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
-#region Action
+        #region Action
 
         [Fact]
         public void FromAsync_Action_ArgumentChecking()
@@ -2066,13 +2060,13 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#endregion
+        #endregion
 
 #endif
 
-#endregion
+        #endregion
 
-#region ToAsync
+        #region ToAsync
 
         [Fact]
         public void ToAsync_ArgumentChecking()
@@ -2087,7 +2081,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Action<int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Func<int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Func<int, int, int, int, int>)));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Action<int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default(Action<int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default(Func<int, int, int, int, int, int>)));
@@ -2112,7 +2105,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
-#endif
+
             var someScheduler = new TestScheduler();
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(default(Action), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(default(Action<int>), someScheduler));
@@ -2123,7 +2116,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int>(default(Func<int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Action<int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>(default(Func<int, int, int, int>), someScheduler));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Func<int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>(default(Action<int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>(default(Action<int, int, int, int, int, int>), someScheduler));
@@ -2149,7 +2141,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Action<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>(default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>), someScheduler));
-#endif
+
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync(() => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(a => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int>(() => 1, null));
@@ -2160,7 +2152,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>((a, b, c, d) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int>((a, b, c) => 1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => 1, null));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int>((a, b, c, d, e) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e, f) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int>((a, b, c, d, e) => 1, null));
@@ -2185,7 +2176,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { }, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) => 1, null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => 1, null));
-#endif
         }
 
         [Fact]
@@ -2222,8 +2212,6 @@ namespace ReactiveTests.Tests
             Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
             Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => a + b + c + d, Scheduler.Default)(1, 2, 3, 4).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 }));
         }
-
-#if !NO_LARGEARITY
 
         [Fact]
         public void ToAsync5()
@@ -2308,7 +2296,6 @@ namespace ReactiveTests.Tests
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p, Scheduler.Default)(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).ToEnumerable().SequenceEqual(new[] { 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 }));
         }
-#endif
 
         [Fact]
         public void ToAsync_Error0()
@@ -2344,8 +2331,6 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             Assert.True(Observable.ToAsync<int, int, int, int, int>((a, b, c, d) => { throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
-
-#if !NO_LARGEARITY
 
         [Fact]
         public void ToAsync_Error5()
@@ -2430,7 +2415,6 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new Notification<int>[] { Notification.CreateOnError<int>(ex) }));
         }
-#endif
 
         [Fact]
         public void ToAsyncAction0()
@@ -2511,8 +2495,6 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             Assert.True(Observable.ToAsync<int, int, int, int>((a, b, c, d) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); throw ex; })(1, 2, 3, 4).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
-
-#if !NO_LARGEARITY
 
         [Fact]
         public void ToAsyncAction5()
@@ -2705,8 +2687,7 @@ namespace ReactiveTests.Tests
             var ex = new Exception();
             Assert.True(Observable.ToAsync<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>((a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => { Assert.Equal(1, a); Assert.Equal(2, b); Assert.Equal(3, c); Assert.Equal(4, d); Assert.Equal(5, e); Assert.Equal(6, f); Assert.Equal(7, g); Assert.Equal(8, h); Assert.Equal(9, i); Assert.Equal(10, j); Assert.Equal(11, k); Assert.Equal(12, l); Assert.Equal(13, m); Assert.Equal(14, n); Assert.Equal(15, o); Assert.Equal(16, p); throw ex; })(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16).Materialize().ToEnumerable().SequenceEqual(new[] { Notification.CreateOnError<Unit>(ex) }));
         }
-#endif
 
-#endregion
+        #endregion
     }
 }

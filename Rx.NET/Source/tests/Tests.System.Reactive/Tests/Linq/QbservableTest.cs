@@ -95,7 +95,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbNull));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
@@ -108,7 +107,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbNull));
-#endif
         }
 
         [Fact]
@@ -1577,9 +1575,7 @@ namespace ReactiveTests.Tests
                 _qbMy.Then((t0) => 1),
                 _qbMy.And(_qbMy).Then((t0, t1) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).Then((t0, t1, t2) => 1),
-                _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3) => 1)
-#if !NO_LARGEARITY
-                ,
+                _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4, t5) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4, t5, t6) => 1),
@@ -1592,8 +1588,7 @@ namespace ReactiveTests.Tests
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14) => 1),
                 _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then((t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15) => 1)
-#endif
-);
+            );
         }
 
         [Fact]
@@ -1604,7 +1599,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).Then(default(Expression<Func<int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int>>)));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int, int, int>>)));
@@ -1617,7 +1611,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>>)));
             ReactiveAssert.Throws<ArgumentNullException>(() => _qbMy.And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).And(_qbMy).Then(default(Expression<Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>>)));
-#endif
         }
 
         [Fact]

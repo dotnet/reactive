@@ -84,7 +84,6 @@ namespace System.Reactive.Linq
             return s_impl.FromAsyncPattern<TArg1, TArg2, TResult>(begin, end);
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
@@ -450,7 +449,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(begin, end);
         }
-#endif
 
         #endregion
 
@@ -522,7 +520,6 @@ namespace System.Reactive.Linq
             return s_impl.FromAsyncPattern<TArg1, TArg2>(begin, end);
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts a Begin/End invoke function pair into an asynchronous function.
         /// </summary>
@@ -876,7 +873,6 @@ namespace System.Reactive.Linq
 
             return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(begin, end);
         }
-#endif
 
         #endregion
 
@@ -1534,7 +1530,6 @@ namespace System.Reactive.Linq
             return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(function, scheduler);
         }
 
-#if !NO_LARGEARITY
         /// <summary>
         /// Converts the function into an asynchronous function. Each invocation of the resulting asynchronous function causes an invocation of the original synchronous function.
         /// </summary>
@@ -2182,7 +2177,6 @@ namespace System.Reactive.Linq
 
             return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(function, scheduler);
         }
-#endif
 
         #endregion
 
@@ -2362,8 +2356,6 @@ namespace System.Reactive.Linq
 
             return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4>(action, scheduler);
         }
-
-#if !NO_LARGEARITY
 
         /// <summary>
         /// Converts the function into an asynchronous action. Each invocation of the resulting asynchronous action causes an invocation of the original synchronous action on the default scheduler.
@@ -2988,7 +2980,6 @@ namespace System.Reactive.Linq
 
             return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(action, scheduler);
         }
-#endif
 
         #endregion
 

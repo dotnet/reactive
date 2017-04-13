@@ -52,9 +52,9 @@
   <!-- Designer support -->
   <ItemGroup>
     <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
-    <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="true" AutoGen="true" DependentUpon="CombineLatest.Generated.tt" />
+    <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="CombineLatest.Generated.tt" />
     <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
-    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="true" AutoGen="true" DependentUpon="Zip.Generated.tt" />
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />
     <Compile Update="Strings_Core.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Core.resx" />
     <Compile Update="Strings_Linq.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Linq.resx" />
     <Compile Update="Strings_PlatformServices.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_PlatformServices.resx" />
@@ -63,6 +63,9 @@
     <EmbeddedResource Update="Strings_Linq.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Linq.Designer.cs" />
     <EmbeddedResource Update="Strings_PlatformServices.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
     <EmbeddedResource Update="Strings_Providers.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Providers.Designer.cs" />    
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

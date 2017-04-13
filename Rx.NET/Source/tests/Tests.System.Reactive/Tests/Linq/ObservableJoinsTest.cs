@@ -25,8 +25,6 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And<int>(null));
-
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
@@ -39,7 +37,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And<int>(null));
-#endif
         }
 
         [Fact]
@@ -237,7 +234,6 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void And5()
         {
@@ -1017,7 +1013,6 @@ namespace ReactiveTests.Tests
                 );
             }
         }
-#endif
 
         #endregion
 
@@ -1033,8 +1028,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).Then<int>(null));
-
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
@@ -1047,7 +1040,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.And<int, int>(someObservable, someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).And(someObservable).Then<int>(null));
-#endif
         }
 
         [Fact]
@@ -1189,7 +1181,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Then5Throws()
         {
@@ -1501,7 +1492,6 @@ namespace ReactiveTests.Tests
                 OnError<int>(210, ex)
             );
         }
-#endif
 
         #endregion
 

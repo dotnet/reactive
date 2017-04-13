@@ -1945,7 +1945,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, default(IObservable<int>), xs, (_0, _1, _2, _3) => _0 + _1 + _2 + _3));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, xs, default(IObservable<int>), (_0, _1, _2, _3) => _0 + _1 + _2 + _3));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, xs, xs, default(Func<int, int, int, int, int>)));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(default(IObservable<int>), xs, xs, xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, default(IObservable<int>), xs, xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, default(IObservable<int>), xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
@@ -2084,7 +2083,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(IObservable<int>), xs, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(IObservable<int>), (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.CombineLatest(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
-#endif
         }
 
         #endregion
@@ -2171,7 +2169,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void CombineLatest_Never5()
         {
@@ -2501,7 +2498,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
         }
-#endif
 
         #endregion
 
@@ -2659,7 +2655,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void CombineLatest_Empty5()
         {
@@ -3013,7 +3008,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
         }
-#endif
 
         #endregion
 
@@ -3968,7 +3962,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + 10 * es.Length));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void CombineLatest_SelectorThrows5()
         {
@@ -4358,7 +4351,6 @@ namespace ReactiveTests.Tests
             foreach (var e in es)
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + 10 * es.Length));
         }
-#endif
 
         #endregion
 
@@ -4464,7 +4456,6 @@ namespace ReactiveTests.Tests
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void CombineLatest_WillNeverBeAbleToCombine5()
         {
@@ -4854,7 +4845,6 @@ namespace ReactiveTests.Tests
 
             es.Last().Subscriptions.AssertEqual(Subscribe(200, 500));
         }
-#endif
 
         #endregion
 
@@ -4960,7 +4950,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 800));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void CombineLatest_Typical5()
         {
@@ -5440,7 +5429,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 800));
         }
-#endif
 
         #endregion
 
@@ -11574,7 +11562,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, default(IObservable<int>), xs, (_0, _1, _2, _3) => _0 + _1 + _2 + _3));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, xs, default(IObservable<int>), (_0, _1, _2, _3) => _0 + _1 + _2 + _3));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, xs, xs, default(Func<int, int, int, int, int>)));
-#if !NO_LARGEARITY
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(default(IObservable<int>), xs, xs, xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, default(IObservable<int>), xs, xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, default(IObservable<int>), xs, xs, (_0, _1, _2, _3, _4) => _0 + _1 + _2 + _3 + _4));
@@ -11713,7 +11700,6 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(IObservable<int>), xs, (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(IObservable<int>), (_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15) => _0 + _1 + _2 + _3 + _4 + _5 + _6 + _7 + _8 + _9 + _10 + _11 + _12 + _13 + _14 + _15));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Zip(xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, xs, default(Func<int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int>)));
-#endif
         }
 
         #endregion
@@ -11780,7 +11766,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Zip_Never5()
         {
@@ -12110,7 +12095,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 1000));
         }
-#endif
 
         #endregion
 
@@ -12278,7 +12262,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Zip_Empty5()
         {
@@ -12632,7 +12615,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + (++i * 10)));
         }
-#endif
 
         #endregion
 
@@ -13276,7 +13258,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Zip_SymmetricReturn5()
         {
@@ -13630,7 +13611,6 @@ namespace ReactiveTests.Tests
             foreach (var e in new[] { e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15 })
                 e.Subscriptions.AssertEqual(Subscribe(200, 400));
         }
-#endif
 
         #endregion
 
@@ -13838,7 +13818,6 @@ namespace ReactiveTests.Tests
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Zip_SelectorThrows5()
         {
@@ -14228,7 +14207,6 @@ namespace ReactiveTests.Tests
             foreach (var e in es)
                 e.Subscriptions.AssertEqual(Subscribe(200, 200 + es.Length * 10));
         }
-#endif
 
         #endregion
 
@@ -14352,7 +14330,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_LARGEARITY
         [Fact]
         public void Zip_AllCompleted5()
         {
@@ -14790,7 +14767,6 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 220 + (i - 1) * 10)
             );
         }
-#endif
 
         #endregion
 

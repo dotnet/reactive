@@ -193,7 +193,6 @@ namespace System.Reactive.Joins
             }
         }
     }
-#if !NO_LARGEARITY
 
     internal class ActivePlan<T1, T2, T3, T4, T5> : ActivePlan
     {
@@ -1433,5 +1432,4 @@ namespace System.Reactive.Joins
             }
         }
     }
-#endif
 }
