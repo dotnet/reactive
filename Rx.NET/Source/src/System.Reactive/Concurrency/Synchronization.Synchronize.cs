@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_PERF
-using System;
-
 namespace System.Reactive.Concurrency
 {
     class Synchronize<TSource> : Producer<TSource>

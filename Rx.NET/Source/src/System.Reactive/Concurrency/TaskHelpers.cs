@@ -21,20 +21,12 @@ namespace System.Reactive.Concurrency
                 var remainder = delay - TimeSpan.FromMilliseconds(MAX_DELAY);
 
                 return
-#if USE_TASKEX
-                    TaskEx.Delay(MAX_DELAY, token)
-#else
                     Task.Delay(MAX_DELAY, token)
-#endif
                         .ContinueWith(_ => Delay(remainder, token), TaskContinuationOptions.ExecuteSynchronously)
                         .Unwrap();
             }
 
-#if USE_TASKEX
-            return TaskEx.Delay(delay, token);
-#else
             return Task.Delay(delay, token);
-#endif
         }
     }
 }

@@ -295,11 +295,7 @@ namespace System.Reactive.Concurrency
             //
             // Note: the dictionary exists to "root" the timers so that they are not garbage collected and finalized while they are running.
             //
-#if !NO_HASHSET
             protected static readonly HashSet<System.Threading.Timer> s_timers = new HashSet<System.Threading.Timer>();
-#else
-            protected static readonly Dictionary<System.Threading.Timer, object> s_timers = new Dictionary<System.Threading.Timer, object>();
-#endif
         }
 
         sealed class Timer<TState> : Timer, IDisposable
@@ -330,11 +326,7 @@ namespace System.Reactive.Concurrency
                 {
                     if (!_hasRemoved)
                     {
-#if !NO_HASHSET
                         s_timers.Add(_timer);
-#else
-                        s_timers.Add(_timer, null);
-#endif
 
                         _hasAdded = true;
                     }
@@ -393,11 +385,7 @@ namespace System.Reactive.Concurrency
             //
             // Note: the dictionary exists to "root" the timers so that they are not garbage collected and finalized while they are running.
             //
-#if !NO_HASHSET
             protected static readonly HashSet<System.Threading.Timer> s_timers = new HashSet<System.Threading.Timer>();
-#else
-            protected static readonly Dictionary<System.Threading.Timer, object> s_timers = new Dictionary<System.Threading.Timer, object>();
-#endif
         }
 
         sealed class PeriodicTimer<TState> : PeriodicTimer, IDisposable
@@ -418,11 +406,7 @@ namespace System.Reactive.Concurrency
 
                 lock (s_timers)
                 {
-#if !NO_HASHSET
                     s_timers.Add(_timer);
-#else
-                    s_timers.Add(_timer, null);
-#endif
                 }
             }
 

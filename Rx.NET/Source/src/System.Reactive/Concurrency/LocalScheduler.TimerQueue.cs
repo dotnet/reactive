@@ -55,11 +55,7 @@ namespace System.Reactive.Concurrency
         /// Set of disposable handles to all of the current short term work Schedule calls,
         /// allowing those to be cancelled upon a system clock change.
         /// </summary>
-#if !NO_HASHSET
         private readonly HashSet<IDisposable> _shortTermWork = new HashSet<IDisposable>();
-#else
-        private readonly Dictionary<IDisposable, object> _shortTermWork = new Dictionary<IDisposable, object>();
-#endif
 
         /// <summary>
         /// Threshold where an item is considered to be short term work or gets moved from
@@ -191,11 +187,7 @@ namespace System.Reactive.Concurrency
                 // of WorkItem.Invoke.
                 //
                 var d = new SingleAssignmentDisposable();
-#if !NO_HASHSET
                 _shortTermWork.Add(d);
-#else
-                _shortTermWork.Add(d, null);
-#endif
 
                 //
                 // We normalize the time delta again (possibly redundant), because we can't assume
@@ -386,12 +378,10 @@ namespace System.Reactive.Concurrency
                     // is used to notice race conditions between cancellation and the timer firing (also
                     // guarded by the same gate object). See checks in ExecuteNextShortTermWorkItem.
                     //
-#if !NO_HASHSET
                     foreach (var d in _shortTermWork)
-#else
-                    foreach (var d in _shortTermWork.Keys)
-#endif
+                    {
                         d.Dispose();
+                    }
 
                     _shortTermWork.Clear();
 
