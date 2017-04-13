@@ -15,11 +15,7 @@ namespace System.Reactive.Subjects
     /// The type of the elements produced by the subject.
     /// This type parameter is covariant. That is, you can use either the type you specified or any type that is more derived. For more information about covariance and contravariance, see Covariance and Contravariance in Generics.
     /// </typeparam>
-#if !NO_VARIANCE
     public interface ISubject<in TSource, out TResult> : IObserver<TSource>, IObservable<TResult>
-#else
-    public interface ISubject<TSource, TResult> : IObserver<TSource>, IObservable<TResult>
-#endif
     {
     }
 }
