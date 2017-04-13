@@ -280,7 +280,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_CDS
         [Fact]
         public void EventLoop_Immediate()
         {
@@ -361,7 +360,6 @@ namespace ReactiveTests.Tests
                 }
             }
         }
-#endif
 
         [Fact]
         public void EventLoop_Periodic()
@@ -393,7 +391,7 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_CDS && DESKTOPCLR
+#if DESKTOPCLR
         [Fact]
         public void EventLoop_CorrectWorkStealing()
         {
