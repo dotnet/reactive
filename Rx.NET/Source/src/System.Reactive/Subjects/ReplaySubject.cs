@@ -982,9 +982,7 @@ namespace System.Reactive.Subjects
         /// <returns>Observer to send terminal notifications to.</returns>
         private IObserver<T> Done()
         {
-#pragma warning disable 0420
             return Interlocked.Exchange(ref _observer, NopObserver<T>.Instance);
-#pragma warning restore 0420
         }
     }
 }

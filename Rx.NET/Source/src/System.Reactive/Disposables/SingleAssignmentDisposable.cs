@@ -53,9 +53,7 @@ namespace System.Reactive.Disposables
 
             set
             {
-#pragma warning disable 0420
                 var old = Interlocked.CompareExchange(ref _current, value, null);
-#pragma warning restore 0420
                 if (old == null)
                     return;
 
@@ -72,9 +70,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-#pragma warning disable 0420
             var old = Interlocked.Exchange(ref _current, BooleanDisposable.True);
-#pragma warning restore 0420
             if (old != null)
                 old.Dispose();
         }

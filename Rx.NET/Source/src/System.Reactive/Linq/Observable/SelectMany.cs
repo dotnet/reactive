@@ -587,7 +587,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
 
 #if !NO_TPL
-#pragma warning disable 0420
         class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TCollection, TResult> _parent;
@@ -858,7 +857,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-#pragma warning restore 0420
 #endif
     }
 
@@ -1513,7 +1511,6 @@ namespace System.Reactive.Linq.ObservableImpl
         }
 
 #if !NO_TPL
-#pragma warning disable 0420
         class SelectManyImpl : Sink<TResult>, IObserver<TSource>
         {
             private readonly SelectMany<TSource, TResult> _parent;
@@ -1734,7 +1731,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-#pragma warning restore 0420
 #endif
     }
 }

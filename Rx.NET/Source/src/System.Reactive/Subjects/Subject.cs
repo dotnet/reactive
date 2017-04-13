@@ -77,9 +77,7 @@ namespace System.Reactive.Subjects
 
                 if (oldObserver == DisposedObserver<T>.Instance || oldObserver is DoneObserver<T>)
                     break;
-#pragma warning disable 0420
             } while (Interlocked.CompareExchange(ref _observer, newObserver, oldObserver) != oldObserver);
-#pragma warning restore 0420
 
             oldObserver.OnCompleted();
         }
@@ -103,9 +101,7 @@ namespace System.Reactive.Subjects
 
                 if (oldObserver == DisposedObserver<T>.Instance || oldObserver is DoneObserver<T>)
                     break;
-#pragma warning disable 0420
             } while (Interlocked.CompareExchange(ref _observer, newObserver, oldObserver) != oldObserver);
-#pragma warning restore 0420
 
             oldObserver.OnError(error);
         }
@@ -175,9 +171,7 @@ namespace System.Reactive.Subjects
                         newObserver = new Observer<T>(new ImmutableList<IObserver<T>>(new[] { oldObserver, observer }));
                     }
                 }
-#pragma warning disable 0420
             } while (Interlocked.CompareExchange(ref _observer, newObserver, oldObserver) != oldObserver);
-#pragma warning restore 0420
 
             return new Subscription(this, observer);
         }
@@ -228,9 +222,7 @@ namespace System.Reactive.Subjects
 
                     newObserver = NopObserver<T>.Instance;
                 }
-#pragma warning disable 0420
             } while (Interlocked.CompareExchange(ref _observer, newObserver, oldObserver) != oldObserver);
-#pragma warning restore 0420
         }
 
         #endregion
