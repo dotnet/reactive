@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
-
-#if !NO_WEAKTABLE
 using System.Runtime.CompilerServices;
-#endif
 
 namespace System.Reactive.Concurrency
 {
@@ -39,7 +36,6 @@ namespace System.Reactive.Concurrency
             };
         }
 
-#if !NO_WEAKTABLE
         public CatchScheduler(IScheduler scheduler, Func<TException, bool> handler, ConditionalWeakTable<IScheduler, IScheduler> cache)
             : base(scheduler, cache)
         {
@@ -50,12 +46,6 @@ namespace System.Reactive.Concurrency
         {
             return new CatchScheduler<TException>(scheduler, _handler, cache);
         }
-#else
-        protected override SchedulerWrapper Clone(IScheduler scheduler)
-        {
-            return new CatchScheduler<TException>(scheduler, _handler);
-        }
-#endif
 
         protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object service)
         {
