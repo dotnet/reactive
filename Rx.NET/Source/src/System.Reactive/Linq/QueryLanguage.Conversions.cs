@@ -113,9 +113,6 @@ namespace System.Reactive.Linq
         #region ToEventPattern
 
         public virtual IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(IObservable<EventPattern<TEventArgs>> source)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             return new EventPatternSource<TEventArgs>(
                 source,

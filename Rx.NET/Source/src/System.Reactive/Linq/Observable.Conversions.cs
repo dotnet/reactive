@@ -114,9 +114,6 @@ namespace System.Reactive.Linq
         /// <returns>The event source object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IEventPatternSource<TEventArgs> ToEventPattern<TEventArgs>(this IObservable<EventPattern<TEventArgs>> source)
-#if !NO_EVENTARGS_CONSTRAINT
-            where TEventArgs : EventArgs
-#endif
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
