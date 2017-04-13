@@ -21,12 +21,10 @@ namespace System.Reactive.Linq
             return Synchronization.ObserveOn<TSource>(source, scheduler);
         }
 
-#if !NO_SYNCCTX
         public virtual IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             return Synchronization.ObserveOn<TSource>(source, context);
         }
-#endif
 
         #endregion
 
@@ -37,12 +35,10 @@ namespace System.Reactive.Linq
             return Synchronization.SubscribeOn<TSource>(source, scheduler);
         }
 
-#if !NO_SYNCCTX
         public virtual IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             return Synchronization.SubscribeOn<TSource>(source, context);
         }
-#endif
 
         #endregion
 

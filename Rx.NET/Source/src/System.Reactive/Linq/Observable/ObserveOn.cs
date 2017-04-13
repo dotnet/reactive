@@ -13,6 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
+        private readonly SynchronizationContext _context;
 
         public ObserveOn(IObservable<TSource> source, IScheduler scheduler)
         {
@@ -20,19 +21,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-#if !NO_SYNCCTX
-        private readonly SynchronizationContext _context;
-
         public ObserveOn(IObservable<TSource> source, SynchronizationContext context)
         {
             _source = source;
             _context = context;
         }
-#endif
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-#if !NO_SYNCCTX
             if (_context != null)
             {
                 var sink = new ObserveOnImpl(this, observer, cancel);
@@ -40,7 +36,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 return _source.Subscribe(sink);
             }
             else
-#endif
             {
                 var sink = new ObserveOnObserver<TSource>(_scheduler, observer, cancel);
                 setSink(sink);
@@ -48,7 +43,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-#if !NO_SYNCCTX
         class ObserveOnImpl : Sink<TSource>, IObserver<TSource>
         {
             private readonly ObserveOn<TSource> _parent;
@@ -85,7 +79,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 });
             }
         }
-#endif
     }
 }
 #endif

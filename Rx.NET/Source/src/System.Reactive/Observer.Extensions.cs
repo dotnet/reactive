@@ -258,7 +258,6 @@ namespace System.Reactive
             return new ObserveOnObserver<T>(scheduler, observer, null);
         }
 
-#if !NO_SYNCCTX
         /// <summary>
         /// Schedules the invocation of observer methods on the given synchonization context.
         /// </summary>
@@ -276,8 +275,7 @@ namespace System.Reactive
 
             return new ObserveOnObserver<T>(new SynchronizationContextScheduler(context), observer, null);
         }
-#endif
-        
+
         /// <summary>
         /// Converts an observer to a progress object.
         /// </summary>

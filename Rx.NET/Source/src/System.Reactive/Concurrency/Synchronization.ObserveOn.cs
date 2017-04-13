@@ -14,6 +14,7 @@ namespace System.Reactive.Concurrency
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
+        private readonly SynchronizationContext _context;
 
         public ObserveOn(IObservable<TSource> source, IScheduler scheduler)
         {
@@ -21,20 +22,15 @@ namespace System.Reactive.Concurrency
             _scheduler = scheduler;
         }
 
-#if !NO_SYNCCTX
-        private readonly SynchronizationContext _context;
-
         public ObserveOn(IObservable<TSource> source, SynchronizationContext context)
         {
             _source = source;
             _context = context;
         }
-#endif
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-#if !NO_SYNCCTX
             if (_context != null)
             {
                 var sink = new ObserveOnSink(this, observer, cancel);
@@ -42,7 +38,6 @@ namespace System.Reactive.Concurrency
                 return sink.Run();
             }
             else
-#endif
             {
                 var sink = new ObserveOnObserver<TSource>(_scheduler, observer, cancel);
                 setSink(sink);
@@ -50,7 +45,6 @@ namespace System.Reactive.Concurrency
             }
         }
 
-#if !NO_SYNCCTX
         class ObserveOnSink : Sink<TSource>, IObserver<TSource>
         {
             private readonly ObserveOn<TSource> _parent;
@@ -113,7 +107,6 @@ namespace System.Reactive.Concurrency
                 base.Dispose();
             }
         }
-#endif
     }
 }
 #endif

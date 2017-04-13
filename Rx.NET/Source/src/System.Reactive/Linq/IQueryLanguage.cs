@@ -380,13 +380,11 @@ namespace System.Reactive.Linq
         #region * Concurrency *
 
         IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, IScheduler scheduler);
-#if !NO_SYNCCTX
         IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context);
-#endif
+
         IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, IScheduler scheduler);
-#if !NO_SYNCCTX
         IObservable<TSource> SubscribeOn<TSource>(IObservable<TSource> source, SynchronizationContext context);
-#endif
+
         IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source);
         IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, object gate);
 
