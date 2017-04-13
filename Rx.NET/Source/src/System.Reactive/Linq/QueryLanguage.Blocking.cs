@@ -7,10 +7,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Reactive.Disposables;
 
-#if NO_SEMAPHORE
-using System.Reactive.Threading;
-#endif
-
 namespace System.Reactive.Linq
 {
 #if !NO_PERF

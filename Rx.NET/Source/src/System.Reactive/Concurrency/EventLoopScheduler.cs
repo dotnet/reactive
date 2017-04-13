@@ -6,10 +6,6 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
 
-#if NO_SEMAPHORE
-using System.Reactive.Threading;
-#endif
-
 namespace System.Reactive.Concurrency
 {
     /// <summary>
