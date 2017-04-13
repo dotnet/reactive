@@ -85,8 +85,6 @@ namespace System.Reactive.Concurrency
             return dueTime;
         }
 
-#if USE_TIMER_SELF_ROOT
-
         //
         // Some historical context. In the early days of Rx, we discovered an issue with
         // the rooting of timers, causing them to get GC'ed even when the IDisposable of
@@ -152,6 +150,10 @@ namespace System.Reactive.Concurrency
         // With the USE_TIMER_SELF_ROOT symbol, we shake off this additional rooting code
         // for newer platforms where this no longer needed. We checked this on .NET Core
         // as well as .NET 4.0, and only #define this symbol for those platforms.
+        //
+        // NB: 4/13/2017 - All target platforms for the 4.x release have the self-rooting
+        //                 behavior described here, so we removed the USE_TIMER_SELF_ROOT
+        //                 symbol.
         //
 
         class Timer : IDisposable
@@ -239,119 +241,6 @@ namespace System.Reactive.Concurrency
                 }
             }
         }
-#else
-        class Timer : IDisposable
-        {
-            //
-            // Note: the dictionary exists to "root" the timers so that they are not garbage collected and finalized while they are running.
-            //
-            private static readonly HashSet<System.Threading.Timer> s_timers = new HashSet<System.Threading.Timer>();
-
-            private Action<object> _action;
-            private System.Threading.Timer _timer;
-
-            private bool _hasAdded;
-            private bool _hasRemoved;
-
-            public Timer(Action<object> action, object state, TimeSpan dueTime)
-            {
-                _action = action;
-                _timer = new System.Threading.Timer(Tick, state, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
-
-                lock (s_timers)
-                {
-                    if (!_hasRemoved)
-                    {
-                        s_timers.Add(_timer);
-                        _hasAdded = true;
-                    }
-                }
-            }
-
-            private void Tick(object state)
-            {
-                try
-                {
-                    _action(state);
-                }
-                finally
-                {
-                    Dispose();
-                }
-            }
-
-            public void Dispose()
-            {
-                _action = Stubs<object>.Ignore;
-
-                var timer = default(System.Threading.Timer);
-
-                lock (s_timers)
-                {
-                    if (!_hasRemoved)
-                    {
-                        timer = _timer;
-                        _timer = null;
-
-                        if (_hasAdded && timer != null)
-                            s_timers.Remove(timer);
-
-                        _hasRemoved = true;
-                    }
-                }
-
-                if (timer != null)
-                    timer.Dispose();
-            }
-        }
-
-        class PeriodicTimer : IDisposable
-        {
-            //
-            // Note: the dictionary exists to "root" the timers so that they are not garbage collected and finalized while they are running.
-            //
-            private static readonly HashSet<System.Threading.Timer> s_timers = new HashSet<System.Threading.Timer>();
-
-            private Action _action;
-            private System.Threading.Timer _timer;
-
-            public PeriodicTimer(Action action, TimeSpan period)
-            {
-                _action = action;
-                _timer = new System.Threading.Timer(Tick, null, period, period);
-
-                lock (s_timers)
-                {
-                    s_timers.Add(_timer);
-                }
-            }
-
-            private void Tick(object state)
-            {
-                _action();
-            }
-
-            public void Dispose()
-            {
-                var timer = default(System.Threading.Timer);
-
-                lock (s_timers)
-                {
-                    timer = _timer;
-                    _timer = null;
-
-                    if (timer != null)
-                        s_timers.Remove(timer);
-                }
-
-                if (timer != null)
-                {
-                    timer.Dispose();
-                    _action = Stubs.Nop;
-                }
-            }
-        }
-#endif
 
         class FastPeriodicTimer : IDisposable
         {
