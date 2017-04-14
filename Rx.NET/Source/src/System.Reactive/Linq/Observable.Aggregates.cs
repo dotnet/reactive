@@ -147,9 +147,9 @@ namespace System.Reactive.Linq
         #region + Average +
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Double" /> values.
+        /// Computes the average of an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -163,9 +163,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Single" /> values.
+        /// Computes the average of an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -196,9 +196,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int32" /> values.
+        /// Computes the average of an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -213,9 +213,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int64" /> values.
+        /// Computes the average of an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -230,9 +230,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -246,9 +246,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -279,9 +279,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -296,9 +296,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="InvalidOperationException">(Asynchronous) The source sequence is empty.</exception>
@@ -334,7 +334,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -354,7 +354,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -374,7 +374,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -395,7 +395,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -437,7 +437,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -457,7 +457,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -477,7 +477,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -498,7 +498,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -564,7 +564,7 @@ namespace System.Reactive.Linq
         #region + Count +
 
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int32" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="int" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -581,7 +581,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int32" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="int" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -822,7 +822,7 @@ namespace System.Reactive.Linq
         #region + LongCount +
 
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int64" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="long" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -839,7 +839,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int64" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="long" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -897,9 +897,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Double" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -912,9 +912,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Single" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -942,9 +942,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Int32" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -957,9 +957,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Int64" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -972,9 +972,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Double" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -987,9 +987,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Single" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1017,9 +1017,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Int32" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1032,9 +1032,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Int64" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1090,12 +1090,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="double" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<double> Max<TSource>(this IObservable<TSource> source, Func<TSource, double> selector)
@@ -1109,12 +1109,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="float" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<float> Max<TSource>(this IObservable<TSource> source, Func<TSource, float> selector)
@@ -1147,12 +1147,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="int" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<int> Max<TSource>(this IObservable<TSource> source, Func<TSource, int> selector)
@@ -1166,12 +1166,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="long" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<long> Max<TSource>(this IObservable<TSource> source, Func<TSource, long> selector)
@@ -1185,7 +1185,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -1204,7 +1204,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -1242,7 +1242,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -1261,7 +1261,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -1366,9 +1366,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Double" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1381,9 +1381,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Single" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1411,9 +1411,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Int32" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1426,9 +1426,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Int64" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1441,9 +1441,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Double" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1456,9 +1456,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Single" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1486,9 +1486,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Int32" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1501,9 +1501,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Int64" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1559,12 +1559,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="double" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<double> Min<TSource>(this IObservable<TSource> source, Func<TSource, double> selector)
@@ -1578,12 +1578,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Single" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="float" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<float> Min<TSource>(this IObservable<TSource> source, Func<TSource, float> selector)
@@ -1616,12 +1616,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="int" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<int> Min<TSource>(this IObservable<TSource> source, Func<TSource, int> selector)
@@ -1635,12 +1635,12 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="long" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
         public static IObservable<long> Min<TSource>(this IObservable<TSource> source, Func<TSource, long> selector)
@@ -1654,7 +1654,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -1673,7 +1673,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Single" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="float" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -1711,7 +1711,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -1730,7 +1730,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -1964,9 +1964,9 @@ namespace System.Reactive.Linq
         #region + Sum +
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Double" /> values.
+        /// Computes the sum of a sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -1979,9 +1979,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Single" /> values.
+        /// Computes the sum of a sequence of <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="float" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -2010,9 +2010,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int32" /> values.
+        /// Computes the sum of a sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int32.MaxValue"/>.</exception>
@@ -2026,9 +2026,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int64" /> values.
+        /// Computes the sum of a sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue"/>.</exception>
@@ -2042,9 +2042,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Double" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -2057,9 +2057,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Single" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="float" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Single" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="float" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -2088,9 +2088,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int32.MaxValue"/>.</exception>
@@ -2104,9 +2104,9 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         /// <exception cref="OverflowException">(Asynchronous) The sum of the elements in the source sequence is larger than <see cref="Int64.MaxValue"/>.</exception>
@@ -2120,7 +2120,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2139,7 +2139,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2178,7 +2178,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2198,7 +2198,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2218,7 +2218,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2237,7 +2237,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Single" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="float" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2276,7 +2276,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -2296,7 +2296,7 @@ namespace System.Reactive.Linq
         }
 
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
