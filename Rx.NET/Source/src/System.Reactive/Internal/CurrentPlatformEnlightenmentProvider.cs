@@ -59,7 +59,7 @@ namespace System.Reactive.PlatformServices
                 }
             }
 
-#if WINDOWS || WINDOWSPHONE7
+#if WINDOWS
             if (t == typeof(IHostLifecycleNotifications))
             {
                 return (T)(object)new HostLifecycleNotifications();
