@@ -23,8 +23,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (scheduler == null)
@@ -49,8 +49,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public static IDisposable SchedulePeriodic<TState>(this IScheduler scheduler, TState state, TimeSpan period, Action<TState> action)
         {
             if (scheduler == null)
@@ -73,8 +73,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public static IDisposable SchedulePeriodic(this IScheduler scheduler, TimeSpan period, Action action)
         {
             if (scheduler == null)
@@ -94,7 +94,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="scheduler">Scheduler to obtain a stopwatch for.</param>
         /// <returns>New stopwatch object; started at the time of the request.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         /// <remarks>The resulting stopwatch object can have non-monotonic behavior.</remarks>
         public static IStopwatch StartStopwatch(this IScheduler scheduler)
         {
@@ -135,7 +135,9 @@ namespace System.Reactive.Concurrency
             //
             var swp = scheduler.AsStopwatchProvider();
             if (swp != null)
+            {
                 return swp.StartStopwatch();
+            }
 
             return new EmulatedStopwatch(scheduler);
         }
@@ -287,7 +289,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        class SchedulePeriodicStopwatch<TState>
+        private sealed class SchedulePeriodicStopwatch<TState>
         {
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _period;
@@ -409,7 +411,9 @@ namespace System.Reactive.Concurrency
                     // once more.
                     //
                     if (shouldWaitForResume)
+                    {
                         _resumeEvent.WaitOne();
+                    }
                 }
 
                 recurse(next);
@@ -424,7 +428,9 @@ namespace System.Reactive.Concurrency
                     _runState = DISPOSED;
 
                     if (!Environment.HasShutdownStarted)
+                    {
                         _resumeEvent.Set();
+                    }
                 }
             }
 
@@ -452,7 +458,9 @@ namespace System.Reactive.Concurrency
                         _runState = SUSPENDED;
 
                         if (!Environment.HasShutdownStarted)
+                        {
                             _resumeEvent.Reset();
+                        }
                     }
                 }
             }
@@ -484,7 +492,9 @@ namespace System.Reactive.Concurrency
                         _runState = RUNNING;
 
                         if (!Environment.HasShutdownStarted)
+                        {
                             _resumeEvent.Set();
+                        }
                     }
                 }
             }
@@ -504,7 +514,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        class SchedulePeriodicRecursive<TState>
+        private sealed class SchedulePeriodicRecursive<TState>
         {
             private readonly IScheduler _scheduler;
             private readonly TimeSpan _period;
@@ -605,14 +615,16 @@ namespace System.Reactive.Concurrency
                         // we make tail calls to play nice with the scheduler.
                         //
                         if (Interlocked.Decrement(ref _pendingTickCount) > 0)
+                        {
                             recurse(DISPATCH_START, TimeSpan.Zero);
+                        }
 
                         break;
                 }
             }
         }
 
-        class EmulatedStopwatch : IStopwatch
+        private sealed class EmulatedStopwatch : IStopwatch
         {
             private readonly IScheduler _scheduler;
             private readonly DateTimeOffset _start;
@@ -623,10 +635,7 @@ namespace System.Reactive.Concurrency
                 _start = _scheduler.Now;
             }
 
-            public TimeSpan Elapsed
-            {
-                get { return Scheduler.Normalize(_scheduler.Now - _start); }
-            }
+            public TimeSpan Elapsed => Normalize(_scheduler.Now - _start);
         }
     }
 }

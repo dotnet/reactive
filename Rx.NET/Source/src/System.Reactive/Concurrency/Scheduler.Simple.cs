@@ -14,7 +14,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to execute the action on.</param>
         /// <param name="action">Action to execute.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, Action action)
         {
             if (scheduler == null)
@@ -32,7 +32,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, TimeSpan dueTime, Action action)
         {
             if (scheduler == null)
@@ -50,7 +50,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute.</param>
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, DateTimeOffset dueTime, Action action)
         {
             if (scheduler == null)
@@ -67,7 +67,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to execute the action on.</param>
         /// <param name="action">Action to execute.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleLongRunning(this ISchedulerLongRunning scheduler, Action<ICancelable> action)
         {
             if (scheduler == null)
@@ -78,7 +78,7 @@ namespace System.Reactive.Concurrency
             return scheduler.ScheduleLongRunning(action, (a, c) => a(c));
         }
 
-        static IDisposable Invoke(IScheduler scheduler, Action action)
+        private static IDisposable Invoke(IScheduler scheduler, Action action)
         {
             action();
             return Disposable.Empty;

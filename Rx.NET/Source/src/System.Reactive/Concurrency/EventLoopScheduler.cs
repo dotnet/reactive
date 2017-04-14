@@ -91,7 +91,7 @@ namespace System.Reactive.Concurrency
         /// Creates an object that schedules units of work on a designated thread, using the specified factory to control thread creation options.
         /// </summary>
         /// <param name="threadFactory">Factory function for thread creation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public EventLoopScheduler(Func<ThreadStart, Thread> threadFactory)
         {
             if (threadFactory == null)
@@ -141,7 +141,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The scheduler has been disposed and doesn't accept new work.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
@@ -181,8 +181,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         /// <exception cref="ObjectDisposedException">The scheduler has been disposed and doesn't accept new work.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
@@ -325,7 +325,9 @@ namespace System.Reactive.Concurrency
                     foreach (var item in ready)
                     {
                         if (!item.IsCanceled)
+                        {
                             item.Invoke();
+                        }
                     }
                 }
 

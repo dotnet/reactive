@@ -192,7 +192,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
         /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
