@@ -46,10 +46,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposable == null; }
-        }
+        public bool IsDisposed => _disposable == null;
 
         /// <summary>
         /// Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.

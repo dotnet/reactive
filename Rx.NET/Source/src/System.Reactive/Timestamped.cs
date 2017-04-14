@@ -18,9 +18,6 @@ namespace System.Reactive
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
     public struct Timestamped<T> : IEquatable<Timestamped<T>>
     {
-        private readonly DateTimeOffset _timestamp;
-        private readonly T _value;
-
         /// <summary>
         /// Constructs a timestamped value.
         /// </summary>
@@ -28,25 +25,19 @@ namespace System.Reactive
         /// <param name="timestamp">Timestamp associated with the value.</param>
         public Timestamped(T value, DateTimeOffset timestamp)
         {
-            _timestamp = timestamp;
-            _value = value;
+            Timestamp = timestamp;
+            Value = value;
         }
 
         /// <summary>
         /// Gets the value.
         /// </summary>
-        public T Value
-        {
-            get { return _value; }
-        }
+        public T Value { get; }
 
         /// <summary>
         /// Gets the timestamp.
         /// </summary>
-        public DateTimeOffset Timestamp
-        {
-            get { return _timestamp; }
-        }
+        public DateTimeOffset Timestamp { get; }
 
         /// <summary>
         /// Determines whether the current <see cref="Timestamped{T}" /> value has the same Value and Timestamp as a specified <see cref="Timestamped{T}" /> value.
@@ -100,9 +91,7 @@ namespace System.Reactive
         /// <returns>A hash code for the current <see cref="Timestamped{T}" /> value.</returns>
         public override int GetHashCode()
         {
-            var valueHashCode = Value == null ? 1979 : Value.GetHashCode();
-
-            return _timestamp.GetHashCode() ^ valueHashCode;
+            return Timestamp.GetHashCode() ^ (Value?.GetHashCode() ?? 1979);
         }
 
         /// <summary>

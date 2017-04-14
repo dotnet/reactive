@@ -13,72 +13,52 @@ namespace System.Reactive
     public struct Unit : IEquatable<Unit>
     {
         /// <summary>
-        /// Determines whether the specified Unit values is equal to the current Unit. Because Unit has a single value, this always returns true.
+        /// Determines whether the specified <see cref="Unit"/> value is equal to the current <see cref="Unit"/>. Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.
         /// </summary>
-        /// <param name="other">An object to compare to the current Unit value.</param>
-        /// <returns>Because Unit has a single value, this always returns true.</returns>
-        public bool Equals(Unit other)
-        {
-            return true;
-        }
+        /// <param name="other">An object to compare to the current <see cref="Unit"/> value.</param>
+        /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.</returns>
+        public bool Equals(Unit other) => true;
 
         /// <summary>
-        /// Determines whether the specified System.Object is equal to the current Unit.
+        /// Determines whether the specified System.Object is equal to the current <see cref="Unit"/>.
         /// </summary>
-        /// <param name="obj">The System.Object to compare with the current Unit.</param>
-        /// <returns>true if the specified System.Object is a Unit value; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return obj is Unit;
-        }
+        /// <param name="obj">The System.Object to compare with the current <see cref="Unit"/>.</param>
+        /// <returns><c>true</c> if the specified System.Object is a <see cref="Unit"/> value; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj) => obj is Unit;
 
         /// <summary>
-        /// Returns the hash code for the current Unit value.
+        /// Returns the hash code for the current <see cref="Unit"/> value.
         /// </summary>
-        /// <returns>A hash code for the current Unit value.</returns>
-        public override int GetHashCode()
-        {
-            return 0;
-        }
+        /// <returns>A hash code for the current <see cref="Unit"/> value.</returns>
+        public override int GetHashCode() => 0;
 
         /// <summary>
-        /// Returns a string representation of the current Unit value.
+        /// Returns a string representation of the current <see cref="Unit"/> value.
         /// </summary>
-        /// <returns>String representation of the current Unit value.</returns>
-        public override string ToString()
-        {
-            return "()";
-        }
+        /// <returns>String representation of the current <see cref="Unit"/> value.</returns>
+        public override string ToString() => "()";
 
         /// <summary>
-        /// Determines whether the two specified Unit values are equal. Because Unit has a single value, this always returns true.
+        /// Determines whether the two specified <see cref="Unit"/> values are equal. Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.
         /// </summary>
-        /// <param name="first">The first Unit value to compare.</param>
-        /// <param name="second">The second Unit value to compare.</param>
-        /// <returns>Because Unit has a single value, this always returns true.</returns>
+        /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
+        /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
+        /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>true</c>.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
-        public static bool operator ==(Unit first, Unit second)
-        {
-            return true;
-        }
+        public static bool operator ==(Unit first, Unit second) => true;
 
         /// <summary>
-        /// Determines whether the two specified Unit values are not equal. Because Unit has a single value, this always returns false.
+        /// Determines whether the two specified <see cref="Unit"/> values are not equal. Because <see cref="Unit"/> has a single value, this always returns <c>false</c>.
         /// </summary>
-        /// <param name="first">The first Unit value to compare.</param>
-        /// <param name="second">The second Unit value to compare.</param>
-        /// <returns>Because Unit has a single value, this always returns false.</returns>
+        /// <param name="first">The first <see cref="Unit"/> value to compare.</param>
+        /// <param name="second">The second <see cref="Unit"/> value to compare.</param>
+        /// <returns>Because <see cref="Unit"/> has a single value, this always returns <c>false</c>.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "first", Justification = "Parameter required for operator overloading."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "second", Justification = "Parameter required for operator overloading.")]
-        public static bool operator !=(Unit first, Unit second)
-        {
-            return false;
-        }
-
-        static readonly Unit _default = new Unit();
+        public static bool operator !=(Unit first, Unit second) => false;
 
         /// <summary>
-        /// Gets the single unit value.
+        /// Gets the single <see cref="Unit"/> value.
         /// </summary>
-        public static Unit Default { get { return _default; } }
+        public static Unit Default => default(Unit);
     }
 }

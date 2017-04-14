@@ -49,13 +49,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed
-        {
-            get
-            {
-                return _observer is DisposedObserver<T>;
-            }
-        }
+        public override bool IsDisposed => _observer is DisposedObserver<T>;
 
         #endregion
 

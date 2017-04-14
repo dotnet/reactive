@@ -17,7 +17,7 @@ namespace System.Reactive.Disposables
         /// Initializes a new instance of the <see cref="CancellationDisposable"/> class that uses an existing <seealso cref="CancellationTokenSource"/>.
         /// </summary>
         /// <param name="cts"><seealso cref="CancellationTokenSource"/> used for cancellation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="cts"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="cts"/> is <c>null</c>.</exception>
         public CancellationDisposable(CancellationTokenSource cts)
         {
             if (cts == null)
@@ -35,12 +35,9 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets the <see cref="CancellationToken"/> used by this CancellationDisposable.
+        /// Gets the <see cref="CancellationToken"/> used by this <see cref="CancellationDisposable"/>.
         /// </summary>
-        public CancellationToken Token
-        {
-            get { return _cts.Token; }
-        }
+        public CancellationToken Token => _cts.Token;
 
         /// <summary>
         /// Cancels the underlying <seealso cref="CancellationTokenSource"/>.
@@ -53,9 +50,6 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _cts.IsCancellationRequested; }
-        }
+        public bool IsDisposed => _cts.IsCancellationRequested;
     }
 }
