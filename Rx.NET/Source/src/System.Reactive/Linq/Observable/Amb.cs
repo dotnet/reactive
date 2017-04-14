@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Amb<TSource> : Producer<TSource>
+    internal sealed class Amb<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _left;
         private readonly IObservable<TSource> _right;

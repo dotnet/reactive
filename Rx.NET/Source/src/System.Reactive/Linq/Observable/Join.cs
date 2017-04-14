@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> : Producer<TResult>
+    internal sealed class Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> : Producer<TResult>
     {
         private readonly IObservable<TLeft> _left;
         private readonly IObservable<TRight> _right;

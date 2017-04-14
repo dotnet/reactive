@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Using<TSource, TResource> : Producer<TSource>
+    internal sealed class Using<TSource, TResource> : Producer<TSource>
         where TResource : IDisposable
     {
         private readonly Func<TResource> _resourceFactory;

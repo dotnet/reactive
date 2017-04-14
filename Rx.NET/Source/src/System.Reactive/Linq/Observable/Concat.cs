@@ -9,7 +9,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Concat<TSource> : Producer<TSource>, IConcatenatable<TSource>
+    internal sealed class Concat<TSource> : Producer<TSource>, IConcatenatable<TSource>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 

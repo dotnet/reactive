@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class MinBy<TSource, TKey> : Producer<IList<TSource>>
+    internal sealed class MinBy<TSource, TKey> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class MostRecent<TSource> : PushToPullAdapter<TSource, TSource>
+    internal sealed class MostRecent<TSource> : PushToPullAdapter<TSource, TSource>
     {
         private readonly TSource _initialValue;
 

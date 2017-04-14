@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ObserveOn<TSource> : Producer<TSource>
+    internal sealed class ObserveOn<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;

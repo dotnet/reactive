@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Any<TSource> : Producer<bool>
+    internal sealed class Any<TSource> : Producer<bool>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;

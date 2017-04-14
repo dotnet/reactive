@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ToLookup<TSource, TKey, TElement> : Producer<ILookup<TKey, TElement>>
+    internal sealed class ToLookup<TSource, TKey, TElement> : Producer<ILookup<TKey, TElement>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

@@ -12,7 +12,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 
-    class Zip<TFirst, TSecond, TResult> : Producer<TResult>
+    internal sealed class Zip<TFirst, TSecond, TResult> : Producer<TResult>
     {
         private readonly IObservable<TFirst> _first;
         private readonly IObservable<TSecond> _second;
@@ -472,7 +472,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class ZipObserver<T> : IObserver<T>
+    internal sealed class ZipObserver<T> : IObserver<T>
     {
         private readonly object _gate;
         private readonly IZip _parent;
@@ -530,7 +530,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region N-ary
 
-    class Zip<TSource> : Producer<IList<TSource>>
+    internal sealed class Zip<TSource> : Producer<IList<TSource>>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 

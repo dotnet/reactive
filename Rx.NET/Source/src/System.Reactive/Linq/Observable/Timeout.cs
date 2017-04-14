@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Timeout<TSource> : Producer<TSource>
+    internal sealed class Timeout<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly TimeSpan? _dueTimeR;
@@ -256,7 +256,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Timeout<TSource, TTimeout> : Producer<TSource>
+    internal sealed class Timeout<TSource, TTimeout> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TTimeout> _firstTimeout;

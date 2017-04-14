@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Throttle<TSource> : Producer<TSource>
+    internal sealed class Throttle<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly TimeSpan _dueTime;
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Throttle<TSource, TThrottle> : Producer<TSource>
+    internal sealed class Throttle<TSource, TThrottle> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;

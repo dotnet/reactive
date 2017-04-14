@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class WithLatestFrom<TFirst, TSecond, TResult> : Producer<TResult>
+    internal sealed class WithLatestFrom<TFirst, TSecond, TResult> : Producer<TResult>
     {
         private readonly IObservable<TFirst> _first;
         private readonly IObservable<TSecond> _second;

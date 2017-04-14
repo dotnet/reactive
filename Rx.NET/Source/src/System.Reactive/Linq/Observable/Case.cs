@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Case<TValue, TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
+    internal sealed class Case<TValue, TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
     {
         private readonly Func<TValue> _selector;
         private readonly IDictionary<TValue, IObservable<TResult>> _sources;

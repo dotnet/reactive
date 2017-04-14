@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ForEach<TSource>
+    internal sealed class ForEach<TSource>
     {
         public class _ : IObserver<TSource>
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class SumDouble : Producer<double>
+    internal sealed class SumDouble : Producer<double>
     {
         private readonly IObservable<double> _source;
 
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumSingle : Producer<float>
+    internal sealed class SumSingle : Producer<float>
     {
         private readonly IObservable<float> _source;
 
@@ -98,7 +98,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumDecimal : Producer<decimal>
+    internal sealed class SumDecimal : Producer<decimal>
     {
         private readonly IObservable<decimal> _source;
 
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumInt32 : Producer<int>
+    internal sealed class SumInt32 : Producer<int>
     {
         private readonly IObservable<int> _source;
 
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumInt64 : Producer<long>
+    internal sealed class SumInt64 : Producer<long>
     {
         private readonly IObservable<long> _source;
 
@@ -258,7 +258,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumDoubleNullable : Producer<double?>
+    internal sealed class SumDoubleNullable : Producer<double?>
     {
         private readonly IObservable<double?> _source;
 
@@ -305,7 +305,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumSingleNullable : Producer<float?>
+    internal sealed class SumSingleNullable : Producer<float?>
     {
         private readonly IObservable<float?> _source;
 
@@ -352,7 +352,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumDecimalNullable : Producer<decimal?>
+    internal sealed class SumDecimalNullable : Producer<decimal?>
     {
         private readonly IObservable<decimal?> _source;
 
@@ -399,7 +399,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumInt32Nullable : Producer<int?>
+    internal sealed class SumInt32Nullable : Producer<int?>
     {
         private readonly IObservable<int?> _source;
 
@@ -457,7 +457,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SumInt64Nullable : Producer<long?>
+    internal sealed class SumInt64Nullable : Producer<long?>
     {
         private readonly IObservable<long?> _source;
 

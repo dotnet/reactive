@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Range : Producer<int>
+    internal sealed class Range : Producer<int>
     {
         private readonly int _start;
         private readonly int _count;

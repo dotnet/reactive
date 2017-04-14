@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Switch<TSource> : Producer<TSource>
+    internal sealed class Switch<TSource> : Producer<TSource>
     {
         private readonly IObservable<IObservable<TSource>> _sources;
 

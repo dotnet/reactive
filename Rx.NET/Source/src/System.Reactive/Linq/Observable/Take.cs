@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Take<TSource> : Producer<TSource>
+    internal sealed class Take<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;

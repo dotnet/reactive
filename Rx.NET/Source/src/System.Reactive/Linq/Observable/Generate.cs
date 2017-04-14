@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Generate<TState, TResult> : Producer<TResult>
+    internal sealed class Generate<TState, TResult> : Producer<TResult>
     {
         private readonly TState _initialState;
         private readonly Func<TState, bool> _condition;

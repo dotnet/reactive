@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class MaxBy<TSource, TKey> : Producer<IList<TSource>>
+    internal sealed class MaxBy<TSource, TKey> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

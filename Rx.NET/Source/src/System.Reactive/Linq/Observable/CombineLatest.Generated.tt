@@ -29,7 +29,7 @@ for (var i = 3; i <= 16; i++)
     var os = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + j + "> source" + j));
     var vs = string.Join(", ", Enumerable.Range(1, i).Select(j => "_observer" + j + ".Value"));
 #>
-    class CombineLatest<<#=ts#>, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<<#=ts#>, TResult> : Producer<TResult>
     {
 <#
 for (var j = 1; j <= i; j++)

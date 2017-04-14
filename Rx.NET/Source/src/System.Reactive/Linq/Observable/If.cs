@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class If<TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
+    internal sealed class If<TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
     {
         private readonly Func<bool> _condition;
         private readonly IObservable<TResult> _thenSource;

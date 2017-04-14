@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class OfType<TSource, TResult> : Producer<TResult>
+    internal sealed class OfType<TSource, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
 

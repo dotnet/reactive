@@ -10,7 +10,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class GroupBy<TSource, TKey, TElement> : Producer<IGroupedObservable<TKey, TElement>>
+    internal sealed class GroupBy<TSource, TKey, TElement> : Producer<IGroupedObservable<TKey, TElement>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

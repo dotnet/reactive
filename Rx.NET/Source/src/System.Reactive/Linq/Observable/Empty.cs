@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Empty<TResult> : Producer<TResult>
+    internal sealed class Empty<TResult> : Producer<TResult>
     {
         private readonly IScheduler _scheduler;
 

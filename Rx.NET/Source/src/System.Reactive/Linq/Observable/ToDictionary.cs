@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ToDictionary<TSource, TKey, TElement> : Producer<IDictionary<TKey, TElement>>
+    internal sealed class ToDictionary<TSource, TKey, TElement> : Producer<IDictionary<TKey, TElement>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

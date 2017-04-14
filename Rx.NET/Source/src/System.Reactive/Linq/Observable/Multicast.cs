@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Multicast<TSource, TIntermediate, TResult> : Producer<TResult>
+    internal sealed class Multicast<TSource, TIntermediate, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<ISubject<TSource, TIntermediate>> _subjectSelector;

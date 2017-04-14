@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Count<TSource> : Producer<int>
+    internal sealed class Count<TSource> : Producer<int>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class OnErrorResumeNext<TSource> : Producer<TSource>
+    internal sealed class OnErrorResumeNext<TSource> : Producer<TSource>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 

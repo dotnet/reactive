@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Aggregate<TSource, TAccumulate, TResult> : Producer<TResult>
+    internal sealed class Aggregate<TSource, TAccumulate, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly TAccumulate _seed;
@@ -80,7 +80,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Aggregate<TSource> : Producer<TSource>
+    internal sealed class Aggregate<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TSource, TSource> _accumulator;

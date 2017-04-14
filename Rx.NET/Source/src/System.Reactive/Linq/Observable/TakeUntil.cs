@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class TakeUntil<TSource, TOther> : Producer<TSource>
+    internal sealed class TakeUntil<TSource, TOther> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TOther> _other;
@@ -161,7 +161,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class TakeUntil<TSource> : Producer<TSource>
+    internal sealed class TakeUntil<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly DateTimeOffset _endTime;

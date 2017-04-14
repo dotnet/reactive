@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Delay<TSource> : Producer<TSource>
+    internal sealed class Delay<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly TimeSpan? _dueTimeR;
@@ -545,7 +545,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Delay<TSource, TDelay> : Producer<TSource>
+    internal sealed class Delay<TSource, TDelay> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TDelay> _subscriptionDelay;

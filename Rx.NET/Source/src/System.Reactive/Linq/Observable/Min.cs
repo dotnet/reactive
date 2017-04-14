@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Min<TSource> : Producer<TSource>
+    internal sealed class Min<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IComparer<TSource> _comparer;
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinDouble : Producer<double>
+    internal sealed class MinDouble : Producer<double>
     {
         private readonly IObservable<double> _source;
 
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinSingle : Producer<float>
+    internal sealed class MinSingle : Producer<float>
     {
         private readonly IObservable<float> _source;
 
@@ -294,7 +294,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinDecimal : Producer<decimal>
+    internal sealed class MinDecimal : Producer<decimal>
     {
         private readonly IObservable<decimal> _source;
 
@@ -361,7 +361,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinInt32 : Producer<int>
+    internal sealed class MinInt32 : Producer<int>
     {
         private readonly IObservable<int> _source;
 
@@ -428,7 +428,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinInt64 : Producer<long>
+    internal sealed class MinInt64 : Producer<long>
     {
         private readonly IObservable<long> _source;
 
@@ -495,7 +495,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinDoubleNullable : Producer<double?>
+    internal sealed class MinDoubleNullable : Producer<double?>
     {
         private readonly IObservable<double?> _source;
 
@@ -554,7 +554,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinSingleNullable : Producer<float?>
+    internal sealed class MinSingleNullable : Producer<float?>
     {
         private readonly IObservable<float?> _source;
 
@@ -613,7 +613,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinDecimalNullable : Producer<decimal?>
+    internal sealed class MinDecimalNullable : Producer<decimal?>
     {
         private readonly IObservable<decimal?> _source;
 
@@ -672,7 +672,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinInt32Nullable : Producer<int?>
+    internal sealed class MinInt32Nullable : Producer<int?>
     {
         private readonly IObservable<int?> _source;
 
@@ -731,7 +731,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MinInt64Nullable : Producer<long?>
+    internal sealed class MinInt64Nullable : Producer<long?>
     {
         private readonly IObservable<long?> _source;
 

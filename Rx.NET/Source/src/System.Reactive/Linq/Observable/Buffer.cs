@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Buffer<TSource> : Producer<IList<TSource>>
+    internal sealed class Buffer<TSource> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;
@@ -460,7 +460,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Buffer<TSource, TBufferClosing> : Producer<IList<TSource>>
+    internal sealed class Buffer<TSource, TBufferClosing> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;

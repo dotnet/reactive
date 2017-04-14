@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class AverageDouble : Producer<double>
+    internal sealed class AverageDouble : Producer<double>
     {
         private readonly IObservable<double> _source;
 
@@ -74,7 +74,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageSingle : Producer<float>
+    internal sealed class AverageSingle : Producer<float>
     {
         private readonly IObservable<float> _source;
 
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageDecimal : Producer<decimal>
+    internal sealed class AverageDecimal : Producer<decimal>
     {
         private readonly IObservable<decimal> _source;
 
@@ -210,7 +210,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageInt32 : Producer<double>
+    internal sealed class AverageInt32 : Producer<double>
     {
         private readonly IObservable<int> _source;
 
@@ -278,7 +278,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageInt64 : Producer<double>
+    internal sealed class AverageInt64 : Producer<double>
     {
         private readonly IObservable<long> _source;
 
@@ -346,7 +346,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageDoubleNullable : Producer<double?>
+    internal sealed class AverageDoubleNullable : Producer<double?>
     {
         private readonly IObservable<double?> _source;
 
@@ -417,7 +417,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageSingleNullable : Producer<float?>
+    internal sealed class AverageSingleNullable : Producer<float?>
     {
         private readonly IObservable<float?> _source;
 
@@ -488,7 +488,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageDecimalNullable : Producer<decimal?>
+    internal sealed class AverageDecimalNullable : Producer<decimal?>
     {
         private readonly IObservable<decimal?> _source;
 
@@ -559,7 +559,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageInt32Nullable : Producer<double?>
+    internal sealed class AverageInt32Nullable : Producer<double?>
     {
         private readonly IObservable<int?> _source;
 
@@ -630,7 +630,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class AverageInt64Nullable : Producer<double?>
+    internal sealed class AverageInt64Nullable : Producer<double?>
     {
         private readonly IObservable<long?> _source;
 

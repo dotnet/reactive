@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Collect<TSource, TResult> : PushToPullAdapter<TSource, TResult>
+    internal sealed class Collect<TSource, TResult> : PushToPullAdapter<TSource, TResult>
     {
         private readonly Func<TResult> _getInitialCollector;
         private readonly Func<TResult, TSource, TResult> _merge;

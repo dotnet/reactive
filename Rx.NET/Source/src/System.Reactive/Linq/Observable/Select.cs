@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Select<TSource, TResult> : Producer<TResult>
+    internal sealed class Select<TSource, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TResult> _selector;

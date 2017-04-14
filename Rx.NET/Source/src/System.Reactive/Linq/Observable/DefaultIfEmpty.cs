@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class DefaultIfEmpty<TSource> : Producer<TSource>
+    internal sealed class DefaultIfEmpty<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly TSource _defaultValue;

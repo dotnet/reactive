@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Finally<TSource> : Producer<TSource>
+    internal sealed class Finally<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Action _finallyAction;
