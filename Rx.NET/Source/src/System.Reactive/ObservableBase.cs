@@ -23,14 +23,14 @@ namespace System.Reactive
         /// </summary>
         /// <param name="observer">Observer that will receive notifications from the observable sequence.</param>
         /// <returns>Disposable object representing an observer's subscription to the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
             var autoDetachObserver = new AutoDetachObserver<T>(observer);
-            
+
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
                 //

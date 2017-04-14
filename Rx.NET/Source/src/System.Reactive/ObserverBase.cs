@@ -9,7 +9,7 @@ namespace System.Reactive
     /// <summary>
     /// Abstract base class for implementations of the <see cref="IObserver{T}"/> interface.
     /// </summary>
-    /// <remarks>This base class enforces the grammar of observers where OnError and OnCompleted are terminal messages.</remarks>
+    /// <remarks>This base class enforces the grammar of observers where <see cref="IObserver{T}.OnError(Exception)"/> and <see cref="IObserver{T}.OnCompleted()"/> are terminal messages.</remarks>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     public abstract class ObserverBase<T> : IObserver<T>, IDisposable
     {
@@ -30,7 +30,9 @@ namespace System.Reactive
         public void OnNext(T value)
         {
             if (Volatile.Read(ref isStopped) == 0)
+            {
                 OnNextCore(value);
+            }
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace System.Reactive
         /// Notifies the observer that an exception has occurred.
         /// </summary>
         /// <param name="error">The error that has occurred.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
         public void OnError(Exception error)
         {
             if (error == null)
@@ -91,9 +93,9 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Core implementation of IDisposable.
+        /// Core implementation of <see cref="IDisposable"/>.
         /// </summary>
-        /// <param name="disposing">true if the Dispose call was triggered by the IDisposable.Dispose method; false if it was triggered by the finalizer.</param>
+        /// <param name="disposing"><c>true</c> if the Dispose call was triggered by the <see cref="IDisposable.Dispose"/> method; <c>false</c> if it was triggered by the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

@@ -93,10 +93,7 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <param name="second">The second <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects represent the same event; otherwise, <c>false</c>.</returns>
-        public static bool operator ==(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second)
-        {
-            return object.Equals(first, second);
-        }
+        public static bool operator ==(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second) => Equals(first, second);
 
         /// <summary>
         /// Determines whether two specified <see cref="EventPattern{TSender, TEventArgs}"/> objects represent a different event.
@@ -104,9 +101,6 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <param name="second">The second <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects don't represent the same event; otherwise, <c>false</c>.</returns>
-        public static bool operator !=(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second)
-        {
-            return !object.Equals(first, second);
-        }
+        public static bool operator !=(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second) => Equals(first, second);
     }
 }

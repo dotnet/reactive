@@ -18,7 +18,7 @@ namespace System.Reactive
     /// that accept delegates for the On* handlers. By doing the fusion, we make the call stack depth shorter which
     /// helps debugging and some performance.
     /// </summary>
-    class AnonymousSafeObserver<T> : IObserver<T>
+    internal sealed class AnonymousSafeObserver<T> : IObserver<T>
     {
         private readonly Action<T> _onNext;
         private readonly Action<Exception> _onError;
