@@ -321,13 +321,11 @@ namespace System
                 return source.Subscribe(observer);
             }
 
-#if !NO_PERF
             var producer = source as IProducer<T>;
             if (producer != null)
             {
                 return producer.SubscribeRaw(observer, enableSafeguard: false);
             }
-#endif
 
             var d = Disposable.Empty;
 

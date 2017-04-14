@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
     using ObservableImpl;
-#endif
 
     internal partial class QueryLanguage
     {
@@ -113,24 +111,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TValue> Defer<TValue>(Func<IObservable<TValue>> observableFactory)
         {
-#if !NO_PERF
             return new Defer<TValue>(observableFactory);
-#else
-            return new AnonymousObservable<TValue>(observer =>
-            {
-                IObservable<TValue> result;
-                try
-                {
-                    result = observableFactory();
-                }
-                catch (Exception exception)
-                {
-                    return Throw<TValue>(exception).Subscribe(observer);
-                }
-
-                return result.Subscribe(observer);
-            });
-#endif
         }
 
         #endregion
@@ -153,28 +134,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Empty<TResult>()
         {
-#if !NO_PERF
             return new Empty<TResult>(SchedulerDefaults.ConstantTimeOperations);
-#else
-            return Empty_<TResult>(SchedulerDefaults.ConstantTimeOperations);
-#endif
         }
 
         public virtual IObservable<TResult> Empty<TResult>(IScheduler scheduler)
         {
-#if !NO_PERF
             return new Empty<TResult>(scheduler);
-#else
-            return Empty_<TResult>(scheduler);
-#endif
         }
-
-#if NO_PERF
-        private static IObservable<TResult> Empty_<TResult>(IScheduler scheduler)
-        {
-            return new AnonymousObservable<TResult>(observer => scheduler.Schedule(observer.OnCompleted));
-        }
-#endif
 
         #endregion
 
@@ -182,60 +148,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
-#if !NO_PERF
             return new Generate<TState, TResult>(initialState, condition, iterate, resultSelector, SchedulerDefaults.Iteration);
-#else
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, SchedulerDefaults.Iteration);
-#endif
         }
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Generate<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
-#else
-            return Generate_<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private static IObservable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
-        {
-            return new AnonymousObservable<TResult>(observer =>
-            {
-                var state = initialState;
-                var first = true;
-                return scheduler.Schedule(self =>
-                {
-                    var hasResult = false;
-                    var result = default(TResult);
-                    try
-                    {
-                        if (first)
-                            first = false;
-                        else
-                            state = iterate(state);
-                        hasResult = condition(state);
-                        if (hasResult)
-                            result = resultSelector(state);
-                    }
-                    catch (Exception exception)
-                    {
-                        observer.OnError(exception);
-                        return;
-                    }
-
-                    if (hasResult)
-                    {
-                        observer.OnNext(result);
-                        self();
-                    }
-                    else
-                        observer.OnCompleted();
-                });
-            });
-        }
-#endif
 
         #endregion
 
@@ -243,11 +162,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Never<TResult>()
         {
-#if !NO_PERF
             return new Never<TResult>();
-#else
-            return new AnonymousObservable<TResult>(observer => Disposable.Empty);
-#endif
         }
 
         #endregion
@@ -266,23 +181,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<int> Range_(int start, int count, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Range(start, count, scheduler);
-#else
-            return new AnonymousObservable<int>(observer =>
-            {
-                return scheduler.Schedule(0, (i, self) =>
-                {
-                    if (i < count)
-                    {
-                        observer.OnNext(start + i);
-                        self(i + 1);
-                    }
-                    else
-                        observer.OnCompleted();
-                });
-            });
-#endif
         }
 
         #endregion
@@ -291,53 +190,23 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value)
         {
-#if !NO_PERF
             return new Repeat<TResult>(value, null, SchedulerDefaults.Iteration);
-#else
-            return Repeat_(value, SchedulerDefaults.Iteration);
-#endif
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Repeat<TResult>(value, null, scheduler);
-#else
-            return Repeat_<TResult>(value, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private IObservable<TResult> Repeat_<TResult>(TResult value, IScheduler scheduler)
-        {
-            return Return(value, scheduler).Repeat();
-        }
-#endif
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount)
         {
-#if !NO_PERF
             return new Repeat<TResult>(value, repeatCount, SchedulerDefaults.Iteration);
-#else
-            return Repeat_(value, repeatCount, SchedulerDefaults.Iteration);
-#endif
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Repeat<TResult>(value, repeatCount, scheduler);
-#else
-            return Repeat_(value, repeatCount, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private IObservable<TResult> Repeat_<TResult>(TResult value, int repeatCount, IScheduler scheduler)
-        {
-            return Return(value, scheduler).Repeat(repeatCount);
-        }
-#endif
 
         #endregion
 
@@ -345,34 +214,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Return<TResult>(TResult value)
         {
-#if !NO_PERF
             return new Return<TResult>(value, SchedulerDefaults.ConstantTimeOperations);
-#else
-            return Return_<TResult>(value, SchedulerDefaults.ConstantTimeOperations);
-#endif
         }
 
         public virtual IObservable<TResult> Return<TResult>(TResult value, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Return<TResult>(value, scheduler);
-#else
-            return Return_<TResult>(value, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private static IObservable<TResult> Return_<TResult>(TResult value, IScheduler scheduler)
-        {
-            return new AnonymousObservable<TResult>(observer => 
-                scheduler.Schedule(() =>
-                {
-                    observer.OnNext(value);
-                    observer.OnCompleted();
-                })
-            );
-        }
-#endif
 
         #endregion
 
@@ -380,28 +228,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Throw<TResult>(Exception exception)
         {
-#if !NO_PERF
             return new Throw<TResult>(exception, SchedulerDefaults.ConstantTimeOperations);
-#else
-            return Throw_<TResult>(exception, SchedulerDefaults.ConstantTimeOperations);
-#endif
         }
 
         public virtual IObservable<TResult> Throw<TResult>(Exception exception, IScheduler scheduler)
         {
-#if !NO_PERF
             return new Throw<TResult>(exception, scheduler);
-#else
-            return Throw_<TResult>(exception, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private static IObservable<TResult> Throw_<TResult>(Exception exception, IScheduler scheduler)
-        {
-            return new AnonymousObservable<TResult>(observer => scheduler.Schedule(() => observer.OnError(exception)));
-        }
-#endif
 
         #endregion
 
@@ -409,28 +242,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Using<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IObservable<TSource>> observableFactory) where TResource : IDisposable
         {
-#if !NO_PERF
             return new Using<TSource, TResource>(resourceFactory, observableFactory);
-#else
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                var source = default(IObservable<TSource>);
-                var disposable = Disposable.Empty;
-                try
-                {
-                    var resource = resourceFactory();
-                    if (resource != null)
-                        disposable = resource;
-                    source = observableFactory(resource);
-                }
-                catch (Exception exception)
-                {
-                    return new CompositeDisposable(Throw<TSource>(exception).Subscribe(observer), disposable);
-                }
-
-                return new CompositeDisposable(source.Subscribe(observer), disposable);
-            });
-#endif
         }
 
         #endregion

@@ -14,9 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
     using ObservableImpl;
-#endif
 
     //
     // BREAKING CHANGE v2 > v1.x - FromEvent[Pattern] now has an implicit SubscribeOn and Publish operation.
@@ -45,12 +43,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<object>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEventPattern.Impl<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
-#else
-            var res = Observable.FromEventPattern<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler);
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -73,19 +66,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
-#else
-            var res = new AnonymousObservable<EventPattern<TEventArgs>>(observer =>
-            {
-                Action<object, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(new EventPattern<TEventArgs>(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<object, TEventArgs>).GetMethod(nameof(Action<object, TEventArgs>.Invoke)));
-                addHandler(d);
-                return Disposable.Create(() => removeHandler(d));
-            });
-            
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -104,18 +85,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
-#else
-            var res = new AnonymousObservable<EventPattern<TEventArgs>>(observer =>
-            {
-                var handler = conversion((sender, eventArgs) => observer.OnNext(new EventPattern<TEventArgs>(sender, eventArgs)));
-                addHandler(handler);
-                return Disposable.Create(() => removeHandler(handler));
-            });
-
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -134,19 +104,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEventPattern.Impl<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
-#else
-            var res = new AnonymousObservable<EventPattern<TSender, TEventArgs>>(observer =>
-            {
-                Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(new EventPattern<TSender, TEventArgs>(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
-                addHandler(d);
-                return Disposable.Create(() => removeHandler(d));
-            });
-
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -169,12 +127,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
-#else
-            var res = Observable.FromEventPattern<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler);
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -320,33 +273,11 @@ namespace System.Reactive.Linq
 #if HAS_WINRT
             if (isWinRT)
             {
-#if !NO_PERF
                 return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, true, scheduler);
-#else
-                return new AnonymousObservable<TResult>(observer =>
-                {
-                    Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(getResult(sender, eventArgs));
-                    var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
-                    var token = addMethod.Invoke(target, new object[] { d });
-                    return Disposable.Create(() => removeMethod.Invoke(target, new object[] { token }));
-                });
-#endif
             }
 #endif
 
-#if !NO_PERF
             return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, false, scheduler);
-#else
-            var res = new AnonymousObservable<TResult>(observer =>
-            {
-                Action<TSender, TEventArgs> handler = (sender, eventArgs) => observer.OnNext(getResult(sender, eventArgs));
-                var d = ReflectionUtils.CreateDelegate(delegateType, handler, typeof(Action<TSender, TEventArgs>).GetMethod(nameof(Action<TSender, TEventArgs>.Invoke)));
-                addMethod.Invoke(target, new object[] { d });
-                return Disposable.Create(() => removeMethod.Invoke(target, new object[] { d }));
-            });
-
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -371,18 +302,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
-#else
-            var res = new AnonymousObservable<TEventArgs>(observer =>
-            {
-                var handler = conversion(observer.OnNext);
-                addHandler(handler);
-                return Disposable.Create(() => removeHandler(handler));
-            });
-
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -401,19 +321,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
-#else
-            var res = new AnonymousObservable<TEventArgs>(observer =>
-            {
-                Action<TEventArgs> handler = observer.OnNext;
-                var d = ReflectionUtils.CreateDelegate<TDelegate>(handler, typeof(Action<TEventArgs>).GetMethod(nameof(Action<TEventArgs>.Invoke)));
-                addHandler(d);
-                return Disposable.Create(() => removeHandler(d));
-            });
-
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -432,12 +340,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TEventArgs> FromEvent_<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEvent<Action<TEventArgs>, TEventArgs>(h => h, addHandler, removeHandler, scheduler);
-#else
-            var res = Observable.FromEvent<Action<TEventArgs>, TEventArgs>(h => h, addHandler, removeHandler);
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -456,12 +359,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<Unit> FromEvent_(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
         {
-#if !NO_PERF
             return new FromEvent<Action, Unit>(h => new Action(() => h(new Unit())), addHandler, removeHandler, scheduler);
-#else
-            var res = Observable.FromEvent<Action, Unit>(h => new Action(() => h(new Unit())), addHandler, removeHandler);
-            return SynchronizeEvents(res, scheduler);
-#endif
         }
 
         #endregion
@@ -479,15 +377,6 @@ namespace System.Reactive.Linq
             else
                 return SchedulerDefaults.ConstantTimeOperations;
         }
-
-#if NO_PERF
-
-        private static IObservable<T> SynchronizeEvents<T>(IObservable<T> source, IScheduler scheduler)
-        {
-            return source.SubscribeOn(scheduler).Publish().RefCount();
-        }
-
-#endif
 
         #endregion
     }

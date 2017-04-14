@@ -8,10 +8,6 @@ using System.Threading;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
-    using ObservableImpl;
-#endif
-
     internal partial class QueryLanguage
     {
         #region + ObserveOn +

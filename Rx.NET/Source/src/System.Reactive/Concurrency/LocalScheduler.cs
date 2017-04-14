@@ -87,14 +87,12 @@ namespace System.Reactive.Concurrency
         /// <returns>Object implementing the requested service, if available; null otherwise.</returns>
         protected virtual object GetService(Type serviceType)
         {
-#if !NO_PERF
             if (serviceType == typeof(IStopwatchProvider))
                 return this as IStopwatchProvider;
             else if (serviceType == typeof(ISchedulerLongRunning))
                 return this as ISchedulerLongRunning;
             else if (serviceType == typeof(ISchedulerPeriodic))
                 return this as ISchedulerPeriodic;
-#endif
 
             return null;
         }
