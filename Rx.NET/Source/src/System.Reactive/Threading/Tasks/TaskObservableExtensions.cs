@@ -22,14 +22,14 @@ namespace System.Reactive.Threading.Tasks
         /// </summary>
         /// <param name="task">Task to convert to an observable sequence.</param>
         /// <returns>An observable sequence that produces a unit value when the task completes, or propagates the exception produced by the task.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is <c>null</c>.</exception>
         /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync(Func{CancellationToken, Task})"/> instead.</remarks>
         public static IObservable<Unit> ToObservable(this Task task)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            return ToObservableImpl(task, null);
+            return ToObservableImpl(task, scheduler: null);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="task">Task to convert to an observable sequence.</param>
         /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
         /// <returns>An observable sequence that produces a unit value when the task completes, or propagates the exception produced by the task.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is <c>null</c> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync(Func{CancellationToken, Task})"/> instead.</remarks>
         public static IObservable<Unit> ToObservable(this Task task, IScheduler scheduler)
         {
@@ -116,14 +116,14 @@ namespace System.Reactive.Threading.Tasks
         /// <typeparam name="TResult">The type of the result produced by the task.</typeparam>
         /// <param name="task">Task to convert to an observable sequence.</param>
         /// <returns>An observable sequence that produces the task's result, or propagates the exception produced by the task.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is <c>null</c>.</exception>
         /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync{TResult}(Func{CancellationToken, Task{TResult}})"/> instead.</remarks>
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            return ToObservableImpl(task, null);
+            return ToObservableImpl(task, scheduler: null);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="task">Task to convert to an observable sequence.</param>
         /// <param name="scheduler">Scheduler on which to notify observers about completion, cancellation or failure.</param>
         /// <returns>An observable sequence that produces the task's result, or propagates the exception produced by the task.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="task"/> is null or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="task"/> is <c>null</c> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         /// <remarks>If the specified task object supports cancellation, consider using <see cref="Observable.FromAsync{TResult}(Func{CancellationToken, Task{TResult}})"/> instead.</remarks>
         public static IObservable<TResult> ToObservable<TResult>(this Task<TResult> task, IScheduler scheduler)
         {
@@ -245,13 +245,13 @@ namespace System.Reactive.Threading.Tasks
         /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
         /// <param name="observable">Observable sequence to convert to a task.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable)
         {
             if (observable == null)
                 throw new ArgumentNullException(nameof(observable));
 
-            return observable.ToTask(new CancellationToken(), null);
+            return observable.ToTask(new CancellationToken(), state: null);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="observable">Observable sequence to convert to a task.</param>
         /// <param name="state">The state to use as the underlying task's AsyncState.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, object state)
         {
             if (observable == null)
@@ -277,13 +277,13 @@ namespace System.Reactive.Threading.Tasks
         /// <param name="observable">Observable sequence to convert to a task.</param>
         /// <param name="cancellationToken">Cancellation token that can be used to cancel the task, causing unsubscription from the observable sequence.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken)
         {
             if (observable == null)
                 throw new ArgumentNullException(nameof(observable));
 
-            return observable.ToTask(cancellationToken, null);
+            return observable.ToTask(cancellationToken, state: null);
         }
 
         private sealed class ToTaskObserver<TResult> : IObserver<TResult>
@@ -298,48 +298,52 @@ namespace System.Reactive.Threading.Tasks
 
             public ToTaskObserver(TaskCompletionSource<TResult> tcs, IDisposable disposable, CancellationToken ct)
             {
-                this._ct = ct;
-                this._tcs = tcs;
-                this._disposable = disposable;
+                _ct = ct;
+                _tcs = tcs;
+                _disposable = disposable;
 
                 if (ct.CanBeCanceled)
                 {
-                    this._ctr = ct.Register(this.Cancel);
+                    _ctr = ct.Register(Cancel);
                 }
             }
 
             public void OnNext(TResult value)
             {
-                this._hasValue = true;
-                this._lastValue = value;
+                _hasValue = true;
+                _lastValue = value;
             }
 
             public void OnError(Exception error)
             {
-                this._tcs.TrySetException(error);
+                _tcs.TrySetException(error);
 
-                this._ctr.Dispose(); // no null-check needed (struct)
-                this._disposable.Dispose();
+                _ctr.Dispose(); // no null-check needed (struct)
+                _disposable.Dispose();
             }
 
             public void OnCompleted()
             {
-                if (this._hasValue)
-                    this._tcs.TrySetResult(this._lastValue);
+                if (_hasValue)
+                {
+                    _tcs.TrySetResult(_lastValue);
+                }
                 else
-                    this._tcs.TrySetException(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                {
+                    _tcs.TrySetException(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                }
 
-                this._ctr.Dispose(); // no null-check needed (struct)
-                this._disposable.Dispose();
+                _ctr.Dispose(); // no null-check needed (struct)
+                _disposable.Dispose();
             }
 
             private void Cancel()
             {
-                this._disposable.Dispose();
+                _disposable.Dispose();
 #if HAS_TPL46
-                this._tcs.TrySetCanceled(this._ct);
+                _tcs.TrySetCanceled(_ct);
 #else
-                this._tcs.TrySetCanceled();
+                _tcs.TrySetCanceled();
 #endif
             }
         }
@@ -350,9 +354,9 @@ namespace System.Reactive.Threading.Tasks
         /// <typeparam name="TResult">The type of the elements in the source sequence.</typeparam>
         /// <param name="observable">Observable sequence to convert to a task.</param>
         /// <param name="cancellationToken">Cancellation token that can be used to cancel the task, causing unsubscription from the observable sequence.</param>
-        /// <param name="state">The state to use as the underlying task's AsyncState.</param>
+        /// <param name="state">The state to use as the underlying task's <see cref="Task.AsyncState"/>.</param>
         /// <returns>A task that will receive the last element or the exception produced by the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observable"/> is <c>null</c>.</exception>
         public static Task<TResult> ToTask<TResult>(this IObservable<TResult> observable, CancellationToken cancellationToken, object state)
         {
             if (observable == null)
@@ -363,11 +367,11 @@ namespace System.Reactive.Threading.Tasks
             var disposable = new SingleAssignmentDisposable();
 
             var taskCompletionObserver = new ToTaskObserver<TResult>(tcs, disposable, cancellationToken);
-            
+
             //
             // Subtle race condition: if the source completes before we reach the line below, the SingleAssigmentDisposable
             // will already have been disposed. Upon assignment, the disposable resource being set will be disposed on the
-            // spot, which may throw an exception. (Similar to TFS 487142)
+            // spot, which may throw an exception.
             //
             try
             {
