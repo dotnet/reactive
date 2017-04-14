@@ -42,10 +42,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Cancels the underlying <seealso cref="CancellationTokenSource"/>.
         /// </summary>
-        public void Dispose()
-        {
-            _cts.Cancel();
-        }
+        public void Dispose() => _cts.Cancel();
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.

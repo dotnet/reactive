@@ -96,8 +96,7 @@ namespace System.Reactive.Disposables
                 }
             }
 
-            if (disposable != null)
-                disposable.Dispose();
+            disposable?.Dispose();
         }
 
         private void Release()
@@ -122,11 +121,10 @@ namespace System.Reactive.Disposables
                 }
             }
 
-            if (disposable != null)
-                disposable.Dispose();
+            disposable?.Dispose();
         }
 
-        sealed class InnerDisposable : IDisposable
+        private sealed class InnerDisposable : IDisposable
         {
             private RefCountDisposable _parent;
 
@@ -137,9 +135,7 @@ namespace System.Reactive.Disposables
 
             public void Dispose()
             {
-                var parent = Interlocked.Exchange(ref _parent, null);
-                if (parent != null)
-                    parent.Release();
+                Interlocked.Exchange(ref _parent, null)?.Release();
             }
         }
     }

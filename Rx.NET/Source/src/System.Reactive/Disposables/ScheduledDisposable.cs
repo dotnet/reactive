@@ -46,7 +46,9 @@ namespace System.Reactive.Disposables
                 var current = _disposable;
 
                 if (current == BooleanDisposable.True)
+                {
                     return DefaultDisposable.Instance; // Don't leak the sentinel value.
+                }
 
                 return current;
             }
@@ -60,10 +62,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Disposes the wrapped disposable on the provided scheduler.
         /// </summary>
-        public void Dispose()
-        {
-            Scheduler.Schedule(DisposeInner);
-        }
+        public void Dispose() => Scheduler.Schedule(DisposeInner);
 
         private void DisposeInner()
         {
