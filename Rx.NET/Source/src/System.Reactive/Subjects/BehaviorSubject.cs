@@ -44,14 +44,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public override bool HasObservers
-        {
-            get
-            {
-                var observers = _observers;
-                return observers != null && observers.Data.Length > 0;
-            }
-        }
+        public override bool HasObservers => _observers?.Data.Length > 0;
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
@@ -160,7 +153,9 @@ namespace System.Reactive.Subjects
             if (os != null)
             {
                 foreach (var o in os)
+                {
                     o.OnCompleted();
+                }
             }
         }
 
@@ -168,7 +163,7 @@ namespace System.Reactive.Subjects
         /// Notifies all subscribed observers about the exception.
         /// </summary>
         /// <param name="error">The exception to send to all observers.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
         public override void OnError(Exception error)
         {
             if (error == null)
@@ -191,7 +186,9 @@ namespace System.Reactive.Subjects
             if (os != null)
             {
                 foreach (var o in os)
+                {
                     o.OnError(error);
+                }
             }
         }
 
@@ -216,7 +213,9 @@ namespace System.Reactive.Subjects
             if (os != null)
             {
                 foreach (var o in os)
+                {
                     o.OnNext(value);
+                }
             }
         }
 
@@ -229,7 +228,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="observer">Observer to subscribe to the subject.</param>
         /// <returns>Disposable object that can be used to unsubscribe the observer from the subject.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
@@ -252,9 +251,13 @@ namespace System.Reactive.Subjects
             }
 
             if (ex != null)
+            {
                 observer.OnError(ex);
+            }
             else
+            {
                 observer.OnCompleted();
+            }
 
             return Disposable.Empty;
         }
@@ -285,7 +288,7 @@ namespace System.Reactive.Subjects
 
         #endregion
 
-        class Subscription : IDisposable
+        private sealed class Subscription : IDisposable
         {
             private readonly BehaviorSubject<T> _subject;
             private IObserver<T> _observer;

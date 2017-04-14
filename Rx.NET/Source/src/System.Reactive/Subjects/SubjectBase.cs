@@ -5,7 +5,7 @@
 namespace System.Reactive.Subjects
 {
     /// <summary>
-    /// Base calss for objects that are both an observable sequence as well as an observer.
+    /// Base class for objects that are both an observable sequence as well as an observer.
     /// </summary>
     /// <typeparam name="T">The type of the elements processed by the subject.</typeparam>
     public abstract class SubjectBase<T> : ISubject<T>, IDisposable
@@ -34,7 +34,7 @@ namespace System.Reactive.Subjects
         /// Notifies all subscribed observers about the specified exception.
         /// </summary>
         /// <param name="error">The exception to send to all currently subscribed observers.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
         public abstract void OnError(Exception error);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="observer">Observer to subscribe to the subject.</param>
         /// <returns>Disposable object that can be used to unsubscribe the observer from the subject.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public abstract IDisposable Subscribe(IObserver<T> observer);
     }
 }
