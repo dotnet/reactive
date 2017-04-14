@@ -4,7 +4,7 @@
 
 namespace System.Reactive
 {
-    internal class ImmutableList<T>
+    internal sealed class ImmutableList<T>
     {
         public static readonly ImmutableList<T> Empty = new ImmutableList<T>();
 
@@ -20,13 +20,7 @@ namespace System.Reactive
             _data = data;
         }
 
-        public T[] Data
-        {
-            get
-            {
-                return _data;
-            }
-        }
+        public T[] Data => _data;
 
         public ImmutableList<T> Add(T value)
         {
@@ -42,11 +36,15 @@ namespace System.Reactive
         {
             var i = IndexOf(value);
             if (i < 0)
+            {
                 return this;
+            }
 
             var length = _data.Length;
             if (length == 1)
+            {
                 return Empty;
+            }
 
             var newData = new T[length - 1];
 
@@ -59,8 +57,12 @@ namespace System.Reactive
         private int IndexOf(T value)
         {
             for (var i = 0; i < _data.Length; ++i)
+            {
                 if (object.Equals(_data[i], value))
+                {
                     return i;
+                }
+            }
 
             return -1;
         }

@@ -4,43 +4,31 @@
 
 namespace System.Reactive
 {
-    internal class NopObserver<T> : IObserver<T>
+    internal sealed class NopObserver<T> : IObserver<T>
     {
         public static readonly IObserver<T> Instance = new NopObserver<T>();
 
-        public void OnCompleted()
-        {
-        }
+        public void OnCompleted() { }
 
-        public void OnError(Exception error)
-        {
-        }
+        public void OnError(Exception error) { }
 
-        public void OnNext(T value)
-        {
-        }
+        public void OnNext(T value) { }
     }
 
-    internal class DoneObserver<T> : IObserver<T>
+    internal sealed class DoneObserver<T> : IObserver<T>
     {
         public static readonly IObserver<T> Completed = new DoneObserver<T>();
 
         public Exception Exception { get; set; }
 
-        public void OnCompleted()
-        {
-        }
+        public void OnCompleted() { }
 
-        public void OnError(Exception error)
-        {
-        }
+        public void OnError(Exception error) { }
 
-        public void OnNext(T value)
-        {
-        }
+        public void OnNext(T value) { }
     }
 
-    internal class DisposedObserver<T> : IObserver<T>
+    internal sealed class DisposedObserver<T> : IObserver<T>
     {
         public static readonly IObserver<T> Instance = new DisposedObserver<T>();
 
@@ -60,7 +48,7 @@ namespace System.Reactive
         }
     }
 
-    internal class Observer<T> : IObserver<T>
+    internal sealed class Observer<T> : IObserver<T>
     {
         private readonly ImmutableList<IObserver<T>> _observers;
 
@@ -72,31 +60,36 @@ namespace System.Reactive
         public void OnCompleted()
         {
             foreach (var observer in _observers.Data)
+            {
                 observer.OnCompleted();
+            }
         }
 
         public void OnError(Exception error)
         {
             foreach (var observer in _observers.Data)
+            {
                 observer.OnError(error);
+            }
         }
 
         public void OnNext(T value)
         {
             foreach (var observer in _observers.Data)
+            {
                 observer.OnNext(value);
+            }
         }
 
-        internal IObserver<T> Add(IObserver<T> observer)
-        {
-            return new Observer<T>(_observers.Add(observer));
-        }
+        internal IObserver<T> Add(IObserver<T> observer) => new Observer<T>(_observers.Add(observer));
 
         internal IObserver<T> Remove(IObserver<T> observer)
         {
             var i = Array.IndexOf(_observers.Data, observer);
             if (i < 0)
+            {
                 return this;
+            }
 
             if (_observers.Data.Length == 2)
             {
