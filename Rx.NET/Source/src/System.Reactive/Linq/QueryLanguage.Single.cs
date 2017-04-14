@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
         {
             var asObservable = source as AsObservable<TSource>;
             if (asObservable != null)
-                return asObservable.Omega();
+                return asObservable;
 
             return new AsObservable<TSource>(source);
         }
@@ -137,7 +137,7 @@ namespace System.Reactive.Linq
         {
             var ignoreElements = source as IgnoreElements<TSource>;
             if (ignoreElements != null)
-                return ignoreElements.Omega();
+                return ignoreElements;
 
             return new IgnoreElements<TSource>(source);
         }

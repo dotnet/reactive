@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Cast<TSource, TResult> : Producer<TResult> /* Could optimize further by deriving from Select<TResult> and providing Omega<TResult2>. We're not doing this (yet) for debuggability. */
+    internal sealed class Cast<TSource, TResult> : Producer<TResult> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
     {
         private readonly IObservable<TSource> _source;
 

@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Omega(int count)
+        public IObservable<TSource> Combine(int count)
         {
             //
             // Minimum semantics:
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Take<TSource>(_source, count);
         }
 
-        public IObservable<TSource> Omega(TimeSpan duration)
+        public IObservable<TSource> Combine(TimeSpan duration)
         {
             //
             // Minimum semantics:

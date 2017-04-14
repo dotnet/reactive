@@ -13,11 +13,6 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        public IObservable<TSource> Omega()
-        {
-            return this;
-        }
-
         public IObservable<TSource> Eval()
         {
             return _source;

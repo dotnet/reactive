@@ -139,7 +139,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Omega(DateTimeOffset startTime)
+        public IObservable<TSource> Combine(DateTimeOffset startTime)
         {
             //
             // Maximum semantics:
