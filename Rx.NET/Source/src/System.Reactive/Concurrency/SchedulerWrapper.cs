@@ -2,23 +2,25 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if !NO_WEAKTABLE
 using System.Runtime.CompilerServices;
-#endif
 
 namespace System.Reactive.Concurrency
 {
     internal abstract class SchedulerWrapper : IScheduler, IServiceProvider
     {
         protected readonly IScheduler _scheduler;
+        private readonly ConditionalWeakTable<IScheduler, IScheduler> _cache;
 
         public SchedulerWrapper(IScheduler scheduler)
         {
             _scheduler = scheduler;
-
-#if !NO_WEAKTABLE
             _cache = new ConditionalWeakTable<IScheduler, IScheduler>();
-#endif
+        }
+
+        public SchedulerWrapper(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache)
+        {
+            _scheduler = scheduler;
+            _cache = cache;
         }
 
         public DateTimeOffset Now
@@ -55,56 +57,12 @@ namespace System.Reactive.Concurrency
             return (self, state) => action(GetRecursiveWrapper(self), state);
         }
 
-#if !NO_WEAKTABLE
-        private readonly ConditionalWeakTable<IScheduler, IScheduler> _cache;
-
-        public SchedulerWrapper(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache)
-        {
-            _scheduler = scheduler;
-            _cache = cache;
-        }
-
         protected IScheduler GetRecursiveWrapper(IScheduler scheduler)
         {
             return _cache.GetValue(scheduler, s => Clone(s, _cache));
         }
 
         protected abstract SchedulerWrapper Clone(IScheduler scheduler, ConditionalWeakTable<IScheduler, IScheduler> cache);
-#else
-            private readonly object _gate = new object();
-            private IScheduler _recursiveOriginal;
-            private IScheduler _recursiveWrapper;
-
-            protected IScheduler GetRecursiveWrapper(IScheduler scheduler)
-            {
-                var recursiveWrapper = default(IScheduler);
-
-                lock (_gate)
-                {
-                    //
-                    // Chances are the recursive scheduler will remain the same. In practice, this
-                    // single-shot caching scheme works out quite well. Notice we propagate our
-                    // mini-cache to recursive raw scheduler wrappers too.
-                    //
-                    if (!object.ReferenceEquals(scheduler, _recursiveOriginal))
-                    {
-                        _recursiveOriginal = scheduler;
-
-                        var wrapper = Clone(scheduler);
-                        wrapper._recursiveOriginal = scheduler;
-                        wrapper._recursiveWrapper = wrapper;
-
-                        _recursiveWrapper = wrapper;
-                    }
-
-                    recursiveWrapper = _recursiveWrapper;
-                }
-
-                return recursiveWrapper;
-            }
-
-            protected abstract SchedulerWrapper Clone(IScheduler scheduler);
-#endif
 
         public object GetService(Type serviceType)
         {

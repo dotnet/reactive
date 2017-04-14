@@ -58,10 +58,13 @@ namespace System.Reactive.Disposables
                         _current = value;
                     }
                 }
-                if (old != null)
-                    old.Dispose();
-                if (shouldDispose && value != null)
-                    value.Dispose();
+
+                old?.Dispose();
+
+                if (shouldDispose)
+                {
+                    value?.Dispose();
+                }
             }
         }
 
@@ -82,8 +85,7 @@ namespace System.Reactive.Disposables
                 }
             }
 
-            if (old != null)
-                old.Dispose();
+            old?.Dispose();
         }
     }
 }

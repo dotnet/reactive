@@ -121,15 +121,9 @@ namespace System.Reactive
             _expression = expression;
         }
 
-        public Type ElementType
-        {
-            get { return typeof(TSource); }
-        }
+        public Type ElementType => typeof(TSource);
 
-        public IQbservableProvider Provider
-        {
-            get { return Qbservable.Provider; }
-        }
+        public IQbservableProvider Provider => Qbservable.Provider;
 
         public IDisposable Subscribe(IObserver<TSource> observer)
         {

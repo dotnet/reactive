@@ -5,10 +5,7 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
-
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -60,7 +57,6 @@ namespace System.Reactive.Linq
 
         #region + CreateAsync +
 
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -162,7 +158,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Create<TResult>(subscribeAsync);
         }
-#endif
 
         #endregion
 
@@ -187,7 +182,6 @@ namespace System.Reactive.Linq
 
         #region + DeferAsync +
 
-#if !NO_TPL
         /// <summary>
         /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
         /// </summary>
@@ -221,7 +215,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Defer<TResult>(observableFactoryAsync);
         }
-#endif
 
         #endregion
 
@@ -595,8 +588,6 @@ namespace System.Reactive.Linq
 
         #region + UsingAsync +
 
-#if !NO_TPL
-
         /// <summary>
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is obtained and used through asynchronous methods.
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
@@ -618,8 +609,6 @@ namespace System.Reactive.Linq
 
             return s_impl.Using<TResult, TResource>(resourceFactoryAsync, observableFactoryAsync);
         }
-
-#endif
 
         #endregion
     }

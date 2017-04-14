@@ -12,7 +12,6 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class ScheduledDisposable : ICancelable
     {
-        private readonly IScheduler _scheduler;
         private volatile IDisposable _disposable;
 
         /// <summary>
@@ -28,17 +27,14 @@ namespace System.Reactive.Disposables
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
 
-            _scheduler = scheduler;
+            Scheduler = scheduler;
             _disposable = disposable;
         }
 
         /// <summary>
         /// Gets the scheduler where the disposable resource will be disposed on.
         /// </summary>
-        public IScheduler Scheduler
-        {
-            get { return _scheduler; }
-        }
+        public IScheduler Scheduler { get; }
 
         /// <summary>
         /// Gets the underlying disposable. After disposal, the result is undefined.
@@ -50,7 +46,9 @@ namespace System.Reactive.Disposables
                 var current = _disposable;
 
                 if (current == BooleanDisposable.True)
+                {
                     return DefaultDisposable.Instance; // Don't leak the sentinel value.
+                }
 
                 return current;
             }
@@ -59,18 +57,12 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposable == BooleanDisposable.True; }
-        }
+        public bool IsDisposed => _disposable == BooleanDisposable.True;
 
         /// <summary>
         /// Disposes the wrapped disposable on the provided scheduler.
         /// </summary>
-        public void Dispose()
-        {
-            Scheduler.Schedule(DisposeInner);
-        }
+        public void Dispose() => Scheduler.Schedule(DisposeInner);
 
         private void DisposeInner()
         {

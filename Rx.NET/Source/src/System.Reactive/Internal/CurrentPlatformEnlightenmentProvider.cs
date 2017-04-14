@@ -52,10 +52,8 @@ namespace System.Reactive.PlatformServices
                     case "ThreadPool":
                         return (T)(object)ThreadPoolScheduler.Default;
 #endif
-#if !NO_TPL
                     case "TaskPool":
                         return (T)(object)TaskPoolScheduler.Default;
-#endif
                     case "NewThread":
                         return (T)(object)NewThreadScheduler.Default;
                 }

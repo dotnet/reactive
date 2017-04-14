@@ -10,6 +10,8 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive
 {
+    // CONSIDER: Deprecate this functionality or invest in an asynchronous variant.
+
     /// <summary>
     /// Represents an object that retains the elements of the observable sequence and signals the end of the sequence.
     /// </summary>
@@ -18,15 +20,15 @@ namespace System.Reactive
     [Experimental]
     public class ListObservable<T> : IList<T>, IObservable<object>
     {
-        IDisposable subscription;
-        AsyncSubject<object> subject = new AsyncSubject<object>();
-        List<T> results = new List<T>();
+        private readonly IDisposable subscription;
+        private readonly AsyncSubject<object> subject = new AsyncSubject<object>();
+        private readonly List<T> results = new List<T>();
 
         /// <summary>
         /// Constructs an object that retains the values of source and signals the end of the sequence.
         /// </summary>
         /// <param name="source">The observable sequence whose elements will be retained in the list.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
         public ListObservable(IObservable<T> source)
         {
             if (source == null)
@@ -35,7 +37,7 @@ namespace System.Reactive
             subscription = source.Subscribe(results.Add, subject.OnError, subject.OnCompleted);
         }
 
-        void Wait()
+        private void Wait()
         {
             subject.DefaultIfEmpty().Wait();
         }
@@ -48,8 +50,12 @@ namespace System.Reactive
             get
             {
                 Wait();
+
                 if (results.Count == 0)
+                {
                     throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+                }
+
                 return results[results.Count - 1];
             }
         }
@@ -185,17 +191,14 @@ namespace System.Reactive
             return results.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Subscribes an observer to the ListObservable which will be notified upon completion.
         /// </summary>
         /// <param name="observer">The observer to send completion or error messages to.</param>
         /// <returns>The disposable resource that can be used to unsubscribe.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public IDisposable Subscribe(IObserver<object> observer)
         {
             if (observer == null)

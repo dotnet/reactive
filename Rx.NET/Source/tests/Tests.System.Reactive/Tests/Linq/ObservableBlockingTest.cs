@@ -10,17 +10,14 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using ReactiveTests.Dummies;
 
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
-
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableBlockingTest : ReactiveTest
     {
         #region Chunkify
@@ -657,9 +654,9 @@ namespace ReactiveTests.Tests
             }
         }
 
-#endregion
+        #endregion
 
-#region + ForEach +
+        #region + ForEach +
 
         [Fact]
         public void ForEach_ArgumentChecking()
@@ -765,9 +762,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => xs.ForEach((x, i) => { throw ex; }));
         }
 
-#endregion
+        #endregion
 
-#region + GetEnumerator +
+        #region + GetEnumerator +
 
         [Fact]
         public void GetEnumerator_ArgumentChecking()
@@ -916,23 +913,9 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if DESKTOPCLR20 || SILVERLIGHTM7
-        class Tuple<T1, T2>
-        {
-            public Tuple(T1 item1, T2 item2)
-            {
-                Item1 = item1;
-                Item2 = item2;
-            }
+        #endregion
 
-            public T1 Item1 { get; private set; }
-            public T2 Item2 { get; private set; }
-        }
-#endif
-
-#endregion
-
-#region Last
+        #region Last
 
         [Fact]
         public void Last_ArgumentChecking()
@@ -985,9 +968,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(50, Observable.Range(value, 10).Last(i => i % 2 == 0));
         }
 
-#endregion
+        #endregion
 
-#region LastOrDefault
+        #region LastOrDefault
 
         [Fact]
         public void LastOrDefault_ArgumentChecking()
@@ -1040,9 +1023,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(50, Observable.Range(value, 10).LastOrDefault(i => i % 2 == 0));
         }
 
-#endregion
+        #endregion
 
-#region + Latest +
+        #region + Latest +
 
         [Fact]
         public void Latest_ArgumentChecking()
@@ -1201,9 +1184,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 
-#endregion
+        #endregion
 
-#region + MostRecent +
+        #region + MostRecent +
 
         [Fact]
         public void MostRecent_ArgumentChecking()
@@ -1387,9 +1370,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 
-#endregion
+        #endregion
 
-#region + Next +
+        #region + Next +
 
         [Fact]
         public void Next_ArgumentChecking()
@@ -1541,9 +1524,9 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws(ex, () => res.MoveNext());
         }
 #endif
-#endregion
+        #endregion
 
-#region Single
+        #region Single
 
         [Fact]
         public void Single_ArgumentChecking()
@@ -1603,9 +1586,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(45, Observable.Range(value, 10).Single(i => i == 45));
         }
 
-#endregion
+        #endregion
 
-#region SingleOrDefault
+        #region SingleOrDefault
 
         [Fact]
         public void SingleOrDefault_ArgumentChecking()
@@ -1672,9 +1655,9 @@ namespace ReactiveTests.Tests
             Assert.Equal(0, Observable.Range(value, 10).SingleOrDefault(i => i > 100));
         }
 
-#endregion
+        #endregion
 
-#region Wait
+        #region Wait
 
         [Fact]
         public void Wait_ArgumentChecking()
@@ -1719,6 +1702,6 @@ namespace ReactiveTests.Tests
             Assert.Equal(n, res);
         }
 #endif
-#endregion
+        #endregion
     }
 }

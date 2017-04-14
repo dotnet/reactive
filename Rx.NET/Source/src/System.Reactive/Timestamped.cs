@@ -18,9 +18,6 @@ namespace System.Reactive
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Timestamped", Justification = "Reviewed and agreed upon.")]
     public struct Timestamped<T> : IEquatable<Timestamped<T>>
     {
-        private readonly DateTimeOffset _timestamp;
-        private readonly T _value;
-
         /// <summary>
         /// Constructs a timestamped value.
         /// </summary>
@@ -28,53 +25,47 @@ namespace System.Reactive
         /// <param name="timestamp">Timestamp associated with the value.</param>
         public Timestamped(T value, DateTimeOffset timestamp)
         {
-            _timestamp = timestamp;
-            _value = value;
+            Timestamp = timestamp;
+            Value = value;
         }
 
         /// <summary>
         /// Gets the value.
         /// </summary>
-        public T Value
-        {
-            get { return _value; }
-        }
+        public T Value { get; }
 
         /// <summary>
         /// Gets the timestamp.
         /// </summary>
-        public DateTimeOffset Timestamp
-        {
-            get { return _timestamp; }
-        }
+        public DateTimeOffset Timestamp { get; }
 
         /// <summary>
-        /// Determines whether the current <see cref="Timestamped{T}" /> value has the same Value and Timestamp as a specified <see cref="Timestamped{T}" /> value.
+        /// Determines whether the current <see cref="Timestamped{T}" /> value has the same <see cref="Value"/> and <see cref="Timestamp"/> as a specified <see cref="Timestamped{T}" /> value.
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="Timestamped{T}" /> value.</param>
-        /// <returns>true if both <see cref="Timestamped{T}" /> values have the same Value and Timestamp; otherwise, false.</returns>
+        /// <returns><c>true</c> if both <see cref="Timestamped{T}" /> values have the same <see cref="Value"/> and <see cref="Timestamp"/>; otherwise, <c>false</c>.</returns>
         public bool Equals(Timestamped<T> other)
         {
             return other.Timestamp.Equals(Timestamp) && EqualityComparer<T>.Default.Equals(Value, other.Value);
         }
 
         /// <summary>
-        /// Determines whether the two specified <see cref="Timestamped{T}" /> values have the same Value and Timestamp.
+        /// Determines whether the two specified <see cref="Timestamped{T}" /> values have the same <see cref="Value"/> and <see cref="Timestamp"/>.
         /// </summary>
         /// <param name="first">The first <see cref="Timestamped{T}" /> value to compare.</param>
         /// <param name="second">The second <see cref="Timestamped{T}" /> value to compare.</param>
-        /// <returns>true if the first <see cref="Timestamped{T}" /> value has the same Value and Timestamp as the second <see cref="Timestamped{T}" /> value; otherwise, false.</returns>
+        /// <returns><c>true</c> if the first <see cref="Timestamped{T}" /> value has the same <see cref="Value"/> and <see cref="Timestamp"/> as the second <see cref="Timestamped{T}" /> value; otherwise, <c>false</c>.</returns>
         public static bool operator ==(Timestamped<T> first, Timestamped<T> second)
         {
             return first.Equals(second);
         }
 
         /// <summary>
-        /// Determines whether the two specified <see cref="Timestamped{T}" /> values don't have the same Value and Timestamp.
+        /// Determines whether the two specified <see cref="Timestamped{T}" /> values don't have the same <see cref="Value"/> and <see cref="Timestamp"/>.
         /// </summary>
         /// <param name="first">The first <see cref="Timestamped{T}" /> value to compare.</param>
         /// <param name="second">The second <see cref="Timestamped{T}" /> value to compare.</param>
-        /// <returns>true if the first <see cref="Timestamped{T}" /> value has a different Value or Timestamp as the second <see cref="Timestamped{T}" /> value; otherwise, false.</returns>
+        /// <returns><c>true</c> if the first <see cref="Timestamped{T}" /> value has a different <see cref="Value"/> or <see cref="Timestamp"/> as the second <see cref="Timestamped{T}" /> value; otherwise, <c>false</c>.</returns>
         public static bool operator !=(Timestamped<T> first, Timestamped<T> second)
         {
             return !first.Equals(second);
@@ -84,7 +75,7 @@ namespace System.Reactive
         /// Determines whether the specified System.Object is equal to the current <see cref="Timestamped{T}" />.
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Timestamped{T}" />.</param>
-        /// <returns>true if the specified System.Object is equal to the current <see cref="Timestamped{T}" />; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="Timestamped{T}" />; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             if (!(obj is Timestamped<T>))
@@ -100,9 +91,7 @@ namespace System.Reactive
         /// <returns>A hash code for the current <see cref="Timestamped{T}" /> value.</returns>
         public override int GetHashCode()
         {
-            var valueHashCode = Value == null ? 1979 : Value.GetHashCode();
-
-            return _timestamp.GetHashCode() ^ valueHashCode;
+            return Timestamp.GetHashCode() ^ (Value?.GetHashCode() ?? 1979);
         }
 
         /// <summary>

@@ -6,17 +6,15 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-
-#if !NO_TPL
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq.ObservableImpl
 {
     class Merge<TSource> : Producer<TSource>
     {
         private readonly IObservable<IObservable<TSource>> _sources;
+        private readonly IObservable<Task<TSource>> _sourcesT;
         private readonly int _maxConcurrent;
 
         public Merge(IObservable<IObservable<TSource>> sources)
@@ -30,14 +28,10 @@ namespace System.Reactive.Linq.ObservableImpl
             _maxConcurrent = maxConcurrent;
         }
 
-#if !NO_TPL
-        private readonly IObservable<Task<TSource>> _sourcesT;
-
         public Merge(IObservable<Task<TSource>> sources)
         {
             _sourcesT = sources;
         }
-#endif
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -47,14 +41,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 setSink(sink);
                 return sink.Run();
             }
-#if !NO_TPL
             else if (_sourcesT != null)
             {
                 var sink = new MergeImpl(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
-#endif
             else
             {
                 var sink = new _(this, observer, cancel);
@@ -308,7 +300,6 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-#if !NO_TPL
         class MergeImpl : Sink<TSource>, IObserver<Task<TSource>>
         {
             private readonly Merge<TSource> _parent;
@@ -397,7 +388,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-#endif
     }
 }
 #endif

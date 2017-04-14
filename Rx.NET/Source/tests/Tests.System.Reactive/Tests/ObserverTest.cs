@@ -643,7 +643,6 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_CDS
         [Fact]
         public void Observer_Synchronize_OnCompleted()
         {
@@ -720,18 +719,14 @@ namespace ReactiveTests.Tests
 
             Assert.Equal(n, N * M);
         }
-#endif
 
         [Fact]
         public void NotifyOn_Null()
         {
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(default(IObserver<int>), Scheduler.Immediate));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(new MyObserver(), default(IScheduler)));
-
-#if !NO_SYNCCTX
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(default(IObserver<int>), new MySyncCtx()));
             ReactiveAssert.Throws<ArgumentNullException>(() => Observer.NotifyOn(new MyObserver(), default(SynchronizationContext)));
-#endif
         }
 
 #if !NO_THREAD

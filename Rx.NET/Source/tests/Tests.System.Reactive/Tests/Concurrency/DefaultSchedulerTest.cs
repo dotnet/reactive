@@ -41,7 +41,6 @@ namespace ReactiveTests.Tests
             evt.WaitOne();
         }
 
-#if !SILVERLIGHT
         [Fact]
         public void ScheduleActionDue()
         {
@@ -51,7 +50,6 @@ namespace ReactiveTests.Tests
             nt.Schedule(TimeSpan.FromSeconds(0.2), () => { Assert.NotEqual(id, Thread.CurrentThread.ManagedThreadId); evt.Set(); });
             evt.WaitOne();
         }
-#endif
 
         [Fact]
         public void ScheduleActionCancel()

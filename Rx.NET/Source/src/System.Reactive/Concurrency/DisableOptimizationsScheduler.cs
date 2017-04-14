@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Linq;
-
-#if !NO_WEAKTABLE
 using System.Runtime.CompilerServices;
-#endif
 
 namespace System.Reactive.Concurrency
 {
@@ -26,7 +23,6 @@ namespace System.Reactive.Concurrency
             _optimizationInterfaces = optimizationInterfaces;
         }
 
-#if !NO_WEAKTABLE
         public DisableOptimizationsScheduler(IScheduler scheduler, Type[] optimizationInterfaces, ConditionalWeakTable<IScheduler, IScheduler> cache)
             : base(scheduler, cache)
         {
@@ -37,12 +33,6 @@ namespace System.Reactive.Concurrency
         {
             return new DisableOptimizationsScheduler(scheduler, _optimizationInterfaces, cache);
         }
-#else
-        protected override SchedulerWrapper Clone(IScheduler scheduler)
-        {
-            return new DisableOptimizationsScheduler(scheduler, _optimizationInterfaces);
-        }
-#endif
 
         protected override bool TryGetService(IServiceProvider provider, Type serviceType, out object service)
         {

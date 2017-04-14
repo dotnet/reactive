@@ -27,10 +27,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _dispose == null; }
-        }
+        public bool IsDisposed => _dispose == null;
 
         /// <summary>
         /// Calls the disposal action if and only if the current instance hasn't been disposed yet.

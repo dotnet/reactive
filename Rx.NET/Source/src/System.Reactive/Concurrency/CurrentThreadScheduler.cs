@@ -28,7 +28,6 @@ namespace System.Reactive.Concurrency
             get { return s_instance.Value; }
         }
 
-#if !NO_TLS
         [ThreadStatic]
         static SchedulerQueue<TimeSpan> s_threadLocalQueue;
 
@@ -55,49 +54,6 @@ namespace System.Reactive.Concurrency
                 return s_clock.Elapsed;
             }
         }
-#else
-        private static readonly System.Collections.Generic.Dictionary<int, SchedulerQueue<TimeSpan>> s_queues = new System.Collections.Generic.Dictionary<int, SchedulerQueue<TimeSpan>>();
-        
-        private static readonly System.Collections.Generic.Dictionary<int, IStopwatch> s_clocks = new System.Collections.Generic.Dictionary<int, IStopwatch>();
-
-        private static SchedulerQueue<TimeSpan> GetQueue()
-        {
-            lock (s_queues)
-            { 
-                var item = default(SchedulerQueue<TimeSpan>);
-                if (s_queues.TryGetValue(Thread.CurrentThread.ManagedThreadId, out item))
-                    return item;
-
-                return null;	
-            }
-        }
-
-        private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
-        {
-            lock (s_queues)
-            {
-                if (newQueue == null)
-                    s_queues.Remove(Thread.CurrentThread.ManagedThreadId);
-                else
-                    s_queues[Thread.CurrentThread.ManagedThreadId] = newQueue;
-            }
-        }
-
-        private static TimeSpan Time
-        {
-            get
-            {
-                lock (s_clocks)
-                {
-                    var clock = default(IStopwatch);
-                    if (!s_clocks.TryGetValue(Thread.CurrentThread.ManagedThreadId, out clock))
-                        s_clocks[Thread.CurrentThread.ManagedThreadId] = clock = ConcurrencyAbstractionLayer.Current.StartStopwatch();
-
-                    return clock.Elapsed;
-                }
-            }
-        }
-#endif
 
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.

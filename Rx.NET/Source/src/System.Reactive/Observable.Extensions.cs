@@ -22,8 +22,8 @@ namespace System
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
         public static IDisposable Subscribe<T>(this IObservable<T> source)
         {
             if (source == null)
@@ -41,8 +41,8 @@ namespace System
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is <c>null</c>.</exception>
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext)
         {
             if (source == null)
@@ -63,8 +63,8 @@ namespace System
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is <c>null</c>.</exception>
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError)
         {
             if (source == null)
@@ -87,8 +87,8 @@ namespace System
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted)
         {
             if (source == null)
@@ -112,8 +112,8 @@ namespace System
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public static IDisposable Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
@@ -135,15 +135,14 @@ namespace System
 
         #region Subscribe overloads with CancellationToken
 
-#if !NO_TPL
         /// <summary>
-        /// Subscribes an observer to an observable sequence, using a CancellationToken to support unsubscription.
+        /// Subscribes an observer to an observable sequence, using a <see cref="CancellationToken"/> to support unsubscription.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="observer">Observer to subscribe to the sequence.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="observer"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, IObserver<T> observer, CancellationToken token)
         {
             if (source == null)
@@ -155,13 +154,13 @@ namespace System
         }
 
         /// <summary>
-        /// Subscribes to the observable sequence without specifying any handlers, using a CancellationToken to support unsubscription.
+        /// Subscribes to the observable sequence without specifying any handlers, using a <see cref="CancellationToken"/> to support unsubscription.
         /// This method can be used to evaluate the observable sequence for its side-effects only.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, CancellationToken token)
         {
             if (source == null)
@@ -171,13 +170,13 @@ namespace System
         }
 
         /// <summary>
-        /// Subscribes an element handler to an observable sequence, using a CancellationToken to support unsubscription.
+        /// Subscribes an element handler to an observable sequence, using a <see cref="CancellationToken"/> to support unsubscription.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, CancellationToken token)
         {
             if (source == null)
@@ -189,14 +188,14 @@ namespace System
         }
 
         /// <summary>
-        /// Subscribes an element handler and an exception handler to an observable sequence, using a CancellationToken to support unsubscription.
+        /// Subscribes an element handler and an exception handler to an observable sequence, using a <see cref="CancellationToken"/> to support unsubscription.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, CancellationToken token)
         {
             if (source == null)
@@ -210,14 +209,14 @@ namespace System
         }
 
         /// <summary>
-        /// Subscribes an element handler and a completion handler to an observable sequence, using a CancellationToken to support unsubscription.
+        /// Subscribes an element handler and a completion handler to an observable sequence, using a <see cref="CancellationToken"/> to support unsubscription.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action onCompleted, CancellationToken token)
         {
             if (source == null)
@@ -231,7 +230,7 @@ namespace System
         }
 
         /// <summary>
-        /// Subscribes an element handler, an exception handler, and a completion handler to an observable sequence, using a CancellationToken to support unsubscription.
+        /// Subscribes an element handler, an exception handler, and a completion handler to an observable sequence, using a <see cref="CancellationToken"/> to support unsubscription.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
@@ -239,7 +238,7 @@ namespace System
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <param name="token">CancellationToken that can be signaled to unsubscribe from the source sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public static void Subscribe<T>(this IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted, CancellationToken token)
         {
             if (source == null)
@@ -270,12 +269,16 @@ namespace System
                         ex =>
                         {
                             using (r)
+                            {
                                 observer.OnError(ex);
+                            }
                         },
                         () =>
                         {
                             using (r)
+                            {
                                 observer.OnCompleted();
+                            }
                         }
                     );
 
@@ -287,21 +290,20 @@ namespace System
                 source.Subscribe(observer);
             }
         }
-#endif
 
         #endregion
 
         #region SubscribeSafe
 
         /// <summary>
-        /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the Subscribe method to the observer's OnError channel.
+        /// Subscribes to the specified source, re-routing synchronous exceptions during invocation of the <see cref="IObservable{T}.Subscribe(IObserver{T})"/> method to the observer's <see cref="IObserver{T}.OnError(Exception)"/> channel.
         /// This method is typically used when writing query operators.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <param name="observer">Observer that will be passed to the observable sequence, and that will be used for exception propagation.</param>
-        /// <returns>IDisposable object used to unsubscribe from the observable sequence.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="observer"/> is null.</exception>
+        /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="observer"/> is <c>null</c>.</exception>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static IDisposable SubscribeSafe<T>(this IObservable<T> source, IObserver<T> observer)
         {
@@ -315,12 +317,16 @@ namespace System
             // for regular operation circumstances.
             //
             if (source is ObservableBase<T>)
+            {
                 return source.Subscribe(observer);
+            }
 
 #if !NO_PERF
             var producer = source as IProducer<T>;
             if (producer != null)
-                return producer.SubscribeRaw(observer, false);
+            {
+                return producer.SubscribeRaw(observer, enableSafeguard: false);
+            }
 #endif
 
             var d = Disposable.Empty;

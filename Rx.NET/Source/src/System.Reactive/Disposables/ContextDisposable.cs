@@ -12,7 +12,6 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class ContextDisposable : ICancelable
     {
-        private readonly SynchronizationContext _context;
         private volatile IDisposable _disposable;
 
         /// <summary>
@@ -28,25 +27,19 @@ namespace System.Reactive.Disposables
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
 
-            _context = context;
+            Context = context;
             _disposable = disposable;
         }
 
         /// <summary>
         /// Gets the provided <see cref="SynchronizationContext"/>.
         /// </summary>
-        public SynchronizationContext Context
-        {
-            get { return _context; }
-        }
+        public SynchronizationContext Context { get; }
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposable == BooleanDisposable.True; }
-        }
+        public bool IsDisposed => _disposable == BooleanDisposable.True;
 
         /// <summary>
         /// Disposes the underlying disposable on the provided <see cref="SynchronizationContext"/>.
@@ -57,7 +50,7 @@ namespace System.Reactive.Disposables
 
             if (disposable != BooleanDisposable.True)
             {
-                _context.PostWithStartComplete(d => d.Dispose(), disposable);
+                Context.PostWithStartComplete(d => d.Dispose(), disposable);
             }
         }
     }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-#if !NO_TPL
 using System.Threading;
 
 namespace System.Reactive.Disposables
@@ -18,7 +17,7 @@ namespace System.Reactive.Disposables
         /// Initializes a new instance of the <see cref="CancellationDisposable"/> class that uses an existing <seealso cref="CancellationTokenSource"/>.
         /// </summary>
         /// <param name="cts"><seealso cref="CancellationTokenSource"/> used for cancellation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="cts"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="cts"/> is <c>null</c>.</exception>
         public CancellationDisposable(CancellationTokenSource cts)
         {
             if (cts == null)
@@ -36,28 +35,18 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets the <see cref="CancellationToken"/> used by this CancellationDisposable.
+        /// Gets the <see cref="CancellationToken"/> used by this <see cref="CancellationDisposable"/>.
         /// </summary>
-        public CancellationToken Token
-        {
-            get { return _cts.Token; }
-        }
+        public CancellationToken Token => _cts.Token;
 
         /// <summary>
         /// Cancels the underlying <seealso cref="CancellationTokenSource"/>.
         /// </summary>
-        public void Dispose()
-        {
-            _cts.Cancel();
-        }
+        public void Dispose() => _cts.Cancel();
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _cts.IsCancellationRequested; }
-        }
+        public bool IsDisposed => _cts.IsCancellationRequested;
     }
 }
-#endif

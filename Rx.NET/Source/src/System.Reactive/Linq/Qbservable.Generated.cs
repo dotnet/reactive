@@ -5,8 +5,6 @@
 
 #pragma warning disable 1591
 
-#if !NO_EXPRESSIONS
-
 using System;
 using System.Reactive.Concurrency;
 using System.Collections.Generic;
@@ -18,9 +16,7 @@ using System.Threading;
 using System.Reactive;
 using System.Reactive.Subjects;
 using System.Diagnostics.CodeAnalysis;
-#if !NO_TPL
 using System.Threading.Tasks;
-#endif
 #if !NO_REMOTING
 using System.Runtime.Remoting.Lifetime;
 #endif
@@ -65,7 +61,7 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Applies an accumulator function over an observable sequence, returning the result of the aggregation as a single element in the result sequence. The specified seed value is used as the initial accumulator value.
-        /// For aggregation behavior with incremental intermediate results, see <see cref="Observable.Scan{TSource, TAccumulate}(IObservable{TAccumulate},TAccumulate,Func{TAccumulate,TSource,TAccumulate})" />.
+        /// For aggregation behavior with incremental intermediate results, see <see cref="Observable.Scan{TSource, TAccumulate}(IObservable{TSource}, TAccumulate, Func{TAccumulate, TSource, TAccumulate})" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TAccumulate">The type of the result of the aggregation.</typeparam>
@@ -346,9 +342,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Double" /> values.
+        /// Computes the average of an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -373,9 +369,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int32" /> values.
+        /// Computes the average of an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -401,9 +397,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int64" /> values.
+        /// Computes the average of an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -457,9 +453,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -484,9 +480,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -512,9 +508,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values.
+        /// Computes the average of an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the average of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to calculate the average of.</param>
         /// <returns>An observable sequence containing a single element with the average of the sequence of values, or null if the source sequence is empty or contains only values that are null.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -627,7 +623,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -691,7 +687,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -724,7 +720,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -790,7 +786,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -854,7 +850,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -887,7 +883,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the average of an observable sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the average of an observable sequence of nullable <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to calculate the average of.</param>
@@ -2965,7 +2961,6 @@ namespace System.Reactive.Linq
             );
         }
 
-#if !NO_TPL
         /// <summary>
         /// Concatenates all task results, as long as the previous task terminated successfully.
         /// </summary>
@@ -2992,7 +2987,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Determines whether an observable sequence contains a specified element by using the default equality comparer.
@@ -3057,7 +3051,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int32" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="int" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -3085,7 +3079,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int32" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="int" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -3114,7 +3108,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Creates an observable sequence from a specified Subscribe method implementation.
         /// </summary>
@@ -3127,7 +3121,7 @@ namespace System.Reactive.Linq
         /// <remarks>
         /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
         /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
-        /// the <see cref="Reactive.ObservableBase`1" /> abstract base class.
+        /// the <see cref="Reactive.ObservableBase{TResult}" /> abstract base class.
         /// </remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, IDisposable>> subscribe)
         {
@@ -3149,7 +3143,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
         /// Creates an observable sequence from a specified Subscribe method implementation.
         /// </summary>
@@ -3162,7 +3156,7 @@ namespace System.Reactive.Linq
         /// <remarks>
         /// Use of this operator is preferred over manual implementation of the <see cref="IObservable{T}"/> interface. In case
         /// you need a type implementing <see cref="IObservable{T}"/> rather than an anonymous implementation, consider using
-        /// the <see cref="Reactive.ObservableBase`1" /> abstract base class.
+        /// the <see cref="Reactive.ObservableBase{TResult}" /> abstract base class.
         /// </remarks>
         public static IQbservable<TResult> Create<TResult>(this IQbservableProvider provider, Expression<Func<IObserver<TResult>, Action>> subscribe)
         {
@@ -3185,7 +3179,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3218,9 +3211,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3251,9 +3242,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3286,9 +3275,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3319,9 +3306,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified cancellable asynchronous Subscribe method.
         /// The CancellationToken passed to the asynchronous Subscribe method is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3354,9 +3339,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Creates an observable sequence from a specified asynchronous Subscribe method.
         /// </summary>
@@ -3387,7 +3370,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Returns the elements of the specified sequence or the type parameter's default value in a singleton sequence if the sequence is empty.
@@ -3473,7 +3455,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Returns an observable sequence that starts the specified asynchronous factory function whenever a new observer subscribes.
         /// </summary>
@@ -3504,9 +3485,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Returns an observable sequence that starts the specified cancellable asynchronous factory function whenever a new observer subscribes.
         /// The CancellationToken passed to the asynchronous factory function is tied to the returned disposable subscription, allowing best-effort cancellation.
@@ -3539,7 +3518,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
 
         /// <summary>
         /// Time shifts the observable sequence to start propagating notifications at the specified absolute time.
@@ -4769,7 +4747,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
@@ -4798,9 +4775,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// </summary>
@@ -4833,9 +4808,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
@@ -4866,9 +4839,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous action into an observable sequence. Each subscription to the resulting sequence causes the action to be started.
         /// The CancellationToken passed to the asynchronous action is tied to the observable sequence's subscription that triggered the action's invocation and can be used for best-effort cancellation.
@@ -4903,9 +4874,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
@@ -4935,9 +4904,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
@@ -4969,9 +4936,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// </summary>
@@ -5005,9 +4970,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Converts to asynchronous function into an observable sequence. Each subscription to the resulting sequence causes the function to be started.
         /// The CancellationToken passed to the asynchronous function is tied to the observable sequence's subscription that triggered the function's invocation and can be used for best-effort cancellation.
@@ -5043,7 +5006,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Converts an Action-based .NET event to an observable sequence. Each event invocation is surfaced through an OnNext message in the resulting sequence.
@@ -5061,7 +5023,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5171,7 +5133,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5284,7 +5246,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5402,7 +5364,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEvent, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5512,7 +5474,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5624,7 +5586,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5738,7 +5700,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5852,7 +5814,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -5946,9 +5908,9 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -5967,7 +5929,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6009,7 +5971,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -6089,7 +6051,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6186,7 +6148,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -6201,7 +6163,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6240,7 +6202,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler`1" />, to an observable sequence.
+        /// Converts a .NET event, conforming to the standard .NET event pattern based on <see cref="EventHandler{TEventArgs}" />, to an observable sequence.
         /// Each event invocation is surfaced through an OnNext message in the resulting sequence.
         /// For conversion of events that don't conform to the standard .NET event pattern, use any of the FromEvent overloads instead.
         /// </summary>
@@ -6313,7 +6275,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6429,7 +6391,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6546,7 +6508,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -6664,7 +6626,7 @@ namespace System.Reactive.Linq
         /// As such, an event handler may be shared by multiple simultaneously active observers, using a subject for multicasting.
         /// </para>
         /// <para>
-        /// The current <see cref="Threading.SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
+        /// The current <see cref="SynchronizationContext" /> is captured during the call to FromEventPattern, and is used to post add and remove handler invocations.
         /// This behavior ensures add and remove handler operations for thread-affine events are accessed from the same context, as required by some UI frameworks.
         /// </para>
         /// <para>
@@ -8185,7 +8147,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int64" /> that represents the total number of elements in an observable sequence.
+        /// Returns an observable sequence containing an <see cref="long" /> that represents the total number of elements in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -8213,7 +8175,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns an observable sequence containing an <see cref="Int64" /> that represents how many elements in the specified observable sequence satisfy a condition.
+        /// Returns an observable sequence containing an <see cref="long" /> that represents how many elements in the specified observable sequence satisfy a condition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence that contains elements to be counted.</param>
@@ -8296,9 +8258,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Double" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8322,9 +8284,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Int32" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8348,9 +8310,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of <see cref="Int64" /> values.
+        /// Returns the maximum value in an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8400,9 +8362,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Double" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8426,9 +8388,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Int32" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8452,9 +8414,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the maximum value in an observable sequence of nullable <see cref="Int64" /> values.
+        /// Returns the maximum value in an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the maximum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to determine the maximum value of.</param>
         /// <returns>An observable sequence containing a single element with the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -8619,12 +8581,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="int" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -8650,12 +8612,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="long" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -8681,7 +8643,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -8774,7 +8736,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -8805,7 +8767,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum nullable <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
@@ -8836,12 +8798,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the maximum <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the maximum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the maximum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="double" /> that corresponds to the maximum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9187,7 +9149,6 @@ namespace System.Reactive.Linq
             );
         }
 
-#if !NO_TPL
         /// <summary>
         /// Merges results from all source tasks into a single observable sequence.
         /// </summary>
@@ -9214,7 +9175,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Merges elements from all of the specified observable sequences into a single observable sequence.
@@ -9409,9 +9369,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Double" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9435,9 +9395,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Int32" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9461,9 +9421,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of <see cref="Int64" /> values.
+        /// Returns the minimum value in an observable sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9513,9 +9473,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Double" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9539,9 +9499,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Int32" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9565,9 +9525,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Returns the minimum value in an observable sequence of nullable <see cref="Int64" /> values.
+        /// Returns the minimum value in an observable sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to determine the minimum value of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to determine the minimum value of.</param>
         /// <returns>An observable sequence containing a single element with the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9701,12 +9661,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Double" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="double" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9794,12 +9754,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int32" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="int" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9825,12 +9785,12 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
-        /// <returns>An observable sequence containing a single element with the value of type <see cref="Int64" /> that corresponds to the minimum value in the source sequence.</returns>
+        /// <returns>An observable sequence containing a single element with the value of type <see cref="long" /> that corresponds to the minimum value in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <remarks>The return type of this operator differs from the corresponding operator on IEnumerable in order to retain asynchronous behavior.</remarks>
@@ -9856,7 +9816,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Double" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="double" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -9949,7 +9909,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int32" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="int" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -9980,7 +9940,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="Int64" /> value.
+        /// Invokes a transform function on each element of a sequence and returns the minimum nullable <see cref="long" /> value.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values to determine the minimum value of.</param>
@@ -10478,7 +10438,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence.
-        /// This operator is a specialization of Multicast using a regular <see cref="Reactive.Subjects.Subject`1" />.
+        /// This operator is a specialization of Multicast using a regular <see cref="Reactive.Subjects.Subject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10487,7 +10447,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="Reactive.Subjects.Subject`1" />
+        /// <seealso cref="Reactive.Subjects.Subject{TResult}" />
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -10511,7 +10471,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence and starts with initialValue.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.BehaviorSubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.BehaviorSubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10521,7 +10481,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="Reactive.Subjects.BehaviorSubject`1" />
+        /// <seealso cref="Reactive.Subjects.BehaviorSubject{TResult}" />
         public static IQbservable<TResult> Publish<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TSource initialValue)
         {
             if (source == null)
@@ -10546,7 +10506,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence containing only the last notification.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.AsyncSubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.AsyncSubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10555,7 +10515,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="Reactive.Subjects.AsyncSubject`1" />
+        /// <seealso cref="Reactive.Subjects.AsyncSubject{TResult}" />
         public static IQbservable<TResult> PublishLast<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -10853,7 +10813,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10862,7 +10822,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector)
         {
             if (source == null)
@@ -10886,7 +10846,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10898,7 +10858,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize)
         {
             if (source == null)
@@ -10923,7 +10883,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10936,7 +10896,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="bufferSize" /> is less than zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, IScheduler scheduler)
         {
             if (source == null)
@@ -10964,7 +10924,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -10979,7 +10939,7 @@ namespace System.Reactive.Linq
         /// <paramref name="bufferSize" /> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window)
         {
             if (source == null)
@@ -11005,7 +10965,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length and element count for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11021,7 +10981,7 @@ namespace System.Reactive.Linq
         /// <paramref name="bufferSize" /> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -11050,7 +11010,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying all notifications.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11060,7 +11020,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that contains the elements of a sequence produced by multicasting the source sequence within a selector function.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, IScheduler scheduler)
         {
             if (source == null)
@@ -11087,7 +11047,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11099,7 +11059,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window)
         {
             if (source == null)
@@ -11124,7 +11084,7 @@ namespace System.Reactive.Linq
         
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on a connectable observable sequence that shares a single subscription to the underlying sequence replaying notifications subject to a maximum time length for the replay buffer.
-        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject`1" />.
+        /// This operator is a specialization of Multicast using a <see cref="Reactive.Subjects.ReplaySubject{TResult}" />.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the elements in the result sequence.</typeparam>
@@ -11137,7 +11097,7 @@ namespace System.Reactive.Linq
         /// <paramref name="source" /> or <paramref name="selector" /> or <paramref name="scheduler" /> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="window" /> is less than TimeSpan.Zero.</exception>
-        /// <seealso cref="Reactive.Subjects.ReplaySubject`1" />
+        /// <seealso cref="Reactive.Subjects.ReplaySubject{TResult}" />
         public static IQbservable<TResult> Replay<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<IObservable<TSource>, IObservable<TResult>>> selector, TimeSpan window, IScheduler scheduler)
         {
             if (source == null)
@@ -11891,7 +11851,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11923,9 +11882,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11957,9 +11914,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support and merges all of the task results into one observable sequence.
         /// </summary>
@@ -11991,9 +11946,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support and merges all of the task results into one observable sequence.
         /// </summary>
@@ -12025,9 +11978,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12064,9 +12015,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12103,9 +12052,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12142,9 +12089,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Projects each element of an observable sequence to a task by incorporating the element's index with cancellation support, invokes the result selector for the source element and the task result, and merges the results into one observable sequence.
         /// </summary>
@@ -12181,7 +12126,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Determines whether two sequences are equal by comparing the elements pairwise.
@@ -12977,7 +12921,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
@@ -13016,9 +12959,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// </summary>
@@ -13061,9 +13002,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13112,9 +13051,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13167,9 +13104,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
@@ -13209,9 +13144,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13261,9 +13194,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// </summary>
@@ -13307,9 +13238,7 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
-#if !NO_TPL
         /// <summary>
         /// Invokes the asynchronous function, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -13363,7 +13292,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Prepends a sequence of values to an observable sequence.
@@ -13591,9 +13519,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Double" /> values.
+        /// Computes the sum of a sequence of <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13617,9 +13545,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int32" /> values.
+        /// Computes the sum of a sequence of <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="int" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13644,9 +13572,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int64" /> values.
+        /// Computes the sum of a sequence of <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of <see cref="Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of <see cref="long" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13698,9 +13626,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Double" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="double" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Double" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="double" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13724,9 +13652,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="int" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int32" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="int" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13751,9 +13679,9 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values.
+        /// Computes the sum of a sequence of nullable <see cref="long" /> values.
         /// </summary>
-        /// <param name="source">A sequence of nullable <see cref="Int64" /> values to calculate the sum of.</param>
+        /// <param name="source">A sequence of nullable <see cref="long" /> values to calculate the sum of.</param>
         /// <returns>An observable sequence containing a single element with the sum of the values in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -13830,7 +13758,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13924,7 +13852,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13956,7 +13884,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of nullable <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of nullable <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -13988,7 +13916,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Double" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="double" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -14082,7 +14010,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int32" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="int" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -14114,7 +14042,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Computes the sum of a sequence of <see cref="Int64" /> values that are obtained by invoking a transform function on each element of the input sequence.
+        /// Computes the sum of a sequence of <see cref="long" /> values that are obtained by invoking a transform function on each element of the input sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">A sequence of values that are used to calculate a sum.</param>
@@ -14174,7 +14102,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Transforms an observable sequence of tasks into an observable sequence 
         /// producing values only from the most recent observable sequence.
@@ -14203,7 +14130,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Synchronizes the observable sequence such that observer notifications cannot be delivered concurrently.
@@ -16433,7 +16359,6 @@ namespace System.Reactive.Linq
             );
         }
         
-#if !NO_TPL
         /// <summary>
         /// Constructs an observable sequence that depends on a resource object, whose lifetime is tied to the resulting observable sequence's lifetime. The resource is obtained and used through asynchronous methods.
         /// The CancellationToken passed to the asynchronous methods is tied to the returned disposable subscription, allowing best-effort cancellation at any stage of the resource acquisition or usage.
@@ -16472,7 +16397,6 @@ namespace System.Reactive.Linq
                 )
             );
         }
-#endif
         
         /// <summary>
         /// Filters the elements of an observable sequence based on a predicate.
@@ -23278,8 +23202,6 @@ namespace System.Reactive.Linq
         
     }
 }
-
-#endif
 
 #pragma warning restore 1591
 

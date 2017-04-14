@@ -67,7 +67,7 @@ namespace System.Reactive.Disposables
             get;
         }
 
-        class Binary : StableCompositeDisposable
+        private sealed class Binary : StableCompositeDisposable
         {
             private volatile IDisposable _disposable1;
             private volatile IDisposable _disposable2;
@@ -78,31 +78,16 @@ namespace System.Reactive.Disposables
                 _disposable2 = disposable2;
             }
 
-            public override bool IsDisposed
-            {
-                get
-                {
-                    return _disposable1 == null;
-                }
-            }
+            public override bool IsDisposed => _disposable1 == null;
 
             public override void Dispose()
             {
-                var old1 = Interlocked.Exchange(ref _disposable1, null);
-                if (old1 != null)
-                {
-                    old1.Dispose();
-                }
-
-                var old2 = Interlocked.Exchange(ref _disposable2, null);
-                if (old2 != null)
-                {
-                    old2.Dispose();
-                }
+                Interlocked.Exchange(ref _disposable1, null)?.Dispose();
+                Interlocked.Exchange(ref _disposable2, null)?.Dispose();
             }
         }
 
-        class NAry : StableCompositeDisposable
+        private sealed class NAry : StableCompositeDisposable
         {
             private volatile List<IDisposable> _disposables;
 
@@ -122,13 +107,7 @@ namespace System.Reactive.Disposables
                     throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
             }
 
-            public override bool IsDisposed
-            {
-                get
-                {
-                    return _disposables == null;
-                }
-            }
+            public override bool IsDisposed => _disposables == null;
 
             public override void Dispose()
             {

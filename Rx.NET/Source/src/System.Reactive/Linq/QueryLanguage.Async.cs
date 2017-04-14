@@ -5,12 +5,9 @@
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-
-#if !NO_TPL
 using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
-#endif
 
 namespace System.Reactive.Linq
 {
@@ -661,7 +658,6 @@ namespace System.Reactive.Linq
             return ToAsync(function, scheduler)();
         }
 
-#if !NO_TPL
         public virtual IObservable<TSource> StartAsync<TSource>(Func<Task<TSource>> functionAsync)
         {
             return StartAsyncImpl(functionAsync, null);
@@ -738,7 +734,6 @@ namespace System.Reactive.Linq
                 return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
-#endif
 
         #endregion
 
@@ -754,7 +749,6 @@ namespace System.Reactive.Linq
             return ToAsync(action, scheduler)();
         }
 
-#if !NO_TPL
         public virtual IObservable<Unit> StartAsync(Func<Task> actionAsync)
         {
             return StartAsyncImpl(actionAsync, null);
@@ -831,15 +825,12 @@ namespace System.Reactive.Linq
                 return StableCompositeDisposable.Create(cancellable, subscription);
             });
         }
-#endif
 
         #endregion
 
         #endregion
 
         #region FromAsync
-
-#if !NO_TPL
 
         #region Func
 
@@ -888,8 +879,6 @@ namespace System.Reactive.Linq
         }
 
         #endregion
-
-#endif
 
         #endregion
 

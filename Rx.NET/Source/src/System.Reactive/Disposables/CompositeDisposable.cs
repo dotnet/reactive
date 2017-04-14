@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,8 +46,8 @@ namespace System.Reactive.Disposables
         /// Initializes a new instance of the <see cref="CompositeDisposable"/> class from a group of disposables.
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
-        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is <c>null</c>.</exception>
         public CompositeDisposable(params IDisposable[] disposables)
             : this((IEnumerable<IDisposable>)disposables)
         {
@@ -56,40 +57,34 @@ namespace System.Reactive.Disposables
         /// Initializes a new instance of the <see cref="CompositeDisposable"/> class from a group of disposables.
         /// </summary>
         /// <param name="disposables">Disposables that will be disposed together.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is null.</exception>
-        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="disposables"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Any of the disposables in the <paramref name="disposables"/> collection is <c>null</c>.</exception>
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables == null)
                 throw new ArgumentNullException(nameof(disposables));
 
             _disposables = new List<IDisposable>(disposables);
-            
+
             //
             // Doing this on the list to avoid duplicate enumeration of disposables.
             //
             if (_disposables.Contains(null))
                 throw new ArgumentException(Strings_Core.DISPOSABLES_CANT_CONTAIN_NULL, nameof(disposables));
-            
+
             _count = _disposables.Count;
         }
 
         /// <summary>
-        /// Gets the number of disposables contained in the CompositeDisposable.
+        /// Gets the number of disposables contained in the <see cref="CompositeDisposable"/>.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _count;
-            }
-        }
+        public int Count => _count;
 
         /// <summary>
-        /// Adds a disposable to the CompositeDisposable or disposes the disposable if the CompositeDisposable is disposed.
+        /// Adds a disposable to the <see cref="CompositeDisposable"/> or disposes the disposable if the <see cref="CompositeDisposable"/> is disposed.
         /// </summary>
         /// <param name="item">Disposable to add.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="item"/> is <c>null</c>.</exception>
         public void Add(IDisposable item)
         {
             if (item == null)
@@ -105,16 +100,19 @@ namespace System.Reactive.Disposables
                     _count++;
                 }
             }
+
             if (shouldDispose)
+            {
                 item.Dispose();
+            }
         }
 
         /// <summary>
-        /// Removes and disposes the first occurrence of a disposable from the CompositeDisposable.
+        /// Removes and disposes the first occurrence of a disposable from the <see cref="CompositeDisposable"/>.
         /// </summary>
         /// <param name="item">Disposable to remove.</param>
         /// <returns>true if found; false otherwise.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="item"/> is <c>null</c>.</exception>
         public bool Remove(IDisposable item)
         {
             if (item == null)
@@ -146,15 +144,21 @@ namespace System.Reactive.Disposables
                             _disposables = new List<IDisposable>(_disposables.Capacity / 2);
 
                             foreach (var d in old)
+                            {
                                 if (d != null)
+                                {
                                     _disposables.Add(d);
+                                }
+                            }
                         }
                     }
                 }
             }
 
             if (shouldDispose)
+            {
                 item.Dispose();
+            }
 
             return shouldDispose;
         }
@@ -179,13 +183,14 @@ namespace System.Reactive.Disposables
             if (currentDisposables != null)
             {
                 foreach (var d in currentDisposables)
-                    if (d != null)
-                        d.Dispose();
+                {
+                    d?.Dispose();
+                }
             }
         }
 
         /// <summary>
-        /// Removes and disposes all disposables from the CompositeDisposable, but does not dispose the CompositeDisposable.
+        /// Removes and disposes all disposables from the <see cref="CompositeDisposable"/>, but does not dispose the <see cref="CompositeDisposable"/>.
         /// </summary>
         public void Clear()
         {
@@ -198,16 +203,17 @@ namespace System.Reactive.Disposables
             }
 
             foreach (var d in currentDisposables)
-                if (d != null)
-                    d.Dispose();
+            {
+                d?.Dispose();
+            }
         }
 
         /// <summary>
-        /// Determines whether the CompositeDisposable contains a specific disposable.
+        /// Determines whether the <see cref="CompositeDisposable"/> contains a specific disposable.
         /// </summary>
         /// <param name="item">Disposable to search for.</param>
         /// <returns>true if the disposable was found; otherwise, false.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="item"/> is <c>null</c>.</exception>
         public bool Contains(IDisposable item)
         {
             if (item == null)
@@ -220,11 +226,11 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Copies the disposables contained in the CompositeDisposable to an array, starting at a particular array index.
+        /// Copies the disposables contained in the <see cref="CompositeDisposable"/> to an array, starting at a particular array index.
         /// </summary>
         /// <param name="array">Array to copy the contained disposables to.</param>
         /// <param name="arrayIndex">Target index at which to copy the first disposable of the group.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="array"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than zero. -or - <paramref name="arrayIndex"/> is larger than or equal to the array length.</exception>
         public void CopyTo(IDisposable[] array, int arrayIndex)
         {
@@ -242,13 +248,10 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Always returns false.
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
-        /// Returns an enumerator that iterates through the CompositeDisposable.
+        /// Returns an enumerator that iterates through the <see cref="CompositeDisposable"/>.
         /// </summary>
         /// <returns>An enumerator to iterate over the disposables.</returns>
         public IEnumerator<IDisposable> GetEnumerator()
@@ -264,20 +267,14 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the CompositeDisposable.
+        /// Returns an enumerator that iterates through the <see cref="CompositeDisposable"/>.
         /// </summary>
         /// <returns>An enumerator to iterate over the disposables.</returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposed; }
-        }
+        public bool IsDisposed => _disposed;
     }
 }

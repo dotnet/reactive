@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive
 {
-    class EventSource<T> : IEventSource<T>
+    internal sealed class EventSource<T> : IEventSource<T>
     {
         private readonly IObservable<T> _source;
         private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
@@ -32,9 +32,13 @@ namespace System.Reactive
                     lock (gate)
                     {
                         if (isAdded)
+                        {
                             Remove(value);
+                        }
                         else
+                        {
                             isDone = true;
+                        }
                     }
                 });
 
@@ -44,7 +48,7 @@ namespace System.Reactive
                 var d = _source.Subscribe/*Unsafe*/(
                     x => _invokeHandler(value, /*this,*/ x),
                     ex => { remove(); ex.Throw(); },
-                    () => remove()
+                    remove
                 );
 
                 lock (gate)
@@ -69,7 +73,9 @@ namespace System.Reactive
             {
                 var l = new Stack<IDisposable>();
                 if (!_subscriptions.TryGetValue(handler, out l))
+                {
                     _subscriptions[handler] = l = new Stack<IDisposable>();
+                }
 
                 l.Push(disposable);
             }
@@ -85,13 +91,15 @@ namespace System.Reactive
                 if (_subscriptions.TryGetValue(handler, out l))
                 {
                     d = l.Pop();
+
                     if (l.Count == 0)
+                    {
                         _subscriptions.Remove(handler);
+                    }
                 }
             }
 
-            if (d != null)
-                d.Dispose();
+            d?.Dispose();
         }
     }
 }

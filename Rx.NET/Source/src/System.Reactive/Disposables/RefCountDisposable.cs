@@ -46,10 +46,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get { return _disposable == null; }
-        }
+        public bool IsDisposed => _disposable == null;
 
         /// <summary>
         /// Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.
@@ -99,8 +96,7 @@ namespace System.Reactive.Disposables
                 }
             }
 
-            if (disposable != null)
-                disposable.Dispose();
+            disposable?.Dispose();
         }
 
         private void Release()
@@ -125,11 +121,10 @@ namespace System.Reactive.Disposables
                 }
             }
 
-            if (disposable != null)
-                disposable.Dispose();
+            disposable?.Dispose();
         }
 
-        sealed class InnerDisposable : IDisposable
+        private sealed class InnerDisposable : IDisposable
         {
             private RefCountDisposable _parent;
 
@@ -140,9 +135,7 @@ namespace System.Reactive.Disposables
 
             public void Dispose()
             {
-                var parent = Interlocked.Exchange(ref _parent, null);
-                if (parent != null)
-                    parent.Release();
+                Interlocked.Exchange(ref _parent, null)?.Release();
             }
         }
     }

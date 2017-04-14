@@ -22,16 +22,12 @@ using ReactiveTests.Dummies;
 using System.Windows.Forms;
 #endif
 
-#if SILVERLIGHT && !SILVERLIGHTM7
-using Microsoft.Silverlight.Testing;
-#endif
-
 namespace ReactiveTests.Tests
 {
-    
+
     public partial class ObservableConcurrencyTest : TestBase
     {
-#region + ObserveOn +
+        #region + ObserveOn +
 
         [Fact]
         public void ObserveOn_ArgumentChecking()
@@ -226,9 +222,9 @@ namespace ReactiveTests.Tests
             });
         }
 #endif
-#endregion
+        #endregion
 
-#region SubscribeOn
+        #region SubscribeOn
 
         [Fact]
         public void SubscribeOn_ArgumentChecking()
@@ -426,9 +422,9 @@ namespace ReactiveTests.Tests
             });
         }
 #endif
-#endregion
+        #endregion
 
-#region + Synchronize +
+        #region + Synchronize +
 
         [Fact]
         public void Synchronize_ArgumentChecking()
@@ -539,13 +535,13 @@ namespace ReactiveTests.Tests
             Assert.Equal(Enumerable.Range(0, 200).Sum(), sum);
         }
 #endif
-#endregion
+        #endregion
     }
 
-    
+
     public class ObservableConcurrencyReactiveTest : ReactiveTest
     {
-#region + ObserveOn +
+        #region + ObserveOn +
 
         [Fact]
         public void ObserveOn_Scheduler_ArgumentChecking()
@@ -560,7 +556,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = scheduler.CreateHotObservable(
-                OnNext( 90, 1),
+                OnNext(90, 1),
                 OnNext(120, 2),
                 OnNext(230, 3),
                 OnNext(240, 4),
@@ -581,7 +577,7 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(531)
             );
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
             // BREAKING CHANGE v2 > v1.x -> More aggressive disposal behavior
             xs.Subscriptions.AssertEqual(
                 Subscribe(200, 531)
@@ -626,7 +622,7 @@ namespace ReactiveTests.Tests
                 OnError<int>(531, ex)
             );
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
             // BREAKING CHANGE v2 > v1.x -> More aggressive disposal behavior
             xs.Subscriptions.AssertEqual(
                 Subscribe(200, 531)
@@ -754,7 +750,7 @@ namespace ReactiveTests.Tests
             }
         }
 
-#if !NO_PERF && !NO_CDS
+#if !NO_PERF
         [Fact]
         public void ObserveOn_LongRunning_Simple()
         {
@@ -935,7 +931,6 @@ namespace ReactiveTests.Tests
         }
 #endif
 
-#if !NO_SYNCCTX
         [Fact]
         public void ObserveOn_SynchronizationContext_Simple()
         {
@@ -967,11 +962,10 @@ namespace ReactiveTests.Tests
                 Subscribe(200, 531)
             );
         }
-#endif
 
-#endregion
+        #endregion
 
-#region SubscribeOn
+        #region SubscribeOn
 
         [Fact]
         public void SubscribeOn_Scheduler_ArgumentChecking()
@@ -1071,7 +1065,6 @@ namespace ReactiveTests.Tests
             );
         }
 
-#if !NO_SYNCCTX
         [Fact]
         public void SubscribeOn_SynchronizationContext_Simple()
         {
@@ -1103,13 +1096,11 @@ namespace ReactiveTests.Tests
                 Subscribe(201, 531)
             );
         }
-#endif
 
-#endregion
+        #endregion
 
-#region |> Helpers <|
+        #region |> Helpers <|
 
-#if !NO_SYNCCTX
         class MyCtx : SynchronizationContext
         {
             private IScheduler scheduler;
@@ -1124,8 +1115,7 @@ namespace ReactiveTests.Tests
                 scheduler.Schedule(state, (self, s) => { d(s); return Disposable.Empty; });
             }
         }
-#endif
 
-#endregion
+        #endregion
     }
 }

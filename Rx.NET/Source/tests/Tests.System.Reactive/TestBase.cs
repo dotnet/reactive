@@ -3,51 +3,10 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace ReactiveTests
 {
-#if SILVERLIGHT && !SILVERLIGHTM7
-    public class TestBase : Microsoft.Silverlight.Testing.SilverlightTest
-    {
-        public void RunAsync(Action<Waiter> a)
-        {
-            EnqueueCallback(() =>
-            {
-                var w = new Waiter(TestComplete);
-                a(w);
-                w.Wait();
-            });
-        }
-
-        public void CompleteAsync()
-        {
-            EnqueueTestComplete();
-        }
-    }
-
-    public class Waiter
-    {
-        private Action _complete;
-
-        public Waiter(Action complete)
-        {
-            _complete = complete;
-        }
-
-        public void Set()
-        {
-            _complete();
-        }
-
-        public void Wait()
-        {
-        }
-    }
-#else
     public class TestBase
     {
         public void RunAsync(Action<Waiter> a)
@@ -77,5 +36,4 @@ namespace ReactiveTests
     public class AsynchronousAttribute : Attribute
     {
     }
-#endif
 }

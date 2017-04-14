@@ -15,7 +15,6 @@ namespace System.Reactive.Concurrency
         where TAbsolute : IComparable<TAbsolute>
     {
         private readonly SingleAssignmentDisposable _disposable = new SingleAssignmentDisposable();
-        private readonly TAbsolute _dueTime;
         private readonly IComparer<TAbsolute> _comparer;
 
         /// <summary>
@@ -29,17 +28,14 @@ namespace System.Reactive.Concurrency
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            _dueTime = dueTime;
+            DueTime = dueTime;
             _comparer = comparer;
         }
 
         /// <summary>
         /// Gets the absolute time at which the item is due for invocation.
         /// </summary>
-        public TAbsolute DueTime
-        {
-            get { return _dueTime; }
-        }
+        public TAbsolute DueTime { get; }
 
         /// <summary>
         /// Invokes the work item.
@@ -181,10 +177,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets whether the work item has received a cancellation request.
         /// </summary>
-        public bool IsCanceled
-        {
-            get { return _disposable.IsDisposed; }
-        }
+        public bool IsCanceled => _disposable.IsDisposed;
     }
 
     /// <summary>

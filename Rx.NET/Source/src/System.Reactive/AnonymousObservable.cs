@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 namespace System.Reactive
 {
     /// <summary>
-    /// Class to create an <see cref="IObservable{T}"/> instance from a delegate-based implementation of the Subscribe method.
+    /// Class to create an <see cref="IObservable{T}"/> instance from a delegate-based implementation of the <see cref="IObservable{T}.Subscribe(IObserver{T})"/> method.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
     public sealed class AnonymousObservable<T> : ObservableBase<T>
@@ -17,8 +17,8 @@ namespace System.Reactive
         /// <summary>
         /// Creates an observable sequence object from the specified subscription function.
         /// </summary>
-        /// <param name="subscribe">Subscribe method implementation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="subscribe"/> is null.</exception>
+        /// <param name="subscribe"><see cref="IObservable{T}.Subscribe(IObserver{T})"/> method implementation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="subscribe"/> is <c>null</c>.</exception>
         public AnonymousObservable(Func<IObserver<T>, IDisposable> subscribe)
         {
             if (subscribe == null)
