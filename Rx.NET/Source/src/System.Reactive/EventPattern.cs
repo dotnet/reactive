@@ -58,9 +58,9 @@ namespace System.Reactive
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects represent the same event; otherwise, <c>false</c>.</returns>
         public bool Equals(EventPattern<TSender, TEventArgs> other)
         {
-            if (object.ReferenceEquals(null, other))
+            if (ReferenceEquals(null, other))
                 return false;
-            if (object.ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
                 return true;
 
             return EqualityComparer<TSender>.Default.Equals(Sender, other.Sender) && EqualityComparer<TEventArgs>.Default.Equals(EventArgs, other.EventArgs);
@@ -71,10 +71,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="EventPattern{TSender, TEventArgs}"/>.</param>
         /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="EventPattern{TSender, TEventArgs}"/>; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as EventPattern<TSender, TEventArgs>);
-        }
+        public override bool Equals(object obj) => Equals(obj as EventPattern<TSender, TEventArgs>);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="EventPattern{TSender, TEventArgs}"/> instance.
@@ -101,6 +98,6 @@ namespace System.Reactive
         /// <param name="first">The first <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <param name="second">The second <see cref="EventPattern{TSender, TEventArgs}"/> to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if both <see cref="EventPattern{TSender, TEventArgs}"/> objects don't represent the same event; otherwise, <c>false</c>.</returns>
-        public static bool operator !=(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second) => Equals(first, second);
+        public static bool operator !=(EventPattern<TSender, TEventArgs> first, EventPattern<TSender, TEventArgs> second) => !Equals(first, second);
     }
 }
