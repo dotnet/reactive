@@ -15,12 +15,12 @@ namespace System.Reactive
         private readonly Action _onCompleted;
 
         /// <summary>
-        /// Creates an observer from the specified OnNext, OnError, and OnCompleted actions.
+        /// Creates an observer from the specified <see cref="IObserver{T}.OnNext(T)"/>, <see cref="IObserver{T}.OnError(Exception)"/>, and <see cref="IObserver{T}.OnCompleted()"/> actions.
         /// </summary>
-        /// <param name="onNext">Observer's OnNext action implementation.</param>
-        /// <param name="onError">Observer's OnError action implementation.</param>
-        /// <param name="onCompleted">Observer's OnCompleted action implementation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <param name="onNext">Observer's <see cref="IObserver{T}.OnNext(T)"/> action implementation.</param>
+        /// <param name="onError">Observer's <see cref="IObserver{T}.OnError(Exception)"/> action implementation.</param>
+        /// <param name="onCompleted">Observer's <see cref="IObserver{T}.OnCompleted()"/> action implementation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (onNext == null)
@@ -36,66 +36,54 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Creates an observer from the specified OnNext action.
+        /// Creates an observer from the specified <see cref="IObserver{T}.OnNext(T)"/> action.
         /// </summary>
-        /// <param name="onNext">Observer's OnNext action implementation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> is null.</exception>
+        /// <param name="onNext">Observer's <see cref="IObserver{T}.OnNext(T)"/> action implementation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext)
             : this(onNext, Stubs.Throw, Stubs.Nop)
         {
         }
 
         /// <summary>
-        /// Creates an observer from the specified OnNext and OnError actions.
+        /// Creates an observer from the specified <see cref="IObserver{T}.OnNext(T)"/> and <see cref="IObserver{T}.OnError(Exception)"/> actions.
         /// </summary>
-        /// <param name="onNext">Observer's OnNext action implementation.</param>
-        /// <param name="onError">Observer's OnError action implementation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> is null.</exception>
+        /// <param name="onNext">Observer's <see cref="IObserver{T}.OnNext(T)"/> action implementation.</param>
+        /// <param name="onError">Observer's <see cref="IObserver{T}.OnError(Exception)"/> action implementation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onError"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action<Exception> onError)
             : this(onNext, onError, Stubs.Nop)
         {
         }
 
         /// <summary>
-        /// Creates an observer from the specified OnNext and OnCompleted actions.
+        /// Creates an observer from the specified <see cref="IObserver{T}.OnNext(T)"/> and <see cref="IObserver{T}.OnCompleted()"/> actions.
         /// </summary>
-        /// <param name="onNext">Observer's OnNext action implementation.</param>
-        /// <param name="onCompleted">Observer's OnCompleted action implementation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onCompleted"/> is null.</exception>
+        /// <param name="onNext">Observer's <see cref="IObserver{T}.OnNext(T)"/> action implementation.</param>
+        /// <param name="onCompleted">Observer's <see cref="IObserver{T}.OnCompleted()"/> action implementation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="onNext"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
         public AnonymousObserver(Action<T> onNext, Action onCompleted)
             : this(onNext, Stubs.Throw, onCompleted)
         {
         }
 
         /// <summary>
-        /// Calls the onNext action.
+        /// Calls the action implementing <see cref="IObserver{T}.OnNext(T)"/>.
         /// </summary>
         /// <param name="value">Next element in the sequence.</param>
-        protected override void OnNextCore(T value)
-        {
-            _onNext(value);
-        }
+        protected override void OnNextCore(T value) => _onNext(value);
 
         /// <summary>
-        /// Calls the onError action.
+        /// Calls the action implementing <see cref="IObserver{T}.OnError(Exception)"/>.
         /// </summary>
         /// <param name="error">The error that has occurred.</param>
-        protected override void OnErrorCore(Exception error)
-        {
-            _onError(error);
-        }
+        protected override void OnErrorCore(Exception error) => _onError(error);
 
         /// <summary>
-        /// Calls the onCompleted action.
+        /// Calls the action implementing <see cref="IObserver{T}.OnCompleted()"/>.
         /// </summary>
-        protected override void OnCompletedCore()
-        {
-            _onCompleted();
-        }
+        protected override void OnCompletedCore() => _onCompleted();
 
-        internal IObserver<T> MakeSafe(IDisposable disposable)
-        {
-            return new AnonymousSafeObserver<T>(_onNext, _onError, _onCompleted, disposable);
-        }
+        internal IObserver<T> MakeSafe(IDisposable disposable) => new AnonymousSafeObserver<T>(_onNext, _onError, _onCompleted, disposable);
     }
 }

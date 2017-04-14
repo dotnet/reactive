@@ -7,8 +7,8 @@ namespace System.Reactive.PlatformServices
     /// <summary>
     /// Provides access to the platform enlightenments used by other Rx libraries to improve system performance and
     /// runtime efficiency. While Rx can run without platform enlightenments loaded, it's recommended to deploy the
-    /// System.Reactive.PlatformServices assembly with your application and call <see cref="EnlightenmentProvider.
-    /// EnsureLoaded"/> during application startup to ensure enlightenments are properly loaded.
+    /// System.Reactive.PlatformServices assembly with your application and call <see cref="EnsureLoaded"/> during
+    /// application startup to ensure enlightenments are properly loaded.
     /// </summary>
     public static class EnlightenmentProvider
     {

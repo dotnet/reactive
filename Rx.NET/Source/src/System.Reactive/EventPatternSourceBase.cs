@@ -24,7 +24,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="source">Source sequence to expose as an event.</param>
         /// <param name="invokeHandler">Delegate used to invoke the event for each element of the sequence.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="invokeHandler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="invokeHandler"/> is <c>null</c>.</exception>
         protected EventPatternSourceBase(IObservable<EventPattern<TSender, TEventArgs>> source, Action<Action<TSender, TEventArgs>, /*object,*/ EventPattern<TSender, TEventArgs>> invokeHandler)
         {
             if (source == null)
@@ -40,9 +40,9 @@ namespace System.Reactive
         /// <summary>
         /// Adds the specified event handler, causing a subscription to the underlying source.
         /// </summary>
-        /// <param name="handler">Event handler to add. The same delegate should be passed to the Remove operation in order to remove the event handler.</param>
+        /// <param name="handler">Event handler to add. The same delegate should be passed to the <see cref="Remove(Delegate)"/> operation in order to remove the event handler.</param>
         /// <param name="invoke">Invocation delegate to raise the event in the derived class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="handler"/> or <paramref name="invoke"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> or <paramref name="invoke"/> is <c>null</c>.</exception>
         protected void Add(Delegate handler, Action<TSender, TEventArgs> invoke)
         {
             if (handler == null)
@@ -59,9 +59,13 @@ namespace System.Reactive
                 lock (gate)
                 {
                     if (isAdded)
+                    {
                         Remove(handler);
+                    }
                     else
+                    {
                         isDone = true;
+                    }
                 }
             });
 
@@ -90,17 +94,19 @@ namespace System.Reactive
             {
                 var l = new Stack<IDisposable>();
                 if (!_subscriptions.TryGetValue(handler, out l))
+                {
                     _subscriptions[handler] = l = new Stack<IDisposable>();
+                }
 
                 l.Push(disposable);
             }
         }
 
         /// <summary>
-        /// Removes the specified event handler, causing a disposal of the corresponding subscription to the underlying source that was created during the Add operation.
+        /// Removes the specified event handler, causing a disposal of the corresponding subscription to the underlying source that was created during the <see cref="Add(Delegate, Action{TSender, TEventArgs})"/> operation.
         /// </summary>
-        /// <param name="handler">Event handler to remove. This should be the same delegate as one that was passed to the Add operation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        /// <param name="handler">Event handler to remove. This should be the same delegate as one that was passed to the <see cref="Add(Delegate, Action{TSender, TEventArgs})"/> operation.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is <c>null</c>.</exception>
         protected void Remove(Delegate handler)
         {
             if (handler == null)
@@ -114,13 +120,15 @@ namespace System.Reactive
                 if (_subscriptions.TryGetValue(handler, out l))
                 {
                     d = l.Pop();
+
                     if (l.Count == 0)
+                    {
                         _subscriptions.Remove(handler);
+                    }
                 }
             }
 
-            if (d != null)
-                d.Dispose();
+            d?.Dispose();
         }
     }
 }

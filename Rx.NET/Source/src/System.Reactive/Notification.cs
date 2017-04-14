@@ -119,12 +119,13 @@ namespace System.Reactive
             /// </summary>
             public override bool Equals(Notification<T> other)
             {
-                if (Object.ReferenceEquals(this, other))
+                if (ReferenceEquals(this, other))
                     return true;
-                if (Object.ReferenceEquals(other, null))
+                if (ReferenceEquals(other, null))
                     return false;
                 if (other.Kind != NotificationKind.OnNext)
                     return false;
+
                 return EqualityComparer<T>.Default.Equals(Value, other.Value);
             }
 
@@ -245,13 +246,14 @@ namespace System.Reactive
             /// </summary>
             public override bool Equals(Notification<T> other)
             {
-                if (Object.ReferenceEquals(this, other))
+                if (ReferenceEquals(this, other))
                     return true;
-                if (Object.ReferenceEquals(other, null))
+                if (ReferenceEquals(other, null))
                     return false;
                 if (other.Kind != NotificationKind.OnError)
                     return false;
-                return Object.Equals(Exception, other.Exception);
+
+                return Equals(Exception, other.Exception);
             }
 
             /// <summary>
@@ -370,10 +372,11 @@ namespace System.Reactive
             /// </summary>
             public override bool Equals(Notification<T> other)
             {
-                if (Object.ReferenceEquals(this, other))
+                if (ReferenceEquals(this, other))
                     return true;
-                if (Object.ReferenceEquals(other, null))
+                if (ReferenceEquals(other, null))
                     return false;
+
                 return other.Kind == NotificationKind.OnCompleted;
             }
 
@@ -449,7 +452,7 @@ namespace System.Reactive
         /// Determines whether the current <see cref="Notification{T}"/> object has the same observer message payload as a specified <see cref="Notification{T}"/> value.
         /// </summary>
         /// <param name="other">An object to compare to the current <see cref="Notification{T}"/> object.</param>
-        /// <returns>true if both <see cref="Notification{T}"/> objects have the same observer message payload; otherwise, false.</returns>
+        /// <returns><c>true</c> if both <see cref="Notification{T}"/> objects have the same observer message payload; otherwise, <c>false</c>.</returns>
         /// <remarks>
         /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
@@ -460,9 +463,9 @@ namespace System.Reactive
         /// <summary>
         /// Determines whether the two specified <see cref="Notification{T}"/> objects have the same observer message payload.
         /// </summary>
-        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or null.</param>
-        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or null.</param>
-        /// <returns>true if the first <see cref="Notification{T}"/> value has the same observer message payload as the second <see cref="Notification{T}"/> value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or <c>null</c>.</param>
+        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or <c>null</c>.</param>
+        /// <returns><c>true</c> if the first <see cref="Notification{T}"/> value has the same observer message payload as the second <see cref="Notification{T}"/> value; otherwise, <c>false</c>.</returns>
         /// <remarks>
         /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
@@ -470,7 +473,7 @@ namespace System.Reactive
         /// </remarks>
         public static bool operator ==(Notification<T> left, Notification<T> right)
         {
-            if (object.ReferenceEquals(left, right))
+            if (ReferenceEquals(left, right))
                 return true;
 
             if ((object)left == null || (object)right == null)
@@ -482,9 +485,9 @@ namespace System.Reactive
         /// <summary>
         /// Determines whether the two specified <see cref="Notification{T}"/> objects have a different observer message payload.
         /// </summary>
-        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or null.</param>
-        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or null.</param>
-        /// <returns>true if the first <see cref="Notification{T}"/> value has a different observer message payload as the second <see cref="Notification{T}"/> value; otherwise, false.</returns>
+        /// <param name="left">The first <see cref="Notification{T}"/> to compare, or <c>null</c>.</param>
+        /// <param name="right">The second <see cref="Notification{T}"/> to compare, or <c>null</c>.</param>
+        /// <returns><c>true</c> if the first <see cref="Notification{T}"/> value has a different observer message payload as the second <see cref="Notification{T}"/> value; otherwise, <c>false</c>.</returns>
         /// <remarks>
         /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
@@ -496,7 +499,7 @@ namespace System.Reactive
         /// Determines whether the specified System.Object is equal to the current <see cref="Notification{T}"/>.
         /// </summary>
         /// <param name="obj">The System.Object to compare with the current <see cref="Notification{T}"/>.</param>
-        /// <returns>true if the specified System.Object is equal to the current <see cref="Notification{T}"/>; otherwise, false.</returns>
+        /// <returns><c>true</c> if the specified System.Object is equal to the current <see cref="Notification{T}"/>; otherwise, <c>false</c>.</returns>
         /// <remarks>
         /// Equality of <see cref="Notification{T}"/> objects is based on the equality of the observer message payload they represent, including the notification Kind and the Value or Exception (if any).
         /// This means two <see cref="Notification{T}"/> objects can be equal even though they don't represent the same observer method call, but have the same Kind and have equal parameters passed to the observer method.
@@ -554,9 +557,12 @@ namespace System.Reactive
 
             return new AnonymousObservable<T>(observer => scheduler.Schedule(() =>
             {
-                this.Accept(observer);
-                if (this.Kind == NotificationKind.OnNext)
+                Accept(observer);
+
+                if (Kind == NotificationKind.OnNext)
+                {
                     observer.OnCompleted();
+                }
             }));
         }
     }
