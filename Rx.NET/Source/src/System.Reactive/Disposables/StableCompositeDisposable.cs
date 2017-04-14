@@ -67,7 +67,7 @@ namespace System.Reactive.Disposables
             get;
         }
 
-        class Binary : StableCompositeDisposable
+        private sealed class Binary : StableCompositeDisposable
         {
             private volatile IDisposable _disposable1;
             private volatile IDisposable _disposable2;
@@ -82,21 +82,12 @@ namespace System.Reactive.Disposables
 
             public override void Dispose()
             {
-                var old1 = Interlocked.Exchange(ref _disposable1, null);
-                if (old1 != null)
-                {
-                    old1.Dispose();
-                }
-
-                var old2 = Interlocked.Exchange(ref _disposable2, null);
-                if (old2 != null)
-                {
-                    old2.Dispose();
-                }
+                Interlocked.Exchange(ref _disposable1, null)?.Dispose();
+                Interlocked.Exchange(ref _disposable2, null)?.Dispose();
             }
         }
 
-        class NAry : StableCompositeDisposable
+        private sealed class NAry : StableCompositeDisposable
         {
             private volatile List<IDisposable> _disposables;
 

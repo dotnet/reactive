@@ -38,7 +38,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown if the SingleAssignmentDisposable has already been assigned to.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the <see cref="SingleAssignmentDisposable"/> has already been assigned to.</exception>
         public IDisposable Disposable
         {
             get
@@ -46,7 +46,9 @@ namespace System.Reactive.Disposables
                 var current = _current;
 
                 if (current == BooleanDisposable.True)
+                {
                     return DefaultDisposable.Instance; // Don't leak the sentinel value.
+                }
 
                 return current;
             }
@@ -60,8 +62,7 @@ namespace System.Reactive.Disposables
                 if (old != BooleanDisposable.True)
                     throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
 
-                if (value != null)
-                    value.Dispose();
+                value?.Dispose();
             }
         }
 
@@ -70,9 +71,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var old = Interlocked.Exchange(ref _current, BooleanDisposable.True);
-            if (old != null)
-                old.Dispose();
+            Interlocked.Exchange(ref _current, BooleanDisposable.True)?.Dispose();
         }
     }
 }

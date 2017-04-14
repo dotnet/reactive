@@ -37,17 +37,19 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
         /// </summary>
-        /// <remarks>If the MutableDisposable has already been disposed, assignment to this property causes immediate disposal of the given disposable object.</remarks>
+        /// <remarks>If the <see cref="MultipleAssignmentDisposable"/> has already been disposed, assignment to this property causes immediate disposal of the given disposable object.</remarks>
         public IDisposable Disposable
         {
             get
             {
                 var a = Volatile.Read(ref _current);
+
                 // Don't leak the DISPOSED sentinel
                 if (a == BooleanDisposable.True)
                 {
                     a = DefaultDisposable.Instance;
                 }
+
                 return a;
             }
 
@@ -55,6 +57,7 @@ namespace System.Reactive.Disposables
             {
                 // Let's read the current value atomically (also prevents reordering).
                 var old = Volatile.Read(ref _current);
+
                 for (;;)
                 {
                     // If it is the disposed instance, dispose the value.
@@ -63,13 +66,16 @@ namespace System.Reactive.Disposables
                         value?.Dispose();
                         return;
                     }
+
                     // Atomically swap in the new value and get back the old.
                     var b = Interlocked.CompareExchange(ref _current, value, old);
+
                     // If the old and new are the same, the swap was successful and we can quit
                     if (old == b)
                     {
                         return;
                     }
+
                     // Otherwise, make the old reference the current and retry.
                     old = b;
                 }
@@ -83,11 +89,13 @@ namespace System.Reactive.Disposables
         {
             // Read the current atomically.
             var a = Volatile.Read(ref _current);
+
             // If it is the disposed instance, don't bother further.
             if (a != BooleanDisposable.True)
             {
                 // Atomically swap in the disposed instance.
                 a = Interlocked.Exchange(ref _current, BooleanDisposable.True);
+
                 // It is possible there was a concurrent Dispose call so don't need to call Dispose()
                 // on DISPOSED
                 if (a != BooleanDisposable.True)
