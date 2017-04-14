@@ -71,7 +71,7 @@ namespace System.Reactive
             var d = _source.Subscribe/*Unsafe*/(
                 x => _invokeHandler(invoke, /*this,*/ x),
                 ex => { remove(); ex.Throw(); },
-                () => remove()
+                remove
             );
 
             lock (gate)
