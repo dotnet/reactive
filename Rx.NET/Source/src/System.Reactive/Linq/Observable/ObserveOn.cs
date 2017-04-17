@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             if (_context != null)
             {
-                var sink = new ObserveOnImpl(this, observer, cancel);
+                var sink = new Context(_context, observer, cancel);
                 setSink(sink);
                 return _source.Subscribe(sink);
             }
@@ -41,19 +41,19 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class ObserveOnImpl : Sink<TSource>, IObserver<TSource>
+        private sealed class Context : Sink<TSource>, IObserver<TSource>
         {
-            private readonly ObserveOn<TSource> _parent;
+            private readonly SynchronizationContext _context;
 
-            public ObserveOnImpl(ObserveOn<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public Context(SynchronizationContext context, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _context = context;
             }
 
             public void OnNext(TSource value)
             {
-                _parent._context.PostWithStartComplete(() =>
+                _context.PostWithStartComplete(() =>
                 {
                     base._observer.OnNext(value);
                 });
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                _parent._context.PostWithStartComplete(() =>
+                _context.PostWithStartComplete(() =>
                 {
                     base._observer.OnError(error);
                     base.Dispose();
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
-                _parent._context.PostWithStartComplete(() =>
+                _context.PostWithStartComplete(() =>
                 {
                     base._observer.OnCompleted();
                     base.Dispose();
