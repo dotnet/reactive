@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if !NO_THREAD
-using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
@@ -17,10 +16,7 @@ namespace System.Reactive.Concurrency
     //
     internal class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
     {
-        public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime)
-        {
-            return new Timer(action, state, Normalize(dueTime));
-        }
+        public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime) => new Timer(action, state, Normalize(dueTime));
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
         {
@@ -47,27 +43,11 @@ namespace System.Reactive.Concurrency
             return Disposable.Empty;
         }
 
-#if USE_SLEEP_MS
-        public void Sleep(TimeSpan timeout)
-        {
-            System.Threading.Thread.Sleep((int)Normalize(timeout).TotalMilliseconds);
-        }
-#else
-        public void Sleep(TimeSpan timeout)
-        {
-            System.Threading.Thread.Sleep(Normalize(timeout));
-        }
-#endif
+        public void Sleep(TimeSpan timeout) => System.Threading.Thread.Sleep(Normalize(timeout));
 
-        public IStopwatch StartStopwatch()
-        {
-            return new StopwatchImpl();
-        }
+        public IStopwatch StartStopwatch() => new StopwatchImpl();
 
-        public bool SupportsLongRunning
-        {
-            get { return true; }
-        }
+        public bool SupportsLongRunning => true;
 
         public void StartThread(Action<object> action, object state)
         {
@@ -77,13 +57,7 @@ namespace System.Reactive.Concurrency
             }) { IsBackground = true }.Start();
         }
 
-        private static TimeSpan Normalize(TimeSpan dueTime)
-        {
-            if (dueTime < TimeSpan.Zero)
-                return TimeSpan.Zero;
-
-            return dueTime;
-        }
+        private static TimeSpan Normalize(TimeSpan dueTime) => dueTime < TimeSpan.Zero ? TimeSpan.Zero : dueTime;
 
         //
         // Some historical context. In the early days of Rx, we discovered an issue with
@@ -156,7 +130,7 @@ namespace System.Reactive.Concurrency
         //                 symbol.
         //
 
-        class Timer : IDisposable
+        private sealed class Timer : IDisposable
         {
             private Action<object> _action;
             private volatile System.Threading.Timer _timer;
@@ -190,10 +164,7 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            private bool IsTimerAssigned()
-            {
-                return _timer != null;
-            }
+            private bool IsTimerAssigned() => _timer != null;
 
             public void Dispose()
             {
@@ -208,7 +179,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        class PeriodicTimer : IDisposable
+        private sealed class PeriodicTimer : IDisposable
         {
             private Action _action;
             private volatile System.Threading.Timer _timer;
@@ -224,10 +195,7 @@ namespace System.Reactive.Concurrency
                 _timer = new System.Threading.Timer(this.Tick, null, period, period);
             }
 
-            private void Tick(object state)
-            {
-                _action();
-            }
+            private void Tick(object state) => _action();
 
             public void Dispose()
             {
@@ -242,7 +210,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        class FastPeriodicTimer : IDisposable
+        private sealed class FastPeriodicTimer : IDisposable
         {
             private readonly Action _action;
             private volatile bool disposed;

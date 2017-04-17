@@ -8,12 +8,12 @@ using System.Reactive.Disposables;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Base class for historical schedulers, which are virtual time schedulers that use DateTimeOffset for absolute time and TimeSpan for relative time.
+    /// Base class for historical schedulers, which are virtual time schedulers that use <see cref="DateTimeOffset"/> for absolute time and <see cref="TimeSpan"/> for relative time.
     /// </summary>
     public abstract class HistoricalSchedulerBase : VirtualTimeSchedulerBase<DateTimeOffset, TimeSpan>
     {
         /// <summary>
-        /// Creates a new historical scheduler with the minimum value of DateTimeOffset as the initial clock value.
+        /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.
         /// </summary>
         protected HistoricalSchedulerBase()
             : base(DateTimeOffset.MinValue, Comparer<DateTimeOffset>.Default)
@@ -51,35 +51,29 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Converts the absolute time value to a DateTimeOffset value.
+        /// Converts the absolute time value to a <see cref="DateTimeOffset"/> value.
         /// </summary>
         /// <param name="absolute">Absolute time value to convert.</param>
-        /// <returns>The corresponding DateTimeOffset value.</returns>
-        protected override DateTimeOffset ToDateTimeOffset(DateTimeOffset absolute)
-        {
-            return absolute;
-        }
+        /// <returns>The corresponding <see cref="DateTimeOffset"/> value.</returns>
+        protected override DateTimeOffset ToDateTimeOffset(DateTimeOffset absolute) => absolute;
 
         /// <summary>
-        /// Converts the TimeSpan value to a relative time value.
+        /// Converts the <see cref="TimeSpan"/> value to a relative time value.
         /// </summary>
-        /// <param name="timeSpan">TimeSpan value to convert.</param>
+        /// <param name="timeSpan"><see cref="TimeSpan"/> value to convert.</param>
         /// <returns>The corresponding relative time value.</returns>
-        protected override TimeSpan ToRelative(TimeSpan timeSpan)
-        {
-            return timeSpan;
-        }
+        protected override TimeSpan ToRelative(TimeSpan timeSpan) => timeSpan;
     }
 
     /// <summary>
-    /// Provides a virtual time scheduler that uses DateTimeOffset for absolute time and TimeSpan for relative time.
+    /// Provides a virtual time scheduler that uses <see cref="DateTimeOffset"/> for absolute time and <see cref="TimeSpan"/> for relative time.
     /// </summary>
     public class HistoricalScheduler : HistoricalSchedulerBase
     {
         private readonly SchedulerQueue<DateTimeOffset> queue = new SchedulerQueue<DateTimeOffset>();
 
         /// <summary>
-        /// Creates a new historical scheduler with the minimum value of DateTimeOffset as the initial clock value.
+        /// Creates a new historical scheduler with the minimum value of <see cref="DateTimeOffset"/> as the initial clock value.
         /// </summary>
         public HistoricalScheduler()
             : base()
@@ -100,7 +94,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="initialClock">Initial value for the clock.</param>
         /// <param name="comparer">Comparer to determine causality of events based on absolute time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         public HistoricalScheduler(DateTimeOffset initialClock, IComparer<DateTimeOffset> comparer)
             : base(initialClock, comparer)
         {
@@ -115,23 +109,29 @@ namespace System.Reactive.Concurrency
             while (queue.Count > 0)
             {
                 var next = queue.Peek();
+
                 if (next.IsCanceled)
+                {
                     queue.Dequeue();
+                }
                 else
+                {
                     return next;
+                }
             }
+
             return null;
         }
 
         /// <summary>
-        /// Schedules an action to be executed at dueTime.
+        /// Schedules an action to be executed at <paramref name="dueTime"/>.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable ScheduleAbsolute<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)

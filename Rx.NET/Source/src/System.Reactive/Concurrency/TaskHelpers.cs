@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Concurrency
 {
-    static class TaskHelpers
+    internal static class TaskHelpers
     {
         private const int MAX_DELAY = int.MaxValue;
 

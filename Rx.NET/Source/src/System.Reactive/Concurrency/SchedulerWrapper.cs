@@ -23,10 +23,7 @@ namespace System.Reactive.Concurrency
             _cache = cache;
         }
 
-        public DateTimeOffset Now
-        {
-            get { return _scheduler.Now; }
-        }
+        public DateTimeOffset Now => _scheduler.Now;
 
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {

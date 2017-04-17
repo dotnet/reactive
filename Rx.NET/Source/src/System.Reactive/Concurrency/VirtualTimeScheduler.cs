@@ -29,7 +29,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="initialClock">Initial value for the clock.</param>
         /// <param name="comparer">Comparer to determine causality of events based on absolute time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected VirtualTimeSchedulerBase(TAbsolute initialClock, IComparer<TAbsolute> comparer)
         {
             if (comparer == null)
@@ -64,20 +64,12 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets whether the scheduler is enabled to run work.
         /// </summary>
-        public bool IsEnabled
-        {
-            get;
-            private set;
-        }
+        public bool IsEnabled { get; private set; }
 
         /// <summary>
         /// Gets the comparer used to compare absolute time values.
         /// </summary>
-        protected IComparer<TAbsolute> Comparer
-        {
-            get;
-            private set;
-        }
+        protected IComparer<TAbsolute> Comparer { get; }
 
         /// <summary>
         /// Schedules an action to be executed at dueTime.
@@ -114,7 +106,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -131,7 +123,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -148,7 +140,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable Schedule<TState>(TState state, DateTimeOffset dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -171,11 +163,16 @@ namespace System.Reactive.Concurrency
                     if (next != null)
                     {
                         if (Comparer.Compare(next.DueTime, Clock) > 0)
+                        {
                             Clock = next.DueTime;
+                        }
+
                         next.Invoke();
                     }
                     else
+                    {
                         IsEnabled = false;
+                    }
                 } while (IsEnabled);
             }
         }
@@ -212,18 +209,23 @@ namespace System.Reactive.Concurrency
                     if (next != null && Comparer.Compare(next.DueTime, time) <= 0)
                     {
                         if (Comparer.Compare(next.DueTime, Clock) > 0)
+                        {
                             Clock = next.DueTime;
+                        }
+
                         next.Invoke();
                     }
                     else
+                    {
                         IsEnabled = false;
+                    }
                 } while (IsEnabled);
 
                 Clock = time;
             }
             else
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, "AdvanceTo"));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, nameof(AdvanceTo)));
             }
         }
 
@@ -250,7 +252,7 @@ namespace System.Reactive.Concurrency
             }
             else
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, "AdvanceBy"));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings_Linq.CANT_ADVANCE_WHILE_RUNNING, nameof(AdvanceBy)));
             }
         }
 
@@ -282,10 +284,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the scheduler's notion of current time.
         /// </summary>
-        public DateTimeOffset Now
-        {
-            get { return ToDateTimeOffset(Clock); }
-        }
+        public DateTimeOffset Now => ToDateTimeOffset(Clock);
 
         /// <summary>
         /// Gets the next scheduled item to be executed.
@@ -294,10 +293,7 @@ namespace System.Reactive.Concurrency
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "By design. Side-effecting operation to retrieve the next element.")]
         protected abstract IScheduledItem<TAbsolute> GetNext();
 
-        object IServiceProvider.GetService(Type serviceType)
-        {
-            return GetService(serviceType);
-        }
+        object IServiceProvider.GetService(Type serviceType) => GetService(serviceType);
 
         /// <summary>
         /// Discovers scheduler services by interface type. The base class implementation supports
@@ -324,7 +320,7 @@ namespace System.Reactive.Concurrency
             return new VirtualTimeStopwatch(() => ToDateTimeOffset(Clock) - start);
         }
 
-        class VirtualTimeStopwatch : IStopwatch
+        private sealed class VirtualTimeStopwatch : IStopwatch
         {
             private readonly Func<TimeSpan> _getElapsed;
 
@@ -333,10 +329,7 @@ namespace System.Reactive.Concurrency
                 _getElapsed = getElapsed;
             }
 
-            public TimeSpan Elapsed
-            {
-                get { return _getElapsed(); }
-            }
+            public TimeSpan Elapsed => _getElapsed();
         }
     }
 
@@ -363,7 +356,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="initialClock">Initial value for the clock.</param>
         /// <param name="comparer">Comparer to determine causality of events based on absolute time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected VirtualTimeScheduler(TAbsolute initialClock, IComparer<TAbsolute> comparer)
             : base(initialClock, comparer)
         {
@@ -381,9 +374,13 @@ namespace System.Reactive.Concurrency
                 {
                     var next = queue.Peek();
                     if (next.IsCanceled)
+                    {
                         queue.Dequeue();
+                    }
                     else
+                    {
                         return next;
+                    }
                 }
             }
 
@@ -398,7 +395,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable ScheduleAbsolute<TState>(TState state, TAbsolute dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
