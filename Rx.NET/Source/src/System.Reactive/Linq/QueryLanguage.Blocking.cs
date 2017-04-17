@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
         {
             using (var evt = new WaitAndSetOnce())
             {
-                var sink = new ForEach<TSource>._(onNext, () => evt.Set());
+                var sink = new ForEach<TSource>.Observer(onNext, () => evt.Set());
 
                 using (source.SubscribeSafe(sink))
                 {
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq
         {
             using (var evt = new WaitAndSetOnce())
             {
-                var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
+                var sink = new ForEach<TSource>.ObserverIndexed(onNext, () => evt.Set());
 
                 using (source.SubscribeSafe(sink))
                 {
