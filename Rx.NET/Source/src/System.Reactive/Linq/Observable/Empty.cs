@@ -17,24 +17,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_scheduler);
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
-            private readonly Empty<TResult> _parent;
-
-            public _(Empty<TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(IScheduler scheduler)
             {
-                return _parent._scheduler.Schedule(Invoke);
+                return scheduler.Schedule(Invoke);
             }
 
             private void Invoke()
