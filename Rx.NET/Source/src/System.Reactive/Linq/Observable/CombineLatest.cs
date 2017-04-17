@@ -26,55 +26,55 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_resultSelector, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_first, _second);
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
-            private readonly CombineLatest<TFirst, TSecond, TResult> _parent;
+            private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-            public _(CombineLatest<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _resultSelector = resultSelector;
             }
 
             private object _gate;
 
-            public IDisposable Run()
+            public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
 
                 var fstSubscription = new SingleAssignmentDisposable();
                 var sndSubscription = new SingleAssignmentDisposable();
 
-                var fstO = new F(this, fstSubscription);
-                var sndO = new S(this, sndSubscription);
+                var fstO = new FirstObserver(this, fstSubscription);
+                var sndO = new SecondObserver(this, sndSubscription);
 
                 fstO.Other = sndO;
                 sndO.Other = fstO;
 
-                fstSubscription.Disposable = _parent._first.SubscribeSafe(fstO);
-                sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
+                fstSubscription.Disposable = first.SubscribeSafe(fstO);
+                sndSubscription.Disposable = second.SubscribeSafe(sndO);
 
                 return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
             }
 
-            class F : IObserver<TFirst>
+            private sealed class FirstObserver : IObserver<TFirst>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
-                private S _other;
+                private SecondObserver _other;
 
-                public F(_ parent, IDisposable self)
+                public FirstObserver(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
                 }
 
-                public S Other { set { _other = value; } }
+                public SecondObserver Other { set { _other = value; } }
 
                 public bool HasValue { get; private set; }
                 public TFirst Value { get; private set; }
@@ -92,7 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             var res = default(TResult);
                             try
                             {
-                                res = _parent._parent._resultSelector(value, _other.Value);
+                                res = _parent._resultSelector(value, _other.Value);
                             }
                             catch (Exception ex)
                             {
@@ -141,19 +141,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class S : IObserver<TSecond>
+            private sealed class SecondObserver : IObserver<TSecond>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
-                private F _other;
+                private FirstObserver _other;
 
-                public S(_ parent, IDisposable self)
+                public SecondObserver(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
                 }
 
-                public F Other { set { _other = value; } }
+                public FirstObserver Other { set { _other = value; } }
 
                 public bool HasValue { get; private set; }
                 public TSecond Value { get; private set; }
@@ -171,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             var res = default(TResult);
                             try
                             {
-                                res = _parent._parent._resultSelector(_other.Value, value);
+                                res = _parent._resultSelector(_other.Value, value);
                             }
                             catch (Exception ex)
                             {
@@ -228,14 +228,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region Helpers for n-ary overloads
 
-    interface ICombineLatest
+    internal interface ICombineLatest
     {
         void Next(int index);
         void Fail(Exception error);
         void Done(int index);
     }
 
-    abstract class CombineLatestSink<TResult> : Sink<TResult>, ICombineLatest
+    internal abstract class CombineLatestSink<TResult> : Sink<TResult>, ICombineLatest
     {
         protected readonly object _gate;
 
@@ -354,10 +354,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _self = self;
         }
 
-        public T Value
-        {
-            get { return _value; }
-        }
+        public T Value => _value;
 
         public void OnNext(T value)
         {
@@ -408,19 +405,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_resultSelector, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_sources);
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
-            private readonly CombineLatest<TSource, TResult> _parent;
+            private readonly Func<IList<TSource>, TResult> _resultSelector;
 
-            public _(CombineLatest<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(Func<IList<TSource>, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _resultSelector = resultSelector;
             }
 
             private object _gate;
@@ -430,9 +427,9 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
 
-            public IDisposable Run()
+            public IDisposable Run(IEnumerable<IObservable<TSource>> sources)
             {
-                var srcs = _parent._sources.ToArray();
+                var srcs = sources.ToArray();
 
                 var N = srcs.Length;
 
@@ -456,7 +453,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var d = new SingleAssignmentDisposable();
                     _subscriptions[j] = d;
 
-                    var o = new O(this, j);
+                    var o = new SourceObserver(this, j);
                     d.Disposable = srcs[j].SubscribeSafe(o);
                 }
 
@@ -476,7 +473,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var res = default(TResult);
                         try
                         {
-                            res = _parent._resultSelector(new ReadOnlyCollection<TSource>(_values));
+                            res = _resultSelector(new ReadOnlyCollection<TSource>(_values));
                         }
                         catch (Exception ex)
                         {
@@ -524,12 +521,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class O : IObserver<TSource>
+            private sealed class SourceObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly int _index;
 
-                public O(_ parent, int index)
+                public SourceObserver(_ parent, int index)
                 {
                     _parent = parent;
                     _index = index;
