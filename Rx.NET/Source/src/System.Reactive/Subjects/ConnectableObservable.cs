@@ -50,7 +50,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        class Connection : IDisposable
+        private sealed class Connection : IDisposable
         {
             private readonly ConnectableObservable<TSource, TResult> _parent;
             private IDisposable _subscription;

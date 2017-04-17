@@ -20,7 +20,7 @@ namespace System.Reactive.Subjects
         /// <param name="observer">The observer used to send messages to the subject.</param>
         /// <param name="observable">The observable used to subscribe to messages sent from the subject.</param>
         /// <returns>Subject implemented using the given observer and observable.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="observable"/> is <c>null</c>.</exception>
         public static ISubject<TSource, TResult> Create<TSource, TResult>(IObserver<TSource> observer, IObservable<TResult> observable)
         {
             if (observer == null)
@@ -38,7 +38,7 @@ namespace System.Reactive.Subjects
         /// <param name="observer">The observer used to send messages to the subject.</param>
         /// <param name="observable">The observable used to subscribe to messages sent from the subject.</param>
         /// <returns>Subject implemented using the given observer and observable.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="observable"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="observable"/> is <c>null</c>.</exception>
         public static ISubject<T> Create<T>(IObserver<T> observer, IObservable<T> observable)
         {
             if (observer == null)
@@ -56,7 +56,7 @@ namespace System.Reactive.Subjects
         /// <typeparam name="TResult">The type of the elements produced by the subject.</typeparam>
         /// <param name="subject">The subject to synchronize.</param>
         /// <returns>Subject whose messages are synchronized.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="subject"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="subject"/> is <c>null</c>.</exception>
         public static ISubject<TSource, TResult> Synchronize<TSource, TResult>(ISubject<TSource, TResult> subject)
         {
             if (subject == null)
@@ -71,7 +71,7 @@ namespace System.Reactive.Subjects
         /// <typeparam name="TSource">The type of the elements received and produced by the subject.</typeparam>
         /// <param name="subject">The subject to synchronize.</param>
         /// <returns>Subject whose messages are synchronized.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="subject"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="subject"/> is <c>null</c>.</exception>
         public static ISubject<TSource> Synchronize<TSource>(ISubject<TSource> subject)
         {
             if (subject == null)
@@ -88,7 +88,7 @@ namespace System.Reactive.Subjects
         /// <param name="subject">The subject to synchronize.</param>
         /// <param name="scheduler">Scheduler to notify observers on.</param>
         /// <returns>Subject whose messages are synchronized and whose observers are notified on the given scheduler.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="subject"/> or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="subject"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         public static ISubject<TSource, TResult> Synchronize<TSource, TResult>(ISubject<TSource, TResult> subject, IScheduler scheduler)
         {
             if (subject == null)
@@ -106,7 +106,7 @@ namespace System.Reactive.Subjects
         /// <param name="subject">The subject to synchronize.</param>
         /// <param name="scheduler">Scheduler to notify observers on.</param>
         /// <returns>Subject whose messages are synchronized and whose observers are notified on the given scheduler.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="subject"/> or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="subject"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         public static ISubject<TSource> Synchronize<TSource>(ISubject<TSource> subject, IScheduler scheduler)
         {
             if (subject == null)
@@ -117,7 +117,7 @@ namespace System.Reactive.Subjects
             return new AnonymousSubject<TSource>(Observer.Synchronize(subject), subject.ObserveOn(scheduler));
         }
 
-        class AnonymousSubject<T, U> : ISubject<T, U>
+        private class AnonymousSubject<T, U> : ISubject<T, U>
         {
             private readonly IObserver<T> _observer;
             private readonly IObservable<U> _observable;
@@ -128,10 +128,7 @@ namespace System.Reactive.Subjects
                 _observable = observable;
             }
 
-            public void OnCompleted()
-            {
-                _observer.OnCompleted();
-            }
+            public void OnCompleted() => _observer.OnCompleted();
 
             public void OnError(Exception error)
             {
@@ -141,10 +138,7 @@ namespace System.Reactive.Subjects
                 _observer.OnError(error);
             }
 
-            public void OnNext(T value)
-            {
-                _observer.OnNext(value);
-            }
+            public void OnNext(T value) => _observer.OnNext(value);
 
             public IDisposable Subscribe(IObserver<U> observer)
             {
@@ -158,7 +152,7 @@ namespace System.Reactive.Subjects
             }
         }
 
-        class AnonymousSubject<T> : AnonymousSubject<T, T>, ISubject<T>
+        private sealed class AnonymousSubject<T> : AnonymousSubject<T, T>, ISubject<T>
         {
             public AnonymousSubject(IObserver<T> observer, IObservable<T> observable)
                 : base(observer, observable)
