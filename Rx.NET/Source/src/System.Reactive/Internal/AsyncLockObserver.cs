@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive
 {
-    internal class AsyncLockObserver<T> : ObserverBase<T>
+    internal sealed class AsyncLockObserver<T> : ObserverBase<T>
     {
         private readonly AsyncLock _gate;
         private readonly IObserver<T> _observer;

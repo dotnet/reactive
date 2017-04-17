@@ -49,17 +49,17 @@ namespace System.Reactive.PlatformServices
             {
                 return s_current;
             }
+
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
                 s_current = value;
             }
             
         }
 
-        private static IPlatformEnlightenmentProvider CreatePlatformProvider()
-        {
-            return new CurrentPlatformEnlightenmentProvider();
-        }
+        private static IPlatformEnlightenmentProvider CreatePlatformProvider() => new CurrentPlatformEnlightenmentProvider();
     }
 }

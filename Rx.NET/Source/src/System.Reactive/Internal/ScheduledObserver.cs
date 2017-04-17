@@ -115,17 +115,16 @@ namespace System.Reactive
             }
         }
 
-        public void EnsureActive()
-        {
-            EnsureActive(1);
-        }
+        public void EnsureActive() => EnsureActive(1);
 
         public void EnsureActive(int n)
         {
             if (_longRunning != null)
             {
                 if (n > 0)
+                {
                     _dispatcherEvent.Release(n);
+                }
 
                 EnsureDispatcher();
             }
@@ -261,6 +260,7 @@ namespace System.Reactive
                 var nop = default(T);
                 while (_queue.TryDequeue(out nop))
                     ;
+
                 throw;
             }
 
@@ -294,7 +294,7 @@ namespace System.Reactive
         }
     }
 
-    class ObserveOnObserver<T> : ScheduledObserver<T>
+    internal sealed class ObserveOnObserver<T> : ScheduledObserver<T>
     {
         private IDisposable _cancel;
 
@@ -328,16 +328,12 @@ namespace System.Reactive
 
             if (disposing)
             {
-                var cancel = Interlocked.Exchange(ref _cancel, null);
-                if (cancel != null)
-                {
-                    cancel.Dispose();
-                }
+                Interlocked.Exchange(ref _cancel, null)?.Dispose();
             }
         }
     }
 
-    interface IScheduledObserver<T> : IObserver<T>, IDisposable
+    internal interface IScheduledObserver<T> : IObserver<T>, IDisposable
     {
         void EnsureActive();
         void EnsureActive(int count);

@@ -29,10 +29,7 @@ namespace System.Reactive.PlatformServices
         /// <summary>
         /// Gets the local system clock time.
         /// </summary>
-        public static DateTimeOffset UtcNow
-        {
-            get { return s_serviceSystemClock.Value.UtcNow; }
-        }
+        public static DateTimeOffset UtcNow => s_serviceSystemClock.Value.UtcNow;
 
         /// <summary>
         /// Adds a reference to the system clock monitor, causing it to be sending notifications.
@@ -220,11 +217,11 @@ namespace System.Reactive.PlatformServices
         /// <summary>
         /// Gets the time before the system clock changed, or DateTimeOffset.MinValue if not known.
         /// </summary>
-        public DateTimeOffset OldTime { get; private set; }
+        public DateTimeOffset OldTime { get; }
 
         /// <summary>
         /// Gets the time after the system clock changed, or DateTimeOffset.MaxValue if not known.
         /// </summary>
-        public DateTimeOffset NewTime { get; private set; }
+        public DateTimeOffset NewTime { get; }
     }
 }

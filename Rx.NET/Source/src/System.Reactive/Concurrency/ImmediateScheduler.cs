@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
 using System.Reactive.Disposables;
 
 namespace System.Reactive.Concurrency
@@ -15,17 +14,14 @@ namespace System.Reactive.Concurrency
     {
         private static readonly Lazy<ImmediateScheduler> s_instance = new Lazy<ImmediateScheduler>(() => new ImmediateScheduler());
 
-        ImmediateScheduler()
+        private ImmediateScheduler()
         {
         }
 
         /// <summary>
         /// Gets the singleton instance of the immediate scheduler.
         /// </summary>
-        public static ImmediateScheduler Instance
-        {
-            get { return s_instance.Value; }
-        }
+        public static ImmediateScheduler Instance => s_instance.Value;
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -66,9 +62,9 @@ namespace System.Reactive.Concurrency
             return action(new AsyncLockScheduler(), state);
         }
 
-        class AsyncLockScheduler : LocalScheduler
+        private sealed class AsyncLockScheduler : LocalScheduler
         {
-            AsyncLock asyncLock;
+            private AsyncLock asyncLock;
 
             public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
@@ -78,12 +74,16 @@ namespace System.Reactive.Concurrency
                 var m = new SingleAssignmentDisposable();
 
                 if (asyncLock == null)
+                {
                     asyncLock = new AsyncLock();
+                }
 
                 asyncLock.Wait(() =>
                 {
                     if (!m.IsDisposed)
+                    {
                         m.Disposable = action(this, state);
+                    }
                 });
 
                 return m;
@@ -95,14 +95,23 @@ namespace System.Reactive.Concurrency
                     throw new ArgumentNullException(nameof(action));
 
                 if (dueTime.Ticks <= 0)
-                    return Schedule<TState>(state, action);
+                {
+                    return Schedule(state, action);
+                }
 
+                return ScheduleSlow(state, dueTime, action);
+            }
+
+            private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+            {
                 var timer = ConcurrencyAbstractionLayer.Current.StartStopwatch();
 
                 var m = new SingleAssignmentDisposable();
 
                 if (asyncLock == null)
+                {
                     asyncLock = new AsyncLock();
+                }
 
                 asyncLock.Wait(() =>
                 {
@@ -113,8 +122,11 @@ namespace System.Reactive.Concurrency
                         {
                             ConcurrencyAbstractionLayer.Current.Sleep(sleep);
                         }
+
                         if (!m.IsDisposed)
+                        {
                             m.Disposable = action(this, state);
+                        }
                     }
                 });
 

@@ -41,7 +41,7 @@ namespace System.Reactive.Subjects
         /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified scheduler.
         /// </summary>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public ReplaySubject(IScheduler scheduler)
         {
             _implementation = new ReplayByTime(scheduler);
@@ -77,7 +77,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero.</exception>
         public ReplaySubject(int bufferSize, IScheduler scheduler)
         {
@@ -92,7 +92,7 @@ namespace System.Reactive.Subjects
         /// Initializes a new instance of the <see cref="ReplaySubject{T}" /> class with the specified window.
         /// </summary>
         /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public ReplaySubject(TimeSpan window)
         {
             _implementation = new ReplayByTime(window);
@@ -103,8 +103,8 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="window"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public ReplaySubject(TimeSpan window, IScheduler scheduler)
         {
             _implementation = new ReplayByTime(window, scheduler);
@@ -119,7 +119,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public ReplaySubject(int bufferSize, TimeSpan window)
         {
             _implementation = new ReplayByTime(bufferSize, window);
@@ -131,8 +131,8 @@ namespace System.Reactive.Subjects
         /// <param name="bufferSize">Maximum element count of the replay buffer.</param>
         /// <param name="window">Maximum time length of the replay buffer.</param>
         /// <param name="scheduler">Scheduler the observers are invoked on.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="bufferSize"/> is less than zero. -or- <paramref name="window"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public ReplaySubject(int bufferSize, TimeSpan window, IScheduler scheduler)
         {
             _implementation = new ReplayByTime(bufferSize, window, scheduler);
@@ -147,18 +147,12 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Indicates whether the subject has observers subscribed to it.
         /// </summary>
-        public override bool HasObservers
-        {
-            get { return _implementation.HasObservers; }
-        }
+        public override bool HasObservers => _implementation.HasObservers;
 
         /// <summary>
         /// Indicates whether the subject has been disposed.
         /// </summary>
-        public override bool IsDisposed
-        {
-            get { return _implementation.IsDisposed; }
-        }
+        public override bool IsDisposed => _implementation.IsDisposed;
 
         #endregion
 
@@ -170,16 +164,13 @@ namespace System.Reactive.Subjects
         /// Notifies all subscribed and future observers about the arrival of the specified element in the sequence.
         /// </summary>
         /// <param name="value">The value to send to all observers.</param>
-        public override void OnNext(T value)
-        {
-            _implementation.OnNext(value);
-        }
+        public override void OnNext(T value) => _implementation.OnNext(value);
 
         /// <summary>
         /// Notifies all subscribed and future observers about the specified exception.
         /// </summary>
         /// <param name="error">The exception to send to all observers.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="error"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
         public override void OnError(Exception error)
         {
             if (error == null)
@@ -191,10 +182,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Notifies all subscribed and future observers about the end of the sequence.
         /// </summary>
-        public override void OnCompleted()
-        {
-            _implementation.OnCompleted();
-        }
+        public override void OnCompleted() => _implementation.OnCompleted();
 
         #endregion
 
@@ -205,7 +193,7 @@ namespace System.Reactive.Subjects
         /// </summary>
         /// <param name="observer">Observer to subscribe to the subject.</param>
         /// <returns>Disposable object that can be used to unsubscribe the observer from the subject.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="observer"/> is <c>null</c>.</exception>
         public override IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null)
@@ -221,10 +209,7 @@ namespace System.Reactive.Subjects
         /// <summary>
         /// Releases all resources used by the current instance of the <see cref="ReplaySubject{T}"/> class and unsubscribe all observers.
         /// </summary>
-        public override void Dispose()
-        {
-            _implementation.Dispose();
-        }
+        public override void Dispose() => _implementation.Dispose();
 
         #endregion
 
@@ -248,14 +233,7 @@ namespace System.Reactive.Subjects
                 _error = null;
             }
 
-            public override bool HasObservers
-            {
-                get
-                {
-                    var observers = _observers;
-                    return observers != null && observers.Data.Length > 0;
-                }
-            }
+            public override bool HasObservers => _observers?.Data.Length > 0;
 
             public override bool IsDisposed
             {
@@ -282,14 +260,18 @@ namespace System.Reactive.Subjects
 
                         o = _observers.Data;
                         foreach (var observer in o)
+                        {
                             observer.OnNext(value);
+                        }
                     }
                 }
 
                 if (o != null)
                 {
                     foreach (var observer in o)
+                    {
                         observer.EnsureActive();
+                    }
                 }
             }
 
@@ -308,7 +290,9 @@ namespace System.Reactive.Subjects
 
                         o = _observers.Data;
                         foreach (var observer in o)
+                        {
                             observer.OnError(error);
+                        }
 
                         _observers = ImmutableList<IScheduledObserver<T>>.Empty;
                     }
@@ -317,7 +301,9 @@ namespace System.Reactive.Subjects
                 if (o != null)
                 {
                     foreach (var observer in o)
+                    {
                         observer.EnsureActive();
+                    }
                 }
             }
 
@@ -335,7 +321,9 @@ namespace System.Reactive.Subjects
 
                         o = _observers.Data;
                         foreach (var observer in o)
+                        {
                             observer.OnCompleted();
+                        }
 
                         _observers = ImmutableList<IScheduledObserver<T>>.Empty;
                     }
@@ -344,7 +332,9 @@ namespace System.Reactive.Subjects
                 if (o != null)
                 {
                     foreach (var observer in o)
+                    {
                         observer.EnsureActive();
+                    }
                 }
             }
 
@@ -443,46 +433,6 @@ namespace System.Reactive.Subjects
                 }
             }
 
-#if NOTYET // TODO: Expose internal notifications similar to BehaviorSubject<T>.TryGetValue?
-
-            public bool TryGetNotifications(out IList<Notification<T>> notifications)
-            {
-                lock (_gate)
-                {
-                    if (_isDisposed)
-                    {
-                        notifications = null;
-                        return false;
-                    }
-                    else
-                    {
-                        var res = new List<Notification<T>>();
-
-                        var materializer = Observer.Create<T>(
-                            x => res.Add(Notification.CreateOnNext(x)),
-                            ex => res.Add(Notification.CreateOnError<T>(ex)),
-                            () => res.Add(Notification.CreateOnCompleted<T>())
-                        );
-
-                        Replay(materializer);
-
-                        if (_error != null)
-                        {
-                            materializer.OnError(_error);
-                        }
-                        else if (_isStopped)
-                        {
-                            materializer.OnCompleted();
-                        }
-
-                        notifications = res;
-                        return true;
-                    }
-                }
-            }
-
-#endif
-
             private sealed class Subscription : IDisposable
             {
                 private readonly ReplayBase _subject;
@@ -580,7 +530,9 @@ namespace System.Reactive.Subjects
                 var n = _queue.Count;
 
                 foreach (var item in _queue)
+                {
                     observer.OnNext(item.Value);
+                }
 
                 return n;
             }
@@ -590,14 +542,19 @@ namespace System.Reactive.Subjects
                 var now = _stopwatch.Elapsed;
 
                 while (_queue.Count > _bufferSize)
+                {
                     _queue.Dequeue();
+                }
+
                 while (_queue.Count > 0 && now.Subtract(_queue.Peek().Interval).CompareTo(_window) > 0)
+                {
                     _queue.Dequeue();
+                }
             }
         }
 
         //
-        // Below are the non-time based implementations. 
+        // Below are the non-time based implementations.
         // These removed the need for the scheduler indirection, SchedulerObservers, stopwatch, TimeInterval and ensuring the scheduled observers are active after each action.
         // The ReplayOne implementation also removes the need to even have a queue.
         //
@@ -652,7 +609,9 @@ namespace System.Reactive.Subjects
             protected override void Trim()
             {
                 while (_queue.Count > _bufferSize)
+                {
                     _queue.Dequeue();
+                }
             }
         }
 
@@ -703,7 +662,9 @@ namespace System.Reactive.Subjects
                 var n = _queue.Count;
 
                 foreach (var item in _queue)
+                {
                     observer.OnNext(item);
+                }
 
                 return n;
             }
@@ -719,7 +680,7 @@ namespace System.Reactive.Subjects
     /// Specialized scheduled observer similar to a scheduled observer for the immediate scheduler.
     /// </summary>
     /// <typeparam name="T">Type of the elements processed by the observer.</typeparam>
-    class FastImmediateObserver<T> : IScheduledObserver<T>
+    internal sealed class FastImmediateObserver<T> : IScheduledObserver<T>
     {
         /// <summary>
         /// Gate to control ownership transfer and protect data structures.

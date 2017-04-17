@@ -26,19 +26,12 @@ namespace System.Reactive
         {
             _observer = NopObserver<TSource>.Instance;
 
-            var cancel = Interlocked.Exchange(ref _cancel, null);
-            if (cancel != null)
-            {
-                cancel.Dispose();
-            }
+            Interlocked.Exchange(ref _cancel, null)?.Dispose();
         }
 
-        public IObserver<TSource> GetForwarder()
-        {
-            return new _(this);
-        }
+        public IObserver<TSource> GetForwarder() => new _(this);
 
-        class _ : IObserver<TSource>
+        private sealed class _ : IObserver<TSource>
         {
             private readonly Sink<TSource> _forward;
 
