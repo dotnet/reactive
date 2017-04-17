@@ -22,7 +22,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="dueTime">Absolute time at which the work item has to be executed.</param>
         /// <param name="comparer">Comparer used to compare work items based on their scheduled time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="comparer"/> is <c>null</c>.</exception>
         protected ScheduledItem(TAbsolute dueTime, IComparer<TAbsolute> comparer)
         {
             if (comparer == null)
@@ -43,7 +43,9 @@ namespace System.Reactive.Concurrency
         public void Invoke()
         {
             if (!_disposable.IsDisposed)
+            {
                 _disposable.Disposable = InvokeCore();
+            }
         }
 
         /// <summary>
@@ -59,12 +61,14 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="other">Work item to compare the current work item to.</param>
         /// <returns>Relative ordering between this and the specified work item.</returns>
-        /// <remarks>The inequality operators are overloaded to provide results consistent with the IComparable implementation. Equality operators implement traditional reference equality semantics.</remarks>
+        /// <remarks>The inequality operators are overloaded to provide results consistent with the <see cref="IComparable"/> implementation. Equality operators implement traditional reference equality semantics.</remarks>
         public int CompareTo(ScheduledItem<TAbsolute> other)
         {
-            // MSDN: By definition, any object compares greater than null, and two null references compare equal to each other. 
-            if (object.ReferenceEquals(other, null))
+            // MSDN: By definition, any object compares greater than null, and two null references compare equal to each other.
+            if (ReferenceEquals(other, null))
+            {
                 return 1;
+            }
 
             return _comparer.Compare(DueTime, other.DueTime);
         }
@@ -74,48 +78,36 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if the DueTime value of left is earlier than the DueTime value of right; otherwise, false.</returns>
-        /// <remarks>This operator provides results consistent with the IComparable implementation.</remarks>
-        public static bool operator <(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) < 0;
-        }
+        /// <returns><c>true</c> if the <see cref="DueTime"/> value of left is earlier than the <see cref="DueTime"/> value of right; otherwise, <c>false</c>.</returns>
+        /// <remarks>This operator provides results consistent with the <see cref="IComparable"/> implementation.</remarks>
+        public static bool operator <(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) < 0;
 
         /// <summary>
         /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due before or at the same of a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if the DueTime value of left is earlier than or simultaneous with the DueTime value of right; otherwise, false.</returns>
-        /// <remarks>This operator provides results consistent with the IComparable implementation.</remarks>
-        public static bool operator <=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) <= 0;
-        }
+        /// <returns><c>true</c> if the <see cref="DueTime"/> value of left is earlier than or simultaneous with the <see cref="DueTime"/> value of right; otherwise, <c>false</c>.</returns>
+        /// <remarks>This operator provides results consistent with the <see cref="IComparable"/> implementation.</remarks>
+        public static bool operator <=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) <= 0;
 
         /// <summary>
         /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due after a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if the DueTime value of left is later than the DueTime value of right; otherwise, false.</returns>
-        /// <remarks>This operator provides results consistent with the IComparable implementation.</remarks>
-        public static bool operator >(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) > 0;
-        }
+        /// <returns><c>true</c> if the <see cref="DueTime"/> value of left is later than the <see cref="DueTime"/> value of right; otherwise, <c>false</c>.</returns>
+        /// <remarks>This operator provides results consistent with the <see cref="IComparable"/> implementation.</remarks>
+        public static bool operator >(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) > 0;
 
         /// <summary>
         /// Determines whether one specified <see cref="ScheduledItem{TAbsolute}" /> object is due after or at the same time of a second specified <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if the DueTime value of left is later than or simultaneous with the DueTime value of right; otherwise, false.</returns>
-        /// <remarks>This operator provides results consistent with the IComparable implementation.</remarks>
-        public static bool operator >=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) >= 0;
-        }
+        /// <returns><c>true</c> if the <see cref="DueTime"/> value of left is later than or simultaneous with the <see cref="DueTime"/> value of right; otherwise, <c>false</c>.</returns>
+        /// <remarks>This operator provides results consistent with the <see cref="IComparable"/> implementation.</remarks>
+        public static bool operator >=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => Comparer<ScheduledItem<TAbsolute>>.Default.Compare(left, right) >= 0;
 
         #endregion
 
@@ -126,53 +118,38 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are equal; otherwise, false.</returns>
+        /// <returns><c>true</c> if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are equal; otherwise, <c>false</c>.</returns>
         /// <remarks>This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</remarks>
-        public static bool operator ==(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return object.ReferenceEquals(left, right);
-        }
+        public static bool operator ==(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => ReferenceEquals(left, right);
 
         /// <summary>
         /// Determines whether two specified <see cref="ScheduledItem{TAbsolute, TValue}" /> objects are inequal.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
-        /// <returns>true if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are inequal; otherwise, false.</returns>
+        /// <returns><c>true</c> if both <see cref="ScheduledItem{TAbsolute, TValue}" /> are inequal; otherwise, <c>false</c>.</returns>
         /// <remarks>This operator does not provide results consistent with the IComparable implementation. Instead, it implements reference equality.</remarks>
-        public static bool operator !=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(ScheduledItem<TAbsolute> left, ScheduledItem<TAbsolute> right) => !(left == right);
 
         /// <summary>
         /// Determines whether a <see cref="ScheduledItem{TAbsolute}" /> object is equal to the specified object.
         /// </summary>
         /// <param name="obj">The object to compare to the current <see cref="ScheduledItem{TAbsolute}" /> object.</param>
-        /// <returns>true if the obj parameter is a <see cref="ScheduledItem{TAbsolute}" /> object and is equal to the current <see cref="ScheduledItem{TAbsolute}" /> object; otherwise, false.</returns>
-        public override bool Equals(object obj)
-        {
-            return object.ReferenceEquals(this, obj);
-        }
+        /// <returns><c>true</c> if the obj parameter is a <see cref="ScheduledItem{TAbsolute}" /> object and is equal to the current <see cref="ScheduledItem{TAbsolute}" /> object; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj) => ReferenceEquals(this, obj);
 
         /// <summary>
         /// Returns the hash code for the current <see cref="ScheduledItem{TAbsolute}" /> object.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => base.GetHashCode();
 
         #endregion
 
         /// <summary>
-        /// Cancels the work item by disposing the resource returned by InvokeCore as soon as possible.
+        /// Cancels the work item by disposing the resource returned by <see cref="InvokeCore"/> as soon as possible.
         /// </summary>
-        public void Cancel()
-        {
-            _disposable.Dispose();
-        }
+        public void Cancel() => _disposable.Dispose();
 
         /// <summary>
         /// Gets whether the work item has received a cancellation request.
@@ -200,7 +177,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Scheduled action.</param>
         /// <param name="dueTime">Time at which to run the scheduled action.</param>
         /// <param name="comparer">Comparer used to compare work items based on their scheduled time.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> or <paramref name="comparer"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> or <paramref name="comparer"/> is <c>null</c>.</exception>
         public ScheduledItem(IScheduler scheduler, TValue state, Func<IScheduler, TValue, IDisposable> action, TAbsolute dueTime, IComparer<TAbsolute> comparer)
             : base(dueTime, comparer)
         {
@@ -221,7 +198,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State to pass to the scheduled action.</param>
         /// <param name="action">Scheduled action.</param>
         /// <param name="dueTime">Time at which to run the scheduled action.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public ScheduledItem(IScheduler scheduler, TValue state, Func<IScheduler, TValue, IDisposable> action, TAbsolute dueTime)
             : this(scheduler, state, action, dueTime, Comparer<TAbsolute>.Default)
         {
@@ -231,9 +208,6 @@ namespace System.Reactive.Concurrency
         /// Invokes the scheduled action with the supplied recursive scheduler and state.
         /// </summary>
         /// <returns>Cancellation resource returned by the scheduled action.</returns>
-        protected override IDisposable InvokeCore()
-        {
-            return _action(_scheduler, _state);
-        }
+        protected override IDisposable InvokeCore() => _action(_scheduler, _state);
     }
 }

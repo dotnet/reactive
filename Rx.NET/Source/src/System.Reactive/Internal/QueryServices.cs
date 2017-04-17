@@ -8,12 +8,9 @@ namespace System.Reactive.Linq
 {
     internal static class QueryServices
     {
-        private static IQueryServices s_services = Initialize();
+        private static readonly IQueryServices s_services = Initialize();
 
-        public static T GetQueryImpl<T>(T defaultInstance)
-        {
-            return s_services.Extend(defaultInstance);
-        }
+        public static T GetQueryImpl<T>(T defaultInstance) => s_services.Extend(defaultInstance);
 
         private static IQueryServices Initialize()
         {
@@ -28,11 +25,8 @@ namespace System.Reactive.Linq
         T Extend<T>(T baseImpl);
     }
 
-    class DefaultQueryServices : IQueryServices
+    internal sealed class DefaultQueryServices : IQueryServices
     {
-        public T Extend<T>(T baseImpl)
-        {
-            return baseImpl;
-        }
+        public T Extend<T>(T baseImpl) => baseImpl;
     }
 }

@@ -27,20 +27,14 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets an instance of this scheduler that uses the default Thread constructor.
         /// </summary>
-        public static NewThreadScheduler Default
-        {
-            get
-            {
-                return s_instance.Value;
-            }
-        }
+        public static NewThreadScheduler Default => s_instance.Value;
 
 #if !NO_THREAD
         /// <summary>
         /// Creates an object that schedules each unit of work on a separate thread.
         /// </summary>
         /// <param name="threadFactory">Factory function for thread creation.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="threadFactory"/> is <c>null</c>.</exception>
         public NewThreadScheduler(Func<ThreadStart, Thread> threadFactory)
         {
             if (threadFactory == null)
@@ -60,7 +54,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -78,7 +72,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             if (action == null)
@@ -109,8 +103,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
@@ -126,7 +120,7 @@ namespace System.Reactive.Concurrency
             return periodic;
         }
 
-        class Periodic<TState> : IDisposable
+        private sealed class Periodic<TState> : IDisposable
         {
             private readonly IStopwatch _stopwatch;
             private readonly TimeSpan _period;

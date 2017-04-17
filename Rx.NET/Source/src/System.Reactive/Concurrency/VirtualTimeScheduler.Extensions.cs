@@ -12,7 +12,7 @@ namespace System.Reactive.Concurrency
     public static class VirtualTimeSchedulerExtensions
     {
         /// <summary>
-        /// Schedules an action to be executed at dueTime.
+        /// Schedules an action to be executed at <paramref name="dueTime"/>.
         /// </summary>
         /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
         /// <typeparam name="TRelative">Relative time representation type.</typeparam>
@@ -20,7 +20,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleRelative<TAbsolute, TRelative>(this VirtualTimeSchedulerBase<TAbsolute, TRelative> scheduler, TRelative dueTime, Action action)
             where TAbsolute : IComparable<TAbsolute>
         {
@@ -33,7 +33,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Schedules an action to be executed at dueTime.
+        /// Schedules an action to be executed at <paramref name="dueTime"/>.
         /// </summary>
         /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
         /// <typeparam name="TRelative">Relative time representation type.</typeparam>
@@ -41,7 +41,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAbsolute<TAbsolute, TRelative>(this VirtualTimeSchedulerBase<TAbsolute, TRelative> scheduler, TAbsolute dueTime, Action action)
             where TAbsolute : IComparable<TAbsolute>
         {
@@ -53,7 +53,7 @@ namespace System.Reactive.Concurrency
             return scheduler.ScheduleAbsolute(action, dueTime, Invoke);
         }
 
-        static IDisposable Invoke(IScheduler scheduler, Action action)
+        private static IDisposable Invoke(IScheduler scheduler, Action action)
         {
             action();
             return Disposable.Empty;

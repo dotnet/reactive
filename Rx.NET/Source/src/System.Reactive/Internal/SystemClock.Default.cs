@@ -17,10 +17,7 @@ namespace System.Reactive.PlatformServices
         /// <summary>
         /// Gets the current time.
         /// </summary>
-        public DateTimeOffset UtcNow
-        {
-            get { return DateTimeOffset.UtcNow; }
-        }
+        public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;
     }
 
     internal class DefaultSystemClockMonitor : PeriodicTimerSystemClockMonitor

@@ -20,9 +20,6 @@ namespace System.Reactive.Concurrency
             _sw = Stopwatch.StartNew();
         }
 
-        public TimeSpan Elapsed
-        {
-            get { return _sw.Elapsed; }
-        }
+        public TimeSpan Elapsed => _sw.Elapsed;
     }
 }
