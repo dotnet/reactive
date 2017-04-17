@@ -364,14 +364,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region Helpers for n-ary overloads
 
-    interface IZip
+    internal interface IZip
     {
         void Next(int index);
         void Fail(Exception error);
         void Done(int index);
     }
 
-    abstract class ZipSink<TResult> : Sink<TResult>, IZip
+    internal abstract class ZipSink<TResult> : Sink<TResult>, IZip
     {
         protected readonly object _gate;
 
@@ -387,10 +387,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _queues = new ICollection[arity];
         }
 
-        public ICollection[] Queues
-        {
-            get { return _queues; }
-        }
+        public ICollection[] Queues => _queues;
 
         public void Next(int index)
         {
@@ -488,10 +485,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _values = new Queue<T>();
         }
 
-        public Queue<T> Values
-        {
-            get { return _values; }
-        }
+        public Queue<T> Values => _values;
 
         public void OnNext(T value)
         {
@@ -545,7 +539,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run();
         }
 
-        class _ : Sink<IList<TSource>>
+        private sealed class _ : Sink<IList<TSource>>
         {
             private readonly Zip<TSource> _parent;
 
@@ -583,7 +577,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var d = new SingleAssignmentDisposable();
                     _subscriptions[j] = d;
 
-                    var o = new O(this, j);
+                    var o = new SourceObserver(this, j);
                     d.Disposable = srcs[j].SubscribeSafe(o);
                 }
 
@@ -601,7 +595,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var res = _queues.Select(q => q.Dequeue()).ToList();
                         base._observer.OnNext(res);
                     }
-                    else if (_isDone.Where((x, i) => i != index).All(Stubs<bool>.I))
+                    else if (AllExcept(_isDone, index))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -625,7 +619,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _isDone[index] = true;
 
-                    if (_isDone.All(Stubs<bool>.I))
+                    if (All(_isDone))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -638,12 +632,41 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class O : IObserver<TSource>
+            private static bool All(bool[] values)
+            {
+                foreach (var value in values)
+                {
+                    if (!value)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            private static bool AllExcept(bool[] values, int index)
+            {
+                for (var i = 0; i < values.Length; i++)
+                {
+                    if (i != index)
+                    {
+                        if (!values[i])
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            private sealed class SourceObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly int _index;
 
-                public O(_ parent, int index)
+                public SourceObserver(_ parent, int index)
                 {
                     _parent = parent;
                     _index = index;
