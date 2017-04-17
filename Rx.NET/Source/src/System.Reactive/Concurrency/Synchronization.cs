@@ -102,11 +102,7 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-#if !NO_PERF
             return new ObserveOn<TSource>(source, scheduler);
-#else
-            return new AnonymousObservable<TSource>(observer => source.Subscribe(new ObserveOnObserver<TSource>(scheduler, observer, null)));
-#endif
         }
 
         /// <summary>
@@ -124,32 +120,7 @@ namespace System.Reactive.Concurrency
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-#if !NO_PERF
             return new ObserveOn<TSource>(source, context);
-#else
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                context.OperationStarted();
-
-                return source.Subscribe(
-                    x => context.Post(_ =>
-                    {
-                        observer.OnNext(x);
-                    }, null),
-                    exception => context.Post(_ =>
-                    {
-                        observer.OnError(exception);
-                    }, null),
-                    () => context.Post(_ =>
-                    {
-                        observer.OnCompleted();
-                    }, null)
-                ).Finally(() =>
-                {
-                    context.OperationCompleted();
-                });
-            });
-#endif
         }
 
         #endregion
@@ -168,15 +139,7 @@ namespace System.Reactive.Concurrency
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-#if !NO_PERF
             return new Synchronize<TSource>(source);
-#else
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                var gate = new object();
-                return source.Subscribe(Observer.Synchronize(observer, gate));
-            });
-#endif
         }
 
         /// <summary>
@@ -194,14 +157,7 @@ namespace System.Reactive.Concurrency
             if (gate == null)
                 throw new ArgumentNullException(nameof(gate));
 
-#if !NO_PERF
             return new Synchronize<TSource>(source, gate);
-#else
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                return source.Subscribe(Observer.Synchronize(observer, gate));
-            });
-#endif
         }
 
         #endregion

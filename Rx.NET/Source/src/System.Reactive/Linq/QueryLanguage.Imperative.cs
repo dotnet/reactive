@@ -11,9 +11,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
     using ObservableImpl;
-#endif
 
     internal partial class QueryLanguage
     {
@@ -146,17 +144,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IObservable<TResult>> sources, IObservable<TResult> defaultSource)
         {
-#if !NO_PERF
             return new Case<TValue, TResult>(selector, sources, defaultSource);
-#else
-            return Observable.Defer(() =>
-            {
-                IObservable<TResult> result;
-                if (!sources.TryGetValue(selector(), out result))
-                    result = defaultSource;
-                return result;
-            });
-#endif
         }
 
         #endregion
@@ -165,11 +153,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> DoWhile<TSource>(IObservable<TSource> source, Func<bool> condition)
         {
-#if !NO_PERF
             return new DoWhile<TSource>(source, condition);
-#else
-            return source.Concat(While(condition, source));
-#endif
         }
 
         #endregion
@@ -178,20 +162,8 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> For<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IObservable<TResult>> resultSelector)
         {
-#if !NO_PERF
             return new For<TSource, TResult>(source, resultSelector);
-#else
-            return ForCore(source, resultSelector).Concat();
-#endif
         }
-
-#if NO_PERF
-        static IEnumerable<IObservable<TResult>> ForCore<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IObservable<TResult>> resultSelector)
-        {
-            foreach (var item in source)
-                yield return resultSelector(item);
-        }
-#endif
 
         #endregion
 
@@ -209,11 +181,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> If<TResult>(Func<bool> condition, IObservable<TResult> thenSource, IObservable<TResult> elseSource)
         {
-#if !NO_PERF
             return new If<TResult>(condition, thenSource, elseSource);
-#else
-            return Observable.Defer(() => condition() ? thenSource : elseSource);
-#endif
         }
 
         #endregion
@@ -222,20 +190,8 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> While<TSource>(Func<bool> condition, IObservable<TSource> source)
         {
-#if !NO_PERF
             return new While<TSource>(condition, source);
-#else
-            return WhileCore(condition, source).Concat();
-#endif
         }
-
-#if NO_PERF
-        static IEnumerable<IObservable<TSource>> WhileCore<TSource>(Func<bool> condition, IObservable<TSource> source)
-        {
-            while (condition())
-                yield return source;
-        }
-#endif
 
         #endregion
     }

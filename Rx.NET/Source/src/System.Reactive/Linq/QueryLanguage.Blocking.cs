@@ -9,9 +9,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
     using ObservableImpl;
-#endif
 
     internal partial class QueryLanguage
     {
@@ -38,65 +36,7 @@ namespace System.Reactive.Linq
 
         private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
         {
-#if !NO_PERF
             return new Collect<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
-#else
-            return new AnonymousEnumerable<TResult>(() =>
-            {
-                var c = getInitialCollector();
-                var f = default(Notification<TSource>);
-                var o = new object();
-                var done = false;
-                return PushToPull<TSource, TResult>(
-                    source,
-                    x =>
-                    {
-                        lock (o)
-                        {
-                            if (x.HasValue)
-                            {
-                                try
-                                {
-                                    c = merge(c, x.Value);
-                                }
-                                catch (Exception ex)
-                                {
-                                    f = Notification.CreateOnError<TSource>(ex);
-                                }
-                            }
-                            else
-                                f = x;
-                        }
-                    },
-                    () =>
-                    {
-                        if (f != null)
-                        {
-                            if (f.Kind == NotificationKind.OnError)
-                            {
-                                return Notification.CreateOnError<TResult>(f.Exception);
-                            }
-                            else
-                            {
-                                if (done)
-                                    return Notification.CreateOnCompleted<TResult>();
-                                else
-                                    done = true;
-                            }
-                        }
-
-                        var l = default(TResult);
-                        lock (o)
-                        {
-                            l = c;
-                            c = getNewCollector(c);
-                        }
-
-                        return Notification.CreateOnNext(l);
-                    }
-                );
-            });
-#endif
         }
 
         #endregion
@@ -176,7 +116,6 @@ namespace System.Reactive.Linq
 
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
-#if !NO_PERF
             using (var evt = new WaitAndSetOnce())
             {
                 var sink = new ForEach<TSource>._(onNext, () => evt.Set());
@@ -188,14 +127,10 @@ namespace System.Reactive.Linq
 
                 sink.Error.ThrowIfNotNull();
             }
-#else
-            ForEach_(source, onNext);
-#endif
         }
 
         public virtual void ForEach<TSource>(IObservable<TSource> source, Action<TSource, int> onNext)
         {
-#if !NO_PERF
             using (var evt = new WaitAndSetOnce())
             {
                 var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
@@ -207,48 +142,7 @@ namespace System.Reactive.Linq
 
                 sink.Error.ThrowIfNotNull();
             }
-#else
-            var i = 0;
-            ForEach_(source, x => onNext(x, checked(i++)));
-#endif
         }
-
-#if NO_PERF
-        private static void ForEach_<TSource>(IObservable<TSource> source, Action<TSource> onNext)
-        {
-            var exception = default(Exception);
-
-            using (var evt = new ManualResetEvent(false))
-            {
-                using (source.Subscribe(
-                    x =>
-                    {
-                        try
-                        {
-                            onNext(x);
-                        }
-                        catch (Exception ex)
-                        {
-                            exception = ex;
-                            evt.Set();
-                        }
-                    },
-                    ex =>
-                    {
-                        exception = ex;
-                        evt.Set();
-                    },
-                    () => evt.Set()
-                ))
-                {
-                    evt.WaitOne();
-                }
-            }
-
-            if (exception != null)
-                exception.Throw();
-        }
-#endif
 
         #endregion
 
@@ -256,27 +150,8 @@ namespace System.Reactive.Linq
 
         public virtual IEnumerator<TSource> GetEnumerator<TSource>(IObservable<TSource> source)
         {
-#if !NO_PERF
             var e = new GetEnumerator<TSource>();
             return e.Run(source);
-#else
-            var q = new Queue<Notification<TSource>>();
-            var s = new Semaphore(0, int.MaxValue);
-            return PushToPull(
-                source,
-                x =>
-                {
-                    lock (q)
-                        q.Enqueue(x);
-                    s.Release();
-                },
-                () =>
-                {
-                    s.WaitOne();
-                    lock (q)
-                        return q.Dequeue();
-                });
-#endif
         }
 
         #endregion
@@ -458,16 +333,6 @@ namespace System.Reactive.Linq
         #endregion
 
         #region |> Helpers <|
-
-#if NO_PERF
-        private static IEnumerator<TResult> PushToPull<TSource, TResult>(IObservable<TSource> source, Action<Notification<TSource>> push, Func<Notification<TResult>> pull)
-        {
-            var subscription = new SingleAssignmentDisposable();
-            var adapter = new PushPullAdapter<TSource, TResult>(push, pull, subscription.Dispose);
-            subscription.Disposable = source.SubscribeSafe(adapter);
-            return adapter;
-        }
-#endif
 
         class WaitAndSetOnce : IDisposable
         {

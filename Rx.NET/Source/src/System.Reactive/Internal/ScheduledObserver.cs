@@ -9,7 +9,6 @@ using System.Threading;
 
 namespace System.Reactive
 {
-#if !NO_PERF
     using System.Collections.Concurrent;
     using System.Diagnostics;
 
@@ -294,106 +293,6 @@ namespace System.Reactive
             }
         }
     }
-#else
-    class ScheduledObserver<T> : ObserverBase<T>, IScheduledObserver<T>
-    {
-        private bool _isAcquired = false;
-        private bool _hasFaulted = false;
-        private readonly Queue<Action> _queue = new Queue<Action>();
-        private readonly IObserver<T> _observer;
-        private readonly IScheduler _scheduler;
-        private readonly SerialDisposable _disposable = new SerialDisposable();
-
-        public ScheduledObserver(IScheduler scheduler, IObserver<T> observer)
-        {
-            _scheduler = scheduler;
-            _observer = observer;
-        }
-
-        public void EnsureActive(int n)
-        {
-            EnsureActive();
-        }
-
-        public void EnsureActive()
-        {
-            var isOwner = false;
-
-            lock (_queue)
-            {
-                if (!_hasFaulted && _queue.Count > 0)
-                {
-                    isOwner = !_isAcquired;
-                    _isAcquired = true;
-                }
-            }
-
-            if (isOwner)
-            {
-                _disposable.Disposable = _scheduler.Schedule<object>(null, Run);
-            }
-        }
-
-        private void Run(object state, Action<object> recurse)
-        {
-            var work = default(Action);
-            lock (_queue)
-            {
-                if (_queue.Count > 0)
-                    work = _queue.Dequeue();
-                else
-                {
-                    _isAcquired = false;
-                    return;
-                }
-            }
-
-            try
-            {
-                work();
-            }
-            catch
-            {
-                lock (_queue)
-                {
-                    _queue.Clear();
-                    _hasFaulted = true;
-                }
-                throw;
-            }
-
-            recurse(state);
-        }
-
-        protected override void OnNextCore(T value)
-        {
-            lock (_queue)
-                _queue.Enqueue(() => _observer.OnNext(value));
-        }
-
-        protected override void OnErrorCore(Exception exception)
-        {
-            lock (_queue)
-                _queue.Enqueue(() => _observer.OnError(exception));
-        }
-
-        protected override void OnCompletedCore()
-        {
-            lock (_queue)
-                _queue.Enqueue(() => _observer.OnCompleted());
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (disposing)
-            {
-                _disposable.Dispose();
-            }
-        }
-    }
-#endif
 
     internal sealed class ObserveOnObserver<T> : ScheduledObserver<T>
     {

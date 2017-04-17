@@ -8,9 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
-#if !NO_PERF
     using ObservableImpl;
-#endif
 
     internal partial class QueryLanguage
     {
@@ -28,61 +26,10 @@ namespace System.Reactive.Linq
 
         private static IDisposable Subscribe_<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
         {
-#if !NO_PERF
             //
             // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
             //
             return new ToObservable<TSource>(source, scheduler).Subscribe/*Unsafe*/(observer);
-#else
-            var e = source.GetEnumerator();
-            var flag = new BooleanDisposable();
-
-            scheduler.Schedule(self =>
-            {
-                var hasNext = false;
-                var ex = default(Exception);
-                var current = default(TSource);
-
-                if (flag.IsDisposed)
-                {
-                    e.Dispose();
-                    return;
-                }
-
-                try
-                {
-                    hasNext = e.MoveNext();
-                    if (hasNext)
-                        current = e.Current;
-                }
-                catch (Exception exception)
-                {
-                    ex = exception;
-                }
-
-                if (!hasNext || ex != null)
-                {
-                    e.Dispose();
-                }
-
-                if (ex != null)
-                {
-                    observer.OnError(ex);
-                    return;
-                }
-
-                if (!hasNext)
-                {
-                    observer.OnCompleted();
-                    return;
-                }
-
-                observer.OnNext(current);
-                self();
-            });
-
-            return flag;
-#endif
         }
 
         #endregion
@@ -126,28 +73,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source)
         {
-#if !NO_PERF
             return new ToObservable<TSource>(source, SchedulerDefaults.Iteration);
-#else
-            return ToObservable_(source, SchedulerDefaults.Iteration);
-#endif
         }
 
         public virtual IObservable<TSource> ToObservable<TSource>(IEnumerable<TSource> source, IScheduler scheduler)
         {
-#if !NO_PERF
             return new ToObservable<TSource>(source, scheduler);
-#else
-            return ToObservable_(source, scheduler);
-#endif
         }
-
-#if NO_PERF
-        private static IObservable<TSource> ToObservable_<TSource>(IEnumerable<TSource> source, IScheduler scheduler)
-        {
-            return new AnonymousObservable<TSource>(observer => source.Subscribe(observer, scheduler));
-        }
-#endif
 
         #endregion
     }
