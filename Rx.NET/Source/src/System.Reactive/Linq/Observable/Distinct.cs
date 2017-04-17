@@ -28,14 +28,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
         class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Distinct<TSource, TKey> _parent;
+            private readonly Func<TSource, TKey> _keySelector;
             private HashSet<TKey> _hashSet;
 
             public _(Distinct<TSource, TKey> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _hashSet = new HashSet<TKey>(_parent._comparer);
+                _keySelector = parent._keySelector;
+                _hashSet = new HashSet<TKey>(parent._comparer);
             }
 
             public void OnNext(TSource value)
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var hasAdded = false;
                 try
                 {
-                    key = _parent._keySelector(value);
+                    key = _keySelector(value);
                     hasAdded = _hashSet.Add(key);
                 }
                 catch (Exception exception)
