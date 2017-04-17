@@ -4,86 +4,227 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Do<TSource> : Producer<TSource>
+    internal static class Do<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Action<TSource> _onNext;
-        private readonly Action<Exception> _onError;
-        private readonly Action _onCompleted;
-
-        public Do(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+        internal sealed class OnNext : Producer<TSource>
         {
-            _source = source;
-            _onNext = onNext;
-            _onError = onError;
-            _onCompleted = onCompleted;
+            private readonly IObservable<TSource> _source;
+            private readonly Action<TSource> _onNext;
+
+            public OnNext(IObservable<TSource> source, Action<TSource> onNext)
+            {
+                _source = source;
+                _onNext = onNext;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_onNext, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            {
+                private readonly Action<TSource> _onNext;
+
+                public _(Action<TSource> onNext, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _onNext = onNext;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    try
+                    {
+                        _onNext(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnNext(value);
+                }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
+            }
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+        internal sealed class Observer : Producer<TSource>
         {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
+            private readonly IObservable<TSource> _source;
+            private readonly IObserver<TSource> _observer;
+
+            public Observer(IObservable<TSource> source, IObserver<TSource> observer)
+            {
+                _source = source;
+                _observer = observer;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_observer, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            {
+                private readonly IObserver<TSource> _doObserver;
+
+                public _(IObserver<TSource> doObserver, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _doObserver = doObserver;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    try
+                    {
+                        _doObserver.OnNext(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnNext(value);
+                }
+
+                public void OnError(Exception error)
+                {
+                    try
+                    {
+                        _doObserver.OnError(error);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    try
+                    {
+                        _doObserver.OnCompleted();
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
+            }
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class Actions : Producer<TSource>
         {
-            private readonly Do<TSource> _parent;
+            private readonly IObservable<TSource> _source;
+            private readonly Action<TSource> _onNext;
+            private readonly Action<Exception> _onError;
+            private readonly Action _onCompleted;
 
-            public _(Do<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Actions(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
             {
-                _parent = parent;
+                _source = source;
+                _onNext = onNext;
+                _onError = onError;
+                _onCompleted = onCompleted;
             }
 
-            public void OnNext(TSource value)
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                try
-                {
-                    _parent._onNext(value);
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
-                    base.Dispose();
-                    return;
-                }
-
-                base._observer.OnNext(value);
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
             }
 
-            public void OnError(Exception error)
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                try
+                private readonly Actions _parent;
+
+                public _(Actions parent, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    _parent._onError(error);
+                    _parent = parent;
                 }
-                catch (Exception ex)
+
+                public void OnNext(TSource value)
                 {
-                    base._observer.OnError(ex);
+                    try
+                    {
+                        _parent._onNext(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnNext(value);
+                }
+
+                public void OnError(Exception error)
+                {
+                    try
+                    {
+                        _parent._onError(error);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnError(error);
                     base.Dispose();
-                    return;
                 }
 
-                base._observer.OnError(error);
-                base.Dispose();
-            }
+                public void OnCompleted()
+                {
+                    try
+                    {
+                        _parent._onCompleted();
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
 
-            public void OnCompleted()
-            {
-                try
-                {
-                    _parent._onCompleted();
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
+                    base._observer.OnCompleted();
                     base.Dispose();
-                    return;
                 }
-
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
-            return Do_<TSource>(source, onNext, Stubs<Exception>.Ignore, Stubs.Nop);
+            return new Do<TSource>.OnNext(source, onNext);
         }
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
@@ -112,12 +112,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, IObserver<TSource> observer)
         {
-            return Do_(source, observer.OnNext, observer.OnError, observer.OnCompleted);
+            return new Do<TSource>.Observer(source, observer);
         }
 
         private static IObservable<TSource> Do_<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return new Do<TSource>(source, onNext, onError, onCompleted);
+            return new Do<TSource>.Actions(source, onNext, onError, onCompleted);
         }
 
         #endregion
