@@ -468,7 +468,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _hasValue[index] = true;
 
-                    if (_hasValueAll || (_hasValueAll = All(_hasValue)))
+                    if (_hasValueAll || (_hasValueAll = _hasValue.All()))
                     {
                         var res = default(TResult);
                         try
@@ -484,7 +484,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         _observer.OnNext(res);
                     }
-                    else if (AllExcept(_isDone, index))
+                    else if (_isDone.AllExcept(index))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -508,7 +508,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _isDone[index] = true;
 
-                    if (All(_isDone))
+                    if (_isDone.All())
                     {
                         base._observer.OnCompleted();
                         base.Dispose();

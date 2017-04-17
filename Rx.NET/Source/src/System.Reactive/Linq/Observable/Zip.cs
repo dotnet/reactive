@@ -595,7 +595,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         var res = _queues.Select(q => q.Dequeue()).ToList();
                         base._observer.OnNext(res);
                     }
-                    else if (AllExcept(_isDone, index))
+                    else if (_isDone.AllExcept(index))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -619,7 +619,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _isDone[index] = true;
 
-                    if (All(_isDone))
+                    if (_isDone.All())
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -630,35 +630,6 @@ namespace System.Reactive.Linq.ObservableImpl
                         _subscriptions[index].Dispose();
                     }
                 }
-            }
-
-            private static bool All(bool[] values)
-            {
-                foreach (var value in values)
-                {
-                    if (!value)
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            private static bool AllExcept(bool[] values, int index)
-            {
-                for (var i = 0; i < values.Length; i++)
-                {
-                    if (i != index)
-                    {
-                        if (!values[i])
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
             }
 
             private sealed class SourceObserver : IObserver<TSource>
