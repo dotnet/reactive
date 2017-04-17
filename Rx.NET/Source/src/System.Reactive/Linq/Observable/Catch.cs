@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run(_sources);
         }
 
-        class _ : TailRecursiveSink<TSource>
+        private sealed class _ : TailRecursiveSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -94,30 +94,30 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_handler, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_source);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Catch<TSource, TException> _parent;
+            private readonly Func<TException, IObservable<TSource>> _handler;
 
-            public _(Catch<TSource, TException> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(Func<TException, IObservable<TSource>> handler, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _handler = handler;
             }
 
             private SerialDisposable _subscription;
 
-            public IDisposable Run()
+            public IDisposable Run(IObservable<TSource> source)
             {
                 _subscription = new SerialDisposable();
 
                 var d1 = new SingleAssignmentDisposable();
                 _subscription.Disposable = d1;
-                d1.Disposable = _parent._source.SubscribeSafe(this);
+                d1.Disposable = source.SubscribeSafe(this);
 
                 return _subscription;
             }
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var result = default(IObservable<TSource>);
                     try
                     {
-                        result = _parent._handler(e);
+                        result = _handler(e);
                     }
                     catch (Exception ex)
                     {
@@ -146,7 +146,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     var d = new SingleAssignmentDisposable();
                     _subscription.Disposable = d;
-                    d.Disposable = result.SubscribeSafe(new Impl(this));
+                    d.Disposable = result.SubscribeSafe(new HandlerObserver(this));
                 }
                 else
                 {
@@ -161,11 +161,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 base.Dispose();
             }
 
-            class Impl : IObserver<TSource>
+            private sealed class HandlerObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
 
-                public Impl(_ parent)
+                public HandlerObserver(_ parent)
                 {
                     _parent = parent;
                 }
