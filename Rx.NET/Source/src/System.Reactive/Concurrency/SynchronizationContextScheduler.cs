@@ -19,7 +19,7 @@ namespace System.Reactive.Concurrency
         /// Creates an object that schedules units of work on the provided <see cref="SynchronizationContext"/>.
         /// </summary>
         /// <param name="context">Synchronization context to schedule units of work on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="context"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="context"/> is <c>null</c>.</exception>
         public SynchronizationContextScheduler(SynchronizationContext context)
         {
             if (context == null)
@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="context">Synchronization context to schedule units of work on.</param>
         /// <param name="alwaysPost">Configures whether scheduling always posts to the synchronization context, regardless whether the caller is on the same synchronization context.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="context"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="context"/> is <c>null</c>.</exception>
         public SynchronizationContextScheduler(SynchronizationContext context, bool alwaysPost)
         {
             if (context == null)
@@ -51,7 +51,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -68,7 +68,9 @@ namespace System.Reactive.Concurrency
                 _context.PostWithStartComplete(() =>
                 {
                     if (!d.IsDisposed)
+                    {
                         d.Disposable = action(this, state);
+                    }
                 });
             }
 
@@ -83,7 +85,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -91,7 +93,9 @@ namespace System.Reactive.Concurrency
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
+            {
                 return Schedule(state, action);
+            }
 
             return DefaultScheduler.Instance.Schedule(state, dt, (_, state1) => Schedule(state1, action));
         }

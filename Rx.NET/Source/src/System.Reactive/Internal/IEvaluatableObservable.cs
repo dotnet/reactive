@@ -4,7 +4,7 @@
 
 namespace System.Reactive
 {
-    interface IEvaluatableObservable<T>
+    internal interface IEvaluatableObservable<out T>
     {
         IObservable<T> Eval();
     }

@@ -414,29 +414,21 @@ namespace System.Reactive.Concurrency
         /// This type is very similar to ScheduledItem, but we need a different Invoke signature to allow customization
         /// of the target scheduler (e.g. when called in a recursive scheduling context, see ExecuteNextShortTermWorkItem).
         /// </remarks>
-        abstract class WorkItem : IComparable<WorkItem>, IDisposable
+        private abstract class WorkItem : IComparable<WorkItem>, IDisposable
         {
-            private readonly LocalScheduler _scheduler;
-            private readonly DateTimeOffset _dueTime;
+            public readonly LocalScheduler Scheduler;
+            public readonly DateTimeOffset DueTime;
+
             private readonly SingleAssignmentDisposable _disposable;
             private int _hasRun;
 
             public WorkItem(LocalScheduler scheduler, DateTimeOffset dueTime)
             {
-                _scheduler = scheduler;
-                _dueTime = dueTime;
+                Scheduler = scheduler;
+                DueTime = dueTime;
+
                 _disposable = new SingleAssignmentDisposable();
                 _hasRun = 0;
-            }
-
-            public LocalScheduler Scheduler
-            {
-                get { return _scheduler; }
-            }
-
-            public DateTimeOffset DueTime
-            {
-                get { return _dueTime; }
             }
 
             public void Invoke(IScheduler scheduler)
@@ -452,33 +444,29 @@ namespace System.Reactive.Concurrency
                     try
                     {
                         if (!_disposable.IsDisposed)
+                        {
                             _disposable.Disposable = InvokeCore(scheduler);
+                        }
                     }
                     finally
                     {
                         SystemClock.Release();
                     }
-                }                
+                }
             }
 
             protected abstract IDisposable InvokeCore(IScheduler scheduler);
 
-            public int CompareTo(WorkItem/*!*/ other)
-            {
-                return Comparer<DateTimeOffset>.Default.Compare(this._dueTime, other._dueTime);
-            }
+            public int CompareTo(WorkItem/*!*/ other) => Comparer<DateTimeOffset>.Default.Compare(DueTime, other.DueTime);
 
-            public void Dispose()
-            {
-                _disposable.Dispose();
-            }
+            public void Dispose() => _disposable.Dispose();
         }
 
         /// <summary>
         /// Represents a work item that closes over scheduler invocation state. Subtyping is
         /// used to have a common type for the scheduler queues.
         /// </summary>
-        sealed class WorkItem<TState> : WorkItem
+        private sealed class WorkItem<TState> : WorkItem
         {
             private readonly TState _state;
             private readonly Func<IScheduler, TState, IDisposable> _action;
@@ -490,10 +478,7 @@ namespace System.Reactive.Concurrency
                 _action = action;
             }
 
-            protected override IDisposable InvokeCore(IScheduler scheduler)
-            {
-                return _action(scheduler, _state);
-            }
+            protected override IDisposable InvokeCore(IScheduler scheduler) => _action(scheduler, _state);
         }
     }
 }

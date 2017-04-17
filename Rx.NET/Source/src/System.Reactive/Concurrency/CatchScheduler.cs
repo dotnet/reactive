@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace System.Reactive.Concurrency
 {
-    class CatchScheduler<TException> : SchedulerWrapper
+    internal sealed class CatchScheduler<TException> : SchedulerWrapper
         where TException : Exception
     {
         private readonly Func<TException, bool> _handler;
@@ -26,11 +26,8 @@ namespace System.Reactive.Concurrency
                 {
                     return action(GetRecursiveWrapper(self), state);
                 }
-                catch (TException exception)
+                catch (TException exception) when (_handler(exception))
                 {
-                    if (!_handler(exception))
-                        throw;
-
                     return Disposable.Empty;
                 }
             };
@@ -54,15 +51,19 @@ namespace System.Reactive.Concurrency
             if (service != null)
             {
                 if (serviceType == typeof(ISchedulerLongRunning))
+                {
                     service = new CatchSchedulerLongRunning((ISchedulerLongRunning)service, _handler);
+                }
                 else if (serviceType == typeof(ISchedulerPeriodic))
+                {
                     service = new CatchSchedulerPeriodic((ISchedulerPeriodic)service, _handler);
+                }
             }
 
             return true;
         }
 
-        class CatchSchedulerLongRunning : ISchedulerLongRunning
+        private class CatchSchedulerLongRunning : ISchedulerLongRunning
         {
             private readonly ISchedulerLongRunning _scheduler;
             private readonly Func<TException, bool> _handler;
@@ -81,16 +82,14 @@ namespace System.Reactive.Concurrency
                     {
                         action(state_, cancel);
                     }
-                    catch (TException exception)
+                    catch (TException exception) when (_handler(exception))
                     {
-                        if (!_handler(exception))
-                            throw;
                     }
                 });
             }
         }
 
-        class CatchSchedulerPeriodic : ISchedulerPeriodic
+        private sealed class CatchSchedulerPeriodic : ISchedulerPeriodic
         {
             private readonly ISchedulerPeriodic _scheduler;
             private readonly Func<TException, bool> _handler;

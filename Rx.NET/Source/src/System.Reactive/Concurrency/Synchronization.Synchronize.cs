@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Concurrency
 {
-    class Synchronize<TSource> : Producer<TSource>
+    internal sealed class Synchronize<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly object _gate;
@@ -28,7 +28,7 @@ namespace System.Reactive.Concurrency
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Synchronize<TSource> _parent;
             private readonly object _gate;
@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    base._observer.OnNext(value);
+                    _observer.OnNext(value);
                 }
             }
 
@@ -52,8 +52,8 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    _observer.OnError(error);
+                    Dispose();
                 }
             }
 
@@ -61,8 +61,8 @@ namespace System.Reactive.Concurrency
             {
                 lock (_gate)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    _observer.OnCompleted();
+                    Dispose();
                 }
             }
         }

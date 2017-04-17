@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 namespace System.Reactive.Concurrency
 {
     /// <summary>
-    /// Represents an object that schedules units of work on a Windows.UI.Core.CoreDispatcher.
+    /// Represents an object that schedules units of work on a <see cref="Windows.UI.Core.CoreDispatcher"/>.
     /// </summary>
     /// <remarks>
     /// This scheduler type is typically used indirectly through the <see cref="System.Reactive.Linq.DispatcherObservable.ObserveOnDispatcher{TSource}(IObservable{TSource})"/> and <see cref="System.Reactive.Linq.DispatcherObservable.SubscribeOnDispatcher{TSource}(IObservable{TSource})"/> methods that use the current Dispatcher.
@@ -21,40 +21,37 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class CoreDispatcherScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private readonly CoreDispatcher _dispatcher;
-        private readonly CoreDispatcherPriority _priority;
-
         /// <summary>
-        /// Constructs a CoreDispatcherScheduler that schedules units of work on the given Windows.UI.Core.CoreDispatcher.
+        /// Constructs a <see cref="CoreDispatcherScheduler"/> that schedules units of work on the given <see cref="Windows.UI.Core.CoreDispatcher"/>.
         /// </summary>
         /// <param name="dispatcher">Dispatcher to schedule work on.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public CoreDispatcherScheduler(CoreDispatcher dispatcher)
         {
             if (dispatcher == null)
                 throw new ArgumentNullException(nameof(dispatcher));
 
-            _dispatcher = dispatcher;
-            _priority = CoreDispatcherPriority.Normal;
+            Dispatcher = dispatcher;
+            Priority = CoreDispatcherPriority.Normal;
         }
 
         /// <summary>
-        /// Constructs a CoreDispatcherScheduler that schedules units of work on the given Windows.UI.Core.CoreDispatcher with the given priority.
+        /// Constructs a <see cref="CoreDispatcherScheduler"/> that schedules units of work on the given <see cref="Windows.UI.Core.CoreDispatcher"/> with the given priority.
         /// </summary>
         /// <param name="dispatcher">Dispatcher to schedule work on.</param>
         /// <param name="priority">Priority for scheduled units of work.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="dispatcher"/> is <c>null</c>.</exception>
         public CoreDispatcherScheduler(CoreDispatcher dispatcher, CoreDispatcherPriority priority)
         {
             if (dispatcher == null)
                 throw new ArgumentNullException(nameof(dispatcher));
 
-            _dispatcher = dispatcher;
-            _priority = priority;
+            Dispatcher = dispatcher;
+            Priority = priority;
         }
 
         /// <summary>
-        /// Gets the scheduler that schedules work on the Windows.UI.Core.CoreDispatcher associated with the current Window.
+        /// Gets the scheduler that schedules work on the <see cref="Windows.UI.Core.CoreDispatcher"/> associated with the current Window.
         /// </summary>
         public static CoreDispatcherScheduler Current
         {
@@ -69,20 +66,14 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Gets the Windows.UI.Core.CoreDispatcher associated with the CoreDispatcherScheduler.
+        /// Gets the <see cref="Windows.UI.Core.CoreDispatcher"/> associated with the <see cref="CoreDispatcherScheduler"/>.
         /// </summary>
-        public CoreDispatcher Dispatcher
-        {
-            get { return _dispatcher; }
-        }
+        public CoreDispatcher Dispatcher { get; }
 
         /// <summary>
         /// Gets the priority at which work is scheduled.
         /// </summary>
-        public CoreDispatcherPriority Priority
-        {
-            get { return _priority; }
-        }
+        public CoreDispatcherPriority Priority { get; }
 
         /// <summary>
         /// Schedules an action to be executed on the dispatcher.
@@ -91,7 +82,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -99,7 +90,7 @@ namespace System.Reactive.Concurrency
 
             var d = new SingleAssignmentDisposable();
 
-            var res = _dispatcher.RunAsync(_priority, () =>
+            var res = Dispatcher.RunAsync(Priority, () =>
             {
                 if (!d.IsDisposed)
                 {
@@ -140,14 +131,14 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Schedules an action to be executed after dueTime on the dispatcher, using a Windows.UI.Xaml.DispatcherTimer object.
+        /// Schedules an action to be executed after <paramref name="dueTime"/> on the dispatcher, using a <see cref="Windows.UI.Xaml.DispatcherTimer"/> object.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -155,8 +146,15 @@ namespace System.Reactive.Concurrency
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
+            {
                 return Schedule(state, action);
+            }
 
+            return ScheduleSlow(state, dt, action);
+        }
+
+        private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
             var d = new MultipleAssignmentDisposable();
 
             var timer = new DispatcherTimer();
@@ -178,7 +176,7 @@ namespace System.Reactive.Concurrency
                 }
             };
 
-            timer.Interval = dt;
+            timer.Interval = dueTime;
             timer.Start();
 
             d.Disposable = Disposable.Create(() =>
@@ -195,15 +193,15 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Schedules a periodic piece of work on the dispatcher, using a Windows.UI.Xaml.DispatcherTimer object.
+        /// Schedules a periodic piece of work on the dispatcher, using a <see cref="Windows.UI.Xaml.DispatcherTimer"/> object.
         /// </summary>
         /// <typeparam name="TState">The type of the state passed to the scheduled action.</typeparam>
         /// <param name="state">Initial state passed to the action upon the first iteration.</param>
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             //

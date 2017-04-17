@@ -53,8 +53,7 @@ namespace System.Reactive.Concurrency
     /// (Infrastructure) Scheduler operation awaiter type used by the code generated for C# await and Visual Basic Await expressions.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public sealed class SchedulerOperationAwaiter
-        : INotifyCompletion
+    public sealed class SchedulerOperationAwaiter : INotifyCompletion
     {
         private readonly Func<Action, IDisposable> _schedule;
         private readonly CancellationToken _cancellationToken;
@@ -76,18 +75,12 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Indicates whether the scheduler operation has completed. Returns false unless cancellation was already requested.
         /// </summary>
-        public bool IsCompleted
-        {
-            get { return _cancellationToken.IsCancellationRequested; }
-        }
+        public bool IsCompleted => _cancellationToken.IsCancellationRequested;
 
         /// <summary>
         /// Completes the scheduler operation, throwing an OperationCanceledException in case cancellation was requested.
         /// </summary>
-        public void GetResult()
-        {
-            _cancellationToken.ThrowIfCancellationRequested();
-        }
+        public void GetResult() => _cancellationToken.ThrowIfCancellationRequested();
 
         /// <summary>
         /// Registers the continuation with the scheduler operation.
@@ -147,10 +140,7 @@ namespace System.Reactive.Concurrency
 
         private void Cancel()
         {
-            var w = _work;
-            if (w != null)
-                w.Dispose();
-
+            _work?.Dispose();
             _continuation?.Invoke();
         }
     }

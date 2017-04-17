@@ -169,7 +169,7 @@ namespace System.Reactive.Subjects
             return new Subscription(this, observer);
         }
 
-        class Subscription : IDisposable
+        private sealed class Subscription : IDisposable
         {
             private Subject<T> _subject;
             private IObserver<T> _observer;

@@ -16,7 +16,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="scheduler">Scheduler to yield work on.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Yield(this IScheduler scheduler)
         {
             if (scheduler == null)
@@ -32,7 +32,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to yield work on.</param>
         /// <param name="cancellationToken">Cancellation token to cancel the continuation to run.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Yield(this IScheduler scheduler, CancellationToken cancellationToken)
         {
             if (scheduler == null)
@@ -48,7 +48,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to yield work on.</param>
         /// <param name="dueTime">Time when the continuation should run.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Sleep(this IScheduler scheduler, TimeSpan dueTime)
         {
             if (scheduler == null)
@@ -65,7 +65,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Time when the continuation should run.</param>
         /// <param name="cancellationToken">Cancellation token to cancel the continuation to run.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Sleep(this IScheduler scheduler, TimeSpan dueTime, CancellationToken cancellationToken)
         {
             if (scheduler == null)
@@ -81,7 +81,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to yield work on.</param>
         /// <param name="dueTime">Time when the continuation should run.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Sleep(this IScheduler scheduler, DateTimeOffset dueTime)
         {
             if (scheduler == null)
@@ -98,7 +98,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Time when the continuation should run.</param>
         /// <param name="cancellationToken">Cancellation token to cancel the continuation to run.</param>
         /// <returns>Scheduler operation object to await in order to schedule the continuation.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static SchedulerOperation Sleep(this IScheduler scheduler, DateTimeOffset dueTime, CancellationToken cancellationToken)
         {
             if (scheduler == null)
@@ -115,7 +115,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State to pass to the asynchronous method.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -134,7 +134,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State to pass to the asynchronous method.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -151,7 +151,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to schedule work on.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -168,7 +168,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to schedule work on.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -188,7 +188,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -208,7 +208,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -226,7 +226,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, TimeSpan dueTime, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -244,7 +244,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, TimeSpan dueTime, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -264,7 +264,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Func<IScheduler, TState, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -284,7 +284,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Func<IScheduler, TState, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -302,7 +302,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, DateTimeOffset dueTime, Func<IScheduler, CancellationToken, Task> action)
         {
             if (scheduler == null)
@@ -320,7 +320,7 @@ namespace System.Reactive.Concurrency
         /// <param name="dueTime">Absolute time at which to execute the action.</param>
         /// <param name="action">Asynchronous method to run the work, using Yield and Sleep operations for cooperative scheduling and injection of cancellation points.</param>
         /// <returns>Disposable object that allows to cancel outstanding work on cooperative cancellation points or through the cancellation token passed to the asynchronous method.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable ScheduleAsync(this IScheduler scheduler, DateTimeOffset dueTime, Func<IScheduler, CancellationToken, Task<IDisposable>> action)
         {
             if (scheduler == null)
@@ -372,7 +372,9 @@ namespace System.Reactive.Concurrency
                     return;
 
                 if (t.Exception != null)
+                {
                     t.Exception.Handle(e => e is OperationCanceledException);
+                }
 
                 d.Disposable = t.Result;
             }, TaskContinuationOptions.ExecuteSynchronously);
@@ -391,7 +393,7 @@ namespace System.Reactive.Concurrency
             return cs != null ? cs.Token : CancellationToken.None;
         }
 
-        class CancelableScheduler : IScheduler
+        private sealed class CancelableScheduler : IScheduler
         {
             private readonly IScheduler _scheduler;
             private readonly CancellationToken _cancellationToken;
@@ -407,10 +409,7 @@ namespace System.Reactive.Concurrency
                 get { return _cancellationToken; }
             }
 
-            public DateTimeOffset Now
-            {
-                get { return _scheduler.Now; }
-            }
+            public DateTimeOffset Now => _scheduler.Now;
 
             public IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
             {
@@ -427,6 +426,5 @@ namespace System.Reactive.Concurrency
                 return _scheduler.Schedule(state, dueTime, action);
             }
         }
-
     }
 }

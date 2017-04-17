@@ -18,13 +18,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the default scheduler.
         /// </summary>
-        public static DefaultScheduler Instance
-        {
-            get
-            {
-                return s_instance.Value;
-            }
-        }
+        public static DefaultScheduler Instance => s_instance.Value;
 
         private DefaultScheduler()
         {
@@ -37,7 +31,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -48,7 +42,9 @@ namespace System.Reactive.Concurrency
             var cancel = s_cal.QueueUserWorkItem(_ =>
             {
                 if (!d.IsDisposed)
+                {
                     d.Disposable = action(this, state);
+                }
             }, null);
 
             return StableCompositeDisposable.Create(
@@ -65,7 +61,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -80,7 +76,9 @@ namespace System.Reactive.Concurrency
             var cancel = s_cal.StartTimer(_ =>
             {
                 if (!d.IsDisposed)
+                {
                     d.Disposable = action(this, state);
+                }
             }, null, dt);
 
             return StableCompositeDisposable.Create(
@@ -97,8 +95,8 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than TimeSpan.Zero.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than <see cref="TimeSpan.Zero"/>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
             if (period < TimeSpan.Zero)
@@ -143,7 +141,7 @@ namespace System.Reactive.Concurrency
             return base.GetService(serviceType);
         }
 
-        class LongRunning : ISchedulerLongRunning
+        private sealed class LongRunning : ISchedulerLongRunning
         {
             public static ISchedulerLongRunning Instance = new LongRunning();
 

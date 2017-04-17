@@ -39,13 +39,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the number of scheduled items in the scheduler queue.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return _queue.Count;
-            }
-        }
+        public int Count => _queue.Count;
 
         /// <summary>
         /// Enqueues the specified work item to be scheduled.
@@ -60,28 +54,19 @@ namespace System.Reactive.Concurrency
         /// Removes the specified work item from the scheduler queue.
         /// </summary>
         /// <param name="scheduledItem">Work item to be removed from the scheduler queue.</param>
-        /// <returns>true if the item was found; false otherwise.</returns>
-        public bool Remove(ScheduledItem<TAbsolute> scheduledItem)
-        {
-            return _queue.Remove(scheduledItem);
-        }
+        /// <returns><c>true</c> if the item was found; <c>false</c> otherwise.</returns>
+        public bool Remove(ScheduledItem<TAbsolute> scheduledItem) => _queue.Remove(scheduledItem);
 
         /// <summary>
         /// Dequeues the next work item from the scheduler queue.
         /// </summary>
         /// <returns>Next work item in the scheduler queue (removed).</returns>
-        public ScheduledItem<TAbsolute> Dequeue()
-        {
-            return _queue.Dequeue();
-        }
+        public ScheduledItem<TAbsolute> Dequeue() => _queue.Dequeue();
 
         /// <summary>
         /// Peeks the next work item in the scheduler queue.
         /// </summary>
         /// <returns>Next work item in the scheduler queue (not removed).</returns>
-        public ScheduledItem<TAbsolute> Peek()
-        {
-            return _queue.Peek();
-        }
+        public ScheduledItem<TAbsolute> Peek() => _queue.Peek();
     }
 }

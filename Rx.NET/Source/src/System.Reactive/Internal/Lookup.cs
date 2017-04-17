@@ -8,34 +8,30 @@ using System.Linq;
 
 namespace System.Reactive
 {
-    class Lookup<K, E> : ILookup<K, E>
+    internal sealed class Lookup<K, E> : ILookup<K, E>
     {
-        private readonly Dictionary<K, List<E>> d;
+        private readonly Dictionary<K, List<E>> _dictionary;
 
         public Lookup(IEqualityComparer<K> comparer)
         {
-            d = new Dictionary<K, List<E>>(comparer);
+            _dictionary = new Dictionary<K, List<E>>(comparer);
         }
 
         public void Add(K key, E element)
         {
             var list = default(List<E>);
 
-            if (!d.TryGetValue(key, out list))
-                d[key] = list = new List<E>();
+            if (!_dictionary.TryGetValue(key, out list))
+            {
+                _dictionary[key] = list = new List<E>();
+            }
 
             list.Add(element);
         }
 
-        public bool Contains(K key)
-        {
-            return d.ContainsKey(key);
-        }
+        public bool Contains(K key) => _dictionary.ContainsKey(key);
 
-        public int Count
-        {
-            get { return d.Count; }
-        }
+        public int Count => _dictionary.Count;
 
         public IEnumerable<E> this[K key]
         {
@@ -43,7 +39,7 @@ namespace System.Reactive
             {
                 var list = default(List<E>);
 
-                if (!d.TryGetValue(key, out list))
+                if (!_dictionary.TryGetValue(key, out list))
                     return Enumerable.Empty<E>();
 
                 return Hide(list);
@@ -53,43 +49,35 @@ namespace System.Reactive
         private IEnumerable<E> Hide(List<E> elements)
         {
             foreach (var x in elements)
+            {
                 yield return x;
+            }
         }
 
         public IEnumerator<IGrouping<K, E>> GetEnumerator()
         {
-            foreach (var kv in d)
+            foreach (var kv in _dictionary)
+            {
                 yield return new Grouping(kv);
+            }
         }
 
-        class Grouping : IGrouping<K, E>
+        private sealed class Grouping : IGrouping<K, E>
         {
-            KeyValuePair<K, List<E>> kv;
+            private readonly KeyValuePair<K, List<E>> _keyValuePair;
 
-            public Grouping(KeyValuePair<K, List<E>> kv)
+            public Grouping(KeyValuePair<K, List<E>> keyValuePair)
             {
-                this.kv = kv;
+                _keyValuePair = keyValuePair;
             }
 
-            public K Key
-            {
-                get { return kv.Key; }
-            }
+            public K Key => _keyValuePair.Key;
 
-            public IEnumerator<E> GetEnumerator()
-            {
-                return kv.Value.GetEnumerator();
-            }
+            public IEnumerator<E> GetEnumerator() => _keyValuePair.Value.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -14,7 +14,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to execute the recursive action on.</param>
         /// <param name="action">Action to execute recursively. The parameter passed to the action is used to trigger recursive scheduling of the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, Action<Action> action)
         {
             if (scheduler == null)
@@ -33,7 +33,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to execute recursively. The last parameter passed to the action is used to trigger recursive scheduling of the action, passing in recursive invocation state.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, Action<TState, Action<TState>> action)
         {
             if (scheduler == null)
@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState>>> { First = state, Second = action }, InvokeRec1);
         }
 
-        static IDisposable InvokeRec1<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState>>> pair)
+        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState>>> pair)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
@@ -62,9 +62,13 @@ namespace System.Reactive.Concurrency
                     lock (gate)
                     {
                         if (isAdded)
+                        {
                             group.Remove(d);
+                        }
                         else
+                        {
                             isDone = true;
+                        }
                     }
                     recursiveAction(state3);
                     return Disposable.Empty;
@@ -92,7 +96,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute recursively. The parameter passed to the action is used to trigger recursive scheduling of the action at the specified relative time.</param>
         /// <param name="dueTime">Relative time after which to execute the action for the first time.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, TimeSpan dueTime, Action<Action<TimeSpan>> action)
         {
             if (scheduler == null)
@@ -112,7 +116,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute recursively. The last parameter passed to the action is used to trigger recursive scheduling of the action, passing in the recursive due time and invocation state.</param>
         /// <param name="dueTime">Relative time after which to execute the action for the first time.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, TimeSpan dueTime, Action<TState, Action<TState, TimeSpan>> action)
         {
             if (scheduler == null)
@@ -123,7 +127,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, TimeSpan>>> { First = state, Second = action }, dueTime, InvokeRec2);
         }
 
-        static IDisposable InvokeRec2<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, TimeSpan>>> pair)
+        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, TimeSpan>>> pair)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
@@ -141,9 +145,13 @@ namespace System.Reactive.Concurrency
                     lock (gate)
                     {
                         if (isAdded)
+                        {
                             group.Remove(d);
+                        }
                         else
+                        {
                             isDone = true;
+                        }
                     }
                     recursiveAction(state3);
                     return Disposable.Empty;
@@ -171,7 +179,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute recursively. The parameter passed to the action is used to trigger recursive scheduling of the action at the specified absolute time.</param>
         /// <param name="dueTime">Absolute time at which to execute the action for the first time.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule(this IScheduler scheduler, DateTimeOffset dueTime, Action<Action<DateTimeOffset>> action)
         {
             if (scheduler == null)
@@ -191,7 +199,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to execute recursively. The last parameter passed to the action is used to trigger recursive scheduling of the action, passing in the recursive due time and invocation state.</param>
         /// <param name="dueTime">Absolute time at which to execute the action for the first time.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
         public static IDisposable Schedule<TState>(this IScheduler scheduler, TState state, DateTimeOffset dueTime, Action<TState, Action<TState, DateTimeOffset>> action)
         {
             if (scheduler == null)
@@ -202,7 +210,7 @@ namespace System.Reactive.Concurrency
             return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> { First = state, Second = action }, dueTime, InvokeRec3);
         }
 
-        static IDisposable InvokeRec3<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> pair)
+        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> pair)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
@@ -220,9 +228,13 @@ namespace System.Reactive.Concurrency
                     lock (gate)
                     {
                         if (isAdded)
+                        {
                             group.Remove(d);
+                        }
                         else
+                        {
                             isDone = true;
+                        }
                     }
                     recursiveAction(state3);
                     return Disposable.Empty;
@@ -246,7 +258,7 @@ namespace System.Reactive.Concurrency
 #if !NO_SERIALIZABLE
         [Serializable]
 #endif
-        struct Pair<T1, T2>
+        private struct Pair<T1, T2>
         {
             public T1 First;
             public T2 Second;
