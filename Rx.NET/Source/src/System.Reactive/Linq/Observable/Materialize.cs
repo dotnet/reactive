@@ -13,10 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        public IObservable<TSource> Dematerialize()
-        {
-            return _source.AsObservable();
-        }
+        public IObservable<TSource> Dematerialize() => _source.AsObservable();
 
         protected override IDisposable Run(IObserver<Notification<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -25,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<Notification<TSource>>, IObserver<TSource>
+        private sealed class _ : Sink<Notification<TSource>>, IObserver<TSource>
         {
             public _(IObserver<Notification<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
