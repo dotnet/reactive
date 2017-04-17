@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if WINDOWS
-using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Windows.System.Threading;
 
@@ -16,8 +15,6 @@ namespace System.Reactive.Concurrency
     [CLSCompliant(false)]
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerPeriodic
     {
-        private readonly WorkItemPriority _priority;
-        private readonly WorkItemOptions _options;
         private static Lazy<ThreadPoolScheduler> s_default = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
 
         /// <summary>
@@ -33,8 +30,8 @@ namespace System.Reactive.Concurrency
         /// <param name="priority">Priority for scheduled units of work.</param>
         public ThreadPoolScheduler(WorkItemPriority priority)
         {
-            _priority = priority;
-            _options = WorkItemOptions.None;
+            Priority = priority;
+            Options = WorkItemOptions.None;
         }
 
         /// <summary>
@@ -44,36 +41,24 @@ namespace System.Reactive.Concurrency
         /// <param name="options">Options that configure how work is scheduled.</param>
         public ThreadPoolScheduler(WorkItemPriority priority, WorkItemOptions options)
         {
-            _priority = priority;
-            _options = options;
+            Priority = priority;
+            Options = options;
         }
 
         /// <summary>
         /// Gets the singleton instance of the Windows Runtime thread pool scheduler.
         /// </summary>
-        public static ThreadPoolScheduler Default
-        {
-            get
-            {
-                return s_default.Value;
-            }
-        }
+        public static ThreadPoolScheduler Default => s_default.Value;
 
         /// <summary>
         /// Gets the priority at which work is scheduled.
         /// </summary>
-        public WorkItemPriority Priority
-        {
-            get { return _priority; }
-        }
+        public WorkItemPriority Priority { get; }
 
         /// <summary>
         /// Gets the options that configure how work is scheduled.
         /// </summary>
-        public WorkItemOptions Options
-        {
-            get { return _options; }
-        }
+        public WorkItemOptions Options { get; }
 
         /// <summary>
         /// Schedules an action to be executed.
@@ -93,8 +78,10 @@ namespace System.Reactive.Concurrency
             var res = global::Windows.System.Threading.ThreadPool.RunAsync(iaa =>
             {
                 if (!d.IsDisposed)
+                {
                     d.Disposable = action(this, state);
-            }, _priority, _options);
+                }
+            }, Priority, Options);
 
             return new CompositeDisposable(
                 d,
@@ -119,17 +106,26 @@ namespace System.Reactive.Concurrency
             var dt = Scheduler.Normalize(dueTime);
 
             if (dt.Ticks == 0)
+            {
                 return Schedule(state, action);
+            }
 
+            return ScheduleSlow(state, dt, action);
+        }
+
+        private IDisposable ScheduleSlow<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
+        {
             var d = new SingleAssignmentDisposable();
 
             var res = global::Windows.System.Threading.ThreadPoolTimer.CreateTimer(
                 tpt =>
                 {
                     if (!d.IsDisposed)
+                    {
                         d.Disposable = action(this, state);
+                    }
                 },
-                dt
+                dueTime
             );
 
             return new CompositeDisposable(

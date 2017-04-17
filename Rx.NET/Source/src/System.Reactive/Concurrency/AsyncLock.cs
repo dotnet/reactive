@@ -21,7 +21,7 @@ namespace System.Reactive.Concurrency
         /// processed by the owner.
         /// </summary>
         /// <param name="action">Action to queue for execution.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public void Wait(Action action)
         {
             if (action == null)
@@ -46,7 +46,9 @@ namespace System.Reactive.Concurrency
                     lock (queue)
                     {
                         if (queue.Count > 0)
+                        {
                             work = queue.Dequeue();
+                        }
                         else
                         {
                             isAcquired = false;
@@ -65,6 +67,7 @@ namespace System.Reactive.Concurrency
                             queue.Clear();
                             hasFaulted = true;
                         }
+
                         throw;
                     }
                 }

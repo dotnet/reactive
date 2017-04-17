@@ -23,7 +23,7 @@ namespace System.Reactive.Concurrency
         /// <param name="source">Source sequence.</param>
         /// <param name="scheduler">Scheduler to perform subscription and unsubscription actions on.</param>
         /// <returns>The source sequence whose subscriptions and unsubscriptions happen on the specified scheduler.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified scheduler.
         /// In order to invoke observer callbacks on the specified scheduler, e.g. to offload callback processing to a dedicated thread, use <see cref="Synchronization.ObserveOn{TSource}(IObservable{TSource}, IScheduler)"/>.
@@ -57,7 +57,7 @@ namespace System.Reactive.Concurrency
         /// <param name="source">Source sequence.</param>
         /// <param name="context">Synchronization context to perform subscription and unsubscription actions on.</param>
         /// <returns>The source sequence whose subscriptions and unsubscriptions happen on the specified synchronization context.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="context"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="context"/> is <c>null</c>.</exception>
         /// <remarks>
         /// Only the side-effects of subscribing to the source sequence and disposing subscriptions to the source sequence are run on the specified synchronization context.
         /// In order to invoke observer callbacks on the specified synchronization context, e.g. to post callbacks to a UI thread represented by the synchronization context, use <see cref="Synchronization.ObserveOn{TSource}(IObservable{TSource}, SynchronizationContext)"/>.
@@ -75,7 +75,9 @@ namespace System.Reactive.Concurrency
                 context.PostWithStartComplete(() =>
                 {
                     if (!subscription.IsDisposed)
+                    {
                         subscription.Disposable = new ContextDisposable(context, source.SubscribeSafe(observer));
+                    }
                 });
                 return subscription;
             });
@@ -92,7 +94,7 @@ namespace System.Reactive.Concurrency
         /// <param name="source">Source sequence.</param>
         /// <param name="scheduler">Scheduler to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified scheduler.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="scheduler"/> is <c>null</c>.</exception>
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, IScheduler scheduler)
         {
             if (source == null)
@@ -110,7 +112,7 @@ namespace System.Reactive.Concurrency
         /// <param name="source">Source sequence.</param>
         /// <param name="context">Synchronization context to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the specified synchronization context.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="context"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="context"/> is <c>null</c>.</exception>
         public static IObservable<TSource> ObserveOn<TSource>(IObservable<TSource> source, SynchronizationContext context)
         {
             if (source == null)
@@ -131,7 +133,7 @@ namespace System.Reactive.Concurrency
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>The source sequence whose outgoing calls to observers are synchronized.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source)
         {
             if (source == null)
@@ -147,7 +149,7 @@ namespace System.Reactive.Concurrency
         /// <param name="source">Source sequence.</param>
         /// <param name="gate">Gate object to synchronize each observer call on.</param>
         /// <returns>The source sequence whose outgoing calls to observers are synchronized on the given gate object.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="gate"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="gate"/> is <c>null</c>.</exception>
         public static IObservable<TSource> Synchronize<TSource>(IObservable<TSource> source, object gate)
         {
             if (source == null)

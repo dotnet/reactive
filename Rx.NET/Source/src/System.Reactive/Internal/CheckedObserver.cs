@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace System.Reactive
 {
-    internal class CheckedObserver<T> : IObserver<T>
+    internal sealed class CheckedObserver<T> : IObserver<T>
     {
         private readonly IObserver<T> _observer;
         private int _state;

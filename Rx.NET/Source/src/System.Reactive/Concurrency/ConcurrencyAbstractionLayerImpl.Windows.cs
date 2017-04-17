@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 #if NO_THREAD && WINDOWS
-using System;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Threading;
 
@@ -72,28 +70,16 @@ namespace System.Reactive.Concurrency
             e.Wait();
         }
 
-        public IStopwatch StartStopwatch()
-        {
-            return new StopwatchImpl();
-        }
+        public IStopwatch StartStopwatch() => new StopwatchImpl();
 
-        public bool SupportsLongRunning
-        {
-            get { return false; }
-        }
+        public bool SupportsLongRunning => false;
 
         public void StartThread(Action<object> action, object state)
         {
             throw new NotSupportedException();
         }
 
-        private TimeSpan Normalize(TimeSpan dueTime)
-        {
-            if (dueTime < TimeSpan.Zero)
-                return TimeSpan.Zero;
-
-            return dueTime;
-        }
+        private TimeSpan Normalize(TimeSpan dueTime) => dueTime < TimeSpan.Zero ? TimeSpan.Zero : dueTime;
     }
 }
 #endif

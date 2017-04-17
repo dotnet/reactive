@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace System.Reactive.Concurrency
 {
-    class DisableOptimizationsScheduler : SchedulerWrapper
+    internal sealed class DisableOptimizationsScheduler : SchedulerWrapper
     {
         private readonly Type[] _optimizationInterfaces;
 

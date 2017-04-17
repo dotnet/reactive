@@ -11,7 +11,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         /// <param name="scheduler">Scheduler to disable all optimizations for.</param>
         /// <returns>Proxy to the original scheduler but without any optimizations enabled.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is <c>null</c>.</exception>
         public static IScheduler DisableOptimizations(this IScheduler scheduler)
         {
             if (scheduler == null)
@@ -26,7 +26,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to disable the specified optimizations for.</param>
         /// <param name="optimizationInterfaces">Types of the optimization interfaces that have to be disabled.</param>
         /// <returns>Proxy to the original scheduler but without the specified optimizations enabled.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="optimizationInterfaces"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="optimizationInterfaces"/> is <c>null</c>.</exception>
         public static IScheduler DisableOptimizations(this IScheduler scheduler, params Type[] optimizationInterfaces)
         {
             if (scheduler == null)
@@ -44,7 +44,7 @@ namespace System.Reactive.Concurrency
         /// <param name="scheduler">Scheduler to apply an exception filter for.</param>
         /// <param name="handler">Handler that's run if an exception is caught. The exception will be rethrown if the handler returns false.</param>
         /// <returns>Wrapper around the original scheduler, enforcing exception handling.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="handler"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="handler"/> is <c>null</c>.</exception>
         public static IScheduler Catch<TException>(this IScheduler scheduler, Func<TException, bool> handler)
             where TException : Exception
         {

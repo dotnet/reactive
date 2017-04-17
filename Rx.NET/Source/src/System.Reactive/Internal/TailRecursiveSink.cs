@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive
 {
-    abstract class TailRecursiveSink<TSource> : Sink<TSource>, IObserver<TSource>
+    internal abstract class TailRecursiveSink<TSource> : Sink<TSource>, IObserver<TSource>
     {
         public TailRecursiveSink(IObserver<TSource> observer, IDisposable cancel)
             : base(observer, cancel)
@@ -69,7 +69,9 @@ namespace System.Reactive
                 {
                     hasNext = e.MoveNext();
                     if (hasNext)
+                    {
                         current = e.Current;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +83,7 @@ namespace System.Reactive
                     // enumerating to find the next observable sequence. Therefore,
                     // we feed those errors directly to the observer.
                     //
-                    base._observer.OnError(ex);
+                    _observer.OnError(ex);
                     base.Dispose();
                     return;
                 }
@@ -188,7 +190,7 @@ namespace System.Reactive
                 // enumerating to find the next observable sequence. Therefore,
                 // we feed those errors directly to the observer.
                 //
-                base._observer.OnError(exception);
+                _observer.OnError(exception);
                 base.Dispose();
 
                 result = null;
@@ -202,13 +204,13 @@ namespace System.Reactive
 
         protected virtual void Done()
         {
-            base._observer.OnCompleted();
+            _observer.OnCompleted();
             base.Dispose();
         }
 
         protected virtual bool Fail(Exception error)
         {
-            base._observer.OnError(error);
+            _observer.OnError(error);
             base.Dispose();
 
             return false;

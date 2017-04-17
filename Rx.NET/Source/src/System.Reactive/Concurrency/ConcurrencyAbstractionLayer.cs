@@ -75,10 +75,7 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets whether long-running scheduling is supported.
         /// </summary>
-        bool SupportsLongRunning
-        {
-            get;
-        }
+        bool SupportsLongRunning { get; }
 
         /// <summary>
         /// Starts a new long-running thread.
