@@ -4,12 +4,12 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ElementAt<TSource> : Producer<TSource>
+    internal sealed class ElementAtOrDefault<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _index;
 
-        public ElementAt(IObservable<TSource> source, int index)
+        public ElementAtOrDefault(IObservable<TSource> source, int index)
         {
             _source = source;
             _index = index;
@@ -52,7 +52,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
-                base._observer.OnError(new ArgumentOutOfRangeException("index"));
+                base._observer.OnNext(default(TSource));
+                base._observer.OnCompleted();
                 base.Dispose();
             }
         }

@@ -190,7 +190,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> ElementAt<TSource>(IObservable<TSource> source, int index)
         {
-            return new ElementAt<TSource>(source, index, true);
+            return new ElementAt<TSource>(source, index);
         }
 
         #endregion
@@ -199,7 +199,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> ElementAtOrDefault<TSource>(IObservable<TSource> source, int index)
         {
-            return new ElementAt<TSource>(source, index, false);
+            return new ElementAtOrDefault<TSource>(source, index);
         }
 
         #endregion
