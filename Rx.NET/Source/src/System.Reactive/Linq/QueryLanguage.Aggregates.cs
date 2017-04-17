@@ -94,12 +94,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<bool> Any<TSource>(IObservable<TSource> source)
         {
-            return new Any<TSource>(source);
+            return new Any<TSource>.Count(source);
         }
 
         public virtual IObservable<bool> Any<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new Any<TSource>(source, predicate);
+            return new Any<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -176,12 +176,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<int> Count<TSource>(IObservable<TSource> source)
         {
-            return new Count<TSource>(source);
+            return new Count<TSource>.All(source);
         }
 
         public virtual IObservable<int> Count<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new Count<TSource>(source, predicate);
+            return new Count<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -208,12 +208,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source)
         {
-            return new FirstAsync<TSource>(source, null, true);
+            return new FirstAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> FirstAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new FirstAsync<TSource>(source, predicate, true);
+            return new FirstAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -222,12 +222,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
-            return new FirstAsync<TSource>(source, null, false);
+            return new FirstOrDefaultAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> FirstOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new FirstAsync<TSource>(source, predicate, false);
+            return new FirstOrDefaultAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -245,12 +245,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source)
         {
-            return new LastAsync<TSource>(source, null, true);
+            return new LastAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> LastAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new LastAsync<TSource>(source, predicate, true);
+            return new LastAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -259,12 +259,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
-            return new LastAsync<TSource>(source, null, false);
+            return new LastOrDefaultAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> LastOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new LastAsync<TSource>(source, predicate, false);
+            return new LastOrDefaultAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -273,12 +273,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<long> LongCount<TSource>(IObservable<TSource> source)
         {
-            return new LongCount<TSource>(source);
+            return new LongCount<TSource>.All(source);
         }
 
         public virtual IObservable<long> LongCount<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new LongCount<TSource>(source, predicate);
+            return new LongCount<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -591,12 +591,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source)
         {
-            return new SingleAsync<TSource>(source, null, true);
+            return new SingleAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> SingleAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new SingleAsync<TSource>(source, predicate, true);
+            return new SingleAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion
@@ -605,12 +605,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source)
         {
-            return new SingleAsync<TSource>(source, null, false);
+            return new SingleOrDefaultAsync<TSource>.Sequence(source);
         }
 
         public virtual IObservable<TSource> SingleOrDefaultAsync<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new SingleAsync<TSource>(source, predicate, false);
+            return new SingleOrDefaultAsync<TSource>.Predicate(source, predicate);
         }
 
         #endregion

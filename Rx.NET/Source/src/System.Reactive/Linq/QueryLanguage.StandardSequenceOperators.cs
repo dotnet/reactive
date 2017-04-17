@@ -199,12 +199,14 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector)
         {
-            return new Select<TSource, TResult>(source, selector);
+            // CONSIDER: Add fusion for Select/Select pairs.
+
+            return new Select<TSource, TResult>.Selector(source, selector);
         }
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, TResult> selector)
         {
-            return new Select<TSource, TResult>(source, selector);
+            return new Select<TSource, TResult>.SelectorIndexed(source, selector);
         }
 
         #endregion
@@ -412,16 +414,16 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            var where = source as Where<TSource>;
+            var where = source as Where<TSource>.Predicate;
             if (where != null)
                 return where.Combine(predicate);
 
-            return new Where<TSource>(source, predicate);
+            return new Where<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new Where<TSource>(source, predicate);
+            return new Where<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion

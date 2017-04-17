@@ -17,19 +17,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_predicate, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<bool>, IObserver<TSource>
+        private sealed class _ : Sink<bool>, IObserver<TSource>
         {
-            private readonly All<TSource> _parent;
+            private readonly Func<TSource, bool> _predicate;
 
-            public _(All<TSource> parent, IObserver<bool> observer, IDisposable cancel)
+            public _(Func<TSource, bool> predicate, IObserver<bool> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _predicate = predicate;
             }
 
             public void OnNext(TSource value)
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var res = false;
                 try
                 {
-                    res = _parent._predicate(value);
+                    res = _predicate(value);
                 }
                 catch (Exception ex)
                 {

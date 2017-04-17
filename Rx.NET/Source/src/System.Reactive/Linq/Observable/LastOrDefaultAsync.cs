@@ -4,48 +4,40 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal static class LongCount<TSource>
+    internal static class LastOrDefaultAsync<TSource>
     {
-        internal sealed class All : Producer<long>
+        internal sealed class Sequence : Producer<TSource>
         {
             private readonly IObservable<TSource> _source;
 
-            public All(IObservable<TSource> source)
+            public Sequence(IObservable<TSource> source)
             {
                 _source = source;
             }
 
-            protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
 
-            private sealed class _ : Sink<long>, IObserver<TSource>
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                private long _count;
+                private TSource _value;
+                private bool _seenValue;
 
-                public _(IObserver<long> observer, IDisposable cancel)
+                public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _count = 0L;
+                    _value = default(TSource);
+                    _seenValue = false;
                 }
 
                 public void OnNext(TSource value)
                 {
-                    try
-                    {
-                        checked
-                        {
-                            _count++;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
+                    _value = value;
+                    _seenValue = true;
                 }
 
                 public void OnError(Exception error)
@@ -56,14 +48,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnCompleted()
                 {
-                    base._observer.OnNext(_count);
+                    base._observer.OnNext(_value);
                     base._observer.OnCompleted();
                     base.Dispose();
                 }
             }
         }
 
-        internal sealed class Predicate : Producer<long>
+        internal sealed class Predicate : Producer<TSource>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<TSource, bool> _predicate;
@@ -74,41 +66,47 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_predicate, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
 
-            private sealed class _ : Sink<long>, IObserver<TSource>
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
-                private long _count;
+                private TSource _value;
+                private bool _seenValue;
 
-                public _(Func<TSource, bool> predicate, IObserver<long> observer, IDisposable cancel)
+                public _(Func<TSource, bool> predicate, IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
                     _predicate = predicate;
-                    _count = 0L;
+
+                    _value = default(TSource);
+                    _seenValue = false;
                 }
 
                 public void OnNext(TSource value)
                 {
+                    var b = false;
+
                     try
                     {
-                        checked
-                        {
-                            if (_predicate(value))
-                            {
-                                _count++;
-                            }
-                        }
+                        b = _predicate(value);
                     }
                     catch (Exception ex)
                     {
                         base._observer.OnError(ex);
                         base.Dispose();
+                        return;
+                    }
+
+                    if (b)
+                    {
+                        _value = value;
+                        _seenValue = true;
                     }
                 }
 
@@ -120,7 +118,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnCompleted()
                 {
-                    base._observer.OnNext(_count);
+                    base._observer.OnNext(_value);
                     base._observer.OnCompleted();
                     base.Dispose();
                 }
