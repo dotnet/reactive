@@ -592,7 +592,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_queues.All(q => q.Count > 0))
                     {
-                        var res = _queues.Select(q => q.Dequeue()).ToList();
+                        var n = _queues.Length;
+
+                        var res = new List<TSource>(n);
+                        for (var i = 0; i < n; i++)
+                        {
+                            res.Add(_queues[i].Dequeue());
+                        }
+
                         base._observer.OnNext(res);
                     }
                     else if (_isDone.AllExcept(index))
