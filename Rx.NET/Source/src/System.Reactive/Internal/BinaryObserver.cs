@@ -4,7 +4,7 @@
 
 namespace System.Reactive
 {
-    class BinaryObserver<TLeft, TRight> : IObserver<Either<Notification<TLeft>, Notification<TRight>>>
+    internal sealed class BinaryObserver<TLeft, TRight> : IObserver<Either<Notification<TLeft>, Notification<TRight>>>
     {
         public BinaryObserver(IObserver<TLeft> leftObserver, IObserver<TRight> rightObserver)
         {
@@ -17,8 +17,8 @@ namespace System.Reactive
         {
         }
 
-        public IObserver<TLeft> LeftObserver { get; private set; }
-        public IObserver<TRight> RightObserver { get; private set; }
+        public IObserver<TLeft> LeftObserver { get; }
+        public IObserver<TRight> RightObserver { get; }
 
         void IObserver<Either<Notification<TLeft>, Notification<TRight>>>.OnNext(Either<Notification<TLeft>, Notification<TRight>> value)
         {

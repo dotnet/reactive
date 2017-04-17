@@ -3,9 +3,11 @@
 // See the LICENSE file in the project root for more information. 
 
 #if NO_THREAD
+using System.Threading.Tasks;
+
 namespace System.Reactive.Concurrency
 {
-    class Thread
+    internal sealed class Thread
     {
         private readonly ThreadStart _start;
 
@@ -19,13 +21,10 @@ namespace System.Reactive.Concurrency
 
         public void Start()
         {
-            System.Threading.Tasks.Task.Factory.StartNew(Run, System.Threading.Tasks.TaskCreationOptions.LongRunning);
+            Task.Factory.StartNew(Run, TaskCreationOptions.LongRunning);
         }
 
-        private void Run()
-        {
-            _start();
-        }
+        private void Run() => _start();
     }
 
     delegate void ThreadStart();

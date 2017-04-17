@@ -6,25 +6,15 @@ using System.Collections.Generic;
 
 namespace System.Reactive
 {
-    abstract class ConcatSink<TSource> : TailRecursiveSink<TSource>
+    internal abstract class ConcatSink<TSource> : TailRecursiveSink<TSource>
     {
         public ConcatSink(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            : base(observer, cancel)
         {
         }
 
-        protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
-        {
-            var concat = source as IConcatenatable<TSource>;
-            if (concat != null)
-                return concat.GetSources();
+        protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source) => (source as IConcatenatable<TSource>)?.GetSources();
 
-            return null;
-        }
-
-        public override void OnCompleted()
-        {
-            _recurse();
-        }
+        public override void OnCompleted() => _recurse();
     }
 }

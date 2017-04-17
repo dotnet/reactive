@@ -21,15 +21,9 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the singleton instance of the CLR thread pool scheduler.
         /// </summary>
-        public static ThreadPoolScheduler Instance
-        {
-            get
-            {
-                return s_instance.Value;
-            }
-        }
+        public static ThreadPoolScheduler Instance => s_instance.Value;
 
-        ThreadPoolScheduler()
+        private ThreadPoolScheduler()
         {
         }
 
@@ -40,7 +34,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -51,7 +45,9 @@ namespace System.Reactive.Concurrency
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 if (!d.IsDisposed)
+                {
                     d.Disposable = action(this, state);
+                }
             }, null);
 
             return d;
@@ -65,7 +61,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -73,7 +69,9 @@ namespace System.Reactive.Concurrency
 
             var dt = Scheduler.Normalize(dueTime);
             if (dt.Ticks == 0)
+            {
                 return Schedule(state, action);
+            }
 
             return new Timer<TState>(this, state, dt, action);
         }
@@ -85,7 +83,7 @@ namespace System.Reactive.Concurrency
         /// <param name="state">State passed to the action to be executed.</param>
         /// <param name="action">Action to be executed.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
         {
             if (action == null)
@@ -116,7 +114,7 @@ namespace System.Reactive.Concurrency
         /// <param name="period">Period for running the work periodically.</param>
         /// <param name="action">Action to be executed, potentially updating the state.</param>
         /// <returns>The disposable object used to cancel the scheduled recurring action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="period"/> is less than zero.</exception>
         public IDisposable SchedulePeriodic<TState>(TState state, TimeSpan period, Func<TState, TState> action)
         {
@@ -135,7 +133,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        sealed class FastPeriodicTimer<TState> : IDisposable
+        private sealed class FastPeriodicTimer<TState> : IDisposable
         {
             private TState _state;
             private Func<TState, TState> _action;
@@ -170,7 +168,7 @@ namespace System.Reactive.Concurrency
         // below and its timer rooting behavior.
         //
 
-        sealed class Timer<TState> : IDisposable
+        private sealed class Timer<TState> : IDisposable
         {
             private readonly MultipleAssignmentDisposable _disposable;
 
@@ -214,15 +212,9 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            private bool IsTimerAssigned()
-            {
-                return _timer != null;
-            }
+            private bool IsTimerAssigned() => _timer != null;
 
-            public void Dispose()
-            {
-                _disposable.Dispose();
-            }
+            public void Dispose() => _disposable.Dispose();
 
             private void Stop()
             {
@@ -236,13 +228,10 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            private IDisposable Nop(IScheduler scheduler, TState state)
-            {
-                return Disposable.Empty;
-            }
+            private IDisposable Nop(IScheduler scheduler, TState state) => Disposable.Empty;
         }
 
-        sealed class PeriodicTimer<TState> : IDisposable
+        private sealed class PeriodicTimer<TState> : IDisposable
         {
             private TState _state;
             private Func<TState, TState> _action;

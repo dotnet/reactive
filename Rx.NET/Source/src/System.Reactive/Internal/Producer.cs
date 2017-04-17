@@ -59,13 +59,13 @@ namespace System.Reactive
             }
             else
             {
-                state.subscription.Disposable = this.Run(state.observer, state.subscription, state.Assign);
+                state.subscription.Disposable = Run(state.observer, state.subscription, state.Assign);
             }
 
             return d;
         }
 
-        struct State
+        private struct State
         {
             public SingleAssignmentDisposable sink;
             public SingleAssignmentDisposable subscription;

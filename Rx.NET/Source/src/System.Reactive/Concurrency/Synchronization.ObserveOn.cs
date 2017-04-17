@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace System.Reactive.Concurrency
 {
-    class ObserveOn<TSource> : Producer<TSource>
+    internal sealed class ObserveOn<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
@@ -42,7 +42,7 @@ namespace System.Reactive.Concurrency
             }
         }
 
-        class ObserveOnSink : Sink<TSource>, IObserver<TSource>
+        private sealed class ObserveOnSink : Sink<TSource>, IObserver<TSource>
         {
             private readonly ObserveOn<TSource> _parent;
 
@@ -84,24 +84,24 @@ namespace System.Reactive.Concurrency
 
             public void OnCompleted()
             {
-                _parent._context.Post(OnCompletedPosted, null);
+                _parent._context.Post(OnCompletedPosted, state: null);
             }
 
             private void OnNextPosted(object value)
             {
-                base._observer.OnNext((TSource)value);
+                _observer.OnNext((TSource)value);
             }
 
             private void OnErrorPosted(object error)
             {
-                base._observer.OnError((Exception)error);
-                base.Dispose();
+                _observer.OnError((Exception)error);
+                Dispose();
             }
 
             private void OnCompletedPosted(object ignored)
             {
-                base._observer.OnCompleted();
-                base.Dispose();
+                _observer.OnCompleted();
+                Dispose();
             }
         }
     }

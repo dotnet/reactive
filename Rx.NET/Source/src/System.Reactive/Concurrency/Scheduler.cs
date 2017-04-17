@@ -21,58 +21,29 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Gets the current time according to the local machine's system clock.
         /// </summary>
-        public static DateTimeOffset Now
-        {
-            get
-            {
-                return SystemClock.UtcNow;
-            }
-        }
+        public static DateTimeOffset Now => SystemClock.UtcNow;
 
         /// <summary>
-        /// Normalizes the specified TimeSpan value to a positive value.
+        /// Normalizes the specified <see cref="TimeSpan"/> value to a positive value.
         /// </summary>
-        /// <param name="timeSpan">The TimeSpan value to normalize.</param>
-        /// <returns>The specified TimeSpan value if it is zero or positive; otherwise, TimeSpan.Zero.</returns>
-        public static TimeSpan Normalize(TimeSpan timeSpan)
-        {
-            if (timeSpan.Ticks < 0)
-                return TimeSpan.Zero;
-            return timeSpan;
-        }
+        /// <param name="timeSpan">The <see cref="TimeSpan"/> value to normalize.</param>
+        /// <returns>The specified TimeSpan value if it is zero or positive; otherwise, <see cref="TimeSpan.Zero"/>.</returns>
+        public static TimeSpan Normalize(TimeSpan timeSpan) => timeSpan.Ticks < 0 ? TimeSpan.Zero : timeSpan;
 
         /// <summary>
         /// Gets a scheduler that schedules work immediately on the current thread.
         /// </summary>
-        public static ImmediateScheduler Immediate
-        {
-            get
-            {
-                return ImmediateScheduler.Instance;
-            }
-        }
+        public static ImmediateScheduler Immediate => ImmediateScheduler.Instance;
 
         /// <summary>
         /// Gets a scheduler that schedules work as soon as possible on the current thread.
         /// </summary>
-        public static CurrentThreadScheduler CurrentThread
-        {
-            get
-            {
-                return CurrentThreadScheduler.Instance;
-            }
-        }
+        public static CurrentThreadScheduler CurrentThread => CurrentThreadScheduler.Instance;
 
         /// <summary>
         /// Gets a scheduler that schedules work on the platform's default scheduler.
         /// </summary>
-        public static DefaultScheduler Default
-        {
-            get
-            {
-                return DefaultScheduler.Instance;
-            }
-        }
+        public static DefaultScheduler Default => DefaultScheduler.Instance;
 
 
         //
@@ -95,13 +66,7 @@ namespace System.Reactive.Concurrency
         /// Gets a scheduler that schedules work on the thread pool.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_THREADPOOL)]
-        public static IScheduler ThreadPool
-        {
-            get
-            {
-                return s_threadPool.Value;
-            }
-        }
+        public static IScheduler ThreadPool => s_threadPool.Value;
 
         private static Lazy<IScheduler> s_newThread = new Lazy<IScheduler>(() => Initialize("NewThread"));
 
@@ -109,13 +74,7 @@ namespace System.Reactive.Concurrency
         /// Gets a scheduler that schedules work on a new thread using default thread creation options.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_NEWTHREAD)]
-        public static IScheduler NewThread
-        {
-            get
-            {
-                return s_newThread.Value;
-            }
-        }
+        public static IScheduler NewThread => s_newThread.Value;
 
         private static Lazy<IScheduler> s_taskPool = new Lazy<IScheduler>(() => Initialize("TaskPool"));
 
@@ -123,13 +82,7 @@ namespace System.Reactive.Concurrency
         /// Gets a scheduler that schedules work on Task Parallel Library (TPL) task pool using the default TaskScheduler.
         /// </summary>
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULER_TASKPOOL)]
-        public static IScheduler TaskPool
-        {
-            get
-            {
-                return s_taskPool.Value;
-            }
-        }
+        public static IScheduler TaskPool => s_taskPool.Value;
 
         private static IScheduler Initialize(string name)
         {

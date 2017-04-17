@@ -16,28 +16,22 @@ namespace System.Reactive.Concurrency
     {
         private static readonly Lazy<CurrentThreadScheduler> s_instance = new Lazy<CurrentThreadScheduler>(() => new CurrentThreadScheduler());
 
-        CurrentThreadScheduler()
+        private CurrentThreadScheduler()
         {
         }
 
         /// <summary>
         /// Gets the singleton instance of the current thread scheduler.
         /// </summary>
-        public static CurrentThreadScheduler Instance
-        {
-            get { return s_instance.Value; }
-        }
+        public static CurrentThreadScheduler Instance => s_instance.Value;
 
         [ThreadStatic]
-        static SchedulerQueue<TimeSpan> s_threadLocalQueue;
+        private static SchedulerQueue<TimeSpan> s_threadLocalQueue;
 
         [ThreadStatic]
-        static IStopwatch s_clock;
+        private static IStopwatch s_clock;
 
-        private static SchedulerQueue<TimeSpan> GetQueue()
-        {
-            return s_threadLocalQueue;
-        }
+        private static SchedulerQueue<TimeSpan> GetQueue() => s_threadLocalQueue;
 
         private static void SetQueue(SchedulerQueue<TimeSpan> newQueue)
         {
@@ -61,25 +55,13 @@ namespace System.Reactive.Concurrency
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Now marked as obsolete.")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete(Constants_Core.OBSOLETE_SCHEDULEREQUIRED)] // Preferring static method call over instance method call.
-        public bool ScheduleRequired
-        {
-            get
-            {
-                return IsScheduleRequired;
-            }
-        }
+        public bool ScheduleRequired => IsScheduleRequired;
 
         /// <summary>
         /// Gets a value that indicates whether the caller must call a Schedule method.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool IsScheduleRequired
-        {
-            get
-            {
-                return GetQueue() == null;
-            }
-        }
+        public static bool IsScheduleRequired => GetQueue() == null;
 
         /// <summary>
         /// Schedules an action to be executed after dueTime.
@@ -89,7 +71,7 @@ namespace System.Reactive.Concurrency
         /// <param name="action">Action to be executed.</param>
         /// <param name="dueTime">Relative time after which to execute the action.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="action"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public override IDisposable Schedule<TState>(TState state, TimeSpan dueTime, Func<IScheduler, TState, IDisposable> action)
         {
             if (action == null)
@@ -106,14 +88,14 @@ namespace System.Reactive.Concurrency
                 queue = new SchedulerQueue<TimeSpan>(4);
                 queue.Enqueue(si);
 
-                CurrentThreadScheduler.SetQueue(queue);
+                SetQueue(queue);
                 try
                 {
                     Trampoline.Run(queue);
                 }
                 finally
                 {
-                    CurrentThreadScheduler.SetQueue(null);
+                    SetQueue(null);
                 }
             }
             else
@@ -124,7 +106,7 @@ namespace System.Reactive.Concurrency
             return Disposable.Create(si.Cancel);
         }
 
-        static class Trampoline
+        private static class Trampoline
         {
             public static void Run(SchedulerQueue<TimeSpan> queue)
             {
@@ -133,14 +115,16 @@ namespace System.Reactive.Concurrency
                     var item = queue.Dequeue();
                     if (!item.IsCanceled)
                     {
-                        var wait = item.DueTime - CurrentThreadScheduler.Time;
+                        var wait = item.DueTime - Time;
                         if (wait.Ticks > 0)
                         {
                             ConcurrencyAbstractionLayer.Current.Sleep(wait);
                         }
 
                         if (!item.IsCanceled)
+                        {
                             item.Invoke();
+                        }
                     }
                 }
             }

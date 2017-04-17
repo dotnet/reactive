@@ -24,7 +24,7 @@ namespace System.Reactive.PlatformServices
         /// </summary>
         /// <typeparam name="T">Service type.</typeparam>
         /// <param name="args">Optional set of arguments.</param>
-        /// <returns>Service instance or null if not found.</returns>
+        /// <returns>Service instance or <c>null</c> if not found.</returns>
         public virtual T GetService<T>(object[] args) where T : class
         {
             var t = typeof(T);
@@ -94,7 +94,9 @@ namespace System.Reactive.PlatformServices
 
                     var dbg = Type.GetType(name, false);
                     if (dbg != null)
-                        return (T)(object)Activator.CreateInstance(dbg);
+                    {
+                        return (T)Activator.CreateInstance(dbg);
+                    }
                 }
             }
 

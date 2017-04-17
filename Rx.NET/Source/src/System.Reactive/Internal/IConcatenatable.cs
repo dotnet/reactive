@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive
 {
-    interface IConcatenatable<TSource>
+    internal interface IConcatenatable<out TSource>
     {
         IEnumerable<IObservable<TSource>> GetSources();
     }

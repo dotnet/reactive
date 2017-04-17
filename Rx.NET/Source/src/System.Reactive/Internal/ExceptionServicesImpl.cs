@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.ExceptionServices;
+
 namespace System.Reactive.PlatformServices
 {
     //
@@ -11,9 +13,6 @@ namespace System.Reactive.PlatformServices
     //
     internal class /*Default*/ExceptionServicesImpl : IExceptionServices
     {
-        public void Rethrow(Exception exception)
-        {
-            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(exception).Throw();
-        }
+        public void Rethrow(Exception exception) => ExceptionDispatchInfo.Capture(exception).Throw();
     }
 }
