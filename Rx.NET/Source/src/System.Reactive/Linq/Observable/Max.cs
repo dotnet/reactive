@@ -22,28 +22,28 @@ namespace System.Reactive.Linq.ObservableImpl
             // LINQ to Objects makes this distinction in order to make [Max|Max] of an empty collection of reference type objects equal to null.
             if (default(TSource) == null)
             {
-                var sink = new _(this, observer, cancel);
+                var sink = new Null(_comparer, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
             else
             {
-                var sink = new Delta(this, observer, cancel);
+                var sink = new NonNull(_comparer, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
         }
 
-        class Delta : Sink<TSource>, IObserver<TSource>
+        private sealed class NonNull : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Max<TSource> _parent;
+            private readonly IComparer<TSource> _comparer;
             private bool _hasValue;
             private TSource _lastValue;
 
-            public Delta(Max<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _comparer = comparer;
 
                 _hasValue = false;
                 _lastValue = default(TSource);
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        comparison = _parent._comparer.Compare(value, _lastValue);
+                        comparison = _comparer.Compare(value, _lastValue);
                     }
                     catch (Exception ex)
                     {
@@ -100,15 +100,15 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class Null : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Max<TSource> _parent;
+            private readonly IComparer<TSource> _comparer;
             private TSource _lastValue;
 
-            public _(Max<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public Null(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _comparer = comparer;
 
                 _lastValue = default(TSource);
             }
@@ -127,7 +127,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         try
                         {
-                            comparison = _parent._comparer.Compare(value, _lastValue);
+                            comparison = _comparer.Compare(value, _lastValue);
                         }
                         catch (Exception ex)
                         {
@@ -175,7 +175,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double>, IObserver<double>
+        private sealed class _ : Sink<double>, IObserver<double>
         {
             private bool _hasValue;
             private double _lastValue;
@@ -242,7 +242,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<float>, IObserver<float>
+        private sealed class _ : Sink<float>, IObserver<float>
         {
             private bool _hasValue;
             private float _lastValue;
@@ -309,7 +309,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<decimal>, IObserver<decimal>
+        private sealed class _ : Sink<decimal>, IObserver<decimal>
         {
             private bool _hasValue;
             private decimal _lastValue;
@@ -376,7 +376,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<int>, IObserver<int>
+        private sealed class _ : Sink<int>, IObserver<int>
         {
             private bool _hasValue;
             private int _lastValue;
@@ -443,7 +443,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<long>, IObserver<long>
+        private sealed class _ : Sink<long>, IObserver<long>
         {
             private bool _hasValue;
             private long _lastValue;
@@ -510,7 +510,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double?>, IObserver<double?>
+        private sealed class _ : Sink<double?>, IObserver<double?>
         {
             private double? _lastValue;
 
@@ -569,7 +569,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<float?>, IObserver<float?>
+        private sealed class _ : Sink<float?>, IObserver<float?>
         {
             private float? _lastValue;
 
@@ -628,7 +628,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<decimal?>, IObserver<decimal?>
+        private sealed class _ : Sink<decimal?>, IObserver<decimal?>
         {
             private decimal? _lastValue;
 
@@ -687,7 +687,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<int?>, IObserver<int?>
+        private sealed class _ : Sink<int?>, IObserver<int?>
         {
             private int? _lastValue;
 
@@ -746,7 +746,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<long?>, IObserver<long?>
+        private sealed class _ : Sink<long?>, IObserver<long?>
         {
             private long? _lastValue;
 
