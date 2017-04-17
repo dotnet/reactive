@@ -344,7 +344,7 @@ namespace System.Reactive.Linq
         {
             var skip = source as Skip<TSource>;
             if (skip != null && skip._scheduler == null)
-                return skip.Omega(count);
+                return skip.Combine(count);
 
             return new Skip<TSource>(source, count);
         }
@@ -387,7 +387,7 @@ namespace System.Reactive.Linq
         {
             var take = source as Take<TSource>;
             if (take != null && take._scheduler == null)
-                return take.Omega(count);
+                return take.Combine(count);
 
             return new Take<TSource>(source, count);
         }
@@ -414,7 +414,7 @@ namespace System.Reactive.Linq
         {
             var where = source as Where<TSource>;
             if (where != null)
-                return where.Omega(predicate);
+                return where.Combine(predicate);
 
             return new Where<TSource>(source, predicate);
         }

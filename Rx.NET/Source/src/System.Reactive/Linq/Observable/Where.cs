@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _predicateI = predicate;
         }
 
-        public IObservable<TSource> Omega(Func<TSource, bool> predicate)
+        public IObservable<TSource> Combine(Func<TSource, bool> predicate)
         {
             if (_predicate != null)
                 return new Where<TSource>(_source, x => _predicate(x) && predicate(x));

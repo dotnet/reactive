@@ -253,7 +253,7 @@ namespace System.Reactive.Linq
         {
             var skip = source as Skip<TSource>;
             if (skip != null && skip._scheduler == scheduler)
-                return skip.Omega(duration);
+                return skip.Combine(duration);
 
             return new Skip<TSource>(source, duration, scheduler);
         }
@@ -295,7 +295,7 @@ namespace System.Reactive.Linq
         {
             var skipUntil = source as SkipUntil<TSource>;
             if (skipUntil != null && skipUntil._scheduler == scheduler)
-                return skipUntil.Omega(startTime);
+                return skipUntil.Combine(startTime);
 
             return new SkipUntil<TSource>(source, startTime, scheduler);
         }
@@ -318,7 +318,7 @@ namespace System.Reactive.Linq
         {
             var take = source as Take<TSource>;
             if (take != null && take._scheduler == scheduler)
-                return take.Omega(duration);
+                return take.Combine(duration);
 
             return new Take<TSource>(source, duration, scheduler);
         }
@@ -380,7 +380,7 @@ namespace System.Reactive.Linq
         {
             var takeUntil = source as TakeUntil<TSource>;
             if (takeUntil != null && takeUntil._scheduler == scheduler)
-                return takeUntil.Omega(endTime);
+                return takeUntil.Combine(endTime);
 
             return new TakeUntil<TSource>(source, endTime, scheduler);
         }

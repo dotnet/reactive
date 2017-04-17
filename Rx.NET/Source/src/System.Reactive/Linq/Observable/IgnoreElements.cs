@@ -13,11 +13,6 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        public IObservable<TSource> Omega()
-        {
-            return this;
-        }
-
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(observer, cancel);

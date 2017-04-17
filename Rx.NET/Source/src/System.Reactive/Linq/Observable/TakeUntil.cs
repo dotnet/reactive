@@ -172,7 +172,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        public IObservable<TSource> Omega(DateTimeOffset endTime)
+        public IObservable<TSource> Combine(DateTimeOffset endTime)
         {
             //
             // Minimum semantics:
