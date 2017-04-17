@@ -468,7 +468,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _hasValue[index] = true;
 
-                    if (_hasValueAll || (_hasValueAll = _hasValue.All(Stubs<bool>.I)))
+                    if (_hasValueAll || (_hasValueAll = All(_hasValue)))
                     {
                         var res = default(TResult);
                         try
@@ -484,7 +484,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         _observer.OnNext(res);
                     }
-                    else if (_isDone.Where((x, i) => i != index).All(Stubs<bool>.I))
+                    else if (AllExcept(_isDone, index))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -508,7 +508,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _isDone[index] = true;
 
-                    if (_isDone.All(Stubs<bool>.I))
+                    if (All(_isDone))
                     {
                         base._observer.OnCompleted();
                         base.Dispose();
@@ -519,6 +519,35 @@ namespace System.Reactive.Linq.ObservableImpl
                         _subscriptions[index].Dispose();
                     }
                 }
+            }
+
+            private static bool All(bool[] values)
+            {
+                foreach (var value in values)
+                {
+                    if (!value)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            private static bool AllExcept(bool[] values, int index)
+            {
+                for (var i = 0; i < values.Length; i++)
+                {
+                    if (i != index)
+                    {
+                        if (!values[i])
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
             }
 
             private sealed class SourceObserver : IObserver<TSource>
