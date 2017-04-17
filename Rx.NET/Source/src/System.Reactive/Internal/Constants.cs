@@ -6,7 +6,7 @@ namespace System.Reactive
 {
     // We can't make those based on the Strings_Core.resx file, because the ObsoleteAttribute needs a compile-time constant.
 
-    class Constants_Core
+    internal static class Constants_Core
     {
         private const string OBSOLETE_REFACTORING = "This property is no longer supported due to refactoring of the API surface and elimination of platform-specific dependencies.";
 
@@ -19,7 +19,7 @@ namespace System.Reactive
 
     // We can't make those based on the Strings_*.resx file, because the ObsoleteAttribute needs a compile-time constant.
 
-    class Constants_Linq
+    internal static class Constants_Linq
     {
 #if PREFER_ASYNC
         public const string USE_ASYNC = "This blocking operation is no longer supported. Instead, use the async version in combination with C# and Visual Basic async/await support. In case you need a blocking operation, use Wait or convert the resulting observable sequence to a Task object and block.";

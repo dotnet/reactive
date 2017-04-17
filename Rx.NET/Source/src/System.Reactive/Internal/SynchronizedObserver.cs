@@ -4,7 +4,7 @@
 
 namespace System.Reactive
 {
-    internal class SynchronizedObserver<T> : ObserverBase<T>
+    internal sealed class SynchronizedObserver<T> : ObserverBase<T>
     {
         private readonly object _gate;
         private readonly IObserver<T> _observer;

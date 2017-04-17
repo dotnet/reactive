@@ -9,7 +9,7 @@ namespace System.Reactive
     // its implementation aspects.
     //
 
-    class SafeObserver<TSource> : IObserver<TSource>
+    internal sealed class SafeObserver<TSource> : IObserver<TSource>
     {
         private readonly IObserver<TSource> _observer;
         private readonly IDisposable _disposable;
@@ -18,9 +18,13 @@ namespace System.Reactive
         {
             var a = observer as AnonymousObserver<TSource>;
             if (a != null)
+            {
                 return a.MakeSafe(disposable);
+            }
             else
+            {
                 return new SafeObserver<TSource>(observer, disposable);
+            }
         }
 
         private SafeObserver(IObserver<TSource> observer, IDisposable disposable)
@@ -40,7 +44,9 @@ namespace System.Reactive
             finally
             {
                 if (!__noError)
+                {
                     _disposable.Dispose();
+                }
             }
         }
 

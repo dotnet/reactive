@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -13,7 +12,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace System.Reactive
 {
-    static class ReflectionUtils
+    internal static class ReflectionUtils
     {
         public static TDelegate CreateDelegate<TDelegate>(object o, MethodInfo method)
         {
@@ -111,13 +110,19 @@ namespace System.Reactive
 
                 var e = t.GetDeclaredEvent(name);
                 if (e != null)
+                {
                     return e;
+                }
 
                 foreach (var i in t.ImplementedInterfaces)
+                {
                     q.Enqueue(i.GetTypeInfo());
+                }
 
                 if (t.BaseType != null)
+                {
                     q.Enqueue(t.BaseType.GetTypeInfo());
+                }
             }
 
             return null;
@@ -127,25 +132,13 @@ namespace System.Reactive
         }
 
 #if (CRIPPLED_REFLECTION && HAS_WINRT)
-        public static MethodInfo GetMethod(this Type type, string name)
-        {
-            return type.GetTypeInfo().GetDeclaredMethod(name);
-        }
+        public static MethodInfo GetMethod(this Type type, string name) => type.GetTypeInfo().GetDeclaredMethod(name);
 
-        public static MethodInfo GetAddMethod(this EventInfo eventInfo)
-        {
-            return eventInfo.AddMethod;
-        }
+        public static MethodInfo GetAddMethod(this EventInfo eventInfo) => eventInfo.AddMethod;
 
-        public static MethodInfo GetRemoveMethod(this EventInfo eventInfo)
-        {
-            return eventInfo.RemoveMethod;
-        }
+        public static MethodInfo GetRemoveMethod(this EventInfo eventInfo) => eventInfo.RemoveMethod;
 
-        public static bool IsAssignableFrom(this Type type1, Type type2)
-        {
-            return type1.GetTypeInfo().IsAssignableFrom(type2.GetTypeInfo());
-        }
+        public static bool IsAssignableFrom(this Type type1, Type type2) => type1.GetTypeInfo().IsAssignableFrom(type2.GetTypeInfo());
 #endif
     }
 }
