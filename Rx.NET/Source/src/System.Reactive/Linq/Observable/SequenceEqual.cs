@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class SequenceEqual<TSource> : Producer<bool>
+    internal sealed class SequenceEqual<TSource> : Producer<bool>
     {
         private readonly IObservable<TSource> _first;
         private readonly IObservable<TSource> _second;

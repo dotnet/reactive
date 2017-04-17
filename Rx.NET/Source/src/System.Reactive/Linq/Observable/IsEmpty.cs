@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class IsEmpty<TSource> : Producer<bool>
+    internal sealed class IsEmpty<TSource> : Producer<bool>
     {
         private readonly IObservable<TSource> _source;
 

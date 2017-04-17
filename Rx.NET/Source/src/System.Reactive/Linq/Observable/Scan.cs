@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Scan<TSource, TAccumulate> : Producer<TAccumulate>
+    internal sealed class Scan<TSource, TAccumulate> : Producer<TAccumulate>
     {
         private readonly IObservable<TSource> _source;
         private readonly TAccumulate _seed;
@@ -76,7 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Scan<TSource> : Producer<TSource>
+    internal sealed class Scan<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TSource, TSource> _accumulator;

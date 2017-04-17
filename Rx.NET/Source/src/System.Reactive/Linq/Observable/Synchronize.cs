@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Synchronize<TSource> : Producer<TSource>
+    internal sealed class Synchronize<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly object _gate;

@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class IgnoreElements<TSource> : Producer<TSource>
+    internal sealed class IgnoreElements<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
 

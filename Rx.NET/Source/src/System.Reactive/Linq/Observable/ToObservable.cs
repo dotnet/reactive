@@ -9,7 +9,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ToObservable<TSource> : Producer<TSource>
+    internal sealed class ToObservable<TSource> : Producer<TSource>
     {
         private readonly IEnumerable<TSource> _source;
         private readonly IScheduler _scheduler;

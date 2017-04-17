@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class LastAsync<TSource> : Producer<TSource>
+    internal sealed class LastAsync<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;

@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Timer : Producer<long>
+    internal sealed class Timer : Producer<long>
     {
         private readonly DateTimeOffset? _dueTimeA;
         private readonly TimeSpan? _dueTimeR;

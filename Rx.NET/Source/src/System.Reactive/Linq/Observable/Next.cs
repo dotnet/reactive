@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Next<TSource> : PushToPullAdapter<TSource, TSource>
+    internal sealed class Next<TSource> : PushToPullAdapter<TSource, TSource>
     {
         public Next(IObservable<TSource> source)
             : base(source)

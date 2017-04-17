@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Contains<TSource> : Producer<bool>
+    internal sealed class Contains<TSource> : Producer<bool>
     {
         private readonly IObservable<TSource> _source;
         private readonly TSource _value;

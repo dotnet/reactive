@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Latest<TSource> : PushToPullAdapter<TSource, TSource>
+    internal sealed class Latest<TSource> : PushToPullAdapter<TSource, TSource>
     {
         public Latest(IObservable<TSource> source)
             : base(source)

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ToList<TSource> : Producer<IList<TSource>>
+    internal sealed class ToList<TSource> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
 

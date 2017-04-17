@@ -159,7 +159,7 @@ using System.Reactive.Subjects;
 //
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class FromEvent<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, TEventArgs>
+    internal sealed class FromEvent<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, TEventArgs>
     {
         private readonly Func<Action<TEventArgs>, TDelegate> _conversion;
 

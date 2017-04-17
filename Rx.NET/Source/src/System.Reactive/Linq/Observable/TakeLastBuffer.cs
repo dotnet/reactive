@@ -10,7 +10,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class TakeLastBuffer<TSource> : Producer<IList<TSource>>
+    internal sealed class TakeLastBuffer<TSource> : Producer<IList<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;

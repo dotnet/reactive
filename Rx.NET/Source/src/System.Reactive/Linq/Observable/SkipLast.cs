@@ -8,7 +8,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class SkipLast<TSource> : Producer<TSource>
+    internal sealed class SkipLast<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;

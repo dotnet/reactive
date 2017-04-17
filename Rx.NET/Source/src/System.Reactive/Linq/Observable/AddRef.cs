@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class AddRef<TSource> : Producer<TSource>
+    internal class AddRef<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly RefCountDisposable _refCount;

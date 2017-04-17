@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Never<TResult> : IObservable<TResult>
+    internal sealed class Never<TResult> : IObservable<TResult>
     {
         public IDisposable Subscribe(IObserver<TResult> observer)
         {

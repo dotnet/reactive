@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Catch<TSource> : Producer<TSource>
+    internal sealed class Catch<TSource> : Producer<TSource>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 
@@ -82,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Catch<TSource, TException> : Producer<TSource> where TException : Exception
+    internal sealed class Catch<TSource, TException> : Producer<TSource> where TException : Exception
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TException, IObservable<TSource>> _handler;

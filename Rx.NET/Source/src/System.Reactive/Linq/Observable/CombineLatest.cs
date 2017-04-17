@@ -12,7 +12,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 
-    class CombineLatest<TFirst, TSecond, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<TFirst, TSecond, TResult> : Producer<TResult>
     {
         private readonly IObservable<TFirst> _first;
         private readonly IObservable<TSecond> _second;
@@ -339,7 +339,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class CombineLatestObserver<T> : IObserver<T>
+    internal sealed class CombineLatestObserver<T> : IObserver<T>
     {
         private readonly object _gate;
         private readonly ICombineLatest _parent;
@@ -396,7 +396,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region N-ary
 
-    class CombineLatest<TSource, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<TSource, TResult> : Producer<TResult>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
         private readonly Func<IList<TSource>, TResult> _resultSelector;

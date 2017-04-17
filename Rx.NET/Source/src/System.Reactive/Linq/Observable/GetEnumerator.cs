@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class GetEnumerator<TSource> : IEnumerator<TSource>, IObserver<TSource>
+    internal sealed class GetEnumerator<TSource> : IEnumerator<TSource>, IObserver<TSource>
     {
         private readonly ConcurrentQueue<TSource> _queue;
         private TSource _current;

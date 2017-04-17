@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class DelaySubscription<TSource> : Producer<TSource>
+    internal sealed class DelaySubscription<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly DateTimeOffset? _dueTimeA;

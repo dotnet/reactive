@@ -15,7 +15,7 @@ using System.Threading;
 //
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class FromEventPattern
+    internal sealed class FromEventPattern
     {
         public class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
         {

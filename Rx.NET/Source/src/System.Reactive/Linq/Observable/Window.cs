@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Window<TSource> : Producer<IObservable<TSource>>
+    internal sealed class Window<TSource> : Producer<IObservable<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;
@@ -489,7 +489,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Window<TSource, TWindowClosing> : Producer<IObservable<TSource>>
+    internal sealed class Window<TSource, TWindowClosing> : Producer<IObservable<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<IObservable<TWindowClosing>> _windowClosingSelector;
@@ -748,7 +748,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class WindowObservable<TSource> : AddRef<TSource>
+    internal sealed class WindowObservable<TSource> : AddRef<TSource>
     {
         public WindowObservable(IObservable<TSource> source, RefCountDisposable refCount)
             : base(source, refCount)

@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Defer<TValue> : Producer<TValue>, IEvaluatableObservable<TValue>
+    internal sealed class Defer<TValue> : Producer<TValue>, IEvaluatableObservable<TValue>
     {
         private readonly Func<IObservable<TValue>> _observableFactory;
 

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Distinct<TSource, TKey> : Producer<TSource>
+    internal sealed class Distinct<TSource, TKey> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;

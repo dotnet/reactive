@@ -10,7 +10,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class GroupByUntil<TSource, TKey, TElement, TDuration> : Producer<IGroupedObservable<TKey, TElement>>
+    internal sealed class GroupByUntil<TSource, TKey, TElement, TDuration> : Producer<IGroupedObservable<TKey, TElement>>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
@@ -276,7 +276,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Map<TKey, TValue>
+    internal sealed class Map<TKey, TValue>
     {
         // Taken from ConcurrentDictionary in the BCL.
 

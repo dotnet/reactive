@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Max<TSource> : Producer<TSource>
+    internal sealed class Max<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IComparer<TSource> _comparer;
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxDouble : Producer<double>
+    internal sealed class MaxDouble : Producer<double>
     {
         private readonly IObservable<double> _source;
 
@@ -227,7 +227,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxSingle : Producer<float>
+    internal sealed class MaxSingle : Producer<float>
     {
         private readonly IObservable<float> _source;
 
@@ -294,7 +294,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxDecimal : Producer<decimal>
+    internal sealed class MaxDecimal : Producer<decimal>
     {
         private readonly IObservable<decimal> _source;
 
@@ -361,7 +361,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxInt32 : Producer<int>
+    internal sealed class MaxInt32 : Producer<int>
     {
         private readonly IObservable<int> _source;
 
@@ -428,7 +428,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxInt64 : Producer<long>
+    internal sealed class MaxInt64 : Producer<long>
     {
         private readonly IObservable<long> _source;
 
@@ -495,7 +495,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxDoubleNullable : Producer<double?>
+    internal sealed class MaxDoubleNullable : Producer<double?>
     {
         private readonly IObservable<double?> _source;
 
@@ -554,7 +554,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxSingleNullable : Producer<float?>
+    internal sealed class MaxSingleNullable : Producer<float?>
     {
         private readonly IObservable<float?> _source;
 
@@ -613,7 +613,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxDecimalNullable : Producer<decimal?>
+    internal sealed class MaxDecimalNullable : Producer<decimal?>
     {
         private readonly IObservable<decimal?> _source;
 
@@ -672,7 +672,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxInt32Nullable : Producer<int?>
+    internal sealed class MaxInt32Nullable : Producer<int?>
     {
         private readonly IObservable<int?> _source;
 
@@ -731,7 +731,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class MaxInt64Nullable : Producer<long?>
+    internal sealed class MaxInt64Nullable : Producer<long?>
     {
         private readonly IObservable<long?> _source;
 

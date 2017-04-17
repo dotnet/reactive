@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Merge<TSource> : Producer<TSource>
+    internal sealed class Merge<TSource> : Producer<TSource>
     {
         private readonly IObservable<IObservable<TSource>> _sources;
         private readonly IObservable<Task<TSource>> _sourcesT;

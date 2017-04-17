@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Repeat<TResult> : Producer<TResult>
+    internal sealed class Repeat<TResult> : Producer<TResult>
     {
         private readonly TResult _value;
         private readonly int? _repeatCount;

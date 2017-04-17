@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class LongCount<TSource> : Producer<long>
+    internal sealed class LongCount<TSource> : Producer<long>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;

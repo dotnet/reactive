@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Materialize<TSource> : Producer<Notification<TSource>>
+    internal sealed class Materialize<TSource> : Producer<Notification<TSource>>
     {
         private readonly IObservable<TSource> _source;
 

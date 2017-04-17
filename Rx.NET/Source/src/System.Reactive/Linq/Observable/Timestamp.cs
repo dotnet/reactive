@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Timestamp<TSource> : Producer<Timestamped<TSource>>
+    internal sealed class Timestamp<TSource> : Producer<Timestamped<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;

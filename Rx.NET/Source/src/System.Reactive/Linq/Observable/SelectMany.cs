@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class SelectMany<TSource, TCollection, TResult> : Producer<TResult>
+    internal sealed class SelectMany<TSource, TCollection, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
@@ -849,7 +849,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class SelectMany<TSource, TResult> : Producer<TResult>
+    internal sealed class SelectMany<TSource, TResult> : Producer<TResult>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, IObservable<TResult>> _selector;

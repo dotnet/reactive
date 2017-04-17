@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Do<TSource> : Producer<TSource>
+    internal sealed class Do<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Action<TSource> _onNext;

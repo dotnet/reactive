@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class ElementAt<TSource> : Producer<TSource>
+    internal sealed class ElementAt<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _index;

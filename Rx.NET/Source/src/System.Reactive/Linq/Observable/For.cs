@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class For<TSource, TResult> : Producer<TResult>, IConcatenatable<TResult>
+    internal sealed class For<TSource, TResult> : Producer<TResult>, IConcatenatable<TResult>
     {
         private readonly IEnumerable<TSource> _source;
         private readonly Func<TSource, IObservable<TResult>> _resultSelector;

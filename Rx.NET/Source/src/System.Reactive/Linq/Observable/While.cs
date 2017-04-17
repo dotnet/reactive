@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class While<TSource> : Producer<TSource>, IConcatenatable<TSource>
+    internal sealed class While<TSource> : Producer<TSource>, IConcatenatable<TSource>
     {
         private readonly Func<bool> _condition;
         private readonly IObservable<TSource> _source;

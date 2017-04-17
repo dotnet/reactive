@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class RefCount<TSource> : Producer<TSource>
+    internal sealed class RefCount<TSource> : Producer<TSource>
     {
         private readonly IConnectableObservable<TSource> _source;
 

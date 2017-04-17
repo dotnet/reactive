@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Sample<TSource, TSample> : Producer<TSource>
+    internal sealed class Sample<TSource, TSample> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TSample> _sampler;
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    class Sample<TSource> : Producer<TSource>
+    internal sealed class Sample<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly TimeSpan _interval;

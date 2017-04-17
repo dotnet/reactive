@@ -6,7 +6,7 @@ using System;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class SingleAsync<TSource> : Producer<TSource>
+    internal sealed class SingleAsync<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;

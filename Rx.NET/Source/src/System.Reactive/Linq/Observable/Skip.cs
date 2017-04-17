@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class Skip<TSource> : Producer<TSource>
+    internal sealed class Skip<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _count;

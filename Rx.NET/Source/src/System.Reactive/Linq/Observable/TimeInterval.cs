@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    class TimeInterval<TSource> : Producer<System.Reactive.TimeInterval<TSource>>
+    internal sealed class TimeInterval<TSource> : Producer<System.Reactive.TimeInterval<TSource>>
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
