@@ -25,7 +25,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink;
         }
 
-        class _ : PushToPullSink<TSource, TResult>
+        private sealed class _ : PushToPullSink<TSource, TResult>
         {
             private readonly Collect<TSource, TResult> _parent;
 

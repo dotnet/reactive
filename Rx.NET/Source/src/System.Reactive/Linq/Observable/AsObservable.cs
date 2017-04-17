@@ -13,10 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        public IObservable<TSource> Eval()
-        {
-            return _source;
-        }
+        public IObservable<TSource> Eval() => _source;
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -25,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

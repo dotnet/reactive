@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run();
         }
 
-        class _ : Sink<TResult>, IObserver<TResult>
+        private sealed class _ : Sink<TResult>, IObserver<TResult>
         {
             private readonly Case<TValue, TResult> _parent;
 

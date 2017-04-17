@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<bool>, IObserver<TSource>
+        private sealed class _ : Sink<bool>, IObserver<TSource>
         {
             private readonly Contains<TSource> _parent;
 
