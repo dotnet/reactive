@@ -140,7 +140,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> DelaySubscription_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return new DelaySubscription<TSource>(source, dueTime, scheduler);
+            return new DelaySubscription<TSource>.Relative(source, dueTime, scheduler);
         }
 
         public virtual IObservable<TSource> DelaySubscription<TSource>(IObservable<TSource> source, DateTimeOffset dueTime)
@@ -155,7 +155,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> DelaySubscription_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return new DelaySubscription<TSource>(source, dueTime, scheduler);
+            return new DelaySubscription<TSource>.Absolute(source, dueTime, scheduler);
         }
 
         #endregion
