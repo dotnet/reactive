@@ -357,12 +357,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipWhile<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> SkipWhile<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
@@ -400,12 +400,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
