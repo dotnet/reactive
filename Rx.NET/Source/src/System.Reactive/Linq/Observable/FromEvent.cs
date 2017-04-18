@@ -190,7 +190,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    abstract class EventProducer<TDelegate, TArgs> : Producer<TArgs>
+    internal abstract class EventProducer<TDelegate, TArgs> : Producer<TArgs>
     {
         private readonly IScheduler _scheduler;
         private readonly object _gate;
@@ -229,7 +229,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return connection;
         }
 
-        class Session
+        private sealed class Session
         {
             private readonly EventProducer<TDelegate, TArgs> _parent;
             private readonly Subject<TArgs> _subject;
@@ -346,7 +346,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    abstract class ClassicEventProducer<TDelegate, TArgs> : EventProducer<TDelegate, TArgs>
+    internal abstract class ClassicEventProducer<TDelegate, TArgs> : EventProducer<TDelegate, TArgs>
     {
         private readonly Action<TDelegate> _addHandler;
         private readonly Action<TDelegate> _removeHandler;
