@@ -300,12 +300,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>.ObservableSelector(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectors(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectorsIndexed(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)

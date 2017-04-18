@@ -28,33 +28,34 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly ObservableSelector _parent;
+                private readonly object _gate = new object();
+                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
+                private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
+                private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
+
+                    _group.Add(_sourceSubscription);
                 }
 
-                private object _gate;
                 private bool _isStopped;
-                private CompositeDisposable _group;
-                private SingleAssignmentDisposable _sourceSubscription;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
                     _isStopped = false;
-                    _group = new CompositeDisposable();
 
-                    _sourceSubscription = new SingleAssignmentDisposable();
-                    _group.Add(_sourceSubscription);
-                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
                     return _group;
                 }
@@ -65,7 +66,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        collection = _parent._collectionSelector(value);
+                        collection = _collectionSelector(value);
                     }
                     catch (Exception ex)
                     {
@@ -134,7 +135,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         try
                         {
-                            res = _parent._parent._resultSelector(_value, value);
+                            res = _parent._resultSelector(_value, value);
                         }
                         catch (Exception ex)
                         {
@@ -199,34 +200,35 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly ObservableSelectorIndexed _parent;
+                private readonly object _gate = new object();
+                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
+                private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
+                private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
                 public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
+
+                    _group.Add(_sourceSubscription);
                 }
 
-                private object _gate;
                 private bool _isStopped;
-                private CompositeDisposable _group;
-                private SingleAssignmentDisposable _sourceSubscription;
                 private int _index;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
                     _isStopped = false;
-                    _group = new CompositeDisposable();
 
-                    _sourceSubscription = new SingleAssignmentDisposable();
-                    _group.Add(_sourceSubscription);
-                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
                     return _group;
                 }
@@ -238,7 +240,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        collection = _parent._collectionSelector(value, index);
+                        collection = _collectionSelector(value, index);
                     }
                     catch (Exception ex)
                     {
@@ -311,7 +313,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         try
                         {
-                            res = _parent._parent._resultSelector(_value, _valueIndex, value, checked(_index++));
+                            res = _parent._resultSelector(_value, _valueIndex, value, checked(_index++));
                         }
                         catch (Exception ex)
                         {
@@ -381,12 +383,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly EnumerableSelector _parent;
+                private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
+                private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
                 public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
                 }
 
                 public void OnNext(TSource value)
@@ -394,7 +398,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var xs = default(IEnumerable<TCollection>);
                     try
                     {
-                        xs = _parent._collectionSelector(value);
+                        xs = _collectionSelector(value);
                     }
                     catch (Exception exception)
                     {
@@ -427,7 +431,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
-                                    current = _parent._resultSelector(value, e.Current);
+                                    current = _resultSelector(value, e.Current);
                             }
                             catch (Exception exception)
                             {
@@ -483,12 +487,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly EnumerableSelectorIndexed _parent;
+                private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
+                private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
                 public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
                 }
 
                 private int _index;
@@ -500,7 +506,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var xs = default(IEnumerable<TCollection>);
                     try
                     {
-                        xs = _parent._collectionSelector(value, index);
+                        xs = _collectionSelector(value, index);
                     }
                     catch (Exception exception)
                     {
@@ -534,7 +540,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             {
                                 hasNext = e.MoveNext();
                                 if (hasNext)
-                                    current = _parent._resultSelector(value, index, e.Current, checked(eIndex++));
+                                    current = _resultSelector(value, index, e.Current, checked(eIndex++));
                             }
                             catch (Exception exception)
                             {
@@ -585,30 +591,31 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly TaskSelector _parent;
+                private readonly object _gate = new object();
+                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+
+                private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelector;
+                private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
                 public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
                 }
 
-                private object _gate;
-                private CancellationDisposable _cancel;
                 private volatile int _count;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
-                    _cancel = new CancellationDisposable();
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
                 public void OnNext(TSource value)
@@ -617,7 +624,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _parent._collectionSelector(value, _cancel.Token);
+                        task = _collectionSelector(value, _cancel.Token);
                     }
                     catch (Exception ex)
                     {
@@ -657,7 +664,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                 var res = default(TResult);
                                 try
                                 {
-                                    res = _parent._resultSelector(value, task.Result);
+                                    res = _resultSelector(value, task.Result);
                                 }
                                 catch (Exception ex)
                                 {
@@ -740,31 +747,32 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly TaskSelectorIndexed _parent;
+                private readonly object _gate = new object();
+                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+
+                private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelector;
+                private readonly Func<TSource, int, TCollection, TResult> _resultSelector;
 
                 public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _collectionSelector = parent._collectionSelector;
+                    _resultSelector = parent._resultSelector;
                 }
 
-                private object _gate;
-                private CancellationDisposable _cancel;
                 private volatile int _count;
                 private int _index;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
-                    _cancel = new CancellationDisposable();
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
                 public void OnNext(TSource value)
@@ -775,7 +783,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _parent._collectionSelector(value, index, _cancel.Token);
+                        task = _collectionSelector(value, index, _cancel.Token);
                     }
                     catch (Exception ex)
                     {
@@ -815,7 +823,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                 var res = default(TResult);
                                 try
                                 {
-                                    res = _parent._resultSelector(value, index, task.Result);
+                                    res = _resultSelector(value, index, task.Result);
                                 }
                                 catch (Exception ex)
                                 {
@@ -884,12 +892,10 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal static class SelectMany<TSource, TResult>
     {
-        internal sealed class ObservableSelector : Producer<TResult>
+        internal class ObservableSelector : Producer<TResult>
         {
-            private readonly IObservable<TSource> _source;
-            private readonly Func<TSource, IObservable<TResult>> _selector;
-            private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
-            private readonly Func<IObservable<TResult>> _selectorOnCompleted;
+            protected readonly IObservable<TSource> _source;
+            protected readonly Func<TSource, IObservable<TResult>> _selector;
 
             public ObservableSelector(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
             {
@@ -897,45 +903,36 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            public ObservableSelector(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
-            {
-                _source = source;
-                _selector = selector;
-                _selectorOnError = selectorOnError;
-                _selectorOnCompleted = selectorOnCompleted;
-            }
-
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
-            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            protected class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly ObservableSelector _parent;
+                protected readonly object _gate = new object();
+                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
+                private readonly Func<TSource, IObservable<TResult>> _selector;
 
                 public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _selector = parent._selector;
+
+                    _group.Add(_sourceSubscription);
                 }
 
-                private object _gate;
                 private bool _isStopped;
-                private CompositeDisposable _group;
-                private SingleAssignmentDisposable _sourceSubscription;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
                     _isStopped = false;
-                    _group = new CompositeDisposable();
 
-                    _sourceSubscription = new SingleAssignmentDisposable();
-                    _group.Add(_sourceSubscription);
-                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
 
                     return _group;
                 }
@@ -946,7 +943,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        inner = _parent._selector(value);
+                        inner = _selector(value);
                     }
                     catch (Exception ex)
                     {
@@ -961,67 +958,21 @@ namespace System.Reactive.Linq.ObservableImpl
                     SubscribeInner(inner);
                 }
 
-                public void OnError(Exception error)
+                public virtual void OnError(Exception error)
                 {
-                    if (_parent._selectorOnError != null)
+                    lock (_gate)
                     {
-                        var inner = default(IObservable<TResult>);
-
-                        try
-                        {
-                            inner = _parent._selectorOnError(error);
-                        }
-                        catch (Exception ex)
-                        {
-                            lock (_gate)
-                            {
-                                base._observer.OnError(ex);
-                                base.Dispose();
-                            }
-                            return;
-                        }
-
-                        SubscribeInner(inner);
-
-                        Final();
-                    }
-                    else
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(error);
-                            base.Dispose();
-                        }
+                        base._observer.OnError(error);
+                        base.Dispose();
                     }
                 }
 
-                public void OnCompleted()
+                public virtual void OnCompleted()
                 {
-                    if (_parent._selectorOnCompleted != null)
-                    {
-                        var inner = default(IObservable<TResult>);
-
-                        try
-                        {
-                            inner = _parent._selectorOnCompleted();
-                        }
-                        catch (Exception ex)
-                        {
-                            lock (_gate)
-                            {
-                                base._observer.OnError(ex);
-                                base.Dispose();
-                            }
-                            return;
-                        }
-
-                        SubscribeInner(inner);
-                    }
-
                     Final();
                 }
 
-                private void Final()
+                protected void Final()
                 {
                     _isStopped = true;
                     if (_group.Count == 1)
@@ -1045,7 +996,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private void SubscribeInner(IObservable<TResult> inner)
+                protected void SubscribeInner(IObservable<TResult> inner)
                 {
                     var innerSubscription = new SingleAssignmentDisposable();
                     _group.Add(innerSubscription);
@@ -1101,23 +1052,14 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class ObservableSelectorIndexed : Producer<TResult>
+        internal sealed class ObservableSelectors : ObservableSelector
         {
-            private readonly IObservable<TSource> _source;
-            private readonly Func<TSource, int, IObservable<TResult>> _selector;
             private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
             private readonly Func<IObservable<TResult>> _selectorOnCompleted;
 
-            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
+            public ObservableSelectors(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
+                : base(source, selector)
             {
-                _source = source;
-                _selector = selector;
-            }
-
-            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
-            {
-                _source = source;
-                _selector = selector;
                 _selectorOnError = selectorOnError;
                 _selectorOnCompleted = selectorOnCompleted;
             }
@@ -1126,68 +1068,30 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
-            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            new private sealed class _ : ObservableSelector._
             {
-                private readonly ObservableSelectorIndexed _parent;
+                private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
+                private readonly Func<IObservable<TResult>> _selectorOnCompleted;
 
-                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(ObservableSelectors parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(parent, observer, cancel)
                 {
-                    _parent = parent;
+                    _selectorOnError = parent._selectorOnError;
+                    _selectorOnCompleted = parent._selectorOnCompleted;
                 }
 
-                private object _gate;
-                private bool _isStopped;
-                private CompositeDisposable _group;
-                private SingleAssignmentDisposable _sourceSubscription;
-                private int _index;
-
-                public IDisposable Run()
+                public override void OnError(Exception error)
                 {
-                    _gate = new object();
-                    _isStopped = false;
-                    _group = new CompositeDisposable();
-
-                    _sourceSubscription = new SingleAssignmentDisposable();
-                    _group.Add(_sourceSubscription);
-                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                    return _group;
-                }
-
-                public void OnNext(TSource value)
-                {
-                    var inner = default(IObservable<TResult>);
-
-                    try
-                    {
-                        inner = _parent._selector(value, checked(_index++));
-                    }
-                    catch (Exception ex)
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(ex);
-                            base.Dispose();
-                        }
-                        return;
-                    }
-
-                    SubscribeInner(inner);
-                }
-
-                public void OnError(Exception error)
-                {
-                    if (_parent._selectorOnError != null)
+                    if (_selectorOnError != null)
                     {
                         var inner = default(IObservable<TResult>);
 
                         try
                         {
-                            inner = _parent._selectorOnError(error);
+                            inner = _selectorOnError(error);
                         }
                         catch (Exception ex)
                         {
@@ -1205,23 +1109,19 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     else
                     {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(error);
-                            base.Dispose();
-                        }
+                        base.OnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
-                    if (_parent._selectorOnCompleted != null)
+                    if (_selectorOnCompleted != null)
                     {
                         var inner = default(IObservable<TResult>);
 
                         try
                         {
-                            inner = _parent._selectorOnCompleted();
+                            inner = _selectorOnCompleted();
                         }
                         catch (Exception ex)
                         {
@@ -1238,8 +1138,91 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     Final();
                 }
+            }
+        }
 
-                private void Final()
+        internal class ObservableSelectorIndexed : Producer<TResult>
+        {
+            protected readonly IObservable<TSource> _source;
+            protected readonly Func<TSource, int, IObservable<TResult>> _selector;
+
+            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
+            {
+                _source = source;
+                _selector = selector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run(_source);
+            }
+
+            protected class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly object _gate = new object();
+                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
+                protected readonly Func<TSource, int, IObservable<TResult>> _selector;
+
+                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _selector = parent._selector;
+
+                    _group.Add(_sourceSubscription);
+                }
+
+                private bool _isStopped;
+                private int _index;
+
+                public IDisposable Run(IObservable<TSource> source)
+                {
+                    _isStopped = false;
+
+                    _sourceSubscription.Disposable = source.SubscribeSafe(this);
+
+                    return _group;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var inner = default(IObservable<TResult>);
+
+                    try
+                    {
+                        inner = _selector(value, checked(_index++));
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+                        return;
+                    }
+
+                    SubscribeInner(inner);
+                }
+
+                public virtual void OnError(Exception error)
+                {
+                    lock (_gate)
+                    {
+                        base._observer.OnError(error);
+                        base.Dispose();
+                    }
+                }
+
+                public virtual void OnCompleted()
+                {
+                    Final();
+                }
+
+                protected void Final()
                 {
                     _isStopped = true;
                     if (_group.Count == 1)
@@ -1263,7 +1246,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                private void SubscribeInner(IObservable<TResult> inner)
+                protected void SubscribeInner(IObservable<TResult> inner)
                 {
                     var innerSubscription = new SingleAssignmentDisposable();
                     _group.Add(innerSubscription);
@@ -1315,6 +1298,101 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                         }
                     }
+                }
+            }
+        }
+
+        internal sealed class ObservableSelectorsIndexed : ObservableSelectorIndexed
+        {
+            private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
+            private readonly Func<IObservable<TResult>> _selectorOnCompleted;
+
+            public ObservableSelectorsIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
+                : base(source, selector)
+            {
+                _selectorOnError = selectorOnError;
+                _selectorOnCompleted = selectorOnCompleted;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run(_source);
+            }
+
+            new private sealed class _ : ObservableSelectorIndexed._
+            {
+                private readonly object _gate = new object();
+                private readonly SingleAssignmentDisposable _sourceSubscription = new SingleAssignmentDisposable();
+                private readonly CompositeDisposable _group = new CompositeDisposable();
+
+                private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
+                private readonly Func<IObservable<TResult>> _selectorOnCompleted;
+
+                public _(ObservableSelectorsIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(parent, observer, cancel)
+                {
+                    _selectorOnError = parent._selectorOnError;
+                    _selectorOnCompleted = parent._selectorOnCompleted;
+
+                    _group.Add(_sourceSubscription);
+                }
+
+                public override void OnError(Exception error)
+                {
+                    if (_selectorOnError != null)
+                    {
+                        var inner = default(IObservable<TResult>);
+
+                        try
+                        {
+                            inner = _selectorOnError(error);
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_gate)
+                            {
+                                base._observer.OnError(ex);
+                                base.Dispose();
+                            }
+                            return;
+                        }
+
+                        SubscribeInner(inner);
+
+                        Final();
+                    }
+                    else
+                    {
+                        base.OnError(error);
+                    }
+                }
+
+                public override void OnCompleted()
+                {
+                    if (_selectorOnCompleted != null)
+                    {
+                        var inner = default(IObservable<TResult>);
+
+                        try
+                        {
+                            inner = _selectorOnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_gate)
+                            {
+                                base._observer.OnError(ex);
+                                base.Dispose();
+                            }
+                            return;
+                        }
+
+                        SubscribeInner(inner);
+                    }
+
+                    Final();
                 }
             }
         }
@@ -1339,12 +1417,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly EnumerableSelector _parent;
+                private readonly Func<TSource, IEnumerable<TResult>> _selector;
 
                 public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _selector = parent._selector;
                 }
 
                 public void OnNext(TSource value)
@@ -1352,7 +1430,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var xs = default(IEnumerable<TResult>);
                     try
                     {
-                        xs = _parent._selector(value);
+                        xs = _selector(value);
                     }
                     catch (Exception exception)
                     {
@@ -1439,12 +1517,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly EnumerableSelectorIndexed _parent;
+                private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
                 public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _selector = parent._selector;
                 }
 
                 private int _index;
@@ -1454,7 +1532,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var xs = default(IEnumerable<TResult>);
                     try
                     {
-                        xs = _parent._selector(value, checked(_index++));
+                        xs = _selector(value, checked(_index++));
                     }
                     catch (Exception exception)
                     {
@@ -1536,30 +1614,29 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly TaskSelector _parent;
+                private readonly object _gate = new object();
+                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+
+                private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
 
                 public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _selector = parent._selector;
                 }
 
-                private object _gate;
-                private CancellationDisposable _cancel;
                 private volatile int _count;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
-                    _cancel = new CancellationDisposable();
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
                 public void OnNext(TSource value)
@@ -1568,7 +1645,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _parent._selector(value, _cancel.Token);
+                        task = _selector(value, _cancel.Token);
                     }
                     catch (Exception ex)
                     {
@@ -1665,31 +1742,30 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
+                return sink.Run(_source);
             }
 
             private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                private readonly TaskSelectorIndexed _parent;
+                private readonly object _gate = new object();
+                private readonly CancellationDisposable _cancel = new CancellationDisposable();
+
+                private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selector;
 
                 public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _selector = parent._selector;
                 }
 
-                private object _gate;
-                private CancellationDisposable _cancel;
                 private volatile int _count;
                 private int _index;
 
-                public IDisposable Run()
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    _gate = new object();
-                    _cancel = new CancellationDisposable();
                     _count = 1;
 
-                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                    return StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel);
                 }
 
                 public void OnNext(TSource value)
@@ -1698,7 +1774,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         Interlocked.Increment(ref _count);
-                        task = _parent._selector(value, checked(_index++), _cancel.Token);
+                        task = _selector(value, checked(_index++), _cancel.Token);
                     }
                     catch (Exception ex)
                     {
