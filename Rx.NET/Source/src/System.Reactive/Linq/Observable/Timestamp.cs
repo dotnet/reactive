@@ -19,24 +19,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<Timestamped<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_scheduler, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
         class _ : Sink<Timestamped<TSource>>, IObserver<TSource>
         {
-            private readonly Timestamp<TSource> _parent;
+            private readonly IScheduler _scheduler;
 
-            public _(Timestamp<TSource> parent, IObserver<Timestamped<TSource>> observer, IDisposable cancel)
+            public _(IScheduler scheduler, IObserver<Timestamped<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _scheduler = scheduler;
             }
 
             public void OnNext(TSource value)
             {
-                base._observer.OnNext(new Timestamped<TSource>(value, _parent._scheduler.Now));
+                base._observer.OnNext(new Timestamped<TSource>(value, _scheduler.Now));
             }
 
             public void OnError(Exception error)
