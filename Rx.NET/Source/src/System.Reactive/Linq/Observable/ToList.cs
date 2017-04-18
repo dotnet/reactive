@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<IList<TSource>>, IObserver<TSource>
+        private sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
         {
             private List<TSource> _list;
 
