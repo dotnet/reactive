@@ -26,8 +26,10 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
             private readonly DistinctUntilChanged<TSource, TKey> _parent;
             private TKey _currentKey;
             private bool _hasCurrentKey;
