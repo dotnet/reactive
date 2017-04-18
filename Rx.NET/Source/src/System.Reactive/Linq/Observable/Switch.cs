@@ -17,19 +17,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+        private sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
         {
-            private readonly Switch<TSource> _parent;
-
-            public _(Switch<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
             private object _gate;
@@ -39,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private ulong _latest;
             private bool _hasLatest;
 
-            public IDisposable Run()
+            public IDisposable Run(Switch<TSource> parent)
             {
                 _gate = new object();
                 _innerSubscription = new SerialDisposable();
@@ -49,7 +46,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var subscription = new SingleAssignmentDisposable();
                 _subscription = subscription;
-                subscription.Disposable = _parent._sources.SubscribeSafe(this);
+                subscription.Disposable = parent._sources.SubscribeSafe(this);
 
                 return StableCompositeDisposable.Create(_subscription, _innerSubscription);
             }
@@ -65,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var d = new SingleAssignmentDisposable();
                 _innerSubscription.Disposable = d;
-                d.Disposable = value.SubscribeSafe(new Iter(this, id, d));
+                d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
             }
 
             public void OnError(Exception error)
@@ -91,13 +88,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class Iter : IObserver<TSource>
+            private sealed class InnerObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly ulong _id;
                 private readonly IDisposable _self;
 
-                public Iter(_ parent, ulong id, IDisposable self)
+                public InnerObserver(_ parent, ulong id, IDisposable self)
                 {
                     _parent = parent;
                     _id = id;
@@ -109,7 +106,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._latest == _id)
+                        {
                             _parent._observer.OnNext(value);
+                        }
                     }
                 }
 
