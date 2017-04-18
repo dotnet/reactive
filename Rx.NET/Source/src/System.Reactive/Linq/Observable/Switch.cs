@@ -24,12 +24,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
         {
+            private readonly object _gate = new object();
+
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
             }
 
-            private object _gate;
             private IDisposable _subscription;
             private SerialDisposable _innerSubscription;
             private bool _isStopped;
@@ -38,7 +39,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(Switch<TSource> parent)
             {
-                _gate = new object();
                 _innerSubscription = new SerialDisposable();
                 _isStopped = false;
                 _latest = 0UL;
