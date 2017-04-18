@@ -277,7 +277,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, int count)
         {
-            return new TakeLastBuffer<TSource>(source, count);
+            return new TakeLastBuffer<TSource>.Count(source, count);
         }
 
         #endregion

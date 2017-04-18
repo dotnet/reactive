@@ -359,7 +359,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IList<TSource>> TakeLastBuffer_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return new TakeLastBuffer<TSource>(source, duration, scheduler);
+            return new TakeLastBuffer<TSource>.Time(source, duration, scheduler);
         }
 
         #endregion
