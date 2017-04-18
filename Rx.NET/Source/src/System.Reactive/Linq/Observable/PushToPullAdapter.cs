@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    abstract class PushToPullAdapter<TSource, TResult> : IEnumerable<TResult>
+    internal abstract class PushToPullAdapter<TSource, TResult> : IEnumerable<TResult>
     {
         private readonly IObservable<TSource> _source;
 
@@ -17,10 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<TResult> GetEnumerator()
         {
@@ -33,7 +30,7 @@ namespace System.Reactive.Linq.ObservableImpl
         protected abstract PushToPullSink<TSource, TResult> Run(IDisposable subscription);
     }
 
-    abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>, IDisposable
+    internal abstract class PushToPullSink<TSource, TResult> : IObserver<TSource>, IEnumerator<TResult>, IDisposable
     {
         private readonly IDisposable _subscription;
 
@@ -76,10 +73,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private set;
         }
 
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
+        object IEnumerator.Current => Current;
 
         public void Reset()
         {

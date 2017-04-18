@@ -75,15 +75,9 @@ namespace System.Reactive.Linq.ObservableImpl
             return false;
         }
 
-        public TSource Current
-        {
-            get { return _current; }
-        }
+        public TSource Current => _current;
 
-        object Collections.IEnumerator.Current
-        {
-            get { return _current; }
-        }
+        object Collections.IEnumerator.Current => _current;
 
         public void Dispose()
         {
