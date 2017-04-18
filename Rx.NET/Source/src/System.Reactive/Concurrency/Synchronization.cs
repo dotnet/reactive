@@ -102,7 +102,7 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new ObserveOn<TSource>(source, scheduler);
+            return new ObserveOn<TSource>.Scheduler(source, scheduler);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace System.Reactive.Concurrency
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            return new ObserveOn<TSource>(source, context);
+            return new ObserveOn<TSource>.Context(source, context);
         }
 
         #endregion

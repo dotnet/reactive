@@ -7,33 +7,20 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ObserveOn<TSource> : Producer<TSource>
+    internal static class ObserveOn<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly IScheduler _scheduler;
-        private readonly SynchronizationContext _context;
-
-        public ObserveOn(IObservable<TSource> source, IScheduler scheduler)
+        internal sealed class Scheduler : Producer<TSource>
         {
-            _source = source;
-            _scheduler = scheduler;
-        }
+            private readonly IObservable<TSource> _source;
+            private readonly IScheduler _scheduler;
 
-        public ObserveOn(IObservable<TSource> source, SynchronizationContext context)
-        {
-            _source = source;
-            _context = context;
-        }
-
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_context != null)
+            public Scheduler(IObservable<TSource> source, IScheduler scheduler)
             {
-                var sink = new Context(_context, observer, cancel);
-                setSink(sink);
-                return _source.Subscribe(sink);
+                _source = source;
+                _scheduler = scheduler;
             }
-            else
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new ObserveOnObserver<TSource>(_scheduler, observer, cancel);
                 setSink(sink);
@@ -41,40 +28,59 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        private sealed class Context : Sink<TSource>, IObserver<TSource>
+        internal sealed class Context : Producer<TSource>
         {
+            private readonly IObservable<TSource> _source;
             private readonly SynchronizationContext _context;
 
-            public Context(SynchronizationContext context, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Context(IObservable<TSource> source, SynchronizationContext context)
             {
+                _source = source;
                 _context = context;
             }
 
-            public void OnNext(TSource value)
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                _context.PostWithStartComplete(() =>
-                {
-                    base._observer.OnNext(value);
-                });
+                var sink = new _(_context, observer, cancel);
+                setSink(sink);
+                return _source.Subscribe(sink);
             }
 
-            public void OnError(Exception error)
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                _context.PostWithStartComplete(() =>
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                });
-            }
+                private readonly SynchronizationContext _context;
 
-            public void OnCompleted()
-            {
-                _context.PostWithStartComplete(() =>
+                public _(SynchronizationContext context, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
-                });
+                    _context = context;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    _context.PostWithStartComplete(() =>
+                    {
+                        base._observer.OnNext(value);
+                    });
+                }
+
+                public void OnError(Exception error)
+                {
+                    _context.PostWithStartComplete(() =>
+                    {
+                        base._observer.OnError(error);
+                        base.Dispose();
+                    });
+                }
+
+                public void OnCompleted()
+                {
+                    _context.PostWithStartComplete(() =>
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    });
+                }
             }
         }
     }
