@@ -164,6 +164,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<TResult>, IObserver<TSource>
         {
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
             private readonly Aggregate<TSource, TAccumulate, TResult> _parent;
             private TAccumulate _accumulation;
 
