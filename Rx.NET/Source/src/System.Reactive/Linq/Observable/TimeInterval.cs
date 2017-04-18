@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run(this);
         }
 
-        class _ : Sink<System.Reactive.TimeInterval<TSource>>, IObserver<TSource>
+        private sealed class _ : Sink<System.Reactive.TimeInterval<TSource>>, IObserver<TSource>
         {
             public _(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)

@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<Timestamped<TSource>>, IObserver<TSource>
+        private sealed class _ : Sink<Timestamped<TSource>>, IObserver<TSource>
         {
             private readonly IScheduler _scheduler;
 
