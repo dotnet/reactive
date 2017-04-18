@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_gate, observer, cancel);
             setSink(sink);
             return _source.Subscribe(sink);
         }
@@ -31,10 +31,10 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private object _gate;
 
-            public _(Synchronize<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(object gate, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _gate = parent._gate ?? new object();
+                _gate = gate ?? new object();
             }
 
             public void OnNext(TSource value)
