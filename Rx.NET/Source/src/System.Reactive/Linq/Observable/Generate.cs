@@ -7,237 +7,113 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Generate<TState, TResult> : Producer<TResult>
+    internal static class Generate<TState, TResult>
     {
-        private readonly TState _initialState;
-        private readonly Func<TState, bool> _condition;
-        private readonly Func<TState, TState> _iterate;
-        private readonly Func<TState, TResult> _resultSelector;
-        private readonly Func<TState, DateTimeOffset> _timeSelectorA;
-        private readonly Func<TState, TimeSpan> _timeSelectorR;
-        private readonly IScheduler _scheduler;
-
-        public Generate(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
+        internal sealed class NoTime : Producer<TResult>
         {
-            _initialState = initialState;
-            _condition = condition;
-            _iterate = iterate;
-            _resultSelector = resultSelector;
-            _scheduler = scheduler;
-        }
+            private readonly TState _initialState;
+            private readonly Func<TState, bool> _condition;
+            private readonly Func<TState, TState> _iterate;
+            private readonly Func<TState, TResult> _resultSelector;
+            private readonly IScheduler _scheduler;
 
-        public Generate(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
-        {
-            _initialState = initialState;
-            _condition = condition;
-            _iterate = iterate;
-            _resultSelector = resultSelector;
-            _timeSelectorA = timeSelector;
-            _scheduler = scheduler;
-        }
-
-        public Generate(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
-        {
-            _initialState = initialState;
-            _condition = condition;
-            _iterate = iterate;
-            _resultSelector = resultSelector;
-            _timeSelectorR = timeSelector;
-            _scheduler = scheduler;
-        }
-
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_timeSelectorA != null)
+            public NoTime(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, IScheduler scheduler)
             {
-                var sink = new SelectorA(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
+                _initialState = initialState;
+                _condition = condition;
+                _iterate = iterate;
+                _resultSelector = resultSelector;
+                _scheduler = scheduler;
             }
-            else if (_timeSelectorR != null)
-            {
-                var sink = new Delta(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
-        }
 
-        private sealed class SelectorA : Sink<TResult>
-        {
-            private readonly Generate<TState, TResult> _parent;
-
-            public SelectorA(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private sealed class _ : Sink<TResult>
             {
-                _parent = parent;
-            }
+                // CONSIDER: This sink has a parent reference that can be considered for removal.
 
-            private bool _first;
-            private bool _hasResult;
-            private TResult _result;
+                private readonly NoTime _parent;
 
-            public IDisposable Run()
-            {
-                _first = true;
-                _hasResult = false;
-                _result = default(TResult);
-
-                return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
-            }
-
-            private IDisposable InvokeRec(IScheduler self, TState state)
-            {
-                var time = default(DateTimeOffset);
-
-                if (_hasResult)
+                public _(NoTime parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    base._observer.OnNext(_result);
+                    _parent = parent;
                 }
 
-                try
+                private TState _state;
+                private bool _first;
+
+                public IDisposable Run()
                 {
-                    if (_first)
+                    _state = _parent._initialState;
+                    _first = true;
+
+                    var longRunning = _parent._scheduler.AsLongRunning();
+                    if (longRunning != null)
                     {
-                        _first = false;
+                        return longRunning.ScheduleLongRunning(Loop);
                     }
                     else
                     {
-                        state = _parent._iterate(state);
+                        return _parent._scheduler.Schedule(LoopRec);
                     }
+                }
 
-                    _hasResult = _parent._condition(state);
-
-                    if (_hasResult)
+                private void Loop(ICancelable cancel)
+                {
+                    while (!cancel.IsDisposed)
                     {
-                        _result = _parent._resultSelector(state);
-                        time = _parent._timeSelectorA(state);
+                        var hasResult = false;
+                        var result = default(TResult);
+                        try
+                        {
+                            if (_first)
+                            {
+                                _first = false;
+                            }
+                            else
+                            {
+                                _state = _parent._iterate(_state);
+                            }
+
+                            hasResult = _parent._condition(_state);
+
+                            if (hasResult)
+                            {
+                                result = _parent._resultSelector(_state);
+                            }
+                        }
+                        catch (Exception exception)
+                        {
+                            base._observer.OnError(exception);
+                            base.Dispose();
+                            return;
+                        }
+
+                        if (hasResult)
+                        {
+                            base._observer.OnNext(result);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return Disposable.Empty;
-                }
 
-                if (!_hasResult)
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
-                    return Disposable.Empty;
-                }
-
-                return self.Schedule(state, time, InvokeRec);
-            }
-        }
-
-        private sealed class Delta : Sink<TResult>
-        {
-            private readonly Generate<TState, TResult> _parent;
-
-            public Delta(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private bool _first;
-            private bool _hasResult;
-            private TResult _result;
-
-            public IDisposable Run()
-            {
-                _first = true;
-                _hasResult = false;
-                _result = default(TResult);
-
-                return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
-            }
-
-            private IDisposable InvokeRec(IScheduler self, TState state)
-            {
-                var time = default(TimeSpan);
-
-                if (_hasResult)
-                {
-                    base._observer.OnNext(_result);
-                }
-
-                try
-                {
-                    if (_first)
+                    if (!cancel.IsDisposed)
                     {
-                        _first = false;
-                    }
-                    else
-                    {
-                        state = _parent._iterate(state);
+                        base._observer.OnCompleted();
                     }
 
-                    _hasResult = _parent._condition(state);
-
-                    if (_hasResult)
-                    {
-                        _result = _parent._resultSelector(state);
-                        time = _parent._timeSelectorR(state);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
                     base.Dispose();
-                    return Disposable.Empty;
                 }
 
-                if (!_hasResult)
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
-                    return Disposable.Empty;
-                }
-
-                return self.Schedule(state, time, InvokeRec);
-            }
-        }
-
-        private sealed class _ : Sink<TResult>
-        {
-            private readonly Generate<TState, TResult> _parent;
-
-            public _(Generate<TState, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private TState _state;
-            private bool _first;
-
-            public IDisposable Run()
-            {
-                _state = _parent._initialState;
-                _first = true;
-
-                var longRunning = _parent._scheduler.AsLongRunning();
-                if (longRunning != null)
-                {
-                    return longRunning.ScheduleLongRunning(Loop);
-                }
-                else
-                {
-                    return _parent._scheduler.Schedule(LoopRec);
-                }
-            }
-
-            private void Loop(ICancelable cancel)
-            {
-                while (!cancel.IsDisposed)
+                private void LoopRec(Action recurse)
                 {
                     var hasResult = false;
                     var result = default(TResult);
@@ -269,59 +145,209 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (hasResult)
                     {
                         base._observer.OnNext(result);
+                        recurse();
                     }
                     else
                     {
-                        break;
+                        base._observer.OnCompleted();
+                        base.Dispose();
                     }
                 }
+            }
+        }
 
-                if (!cancel.IsDisposed)
-                {
-                    base._observer.OnCompleted();
-                }
+        internal sealed class Absolute : Producer<TResult>
+        {
+            private readonly TState _initialState;
+            private readonly Func<TState, bool> _condition;
+            private readonly Func<TState, TState> _iterate;
+            private readonly Func<TState, TResult> _resultSelector;
+            private readonly Func<TState, DateTimeOffset> _timeSelector;
+            private readonly IScheduler _scheduler;
 
-                base.Dispose();
+            public Absolute(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
+            {
+                _initialState = initialState;
+                _condition = condition;
+                _iterate = iterate;
+                _resultSelector = resultSelector;
+                _timeSelector = timeSelector;
+                _scheduler = scheduler;
             }
 
-            private void LoopRec(Action recurse)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                var hasResult = false;
-                var result = default(TResult);
-                try
-                {
-                    if (_first)
-                    {
-                        _first = false;
-                    }
-                    else
-                    {
-                        _state = _parent._iterate(_state);
-                    }
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
 
-                    hasResult = _parent._condition(_state);
+            private sealed class _ : Sink<TResult>
+            {
+                // CONSIDER: This sink has a parent reference that can be considered for removal.
 
-                    if (hasResult)
-                    {
-                        result = _parent._resultSelector(_state);
-                    }
-                }
-                catch (Exception exception)
+                private readonly Absolute _parent;
+
+                public _(Absolute parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
+                    _parent = parent;
                 }
 
-                if (hasResult)
+                private bool _first;
+                private bool _hasResult;
+                private TResult _result;
+
+                public IDisposable Run()
                 {
-                    base._observer.OnNext(result);
-                    recurse();
+                    _first = true;
+                    _hasResult = false;
+                    _result = default(TResult);
+
+                    return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
                 }
-                else
+
+                private IDisposable InvokeRec(IScheduler self, TState state)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    var time = default(DateTimeOffset);
+
+                    if (_hasResult)
+                    {
+                        base._observer.OnNext(_result);
+                    }
+
+                    try
+                    {
+                        if (_first)
+                        {
+                            _first = false;
+                        }
+                        else
+                        {
+                            state = _parent._iterate(state);
+                        }
+
+                        _hasResult = _parent._condition(state);
+
+                        if (_hasResult)
+                        {
+                            _result = _parent._resultSelector(state);
+                            time = _parent._timeSelector(state);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    if (!_hasResult)
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    return self.Schedule(state, time, InvokeRec);
+                }
+            }
+        }
+
+        internal sealed class Relative : Producer<TResult>
+        {
+            private readonly TState _initialState;
+            private readonly Func<TState, bool> _condition;
+            private readonly Func<TState, TState> _iterate;
+            private readonly Func<TState, TResult> _resultSelector;
+            private readonly Func<TState, TimeSpan> _timeSelector;
+            private readonly IScheduler _scheduler;
+
+            public Relative(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
+            {
+                _initialState = initialState;
+                _condition = condition;
+                _iterate = iterate;
+                _resultSelector = resultSelector;
+                _timeSelector = timeSelector;
+                _scheduler = scheduler;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
+
+            private sealed class _ : Sink<TResult>
+            {
+                // CONSIDER: This sink has a parent reference that can be considered for removal.
+
+                private readonly Relative _parent;
+
+                public _(Relative parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                private bool _first;
+                private bool _hasResult;
+                private TResult _result;
+
+                public IDisposable Run()
+                {
+                    _first = true;
+                    _hasResult = false;
+                    _result = default(TResult);
+
+                    return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
+                }
+
+                private IDisposable InvokeRec(IScheduler self, TState state)
+                {
+                    var time = default(TimeSpan);
+
+                    if (_hasResult)
+                    {
+                        base._observer.OnNext(_result);
+                    }
+
+                    try
+                    {
+                        if (_first)
+                        {
+                            _first = false;
+                        }
+                        else
+                        {
+                            state = _parent._iterate(state);
+                        }
+
+                        _hasResult = _parent._condition(state);
+
+                        if (_hasResult)
+                        {
+                            _result = _parent._resultSelector(state);
+                            time = _parent._timeSelector(state);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    if (!_hasResult)
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    return self.Schedule(state, time, InvokeRec);
                 }
             }
         }

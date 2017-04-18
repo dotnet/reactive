@@ -174,7 +174,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, TimeSpan> timeSelector, IScheduler scheduler)
         {
-            return new Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+            return new Generate<TState, TResult>.Relative(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
 
         public virtual IObservable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector)
@@ -189,7 +189,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector, Func<TState, DateTimeOffset> timeSelector, IScheduler scheduler)
         {
-            return new Generate<TState, TResult>(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
+            return new Generate<TState, TResult>.Absolute(initialState, condition, iterate, resultSelector, timeSelector, scheduler);
         }
 
         #endregion
