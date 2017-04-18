@@ -28,6 +28,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<bool>, IObserver<TSource>
         {
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
             private readonly Contains<TSource> _parent;
 
             public _(Contains<TSource> parent, IObserver<bool> observer, IDisposable cancel)
