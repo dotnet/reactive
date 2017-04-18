@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<TSource[]>, IObserver<TSource>
         {
-            private List<TSource> _list;
+            private readonly List<TSource> _list;
 
             public _(IObserver<TSource[]> observer, IDisposable cancel)
                 : base(observer, cancel)
