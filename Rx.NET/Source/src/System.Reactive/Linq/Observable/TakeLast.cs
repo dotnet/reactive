@@ -32,6 +32,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
+                // CONSIDER: This sink has a parent reference that can be considered for removal.
+
                 private readonly Count _parent;
                 private Queue<TSource> _queue;
 
@@ -139,6 +141,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
+                // CONSIDER: This sink has a parent reference that can be considered for removal.
+
                 private readonly Time _parent;
                 private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
