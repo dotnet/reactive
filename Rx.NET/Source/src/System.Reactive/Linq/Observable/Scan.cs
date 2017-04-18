@@ -103,7 +103,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 try
                 {
                     if (_hasAccumulation)
+                    {
                         _accumulation = _accumulator(_accumulation, value);
+                    }
                     else
                     {
                         _accumulation = value;
