@@ -31,8 +31,10 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run();
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
             private readonly Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> _parent;
 
             public _(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
@@ -47,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _leftDone;
             private int _leftID;
             private SortedDictionary<int, TLeft> _leftMap;
-                   
+
             private bool _rightDone;
             private int _rightID;
             private SortedDictionary<int, TRight> _rightMap;
@@ -56,7 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _gate = new object();
                 _group = new CompositeDisposable();
-                
+
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
                 _leftDone = false;
@@ -75,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return _group;
             }
 
-            class LeftObserver : IObserver<TLeft>
+            private sealed class LeftObserver : IObserver<TLeft>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
@@ -126,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    md.Disposable = duration.SubscribeSafe(new Delta(this, id, md));
+                    md.Disposable = duration.SubscribeSafe(new DurationObserver(this, id, md));
 
                     lock (_parent._gate)
                     {
@@ -152,13 +154,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                class Delta : IObserver<TLeftDuration>
+                private sealed class DurationObserver : IObserver<TLeftDuration>
                 {
                     private readonly LeftObserver _parent;
                     private readonly int _id;
                     private readonly IDisposable _self;
 
-                    public Delta(LeftObserver parent, int id, IDisposable self)
+                    public DurationObserver(LeftObserver parent, int id, IDisposable self)
                     {
                         _parent = parent;
                         _id = id;
@@ -208,7 +210,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class RightObserver : IObserver<TRight>
+            private sealed class RightObserver : IObserver<TRight>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
@@ -259,7 +261,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    md.Disposable = duration.SubscribeSafe(new Delta(this, id, md));
+                    md.Disposable = duration.SubscribeSafe(new DurationObserver(this, id, md));
 
                     lock (_parent._gate)
                     {
@@ -285,13 +287,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                class Delta : IObserver<TRightDuration>
+                private sealed class DurationObserver : IObserver<TRightDuration>
                 {
                     private readonly RightObserver _parent;
                     private readonly int _id;
                     private readonly IDisposable _self;
 
-                    public Delta(RightObserver parent, int id, IDisposable self)
+                    public DurationObserver(RightObserver parent, int id, IDisposable self)
                     {
                         _parent = parent;
                         _id = id;
