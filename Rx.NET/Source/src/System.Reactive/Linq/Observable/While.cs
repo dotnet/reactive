@@ -30,7 +30,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 yield return _source;
         }
 
-        class _ : ConcatSink<TSource>
+        private sealed class _ : ConcatSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

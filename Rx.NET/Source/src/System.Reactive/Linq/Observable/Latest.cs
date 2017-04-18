@@ -18,7 +18,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return new _(subscription);
         }
 
-        class _ : PushToPullSink<TSource, TSource>
+        private sealed class _ : PushToPullSink<TSource, TSource>
         {
             private readonly object _gate;
             private readonly SemaphoreSlim _semaphore;

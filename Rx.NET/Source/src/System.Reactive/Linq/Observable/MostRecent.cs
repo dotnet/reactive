@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return new _(_initialValue, subscription);
         }
 
-        class _ : PushToPullSink<TSource, TSource>
+        private sealed class _ : PushToPullSink<TSource, TSource>
         {
             public _(TSource initialValue, IDisposable subscription)
                 : base(subscription)
