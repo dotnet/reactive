@@ -21,27 +21,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>
+        private sealed class _ : Sink<TSource>
         {
-            private readonly ToObservable<TSource> _parent;
-
-            public _(ToObservable<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(ToObservable<TSource> parent)
             {
                 var e = default(IEnumerator<TSource>);
                 try
                 {
-                    e = _parent._source.GetEnumerator();
+                    e = parent._source.GetEnumerator();
                 }
                 catch (Exception exception)
                 {
@@ -50,7 +47,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                var longRunning = _parent._scheduler.AsLongRunning();
+                var longRunning = parent._scheduler.AsLongRunning();
                 if (longRunning != null)
                 {
                     //
@@ -69,12 +66,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     // enumerator.
                     //
                     var flag = new BooleanDisposable();
-                    _parent._scheduler.Schedule(new State(flag, e), LoopRec);
+                    parent._scheduler.Schedule(new State(flag, e), LoopRec);
                     return flag;
                 }
             }
 
-            class State
+            private sealed class State
             {
                 public readonly ICancelable flag;
                 public readonly IEnumerator<TSource> enumerator;
