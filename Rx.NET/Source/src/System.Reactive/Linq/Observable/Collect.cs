@@ -27,6 +27,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : PushToPullSink<TSource, TResult>
         {
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
             private readonly Collect<TSource, TResult> _parent;
 
             public _(Collect<TSource, TResult> parent, IDisposable subscription)
