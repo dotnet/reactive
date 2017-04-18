@@ -20,31 +20,28 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Using<TSource, TResource> _parent;
-
-            public _(Using<TSource, TResource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(Using<TSource, TResource> parent)
             {
                 var source = default(IObservable<TSource>);
                 var disposable = Disposable.Empty;
                 try
                 {
-                    var resource = _parent._resourceFactory();
+                    var resource = parent._resourceFactory();
                     if (resource != null)
                         disposable = resource;
-                    source = _parent._observableFactory(resource);
+                    source = parent._observableFactory(resource);
                 }
                 catch (Exception exception)
                 {
