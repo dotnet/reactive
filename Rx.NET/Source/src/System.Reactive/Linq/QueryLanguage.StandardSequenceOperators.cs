@@ -344,11 +344,11 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, int count)
         {
-            var skip = source as Skip<TSource>;
-            if (skip != null && skip._scheduler == null)
+            var skip = source as Skip<TSource>.Count;
+            if (skip != null)
                 return skip.Combine(count);
 
-            return new Skip<TSource>(source, count);
+            return new Skip<TSource>.Count(source, count);
         }
 
         #endregion
@@ -387,11 +387,11 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, int count)
         {
-            var take = source as Take<TSource>;
-            if (take != null && take._scheduler == null)
+            var take = source as Take<TSource>.Count;
+            if (take != null)
                 return take.Combine(count);
 
-            return new Take<TSource>(source, count);
+            return new Take<TSource>.Count(source, count);
         }
 
         #endregion

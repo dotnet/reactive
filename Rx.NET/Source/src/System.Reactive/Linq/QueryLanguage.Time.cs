@@ -251,11 +251,11 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Skip_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            var skip = source as Skip<TSource>;
+            var skip = source as Skip<TSource>.Time;
             if (skip != null && skip._scheduler == scheduler)
                 return skip.Combine(duration);
 
-            return new Skip<TSource>(source, duration, scheduler);
+            return new Skip<TSource>.Time(source, duration, scheduler);
         }
 
         #endregion
@@ -316,11 +316,11 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            var take = source as Take<TSource>;
+            var take = source as Take<TSource>.Time;
             if (take != null && take._scheduler == scheduler)
                 return take.Combine(duration);
 
-            return new Take<TSource>(source, duration, scheduler);
+            return new Take<TSource>.Time(source, duration, scheduler);
         }
 
         #endregion

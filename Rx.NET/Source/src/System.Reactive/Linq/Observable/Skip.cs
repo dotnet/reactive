@@ -7,143 +7,145 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Skip<TSource> : Producer<TSource>
+    internal static class Skip<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly int _count;
-        private readonly TimeSpan _duration;
-        internal readonly IScheduler _scheduler;
-
-        public Skip(IObservable<TSource> source, int count)
+        internal sealed class Count : Producer<TSource>
         {
-            _source = source;
-            _count = count;
-        }
+            private readonly IObservable<TSource> _source;
+            private readonly int _count;
 
-        public Skip(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
-        {
-            _source = source;
-            _duration = duration;
-            _scheduler = scheduler;
-        }
-
-        public IObservable<TSource> Combine(int count)
-        {
-            //
-            // Sum semantics:
-            //
-            //   xs                    --o--o--o--o--o--o--|      xs                    --o--o--o--o--o--o--|
-            //   xs.Skip(2)            --x--x--o--o--o--o--|      xs.Skip(3)            --x--x--x--o--o--o--|
-            //   xs.Skip(2).Skip(3)    --------x--x--x--o--|      xs.Skip(3).Skip(2)    -----------x--x--o--|
-            //
-            return new Skip<TSource>(_source, _count + count);
-        }
-
-        public IObservable<TSource> Combine(TimeSpan duration)
-        {
-            //
-            // Maximum semantics:
-            //
-            //   t                     0--1--2--3--4--5--6--7->   t                     0--1--2--3--4--5--6--7->
-            //                                                    
-            //   xs                    --o--o--o--o--o--o--|      xs                    --o--o--o--o--o--o--|
-            //   xs.Skip(2s)           xxxxxxx-o--o--o--o--|      xs.Skip(3s)           xxxxxxxxxx-o--o--o--|
-            //   xs.Skip(2s).Skip(3s)  xxxxxxxxxx-o--o--o--|      xs.Skip(3s).Skip(2s)  xxxxxxx----o--o--o--|
-            //
-            if (duration <= _duration)
-                return this;
-            else
-                return new Skip<TSource>(_source, duration, _scheduler);
-        }
-
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_scheduler == null)
+            public Count(IObservable<TSource> source, int count)
             {
-                var sink = new _(this, observer, cancel);
+                _source = source;
+                _count = count;
+            }
+
+            public IObservable<TSource> Combine(int count)
+            {
+                //
+                // Sum semantics:
+                //
+                //   xs                    --o--o--o--o--o--o--|      xs                    --o--o--o--o--o--o--|
+                //   xs.Skip(2)            --x--x--o--o--o--o--|      xs.Skip(3)            --x--x--x--o--o--o--|
+                //   xs.Skip(2).Skip(3)    --------x--x--x--o--|      xs.Skip(3).Skip(2)    -----------x--x--o--|
+                //
+                return new Count(_source, _count + count);
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_count, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
-            else
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                var sink = new SkipImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
+                private int _remaining;
+
+                public _(int count, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _remaining = count;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    if (_remaining <= 0)
+                        base._observer.OnNext(value);
+                    else
+                        _remaining--;
+                }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
             }
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class Time : Producer<TSource>
         {
-            private readonly Skip<TSource> _parent;
-            private int _remaining;
+            private readonly IObservable<TSource> _source;
+            private readonly TimeSpan _duration;
+            internal readonly IScheduler _scheduler;
 
-            public _(Skip<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Time(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
             {
-                _parent = parent;
-                _remaining = _parent._count;
+                _source = source;
+                _duration = duration;
+                _scheduler = scheduler;
             }
 
-            public void OnNext(TSource value)
+            public IObservable<TSource> Combine(TimeSpan duration)
             {
-                if (_remaining <= 0)
-                    base._observer.OnNext(value);
+                //
+                // Maximum semantics:
+                //
+                //   t                     0--1--2--3--4--5--6--7->   t                     0--1--2--3--4--5--6--7->
+                //                                                    
+                //   xs                    --o--o--o--o--o--o--|      xs                    --o--o--o--o--o--o--|
+                //   xs.Skip(2s)           xxxxxxx-o--o--o--o--|      xs.Skip(3s)           xxxxxxxxxx-o--o--o--|
+                //   xs.Skip(2s).Skip(3s)  xxxxxxxxxx-o--o--o--|      xs.Skip(3s).Skip(2s)  xxxxxxx----o--o--o--|
+                //
+                if (duration <= _duration)
+                    return this;
                 else
-                    _remaining--;
+                    return new Time(_source, duration, _scheduler);
             }
 
-            public void OnError(Exception error)
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                var sink = new _(observer, cancel);
+                setSink(sink);
+                return sink.Run(this);
             }
 
-            public void OnCompleted()
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
+                private volatile bool _open;
 
-        class SkipImpl : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly Skip<TSource> _parent;
-            private volatile bool _open;
+                public _(IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                }
 
-            public SkipImpl(Skip<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
+                public IDisposable Run(Time parent)
+                {
+                    var t = parent._scheduler.Schedule(parent._duration, Tick);
+                    var d = parent._source.SubscribeSafe(this);
+                    return StableCompositeDisposable.Create(t, d);
+                }
 
-            public IDisposable Run()
-            {
-                var t = _parent._scheduler.Schedule(_parent._duration, Tick);
-                var d = _parent._source.SubscribeSafe(this);
-                return StableCompositeDisposable.Create(t, d);
-            }
+                private void Tick()
+                {
+                    _open = true;
+                }
 
-            private void Tick()
-            {
-                _open = true;
-            }
+                public void OnNext(TSource value)
+                {
+                    if (_open)
+                        base._observer.OnNext(value);
+                }
 
-            public void OnNext(TSource value)
-            {
-                if (_open)
-                    base._observer.OnNext(value);
-            }
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                public void OnCompleted()
+                {
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
             }
         }
     }
