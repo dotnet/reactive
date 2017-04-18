@@ -567,22 +567,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return new SequenceEqual<TSource>(first, second, EqualityComparer<TSource>.Default);
+            return new SequenceEqual<TSource>.Observable(first, second, EqualityComparer<TSource>.Default);
         }
 
         public virtual IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IObservable<TSource> second, IEqualityComparer<TSource> comparer)
         {
-            return new SequenceEqual<TSource>(first, second, comparer);
+            return new SequenceEqual<TSource>.Observable(first, second, comparer);
         }
 
         public virtual IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IEnumerable<TSource> second)
         {
-            return new SequenceEqual<TSource>(first, second, EqualityComparer<TSource>.Default);
+            return new SequenceEqual<TSource>.Enumerable(first, second, EqualityComparer<TSource>.Default);
         }
 
         public virtual IObservable<bool> SequenceEqual<TSource>(IObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
-            return new SequenceEqual<TSource>(first, second, comparer);
+            return new SequenceEqual<TSource>.Enumerable(first, second, comparer);
         }
 
         #endregion
