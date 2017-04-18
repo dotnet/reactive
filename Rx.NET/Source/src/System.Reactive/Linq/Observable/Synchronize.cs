@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private object _gate;
+            private readonly object _gate;
 
             public _(object gate, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
