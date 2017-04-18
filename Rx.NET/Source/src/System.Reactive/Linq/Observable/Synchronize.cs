@@ -27,16 +27,14 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.Subscribe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Synchronize<TSource> _parent;
             private object _gate;
 
             public _(Synchronize<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _gate = _parent._gate ?? new object();
+                _gate = parent._gate ?? new object();
             }
 
             public void OnNext(TSource value)
