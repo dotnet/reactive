@@ -9,233 +9,92 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class SelectMany<TSource, TCollection, TResult> : Producer<TResult>
+    internal static class SelectMany<TSource, TCollection, TResult>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
-        private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelectorI;
-        private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelectorE;
-        private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelectorEI;
-        private readonly Func<TSource, TCollection, TResult> _resultSelector;
-        private readonly Func<TSource, int, TCollection, int, TResult> _resultSelectorI;
-        private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelectorT;
-        private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelectorTI;
-        private readonly Func<TSource, int, TCollection, TResult> _resultSelectorTI;
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        internal sealed class ObservableSelector : Producer<TResult>
         {
-            _source = source;
-            _collectionSelector = collectionSelector;
-            _resultSelector = resultSelector;
-        }
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IObservable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, TCollection, TResult> _resultSelector;
 
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
-        {
-            _source = source;
-            _collectionSelectorI = collectionSelector;
-            _resultSelectorI = resultSelector;
-        }
+            public ObservableSelector(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+            {
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
+            }
 
-        public SelectMany(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
-        {
-            _source = source;
-            _collectionSelectorE = collectionSelector;
-            _resultSelector = resultSelector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
-        {
-            _source = source;
-            _collectionSelectorEI = collectionSelector;
-            _resultSelectorI = resultSelector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
-        {
-            _source = source;
-            _collectionSelectorT = collectionSelector;
-            _resultSelector = resultSelector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TCollection>> collectionSelector, Func<TSource, int, TCollection, TResult> resultSelector)
-        {
-            _source = source;
-            _collectionSelectorTI = collectionSelector;
-            _resultSelectorTI = resultSelector;
-        }
-
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_collectionSelector != null)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
-            else if (_collectionSelectorI != null)
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                var sink = new IndexSelectorImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_collectionSelectorT != null)
-            {
-                var sink = new SelectManyImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_collectionSelectorTI != null)
-            {
-                var sink = new Sigma(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_collectionSelectorE != null)
-            {
-                var sink = new NoSelectorImpl(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
-            else
-            {
-                var sink = new Omega(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
-        }
+                private readonly ObservableSelector _parent;
 
-        class _ : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
-
-            public _(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private bool _isStopped;
-            private CompositeDisposable _group;
-            private SingleAssignmentDisposable _sourceSubscription;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _isStopped = false;
-                _group = new CompositeDisposable();
-
-                _sourceSubscription = new SingleAssignmentDisposable();
-                _group.Add(_sourceSubscription);
-                _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                return _group;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var collection = default(IObservable<TCollection>);
-
-                try
-                {
-                    collection = _parent._collectionSelector(value);
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
-                    return;
-                }
-
-                var innerSubscription = new SingleAssignmentDisposable();
-                _group.Add(innerSubscription);
-                innerSubscription.Disposable = collection.SubscribeSafe(new Iter(this, value, innerSubscription));
-            }
-
-            public void OnError(Exception error)
-            {
-                lock (_gate)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                _isStopped = true;
-                if (_group.Count == 1)
-                {
-                    //
-                    // Notice there can be a race between OnCompleted of the source and any
-                    // of the inner sequences, where both see _group.Count == 1, and one is
-                    // waiting for the lock. There won't be a double OnCompleted observation
-                    // though, because the call to Dispose silences the observer by swapping
-                    // in a NopObserver<T>.
-                    //
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                    }
-                }
-                else
-                {
-                    _sourceSubscription.Dispose();
-                }
-            }
-
-            class Iter : IObserver<TCollection>
-            {
-                private readonly _ _parent;
-                private readonly TSource _value;
-                private readonly IDisposable _self;
-
-                public Iter(_ parent, TSource value, IDisposable self)
+                public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
                     _parent = parent;
-                    _value = value;
-                    _self = self;
                 }
 
-                public void OnNext(TCollection value)
+                private object _gate;
+                private bool _isStopped;
+                private CompositeDisposable _group;
+                private SingleAssignmentDisposable _sourceSubscription;
+
+                public IDisposable Run()
                 {
-                    var res = default(TResult);
+                    _gate = new object();
+                    _isStopped = false;
+                    _group = new CompositeDisposable();
+
+                    _sourceSubscription = new SingleAssignmentDisposable();
+                    _group.Add(_sourceSubscription);
+                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+
+                    return _group;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var collection = default(IObservable<TCollection>);
 
                     try
                     {
-                        res = _parent._parent._resultSelector(_value, value);
+                        collection = _parent._collectionSelector(value);
                     }
                     catch (Exception ex)
                     {
-                        lock (_parent._gate)
+                        lock (_gate)
                         {
-                            _parent._observer.OnError(ex);
-                            _parent.Dispose();
+                            base._observer.OnError(ex);
+                            base.Dispose();
                         }
                         return;
                     }
 
-                    lock (_parent._gate)
-                        _parent._observer.OnNext(res);
+                    var innerSubscription = new SingleAssignmentDisposable();
+                    _group.Add(innerSubscription);
+                    innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, innerSubscription));
                 }
 
                 public void OnError(Exception error)
                 {
-                    lock (_parent._gate)
+                    lock (_gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        base._observer.OnError(error);
+                        base.Dispose();
                     }
                 }
 
                 public void OnCompleted()
                 {
-                    _parent._group.Remove(_self);
-                    if (_parent._isStopped && _parent._group.Count == 1)
+                    _isStopped = true;
+                    if (_group.Count == 1)
                     {
                         //
                         // Notice there can be a race between OnCompleted of the source and any
@@ -244,1472 +103,1678 @@ namespace System.Reactive.Linq.ObservableImpl
                         // though, because the call to Dispose silences the observer by swapping
                         // in a NopObserver<T>.
                         //
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        _sourceSubscription.Dispose();
+                    }
+                }
+
+                private sealed class InnerObserver : IObserver<TCollection>
+                {
+                    private readonly _ _parent;
+                    private readonly TSource _value;
+                    private readonly IDisposable _self;
+
+                    public InnerObserver(_ parent, TSource value, IDisposable self)
+                    {
+                        _parent = parent;
+                        _value = value;
+                        _self = self;
+                    }
+
+                    public void OnNext(TCollection value)
+                    {
+                        var res = default(TResult);
+
+                        try
+                        {
+                            res = _parent._parent._resultSelector(_value, value);
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnError(ex);
+                                _parent.Dispose();
+                            }
+                            return;
+                        }
+
+                        lock (_parent._gate)
+                            _parent._observer.OnNext(res);
+                    }
+
+                    public void OnError(Exception error)
+                    {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnCompleted();
+                            _parent._observer.OnError(error);
                             _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _parent._group.Remove(_self);
+                        if (_parent._isStopped && _parent._group.Count == 1)
+                        {
+                            //
+                            // Notice there can be a race between OnCompleted of the source and any
+                            // of the inner sequences, where both see _group.Count == 1, and one is
+                            // waiting for the lock. There won't be a double OnCompleted observation
+                            // though, because the call to Dispose silences the observer by swapping
+                            // in a NopObserver<T>.
+                            //
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                            }
                         }
                     }
                 }
             }
         }
 
-        class IndexSelectorImpl : Sink<TResult>, IObserver<TSource>
+        internal sealed class ObservableSelectorIndexed : Producer<TResult>
         {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, IObservable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
 
-            public IndexSelectorImpl(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
             {
-                _parent = parent;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
-            private object _gate;
-            private bool _isStopped;
-            private CompositeDisposable _group;
-            private SingleAssignmentDisposable _sourceSubscription;
-            private int _index;
-
-            public IDisposable Run()
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                _gate = new object();
-                _isStopped = false;
-                _group = new CompositeDisposable();
-
-                _sourceSubscription = new SingleAssignmentDisposable();
-                _group.Add(_sourceSubscription);
-                _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                return _group;
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
             }
 
-            public void OnNext(TSource value)
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                var index = checked(_index++);
-                var collection = default(IObservable<TCollection>);
+                private readonly ObservableSelectorIndexed _parent;
 
-                try
+                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    collection = _parent._collectionSelectorI(value, index);
+                    _parent = parent;
                 }
-                catch (Exception ex)
+
+                private object _gate;
+                private bool _isStopped;
+                private CompositeDisposable _group;
+                private SingleAssignmentDisposable _sourceSubscription;
+                private int _index;
+
+                public IDisposable Run()
+                {
+                    _gate = new object();
+                    _isStopped = false;
+                    _group = new CompositeDisposable();
+
+                    _sourceSubscription = new SingleAssignmentDisposable();
+                    _group.Add(_sourceSubscription);
+                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+
+                    return _group;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var index = checked(_index++);
+                    var collection = default(IObservable<TCollection>);
+
+                    try
+                    {
+                        collection = _parent._collectionSelector(value, index);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+                        return;
+                    }
+
+                    var innerSubscription = new SingleAssignmentDisposable();
+                    _group.Add(innerSubscription);
+                    innerSubscription.Disposable = collection.SubscribeSafe(new InnerObserver(this, value, index, innerSubscription));
+                }
+
+                public void OnError(Exception error)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(ex);
+                        base._observer.OnError(error);
                         base.Dispose();
                     }
-                    return;
                 }
 
-                var innerSubscription = new SingleAssignmentDisposable();
-                _group.Add(innerSubscription);
-                innerSubscription.Disposable = collection.SubscribeSafe(new Iter(this, value, index, innerSubscription));
+                public void OnCompleted()
+                {
+                    _isStopped = true;
+                    if (_group.Count == 1)
+                    {
+                        //
+                        // Notice there can be a race between OnCompleted of the source and any
+                        // of the inner sequences, where both see _group.Count == 1, and one is
+                        // waiting for the lock. There won't be a double OnCompleted observation
+                        // though, because the call to Dispose silences the observer by swapping
+                        // in a NopObserver<T>.
+                        //
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        _sourceSubscription.Dispose();
+                    }
+                }
+
+                private sealed class InnerObserver : IObserver<TCollection>
+                {
+                    private readonly _ _parent;
+                    private readonly TSource _value;
+                    private readonly int _valueIndex;
+                    private readonly IDisposable _self;
+
+                    public InnerObserver(_ parent, TSource value, int index, IDisposable self)
+                    {
+                        _parent = parent;
+                        _value = value;
+                        _valueIndex = index;
+                        _self = self;
+                    }
+
+                    private int _index;
+
+                    public void OnNext(TCollection value)
+                    {
+                        var res = default(TResult);
+
+                        try
+                        {
+                            res = _parent._parent._resultSelector(_value, _valueIndex, value, checked(_index++));
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnError(ex);
+                                _parent.Dispose();
+                            }
+                            return;
+                        }
+
+                        lock (_parent._gate)
+                            _parent._observer.OnNext(res);
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _parent._group.Remove(_self);
+                        if (_parent._isStopped && _parent._group.Count == 1)
+                        {
+                            //
+                            // Notice there can be a race between OnCompleted of the source and any
+                            // of the inner sequences, where both see _group.Count == 1, and one is
+                            // waiting for the lock. There won't be a double OnCompleted observation
+                            // though, because the call to Dispose silences the observer by swapping
+                            // in a NopObserver<T>.
+                            //
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        internal sealed class EnumerableSelector : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IEnumerable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, TCollection, TResult> _resultSelector;
+
+            public EnumerableSelector(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+            {
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
-            public void OnError(Exception error)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                lock (_gate)
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly EnumerableSelector _parent;
+
+                public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var xs = default(IEnumerable<TCollection>);
+                    try
+                    {
+                        xs = _parent._collectionSelector(value);
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    var e = default(IEnumerator<TCollection>);
+                    try
+                    {
+                        e = xs.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    try
+                    {
+                        var hasNext = true;
+                        while (hasNext)
+                        {
+                            hasNext = false;
+                            var current = default(TResult);
+
+                            try
+                            {
+                                hasNext = e.MoveNext();
+                                if (hasNext)
+                                    current = _parent._resultSelector(value, e.Current);
+                            }
+                            catch (Exception exception)
+                            {
+                                base._observer.OnError(exception);
+                                base.Dispose();
+                                return;
+                            }
+
+                            if (hasNext)
+                                base._observer.OnNext(current);
+                        }
+                    }
+                    finally
+                    {
+                        if (e != null)
+                            e.Dispose();
+                    }
+                }
+
+                public void OnError(Exception error)
                 {
                     base._observer.OnError(error);
                     base.Dispose();
                 }
-            }
 
-            public void OnCompleted()
-            {
-                _isStopped = true;
-                if (_group.Count == 1)
+                public void OnCompleted()
                 {
-                    //
-                    // Notice there can be a race between OnCompleted of the source and any
-                    // of the inner sequences, where both see _group.Count == 1, and one is
-                    // waiting for the lock. There won't be a double OnCompleted observation
-                    // though, because the call to Dispose silences the observer by swapping
-                    // in a NopObserver<T>.
-                    //
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                    }
-                }
-                else
-                {
-                    _sourceSubscription.Dispose();
+                    base._observer.OnCompleted();
+                    base.Dispose();
                 }
             }
+        }
 
-            class Iter : IObserver<TCollection>
+        internal sealed class EnumerableSelectorIndexed : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, IEnumerable<TCollection>> _collectionSelector;
+            private readonly Func<TSource, int, TCollection, int, TResult> _resultSelector;
+
+            public EnumerableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
             {
-                private readonly IndexSelectorImpl _parent;
-                private readonly TSource _value;
-                private readonly int _valueIndex;
-                private readonly IDisposable _self;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
+            }
 
-                public Iter(IndexSelectorImpl parent, TSource value, int index, IDisposable self)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly EnumerableSelectorIndexed _parent;
+
+                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
                     _parent = parent;
-                    _value = value;
-                    _valueIndex = index;
-                    _self = self;
                 }
 
                 private int _index;
 
-                public void OnNext(TCollection value)
+                public void OnNext(TSource value)
                 {
-                    var res = default(TResult);
+                    var index = checked(_index++);
 
+                    var xs = default(IEnumerable<TCollection>);
                     try
                     {
-                        res = _parent._parent._resultSelectorI(_value, _valueIndex, value, checked(_index++));
+                        xs = _parent._collectionSelector(value, index);
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
-                        lock (_parent._gate)
-                        {
-                            _parent._observer.OnError(ex);
-                            _parent.Dispose();
-                        }
+                        base._observer.OnError(exception);
+                        base.Dispose();
                         return;
                     }
 
-                    lock (_parent._gate)
-                        _parent._observer.OnNext(res);
+                    var e = default(IEnumerator<TCollection>);
+                    try
+                    {
+                        e = xs.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    try
+                    {
+                        var eIndex = 0;
+                        var hasNext = true;
+                        while (hasNext)
+                        {
+                            hasNext = false;
+                            var current = default(TResult);
+
+                            try
+                            {
+                                hasNext = e.MoveNext();
+                                if (hasNext)
+                                    current = _parent._resultSelector(value, index, e.Current, checked(eIndex++));
+                            }
+                            catch (Exception exception)
+                            {
+                                base._observer.OnError(exception);
+                                base.Dispose();
+                                return;
+                            }
+
+                            if (hasNext)
+                                base._observer.OnNext(current);
+                        }
+                    }
+                    finally
+                    {
+                        if (e != null)
+                            e.Dispose();
+                    }
                 }
 
                 public void OnError(Exception error)
                 {
-                    lock (_parent._gate)
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
+            }
+        }
+
+        internal sealed class TaskSelector : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, CancellationToken, Task<TCollection>> _collectionSelector;
+            private readonly Func<TSource, TCollection, TResult> _resultSelector;
+
+            public TaskSelector(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+            {
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly TaskSelector _parent;
+
+                public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                private object _gate;
+                private CancellationDisposable _cancel;
+                private volatile int _count;
+
+                public IDisposable Run()
+                {
+                    _gate = new object();
+                    _cancel = new CancellationDisposable();
+                    _count = 1;
+
+                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var task = default(Task<TCollection>);
+                    try
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        Interlocked.Increment(ref _count);
+                        task = _parent._collectionSelector(value, _cancel.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+
+                        return;
+                    }
+
+                    if (task.IsCompleted)
+                    {
+                        OnCompletedTask(value, task);
+                    }
+                    else
+                    {
+                        AttachContinuation(value, task);
+                    }
+                }
+
+                private void AttachContinuation(TSource value, Task<TCollection> task)
+                {
+                    //
+                    // Separate method to avoid closure in synchronous completion case.
+                    //
+                    task.ContinueWith(t => OnCompletedTask(value, t));
+                }
+
+                private void OnCompletedTask(TSource value, Task<TCollection> task)
+                {
+                    switch (task.Status)
+                    {
+                        case TaskStatus.RanToCompletion:
+                            {
+                                var res = default(TResult);
+                                try
+                                {
+                                    res = _parent._resultSelector(value, task.Result);
+                                }
+                                catch (Exception ex)
+                                {
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(ex);
+                                        base.Dispose();
+                                    }
+
+                                    return;
+                                }
+
+                                lock (_gate)
+                                    base._observer.OnNext(res);
+
+                                OnCompleted();
+                            }
+                            break;
+                        case TaskStatus.Faulted:
+                            {
+                                lock (_gate)
+                                {
+                                    base._observer.OnError(task.Exception.InnerException);
+                                    base.Dispose();
+                                }
+                            }
+                            break;
+                        case TaskStatus.Canceled:
+                            {
+                                if (!_cancel.IsDisposed)
+                                {
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(new TaskCanceledException(task));
+                                        base.Dispose();
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                public void OnError(Exception error)
+                {
+                    lock (_gate)
+                    {
+                        base._observer.OnError(error);
+                        base.Dispose();
                     }
                 }
 
                 public void OnCompleted()
                 {
-                    _parent._group.Remove(_self);
-                    if (_parent._isStopped && _parent._group.Count == 1)
+                    if (Interlocked.Decrement(ref _count) == 0)
                     {
-                        //
-                        // Notice there can be a race between OnCompleted of the source and any
-                        // of the inner sequences, where both see _group.Count == 1, and one is
-                        // waiting for the lock. There won't be a double OnCompleted observation
-                        // though, because the call to Dispose silences the observer by swapping
-                        // in a NopObserver<T>.
-                        //
-                        lock (_parent._gate)
+                        lock (_gate)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                        }
-                    }
-                }
-            }
-        }
-
-        class NoSelectorImpl : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
-
-            public NoSelectorImpl(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var xs = default(IEnumerable<TCollection>);
-                try
-                {
-                    xs = _parent._collectionSelectorE(value);
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                var e = default(IEnumerator<TCollection>);
-                try
-                {
-                    e = xs.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                try
-                {
-                    var hasNext = true;
-                    while (hasNext)
-                    {
-                        hasNext = false;
-                        var current = default(TResult);
-
-                        try
-                        {
-                            hasNext = e.MoveNext();
-                            if (hasNext)
-                                current = _parent._resultSelector(value, e.Current);
-                        }
-                        catch (Exception exception)
-                        {
-                            base._observer.OnError(exception);
+                            base._observer.OnCompleted();
                             base.Dispose();
-                            return;
                         }
-
-                        if (hasNext)
-                            base._observer.OnNext(current);
                     }
                 }
-                finally
-                {
-                    if (e != null)
-                        e.Dispose();
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
 
-        class Omega : Sink<TResult>, IObserver<TSource>
+        internal sealed class TaskSelectorIndexed : Producer<TResult>
         {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, CancellationToken, Task<TCollection>> _collectionSelector;
+            private readonly Func<TSource, int, TCollection, TResult> _resultSelector;
 
-            public Omega(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public TaskSelectorIndexed(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TCollection>> collectionSelector, Func<TSource, int, TCollection, TResult> resultSelector)
             {
-                _parent = parent;
+                _source = source;
+                _collectionSelector = collectionSelector;
+                _resultSelector = resultSelector;
             }
 
-            private int _index;
-
-            public void OnNext(TSource value)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                var index = checked(_index++);
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
 
-                var xs = default(IEnumerable<TCollection>);
-                try
-                {
-                    xs = _parent._collectionSelectorEI(value, index);
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly TaskSelectorIndexed _parent;
 
-                var e = default(IEnumerator<TCollection>);
-                try
+                public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    e = xs.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
+                    _parent = parent;
                 }
 
-                try
+                private object _gate;
+                private CancellationDisposable _cancel;
+                private volatile int _count;
+                private int _index;
+
+                public IDisposable Run()
                 {
-                    var eIndex = 0;
-                    var hasNext = true;
-                    while (hasNext)
+                    _gate = new object();
+                    _cancel = new CancellationDisposable();
+                    _count = 1;
+
+                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var index = checked(_index++);
+
+                    var task = default(Task<TCollection>);
+                    try
                     {
-                        hasNext = false;
-                        var current = default(TResult);
-
-                        try
+                        Interlocked.Increment(ref _count);
+                        task = _parent._collectionSelector(value, index, _cancel.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
                         {
-                            hasNext = e.MoveNext();
-                            if (hasNext)
-                                current = _parent._resultSelectorI(value, index, e.Current, checked(eIndex++));
-                        }
-                        catch (Exception exception)
-                        {
-                            base._observer.OnError(exception);
+                            base._observer.OnError(ex);
                             base.Dispose();
-                            return;
                         }
 
-                        if (hasNext)
-                            base._observer.OnNext(current);
+                        return;
                     }
-                }
-                finally
-                {
-                    if (e != null)
-                        e.Dispose();
-                }
-            }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
-
-        class SelectManyImpl : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
-
-            public SelectManyImpl(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private CancellationDisposable _cancel;
-            private volatile int _count;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _cancel = new CancellationDisposable();
-                _count = 1;
-
-                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
-            }
-
-            public void OnNext(TSource value)
-            {
-                var task = default(Task<TCollection>);
-                try
-                {
-                    Interlocked.Increment(ref _count);
-                    task = _parent._collectionSelectorT(value, _cancel.Token);
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
+                    if (task.IsCompleted)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        OnCompletedTask(value, index, task);
                     }
-
-                    return;
+                    else
+                    {
+                        AttachContinuation(value, index, task);
+                    }
                 }
 
-                if (task.IsCompleted)
+                private void AttachContinuation(TSource value, int index, Task<TCollection> task)
                 {
-                    OnCompletedTask(value, task);
+                    //
+                    // Separate method to avoid closure in synchronous completion case.
+                    //
+                    task.ContinueWith(t => OnCompletedTask(value, index, t));
                 }
-                else
-                {
-                    AttachContinuation(value, task);
-                }
-            }
 
-            private void AttachContinuation(TSource value, Task<TCollection> task)
-            {
-                //
-                // Separate method to avoid closure in synchronous completion case.
-                //
-                task.ContinueWith(t => OnCompletedTask(value, t));
-            }
-
-            private void OnCompletedTask(TSource value, Task<TCollection> task)
-            {
-                switch (task.Status)
+                private void OnCompletedTask(TSource value, int index, Task<TCollection> task)
                 {
-                    case TaskStatus.RanToCompletion:
-                        {
-                            var res = default(TResult);
-                            try
+                    switch (task.Status)
+                    {
+                        case TaskStatus.RanToCompletion:
                             {
-                                res = _parent._resultSelector(value, task.Result);
+                                var res = default(TResult);
+                                try
+                                {
+                                    res = _parent._resultSelector(value, index, task.Result);
+                                }
+                                catch (Exception ex)
+                                {
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(ex);
+                                        base.Dispose();
+                                    }
+
+                                    return;
+                                }
+
+                                lock (_gate)
+                                    base._observer.OnNext(res);
+
+                                OnCompleted();
                             }
-                            catch (Exception ex)
+                            break;
+                        case TaskStatus.Faulted:
                             {
                                 lock (_gate)
                                 {
-                                    base._observer.OnError(ex);
+                                    base._observer.OnError(task.Exception.InnerException);
                                     base.Dispose();
                                 }
-
-                                return;
                             }
-
-                            lock (_gate)
-                                base._observer.OnNext(res);
-
-                            OnCompleted();
-                        }
-                        break;
-                    case TaskStatus.Faulted:
-                        {
-                            lock (_gate)
+                            break;
+                        case TaskStatus.Canceled:
                             {
-                                base._observer.OnError(task.Exception.InnerException);
-                                base.Dispose();
-                            }
-                        }
-                        break;
-                    case TaskStatus.Canceled:
-                        {
-                            if (!_cancel.IsDisposed)
-                            {
-                                lock (_gate)
+                                if (!_cancel.IsDisposed)
                                 {
-                                    base._observer.OnError(new TaskCanceledException(task));
-                                    base.Dispose();
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(new TaskCanceledException(task));
+                                        base.Dispose();
+                                    }
                                 }
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
-            }
 
-            public void OnError(Exception error)
-            {
-                lock (_gate)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (Interlocked.Decrement(ref _count) == 0)
+                public void OnError(Exception error)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
+                        base._observer.OnError(error);
                         base.Dispose();
                     }
                 }
-            }
-        }
 
-        class Sigma : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TCollection, TResult> _parent;
-
-            public Sigma(SelectMany<TSource, TCollection, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private CancellationDisposable _cancel;
-            private volatile int _count;
-            private int _index;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _cancel = new CancellationDisposable();
-                _count = 1;
-
-                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
-            }
-
-            public void OnNext(TSource value)
-            {
-                var index = checked(_index++);
-
-                var task = default(Task<TCollection>);
-                try
+                public void OnCompleted()
                 {
-                    Interlocked.Increment(ref _count);
-                    task = _parent._collectionSelectorTI(value, index, _cancel.Token);
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
+                    if (Interlocked.Decrement(ref _count) == 0)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
-
-                    return;
-                }
-
-                if (task.IsCompleted)
-                {
-                    OnCompletedTask(value, index, task);
-                }
-                else
-                {
-                    AttachContinuation(value, index, task);
-                }
-            }
-
-            private void AttachContinuation(TSource value, int index, Task<TCollection> task)
-            {
-                //
-                // Separate method to avoid closure in synchronous completion case.
-                //
-                task.ContinueWith(t => OnCompletedTask(value, index, t));
-            }
-
-            private void OnCompletedTask(TSource value, int index, Task<TCollection> task)
-            {
-                switch (task.Status)
-                {
-                    case TaskStatus.RanToCompletion:
+                        lock (_gate)
                         {
-                            var res = default(TResult);
-                            try
-                            {
-                                res = _parent._resultSelectorTI(value, index, task.Result);
-                            }
-                            catch (Exception ex)
-                            {
-                                lock (_gate)
-                                {
-                                    base._observer.OnError(ex);
-                                    base.Dispose();
-                                }
-
-                                return;
-                            }
-
-                            lock (_gate)
-                                base._observer.OnNext(res);
-
-                            OnCompleted();
+                            base._observer.OnCompleted();
+                            base.Dispose();
                         }
-                        break;
-                    case TaskStatus.Faulted:
-                        {
-                            lock (_gate)
-                            {
-                                base._observer.OnError(task.Exception.InnerException);
-                                base.Dispose();
-                            }
-                        }
-                        break;
-                    case TaskStatus.Canceled:
-                        {
-                            if (!_cancel.IsDisposed)
-                            {
-                                lock (_gate)
-                                {
-                                    base._observer.OnError(new TaskCanceledException(task));
-                                    base.Dispose();
-                                }
-                            }
-                        }
-                        break;
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                lock (_gate)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (Interlocked.Decrement(ref _count) == 0)
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
                     }
                 }
             }
         }
     }
 
-    internal sealed class SelectMany<TSource, TResult> : Producer<TResult>
+    internal static class SelectMany<TSource, TResult>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Func<TSource, IObservable<TResult>> _selector;
-        private readonly Func<TSource, int, IObservable<TResult>> _selectorI;
-        private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
-        private readonly Func<IObservable<TResult>> _selectorOnCompleted;
-        private readonly Func<TSource, IEnumerable<TResult>> _selectorE;
-        private readonly Func<TSource, int, IEnumerable<TResult>> _selectorEI;
-        private readonly Func<TSource, CancellationToken, Task<TResult>> _selectorT;
-        private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selectorTI;
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
+        internal sealed class ObservableSelector : Producer<TResult>
         {
-            _source = source;
-            _selector = selector;
-        }
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IObservable<TResult>> _selector;
+            private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
+            private readonly Func<IObservable<TResult>> _selectorOnCompleted;
 
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
-        {
-            _source = source;
-            _selectorI = selector;
-        }
+            public ObservableSelector(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
+            {
+                _source = source;
+                _selector = selector;
+            }
 
-        public SelectMany(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
-        {
-            _source = source;
-            _selector = selector;
-            _selectorOnError = selectorOnError;
-            _selectorOnCompleted = selectorOnCompleted;
-        }
+            public ObservableSelector(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
+            {
+                _source = source;
+                _selector = selector;
+                _selectorOnError = selectorOnError;
+                _selectorOnCompleted = selectorOnCompleted;
+            }
 
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
-        {
-            _source = source;
-            _selectorI = selector;
-            _selectorOnError = selectorOnError;
-            _selectorOnCompleted = selectorOnCompleted;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
-        {
-            _source = source;
-            _selectorE = selector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
-        {
-            _source = source;
-            _selectorEI = selector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
-        {
-            _source = source;
-            _selectorT = selector;
-        }
-
-        public SelectMany(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
-        {
-            _source = source;
-            _selectorTI = selector;
-        }
-
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_selector != null)
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
                 setSink(sink);
                 return sink.Run();
             }
-            else if (_selectorI != null)
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                var sink = new IndexSelectorImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_selectorT != null)
-            {
-                var sink = new SelectManyImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_selectorTI != null)
-            {
-                var sink = new Sigma(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-            else if (_selectorE != null)
-            {
-                var sink = new NoSelectorImpl(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
-            else
-            {
-                var sink = new Omega(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
-        }
+                private readonly ObservableSelector _parent;
 
-        class _ : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TResult> _parent;
-
-            public _(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private bool _isStopped;
-            private CompositeDisposable _group;
-            private SingleAssignmentDisposable _sourceSubscription;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _isStopped = false;
-                _group = new CompositeDisposable();
-
-                _sourceSubscription = new SingleAssignmentDisposable();
-                _group.Add(_sourceSubscription);
-                _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                return _group;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var inner = default(IObservable<TResult>);
-
-                try
-                {
-                    inner = _parent._selector(value);
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
-                    return;
-                }
-
-                SubscribeInner(inner);
-            }
-
-            public void OnError(Exception error)
-            {
-                if (_parent._selectorOnError != null)
-                {
-                    var inner = default(IObservable<TResult>);
-
-                    try
-                    {
-                        inner = _parent._selectorOnError(error);
-                    }
-                    catch (Exception ex)
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(ex);
-                            base.Dispose();
-                        }
-                        return;
-                    }
-
-                    SubscribeInner(inner);
-
-                    Final();
-                }
-                else
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(error);
-                        base.Dispose();
-                    }
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (_parent._selectorOnCompleted != null)
-                {
-                    var inner = default(IObservable<TResult>);
-
-                    try
-                    {
-                        inner = _parent._selectorOnCompleted();
-                    }
-                    catch (Exception ex)
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(ex);
-                            base.Dispose();
-                        }
-                        return;
-                    }
-
-                    SubscribeInner(inner);
-                }
-
-                Final();
-            }
-
-            private void Final()
-            {
-                _isStopped = true;
-                if (_group.Count == 1)
-                {
-                    //
-                    // Notice there can be a race between OnCompleted of the source and any
-                    // of the inner sequences, where both see _group.Count == 1, and one is
-                    // waiting for the lock. There won't be a double OnCompleted observation
-                    // though, because the call to Dispose silences the observer by swapping
-                    // in a NopObserver<T>.
-                    //
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                    }
-                }
-                else
-                {
-                    _sourceSubscription.Dispose();
-                }
-            }
-
-            private void SubscribeInner(IObservable<TResult> inner)
-            {
-                var innerSubscription = new SingleAssignmentDisposable();
-                _group.Add(innerSubscription);
-                innerSubscription.Disposable = inner.SubscribeSafe(new Iter(this, innerSubscription));
-            }
-
-            class Iter : IObserver<TResult>
-            {
-                private readonly _ _parent;
-                private readonly IDisposable _self;
-
-                public Iter(_ parent, IDisposable self)
+                public _(ObservableSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
-                public void OnNext(TResult value)
+                private object _gate;
+                private bool _isStopped;
+                private CompositeDisposable _group;
+                private SingleAssignmentDisposable _sourceSubscription;
+
+                public IDisposable Run()
                 {
-                    lock (_parent._gate)
-                        _parent._observer.OnNext(value);
+                    _gate = new object();
+                    _isStopped = false;
+                    _group = new CompositeDisposable();
+
+                    _sourceSubscription = new SingleAssignmentDisposable();
+                    _group.Add(_sourceSubscription);
+                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+
+                    return _group;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var inner = default(IObservable<TResult>);
+
+                    try
+                    {
+                        inner = _parent._selector(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+                        return;
+                    }
+
+                    SubscribeInner(inner);
                 }
 
                 public void OnError(Exception error)
                 {
-                    lock (_parent._gate)
+                    if (_parent._selectorOnError != null)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    _parent._group.Remove(_self);
-                    if (_parent._isStopped && _parent._group.Count == 1)
-                    {
-                        //
-                        // Notice there can be a race between OnCompleted of the source and any
-                        // of the inner sequences, where both see _group.Count == 1, and one is
-                        // waiting for the lock. There won't be a double OnCompleted observation
-                        // though, because the call to Dispose silences the observer by swapping
-                        // in a NopObserver<T>.
-                        //
-                        lock (_parent._gate)
-                        {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                        }
-                    }
-                }
-            }
-        }
-
-        class IndexSelectorImpl : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TResult> _parent;
-
-            public IndexSelectorImpl(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private bool _isStopped;
-            private CompositeDisposable _group;
-            private SingleAssignmentDisposable _sourceSubscription;
-            private int _index;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _isStopped = false;
-                _group = new CompositeDisposable();
-
-                _sourceSubscription = new SingleAssignmentDisposable();
-                _group.Add(_sourceSubscription);
-                _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
-
-                return _group;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var inner = default(IObservable<TResult>);
-
-                try
-                {
-                    inner = _parent._selectorI(value, checked(_index++));
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
-                    return;
-                }
-
-                SubscribeInner(inner);
-            }
-
-            public void OnError(Exception error)
-            {
-                if (_parent._selectorOnError != null)
-                {
-                    var inner = default(IObservable<TResult>);
-
-                    try
-                    {
-                        inner = _parent._selectorOnError(error);
-                    }
-                    catch (Exception ex)
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(ex);
-                            base.Dispose();
-                        }
-                        return;
-                    }
-
-                    SubscribeInner(inner);
-
-                    Final();
-                }
-                else
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(error);
-                        base.Dispose();
-                    }
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (_parent._selectorOnCompleted != null)
-                {
-                    var inner = default(IObservable<TResult>);
-
-                    try
-                    {
-                        inner = _parent._selectorOnCompleted();
-                    }
-                    catch (Exception ex)
-                    {
-                        lock (_gate)
-                        {
-                            base._observer.OnError(ex);
-                            base.Dispose();
-                        }
-                        return;
-                    }
-
-                    SubscribeInner(inner);
-                }
-
-                Final();
-            }
-
-            private void Final()
-            {
-                _isStopped = true;
-                if (_group.Count == 1)
-                {
-                    //
-                    // Notice there can be a race between OnCompleted of the source and any
-                    // of the inner sequences, where both see _group.Count == 1, and one is
-                    // waiting for the lock. There won't be a double OnCompleted observation
-                    // though, because the call to Dispose silences the observer by swapping
-                    // in a NopObserver<T>.
-                    //
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                    }
-                }
-                else
-                {
-                    _sourceSubscription.Dispose();
-                }
-            }
-
-            private void SubscribeInner(IObservable<TResult> inner)
-            {
-                var innerSubscription = new SingleAssignmentDisposable();
-                _group.Add(innerSubscription);
-                innerSubscription.Disposable = inner.SubscribeSafe(new Iter(this, innerSubscription));
-            }
-
-            class Iter : IObserver<TResult>
-            {
-                private readonly IndexSelectorImpl _parent;
-                private readonly IDisposable _self;
-
-                public Iter(IndexSelectorImpl parent, IDisposable self)
-                {
-                    _parent = parent;
-                    _self = self;
-                }
-
-                public void OnNext(TResult value)
-                {
-                    lock (_parent._gate)
-                        _parent._observer.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    lock (_parent._gate)
-                    {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    _parent._group.Remove(_self);
-                    if (_parent._isStopped && _parent._group.Count == 1)
-                    {
-                        //
-                        // Notice there can be a race between OnCompleted of the source and any
-                        // of the inner sequences, where both see _group.Count == 1, and one is
-                        // waiting for the lock. There won't be a double OnCompleted observation
-                        // though, because the call to Dispose silences the observer by swapping
-                        // in a NopObserver<T>.
-                        //
-                        lock (_parent._gate)
-                        {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                        }
-                    }
-                }
-            }
-        }
-
-        class NoSelectorImpl : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TResult> _parent;
-
-            public NoSelectorImpl(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var xs = default(IEnumerable<TResult>);
-                try
-                {
-                    xs = _parent._selectorE(value);
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                var e = default(IEnumerator<TResult>);
-                try
-                {
-                    e = xs.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                try
-                {
-                    var hasNext = true;
-                    while (hasNext)
-                    {
-                        hasNext = false;
-                        var current = default(TResult);
+                        var inner = default(IObservable<TResult>);
 
                         try
                         {
-                            hasNext = e.MoveNext();
-                            if (hasNext)
-                                current = e.Current;
+                            inner = _parent._selectorOnError(error);
                         }
-                        catch (Exception exception)
-                        {
-                            base._observer.OnError(exception);
-                            base.Dispose();
-                            return;
-                        }
-
-                        if (hasNext)
-                            base._observer.OnNext(current);
-                    }
-                }
-                finally
-                {
-                    if (e != null)
-                        e.Dispose();
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
-
-        class Omega : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TResult> _parent;
-
-            public Omega(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-            
-            private int _index;
-
-            public void OnNext(TSource value)
-            {
-                var xs = default(IEnumerable<TResult>);
-                try
-                {
-                    xs = _parent._selectorEI(value, checked(_index++));
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                var e = default(IEnumerator<TResult>);
-                try
-                {
-                    e = xs.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                try
-                {
-                    var hasNext = true;
-                    while (hasNext)
-                    {
-                        hasNext = false;
-                        var current = default(TResult);
-
-                        try
-                        {
-                            hasNext = e.MoveNext();
-                            if (hasNext)
-                                current = e.Current;
-                        }
-                        catch (Exception exception)
-                        {
-                            base._observer.OnError(exception);
-                            base.Dispose();
-                            return;
-                        }
-
-                        if (hasNext)
-                            base._observer.OnNext(current);
-                    }
-                }
-                finally
-                {
-                    if (e != null)
-                        e.Dispose();
-                }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
-
-        class SelectManyImpl : Sink<TResult>, IObserver<TSource>
-        {
-            private readonly SelectMany<TSource, TResult> _parent;
-
-            public SelectManyImpl(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private object _gate;
-            private CancellationDisposable _cancel;
-            private volatile int _count;
-
-            public IDisposable Run()
-            {
-                _gate = new object();
-                _cancel = new CancellationDisposable();
-                _count = 1;
-
-                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
-            }
-
-            public void OnNext(TSource value)
-            {
-                var task = default(Task<TResult>);
-                try
-                {
-                    Interlocked.Increment(ref _count);
-                    task = _parent._selectorT(value, _cancel.Token);
-                }
-                catch (Exception ex)
-                {
-                    lock (_gate)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                    }
-
-                    return;
-                }
-
-                if (task.IsCompleted)
-                {
-                    OnCompletedTask(task);
-                }
-                else
-                {
-                    task.ContinueWith(OnCompletedTask);
-                }
-            }
-
-            private void OnCompletedTask(Task<TResult> task)
-            {
-                switch (task.Status)
-                {
-                    case TaskStatus.RanToCompletion:
-                        {
-                            lock (_gate)
-                                base._observer.OnNext(task.Result);
-
-                            OnCompleted();
-                        }
-                        break;
-                    case TaskStatus.Faulted:
+                        catch (Exception ex)
                         {
                             lock (_gate)
                             {
-                                base._observer.OnError(task.Exception.InnerException);
+                                base._observer.OnError(ex);
                                 base.Dispose();
                             }
+                            return;
                         }
-                        break;
-                    case TaskStatus.Canceled:
+
+                        SubscribeInner(inner);
+
+                        Final();
+                    }
+                    else
+                    {
+                        lock (_gate)
                         {
-                            if (!_cancel.IsDisposed)
+                            base._observer.OnError(error);
+                            base.Dispose();
+                        }
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    if (_parent._selectorOnCompleted != null)
+                    {
+                        var inner = default(IObservable<TResult>);
+
+                        try
+                        {
+                            inner = _parent._selectorOnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_gate)
                             {
-                                lock (_gate)
-                                {
-                                    base._observer.OnError(new TaskCanceledException(task));
-                                    base.Dispose();
-                               }
+                                base._observer.OnError(ex);
+                                base.Dispose();
+                            }
+                            return;
+                        }
+
+                        SubscribeInner(inner);
+                    }
+
+                    Final();
+                }
+
+                private void Final()
+                {
+                    _isStopped = true;
+                    if (_group.Count == 1)
+                    {
+                        //
+                        // Notice there can be a race between OnCompleted of the source and any
+                        // of the inner sequences, where both see _group.Count == 1, and one is
+                        // waiting for the lock. There won't be a double OnCompleted observation
+                        // though, because the call to Dispose silences the observer by swapping
+                        // in a NopObserver<T>.
+                        //
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        _sourceSubscription.Dispose();
+                    }
+                }
+
+                private void SubscribeInner(IObservable<TResult> inner)
+                {
+                    var innerSubscription = new SingleAssignmentDisposable();
+                    _group.Add(innerSubscription);
+                    innerSubscription.Disposable = inner.SubscribeSafe(new InnerObserver(this, innerSubscription));
+                }
+
+                private sealed class InnerObserver : IObserver<TResult>
+                {
+                    private readonly _ _parent;
+                    private readonly IDisposable _self;
+
+                    public InnerObserver(_ parent, IDisposable self)
+                    {
+                        _parent = parent;
+                        _self = self;
+                    }
+
+                    public void OnNext(TResult value)
+                    {
+                        lock (_parent._gate)
+                            _parent._observer.OnNext(value);
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _parent._group.Remove(_self);
+                        if (_parent._isStopped && _parent._group.Count == 1)
+                        {
+                            //
+                            // Notice there can be a race between OnCompleted of the source and any
+                            // of the inner sequences, where both see _group.Count == 1, and one is
+                            // waiting for the lock. There won't be a double OnCompleted observation
+                            // though, because the call to Dispose silences the observer by swapping
+                            // in a NopObserver<T>.
+                            //
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
                             }
                         }
-                        break;
+                    }
                 }
             }
+        }
 
-            public void OnError(Exception error)
+        internal sealed class ObservableSelectorIndexed : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, IObservable<TResult>> _selector;
+            private readonly Func<Exception, IObservable<TResult>> _selectorOnError;
+            private readonly Func<IObservable<TResult>> _selectorOnCompleted;
+
+            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
             {
-                lock (_gate)
+                _source = source;
+                _selector = selector;
+            }
+
+            public ObservableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector, Func<Exception, IObservable<TResult>> selectorOnError, Func<IObservable<TResult>> selectorOnCompleted)
+            {
+                _source = source;
+                _selector = selector;
+                _selectorOnError = selectorOnError;
+                _selectorOnCompleted = selectorOnCompleted;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly ObservableSelectorIndexed _parent;
+
+                public _(ObservableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                private object _gate;
+                private bool _isStopped;
+                private CompositeDisposable _group;
+                private SingleAssignmentDisposable _sourceSubscription;
+                private int _index;
+
+                public IDisposable Run()
+                {
+                    _gate = new object();
+                    _isStopped = false;
+                    _group = new CompositeDisposable();
+
+                    _sourceSubscription = new SingleAssignmentDisposable();
+                    _group.Add(_sourceSubscription);
+                    _sourceSubscription.Disposable = _parent._source.SubscribeSafe(this);
+
+                    return _group;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var inner = default(IObservable<TResult>);
+
+                    try
+                    {
+                        inner = _parent._selector(value, checked(_index++));
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+                        return;
+                    }
+
+                    SubscribeInner(inner);
+                }
+
+                public void OnError(Exception error)
+                {
+                    if (_parent._selectorOnError != null)
+                    {
+                        var inner = default(IObservable<TResult>);
+
+                        try
+                        {
+                            inner = _parent._selectorOnError(error);
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_gate)
+                            {
+                                base._observer.OnError(ex);
+                                base.Dispose();
+                            }
+                            return;
+                        }
+
+                        SubscribeInner(inner);
+
+                        Final();
+                    }
+                    else
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(error);
+                            base.Dispose();
+                        }
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    if (_parent._selectorOnCompleted != null)
+                    {
+                        var inner = default(IObservable<TResult>);
+
+                        try
+                        {
+                            inner = _parent._selectorOnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            lock (_gate)
+                            {
+                                base._observer.OnError(ex);
+                                base.Dispose();
+                            }
+                            return;
+                        }
+
+                        SubscribeInner(inner);
+                    }
+
+                    Final();
+                }
+
+                private void Final()
+                {
+                    _isStopped = true;
+                    if (_group.Count == 1)
+                    {
+                        //
+                        // Notice there can be a race between OnCompleted of the source and any
+                        // of the inner sequences, where both see _group.Count == 1, and one is
+                        // waiting for the lock. There won't be a double OnCompleted observation
+                        // though, because the call to Dispose silences the observer by swapping
+                        // in a NopObserver<T>.
+                        //
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
+                    }
+                    else
+                    {
+                        _sourceSubscription.Dispose();
+                    }
+                }
+
+                private void SubscribeInner(IObservable<TResult> inner)
+                {
+                    var innerSubscription = new SingleAssignmentDisposable();
+                    _group.Add(innerSubscription);
+                    innerSubscription.Disposable = inner.SubscribeSafe(new InnerObserver(this, innerSubscription));
+                }
+
+                private sealed class InnerObserver : IObserver<TResult>
+                {
+                    private readonly _ _parent;
+                    private readonly IDisposable _self;
+
+                    public InnerObserver(_ parent, IDisposable self)
+                    {
+                        _parent = parent;
+                        _self = self;
+                    }
+
+                    public void OnNext(TResult value)
+                    {
+                        lock (_parent._gate)
+                            _parent._observer.OnNext(value);
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        _parent._group.Remove(_self);
+                        if (_parent._isStopped && _parent._group.Count == 1)
+                        {
+                            //
+                            // Notice there can be a race between OnCompleted of the source and any
+                            // of the inner sequences, where both see _group.Count == 1, and one is
+                            // waiting for the lock. There won't be a double OnCompleted observation
+                            // though, because the call to Dispose silences the observer by swapping
+                            // in a NopObserver<T>.
+                            //
+                            lock (_parent._gate)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        internal sealed class EnumerableSelector : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IEnumerable<TResult>> _selector;
+
+            public EnumerableSelector(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
+            {
+                _source = source;
+                _selector = selector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly EnumerableSelector _parent;
+
+                public _(EnumerableSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var xs = default(IEnumerable<TResult>);
+                    try
+                    {
+                        xs = _parent._selector(value);
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    var e = default(IEnumerator<TResult>);
+                    try
+                    {
+                        e = xs.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    try
+                    {
+                        var hasNext = true;
+                        while (hasNext)
+                        {
+                            hasNext = false;
+                            var current = default(TResult);
+
+                            try
+                            {
+                                hasNext = e.MoveNext();
+                                if (hasNext)
+                                    current = e.Current;
+                            }
+                            catch (Exception exception)
+                            {
+                                base._observer.OnError(exception);
+                                base.Dispose();
+                                return;
+                            }
+
+                            if (hasNext)
+                                base._observer.OnNext(current);
+                        }
+                    }
+                    finally
+                    {
+                        if (e != null)
+                            e.Dispose();
+                    }
+                }
+
+                public void OnError(Exception error)
                 {
                     base._observer.OnError(error);
                     base.Dispose();
                 }
-            }
 
-            public void OnCompleted()
-            {
-                if (Interlocked.Decrement(ref _count) == 0)
+                public void OnCompleted()
                 {
-                    lock (_gate)
-                    {
-                        base._observer.OnCompleted();
-                        base.Dispose();
-                    }
+                    base._observer.OnCompleted();
+                    base.Dispose();
                 }
             }
         }
 
-        class Sigma : Sink<TResult>, IObserver<TSource>
+        internal sealed class EnumerableSelectorIndexed : Producer<TResult>
         {
-            private readonly SelectMany<TSource, TResult> _parent;
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, IEnumerable<TResult>> _selector;
 
-            public Sigma(SelectMany<TSource, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public EnumerableSelectorIndexed(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
             {
-                _parent = parent;
+                _source = source;
+                _selector = selector;
             }
 
-            private object _gate;
-            private CancellationDisposable _cancel;
-            private volatile int _count;
-            private int _index;
-
-            public IDisposable Run()
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                _gate = new object();
-                _cancel = new CancellationDisposable();
-                _count = 1;
-
-                return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
             }
 
-            public void OnNext(TSource value)
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
             {
-                var task = default(Task<TResult>);
-                try
+                private readonly EnumerableSelectorIndexed _parent;
+
+                public _(EnumerableSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    Interlocked.Increment(ref _count);
-                    task = _parent._selectorTI(value, checked(_index++), _cancel.Token);
+                    _parent = parent;
                 }
-                catch (Exception ex)
+
+                private int _index;
+
+                public void OnNext(TSource value)
                 {
-                    lock (_gate)
+                    var xs = default(IEnumerable<TResult>);
+                    try
                     {
-                        base._observer.OnError(ex);
+                        xs = _parent._selector(value, checked(_index++));
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
                         base.Dispose();
+                        return;
                     }
 
-                    return;
+                    var e = default(IEnumerator<TResult>);
+                    try
+                    {
+                        e = xs.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    try
+                    {
+                        var hasNext = true;
+                        while (hasNext)
+                        {
+                            hasNext = false;
+                            var current = default(TResult);
+
+                            try
+                            {
+                                hasNext = e.MoveNext();
+                                if (hasNext)
+                                    current = e.Current;
+                            }
+                            catch (Exception exception)
+                            {
+                                base._observer.OnError(exception);
+                                base.Dispose();
+                                return;
+                            }
+
+                            if (hasNext)
+                                base._observer.OnNext(current);
+                        }
+                    }
+                    finally
+                    {
+                        if (e != null)
+                            e.Dispose();
+                    }
                 }
 
-                if (task.IsCompleted)
+                public void OnError(Exception error)
                 {
-                    OnCompletedTask(task);
+                    base._observer.OnError(error);
+                    base.Dispose();
                 }
-                else
+
+                public void OnCompleted()
                 {
-                    task.ContinueWith(OnCompletedTask);
+                    base._observer.OnCompleted();
+                    base.Dispose();
                 }
             }
+        }
 
-            private void OnCompletedTask(Task<TResult> task)
+        internal sealed class TaskSelector : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, CancellationToken, Task<TResult>> _selector;
+
+            public TaskSelector(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
             {
-                switch (task.Status)
-                {
-                    case TaskStatus.RanToCompletion:
-                        {
-                            lock (_gate)
-                                base._observer.OnNext(task.Result);
+                _source = source;
+                _selector = selector;
+            }
 
-                            OnCompleted();
-                        }
-                        break;
-                    case TaskStatus.Faulted:
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly TaskSelector _parent;
+
+                public _(TaskSelector parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                private object _gate;
+                private CancellationDisposable _cancel;
+                private volatile int _count;
+
+                public IDisposable Run()
+                {
+                    _gate = new object();
+                    _cancel = new CancellationDisposable();
+                    _count = 1;
+
+                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var task = default(Task<TResult>);
+                    try
+                    {
+                        Interlocked.Increment(ref _count);
+                        task = _parent._selector(value, _cancel.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
                         {
-                            lock (_gate)
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+
+                        return;
+                    }
+
+                    if (task.IsCompleted)
+                    {
+                        OnCompletedTask(task);
+                    }
+                    else
+                    {
+                        task.ContinueWith(OnCompletedTask);
+                    }
+                }
+
+                private void OnCompletedTask(Task<TResult> task)
+                {
+                    switch (task.Status)
+                    {
+                        case TaskStatus.RanToCompletion:
                             {
-                                base._observer.OnError(task.Exception.InnerException);
-                                base.Dispose();
+                                lock (_gate)
+                                    base._observer.OnNext(task.Result);
+
+                                OnCompleted();
                             }
-                        }
-                        break;
-                    case TaskStatus.Canceled:
-                        {
-                            if (!_cancel.IsDisposed)
+                            break;
+                        case TaskStatus.Faulted:
                             {
                                 lock (_gate)
                                 {
-                                    base._observer.OnError(new TaskCanceledException(task));
+                                    base._observer.OnError(task.Exception.InnerException);
                                     base.Dispose();
                                 }
                             }
-                        }
-                        break;
+                            break;
+                        case TaskStatus.Canceled:
+                            {
+                                if (!_cancel.IsDisposed)
+                                {
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(new TaskCanceledException(task));
+                                        base.Dispose();
+                                    }
+                                }
+                            }
+                            break;
+                    }
                 }
-            }
 
-            public void OnError(Exception error)
-            {
-                lock (_gate)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                if (Interlocked.Decrement(ref _count) == 0)
+                public void OnError(Exception error)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnCompleted();
+                        base._observer.OnError(error);
                         base.Dispose();
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    if (Interlocked.Decrement(ref _count) == 0)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
+                    }
+                }
+            }
+        }
+
+        internal sealed class TaskSelectorIndexed : Producer<TResult>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, int, CancellationToken, Task<TResult>> _selector;
+
+            public TaskSelectorIndexed(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
+            {
+                _source = source;
+                _selector = selector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run();
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            {
+                private readonly TaskSelectorIndexed _parent;
+
+                public _(TaskSelectorIndexed parent, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _parent = parent;
+                }
+
+                private object _gate;
+                private CancellationDisposable _cancel;
+                private volatile int _count;
+                private int _index;
+
+                public IDisposable Run()
+                {
+                    _gate = new object();
+                    _cancel = new CancellationDisposable();
+                    _count = 1;
+
+                    return StableCompositeDisposable.Create(_parent._source.SubscribeSafe(this), _cancel);
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var task = default(Task<TResult>);
+                    try
+                    {
+                        Interlocked.Increment(ref _count);
+                        task = _parent._selector(value, checked(_index++), _cancel.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                        }
+
+                        return;
+                    }
+
+                    if (task.IsCompleted)
+                    {
+                        OnCompletedTask(task);
+                    }
+                    else
+                    {
+                        task.ContinueWith(OnCompletedTask);
+                    }
+                }
+
+                private void OnCompletedTask(Task<TResult> task)
+                {
+                    switch (task.Status)
+                    {
+                        case TaskStatus.RanToCompletion:
+                            {
+                                lock (_gate)
+                                    base._observer.OnNext(task.Result);
+
+                                OnCompleted();
+                            }
+                            break;
+                        case TaskStatus.Faulted:
+                            {
+                                lock (_gate)
+                                {
+                                    base._observer.OnError(task.Exception.InnerException);
+                                    base.Dispose();
+                                }
+                            }
+                            break;
+                        case TaskStatus.Canceled:
+                            {
+                                if (!_cancel.IsDisposed)
+                                {
+                                    lock (_gate)
+                                    {
+                                        base._observer.OnError(new TaskCanceledException(task));
+                                        base.Dispose();
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                public void OnError(Exception error)
+                {
+                    lock (_gate)
+                    {
+                        base._observer.OnError(error);
+                        base.Dispose();
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    if (Interlocked.Decrement(ref _count) == 0)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnCompleted();
+                            base.Dispose();
+                        }
                     }
                 }
             }
