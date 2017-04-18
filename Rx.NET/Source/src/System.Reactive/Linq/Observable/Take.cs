@@ -44,7 +44,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                private readonly Count _parent;
                 private int _remaining;
 
                 public _(int count, IObserver<TSource> observer, IDisposable cancel)
