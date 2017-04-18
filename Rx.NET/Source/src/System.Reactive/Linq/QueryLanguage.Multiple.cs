@@ -401,7 +401,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
-            return new Zip<TFirst, TSecond, TResult>(first, second, resultSelector);
+            return new Zip<TFirst, TSecond, TResult>.Observable(first, second, resultSelector);
         }
 
         public virtual IObservable<TResult> Zip<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
@@ -502,7 +502,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
-            return new Zip<TFirst, TSecond, TResult>(first, second, resultSelector);
+            return new Zip<TFirst, TSecond, TResult>.Enumerable(first, second, resultSelector);
         }
 
         #endregion

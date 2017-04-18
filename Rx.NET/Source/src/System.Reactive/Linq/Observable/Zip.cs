@@ -11,310 +11,302 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 
-    internal sealed class Zip<TFirst, TSecond, TResult> : Producer<TResult>
+    internal static class Zip<TFirst, TSecond, TResult>
     {
-        private readonly IObservable<TFirst> _first;
-        private readonly IObservable<TSecond> _second;
-        private readonly IEnumerable<TSecond> _secondE;
-        private readonly Func<TFirst, TSecond, TResult> _resultSelector;
-
-        public Zip(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+        internal sealed class Observable : Producer<TResult>
         {
-            _first = first;
-            _second = second;
-            _resultSelector = resultSelector;
-        }
+            private readonly IObservable<TFirst> _first;
+            private readonly IObservable<TSecond> _second;
+            private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-        public Zip(IObservable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
-        {
-            _first = first;
-            _secondE = second;
-            _resultSelector = resultSelector;
-        }
-
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_second != null)
+            public Observable(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
             {
-                var sink = new _(this, observer, cancel);
+                _first = first;
+                _second = second;
+                _resultSelector = resultSelector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_resultSelector, observer, cancel);
                 setSink(sink);
-                return sink.Run();
-            }
-            else
-            {
-                var sink = new ZipImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-        }
-
-        class _ : Sink<TResult>
-        {
-            private readonly Zip<TFirst, TSecond, TResult> _parent;
-
-            public _(Zip<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
+                return sink.Run(_first, _second);
             }
 
-            private object _gate;
-
-            public IDisposable Run()
+            private sealed class _ : Sink<TResult>
             {
-                _gate = new object();
+                private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-                var fstSubscription = new SingleAssignmentDisposable();
-                var sndSubscription = new SingleAssignmentDisposable();
-
-                var fstO = new F(this, fstSubscription);
-                var sndO = new S(this, sndSubscription);
-
-                fstO.Other = sndO;
-                sndO.Other = fstO;
-
-                fstSubscription.Disposable = _parent._first.SubscribeSafe(fstO);
-                sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
-
-                return StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO);
-            }
-
-            class F : IObserver<TFirst>, IDisposable
-            {
-                private readonly _ _parent;
-                private readonly IDisposable _self;
-                private S _other;
-                private Queue<TFirst> _queue;
-
-                public F(_ parent, IDisposable self)
+                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    _parent = parent;
-                    _self = self;
-                    _queue = new Queue<TFirst>();
+                    _resultSelector = resultSelector;
                 }
 
-                public S Other { set { _other = value; } }
+                private object _gate;
 
-                public Queue<TFirst> Queue { get { return _queue; } }
-                public bool Done { get; private set; }
+                public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
+                {
+                    _gate = new object();
+
+                    var fstSubscription = new SingleAssignmentDisposable();
+                    var sndSubscription = new SingleAssignmentDisposable();
+
+                    var fstO = new FirstObserver(this, fstSubscription);
+                    var sndO = new SecondObserver(this, sndSubscription);
+
+                    fstO.Other = sndO;
+                    sndO.Other = fstO;
+
+                    fstSubscription.Disposable = first.SubscribeSafe(fstO);
+                    sndSubscription.Disposable = second.SubscribeSafe(sndO);
+
+                    return StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO);
+                }
+
+                private sealed class FirstObserver : IObserver<TFirst>, IDisposable
+                {
+                    private readonly _ _parent;
+                    private readonly IDisposable _self;
+                    private SecondObserver _other;
+                    private Queue<TFirst> _queue;
+
+                    public FirstObserver(_ parent, IDisposable self)
+                    {
+                        _parent = parent;
+                        _self = self;
+                        _queue = new Queue<TFirst>();
+                    }
+
+                    public SecondObserver Other { set { _other = value; } }
+
+                    public Queue<TFirst> Queue => _queue;
+                    public bool Done { get; private set; }
+
+                    public void OnNext(TFirst value)
+                    {
+                        lock (_parent._gate)
+                        {
+                            if (_other.Queue.Count > 0)
+                            {
+                                var r = _other.Queue.Dequeue();
+
+                                var res = default(TResult);
+                                try
+                                {
+                                    res = _parent._resultSelector(value, r);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _parent._observer.OnError(ex);
+                                    _parent.Dispose();
+                                    return;
+                                }
+
+                                _parent._observer.OnNext(res);
+                            }
+                            else
+                            {
+                                if (_other.Done)
+                                {
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                    return;
+                                }
+
+                                _queue.Enqueue(value);
+                            }
+                        }
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_parent._gate)
+                        {
+                            Done = true;
+
+                            if (_other.Done)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                                return;
+                            }
+                            else
+                            {
+                                _self.Dispose();
+                            }
+                        }
+                    }
+
+                    public void Dispose()
+                    {
+                        _queue.Clear();
+                    }
+                }
+
+                private sealed class SecondObserver : IObserver<TSecond>, IDisposable
+                {
+                    private readonly _ _parent;
+                    private readonly IDisposable _self;
+                    private FirstObserver _other;
+                    private Queue<TSecond> _queue;
+
+                    public SecondObserver(_ parent, IDisposable self)
+                    {
+                        _parent = parent;
+                        _self = self;
+                        _queue = new Queue<TSecond>();
+                    }
+
+                    public FirstObserver Other { set { _other = value; } }
+
+                    public Queue<TSecond> Queue => _queue;
+                    public bool Done { get; private set; }
+
+                    public void OnNext(TSecond value)
+                    {
+                        lock (_parent._gate)
+                        {
+                            if (_other.Queue.Count > 0)
+                            {
+                                var l = _other.Queue.Dequeue();
+
+                                var res = default(TResult);
+                                try
+                                {
+                                    res = _parent._resultSelector(l, value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _parent._observer.OnError(ex);
+                                    _parent.Dispose();
+                                    return;
+                                }
+
+                                _parent._observer.OnNext(res);
+                            }
+                            else
+                            {
+                                if (_other.Done)
+                                {
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                    return;
+                                }
+
+                                _queue.Enqueue(value);
+                            }
+                        }
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_parent._gate)
+                        {
+                            Done = true;
+
+                            if (_other.Done)
+                            {
+                                _parent._observer.OnCompleted();
+                                _parent.Dispose();
+                                return;
+                            }
+                            else
+                            {
+                                _self.Dispose();
+                            }
+                        }
+                    }
+
+                    public void Dispose()
+                    {
+                        _queue.Clear();
+                    }
+                }
+            }
+        }
+
+        internal sealed class Enumerable : Producer<TResult>
+        {
+            private readonly IObservable<TFirst> _first;
+            private readonly IEnumerable<TSecond> _second;
+            private readonly Func<TFirst, TSecond, TResult> _resultSelector;
+
+            public Enumerable(IObservable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
+            {
+                _first = first;
+                _second = second;
+                _resultSelector = resultSelector;
+            }
+
+            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_resultSelector, observer, cancel);
+                setSink(sink);
+                return sink.Run(_first, _second);
+            }
+
+            private sealed class _ : Sink<TResult>, IObserver<TFirst>
+            {
+                private readonly Func<TFirst, TSecond, TResult> _resultSelector;
+
+                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _resultSelector = resultSelector;
+                }
+
+                private IEnumerator<TSecond> _rightEnumerator;
+
+                public IDisposable Run(IObservable<TFirst> first, IEnumerable<TSecond> second)
+                {
+                    //
+                    // Notice the evaluation order of obtaining the enumerator and subscribing to the
+                    // observable sequence is reversed compared to the operator's signature. This is
+                    // required to make sure the enumerator is available as soon as the observer can
+                    // be called. Otherwise, we end up having a race for the initialization and use
+                    // of the _rightEnumerator field.
+                    //
+                    try
+                    {
+                        _rightEnumerator = second.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    var leftSubscription = first.SubscribeSafe(this);
+
+                    return StableCompositeDisposable.Create(leftSubscription, _rightEnumerator);
+                }
 
                 public void OnNext(TFirst value)
                 {
-                    lock (_parent._gate)
-                    {
-                        if (_other.Queue.Count > 0)
-                        {
-                            var r = _other.Queue.Dequeue();
-
-                            var res = default(TResult);
-                            try
-                            {
-                                res = _parent._parent._resultSelector(value, r);
-                            }
-                            catch (Exception ex)
-                            {
-                                _parent._observer.OnError(ex);
-                                _parent.Dispose();
-                                return;
-                            }
-
-                            _parent._observer.OnNext(res);
-                        }
-                        else
-                        {
-                            if (_other.Done)
-                            {
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
-                                return;
-                            }
-
-                            _queue.Enqueue(value);
-                        }
-                    }
-                }
-
-                public void OnError(Exception error)
-                {
-                    lock (_parent._gate)
-                    {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    lock (_parent._gate)
-                    {
-                        Done = true;
-
-                        if (_other.Done)
-                        {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
-                        }
-                        else
-                        {
-                            _self.Dispose();
-                        }
-                    }
-                }
-
-                public void Dispose()
-                {
-                    _queue.Clear();
-                }
-            }
-
-            class S : IObserver<TSecond>, IDisposable
-            {
-                private readonly _ _parent;
-                private readonly IDisposable _self;
-                private F _other;
-                private Queue<TSecond> _queue;
-
-                public S(_ parent, IDisposable self)
-                {
-                    _parent = parent;
-                    _self = self;
-                    _queue = new Queue<TSecond>();
-                }
-
-                public F Other { set { _other = value; } }
-
-                public Queue<TSecond> Queue { get { return _queue; } }
-                public bool Done { get; private set; }
-
-                public void OnNext(TSecond value)
-                {
-                    lock (_parent._gate)
-                    {
-                        if (_other.Queue.Count > 0)
-                        {
-                            var l = _other.Queue.Dequeue();
-
-                            var res = default(TResult);
-                            try
-                            {
-                                res = _parent._parent._resultSelector(l, value);
-                            }
-                            catch (Exception ex)
-                            {
-                                _parent._observer.OnError(ex);
-                                _parent.Dispose();
-                                return;
-                            }
-
-                            _parent._observer.OnNext(res);
-                        }
-                        else
-                        {
-                            if (_other.Done)
-                            {
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
-                                return;
-                            }
-
-                            _queue.Enqueue(value);
-                        }
-                    }
-                }
-
-                public void OnError(Exception error)
-                {
-                    lock (_parent._gate)
-                    {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    lock (_parent._gate)
-                    {
-                        Done = true;
-
-                        if (_other.Done)
-                        {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                            return;
-                        }
-                        else
-                        {
-                            _self.Dispose();
-                        }
-                    }
-                }
-
-                public void Dispose()
-                {
-                    _queue.Clear();
-                }
-            }
-        }
-
-        class ZipImpl : Sink<TResult>, IObserver<TFirst>
-        {
-            private readonly Zip<TFirst, TSecond, TResult> _parent;
-
-            public ZipImpl(Zip<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            private IEnumerator<TSecond> _rightEnumerator;
-
-            public IDisposable Run()
-            {
-                //
-                // Notice the evaluation order of obtaining the enumerator and subscribing to the
-                // observable sequence is reversed compared to the operator's signature. This is
-                // required to make sure the enumerator is available as soon as the observer can
-                // be called. Otherwise, we end up having a race for the initialization and use
-                // of the _rightEnumerator field.
-                //
-                try
-                {
-                    _rightEnumerator = _parent._secondE.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return Disposable.Empty;
-                }
-
-                var leftSubscription = _parent._first.SubscribeSafe(this);
-
-                return StableCompositeDisposable.Create(leftSubscription, _rightEnumerator);
-            }
-
-            public void OnNext(TFirst value)
-            {
-                var hasNext = false;
-                try
-                {
-                    hasNext = _rightEnumerator.MoveNext();
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
-                    base.Dispose();
-                    return;
-                }
-
-                if (hasNext)
-                {
-                    var right = default(TSecond);
+                    var hasNext = false;
                     try
                     {
-                        right = _rightEnumerator.Current;
+                        hasNext = _rightEnumerator.MoveNext();
                     }
                     catch (Exception ex)
                     {
@@ -323,37 +315,52 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    TResult result;
-                    try
+                    if (hasNext)
                     {
-                        result = _parent._resultSelector(value, right);
-                    }
-                    catch (Exception ex)
-                    {
-                        base._observer.OnError(ex);
-                        base.Dispose();
-                        return;
-                    }
+                        var right = default(TSecond);
+                        try
+                        {
+                            right = _rightEnumerator.Current;
+                        }
+                        catch (Exception ex)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                            return;
+                        }
 
-                    base._observer.OnNext(result);
+                        TResult result;
+                        try
+                        {
+                            result = _resultSelector(value, right);
+                        }
+                        catch (Exception ex)
+                        {
+                            base._observer.OnError(ex);
+                            base.Dispose();
+                            return;
+                        }
+
+                        base._observer.OnNext(result);
+                    }
+                    else
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
                 }
-                else
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
                 {
                     base._observer.OnCompleted();
                     base.Dispose();
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }
