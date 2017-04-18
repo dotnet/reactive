@@ -272,7 +272,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
         {
-            return new TakeLast<TSource>(source, count, scheduler);
+            return new TakeLast<TSource>.Count(source, count, scheduler);
         }
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, int count)

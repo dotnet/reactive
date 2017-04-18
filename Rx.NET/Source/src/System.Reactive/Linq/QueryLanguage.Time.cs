@@ -344,7 +344,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler timerScheduler, IScheduler loopScheduler)
         {
-            return new TakeLast<TSource>(source, duration, timerScheduler, loopScheduler);
+            return new TakeLast<TSource>.Time(source, duration, timerScheduler, loopScheduler);
         }
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, TimeSpan duration)
