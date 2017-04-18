@@ -565,22 +565,22 @@ namespace System.Reactive.Linq
 
         private static IObservable<long> Timer_(TimeSpan dueTime, IScheduler scheduler)
         {
-            return new Timer(dueTime, null, scheduler);
+            return new Timer.Single.Relative(dueTime, scheduler);
         }
 
         private static IObservable<long> Timer_(TimeSpan dueTime, TimeSpan period, IScheduler scheduler)
         {
-            return new Timer(dueTime, period, scheduler);
+            return new Timer.Periodic.Relative(dueTime, period, scheduler);
         }
 
         private static IObservable<long> Timer_(DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return new Timer(dueTime, null, scheduler);
+            return new Timer.Single.Absolute(dueTime, scheduler);
         }
 
         private static IObservable<long> Timer_(DateTimeOffset dueTime, TimeSpan period, IScheduler scheduler)
         {
-            return new Timer(dueTime, period, scheduler);
+            return new Timer.Periodic.Absolute(dueTime, period, scheduler);
         }
 
         #endregion
