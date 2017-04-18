@@ -230,22 +230,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, (x, token) => selector(x));
+            return new SelectMany<TSource, TResult>.TaskSelector(source, (x, token) => selector(x));
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, (x, i, token) => selector(x, i));
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, (x, i, token) => selector(x, i));
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelector(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -260,62 +260,62 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, (x, token) => taskSelector(x), resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, (x, token) => taskSelector(x), resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, (x, i, token) => taskSelector(x, i), resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, (x, i, token) => taskSelector(x, i), resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, taskSelector, resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, taskSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.ObservableSelector(source, selector);
         }
         
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, selector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelector(source, collectionSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelector(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelector(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelectorIndexed(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -330,12 +330,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelector(source, collectionSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         #endregion
