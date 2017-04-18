@@ -21,19 +21,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_resultSelector, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_first, _second);
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
-            private readonly WithLatestFrom<TFirst, TSecond, TResult> _parent;
+            private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-            public _(WithLatestFrom<TFirst, TSecond, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _resultSelector = resultSelector;
             }
 
             private object _gate;
@@ -42,27 +42,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private object _latestGate;
 
-            public IDisposable Run()
+            public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
                 _latestGate = new object();
 
                 var sndSubscription = new SingleAssignmentDisposable();
 
-                var fstO = new F(this);
-                var sndO = new S(this, sndSubscription);
+                var fstO = new FirstObserver(this);
+                var sndO = new SecondObserver(this, sndSubscription);
 
-                var fstSubscription = _parent._first.SubscribeSafe(fstO);
-                sndSubscription.Disposable = _parent._second.SubscribeSafe(sndO);
+                var fstSubscription = first.SubscribeSafe(fstO);
+                sndSubscription.Disposable = second.SubscribeSafe(sndO);
 
                 return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
             }
 
-            class F : IObserver<TFirst>
+            private sealed class FirstObserver : IObserver<TFirst>
             {
                 private readonly _ _parent;
 
-                public F(_ parent)
+                public FirstObserver(_ parent)
                 {
                     _parent = parent;
                 }
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         try
                         {
-                            res = _parent._parent._resultSelector(value, latest);
+                            res = _parent._resultSelector(value, latest);
                         }
                         catch (Exception ex)
                         {
@@ -122,12 +122,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class S : IObserver<TSecond>
+            private sealed class SecondObserver : IObserver<TSecond>
             {
                 private readonly _ _parent;
                 private readonly IDisposable _self;
 
-                public S(_ parent, IDisposable self)
+                public SecondObserver(_ parent, IDisposable self)
                 {
                     _parent = parent;
                     _self = self;
