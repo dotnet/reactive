@@ -68,7 +68,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class SelectorA : Sink<TResult>
+        private sealed class SelectorA : Sink<TResult>
         {
             private readonly Generate<TState, TResult> _parent;
 
@@ -96,14 +96,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 var time = default(DateTimeOffset);
 
                 if (_hasResult)
+                {
                     base._observer.OnNext(_result);
+                }
+
                 try
                 {
                     if (_first)
+                    {
                         _first = false;
+                    }
                     else
+                    {
                         state = _parent._iterate(state);
+                    }
+
                     _hasResult = _parent._condition(state);
+
                     if (_hasResult)
                     {
                         _result = _parent._resultSelector(state);
@@ -128,7 +137,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class Delta : Sink<TResult>
+        private sealed class Delta : Sink<TResult>
         {
             private readonly Generate<TState, TResult> _parent;
 
@@ -156,14 +165,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 var time = default(TimeSpan);
 
                 if (_hasResult)
+                {
                     base._observer.OnNext(_result);
+                }
+
                 try
                 {
                     if (_first)
+                    {
                         _first = false;
+                    }
                     else
+                    {
                         state = _parent._iterate(state);
+                    }
+
                     _hasResult = _parent._condition(state);
+
                     if (_hasResult)
                     {
                         _result = _parent._resultSelector(state);
@@ -188,7 +206,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
             private readonly Generate<TState, TResult> _parent;
 
@@ -226,12 +244,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     try
                     {
                         if (_first)
+                        {
                             _first = false;
+                        }
                         else
+                        {
                             _state = _parent._iterate(_state);
+                        }
+
                         hasResult = _parent._condition(_state);
+
                         if (hasResult)
+                        {
                             result = _parent._resultSelector(_state);
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -241,13 +267,19 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (hasResult)
+                    {
                         base._observer.OnNext(result);
+                    }
                     else
+                    {
                         break;
+                    }
                 }
 
                 if (!cancel.IsDisposed)
+                {
                     base._observer.OnCompleted();
+                }
 
                 base.Dispose();
             }
@@ -259,12 +291,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 try
                 {
                     if (_first)
+                    {
                         _first = false;
+                    }
                     else
+                    {
                         _state = _parent._iterate(_state);
+                    }
+
                     hasResult = _parent._condition(_state);
+
                     if (hasResult)
+                    {
                         result = _parent._resultSelector(_state);
+                    }
                 }
                 catch (Exception exception)
                 {
