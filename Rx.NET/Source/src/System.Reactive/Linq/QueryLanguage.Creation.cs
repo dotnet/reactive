@@ -190,22 +190,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value)
         {
-            return new Repeat<TResult>(value, null, SchedulerDefaults.Iteration);
+            return new Repeat<TResult>.Forever(value, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, IScheduler scheduler)
         {
-            return new Repeat<TResult>(value, null, scheduler);
+            return new Repeat<TResult>.Forever(value, scheduler);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount)
         {
-            return new Repeat<TResult>(value, repeatCount, SchedulerDefaults.Iteration);
+            return new Repeat<TResult>.Count(value, repeatCount, SchedulerDefaults.Iteration);
         }
 
         public virtual IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, IScheduler scheduler)
         {
-            return new Repeat<TResult>(value, repeatCount, scheduler);
+            return new Repeat<TResult>.Count(value, repeatCount, scheduler);
         }
 
         #endregion
