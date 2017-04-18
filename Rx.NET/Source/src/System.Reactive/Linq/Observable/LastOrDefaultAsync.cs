@@ -25,19 +25,16 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private TSource _value;
-                private bool _seenValue;
 
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
                     _value = default(TSource);
-                    _seenValue = false;
                 }
 
                 public void OnNext(TSource value)
                 {
                     _value = value;
-                    _seenValue = true;
                 }
 
                 public void OnError(Exception error)
@@ -77,7 +74,6 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Func<TSource, bool> _predicate;
                 private TSource _value;
-                private bool _seenValue;
 
                 public _(Func<TSource, bool> predicate, IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -85,7 +81,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     _predicate = predicate;
 
                     _value = default(TSource);
-                    _seenValue = false;
                 }
 
                 public void OnNext(TSource value)
@@ -106,7 +101,6 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (b)
                     {
                         _value = value;
-                        _seenValue = true;
                     }
                 }
 
