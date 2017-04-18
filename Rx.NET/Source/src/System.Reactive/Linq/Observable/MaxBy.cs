@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<IList<TSource>>, IObserver<TSource>
+        private sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly MaxBy<TSource, TKey> _parent;
             private bool _hasValue;
