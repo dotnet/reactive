@@ -19,30 +19,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
         class _ : Sink<System.Reactive.TimeInterval<TSource>>, IObserver<TSource>
         {
-            private readonly TimeInterval<TSource> _parent;
-
-            public _(TimeInterval<TSource> parent, IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel)
+            public _(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
             private IStopwatch _watch;
             private TimeSpan _last;
 
-            public IDisposable Run()
+            public IDisposable Run(TimeInterval<TSource> parent)
             {
-                _watch = _parent._scheduler.StartStopwatch();
+                _watch = parent._scheduler.StartStopwatch();
                 _last = TimeSpan.Zero;
 
-                return _parent._source.Subscribe(this);
+                return parent._source.Subscribe(this);
             }
 
             public void OnNext(TSource value)
