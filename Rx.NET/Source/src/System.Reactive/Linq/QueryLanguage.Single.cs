@@ -211,7 +211,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count)
         {
-            return new SkipLast<TSource>(source, count);
+            return new SkipLast<TSource>.Count(source, count);
         }
 
         #endregion

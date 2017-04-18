@@ -274,7 +274,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> SkipLast_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            return new SkipLast<TSource>(source, duration, scheduler);
+            return new SkipLast<TSource>.Time(source, duration, scheduler);
         }
 
         #endregion
