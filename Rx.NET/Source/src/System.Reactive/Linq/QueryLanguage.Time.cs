@@ -456,7 +456,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Timeout_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
-            return new Timeout<TSource>(source, dueTime, other, scheduler);
+            return new Timeout<TSource>.Relative(source, dueTime, other, scheduler);
         }
 
         #endregion
@@ -485,7 +485,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Timeout_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
         {
-            return new Timeout<TSource>(source, dueTime, other, scheduler);
+            return new Timeout<TSource>.Absolute(source, dueTime, other, scheduler);
         }
 
         #endregion
