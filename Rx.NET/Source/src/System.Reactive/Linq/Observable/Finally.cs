@@ -19,24 +19,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_finallyAction, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_source);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Finally<TSource> _parent;
+            private readonly Action _finallyAction;
 
-            public _(Finally<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(Action finallyAction, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _finallyAction = finallyAction;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(IObservable<TSource> source)
             {
-                var subscription = _parent._source.SubscribeSafe(this);
+                var subscription = source.SubscribeSafe(this);
 
                 return Disposable.Create(() =>
                 {
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     finally
                     {
-                        _parent._finallyAction();
+                        _finallyAction();
                     }
                 });
             }
