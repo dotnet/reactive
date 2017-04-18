@@ -248,7 +248,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<Task<TSource>> sources)
         {
-            return new Merge<TSource>(sources);
+            return new Merge<TSource>.Tasks(sources);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
@@ -298,12 +298,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return new Merge<TSource>(sources);
+            return new Merge<TSource>.Observables(sources);
         }
 
         private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
-            return new Merge<TSource>(sources, maxConcurrent);
+            return new Merge<TSource>.ObservablesMaxConcurrency(sources, maxConcurrent);
         }
 
         #endregion
