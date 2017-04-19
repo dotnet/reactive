@@ -28,23 +28,27 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<IDictionary<TKey, TElement>>, IObserver<TSource>
+        private sealed class _ : Sink<IDictionary<TKey, TElement>>, IObserver<TSource>
         {
-            private readonly ToDictionary<TSource, TKey, TElement> _parent;
-            private Dictionary<TKey, TElement> _dictionary;
+            // CONSIDER: This sink has a parent reference that can be considered for removal.
+
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly Func<TSource, TElement> _elementSelector;
+            private readonly Dictionary<TKey, TElement> _dictionary;
 
             public _(ToDictionary<TSource, TKey, TElement> parent, IObserver<IDictionary<TKey, TElement>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _dictionary = new Dictionary<TKey, TElement>(_parent._comparer);
+                _keySelector = parent._keySelector;
+                _elementSelector = parent._elementSelector;
+                _dictionary = new Dictionary<TKey, TElement>(parent._comparer);
             }
 
             public void OnNext(TSource value)
             {
                 try
                 {
-                    _dictionary.Add(_parent._keySelector(value), _parent._elementSelector(value));
+                    _dictionary.Add(_keySelector(value), _elementSelector(value));
                 }
                 catch (Exception ex)
                 {
