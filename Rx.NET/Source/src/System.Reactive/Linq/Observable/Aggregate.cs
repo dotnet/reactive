@@ -164,23 +164,25 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<TResult>, IObserver<TSource>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
+            private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
+            private readonly Func<TAccumulate, TResult> _resultSelector;
 
-            private readonly Aggregate<TSource, TAccumulate, TResult> _parent;
             private TAccumulate _accumulation;
 
             public _(Aggregate<TSource, TAccumulate, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _accumulation = _parent._seed;
+                _accumulator = parent._accumulator;
+                _resultSelector = parent._resultSelector;
+
+                _accumulation = parent._seed;
             }
 
             public void OnNext(TSource value)
             {
                 try
                 {
-                    _accumulation = _parent._accumulator(_accumulation, value);
+                    _accumulation = _accumulator(_accumulation, value);
                 }
                 catch (Exception exception)
                 {
@@ -200,7 +202,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var result = default(TResult);
                 try
                 {
-                    result = _parent._resultSelector(_accumulation);
+                    result = _resultSelector(_accumulation);
                 }
                 catch (Exception exception)
                 {
