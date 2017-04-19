@@ -294,7 +294,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return new Window<TSource>(source, count, skip);
+            return new Window<TSource>.Count(source, count, skip);
         }
 
         #endregion

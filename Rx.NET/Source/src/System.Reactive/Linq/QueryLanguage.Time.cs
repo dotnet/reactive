@@ -615,12 +615,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan)
         {
-            return Window_<TSource>(source, timeSpan, timeSpan, SchedulerDefaults.TimeBasedOperations);
+            return Window_<TSource>(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
-            return Window_<TSource>(source, timeSpan, timeSpan, scheduler);
+            return Window_<TSource>(source, timeSpan, scheduler);
+        }
+
+        private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
+        {
+            return new Window<TSource>.TimeHopping(source, timeSpan, scheduler);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
@@ -635,7 +640,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
-            return new Window<TSource>(source, timeSpan, timeShift, scheduler);
+            return new Window<TSource>.TimeSliding(source, timeSpan, timeShift, scheduler);
         }
 
         #endregion
@@ -654,7 +659,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
-            return new Window<TSource>(source, timeSpan, count, scheduler);
+            return new Window<TSource>.Ferry(source, timeSpan, count, scheduler);
         }
 
         #endregion

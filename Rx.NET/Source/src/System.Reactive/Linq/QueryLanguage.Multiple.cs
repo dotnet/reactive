@@ -369,7 +369,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector)
         {
-            return new Window<TSource, TWindowClosing>(source, windowClosingSelector);
+            return new Window<TSource, TWindowClosing>.Selector(source, windowClosingSelector);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector)
@@ -379,7 +379,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries)
         {
-            return new Window<TSource, TWindowBoundary>(source, windowBoundaries);
+            return new Window<TSource, TWindowBoundary>.Boundaries(source, windowBoundaries);
         }
 
         #endregion
