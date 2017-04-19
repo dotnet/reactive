@@ -28,51 +28,48 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
         private sealed class _ : Sink<TResult>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
+            private readonly object _gate = new object();
+            private readonly CompositeDisposable _group = new CompositeDisposable();
+            private readonly SortedDictionary<int, TLeft> _leftMap = new SortedDictionary<int, TLeft>();
+            private readonly SortedDictionary<int, TRight> _rightMap = new SortedDictionary<int, TRight>();
 
-            private readonly Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> _parent;
+            private readonly Func<TLeft, IObservable<TLeftDuration>> _leftDurationSelector;
+            private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
+            private readonly Func<TLeft, TRight, TResult> _resultSelector;
 
             public _(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _leftDurationSelector = parent._leftDurationSelector;
+                _rightDurationSelector = parent._rightDurationSelector;
+                _resultSelector = parent._resultSelector;
             }
-
-            private object _gate;
-            private CompositeDisposable _group;
 
             private bool _leftDone;
             private int _leftID;
-            private SortedDictionary<int, TLeft> _leftMap;
 
             private bool _rightDone;
             private int _rightID;
-            private SortedDictionary<int, TRight> _rightMap;
 
-            public IDisposable Run()
+            public IDisposable Run(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
             {
-                _gate = new object();
-                _group = new CompositeDisposable();
-
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
                 _leftDone = false;
                 _leftID = 0;
-                _leftMap = new SortedDictionary<int, TLeft>();
 
                 var rightSubscription = new SingleAssignmentDisposable();
                 _group.Add(rightSubscription);
                 _rightDone = false;
                 _rightID = 0;
-                _rightMap = new SortedDictionary<int, TRight>();
 
-                leftSubscription.Disposable = _parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
-                rightSubscription.Disposable = _parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
+                leftSubscription.Disposable = parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
+                rightSubscription.Disposable = parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
 
                 return _group;
             }
@@ -119,7 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var duration = default(IObservable<TLeftDuration>);
                     try
                     {
-                        duration = _parent._parent._leftDurationSelector(value);
+                        duration = _parent._leftDurationSelector(value);
                     }
                     catch (Exception exception)
                     {
@@ -139,7 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                 var result = default(TResult);
                                 try
                                 {
-                                    result = _parent._parent._resultSelector(value, rightValue.Value);
+                                    result = _parent._resultSelector(value, rightValue.Value);
                                 }
                                 catch (Exception exception)
                                 {
@@ -252,7 +249,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var duration = default(IObservable<TRightDuration>);
                     try
                     {
-                        duration = _parent._parent._rightDurationSelector(value);
+                        duration = _parent._rightDurationSelector(value);
                     }
                     catch (Exception exception)
                     {
@@ -272,7 +269,7 @@ namespace System.Reactive.Linq.ObservableImpl
                                 var result = default(TResult);
                                 try
                                 {
-                                    result = _parent._parent._resultSelector(leftValue.Value, value);
+                                    result = _parent._resultSelector(leftValue.Value, value);
                                 }
                                 catch (Exception exception)
                                 {
