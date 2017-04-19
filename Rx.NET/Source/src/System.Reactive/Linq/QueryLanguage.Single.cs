@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return new Buffer<TSource>(source, count, skip);
+            return new Buffer<TSource>.Count(source, count, skip);
         }
 
         #endregion

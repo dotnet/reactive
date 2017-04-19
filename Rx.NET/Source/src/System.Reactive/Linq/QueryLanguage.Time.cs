@@ -19,12 +19,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan)
         {
-            return Buffer_<TSource>(source, timeSpan, timeSpan, SchedulerDefaults.TimeBasedOperations);
+            return Buffer_<TSource>(source, timeSpan, SchedulerDefaults.TimeBasedOperations);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
         {
-            return Buffer_<TSource>(source, timeSpan, timeSpan, scheduler);
+            return Buffer_<TSource>(source, timeSpan, scheduler);
+        }
+
+        private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, IScheduler scheduler)
+        {
+            return new Buffer<TSource>.TimeHopping(source, timeSpan, scheduler);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift)
@@ -39,7 +44,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, TimeSpan timeShift, IScheduler scheduler)
         {
-            return new Buffer<TSource>(source, timeSpan, timeShift, scheduler);
+            return new Buffer<TSource>.TimeSliding(source, timeSpan, timeShift, scheduler);
         }
 
         #endregion
@@ -58,7 +63,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, TimeSpan timeSpan, int count, IScheduler scheduler)
         {
-            return new Buffer<TSource>(source, timeSpan, count, scheduler);
+            return new Buffer<TSource>.Ferry(source, timeSpan, count, scheduler);
         }
 
         #endregion

@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferClosing>(IObservable<TSource> source, Func<IObservable<TBufferClosing>> bufferClosingSelector)
         {
-            return new Buffer<TSource, TBufferClosing>(source, bufferClosingSelector);
+            return new Buffer<TSource, TBufferClosing>.Selector(source, bufferClosingSelector);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(IObservable<TSource> source, IObservable<TBufferOpening> bufferOpenings, Func<TBufferOpening, IObservable<TBufferClosing>> bufferClosingSelector)
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferBoundary>(IObservable<TSource> source, IObservable<TBufferBoundary> bufferBoundaries)
         {
-            return new Buffer<TSource, TBufferBoundary>(source, bufferBoundaries);
+            return new Buffer<TSource, TBufferBoundary>.Boundaries(source, bufferBoundaries);
         }
 
         #endregion
