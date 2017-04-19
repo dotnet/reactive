@@ -24,37 +24,39 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_scheduler);
         }
 
-        class _ : Sink<int>
+        private sealed class _ : Sink<int>
         {
-            private readonly Range _parent;
+            private readonly int _start;
+            private readonly int _count;
 
             public _(Range parent, IObserver<int> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _start = parent._start;
+                _count = parent._count;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(IScheduler scheduler)
             {
-                var longRunning = _parent._scheduler.AsLongRunning();
+                var longRunning = scheduler.AsLongRunning();
                 if (longRunning != null)
                 {
                     return longRunning.ScheduleLongRunning(0, Loop);
                 }
                 else
                 {
-                    return _parent._scheduler.Schedule(0, LoopRec);
+                    return scheduler.Schedule(0, LoopRec);
                 }
             }
 
             private void Loop(int i, ICancelable cancel)
             {
-                while (!cancel.IsDisposed && i < _parent._count)
+                while (!cancel.IsDisposed && i < _count)
                 {
-                    base._observer.OnNext(_parent._start + i);
+                    base._observer.OnNext(_start + i);
                     i++;
                 }
 
@@ -66,9 +68,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void LoopRec(int i, Action<int> recurse)
             {
-                if (i < _parent._count)
+                if (i < _count)
                 {
-                    base._observer.OnNext(_parent._start + i);
+                    base._observer.OnNext(_start + i);
                     recurse(i + 1);
                 }
                 else
