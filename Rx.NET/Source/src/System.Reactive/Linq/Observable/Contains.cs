@@ -28,14 +28,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<bool>, IObserver<TSource>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
-
-            private readonly Contains<TSource> _parent;
+            private readonly TSource _value;
+            private readonly IEqualityComparer<TSource> _comparer;
 
             public _(Contains<TSource> parent, IObserver<bool> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _value = parent._value;
+                _comparer = parent._comparer;
             }
 
             public void OnNext(TSource value)
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var res = false;
                 try
                 {
-                    res = _parent._comparer.Equals(value, _parent._value);
+                    res = _comparer.Equals(value, _value);
                 }
                 catch (Exception ex)
                 {
