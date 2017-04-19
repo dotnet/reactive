@@ -4,35 +4,44 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class OfType<TSource, TResult> : Producer<TResult>
+    internal sealed class ElementAtOrDefault<TSource> : Producer<TSource>
     {
         private readonly IObservable<TSource> _source;
+        private readonly int _index;
 
-        public OfType(IObservable<TSource> source)
+        public ElementAtOrDefault(IObservable<TSource> source, int index)
         {
             _source = source;
+            _index = index;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
+        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(observer, cancel);
+            var sink = new _(_index, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
-        private sealed class _ : Sink<TResult>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            public _(IObserver<TResult> observer, IDisposable cancel)
+            private int _i;
+
+            public _(int index, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
+                _i = index;
             }
 
             public void OnNext(TSource value)
             {
-                if (value is TResult)
+                if (_i == 0)
                 {
-                    base._observer.OnNext((TResult)(object)value);
+                    base._observer.OnNext(value);
+                    base._observer.OnCompleted();
+                    base.Dispose();
                 }
+
+                _i--;
             }
 
             public void OnError(Exception error)
@@ -43,6 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
+                base._observer.OnNext(default(TSource));
                 base._observer.OnCompleted();
                 base.Dispose();
             }

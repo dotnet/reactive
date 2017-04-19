@@ -24,31 +24,23 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TAccumulate>, IObserver<TSource>
+        private sealed class _ : Sink<TAccumulate>, IObserver<TSource>
         {
-            private readonly Scan<TSource, TAccumulate> _parent;
+            private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
-            private bool _hasAccumulation;
 
             public _(Scan<TSource, TAccumulate> parent, IObserver<TAccumulate> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _accumulation = default(TAccumulate);
-                _hasAccumulation = false;
+                _accumulator = parent._accumulator;
+                _accumulation = parent._seed;
             }
 
             public void OnNext(TSource value)
             {
                 try
                 {
-                    if (_hasAccumulation)
-                        _accumulation = _parent._accumulator(_accumulation, value);
-                    else
-                    {
-                        _accumulation = _parent._accumulator(_parent._seed, value);
-                        _hasAccumulation = true;
-                    }
+                    _accumulation = _accumulator(_accumulation, value);
                 }
                 catch (Exception exception)
                 {
@@ -87,21 +79,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_accumulator, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Scan<TSource> _parent;
+            private readonly Func<TSource, TSource, TSource> _accumulator;
             private TSource _accumulation;
             private bool _hasAccumulation;
 
-            public _(Scan<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(Func<TSource, TSource, TSource> accumulator, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _accumulator = accumulator;
                 _accumulation = default(TSource);
                 _hasAccumulation = false;
             }
@@ -111,7 +103,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 try
                 {
                     if (_hasAccumulation)
-                        _accumulation = _parent._accumulator(_accumulation, value);
+                    {
+                        _accumulation = _accumulator(_accumulation, value);
+                    }
                     else
                     {
                         _accumulation = value;

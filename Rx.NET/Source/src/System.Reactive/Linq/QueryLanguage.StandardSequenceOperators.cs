@@ -199,12 +199,14 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector)
         {
-            return new Select<TSource, TResult>(source, selector);
+            // CONSIDER: Add fusion for Select/Select pairs.
+
+            return new Select<TSource, TResult>.Selector(source, selector);
         }
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, TResult> selector)
         {
-            return new Select<TSource, TResult>(source, selector);
+            return new Select<TSource, TResult>.SelectorIndexed(source, selector);
         }
 
         #endregion
@@ -228,22 +230,22 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, (x, token) => selector(x));
+            return new SelectMany<TSource, TResult>.TaskSelector(source, (x, token) => selector(x));
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, (x, i, token) => selector(x, i));
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, (x, i, token) => selector(x, i));
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelector(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -258,62 +260,62 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, (x, token) => taskSelector(x), resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, (x, token) => taskSelector(x), resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, (x, i, token) => taskSelector(x, i), resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, (x, i, token) => taskSelector(x, i), resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, taskSelector, resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TTaskResult, TResult>(IObservable<TSource> source, Func<TSource, int, CancellationToken, Task<TTaskResult>> taskSelector, Func<TSource, int, TTaskResult, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, taskSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.ObservableSelector(source, selector);
         }
         
         private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, selector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelector(source, collectionSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectors(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> onNext, Func<Exception, IObservable<TResult>> onError, Func<IObservable<TResult>> onCompleted)
         {
-            return new SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectorsIndexed(source, onNext, onError, onCompleted);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelector(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
-            return new SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelectorIndexed(source, selector);
         }
 
         public virtual IObservable<TResult> SelectMany<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
@@ -328,12 +330,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelector(source, collectionSelector, resultSelector);
         }
 
         private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
-            return new SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         #endregion
@@ -342,11 +344,11 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, int count)
         {
-            var skip = source as Skip<TSource>;
-            if (skip != null && skip._scheduler == null)
+            var skip = source as Skip<TSource>.Count;
+            if (skip != null)
                 return skip.Combine(count);
 
-            return new Skip<TSource>(source, count);
+            return new Skip<TSource>.Count(source, count);
         }
 
         #endregion
@@ -355,12 +357,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipWhile<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> SkipWhile<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
@@ -385,11 +387,11 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, int count)
         {
-            var take = source as Take<TSource>;
-            if (take != null && take._scheduler == null)
+            var take = source as Take<TSource>.Count;
+            if (take != null)
                 return take.Combine(count);
 
-            return new Take<TSource>(source, count);
+            return new Take<TSource>.Count(source, count);
         }
 
         #endregion
@@ -398,12 +400,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            return new TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> TakeWhile<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
@@ -412,16 +414,16 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            var where = source as Where<TSource>;
+            var where = source as Where<TSource>.Predicate;
             if (where != null)
                 return where.Combine(predicate);
 
-            return new Where<TSource>(source, predicate);
+            return new Where<TSource>.Predicate(source, predicate);
         }
 
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
-            return new Where<TSource>(source, predicate);
+            return new Where<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion

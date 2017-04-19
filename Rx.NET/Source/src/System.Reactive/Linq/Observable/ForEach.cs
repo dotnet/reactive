@@ -8,7 +8,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class ForEach<TSource>
     {
-        public class _ : IObserver<TSource>
+        public sealed class Observer : IObserver<TSource>
         {
             private readonly Action<TSource> _onNext;
             private readonly Action _done;
@@ -16,7 +16,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private Exception _exception;
             private int _stopped;
 
-            public _(Action<TSource> onNext, Action done)
+            public Observer(Action<TSource> onNext, Action done)
             {
                 _onNext = onNext;
                 _done = done;
@@ -24,10 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _stopped = 0;
             }
 
-            public Exception Error
-            {
-                get { return _exception; }
-            }
+            public Exception Error => _exception;
 
             public void OnNext(TSource value)
             {
@@ -62,7 +59,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public class ForEachImpl : IObserver<TSource>
+        public sealed class ObserverIndexed : IObserver<TSource>
         {
             private readonly Action<TSource, int> _onNext;
             private readonly Action _done;
@@ -71,19 +68,16 @@ namespace System.Reactive.Linq.ObservableImpl
             private Exception _exception;
             private int _stopped;
 
-            public ForEachImpl(Action<TSource, int> onNext, Action done)
+            public ObserverIndexed(Action<TSource, int> onNext, Action done)
             {
                 _onNext = onNext;
                 _done = done;
-                
+
                 _index = 0;
                 _stopped = 0;
             }
 
-            public Exception Error
-            {
-                get { return _exception; }
-            }
+            public Exception Error => _exception;
 
             public void OnNext(TSource value)
             {

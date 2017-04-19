@@ -19,10 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
             _elseSource = elseSource;
         }
 
-        public IObservable<TResult> Eval()
-        {
-            return _condition() ? _thenSource : _elseSource;
-        }
+        public IObservable<TResult> Eval() => _condition() ? _thenSource : _elseSource;
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
@@ -31,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run();
         }
 
-        class _ : Sink<TResult>, IObserver<TResult>
+        private sealed class _ : Sink<TResult>, IObserver<TResult>
         {
             private readonly If<TResult> _parent;
 

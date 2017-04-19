@@ -26,16 +26,20 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly DistinctUntilChanged<TSource, TKey> _parent;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly IEqualityComparer<TKey> _comparer;
+
             private TKey _currentKey;
             private bool _hasCurrentKey;
 
             public _(DistinctUntilChanged<TSource, TKey> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _keySelector = parent._keySelector;
+                _comparer = parent._comparer;
+
                 _currentKey = default(TKey);
                 _hasCurrentKey = false;
             }
@@ -45,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var key = default(TKey);
                 try
                 {
-                    key = _parent._keySelector(value);
+                    key = _keySelector(value);
                 }
                 catch (Exception exception)
                 {
@@ -59,7 +63,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        comparerEquals = _parent._comparer.Equals(_currentKey, key);
+                        comparerEquals = _comparer.Equals(_currentKey, key);
                     }
                     catch (Exception exception)
                     {

@@ -7,249 +7,257 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Timeout<TSource> : Producer<TSource>
+    internal static class Timeout<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly TimeSpan? _dueTimeR;
-        private readonly DateTimeOffset? _dueTimeA;
-        private readonly IObservable<TSource> _other;
-        private readonly IScheduler _scheduler;
-
-        public Timeout(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
+        internal sealed class Relative : Producer<TSource>
         {
-            _source = source;
-            _dueTimeR = dueTime;
-            _other = other;
-            _scheduler = scheduler;
-        }
+            private readonly IObservable<TSource> _source;
+            private readonly TimeSpan _dueTime;
+            private readonly IObservable<TSource> _other;
+            private readonly IScheduler _scheduler;
 
-        public Timeout(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
-        {
-            _source = source;
-            _dueTimeA = dueTime;
-            _other = other;
-            _scheduler = scheduler;
-        }
-
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_dueTimeA.HasValue)
+            public Relative(IObservable<TSource> source, TimeSpan dueTime, IObservable<TSource> other, IScheduler scheduler)
             {
-                var sink = new TimeA(this, observer, cancel);
+                _source = source;
+                _dueTime = dueTime;
+                _other = other;
+                _scheduler = scheduler;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
                 setSink(sink);
-                return sink.Run();
-            }
-            else
-            {
-                var sink = new TimeR(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-        }
-
-        class TimeA : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly Timeout<TSource> _parent;
-
-            public TimeA(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
+                return sink.Run(_source);
             }
 
-            private SerialDisposable _subscription;
-            private object _gate;
-            private bool _switched;
-
-            public IDisposable Run()
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                _subscription = new SerialDisposable();
-                var original = new SingleAssignmentDisposable();
+                private readonly TimeSpan _dueTime;
+                private readonly IObservable<TSource> _other;
+                private readonly IScheduler _scheduler;
 
-                _subscription.Disposable = original;
+                private readonly object _gate = new object();
+                private SerialDisposable _subscription = new SerialDisposable();
+                private SerialDisposable _timer = new SerialDisposable();
 
-                _gate = new object();
-                _switched = false;
-
-                var timer = _parent._scheduler.Schedule(_parent._dueTimeA.Value, Timeout);
-
-                original.Disposable = _parent._source.SubscribeSafe(this);
-
-                return StableCompositeDisposable.Create(_subscription, timer);
-            }
-
-            private void Timeout()
-            {
-                var timerWins = false;
-
-                lock (_gate)
+                public _(Relative parent, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    timerWins = !_switched;
-                    _switched = true;
+                    _dueTime = parent._dueTime;
+                    _other = parent._other;
+                    _scheduler = parent._scheduler;
                 }
 
-                if (timerWins)
-                    _subscription.Disposable = _parent._other.SubscribeSafe(this.GetForwarder());
-            }
+                private ulong _id;
+                private bool _switched;
 
-            public void OnNext(TSource value)
-            {
-                lock (_gate)
+                public IDisposable Run(IObservable<TSource> source)
                 {
-                    if (!_switched)
-                        base._observer.OnNext(value);
-                }
-            }
+                    var original = new SingleAssignmentDisposable();
 
-            public void OnError(Exception error)
-            {
-                var onErrorWins = false;
+                    _subscription.Disposable = original;
 
-                lock (_gate)
-                {
-                    onErrorWins = !_switched;
-                    _switched = true;
+                    _id = 0UL;
+                    _switched = false;
+
+                    CreateTimer();
+
+                    original.Disposable = source.SubscribeSafe(this);
+
+                    return StableCompositeDisposable.Create(_subscription, _timer);
                 }
 
-                if (onErrorWins)
+                private void CreateTimer()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                var onCompletedWins = false;
-
-                lock (_gate)
-                {
-                    onCompletedWins = !_switched;
-                    _switched = true;
+                    _timer.Disposable = _scheduler.Schedule(_id, _dueTime, Timeout);
                 }
 
-                if (onCompletedWins)
+                private IDisposable Timeout(IScheduler _, ulong myid)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
-                }
-            }
-        }
+                    var timerWins = false;
 
-        class TimeR : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly Timeout<TSource> _parent;
+                    lock (_gate)
+                    {
+                        _switched = (_id == myid);
+                        timerWins = _switched;
+                    }
 
-            public TimeR(Timeout<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
+                    if (timerWins)
+                        _subscription.Disposable = _other.SubscribeSafe(this.GetForwarder());
 
-            private SerialDisposable _subscription;
-            private SerialDisposable _timer;
-
-            private object _gate;
-            private ulong _id;
-            private bool _switched;
-
-            public IDisposable Run()
-            {
-                _subscription = new SerialDisposable();
-                _timer = new SerialDisposable();
-                var original = new SingleAssignmentDisposable();
-
-                _subscription.Disposable = original;
-
-                _gate = new object();
-                _id = 0UL;
-                _switched = false;
-
-                CreateTimer();
-
-                original.Disposable = _parent._source.SubscribeSafe(this);
-
-                return StableCompositeDisposable.Create(_subscription, _timer);
-            }
-
-            private void CreateTimer()
-            {
-                _timer.Disposable = _parent._scheduler.Schedule(_id, _parent._dueTimeR.Value, Timeout);
-            }
-
-            private IDisposable Timeout(IScheduler _, ulong myid)
-            {
-                var timerWins = false;
-
-                lock (_gate)
-                {
-                    _switched = (_id == myid);
-                    timerWins = _switched;
+                    return Disposable.Empty;
                 }
 
-                if (timerWins)
-                    _subscription.Disposable = _parent._other.SubscribeSafe(this.GetForwarder());
-
-                return Disposable.Empty;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var onNextWins = false;
-
-                lock (_gate)
+                public void OnNext(TSource value)
                 {
-                    onNextWins = !_switched;
+                    var onNextWins = false;
+
+                    lock (_gate)
+                    {
+                        onNextWins = !_switched;
+                        if (onNextWins)
+                        {
+                            _id = unchecked(_id + 1);
+                        }
+                    }
+
                     if (onNextWins)
                     {
-                        _id = unchecked(_id + 1);
+                        base._observer.OnNext(value);
+                        CreateTimer();
                     }
                 }
 
-                if (onNextWins)
+                public void OnError(Exception error)
                 {
-                    base._observer.OnNext(value);
-                    CreateTimer();
-                }
-            }
+                    var onErrorWins = false;
 
-            public void OnError(Exception error)
-            {
-                var onErrorWins = false;
+                    lock (_gate)
+                    {
+                        onErrorWins = !_switched;
+                        if (onErrorWins)
+                        {
+                            _id = unchecked(_id + 1);
+                        }
+                    }
 
-                lock (_gate)
-                {
-                    onErrorWins = !_switched;
                     if (onErrorWins)
                     {
-                        _id = unchecked(_id + 1);
+                        base._observer.OnError(error);
+                        base.Dispose();
                     }
                 }
 
-                if (onErrorWins)
+                public void OnCompleted()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
+                    var onCompletedWins = false;
 
-            public void OnCompleted()
-            {
-                var onCompletedWins = false;
+                    lock (_gate)
+                    {
+                        onCompletedWins = !_switched;
+                        if (onCompletedWins)
+                        {
+                            _id = unchecked(_id + 1);
+                        }
+                    }
 
-                lock (_gate)
-                {
-                    onCompletedWins = !_switched;
                     if (onCompletedWins)
                     {
-                        _id = unchecked(_id + 1);
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
+                }
+            }
+        }
+
+        internal sealed class Absolute : Producer<TSource>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly DateTimeOffset _dueTime;
+            private readonly IObservable<TSource> _other;
+            private readonly IScheduler _scheduler;
+
+            public Absolute(IObservable<TSource> source, DateTimeOffset dueTime, IObservable<TSource> other, IScheduler scheduler)
+            {
+                _source = source;
+                _dueTime = dueTime;
+                _other = other;
+                _scheduler = scheduler;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_other, observer, cancel);
+                setSink(sink);
+                return sink.Run(this);
+            }
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            {
+                private readonly IObservable<TSource> _other;
+
+                private readonly object _gate = new object();
+                private readonly SerialDisposable _subscription = new SerialDisposable();
+
+                public _(IObservable<TSource> other, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _other = other;
+                }
+
+                private bool _switched;
+
+                public IDisposable Run(Absolute parent)
+                {
+                    var original = new SingleAssignmentDisposable();
+
+                    _subscription.Disposable = original;
+
+                    _switched = false;
+
+                    var timer = parent._scheduler.Schedule(parent._dueTime, Timeout);
+
+                    original.Disposable = parent._source.SubscribeSafe(this);
+
+                    return StableCompositeDisposable.Create(_subscription, timer);
+                }
+
+                private void Timeout()
+                {
+                    var timerWins = false;
+
+                    lock (_gate)
+                    {
+                        timerWins = !_switched;
+                        _switched = true;
+                    }
+
+                    if (timerWins)
+                        _subscription.Disposable = _other.SubscribeSafe(this.GetForwarder());
+                }
+
+                public void OnNext(TSource value)
+                {
+                    lock (_gate)
+                    {
+                        if (!_switched)
+                            base._observer.OnNext(value);
                     }
                 }
 
-                if (onCompletedWins)
+                public void OnError(Exception error)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    var onErrorWins = false;
+
+                    lock (_gate)
+                    {
+                        onErrorWins = !_switched;
+                        _switched = true;
+                    }
+
+                    if (onErrorWins)
+                    {
+                        base._observer.OnError(error);
+                        base.Dispose();
+                    }
+                }
+
+                public void OnCompleted()
+                {
+                    var onCompletedWins = false;
+
+                    lock (_gate)
+                    {
+                        onCompletedWins = !_switched;
+                        _switched = true;
+                    }
+
+                    if (onCompletedWins)
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
                 }
             }
         }
@@ -274,40 +282,40 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Timeout<TSource, TTimeout> _parent;
+            private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
+            private readonly IObservable<TSource> _other;
+
+            private readonly object _gate = new object();
+            private readonly SerialDisposable _subscription = new SerialDisposable();
+            private readonly SerialDisposable _timer = new SerialDisposable();
 
             public _(Timeout<TSource, TTimeout> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _timeoutSelector = parent._timeoutSelector;
+                _other = parent._other;
             }
 
-            private SerialDisposable _subscription;
-            private SerialDisposable _timer;
-            private object _gate;
             private ulong _id;
             private bool _switched;
 
-            public IDisposable Run()
+            public IDisposable Run(Timeout<TSource, TTimeout> parent)
             {
-                _subscription = new SerialDisposable();
-                _timer = new SerialDisposable();
                 var original = new SingleAssignmentDisposable();
 
                 _subscription.Disposable = original;
 
-                _gate = new object();
                 _id = 0UL;
                 _switched = false;
 
-                SetTimer(_parent._firstTimeout);
+                SetTimer(parent._firstTimeout);
 
-                original.Disposable = _parent._source.SubscribeSafe(this);
+                original.Disposable = parent._source.SubscribeSafe(this);
 
                 return StableCompositeDisposable.Create(_subscription, _timer);
             }
@@ -321,7 +329,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     var timeout = default(IObservable<TTimeout>);
                     try
                     {
-                        timeout = _parent._timeoutSelector(value);
+                        timeout = _timeoutSelector(value);
                     }
                     catch (Exception error)
                     {
@@ -358,16 +366,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var d = new SingleAssignmentDisposable();
                 _timer.Disposable = d;
-                d.Disposable = timeout.SubscribeSafe(new TimeoutImpl(this, myid, d));
+                d.Disposable = timeout.SubscribeSafe(new TimeoutObserver(this, myid, d));
             }
 
-            class TimeoutImpl : IObserver<TTimeout>
+            private sealed class TimeoutObserver : IObserver<TTimeout>
             {
                 private readonly _ _parent;
                 private readonly ulong _id;
                 private readonly IDisposable _self;
 
-                public TimeoutImpl(_ parent, ulong id, IDisposable self)
+                public TimeoutObserver(_ parent, ulong id, IDisposable self)
                 {
                     _parent = parent;
                     _id = id;
@@ -377,7 +385,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnNext(TTimeout value)
                 {
                     if (TimerWins())
-                        _parent._subscription.Disposable = _parent._parent._other.SubscribeSafe(_parent.GetForwarder());
+                        _parent._subscription.Disposable = _parent._other.SubscribeSafe(_parent.GetForwarder());
 
                     _self.Dispose();
                 }
@@ -394,7 +402,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnCompleted()
                 {
                     if (TimerWins())
-                        _parent._subscription.Disposable = _parent._parent._other.SubscribeSafe(_parent.GetForwarder());
+                        _parent._subscription.Disposable = _parent._other.SubscribeSafe(_parent.GetForwarder());
                 }
 
                 private bool TimerWins()

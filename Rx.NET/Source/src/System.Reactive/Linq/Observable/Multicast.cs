@@ -22,30 +22,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TResult>, IObserver<TResult>
+        private sealed class _ : Sink<TResult>, IObserver<TResult>
         {
-            private readonly Multicast<TSource, TIntermediate, TResult> _parent;
-
-            public _(Multicast<TSource, TIntermediate, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(Multicast<TSource, TIntermediate, TResult> parent)
             {
                 var observable = default(IObservable<TResult>);
                 var connectable = default(IConnectableObservable<TIntermediate>);
                 try
                 {
-                    var subject = _parent._subjectSelector();
-                    connectable = new ConnectableObservable<TSource, TIntermediate>(_parent._source, subject);
-                    observable = _parent._selector(connectable);
+                    var subject =parent._subjectSelector();
+                    connectable = new ConnectableObservable<TSource, TIntermediate>(parent._source, subject);
+                    observable = parent._selector(connectable);
                 }
                 catch (Exception exception)
                 {

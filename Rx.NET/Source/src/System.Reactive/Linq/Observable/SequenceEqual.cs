@@ -7,224 +7,210 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class SequenceEqual<TSource> : Producer<bool>
+    internal static class SequenceEqual<TSource>
     {
-        private readonly IObservable<TSource> _first;
-        private readonly IObservable<TSource> _second;
-        private readonly IEnumerable<TSource> _secondE;
-        private readonly IEqualityComparer<TSource> _comparer;
-
-        public SequenceEqual(IObservable<TSource> first, IObservable<TSource> second, IEqualityComparer<TSource> comparer)
+        internal sealed class Observable : Producer<bool>
         {
-            _first = first;
-            _second = second;
-            _comparer = comparer;
-        }
+            private readonly IObservable<TSource> _first;
+            private readonly IObservable<TSource> _second;
+            private readonly IEqualityComparer<TSource> _comparer;
 
-        public SequenceEqual(IObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
-        {
-            _first = first;
-            _secondE = second;
-            _comparer = comparer;
-        }
-
-        protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_second != null)
+            public Observable(IObservable<TSource> first, IObservable<TSource> second, IEqualityComparer<TSource> comparer)
             {
-                var sink = new _(this, observer, cancel);
+                _first = first;
+                _second = second;
+                _comparer = comparer;
+            }
+
+            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_comparer, observer, cancel);
                 setSink(sink);
-                return sink.Run();
-            }
-            else
-            {
-                var sink = new SequenceEqualImpl(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
-        }
-
-        class _ : Sink<bool>
-        {
-            private readonly SequenceEqual<TSource> _parent;
-
-            public _(SequenceEqual<TSource> parent, IObserver<bool> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
+                return sink.Run(this);
             }
 
-            private object _gate;
-            private bool _donel;
-            private bool _doner;
-            private Queue<TSource> _ql;
-            private Queue<TSource> _qr;
-
-            public IDisposable Run()
+            private sealed class _ : Sink<bool>
             {
-                _gate = new object();
-                _donel = false;
-                _doner = false;
-                _ql = new Queue<TSource>();
-                _qr = new Queue<TSource>();
+                private readonly IEqualityComparer<TSource> _comparer;
 
-                return StableCompositeDisposable.Create
-                (
-                    _parent._first.SubscribeSafe(new F(this)),
-                    _parent._second.SubscribeSafe(new S(this))
-                );
-            }
-
-            class F : IObserver<TSource>
-            {
-                private readonly _ _parent;
-
-                public F(_ parent)
+                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    _parent = parent;
+                    _comparer = comparer;
                 }
 
-                public void OnNext(TSource value)
+                private object _gate;
+                private bool _donel;
+                private bool _doner;
+                private Queue<TSource> _ql;
+                private Queue<TSource> _qr;
+
+                public IDisposable Run(Observable parent)
                 {
-                    lock (_parent._gate)
+                    _gate = new object();
+                    _donel = false;
+                    _doner = false;
+                    _ql = new Queue<TSource>();
+                    _qr = new Queue<TSource>();
+
+                    return StableCompositeDisposable.Create
+                    (
+                        parent._first.SubscribeSafe(new FirstObserver(this)),
+                        parent._second.SubscribeSafe(new SecondObserver(this))
+                    );
+                }
+
+                private sealed class FirstObserver : IObserver<TSource>
+                {
+                    private readonly _ _parent;
+
+                    public FirstObserver(_ parent)
                     {
-                        if (_parent._qr.Count > 0)
-                        {
-                            var equal = false;
-                            var v = _parent._qr.Dequeue();
-                            try
-                            {
-                                equal = _parent._parent._comparer.Equals(value, v);
-                            }
-                            catch (Exception exception)
-                            {
-                                _parent._observer.OnError(exception);
-                                _parent.Dispose();
-                                return;
-                            }
-                            if (!equal)
-                            {
-                                _parent._observer.OnNext(false);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
-                            }
-                        }
-                        else if (_parent._doner)
-                        {
-                            _parent._observer.OnNext(false);
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
-                        }
-                        else
-                            _parent._ql.Enqueue(value);
+                        _parent = parent;
                     }
-                }
 
-                public void OnError(Exception error)
-                {
-                    lock (_parent._gate)
+                    public void OnNext(TSource value)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    lock (_parent._gate)
-                    {
-                        _parent._donel = true;
-                        if (_parent._ql.Count == 0)
+                        lock (_parent._gate)
                         {
                             if (_parent._qr.Count > 0)
                             {
-                                _parent._observer.OnNext(false);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                var equal = false;
+                                var v = _parent._qr.Dequeue();
+                                try
+                                {
+                                    equal = _parent._comparer.Equals(value, v);
+                                }
+                                catch (Exception exception)
+                                {
+                                    _parent._observer.OnError(exception);
+                                    _parent.Dispose();
+                                    return;
+                                }
+                                if (!equal)
+                                {
+                                    _parent._observer.OnNext(false);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
                             }
                             else if (_parent._doner)
                             {
-                                _parent._observer.OnNext(true);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
-                            }
-                        }
-                    }
-                }
-            }
-
-            class S : IObserver<TSource>
-            {
-                private readonly _ _parent;
-
-                public S(_ parent)
-                {
-                    _parent = parent;
-                }
-
-                public void OnNext(TSource value)
-                {
-                    lock (_parent._gate)
-                    {
-                        if (_parent._ql.Count > 0)
-                        {
-                            var equal = false;
-                            var v = _parent._ql.Dequeue();
-                            try
-                            {
-                                equal = _parent._parent._comparer.Equals(v, value);
-                            }
-                            catch (Exception exception)
-                            {
-                                _parent._observer.OnError(exception);
-                                _parent.Dispose();
-                                return;
-                            }
-                            if (!equal)
-                            {
                                 _parent._observer.OnNext(false);
                                 _parent._observer.OnCompleted();
                                 _parent.Dispose();
                             }
+                            else
+                                _parent._ql.Enqueue(value);
                         }
-                        else if (_parent._donel)
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(false);
-                            _parent._observer.OnCompleted();
+                            _parent._observer.OnError(error);
                             _parent.Dispose();
                         }
-                        else
-                            _parent._qr.Enqueue(value);
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._donel = true;
+                            if (_parent._ql.Count == 0)
+                            {
+                                if (_parent._qr.Count > 0)
+                                {
+                                    _parent._observer.OnNext(false);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
+                                else if (_parent._doner)
+                                {
+                                    _parent._observer.OnNext(true);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
+                            }
+                        }
                     }
                 }
 
-                public void OnError(Exception error)
+                private sealed class SecondObserver : IObserver<TSource>
                 {
-                    lock (_parent._gate)
-                    {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
-                    }
-                }
+                    private readonly _ _parent;
 
-                public void OnCompleted()
-                {
-                    lock (_parent._gate)
+                    public SecondObserver(_ parent)
                     {
-                        _parent._doner = true;
-                        if (_parent._qr.Count == 0)
+                        _parent = parent;
+                    }
+
+                    public void OnNext(TSource value)
+                    {
+                        lock (_parent._gate)
                         {
                             if (_parent._ql.Count > 0)
                             {
+                                var equal = false;
+                                var v = _parent._ql.Dequeue();
+                                try
+                                {
+                                    equal = _parent._comparer.Equals(v, value);
+                                }
+                                catch (Exception exception)
+                                {
+                                    _parent._observer.OnError(exception);
+                                    _parent.Dispose();
+                                    return;
+                                }
+                                if (!equal)
+                                {
+                                    _parent._observer.OnNext(false);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
+                            }
+                            else if (_parent._donel)
+                            {
                                 _parent._observer.OnNext(false);
                                 _parent._observer.OnCompleted();
                                 _parent.Dispose();
                             }
-                            else if (_parent._donel)
+                            else
+                                _parent._qr.Enqueue(value);
+                        }
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._doner = true;
+                            if (_parent._qr.Count == 0)
                             {
-                                _parent._observer.OnNext(true);
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                if (_parent._ql.Count > 0)
+                                {
+                                    _parent._observer.OnNext(false);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
+                                else if (_parent._donel)
+                                {
+                                    _parent._observer.OnNext(true);
+                                    _parent._observer.OnCompleted();
+                                    _parent.Dispose();
+                                }
                             }
                         }
                     }
@@ -232,95 +218,116 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        class SequenceEqualImpl : Sink<bool>, IObserver<TSource>
+        internal sealed class Enumerable : Producer<bool>
         {
-            private readonly SequenceEqual<TSource> _parent;
+            private readonly IObservable<TSource> _first;
+            private readonly IEnumerable<TSource> _second;
+            private readonly IEqualityComparer<TSource> _comparer;
 
-            public SequenceEqualImpl(SequenceEqual<TSource> parent, IObserver<bool> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Enumerable(IObservable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
             {
-                _parent = parent;
+                _first = first;
+                _second = second;
+                _comparer = comparer;
             }
 
-            private IEnumerator<TSource> _enumerator;
-
-            public IDisposable Run()
+            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                //
-                // Notice the evaluation order of obtaining the enumerator and subscribing to the
-                // observable sequence is reversed compared to the operator's signature. This is
-                // required to make sure the enumerator is available as soon as the observer can
-                // be called. Otherwise, we end up having a race for the initialization and use
-                // of the _rightEnumerator field.
-                //
-                try
-                {
-                    _enumerator = _parent._secondE.GetEnumerator();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return Disposable.Empty;
-                }
-
-                return StableCompositeDisposable.Create(
-                    _parent._first.SubscribeSafe(this),
-                    _enumerator
-                );
+                var sink = new _(_comparer, observer, cancel);
+                setSink(sink);
+                return sink.Run(this);
             }
 
-            public void OnNext(TSource value)
+            private sealed class _ : Sink<bool>, IObserver<TSource>
             {
-                var equal = false;
+                private readonly IEqualityComparer<TSource> _comparer;
 
-                try
+                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    if (_enumerator.MoveNext())
+                    _comparer = comparer;
+                }
+
+                private IEnumerator<TSource> _enumerator;
+
+                public IDisposable Run(Enumerable parent)
+                {
+                    //
+                    // Notice the evaluation order of obtaining the enumerator and subscribing to the
+                    // observable sequence is reversed compared to the operator's signature. This is
+                    // required to make sure the enumerator is available as soon as the observer can
+                    // be called. Otherwise, we end up having a race for the initialization and use
+                    // of the _rightEnumerator field.
+                    //
+                    try
                     {
-                        var current = _enumerator.Current;
-                        equal = _parent._comparer.Equals(value, current);
+                        _enumerator = parent._second.GetEnumerator();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return Disposable.Empty;
+                    }
+
+                    return StableCompositeDisposable.Create(
+                        parent._first.SubscribeSafe(this),
+                        _enumerator
+                    );
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var equal = false;
+
+                    try
+                    {
+                        if (_enumerator.MoveNext())
+                        {
+                            var current = _enumerator.Current;
+                            equal = _comparer.Equals(value, current);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    if (!equal)
+                    {
+                        base._observer.OnNext(false);
+                        base._observer.OnCompleted();
+                        base.Dispose();
                     }
                 }
-                catch (Exception exception)
+
+                public void OnError(Exception error)
                 {
-                    base._observer.OnError(exception);
+                    base._observer.OnError(error);
                     base.Dispose();
-                    return;
                 }
 
-                if (!equal)
+                public void OnCompleted()
                 {
-                    base._observer.OnNext(false);
+                    var hasNext = false;
+
+                    try
+                    {
+                        hasNext = _enumerator.MoveNext();
+                    }
+                    catch (Exception exception)
+                    {
+                        base._observer.OnError(exception);
+                        base.Dispose();
+                        return;
+                    }
+
+                    base._observer.OnNext(!hasNext);
                     base._observer.OnCompleted();
                     base.Dispose();
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                var hasNext = false;
-
-                try
-                {
-                    hasNext = _enumerator.MoveNext();
-                }
-                catch (Exception exception)
-                {
-                    base._observer.OnError(exception);
-                    base.Dispose();
-                    return;
-                }
-
-                base._observer.OnNext(!hasNext);
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

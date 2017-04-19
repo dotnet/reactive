@@ -4,118 +4,126 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Count<TSource> : Producer<int>
+    internal static class Count<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Func<TSource, bool> _predicate;
-
-        public Count(IObservable<TSource> source)
+        internal sealed class All : Producer<int>
         {
-            _source = source;
-        }
+            private readonly IObservable<TSource> _source;
 
-        public Count(IObservable<TSource> source, Func<TSource, bool> predicate)
-        {
-            _source = source;
-            _predicate = predicate;
-        }
+            public All(IObservable<TSource> source)
+            {
+                _source = source;
+            }
 
-        protected override IDisposable Run(IObserver<int> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_predicate == null)
+            protected override IDisposable Run(IObserver<int> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
-            else
+
+            private sealed class _ : Sink<int>, IObserver<TSource>
             {
-                var sink = new CountImpl(this, observer, cancel);
+                private int _count;
+
+                public _(IObserver<int> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _count = 0;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    try
+                    {
+                        checked
+                        {
+                            _count++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                    }
+                }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnNext(_count);
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
+            }
+        }
+
+        internal sealed class Predicate : Producer<int>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, bool> _predicate;
+
+            public Predicate(IObservable<TSource> source, Func<TSource, bool> predicate)
+            {
+                _source = source;
+                _predicate = predicate;
+            }
+
+            protected override IDisposable Run(IObserver<int> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_predicate, observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
-        }
 
-        class _ : Sink<int>, IObserver<TSource>
-        {
-            private int _count;
-
-            public _(IObserver<int> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private sealed class _ : Sink<int>, IObserver<TSource>
             {
-                _count = 0;
-            }
+                private readonly Func<TSource, bool> _predicate;
+                private int _count;
 
-            public void OnNext(TSource value)
-            {
-                try
+                public _(Func<TSource, bool> predicate, IObserver<int> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    checked
+                    _predicate = predicate;
+                    _count = 0;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    try
                     {
-                        _count++;
+                        checked
+                        {
+                            if (_predicate(value))
+                            {
+                                _count++;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
                     }
                 }
-                catch (Exception ex)
+
+                public void OnError(Exception error)
                 {
-                    base._observer.OnError(ex);
+                    base._observer.OnError(error);
                     base.Dispose();
                 }
-            }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_count);
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
-
-        class CountImpl : Sink<int>, IObserver<TSource>
-        {
-            private readonly Count<TSource> _parent;
-            private int _count;
-
-            public CountImpl(Count<TSource> parent, IObserver<int> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-                _count = 0;
-            }
-
-            public void OnNext(TSource value)
-            {
-                try
+                public void OnCompleted()
                 {
-                    checked
-                    {
-                        if (_parent._predicate(value))
-                            _count++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
+                    base._observer.OnNext(_count);
+                    base._observer.OnCompleted();
                     base.Dispose();
                 }
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_count);
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

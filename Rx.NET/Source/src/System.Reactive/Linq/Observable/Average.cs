@@ -20,7 +20,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double>, IObserver<double>
+        private sealed class _ : Sink<double>, IObserver<double>
         {
             private double _sum;
             private long _count;
@@ -88,7 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<float>, IObserver<float>
+        private sealed class _ : Sink<float>, IObserver<float>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -156,7 +156,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<decimal>, IObserver<decimal>
+        private sealed class _ : Sink<decimal>, IObserver<decimal>
         {
             private decimal _sum;
             private long _count;
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double>, IObserver<int>
+        private sealed class _ : Sink<double>, IObserver<int>
         {
             private long _sum;
             private long _count;
@@ -292,7 +292,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double>, IObserver<long>
+        private sealed class _ : Sink<double>, IObserver<long>
         {
             private long _sum;
             private long _count;
@@ -360,7 +360,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double?>, IObserver<double?>
+        private sealed class _ : Sink<double?>, IObserver<double?>
         {
             private double _sum;
             private long _count;
@@ -431,7 +431,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<float?>, IObserver<float?>
+        private sealed class _ : Sink<float?>, IObserver<float?>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -502,7 +502,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<decimal?>, IObserver<decimal?>
+        private sealed class _ : Sink<decimal?>, IObserver<decimal?>
         {
             private decimal _sum;
             private long _count;
@@ -573,7 +573,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double?>, IObserver<int?>
+        private sealed class _ : Sink<double?>, IObserver<int?>
         {
             private long _sum;
             private long _count;
@@ -644,7 +644,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<double?>, IObserver<long?>
+        private sealed class _ : Sink<double?>, IObserver<long?>
         {
             private long _sum;
             private long _count;

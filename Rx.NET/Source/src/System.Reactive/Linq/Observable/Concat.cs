@@ -22,12 +22,9 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run(_sources);
         }
 
-        public IEnumerable<IObservable<TSource>> GetSources()
-        {
-            return _sources;
-        }
+        public IEnumerable<IObservable<TSource>> GetSources() => _sources;
 
-        class _ : ConcatSink<TSource>
+        private sealed class _ : ConcatSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

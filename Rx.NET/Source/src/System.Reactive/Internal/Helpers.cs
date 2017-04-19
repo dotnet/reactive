@@ -39,5 +39,34 @@ namespace System.Reactive
 
             return source;
         }
+
+        public static bool All(this bool[] values)
+        {
+            foreach (var value in values)
+            {
+                if (!value)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool AllExcept(this bool[] values, int index)
+        {
+            for (var i = 0; i < values.Length; i++)
+            {
+                if (i != index)
+                {
+                    if (!values[i])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 }

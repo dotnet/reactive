@@ -20,7 +20,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TResult>, IObserver<TSource>
+        private sealed class _ : Sink<TResult>, IObserver<TSource>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

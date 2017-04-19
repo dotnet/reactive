@@ -31,27 +31,24 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TResult>, IObserver<TResult>
+        private sealed class _ : Sink<TResult>, IObserver<TResult>
         {
-            private readonly Case<TValue, TResult> _parent;
-
-            public _(Case<TValue, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(Case<TValue, TResult> parent)
             {
                 var result = default(IObservable<TResult>);
                 try
                 {
-                    result = _parent.Eval();
+                    result = parent.Eval();
                 }
                 catch (Exception exception)
                 {

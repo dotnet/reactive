@@ -4,109 +4,115 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Any<TSource> : Producer<bool>
+    internal static class Any<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Func<TSource, bool> _predicate;
-
-        public Any(IObservable<TSource> source)
+        internal sealed class Count : Producer<bool>
         {
-            _source = source;
-        }
+            private readonly IObservable<TSource> _source;
 
-        public Any(IObservable<TSource> source, Func<TSource, bool> predicate)
-        {
-            _source = source;
-            _predicate = predicate;
-        }
-
-        protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_predicate != null)
+            public Count(IObservable<TSource> source)
             {
-                var sink = new AnyImpl(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
+                _source = source;
             }
-            else
+
+            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
-        }
 
-        class _ : Sink<bool>, IObserver<TSource>
-        {
-            public _(IObserver<bool> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private sealed class _ : Sink<bool>, IObserver<TSource>
             {
-            }
-
-            public void OnNext(TSource value)
-            {
-                base._observer.OnNext(true);
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(false);
-                base._observer.OnCompleted();
-                base.Dispose();
-            }
-        }
-
-        class AnyImpl : Sink<bool>, IObserver<TSource>
-        {
-            private readonly Any<TSource> _parent;
-
-            public AnyImpl(Any<TSource> parent, IObserver<bool> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var res = false;
-                try
+                public _(IObserver<bool> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    res = _parent._predicate(value);
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
-                    base.Dispose();
-                    return;
                 }
 
-                if (res)
+                public void OnNext(TSource value)
                 {
                     base._observer.OnNext(true);
                     base._observer.OnCompleted();
                     base.Dispose();
                 }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnNext(false);
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
+            }
+        }
+
+        internal sealed class Predicate : Producer<bool>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, bool> _predicate;
+
+            public Predicate(IObservable<TSource> source, Func<TSource, bool> predicate)
+            {
+                _source = source;
+                _predicate = predicate;
             }
 
-            public void OnError(Exception error)
+            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                base._observer.OnError(error);
-                base.Dispose();
+                var sink = new _(_predicate, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
             }
 
-            public void OnCompleted()
+            private sealed class _ : Sink<bool>, IObserver<TSource>
             {
-                base._observer.OnNext(false);
-                base._observer.OnCompleted();
-                base.Dispose();
+                private readonly Func<TSource, bool> _predicate;
+
+                public _(Func<TSource, bool> predicate, IObserver<bool> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _predicate = predicate;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var res = false;
+                    try
+                    {
+                        res = _predicate(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    if (res)
+                    {
+                        base._observer.OnNext(true);
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
+                }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    base._observer.OnNext(false);
+                    base._observer.OnCompleted();
+                    base.Dispose();
+                }
             }
         }
     }

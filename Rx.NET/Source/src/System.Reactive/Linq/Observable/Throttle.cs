@@ -24,17 +24,19 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_source);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Throttle<TSource> _parent;
+            private readonly TimeSpan _dueTime;
+            private readonly IScheduler _scheduler;
 
             public _(Throttle<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _dueTime = parent._dueTime;
+                _scheduler = parent._scheduler;
             }
 
             private object _gate;
@@ -43,7 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private SerialDisposable _cancelable;
             private ulong _id;
 
-            public IDisposable Run()
+            public IDisposable Run(IObservable<TSource> source)
             {
                 _gate = new object();
                 _value = default(TSource);
@@ -51,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancelable = new SerialDisposable();
                 _id = 0UL;
 
-                var subscription = _parent._source.SubscribeSafe(this);
+                var subscription = source.SubscribeSafe(this);
 
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
@@ -68,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 var d = new SingleAssignmentDisposable();
                 _cancelable.Disposable = d;
-                d.Disposable = _parent._scheduler.Schedule(currentid, _parent._dueTime, Propagate);
+                d.Disposable = _scheduler.Schedule(currentid, _dueTime, Propagate);
             }
 
             private IDisposable Propagate(IScheduler self, ulong currentid)
@@ -94,7 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
-                }                        
+                }
             }
 
             public void OnCompleted()
@@ -105,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_hasValue)
                         base._observer.OnNext(_value);
-                    
+
                     base._observer.OnCompleted();
                     base.Dispose();
 
@@ -131,17 +133,17 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly Throttle<TSource, TThrottle> _parent;
+            private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
             public _(Throttle<TSource, TThrottle> parent, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _throttleSelector = parent._throttleSelector;
             }
 
             private object _gate;
@@ -150,7 +152,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private SerialDisposable _cancelable;
             private ulong _id;
 
-            public IDisposable Run()
+            public IDisposable Run(Throttle<TSource, TThrottle> parent)
             {
                 _gate = new object();
                 _value = default(TSource);
@@ -158,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _cancelable = new SerialDisposable();
                 _id = 0UL;
 
-                var subscription = _parent._source.SubscribeSafe(this);
+                var subscription = parent._source.SubscribeSafe(this);
 
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
@@ -168,7 +170,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var throttle = default(IObservable<TThrottle>);
                 try
                 {
-                    throttle = _parent._throttleSelector(value);
+                    throttle = _throttleSelector(value);
                 }
                 catch (Exception error)
                 {
@@ -192,7 +194,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 var d = new SingleAssignmentDisposable();
                 _cancelable.Disposable = d;
-                d.Disposable = throttle.SubscribeSafe(new Delta(this, value, currentid, d));
+                d.Disposable = throttle.SubscribeSafe(new ThrottleObserver(this, value, currentid, d));
             }
 
             public void OnError(Exception error)
@@ -226,14 +228,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class Delta : IObserver<TThrottle>
+            private sealed class ThrottleObserver : IObserver<TThrottle>
             {
                 private readonly _ _parent;
                 private readonly TSource _value;
                 private readonly ulong _currentid;
                 private readonly IDisposable _self;
 
-                public Delta(_ parent, TSource value, ulong currentid, IDisposable self)
+                public ThrottleObserver(_ parent, TSource value, ulong currentid, IDisposable self)
                 {
                     _parent = parent;
                     _value = value;

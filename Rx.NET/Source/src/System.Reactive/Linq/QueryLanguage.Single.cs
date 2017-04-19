@@ -5,8 +5,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
@@ -41,7 +39,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return new Buffer<TSource>(source, count, skip);
+            return new Buffer<TSource>.Count(source, count, skip);
         }
 
         #endregion
@@ -92,7 +90,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext)
         {
-            return Do_<TSource>(source, onNext, Stubs<Exception>.Ignore, Stubs.Nop);
+            return new Do<TSource>.OnNext(source, onNext);
         }
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
@@ -112,12 +110,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Do<TSource>(IObservable<TSource> source, IObserver<TSource> observer)
         {
-            return Do_(source, observer.OnNext, observer.OnError, observer.OnCompleted);
+            return new Do<TSource>.Observer(source, observer);
         }
 
         private static IObservable<TSource> Do_<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
-            return new Do<TSource>(source, onNext, onError, onCompleted);
+            return new Do<TSource>.Actions(source, onNext, onError, onCompleted);
         }
 
         #endregion
@@ -211,7 +209,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count)
         {
-            return new SkipLast<TSource>(source, count);
+            return new SkipLast<TSource>.Count(source, count);
         }
 
         #endregion
@@ -272,12 +270,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
         {
-            return new TakeLast<TSource>(source, count, scheduler);
+            return new TakeLast<TSource>.Count(source, count, scheduler);
         }
 
         public virtual IObservable<IList<TSource>> TakeLastBuffer<TSource>(IObservable<TSource> source, int count)
         {
-            return new TakeLastBuffer<TSource>(source, count);
+            return new TakeLastBuffer<TSource>.Count(source, count);
         }
 
         #endregion
@@ -296,7 +294,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<IObservable<TSource>> Window_<TSource>(IObservable<TSource> source, int count, int skip)
         {
-            return new Window<TSource>(source, count, skip);
+            return new Window<TSource>.Count(source, count, skip);
         }
 
         #endregion

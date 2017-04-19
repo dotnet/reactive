@@ -15,7 +15,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal sealed class FromEventPattern
     {
-        public class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
+        public sealed class Impl<TDelegate, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TEventArgs>>
         {
             private readonly Func<EventHandler<TEventArgs>, TDelegate> _conversion;
 
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public class Impl<TDelegate, TSender, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TSender, TEventArgs>>
+        public sealed class Impl<TDelegate, TSender, TEventArgs> : ClassicEventProducer<TDelegate, EventPattern<TSender, TEventArgs>>
         {
             public Impl(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
                 : base(addHandler, removeHandler, scheduler)
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        public class Handler<TSender, TEventArgs, TResult> : EventProducer<Delegate, TResult>
+        public sealed class Handler<TSender, TEventArgs, TResult> : EventProducer<Delegate, TResult>
         {
             private readonly object _target;
             private readonly Type _delegateType;
@@ -103,14 +103,12 @@ namespace System.Reactive.Linq.ObservableImpl
 #if HAS_WINRT
                     if (_isWinRT)
                     {
-                        var token = _addMethod.Invoke(_target, new object[] { handler });
-                        removeHandler = () => _removeMethod.Invoke(_target, new object[] { token });
+                        removeHandler = AddHandlerCoreWinRT(handler);
                     }
                     else
 #endif
                     {
-                        _addMethod.Invoke(_target, new object[] { handler });
-                        removeHandler = () => _removeMethod.Invoke(_target, new object[] { handler });
+                        removeHandler = AddHandlerCore(handler);
                     }
                 }
                 catch (TargetInvocationException tie)
@@ -130,6 +128,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 });
             }
+
+            private Action AddHandlerCore(Delegate handler)
+            {
+                _addMethod.Invoke(_target, new object[] { handler });
+                return () => _removeMethod.Invoke(_target, new object[] { handler });
+            }
+
+#if HAS_WINRT
+            private Action AddHandlerCoreWinRT(Delegate handler)
+            {
+                var token = _addMethod.Invoke(_target, new object[] { handler });
+                return () => _removeMethod.Invoke(_target, new object[] { token });
+            }
+#endif
         }
     }
 }

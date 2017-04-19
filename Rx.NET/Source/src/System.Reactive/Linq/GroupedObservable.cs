@@ -7,29 +7,25 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
-    class GroupedObservable<TKey, TElement> : ObservableBase<TElement>, IGroupedObservable<TKey, TElement>
+    internal sealed class GroupedObservable<TKey, TElement> : ObservableBase<TElement>, IGroupedObservable<TKey, TElement>
     {
-        private readonly TKey _key;
         private readonly IObservable<TElement> _subject;
         private readonly RefCountDisposable _refCount;
 
         public GroupedObservable(TKey key, ISubject<TElement> subject, RefCountDisposable refCount)
         {
-            _key = key;
+            Key = key;
             _subject = subject;
             _refCount = refCount;
         }
 
         public GroupedObservable(TKey key, ISubject<TElement> subject)
         {
-            _key = key;
+            Key = key;
             _subject = subject;
         }
 
-        public TKey Key
-        {
-            get { return _key; }
-        }
+        public TKey Key { get; }
 
         protected override IDisposable SubscribeCore(IObserver<TElement> observer)
         {

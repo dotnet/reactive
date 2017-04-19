@@ -19,24 +19,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _( observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>
+        private sealed class _ : Sink<TSource>
         {
-            private readonly Amb<TSource> _parent;
-
-            public _(Amb<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
             private AmbState _choice;
 
-            public IDisposable Run()
+            public IDisposable Run(Amb<TSource> parent)
             {
                 var ls = new SingleAssignmentDisposable();
                 var rs = new SingleAssignmentDisposable();
@@ -54,13 +51,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _choice = AmbState.Neither;
 
-                ls.Disposable = _parent._left.SubscribeSafe(lo);
-                rs.Disposable = _parent._right.SubscribeSafe(ro);
+                ls.Disposable = parent._left.SubscribeSafe(lo);
+                rs.Disposable = parent._right.SubscribeSafe(ro);
 
                 return d;
             }
 
-            class DecisionObserver : IObserver<TSource>
+            private sealed class DecisionObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
                 private readonly AmbState _me;
@@ -92,7 +89,9 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
 
                         if (_parent._choice == _me)
+                        {
                             _parent._observer.OnNext(value);
+                        }
                     }
                 }
 
@@ -137,7 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            class AmbObserver : IObserver<TSource>
+            private sealed class AmbObserver : IObserver<TSource>
             {
                 public IObserver<TSource> _target;
 
@@ -161,11 +160,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            enum AmbState
+            private enum AmbState
             {
                 Left,
                 Right,
-                Neither
+                Neither,
             }
         }
     }

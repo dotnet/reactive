@@ -25,30 +25,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(this);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly RefCount<TSource> _parent;
-
-            public _(RefCount<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(RefCount<TSource> parent)
             {
-                var subscription = _parent._source.SubscribeSafe(this);
+                var subscription = parent._source.SubscribeSafe(this);
 
-                lock (_parent._gate)
+                lock (parent._gate)
                 {
-                    if (++_parent._count == 1)
+                    if (++parent._count == 1)
                     {
-                        _parent._connectableSubscription = _parent._source.Connect();
+                        parent._connectableSubscription = parent._source.Connect();
                     }
                 }
 
@@ -56,11 +53,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     subscription.Dispose();
 
-                    lock (_parent._gate)
+                    lock (parent._gate)
                     {
-                        if (--_parent._count == 0)
+                        if (--parent._count == 0)
                         {
-                            _parent._connectableSubscription.Dispose();
+                            parent._connectableSubscription.Dispose();
                         }
                     }
                 });

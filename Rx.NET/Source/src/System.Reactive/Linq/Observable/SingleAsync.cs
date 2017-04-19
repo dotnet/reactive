@@ -4,120 +4,41 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class SingleAsync<TSource> : Producer<TSource>
+    internal static class SingleAsync<TSource>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly Func<TSource, bool> _predicate;
-        private readonly bool _throwOnEmpty;
-
-        public SingleAsync(IObservable<TSource> source, Func<TSource, bool> predicate, bool throwOnEmpty)
+        internal sealed class Sequence : Producer<TSource>
         {
-            _source = source;
-            _predicate = predicate;
-            _throwOnEmpty = throwOnEmpty;
-        }
+            private readonly IObservable<TSource> _source;
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            if (_predicate != null)
+            public Sequence(IObservable<TSource> source)
             {
-                var sink = new SingleAsyncImpl(this, observer, cancel);
+                _source = source;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(observer, cancel);
                 setSink(sink);
                 return _source.SubscribeSafe(sink);
             }
-            else
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
             {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
-        }
+                private TSource _value;
+                private bool _seenValue;
 
-        class _ : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly SingleAsync<TSource> _parent;
-            private TSource _value;
-            private bool _seenValue;
-
-            public _(SingleAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-
-                _value = default(TSource);
-                _seenValue = false;
-            }
-
-            public void OnNext(TSource value)
-            {
-                if (_seenValue)
+                public _(IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT));
-                    base.Dispose();
-                    return;
+                    _value = default(TSource);
+                    _seenValue = false;
                 }
 
-                _value = value;
-                _seenValue = true;
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                if (!_seenValue && _parent._throwOnEmpty)
-                {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
-                }
-                else
-                {
-                    base._observer.OnNext(_value);
-                    base._observer.OnCompleted();
-                }
-
-                base.Dispose();
-            }
-        }
-
-        class SingleAsyncImpl : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly SingleAsync<TSource> _parent;
-            private TSource _value;
-            private bool _seenValue;
-
-            public SingleAsyncImpl(SingleAsync<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
-            {
-                _parent = parent;
-
-                _value = default(TSource);
-                _seenValue = false;
-            }
-
-            public void OnNext(TSource value)
-            {
-                var b = false;
-
-                try
-                {
-                    b = _parent._predicate(value);
-                }
-                catch (Exception ex)
-                {
-                    base._observer.OnError(ex);
-                    base.Dispose();
-                    return;
-                }
-
-                if (b)
+                public void OnNext(TSource value)
                 {
                     if (_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT));
+                        base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT));
                         base.Dispose();
                         return;
                     }
@@ -125,27 +46,112 @@ namespace System.Reactive.Linq.ObservableImpl
                     _value = value;
                     _seenValue = true;
                 }
-            }
 
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                if (!_seenValue && _parent._throwOnEmpty)
+                public void OnError(Exception error)
                 {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
-                }
-                else
-                {
-                    base._observer.OnNext(_value);
-                    base._observer.OnCompleted();
+                    base._observer.OnError(error);
+                    base.Dispose();
                 }
 
-                base.Dispose();
+                public void OnCompleted()
+                {
+                    if (!_seenValue)
+                    {
+                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                    }
+                    else
+                    {
+                        base._observer.OnNext(_value);
+                        base._observer.OnCompleted();
+                    }
+
+                    base.Dispose();
+                }
+            }
+        }
+
+        internal sealed class Predicate : Producer<TSource>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly Func<TSource, bool> _predicate;
+
+            public Predicate(IObservable<TSource> source, Func<TSource, bool> predicate)
+            {
+                _source = source;
+                _predicate = predicate;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(_predicate, observer, cancel);
+                setSink(sink);
+                return _source.SubscribeSafe(sink);
+            }
+
+            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            {
+                private readonly Func<TSource, bool> _predicate;
+                private TSource _value;
+                private bool _seenValue;
+
+                public _(Func<TSource, bool> predicate, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
+                {
+                    _predicate = predicate;
+
+                    _value = default(TSource);
+                    _seenValue = false;
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var b = false;
+
+                    try
+                    {
+                        b = _predicate(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        base._observer.OnError(ex);
+                        base.Dispose();
+                        return;
+                    }
+
+                    if (b)
+                    {
+                        if (_seenValue)
+                        {
+                            base._observer.OnError(new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_MATCHING_ELEMENT));
+                            base.Dispose();
+                            return;
+                        }
+
+                        _value = value;
+                        _seenValue = true;
+                    }
+                }
+
+                public void OnError(Exception error)
+                {
+                    base._observer.OnError(error);
+                    base.Dispose();
+                }
+
+                public void OnCompleted()
+                {
+                    if (!_seenValue)
+                    {
+                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
+                    }
+                    else
+                    {
+                        base._observer.OnNext(_value);
+                        base._observer.OnCompleted();
+                    }
+
+                    base.Dispose();
+                }
             }
         }
     }

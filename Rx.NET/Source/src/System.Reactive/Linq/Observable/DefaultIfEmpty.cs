@@ -17,20 +17,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_defaultValue, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly DefaultIfEmpty<TSource> _parent;
+            private readonly TSource _defaultValue;
             private bool _found;
 
-            public _(DefaultIfEmpty<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(TSource defaultValue, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _defaultValue = defaultValue;
                 _found = false;
             }
 
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public void OnCompleted()
             {
                 if (!_found)
-                    base._observer.OnNext(_parent._defaultValue);
+                    base._observer.OnNext(_defaultValue);
                 base._observer.OnCompleted();
                 base.Dispose();
             }

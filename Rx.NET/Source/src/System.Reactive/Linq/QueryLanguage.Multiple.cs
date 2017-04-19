@@ -2,13 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
@@ -51,7 +47,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferClosing>(IObservable<TSource> source, Func<IObservable<TBufferClosing>> bufferClosingSelector)
         {
-            return new Buffer<TSource, TBufferClosing>(source, bufferClosingSelector);
+            return new Buffer<TSource, TBufferClosing>.Selector(source, bufferClosingSelector);
         }
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferOpening, TBufferClosing>(IObservable<TSource> source, IObservable<TBufferOpening> bufferOpenings, Func<TBufferOpening, IObservable<TBufferClosing>> bufferClosingSelector)
@@ -61,7 +57,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IList<TSource>> Buffer<TSource, TBufferBoundary>(IObservable<TSource> source, IObservable<TBufferBoundary> bufferBoundaries)
         {
-            return new Buffer<TSource, TBufferBoundary>(source, bufferBoundaries);
+            return new Buffer<TSource, TBufferBoundary>.Boundaries(source, bufferBoundaries);
         }
 
         #endregion
@@ -248,7 +244,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<Task<TSource>> sources)
         {
-            return new Merge<TSource>(sources);
+            return new Merge<TSource>.Tasks(sources);
         }
 
         public virtual IObservable<TSource> Merge<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
@@ -298,12 +294,12 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return new Merge<TSource>(sources);
+            return new Merge<TSource>.Observables(sources);
         }
 
         private static IObservable<TSource> Merge_<TSource>(IObservable<IObservable<TSource>> sources, int maxConcurrent)
         {
-            return new Merge<TSource>(sources, maxConcurrent);
+            return new Merge<TSource>.ObservablesMaxConcurrency(sources, maxConcurrent);
         }
 
         #endregion
@@ -373,7 +369,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowClosing>(IObservable<TSource> source, Func<IObservable<TWindowClosing>> windowClosingSelector)
         {
-            return new Window<TSource, TWindowClosing>(source, windowClosingSelector);
+            return new Window<TSource, TWindowClosing>.Selector(source, windowClosingSelector);
         }
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowOpening, TWindowClosing>(IObservable<TSource> source, IObservable<TWindowOpening> windowOpenings, Func<TWindowOpening, IObservable<TWindowClosing>> windowClosingSelector)
@@ -383,7 +379,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<IObservable<TSource>> Window<TSource, TWindowBoundary>(IObservable<TSource> source, IObservable<TWindowBoundary> windowBoundaries)
         {
-            return new Window<TSource, TWindowBoundary>(source, windowBoundaries);
+            return new Window<TSource, TWindowBoundary>.Boundaries(source, windowBoundaries);
         }
 
         #endregion
@@ -401,7 +397,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
-            return new Zip<TFirst, TSecond, TResult>(first, second, resultSelector);
+            return new Zip<TFirst, TSecond, TResult>.Observable(first, second, resultSelector);
         }
 
         public virtual IObservable<TResult> Zip<TSource, TResult>(IEnumerable<IObservable<TSource>> sources, Func<IList<TSource>, TResult> resultSelector)
@@ -502,7 +498,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Zip<TFirst, TSecond, TResult>(IObservable<TFirst> first, IEnumerable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
-            return new Zip<TFirst, TSecond, TResult>(first, second, resultSelector);
+            return new Zip<TFirst, TSecond, TResult>.Enumerable(first, second, resultSelector);
         }
 
         #endregion

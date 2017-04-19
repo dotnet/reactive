@@ -19,29 +19,29 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_value, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(_scheduler);
         }
 
-        class _ : Sink<TResult>
+        private sealed class _ : Sink<TResult>
         {
-            private readonly Return<TResult> _parent;
+            private readonly TResult _value;
 
-            public _(Return<TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _value = value;
             }
 
-            public IDisposable Run()
+            public IDisposable Run(IScheduler scheduler)
             {
-                return _parent._scheduler.Schedule(Invoke);
+                return scheduler.Schedule(Invoke);
             }
 
             private void Invoke()
             {
-                base._observer.OnNext(_parent._value);
+                base._observer.OnNext(_value);
                 base._observer.OnCompleted();
                 base.Dispose();
             }

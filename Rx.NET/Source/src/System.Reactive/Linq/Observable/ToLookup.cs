@@ -29,23 +29,25 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
+        private sealed class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
         {
-            private readonly ToLookup<TSource, TKey, TElement> _parent;
-            private Lookup<TKey, TElement> _lookup;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly Func<TSource, TElement> _elementSelector;
+            private readonly Lookup<TKey, TElement> _lookup;
 
             public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _lookup = new Lookup<TKey, TElement>(_parent._comparer);
+                _keySelector = parent._keySelector;
+                _elementSelector = parent._elementSelector;
+                _lookup = new Lookup<TKey, TElement>(parent._comparer);
             }
 
             public void OnNext(TSource value)
             {
                 try
                 {
-                    _lookup.Add(_parent._keySelector(value), _parent._elementSelector(value));
+                    _lookup.Add(_keySelector(value), _elementSelector(value));
                 }
                 catch (Exception ex)
                 {

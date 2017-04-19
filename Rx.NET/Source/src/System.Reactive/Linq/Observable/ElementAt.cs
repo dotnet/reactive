@@ -8,32 +8,28 @@ namespace System.Reactive.Linq.ObservableImpl
     {
         private readonly IObservable<TSource> _source;
         private readonly int _index;
-        private readonly bool _throwOnEmpty;
 
-        public ElementAt(IObservable<TSource> source, int index, bool throwOnEmpty)
+        public ElementAt(IObservable<TSource> source, int index)
         {
             _source = source;
             _index = index;
-            _throwOnEmpty = throwOnEmpty;
         }
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_index, observer, cancel);
             setSink(sink);
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
-            private readonly ElementAt<TSource> _parent;
             private int _i;
 
-            public _(ElementAt<TSource> parent, IObserver<TSource> observer, IDisposable cancel)
+            public _(int index, IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
-                _i = _parent._index;
+                _i = index;
             }
 
             public void OnNext(TSource value)
@@ -56,16 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
-                if (_parent._throwOnEmpty)
-                {
-                    base._observer.OnError(new ArgumentOutOfRangeException("index"));
-                }
-                else
-                {
-                    base._observer.OnNext(default(TSource));
-                    base._observer.OnCompleted();
-                }
-                
+                base._observer.OnError(new ArgumentOutOfRangeException("index"));
                 base.Dispose();
             }
         }

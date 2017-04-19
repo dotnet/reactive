@@ -17,24 +17,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<TValue> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_observableFactory, observer, cancel);
             setSink(sink);
             return sink.Run();
         }
 
-        public IObservable<TValue> Eval()
-        {
-            return _observableFactory();
-        }
+        public IObservable<TValue> Eval() => _observableFactory();
 
-        class _ : Sink<TValue>, IObserver<TValue>
+        private sealed class _ : Sink<TValue>, IObserver<TValue>
         {
-            private readonly Defer<TValue> _parent;
+            private readonly Func<IObservable<TValue>> _observableFactory;
 
-            public _(Defer<TValue> parent, IObserver<TValue> observer, IDisposable cancel)
+            public _(Func<IObservable<TValue>> observableFactory, IObserver<TValue> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _observableFactory = observableFactory;
             }
 
             public IDisposable Run()
@@ -42,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var result = default(IObservable<TValue>);
                 try
                 {
-                    result = _parent.Eval();
+                    result = _observableFactory();
                 }
                 catch (Exception exception)
                 {

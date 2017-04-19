@@ -24,6 +24,7 @@ for (var i = 3; i <= 16; i++)
     var ts = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
     var os = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<T" + j + "> source" + j));
     var vs = string.Join(", ", Enumerable.Range(1, i).Select(j => "_observer" + j + ".Values.Dequeue()"));
+    var ss = string.Join(", ", Enumerable.Range(1, i).Select(j => "_source" + j));
 #>
     internal sealed class Zip<<#=ts#>, TResult> : Producer<TResult>
     {
@@ -52,19 +53,19 @@ for (var j = 1; j <= i; j++)
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            var sink = new _(this, observer, cancel);
+            var sink = new _(_resultSelector, observer, cancel);
             setSink(sink);
-            return sink.Run();
+            return sink.Run(<#=ss#>);
         }
 
-        class _ : ZipSink<TResult>
+        private sealed class _ : ZipSink<TResult>
         {
-            private readonly Zip<<#=ts#>, TResult> _parent;
+            private readonly Func<<#=ts#>, TResult> _resultSelector;
 
-            public _(Zip<<#=ts#>, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
+            public _(Func<<#=ts#>, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
                 : base(<#=i#>, observer, cancel)
             {
-                _parent = parent;
+                _resultSelector = resultSelector;
             }
 
 <#
@@ -76,7 +77,7 @@ for (var j = 1; j <= i; j++)
 }
 #>
 
-            public IDisposable Run()
+            public IDisposable Run(<#=os#>)
             {
                 var disposables = new IDisposable[<#=i + 1#>];
 
@@ -95,7 +96,7 @@ for (var j = 1; j <= i; j++)
 for (var j = 1; j <= i; j++)
 {
 #>
-                d<#=j#>.Disposable = _parent._source<#=j#>.SubscribeSafe(_observer<#=j#>);
+                d<#=j#>.Disposable = source<#=j#>.SubscribeSafe(_observer<#=j#>);
 <#
 }
 #>
@@ -115,10 +116,7 @@ for (var j = 1; j <= i; j++)
                 return StableCompositeDisposable.Create(disposables);
             }
 
-            protected override TResult GetResult()
-            {
-                return _parent._resultSelector(<#=vs#>);
-            }
+            protected override TResult GetResult() => _resultSelector(<#=vs#>);
         }
     }
 

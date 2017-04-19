@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return sink.Run(_sources);
         }
 
-        class _ : TailRecursiveSink<TSource>
+        private sealed class _ : TailRecursiveSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

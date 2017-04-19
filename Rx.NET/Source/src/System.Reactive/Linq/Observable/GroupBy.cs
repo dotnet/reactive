@@ -25,40 +25,44 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        private CompositeDisposable _groupDisposable;
-        private RefCountDisposable _refCountDisposable;
-
         protected override IDisposable Run(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
-            _groupDisposable = new CompositeDisposable();
-            _refCountDisposable = new RefCountDisposable(_groupDisposable);
-
             var sink = new _(this, observer, cancel);
             setSink(sink);
-            _groupDisposable.Add(_source.SubscribeSafe(sink));
-
-            return _refCountDisposable;
+            return sink.Run(_source);
         }
 
-        class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        private sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
         {
-            private readonly GroupBy<TSource, TKey, TElement> _parent;
-            private readonly Dictionary<TKey, ISubject<TElement>> _map;
-            private ISubject<TElement> _null;
+            private readonly Func<TSource, TKey> _keySelector;
+            private readonly Func<TSource, TElement> _elementSelector;
+            private readonly Dictionary<TKey, Subject<TElement>> _map;
+
+            private RefCountDisposable _refCountDisposable;
+            private Subject<TElement> _null;
 
             public _(GroupBy<TSource, TKey, TElement> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _parent = parent;
+                _keySelector = parent._keySelector;
+                _elementSelector = parent._elementSelector;
 
-                if (_parent._capacity.HasValue)
+                if (parent._capacity.HasValue)
                 {
-                    _map = new Dictionary<TKey, ISubject<TElement>>(_parent._capacity.Value, _parent._comparer);
+                    _map = new Dictionary<TKey, Subject<TElement>>(parent._capacity.Value, parent._comparer);
                 }
                 else
                 {
-                    _map = new Dictionary<TKey, ISubject<TElement>>(_parent._comparer);
+                    _map = new Dictionary<TKey, Subject<TElement>>(parent._comparer);
                 }
+            }
+
+            public IDisposable Run(IObservable<TSource> source)
+            {
+                var sourceSubscription = new SingleAssignmentDisposable();
+                _refCountDisposable = new RefCountDisposable(sourceSubscription);
+                sourceSubscription.Disposable = source.SubscribeSafe(this);
+                return _refCountDisposable;
             }
 
             public void OnNext(TSource value)
@@ -66,7 +70,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var key = default(TKey);
                 try
                 {
-                    key = _parent._keySelector(value);
+                    key = _keySelector(value);
                 }
                 catch (Exception exception)
                 {
@@ -75,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
 
                 var fireNewMapEntry = false;
-                var writer = default(ISubject<TElement>);
+                var writer = default(Subject<TElement>);
                 try
                 {
                     //
@@ -124,14 +128,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (fireNewMapEntry)
                 {
-                    var group = new GroupedObservable<TKey, TElement>(key, writer, _parent._refCountDisposable);
+                    var group = new GroupedObservable<TKey, TElement>(key, writer, _refCountDisposable);
                     _observer.OnNext(group);
                 }
 
                 var element = default(TElement);
                 try
                 {
-                    element = _parent._elementSelector(value);
+                    element = _elementSelector(value);
                 }
                 catch (Exception exception)
                 {
@@ -149,8 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
-                if (_null != null)
-                    _null.OnCompleted();
+                _null?.OnCompleted();
 
                 foreach (var w in _map.Values)
                     w.OnCompleted();
@@ -161,8 +164,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void Error(Exception exception)
             {
-                if (_null != null)
-                    _null.OnError(exception);
+                _null?.OnError(exception);
 
                 foreach (var w in _map.Values)
                     w.OnError(exception);

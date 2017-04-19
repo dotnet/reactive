@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
@@ -118,7 +116,7 @@ namespace System.Reactive.Linq
         {
             using (var evt = new WaitAndSetOnce())
             {
-                var sink = new ForEach<TSource>._(onNext, () => evt.Set());
+                var sink = new ForEach<TSource>.Observer(onNext, () => evt.Set());
 
                 using (source.SubscribeSafe(sink))
                 {
@@ -133,7 +131,7 @@ namespace System.Reactive.Linq
         {
             using (var evt = new WaitAndSetOnce())
             {
-                var sink = new ForEach<TSource>.ForEachImpl(onNext, () => evt.Set());
+                var sink = new ForEach<TSource>.ObserverIndexed(onNext, () => evt.Set());
 
                 using (source.SubscribeSafe(sink))
                 {
