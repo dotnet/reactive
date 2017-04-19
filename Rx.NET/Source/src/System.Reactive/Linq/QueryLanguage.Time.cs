@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Delay_<TSource>(IObservable<TSource> source, TimeSpan dueTime, IScheduler scheduler)
         {
-            return new Delay<TSource>(source, dueTime, scheduler);
+            return new Delay<TSource>.Relative(source, dueTime, scheduler);
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Delay_<TSource>(IObservable<TSource> source, DateTimeOffset dueTime, IScheduler scheduler)
         {
-            return new Delay<TSource>(source, dueTime, scheduler);
+            return new Delay<TSource>.Absolute(source, dueTime, scheduler);
         }
 
         #endregion
