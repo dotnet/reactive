@@ -68,8 +68,7 @@ namespace System.Reactive.Concurrency
         private static T As<T>(IScheduler scheduler)
             where T : class
         {
-            var svc = scheduler as IServiceProvider;
-            if (svc != null)
+            if (scheduler is IServiceProvider svc)
             {
                 return (T)svc.GetService(typeof(T));
             }

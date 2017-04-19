@@ -251,8 +251,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Skip_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            var skip = source as Skip<TSource>.Time;
-            if (skip != null && skip._scheduler == scheduler)
+            if (source is Skip<TSource>.Time skip && skip._scheduler == scheduler)
                 return skip.Combine(duration);
 
             return new Skip<TSource>.Time(source, duration, scheduler);
@@ -293,8 +292,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> SkipUntil_<TSource>(IObservable<TSource> source, DateTimeOffset startTime, IScheduler scheduler)
         {
-            var skipUntil = source as SkipUntil<TSource>;
-            if (skipUntil != null && skipUntil._scheduler == scheduler)
+            if (source is SkipUntil<TSource> skipUntil && skipUntil._scheduler == scheduler)
                 return skipUntil.Combine(startTime);
 
             return new SkipUntil<TSource>(source, startTime, scheduler);
@@ -316,8 +314,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, TimeSpan duration, IScheduler scheduler)
         {
-            var take = source as Take<TSource>.Time;
-            if (take != null && take._scheduler == scheduler)
+            if (source is Take<TSource>.Time take && take._scheduler == scheduler)
                 return take.Combine(duration);
 
             return new Take<TSource>.Time(source, duration, scheduler);
@@ -378,8 +375,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> TakeUntil_<TSource>(IObservable<TSource> source, DateTimeOffset endTime, IScheduler scheduler)
         {
-            var takeUntil = source as TakeUntil<TSource>;
-            if (takeUntil != null && takeUntil._scheduler == scheduler)
+            if (source is TakeUntil<TSource> takeUntil && takeUntil._scheduler == scheduler)
                 return takeUntil.Combine(endTime);
 
             return new TakeUntil<TSource>(source, endTime, scheduler);

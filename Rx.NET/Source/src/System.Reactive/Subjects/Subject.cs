@@ -141,8 +141,7 @@ namespace System.Reactive.Subjects
                     return Disposable.Empty;
                 }
 
-                var done = oldObserver as DoneObserver<T>;
-                if (done != null)
+                if (oldObserver is DoneObserver<T> done)
                 {
                     observer.OnError(done.Exception);
                     return Disposable.Empty;
@@ -154,8 +153,7 @@ namespace System.Reactive.Subjects
                 }
                 else
                 {
-                    var obs = oldObserver as Observer<T>;
-                    if (obs != null)
+                    if (oldObserver is Observer<T> obs)
                     {
                         newObserver = obs.Add(observer);
                     }
@@ -203,8 +201,7 @@ namespace System.Reactive.Subjects
                 if (oldObserver == DisposedObserver<T>.Instance || oldObserver is DoneObserver<T>)
                     return;
 
-                var obs = oldObserver as Observer<T>;
-                if (obs != null)
+                if (oldObserver is Observer<T> obs)
                 {
                     newObserver = obs.Remove(observer);
                 }

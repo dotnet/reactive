@@ -16,8 +16,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source)
         {
-            var asObservable = source as AsObservable<TSource>;
-            if (asObservable != null)
+            if (source is AsObservable<TSource> asObservable)
                 return asObservable;
 
             return new AsObservable<TSource>(source);
@@ -48,8 +47,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Dematerialize<TSource>(IObservable<Notification<TSource>> source)
         {
-            var materialize = source as Materialize<TSource>;
-            if (materialize != null)
+            if (source is Materialize<TSource> materialize)
                 return materialize.Dematerialize();
 
             return new Dematerialize<TSource>(source);
@@ -133,8 +131,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> IgnoreElements<TSource>(IObservable<TSource> source)
         {
-            var ignoreElements = source as IgnoreElements<TSource>;
-            if (ignoreElements != null)
+            if (source is IgnoreElements<TSource> ignoreElements)
                 return ignoreElements;
 
             return new IgnoreElements<TSource>(source);

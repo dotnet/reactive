@@ -32,8 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
             {
-                var @catch = source as Catch<TSource>;
-                if (@catch != null)
+                if (source is Catch<TSource> @catch)
                     return @catch._sources;
 
                 return null;
@@ -129,8 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                var e = error as TException;
-                if (e != null)
+                if (error is TException e)
                 {
                     var result = default(IObservable<TSource>);
                     try

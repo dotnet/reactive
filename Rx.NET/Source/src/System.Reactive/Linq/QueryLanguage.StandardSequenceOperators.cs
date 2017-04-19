@@ -344,8 +344,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Skip<TSource>(IObservable<TSource> source, int count)
         {
-            var skip = source as Skip<TSource>.Count;
-            if (skip != null)
+            if (source is Skip<TSource>.Count skip)
                 return skip.Combine(count);
 
             return new Skip<TSource>.Count(source, count);
@@ -387,8 +386,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, int count)
         {
-            var take = source as Take<TSource>.Count;
-            if (take != null)
+            if (source is Take<TSource>.Count take)
                 return take.Combine(count);
 
             return new Take<TSource>.Count(source, count);
@@ -414,8 +412,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Where<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
         {
-            var where = source as Where<TSource>.Predicate;
-            if (where != null)
+            if (source is Where<TSource>.Predicate where)
                 return where.Combine(predicate);
 
             return new Where<TSource>.Predicate(source, predicate);

@@ -16,8 +16,7 @@ namespace System.Reactive
 
         public static IObserver<TSource> Create(IObserver<TSource> observer, IDisposable disposable)
         {
-            var a = observer as AnonymousObserver<TSource>;
-            if (a != null)
+            if (observer is AnonymousObserver<TSource> a)
             {
                 return a.MakeSafe(disposable);
             }

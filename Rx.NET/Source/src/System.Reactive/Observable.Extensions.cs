@@ -321,8 +321,7 @@ namespace System
                 return source.Subscribe(observer);
             }
 
-            var producer = source as IProducer<T>;
-            if (producer != null)
+            if (source is IProducer<T> producer)
             {
                 return producer.SubscribeRaw(observer, enableSafeguard: false);
             }

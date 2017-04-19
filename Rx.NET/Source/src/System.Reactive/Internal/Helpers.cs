@@ -10,12 +10,10 @@ namespace System.Reactive
     {
         public static int? GetLength<T>(IEnumerable<T> source)
         {
-            var array = source as T[];
-            if (array != null)
+            if (source is T[] array)
                 return array.Length;
 
-            var list = source as IList<T>;
-            if (list != null)
+            if (source is IList<T> list)
                 return list.Count;
 
             return null;
@@ -29,8 +27,7 @@ namespace System.Reactive
             {
                 hasOpt = false;
 
-                var eval = source as IEvaluatableObservable<T>;
-                if (eval != null)
+                if (source is IEvaluatableObservable<T> eval)
                 {
                     source = eval.Eval();
                     hasOpt = true;
