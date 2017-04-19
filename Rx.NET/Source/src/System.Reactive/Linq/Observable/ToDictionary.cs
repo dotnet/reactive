@@ -30,8 +30,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private sealed class _ : Sink<IDictionary<TKey, TElement>>, IObserver<TSource>
         {
-            // CONSIDER: This sink has a parent reference that can be considered for removal.
-
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
             private readonly Dictionary<TKey, TElement> _dictionary;
