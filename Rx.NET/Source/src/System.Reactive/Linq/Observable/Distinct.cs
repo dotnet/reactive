@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        class _ : Sink<TSource>, IObserver<TSource>
+        private sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private HashSet<TKey> _hashSet;
