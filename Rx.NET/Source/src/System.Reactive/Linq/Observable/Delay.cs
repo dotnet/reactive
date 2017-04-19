@@ -545,184 +545,216 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Delay<TSource, TDelay> : Producer<TSource>
+    internal static class Delay<TSource, TDelay>
     {
-        private readonly IObservable<TSource> _source;
-        private readonly IObservable<TDelay> _subscriptionDelay;
-        private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
-
-        public Delay(IObservable<TSource> source, IObservable<TDelay> subscriptionDelay, Func<TSource, IObservable<TDelay>> delaySelector)
+        internal class Selector : Producer<TSource>
         {
-            _source = source;
-            _subscriptionDelay = subscriptionDelay;
-            _delaySelector = delaySelector;
-        }
+            protected readonly IObservable<TSource> _source;
+            private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run();
-        }
-
-        class _ : Sink<TSource>, IObserver<TSource>
-        {
-            private readonly Delay<TSource, TDelay> _parent;
-
-            public _(Delay<TSource, TDelay> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public Selector(IObservable<TSource> source, Func<TSource, IObservable<TDelay>> delaySelector)
             {
-                _parent = parent;
+                _source = source;
+                _delaySelector = delaySelector;
             }
 
-            private CompositeDisposable _delays;
-            private object _gate;
-            private bool _atEnd;
-            private SerialDisposable _subscription;
-
-            public IDisposable Run()
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
-                _delays = new CompositeDisposable();
-                _gate = new object();
-                _atEnd = false;
-                _subscription = new SerialDisposable();
-
-                if (_parent._subscriptionDelay == null)
-                {
-                    Start();
-                }
-                else
-                {
-                    _subscription.Disposable = _parent._subscriptionDelay.SubscribeSafe(new SubscriptionDelay(this));
-                }
-
-                return StableCompositeDisposable.Create(_subscription, _delays);
+                var sink = new _<Selector>(this, observer, cancel);
+                setSink(sink);
+                return sink.Run(this);
             }
 
-            private void Start()
+            protected class _<TParent> : Sink<TSource>, IObserver<TSource>
+                where TParent : Selector
             {
-                _subscription.Disposable = _parent._source.SubscribeSafe(this);
-            }
+                private readonly CompositeDisposable _delays = new CompositeDisposable();
+                private object _gate = new object();
 
-            public void OnNext(TSource value)
-            {
-                var delay = default(IObservable<TDelay>);
-                try
+                private readonly Func<TSource, IObservable<TDelay>> _delaySelector;
+
+                public _(Selector parent, IObserver<TSource> observer, IDisposable cancel)
+                    : base(observer, cancel)
                 {
-                    delay = _parent._delaySelector(value);
+                    _delaySelector = parent._delaySelector;
                 }
-                catch (Exception error)
+
+                private bool _atEnd;
+                private IDisposable _subscription;
+
+                public IDisposable Run(TParent parent)
+                {
+                    _atEnd = false;
+
+                    _subscription = RunCore(parent);
+
+                    return StableCompositeDisposable.Create(_subscription, _delays);
+                }
+
+                protected virtual IDisposable RunCore(TParent parent)
+                {
+                    return parent._source.SubscribeSafe(this);
+                }
+
+                public void OnNext(TSource value)
+                {
+                    var delay = default(IObservable<TDelay>);
+                    try
+                    {
+                        delay = _delaySelector(value);
+                    }
+                    catch (Exception error)
+                    {
+                        lock (_gate)
+                        {
+                            base._observer.OnError(error);
+                            base.Dispose();
+                        }
+
+                        return;
+                    }
+
+                    var d = new SingleAssignmentDisposable();
+                    _delays.Add(d);
+                    d.Disposable = delay.SubscribeSafe(new DelayObserver(this, value, d));
+                }
+
+                public void OnError(Exception error)
                 {
                     lock (_gate)
                     {
                         base._observer.OnError(error);
                         base.Dispose();
                     }
-
-                    return;
-                }
-
-                var d = new SingleAssignmentDisposable();
-                _delays.Add(d);
-                d.Disposable = delay.SubscribeSafe(new Delta(this, value, d));
-            }
-
-            public void OnError(Exception error)
-            {
-                lock (_gate)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-            }
-
-            public void OnCompleted()
-            {
-                lock (_gate)
-                {
-                    _atEnd = true;
-                    _subscription.Dispose();
-
-                    CheckDone();
-                }
-            }
-
-            private void CheckDone()
-            {
-                if (_atEnd && _delays.Count == 0)
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
-                }
-            }
-
-            class SubscriptionDelay : IObserver<TDelay>
-            {
-                private readonly _ _parent;
-
-                public SubscriptionDelay(_ parent)
-                {
-                    _parent = parent;
-                }
-
-                public void OnNext(TDelay value)
-                {
-                    _parent.Start();
-                }
-
-                public void OnError(Exception error)
-                {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
                 }
 
                 public void OnCompleted()
                 {
-                    _parent.Start();
-                }
-            }
-
-            class Delta : IObserver<TDelay>
-            {
-                private readonly _ _parent;
-                private readonly TSource _value;
-                private readonly IDisposable _self;
-
-                public Delta(_ parent, TSource value, IDisposable self)
-                {
-                    _parent = parent;
-                    _value = value;
-                    _self = self;
-                }
-
-                public void OnNext(TDelay value)
-                {
-                    lock (_parent._gate)
+                    lock (_gate)
                     {
-                        _parent._observer.OnNext(_value);
+                        _atEnd = true;
+                        _subscription.Dispose();
 
-                        _parent._delays.Remove(_self);
-                        _parent.CheckDone();
+                        CheckDone();
                     }
                 }
 
-                public void OnError(Exception error)
+                private void CheckDone()
                 {
-                    lock (_parent._gate)
+                    if (_atEnd && _delays.Count == 0)
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
+                }
+
+                private sealed class DelayObserver : IObserver<TDelay>
+                {
+                    private readonly _<TParent> _parent;
+                    private readonly TSource _value;
+                    private readonly IDisposable _self;
+
+                    public DelayObserver(_<TParent> parent, TSource value, IDisposable self)
+                    {
+                        _parent = parent;
+                        _value = value;
+                        _self = self;
+                    }
+
+                    public void OnNext(TDelay value)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnNext(_value);
+
+                            _parent._delays.Remove(_self);
+                            _parent.CheckDone();
+                        }
+                    }
+
+                    public void OnError(Exception error)
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnError(error);
+                            _parent.Dispose();
+                        }
+                    }
+
+                    public void OnCompleted()
+                    {
+                        lock (_parent._gate)
+                        {
+                            _parent._observer.OnNext(_value);
+
+                            _parent._delays.Remove(_self);
+                            _parent.CheckDone();
+                        }
+                    }
+                }
+            }
+        }
+
+        internal sealed class SelectorWithSubscriptionDelay : Selector
+        {
+            private readonly IObservable<TDelay> _subscriptionDelay;
+
+            public SelectorWithSubscriptionDelay(IObservable<TSource> source, IObservable<TDelay> subscriptionDelay, Func<TSource, IObservable<TDelay>> delaySelector)
+                : base(source, delaySelector)
+            {
+                _subscriptionDelay = subscriptionDelay;
+            }
+
+            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
+            {
+                var sink = new _(this, observer, cancel);
+                setSink(sink);
+                return sink.Run(this);
+            }
+
+            private sealed class _ : _<SelectorWithSubscriptionDelay>
+            {
+                public _(SelectorWithSubscriptionDelay parent, IObserver<TSource> observer, IDisposable cancel)
+                    : base(parent, observer, cancel)
+                {
+                }
+
+                protected override IDisposable RunCore(SelectorWithSubscriptionDelay parent)
+                {
+                    var subscription = new SerialDisposable();
+
+                    subscription.Disposable = parent._subscriptionDelay.SubscribeSafe(new SubscriptionDelayObserver(this, parent._source, subscription));
+
+                    return subscription;
+                }
+
+                private sealed class SubscriptionDelayObserver : IObserver<TDelay>
+                {
+                    private readonly _ _parent;
+                    private readonly IObservable<TSource> _source;
+                    private readonly SerialDisposable _subscription;
+
+                    public SubscriptionDelayObserver(_ parent, IObservable<TSource> source, SerialDisposable subscription)
+                    {
+                        _parent = parent;
+                        _source = source;
+                        _subscription = subscription;
+                    }
+
+                    public void OnNext(TDelay value)
+                    {
+                        _subscription.Disposable = _source.SubscribeSafe(_parent);
+                    }
+
+                    public void OnError(Exception error)
                     {
                         _parent._observer.OnError(error);
                         _parent.Dispose();
                     }
-                }
 
-                public void OnCompleted()
-                {
-                    lock (_parent._gate)
+                    public void OnCompleted()
                     {
-                        _parent._observer.OnNext(_value);
-
-                        _parent._delays.Remove(_self);
-                        _parent.CheckDone();
+                        _subscription.Disposable = _source.SubscribeSafe(_parent);
                     }
                 }
             }

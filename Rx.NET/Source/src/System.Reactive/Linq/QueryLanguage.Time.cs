@@ -114,17 +114,12 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Delay<TSource, TDelay>(IObservable<TSource> source, Func<TSource, IObservable<TDelay>> delayDurationSelector)
         {
-            return Delay_<TSource, TDelay>(source, null, delayDurationSelector);
+            return new Delay<TSource, TDelay>.Selector(source, delayDurationSelector);
         }
 
         public virtual IObservable<TSource> Delay<TSource, TDelay>(IObservable<TSource> source, IObservable<TDelay> subscriptionDelay, Func<TSource, IObservable<TDelay>> delayDurationSelector)
         {
-            return Delay_<TSource, TDelay>(source, subscriptionDelay, delayDurationSelector);
-        }
-
-        private static IObservable<TSource> Delay_<TSource, TDelay>(IObservable<TSource> source, IObservable<TDelay> subscriptionDelay, Func<TSource, IObservable<TDelay>> delayDurationSelector)
-        {
-            return new Delay<TSource, TDelay>(source, subscriptionDelay, delayDurationSelector);
+            return new Delay<TSource, TDelay>.SelectorWithSubscriptionDelay(source, subscriptionDelay, delayDurationSelector);
         }
 
         #endregion
