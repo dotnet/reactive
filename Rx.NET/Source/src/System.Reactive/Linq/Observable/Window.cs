@@ -405,65 +405,61 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent._scheduler;
                 }
 
-                private ISubject<TSource> _s;
+                private Subject<TSource> _s;
                 private int _n;
-                private int _windowId;
 
                 private RefCountDisposable _refCountDisposable;
 
                 public IDisposable Run(IObservable<TSource> source)
                 {
-                    _s = default(ISubject<TSource>);
                     _n = 0;
-                    _windowId = 0;
 
                     var groupDisposable = new CompositeDisposable(2) { _timerD };
                     _refCountDisposable = new RefCountDisposable(groupDisposable);
 
                     _s = new Subject<TSource>();
                     base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
-                    CreateTimer(0);
+                    CreateTimer(_s);
 
                     groupDisposable.Add(source.SubscribeSafe(this));
 
                     return _refCountDisposable;
                 }
 
-                private void CreateTimer(int id)
+                private void CreateTimer(Subject<TSource> window)
                 {
                     var m = new SingleAssignmentDisposable();
                     _timerD.Disposable = m;
 
-                    m.Disposable = _scheduler.Schedule(id, _timeSpan, Tick);
+                    m.Disposable = _scheduler.Schedule(window, _timeSpan, Tick);
                 }
 
-                private IDisposable Tick(IScheduler self, int id)
+                private IDisposable Tick(IScheduler self, Subject<TSource> window)
                 {
                     var d = Disposable.Empty;
 
-                    var newId = 0;
+                    var newWindow = default(Subject<TSource>);
                     lock (_gate)
                     {
-                        if (id != _windowId)
+                        if (window != _s)
                             return d;
 
                         _n = 0;
-                        newId = ++_windowId;
+                        newWindow = new Subject<TSource>();
 
                         _s.OnCompleted();
-                        _s = new Subject<TSource>();
+                        _s = newWindow;
                         base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
                     }
 
-                    CreateTimer(newId);
+                    CreateTimer(newWindow);
 
                     return d;
                 }
 
                 public void OnNext(TSource value)
                 {
-                    var newWindow = false;
-                    var newId = 0;
+                    var newWindow = default(Subject<TSource>);
 
                     lock (_gate)
                     {
@@ -472,18 +468,17 @@ namespace System.Reactive.Linq.ObservableImpl
                         _n++;
                         if (_n == _count)
                         {
-                            newWindow = true;
                             _n = 0;
-                            newId = ++_windowId;
+                            newWindow = new Subject<TSource>();
 
                             _s.OnCompleted();
-                            _s = new Subject<TSource>();
+                            _s = newWindow;
                             base._observer.OnNext(new WindowObservable<TSource>(_s, _refCountDisposable));
                         }
                     }
 
-                    if (newWindow)
-                        CreateTimer(newId);
+                    if (newWindow != null)
+                        CreateTimer(newWindow);
                 }
 
                 public void OnError(Exception error)
