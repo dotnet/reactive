@@ -31,8 +31,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source)
             {
-                var oern = source as OnErrorResumeNext<TSource>;
-                if (oern != null)
+                if (source is OnErrorResumeNext<TSource> oern)
                     return oern._sources;
 
                 return null;

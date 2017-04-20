@@ -143,8 +143,7 @@ namespace System.Reactive
 
         public override string ToString()
         {
-            var c = _expression as ConstantExpression;
-            if (c != null && c.Value == this)
+            if (_expression is ConstantExpression c && c.Value == this)
             {
                 if (_source != null)
                     return _source.ToString();
@@ -159,8 +158,7 @@ namespace System.Reactive
         {
             protected override Expression VisitConstant(ConstantExpression/*!*/ node)
             {
-                var query = node.Value as ObservableQuery;
-                if (query != null)
+                if (node.Value is ObservableQuery query)
                 {
                     var source = query.Source;
                     if (source != null)
