@@ -52,7 +52,15 @@ msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$config
 msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /m /t:build /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
+        }  
+}
+
 
 Write-Host "Building Packages" -Foreground Green
 msbuild "$scriptPath\src\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true /p:NuGetBuildTasksPackTargets="workaround"
@@ -85,6 +93,7 @@ if($hasSignClientSecret) {
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"
@@ -108,6 +117,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
@@ -118,6 +128,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
