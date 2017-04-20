@@ -15,6 +15,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TSource> Dematerialize() => _source.AsObservable();
 
+        protected override IDisposable CreateSink(IObserver<Notification<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+
         protected override IDisposable Run(IObserver<Notification<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(observer, cancel);

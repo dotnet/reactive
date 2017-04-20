@@ -20,6 +20,8 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new ObserveOnObserver<TSource>(_scheduler, observer, cancel);
+
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -39,6 +41,8 @@ namespace System.Reactive.Concurrency
                 _source = source;
                 _context = context;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_context, observer, cancel);
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)

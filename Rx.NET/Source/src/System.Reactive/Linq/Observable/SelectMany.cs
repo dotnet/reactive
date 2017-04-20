@@ -24,6 +24,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
@@ -195,6 +197,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -374,6 +378,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
@@ -477,6 +483,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -586,6 +594,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -742,6 +752,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _collectionSelector = collectionSelector;
                 _resultSelector = resultSelector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -902,6 +914,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _selector = selector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -1064,6 +1078,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selectorOnCompleted = selectorOnCompleted;
             }
 
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
@@ -1151,6 +1167,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _selector = selector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -1408,6 +1426,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
@@ -1507,6 +1527,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _selector = selector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -1609,6 +1631,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _selector = selector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -1737,6 +1761,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _selector = selector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {

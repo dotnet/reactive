@@ -454,6 +454,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => _scheduler.AsLongRunning() != null ? (IDisposable)new L(this, observer, cancel) : new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 if (_scheduler.AsLongRunning() != null)
@@ -563,6 +565,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => _scheduler.AsLongRunning() != null ? (IDisposable)new L(this, observer, cancel) : new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 if (_scheduler.AsLongRunning() != null)
@@ -622,6 +626,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _delaySelector = delaySelector;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _<Selector>(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {

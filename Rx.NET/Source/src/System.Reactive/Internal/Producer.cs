@@ -92,5 +92,7 @@ namespace System.Reactive
         /// <returns>Disposable representing all the resources and/or subscriptions the operator uses to process events.</returns>
         /// <remarks>The <paramref name="observer">observer</paramref> passed in to this method is not protected using auto-detach behavior upon an OnError or OnCompleted call. The implementation must ensure proper resource disposal and enforce the message grammar.</remarks>
         protected abstract IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink);
+
+        protected abstract IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel);
     }
 }

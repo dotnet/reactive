@@ -15,6 +15,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _observableFactory = observableFactory;
         }
 
+        protected override IDisposable CreateSink(IObserver<TValue> observer, IDisposable cancel) => new _(_observableFactory, observer, cancel);
+
         protected override IDisposable Run(IObserver<TValue> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(_observableFactory, observer, cancel);

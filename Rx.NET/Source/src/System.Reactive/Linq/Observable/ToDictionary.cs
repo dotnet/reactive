@@ -21,6 +21,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
+        protected override IDisposable CreateSink(IObserver<IDictionary<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+
         protected override IDisposable Run(IObserver<IDictionary<TKey, TElement>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(this, observer, cancel);

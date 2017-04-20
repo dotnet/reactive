@@ -15,6 +15,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
+        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_accumulator, observer, cancel);
+
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(_accumulator, observer, cancel);
@@ -93,6 +95,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
+        protected override IDisposable CreateSink(IObserver<TAccumulate> observer, IDisposable cancel) => new _(_seed, _accumulator, observer, cancel);
+
         protected override IDisposable Run(IObserver<TAccumulate> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(_seed, _accumulator, observer, cancel);
@@ -154,6 +158,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
             _resultSelector = resultSelector;
         }
+
+        protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {

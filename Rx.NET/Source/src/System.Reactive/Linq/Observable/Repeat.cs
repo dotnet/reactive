@@ -20,6 +20,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_value, observer, cancel);
@@ -79,6 +81,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
                 _repeatCount = repeatCount;
             }
+
+            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
 
             protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
             {

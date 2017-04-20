@@ -17,6 +17,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
+        protected override IDisposable CreateSink(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+
         protected override IDisposable Run(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(observer, cancel);

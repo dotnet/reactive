@@ -206,6 +206,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private Session _session;
 
+        protected override IDisposable CreateSink(IObserver<TArgs> observer, IDisposable cancel) => Disposable.Empty;
+
         protected override IDisposable Run(IObserver<TArgs> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var connection = default(IDisposable);

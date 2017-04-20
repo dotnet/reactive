@@ -21,6 +21,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval() => _condition() ? _thenSource : _elseSource;
 
+        protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+
         protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(this, observer, cancel);

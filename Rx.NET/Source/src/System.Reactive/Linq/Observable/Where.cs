@@ -22,6 +22,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Predicate(_source, x => _predicate(x) && predicate(x));
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_predicate, observer, cancel);
@@ -83,6 +85,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _predicate = predicate;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
 
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {

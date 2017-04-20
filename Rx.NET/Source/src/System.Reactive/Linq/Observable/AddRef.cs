@@ -17,6 +17,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _refCount = refCount;
         }
 
+        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel));
+
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var d = StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel);

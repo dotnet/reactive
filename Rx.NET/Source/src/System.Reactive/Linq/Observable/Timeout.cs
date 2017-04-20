@@ -24,6 +24,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(this, observer, cancel);
@@ -166,6 +168,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_other, observer, cancel);
@@ -277,6 +281,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _timeoutSelector = timeoutSelector;
             _other = other;
         }
+
+        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
         protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
         {

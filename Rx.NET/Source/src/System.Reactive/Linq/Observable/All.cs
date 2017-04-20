@@ -15,6 +15,8 @@ namespace System.Reactive.Linq.ObservableImpl
             _predicate = predicate;
         }
 
+        protected override IDisposable CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+
         protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
         {
             var sink = new _(_predicate, observer, cancel);

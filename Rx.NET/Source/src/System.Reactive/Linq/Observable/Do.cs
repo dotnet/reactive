@@ -17,6 +17,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onNext = onNext;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_onNext, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_onNext, observer, cancel);
@@ -74,6 +76,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
                 _observer = observer;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_observer, observer, cancel);
 
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
@@ -158,6 +162,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onError = onError;
                 _onCompleted = onCompleted;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {

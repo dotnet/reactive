@@ -22,6 +22,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _maxConcurrent = maxConcurrent;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_maxConcurrent, observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(_maxConcurrent, observer, cancel);
@@ -168,6 +170,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
                 var sink = new _(observer, cancel);
@@ -297,6 +301,8 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 _sources = sources;
             }
+
+            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
             protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
             {
