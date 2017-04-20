@@ -57,6 +57,7 @@ if ($LastExitCode -ne 0) {
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
         }  
 }
 
@@ -92,6 +93,7 @@ if($hasSignClientSecret) {
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"
@@ -115,6 +117,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
@@ -125,6 +128,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
