@@ -5,7 +5,7 @@ $configuration = "Release"
 $isAppVeyor = Test-Path -Path env:\APPVEYOR
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
-$xUnitConsolePath = ".\packages\xunit.runner.console\tools\xunit.console.exe"
+$xUnitConsolePath = ".\packages\xunit.runner.console\tools\net452\xunit.console.exe"
 $rootPath = (Resolve-Path .).Path
 $artifacts = Join-Path $rootPath "artifacts"
 
