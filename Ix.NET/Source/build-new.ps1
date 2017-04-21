@@ -51,8 +51,13 @@ msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration
 
 Write-Host "Building $scriptPath\Ix.NET.sln" -Foreground Green
 msbuild "$scriptPath\Ix.NET.sln" /m /t:build /p:Configuration=$configuration 
-
-
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
+        }  
+}
 
 
 Write-Host "Building Packages" -Foreground Green
@@ -74,6 +79,7 @@ if($hasSignClientSecret) {
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"
@@ -96,6 +102,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
@@ -106,6 +113,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 

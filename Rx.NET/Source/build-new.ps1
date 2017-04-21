@@ -52,12 +52,12 @@ msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$config
 msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /t:build /m /p:Configuration=$configuration 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
+          exit $LastExitCode
         }  
 }
 
@@ -93,7 +93,7 @@ if($hasSignClientSecret) {
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
+          exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"
