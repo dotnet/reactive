@@ -45,6 +45,8 @@ New-Item -ItemType Directory -Force -Path $artifacts
 
 
 Write-Host "Restoring packages for $scriptPath\Ix.NET.sln" -Foreground Green
+# use nuget.exe to restore on the legacy proj type
+.\nuget.exe restore .\System.Interactive.Tests.Uwp.DeviceRunner\System.Interactive.Tests.Uwp.DeviceRunner.csproj
 msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
 # Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
 msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
