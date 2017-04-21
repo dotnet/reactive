@@ -20,7 +20,6 @@
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
     <GetVersion Condition=" '$(NCrunch)' != '' ">false</GetVersion>
-    <SourceLinkEnabled>false</SourceLinkEnabled>
   </PropertyGroup>
   
   <ItemGroup>
@@ -29,8 +28,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="SourceLink.Create.GitHub" Version="2.1.0" PrivateAssets="All" /> 
-    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.1.0" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.0" PrivateAssets="All" /> 
   </ItemGroup>
   
   <!-- Workaround -->
