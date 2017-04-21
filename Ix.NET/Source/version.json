@@ -1,0 +1,16 @@
+{
+  "$schema": "src\\NerdBank.GitVersioning\\version.schema.json",
+  "version": "3.2.1-alpha",
+  "assemblyVersion": {
+    "precision": "revision"
+  },
+  "publicReleaseRefSpec": [
+    "^refs/heads/master$", // we release out of master
+    "^refs/tags/v\\d+\\.\\d+" // we also release tags starting with vN.N
+  ],
+  "cloudBuild": {
+    "buildNumber": {
+      "enabled": true
+    }
+  }
+}

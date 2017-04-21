@@ -31,6 +31,7 @@ if (!(Test-Path .\nuget.exe)) {
 .\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
 .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 1.6.27-ge56a446f19 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
