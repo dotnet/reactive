@@ -20,7 +20,6 @@
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
     <GetVersion Condition=" '$(NCrunch)' != '' ">false</GetVersion>
-    <!--<SourceLinkEnabled>false</SourceLinkEnabled>-->
   </PropertyGroup>
   
   <ItemGroup>
