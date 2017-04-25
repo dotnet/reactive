@@ -11,7 +11,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Window<TSource>
     {
-        internal sealed class Count : Producer<IObservable<TSource>>
+        internal sealed class Count : Producer<IObservable<TSource>, Count._>
         {
             private readonly IObservable<TSource> _source;
             private readonly int _count;
@@ -24,16 +24,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _skip = skip;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(_source);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly Queue<ISubject<TSource>> _queue = new Queue<ISubject<TSource>>();
                 private readonly SingleAssignmentDisposable _m = new SingleAssignmentDisposable();
@@ -112,7 +107,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class TimeSliding : Producer<IObservable<TSource>>
+        internal sealed class TimeSliding : Producer<IObservable<TSource>, TimeSliding._>
         {
             private readonly IObservable<TSource> _source;
             private readonly TimeSpan _timeSpan;
@@ -127,16 +122,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly object _gate = new object();
                 private readonly Queue<ISubject<TSource>> _q = new Queue<ISubject<TSource>>();
@@ -278,7 +268,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class TimeHopping : Producer<IObservable<TSource>>
+        internal sealed class TimeHopping : Producer<IObservable<TSource>, TimeHopping._>
         {
             private readonly IObservable<TSource> _source;
             private readonly TimeSpan _timeSpan;
@@ -291,16 +281,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly object _gate = new object();
 
@@ -372,7 +357,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Ferry : Producer<IObservable<TSource>>
+        internal sealed class Ferry : Producer<IObservable<TSource>, Ferry._>
         {
             private readonly IObservable<TSource> _source;
             private readonly int _count;
@@ -387,16 +372,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(_source);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly object _gate = new object();
                 private readonly SerialDisposable _timerD = new SerialDisposable();
@@ -514,7 +494,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal static class Window<TSource, TWindowClosing>
     {
-        internal sealed class Selector : Producer<IObservable<TSource>>
+        internal sealed class Selector : Producer<IObservable<TSource>, Selector._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<IObservable<TWindowClosing>> _windowClosingSelector;
@@ -525,16 +505,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _windowClosingSelector = windowClosingSelector;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(_source);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _windowGate = new AsyncLock();
@@ -663,7 +638,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Boundaries : Producer<IObservable<TSource>>
+        internal sealed class Boundaries : Producer<IObservable<TSource>, Boundaries._>
         {
             private readonly IObservable<TSource> _source;
             private readonly IObservable<TWindowClosing> _windowBoundaries;
@@ -674,16 +649,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _windowBoundaries = windowBoundaries;
             }
 
-            protected override IDisposable CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<IObservable<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<IObservable<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
+            internal sealed class _ : Sink<IObservable<TSource>>, IObserver<TSource>
             {
                 private readonly object _gate = new object();
 

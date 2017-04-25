@@ -9,7 +9,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class SequenceEqual<TSource>
     {
-        internal sealed class Observable : Producer<bool>
+        internal sealed class Observable : Producer<bool, Observable._>
         {
             private readonly IObservable<TSource> _first;
             private readonly IObservable<TSource> _second;
@@ -22,16 +22,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override IDisposable CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
 
-            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_comparer, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<bool>
+            internal sealed class _ : Sink<bool>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 
@@ -220,7 +215,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Enumerable : Producer<bool>
+        internal sealed class Enumerable : Producer<bool, Enumerable._>
         {
             private readonly IObservable<TSource> _first;
             private readonly IEnumerable<TSource> _second;
@@ -233,16 +228,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override IDisposable CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
 
-            protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_comparer, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<bool>, IObserver<TSource>
+            internal sealed class _ : Sink<bool>, IObserver<TSource>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 

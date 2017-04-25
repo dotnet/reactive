@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Distinct<TSource, TKey> : Producer<TSource>
+    internal sealed class Distinct<TSource, TKey> : Producer<TSource, Distinct<TSource, TKey>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
@@ -19,16 +19,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private HashSet<TKey> _hashSet;

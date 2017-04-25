@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Throttle<TSource> : Producer<TSource>
+    internal sealed class Throttle<TSource> : Producer<TSource, Throttle<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly TimeSpan _dueTime;
@@ -20,16 +20,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(_source);
-        }
+        protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
@@ -120,7 +115,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Throttle<TSource, TThrottle> : Producer<TSource>
+    internal sealed class Throttle<TSource, TThrottle> : Producer<TSource, Throttle<TSource, TThrottle>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
@@ -131,16 +126,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _throttleSelector = throttleSelector;
         }
 
-        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 

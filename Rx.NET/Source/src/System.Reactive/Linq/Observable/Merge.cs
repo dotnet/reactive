@@ -11,7 +11,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Merge<TSource>
     {
-        internal sealed class ObservablesMaxConcurrency : Producer<TSource>
+        internal sealed class ObservablesMaxConcurrency : Producer<TSource, ObservablesMaxConcurrency._>
         {
             private readonly IObservable<IObservable<TSource>> _sources;
             private readonly int _maxConcurrent;
@@ -22,16 +22,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _maxConcurrent = maxConcurrent;
             }
 
-            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_maxConcurrent, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_maxConcurrent, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_maxConcurrent, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+            internal sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
             {
                 private readonly int _maxConcurrent;
 
@@ -161,7 +156,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Observables : Producer<TSource>
+        internal sealed class Observables : Producer<TSource, Observables._>
         {
             private readonly IObservable<IObservable<TSource>> _sources;
 
@@ -170,16 +165,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+            internal sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -293,7 +283,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Tasks : Producer<TSource>
+        internal sealed class Tasks : Producer<TSource, Tasks._>
         {
             private readonly IObservable<Task<TSource>> _sources;
 
@@ -302,16 +292,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            private sealed class _ : Sink<TSource>, IObserver<Task<TSource>>
+            internal sealed class _ : Sink<TSource>, IObserver<Task<TSource>>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)

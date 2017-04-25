@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Materialize<TSource> : Producer<Notification<TSource>>
+    internal sealed class Materialize<TSource> : Producer<Notification<TSource>, Materialize<TSource>._>
     {
         private readonly IObservable<TSource> _source;
 
@@ -15,16 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TSource> Dematerialize() => _source.AsObservable();
 
-        protected override IDisposable CreateSink(IObserver<Notification<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<Notification<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
 
-        protected override IDisposable Run(IObserver<Notification<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<Notification<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<Notification<TSource>>, IObserver<TSource>
         {
             public _(IObserver<Notification<TSource>> observer, IDisposable cancel)
                 : base(observer, cancel)

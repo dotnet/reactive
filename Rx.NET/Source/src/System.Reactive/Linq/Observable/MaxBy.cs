@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class MaxBy<TSource, TKey> : Producer<IList<TSource>>
+    internal sealed class MaxBy<TSource, TKey> : Producer<IList<TSource>, MaxBy<TSource, TKey>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
@@ -19,16 +19,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override IDisposable CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<IList<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+        internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly MaxBy<TSource, TKey> _parent;
             private bool _hasValue;

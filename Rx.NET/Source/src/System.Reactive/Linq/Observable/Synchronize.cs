@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Synchronize<TSource> : Producer<TSource>
+    internal sealed class Synchronize<TSource> : Producer<TSource, Synchronize<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly object _gate;
@@ -20,16 +20,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_gate, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_gate, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_gate, observer, cancel);
-            setSink(sink);
-            return _source.Subscribe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.Subscribe(sink);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly object _gate;
 

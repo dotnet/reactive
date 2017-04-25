@@ -13,7 +13,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     internal static class Zip<TFirst, TSecond, TResult>
     {
-        internal sealed class Observable : Producer<TResult>
+        internal sealed class Observable : Producer<TResult, Observable._>
         {
             private readonly IObservable<TFirst> _first;
             private readonly IObservable<TSecond> _second;
@@ -26,16 +26,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_resultSelector, observer, cancel);
-                setSink(sink);
-                return sink.Run(_first, _second);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-            private sealed class _ : Sink<TResult>
+            internal sealed class _ : Sink<TResult>
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -246,7 +241,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Enumerable : Producer<TResult>
+        internal sealed class Enumerable : Producer<TResult, Enumerable._>
         {
             private readonly IObservable<TFirst> _first;
             private readonly IEnumerable<TSecond> _second;
@@ -259,16 +254,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_resultSelector, observer, cancel);
-                setSink(sink);
-                return sink.Run(_first, _second);
-            }
+            protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-            private sealed class _ : Sink<TResult>, IObserver<TFirst>
+            internal sealed class _ : Sink<TResult>, IObserver<TFirst>
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -534,7 +524,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region N-ary
 
-    internal sealed class Zip<TSource> : Producer<IList<TSource>>
+    internal sealed class Zip<TSource> : Producer<IList<TSource>, Zip<TSource>._>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 
@@ -543,16 +533,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override IDisposable CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<IList<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run();
-        }
+        protected override IDisposable Run(_ sink) => sink.Run();
 
-        private sealed class _ : Sink<IList<TSource>>
+        internal sealed class _ : Sink<IList<TSource>>
         {
             private readonly Zip<TSource> _parent;
 

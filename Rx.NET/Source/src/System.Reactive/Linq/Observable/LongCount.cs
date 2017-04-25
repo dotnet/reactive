@@ -6,7 +6,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class LongCount<TSource>
     {
-        internal sealed class All : Producer<long>
+        internal sealed class All : Producer<long, All._>
         {
             private readonly IObservable<TSource> _source;
 
@@ -15,16 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            protected override IDisposable CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
 
-            protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            private sealed class _ : Sink<long>, IObserver<TSource>
+            internal sealed class _ : Sink<long>, IObserver<TSource>
             {
                 private long _count;
 
@@ -65,7 +60,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Predicate : Producer<long>
+        internal sealed class Predicate : Producer<long, Predicate._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<TSource, bool> _predicate;
@@ -76,16 +71,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            protected override IDisposable CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
+            protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
 
-            protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_predicate, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            private sealed class _ : Sink<long>, IObserver<TSource>
+            internal sealed class _ : Sink<long>, IObserver<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private long _count;

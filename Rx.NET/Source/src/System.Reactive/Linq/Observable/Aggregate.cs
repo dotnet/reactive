@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Aggregate<TSource> : Producer<TSource>
+    internal sealed class Aggregate<TSource> : Producer<TSource, Aggregate<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TSource, TSource> _accumulator;
@@ -15,16 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
-        protected override IDisposable CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_accumulator, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_accumulator, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_accumulator, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TSource, TSource, TSource> _accumulator;
             private TSource _accumulation;
@@ -82,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Aggregate<TSource, TAccumulate> : Producer<TAccumulate>
+    internal sealed class Aggregate<TSource, TAccumulate> : Producer<TAccumulate, Aggregate<TSource, TAccumulate>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly TAccumulate _seed;
@@ -95,16 +90,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
-        protected override IDisposable CreateSink(IObserver<TAccumulate> observer, IDisposable cancel) => new _(_seed, _accumulator, observer, cancel);
+        protected override _ CreateSink(IObserver<TAccumulate> observer, IDisposable cancel) => new _(_seed, _accumulator, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TAccumulate> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_seed, _accumulator, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<TAccumulate>, IObserver<TSource>
+        internal sealed class _ : Sink<TAccumulate>, IObserver<TSource>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
@@ -144,7 +134,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Aggregate<TSource, TAccumulate, TResult> : Producer<TResult>
+    internal sealed class Aggregate<TSource, TAccumulate, TResult> : Producer<TResult, Aggregate<TSource, TAccumulate, TResult>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly TAccumulate _seed;
@@ -159,16 +149,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<TResult>, IObserver<TSource>
+        internal sealed class _ : Sink<TResult>, IObserver<TSource>
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private readonly Func<TAccumulate, TResult> _resultSelector;

@@ -10,7 +10,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class GroupByUntil<TSource, TKey, TElement, TDuration> : Producer<IGroupedObservable<TKey, TElement>>
+    internal sealed class GroupByUntil<TSource, TKey, TElement, TDuration> : Producer<IGroupedObservable<TKey, TElement>, GroupByUntil<TSource, TKey, TElement, TDuration>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
@@ -29,16 +29,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override IDisposable CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        protected override IDisposable Run(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(_source);
-        }
+        protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        private sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<IGroupedObservable<TKey, TElement>>, IObserver<TSource>
         {
             private readonly object _nullGate = new object();
             private readonly CompositeDisposable _groupDisposable = new CompositeDisposable();

@@ -9,7 +9,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Generate<TState, TResult>
     {
-        internal sealed class NoTime : Producer<TResult>
+        internal sealed class NoTime : Producer<TResult, NoTime._>
         {
             private readonly TState _initialState;
             private readonly Func<TState, bool> _condition;
@@ -26,16 +26,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
+            protected override IDisposable Run(_ sink) => sink.Run();
 
-            private sealed class _ : Sink<TResult>
+            internal sealed class _ : Sink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -158,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Absolute : Producer<TResult>
+        internal sealed class Absolute : Producer<TResult, Absolute._>
         {
             private readonly TState _initialState;
             private readonly Func<TState, bool> _condition;
@@ -177,16 +172,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
+            protected override IDisposable Run(_ sink) => sink.Run();
 
-            private sealed class _ : Sink<TResult>
+            internal sealed class _ : Sink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -258,7 +248,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Relative : Producer<TResult>
+        internal sealed class Relative : Producer<TResult, Relative._>
         {
             private readonly TState _initialState;
             private readonly Func<TState, bool> _condition;
@@ -277,16 +267,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
+            protected override IDisposable Run(_ sink) => sink.Run();
 
-            private sealed class _ : Sink<TResult>
+            internal sealed class _ : Sink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
