@@ -6,7 +6,7 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</PackageLicenseUrl>
