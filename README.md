@@ -4,7 +4,7 @@ Reactive Extensions
 Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
 AppVeyor<br>([home](https://ci.appveyor.com/project/dotnetfoundation/rx-net)) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg)
-NuGet.org | ![#](https://img.shields.io/nuget/v/System.Reactive.svg) | ![#](https://img.shields.io/nuget/v/System.Interactive.svg)
+NuGet.org | [![Nuget Status](https://img.shields.io/nuget/v/System.Reactive.svg?style=flat)](https://www.nuget.org/packages/System.Reactive) | [![Nuget Status](https://img.shields.io/nuget/v/System.Interactive.svg?style=flat)](https://www.nuget.org/packages/System.Interactive)
 MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Reactive.svg) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Interactive.svg)  
 
 ### Join the conversation
@@ -33,7 +33,7 @@ The NuGet packages have changed their package naming in the move from v2.x.x to 
  * ~~`Rx-Core`~~ is now [`System.Reactive.Core`](https://www.nuget.org/packages/System.Reactive.Core/)
  * ~~`Rx-Interfaces`~~  is now [`System.Reactive.Interfaces`](https://www.nuget.org/packages/System.Reactive.Interfaces/)
  * ~~`Rx-Linq`~~  is now [`System.Reactive.Linq`](https://www.nuget.org/packages/System.Reactive.Linq/)
- * ~~`Rx-PlatformServices`~~  is now [`System.Reactive.PlatformServices`](https://www.nuget.org/packages/System.Reactive.PlatformServices/)
+ * ~~`Rx-PlatformServices`~~  is now [[`System.Reactive.PlatformServices`](https://www.nuget.org/packages/System.Reactive.PlatformServices/)](https://www.nuget.org/packages/System.Reactive/)
  * ~~`Rx-Testing`~~  is now [`Microsoft.Reactive.Testing`](https://www.nuget.org/packages/Microsoft.Reactive.Testing/)
 
 This brings the NuGet package naming in line with NuGet guidelines and also the dominant namespace in each package.
