@@ -41,7 +41,7 @@ if (!(Test-Path .\nuget.exe)) {
 #update version
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json
-$packageSemVer = $versionObj.FullSemVer
+$packageSemVer = $versionObj.NuGetVersionV2
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
