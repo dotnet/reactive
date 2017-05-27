@@ -28,7 +28,7 @@ if (!(Test-Path .\nuget.exe)) {
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
 .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
@@ -75,7 +75,7 @@ if($hasSignClientSecret) {
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
 
-    dotnet $signClientAppPath 'zip' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
+    dotnet $signClientAppPath 'sign' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
 
     if ($LastExitCode -ne 0) { 
         Write-Host "Error signing $nupkg" -Foreground Red
