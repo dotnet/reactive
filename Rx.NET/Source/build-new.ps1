@@ -30,18 +30,18 @@ if (!(Test-Path .\nuget.exe)) {
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.3-beta-g4d80666c50 -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io.dotcover -outputdirectory packages
 
-
 #update version
-.\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
-$versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json
-$packageSemVer = $versionObj.FullSemVer
+$versionObj = .\packages\Nerdbank.GitVersioning\tools\get-version.ps1
+$packageSemVer = $versionObj.NuGetPackageVersion
+
+Write-Host "Building $packageSemVer" -Foreground Green
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
