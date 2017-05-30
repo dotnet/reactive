@@ -1,9 +1,5 @@
 {
-  "$schema": "src\\NerdBank.GitVersioning\\version.schema.json",
-  "version": "3.2.1-alpha.{height}",
-  "assemblyVersion": {
-    "precision": "revision"
-  },
+  "version": "3.2.0-preview.{height}",
   "publicReleaseRefSpec": [
     "^refs/heads/master$", // we release out of master
     "^refs/heads/develop$", // we release out of develop
