@@ -26,11 +26,11 @@
   <Target Name="GetPackagingOutputs" />
   
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>2.0.3-beta-g4d80666c50</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>2.0.4-beta</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.3-beta-g4d80666c50" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.4-beta" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4337 -->

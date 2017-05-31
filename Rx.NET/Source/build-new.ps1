@@ -30,7 +30,7 @@ if (!(Test-Path .\nuget.exe)) {
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.3-beta-g4d80666c50 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.4-beta -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
