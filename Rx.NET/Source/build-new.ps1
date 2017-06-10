@@ -30,7 +30,7 @@ if (!(Test-Path .\nuget.exe)) {
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.4-beta -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.21-beta -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
@@ -111,7 +111,7 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 # Run .NET Core only for now until perf improves on the runner for .net desktop
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build -f netcoreapp1.0 --filter:SkipCI!=true" /output="$outputFileDotCover1" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build -f netcoreapp1.1 --filter:SkipCI!=true" /output="$outputFileDotCover1" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute"
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
