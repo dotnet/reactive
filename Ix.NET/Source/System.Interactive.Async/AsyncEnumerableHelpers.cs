@@ -24,8 +24,7 @@ namespace System.Collections.Generic
             var result = new ArrayWithLength<T>();
             // Check for short circuit optimizations. This one is very unlikely
             // but could be here as a group
-            var ic = source as ICollection<T>;
-            if (ic != null)
+            if (source is ICollection<T> ic)
             {
                 var count = ic.Count;
                 if (count != 0)

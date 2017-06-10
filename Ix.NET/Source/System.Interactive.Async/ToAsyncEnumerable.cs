@@ -18,12 +18,10 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
 
             // optimize these adapters for lists and collections
-            var list = source as IList<TSource>;
-            if (list != null)
+            if (source is IList<TSource> list)
                 return new AsyncIListEnumerableAdapter<TSource>(list);
 
-            var collection = source as ICollection<TSource>;
-            if (collection != null)
+            if (source is ICollection<TSource> collection)
                 return new AsyncICollectionEnumerableAdapter<TSource>(collection);
 
             return new AsyncEnumerableAdapter<TSource>(source);

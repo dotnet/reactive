@@ -1822,7 +1822,7 @@ namespace Tests
             var ys = xs.OrderBy(x => x);
 
             var e = ys.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 HasNext(e, i);
             NoNext(e);
         }
@@ -1852,7 +1852,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderBy<int, int>(x => x).ThenBy<int, int>(x => { throw ex; });
+            var ys = xs.OrderBy(x => x).ThenBy<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -1865,7 +1865,7 @@ namespace Tests
             var ys = xs.OrderByDescending(x => x);
 
             var e = ys.GetEnumerator();
-            for (int i = 9; i >= 0; i--)
+            for (var i = 9; i >= 0; i--)
                 HasNext(e, i);
             NoNext(e);
         }
@@ -2810,7 +2810,7 @@ namespace Tests
             {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
+                if (obj.GetType() != GetType()) return false;
                 return Equals((Kvp)obj);
             }
 
@@ -3445,7 +3445,7 @@ namespace Tests
         [Fact]
         public void TakeLast_BugFix_TakeLast_Zero_TakesForever()
         {
-            bool isSet = false;
+            var isSet = false;
             new int[] { 1, 2, 3, 4 }.ToAsyncEnumerable()
                 .TakeLast(0)
                 .ForEachAsync(_ => { isSet = true; })

@@ -18,8 +18,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            var iterator = source as AsyncIterator<TSource>;
-            if (iterator != null)
+            if (source is AsyncIterator<TSource> iterator)
             {
                 return iterator.Where(predicate);
             }

@@ -89,8 +89,7 @@ namespace System.Linq
 
         private static async Task<TSource> Single_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var list = source as IList<TSource>;
-            if (list != null)
+            if (source is IList<TSource> list)
             {
                 switch (list.Count)
                 {
@@ -119,8 +118,7 @@ namespace System.Linq
 
         private static async Task<TSource> SingleOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var list = source as IList<TSource>;
-            if (list != null)
+            if (source is IList<TSource> list)
             {
                 switch (list.Count)
                 {

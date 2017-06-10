@@ -23,8 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var queryable = source as IAsyncQueryable<TElement>;
-            if (queryable != null)
+            if (source is IAsyncQueryable<TElement> queryable)
             {
                 return queryable;
             }
@@ -34,8 +33,7 @@ namespace System.Linq
 
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
-            var queryable = source as IAsyncQueryable<TSource>;
-            if (queryable != null)
+            if (source is IAsyncQueryable<TSource> queryable)
             {
                 return queryable.Expression;
             }

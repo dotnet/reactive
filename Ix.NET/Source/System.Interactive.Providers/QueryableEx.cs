@@ -2401,13 +2401,11 @@ namespace System.Linq
 
             private static Expression Redir(Expression expression)
             {
-                var mce = expression as MethodCallExpression;
-                if (mce != null && mce.Method.DeclaringType == typeof(QueryableEx))
+                if (expression is MethodCallExpression mce && mce.Method.DeclaringType == typeof(QueryableEx))
                 {
                     if (mce.Arguments.Count >= 1 && typeof(IQueryProvider).IsAssignableFrom(mce.Arguments[0].Type))
                     {
-                        var ce = mce.Arguments[0] as ConstantExpression;
-                        if (ce != null)
+                        if (mce.Arguments[0] is ConstantExpression ce)
                         {
                             if (ce.Value is QueryProviderShim)
                             {
@@ -2525,8 +2523,7 @@ namespace System.Linq
 
         internal static Expression GetSourceExpression<TSource>(IEnumerable<TSource> source)
         {
-            var q = source as IQueryable<TSource>;
-            if (q != null)
+            if (source is IQueryable<TSource> q)
                 return q.Expression;
 
             return Expression.Constant(source, typeof(IEnumerable<TSource>));
