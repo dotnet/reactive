@@ -13,6 +13,7 @@ namespace Tests
     
     public partial class Tests
     {
+#pragma warning disable xUnit1013 // Public method should be marked as test
         public void AssertThrows<E>(Action a)
             where E : Exception
         {
@@ -43,5 +44,6 @@ namespace Tests
             Assert.True(e.MoveNext());
             Assert.Equal(value, e.Current);
         }
+#pragma warning restore xUnit1013 // Public method should be marked as test
     }
 }
