@@ -17,6 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>System.Interactive.Tests.Uwp.DeviceRunner_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>422BF5D1CFB50C975293A3158EA46852395F42CF</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -88,9 +89,9 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.3" />
     <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="xunit.runner.devices" Version="2.2.0-rc1" />
+    <PackageReference Include="xunit.runner.devices" Version="2.2.0" />
     <PackageReference Include="FluentAssertions" Version="4.19.2" />
   </ItemGroup>
   <ItemGroup>
