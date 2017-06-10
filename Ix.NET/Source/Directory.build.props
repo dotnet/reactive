@@ -12,7 +12,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>    
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);1701;1702;CS1591</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
     <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
