@@ -79,7 +79,7 @@ namespace System.Reactive
 
         private IDisposable Run(IScheduler _, State x)
         {
-            x.subscription.Disposable = this.Run(x.observer, x.subscription, x.Assign);
+            x.subscription.Disposable = Run(x.observer, x.subscription, x.Assign);
             return Disposable.Empty;
         }
 

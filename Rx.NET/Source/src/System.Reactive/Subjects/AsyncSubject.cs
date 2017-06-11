@@ -291,7 +291,7 @@ namespace System.Reactive.Subjects
             //
             // [OK] Use of unsafe Subscribe: this type's Subscribe implementation is safe.
             //
-            this.Subscribe/*Unsafe*/(new AwaitObserver(continuation, originalContext));
+            Subscribe/*Unsafe*/(new AwaitObserver(continuation, originalContext));
         }
 
         private sealed class AwaitObserver : IObserver<T>

@@ -84,7 +84,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (timerWins)
-                        _subscription.Disposable = _other.SubscribeSafe(this.GetForwarder());
+                        _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
 
                     return Disposable.Empty;
                 }
@@ -214,7 +214,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (timerWins)
-                        _subscription.Disposable = _other.SubscribeSafe(this.GetForwarder());
+                        _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
                 }
 
                 public void OnNext(TSource value)

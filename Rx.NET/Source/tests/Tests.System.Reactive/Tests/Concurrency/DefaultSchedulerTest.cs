@@ -97,9 +97,7 @@ namespace ReactiveTests.Tests
         [Fact]
         public void No_ThreadPool_Starvation_Dispose()
         {
-            var bwt = default(int);
-            var bio = default(int);
-            ThreadPool.GetAvailableThreads(out bwt, out bio);
+            ThreadPool.GetAvailableThreads(out var bwt, out var bio);
 
             var N = Environment.ProcessorCount * 2;
 
@@ -113,9 +111,7 @@ namespace ReactiveTests.Tests
                 f.Set();
             }
 
-            var ewt = default(int);
-            var eio = default(int);
-            ThreadPool.GetAvailableThreads(out ewt, out eio);
+            ThreadPool.GetAvailableThreads(out var ewt, out var eio);
 
             Assert.False(bwt - ewt >= N);
         }

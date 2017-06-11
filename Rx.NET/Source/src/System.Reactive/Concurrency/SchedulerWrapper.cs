@@ -67,8 +67,7 @@ namespace System.Reactive.Concurrency
             if (serviceProvider == null)
                 return null;
 
-            var result = default(object);
-            if (TryGetService(serviceProvider, serviceType, out result))
+            if (TryGetService(serviceProvider, serviceType, out var result))
                 return result;
 
             return serviceProvider.GetService(serviceType);

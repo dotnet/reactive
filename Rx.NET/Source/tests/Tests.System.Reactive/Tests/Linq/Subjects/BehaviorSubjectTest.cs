@@ -450,8 +450,7 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.Equal(42, s.Value);
 
-            var x = default(int);
-            Assert.True(s.TryGetValue(out x));
+            Assert.True(s.TryGetValue(out var x));
             Assert.Equal(42, x);
         }
 
@@ -461,8 +460,7 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.Equal(42, s.Value);
 
-            var x = default(int);
-            Assert.True(s.TryGetValue(out x));
+            Assert.True(s.TryGetValue(out var x));
             Assert.Equal(42, x);
 
             s.OnNext(43);
@@ -478,8 +476,7 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.Equal(42, s.Value);
 
-            var x = default(int);
-            Assert.True(s.TryGetValue(out x));
+            Assert.True(s.TryGetValue(out var x));
             Assert.Equal(42, x);
 
             s.OnNext(43);
@@ -501,8 +498,7 @@ namespace ReactiveTests.Tests
             var s = new BehaviorSubject<int>(42);
             Assert.Equal(42, s.Value);
 
-            var x = default(int);
-            Assert.True(s.TryGetValue(out x));
+            Assert.True(s.TryGetValue(out var x));
             Assert.Equal(42, x);
 
             s.OnNext(43);
@@ -545,8 +541,7 @@ namespace ReactiveTests.Tests
 
             ReactiveAssert.Throws<InvalidOperationException>(() =>
             {
-                var x = default(int);
-                s.TryGetValue(out x);
+                s.TryGetValue(out var x);
             });
         }
 
@@ -563,8 +558,7 @@ namespace ReactiveTests.Tests
                 var ignored = s.Value;
             });
 
-            var x = default(int);
-            Assert.False(s.TryGetValue(out x));
+            Assert.False(s.TryGetValue(out var x));
         }
     }
 }
