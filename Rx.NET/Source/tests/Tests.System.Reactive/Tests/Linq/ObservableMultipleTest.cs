@@ -6608,7 +6608,7 @@ namespace ReactiveTests.Tests
             res.Messages.AssertEqual(expected);
         }
 
-#if !NO_THREAD && !NETCOREAPP1_0
+#if !NO_THREAD && !NETCOREAPP1_1
         [Fact]
         public void Concat_TailRecursive2()
         {

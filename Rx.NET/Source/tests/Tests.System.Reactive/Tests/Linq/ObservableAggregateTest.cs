@@ -2460,7 +2460,7 @@ namespace ReactiveTests.Tests
             ReactiveAssert.Throws<OverflowException>(() => res.ForEach(_ => { }));
         }
 #endif
-#if !CRIPPLED_REFLECTION || NETCOREAPP1_0
+#if !CRIPPLED_REFLECTION || NETCOREAPP1_1
         class OverflowInjection<T> : IObservable<T>
         {
             private readonly IObservable<T> _source;
