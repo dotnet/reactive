@@ -1,4 +1,4 @@
-image: Visual Studio 2017
+image: Visual Studio 2017 Preview
 
 environment:
   COVERALLS_REPO_TOKEN:
