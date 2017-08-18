@@ -16,9 +16,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Subjects;
-#if !NO_REMOTING
-using System.Runtime.Remoting.Lifetime;
-#endif
 
 namespace System.Reactive.Linq
 {

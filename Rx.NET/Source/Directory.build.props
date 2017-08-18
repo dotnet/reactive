@@ -24,7 +24,8 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.2" PrivateAssets="All" /> 
+    <!-- Disabled until https://github.com/ctaggart/SourceLink/issues/230 is fixed  -->
+    <!--<PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.2" PrivateAssets="All" />-->
   </ItemGroup>
     
   <PropertyGroup>
