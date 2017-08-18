@@ -108,7 +108,7 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 # Use xUnit CLI as it's significantly faster than vstest (dotnet test)
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration --no-build -notrait 'SkipCI!=true'" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration --no-build -notrait `"SkipCI=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
