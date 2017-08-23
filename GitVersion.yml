@@ -12,7 +12,7 @@ commit-message-incrementing: Enabled
 branches:
   master:
     mode: ContinuousDeployment
-    tag: build
+    tag: preview
   release:
     mode: ContinuousDeployment
     tag: rc

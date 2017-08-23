@@ -28,7 +28,7 @@ if (!(Test-Path .\nuget.exe)) {
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
 .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
@@ -45,14 +45,21 @@ New-Item -ItemType Directory -Force -Path $artifacts
 
 
 Write-Host "Restoring packages for $scriptPath\Ix.NET.sln" -Foreground Green
+# use nuget.exe to restore on the legacy proj type
+.\nuget.exe restore "$scriptPath\System.Interactive.Tests.Uwp.DeviceRunner\System.Interactive.Tests.Uwp.DeviceRunner.csproj"
 msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
 # Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
 msbuild "$scriptPath\Ix.NET.sln" /m /t:restore /p:Configuration=$configuration 
 
 Write-Host "Building $scriptPath\Ix.NET.sln" -Foreground Green
 msbuild "$scriptPath\Ix.NET.sln" /m /t:build /p:Configuration=$configuration 
-
-
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
+        }  
+}
 
 
 Write-Host "Building Packages" -Foreground Green
@@ -68,12 +75,13 @@ if($hasSignClientSecret) {
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
 
-    dotnet $signClientAppPath 'zip' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
+    dotnet $signClientAppPath 'sign' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
 
     if ($LastExitCode -ne 0) { 
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"
@@ -96,6 +104,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 
@@ -106,6 +115,7 @@ if ($LastExitCode -ne 0) {
 	Write-Host "Error with tests" -Foreground Red
 	if($isAppVeyor) {
 	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
 	}  
 }
 

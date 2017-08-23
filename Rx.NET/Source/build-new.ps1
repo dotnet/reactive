@@ -28,7 +28,7 @@ if (!(Test-Path .\nuget.exe)) {
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.5.0-beta4 -pre -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
 .\nuget.exe install -excludeversion gitversion.commandline -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
@@ -41,7 +41,7 @@ if (!(Test-Path .\nuget.exe)) {
 #update version
 .\packages\gitversion.commandline\tools\gitversion.exe /l console /output buildserver
 $versionObj = .\packages\gitversion.commandline\tools\gitversion.exe | ConvertFrom-Json
-$packageSemVer = $versionObj.FullSemVer
+$packageSemVer = $versionObj.NuGetVersionV2
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
@@ -52,12 +52,12 @@ msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$config
 msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /t:build /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /t:build /m /p:Configuration=$configuration 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
+          exit $LastExitCode
         }  
 }
 
@@ -87,13 +87,13 @@ if($hasSignClientSecret) {
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
 
-    dotnet $signClientAppPath 'zip' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Rx.NET' -d 'Reactive Extensions for .NET' -u 'http://reactivex.io/' 
+    dotnet $signClientAppPath 'sign' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Rx.NET' -d 'Reactive Extensions for .NET' -u 'http://reactivex.io/' 
 
     if ($LastExitCode -ne 0) { 
         Write-Host "Error signing $nupkg" -Foreground Red
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
+          exit $LastExitCode
         }  
     }
     Write-Host "Finished signing $nupkg"

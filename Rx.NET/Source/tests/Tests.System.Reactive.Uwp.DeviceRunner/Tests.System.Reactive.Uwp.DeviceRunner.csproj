@@ -135,9 +135,6 @@
     <Compile Include="..\Tests.System.Reactive\NullErrorObservable.cs">
       <Link>NullErrorObservable.cs</Link>
     </Compile>
-    <Compile Include="..\Tests.System.Reactive\Semaphore.cs">
-      <Link>Semaphore.cs</Link>
-    </Compile>
     <Compile Include="..\Tests.System.Reactive\Stress\Core\Disposables\Composite.cs">
       <Link>Stress\Core\Disposables\Composite.cs</Link>
     </Compile>
