@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-#if NETCOREAPP1_0 || NET46
+#if NETCOREAPP1_1 || NET46 || NETCOREAPP1_0
 using System.Threading;
 #endif
 #if HAS_DISPATCHER

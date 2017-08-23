@@ -211,7 +211,7 @@ namespace ReactiveTests.Tests
             public bool Equals(Left other)
             {
                 var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other == null ? null : other._value });
+                return (bool)equ.Invoke(_value, new object[] { other?._value });
             }
         }
 
@@ -233,7 +233,7 @@ namespace ReactiveTests.Tests
             public bool Equals(Right other)
             {
                 var equ = _value.GetType().GetMethods().Where(m => m.Name == nameof(Equals) && m.GetParameters()[0].ParameterType != typeof(object)).Single();
-                return (bool)equ.Invoke(_value, new object[] { other == null ? null : other._value });
+                return (bool)equ.Invoke(_value, new object[] { other?._value });
             }
         }
     }

@@ -18,6 +18,7 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+#pragma warning disable xUnit1013 // Public method should be marked as test        
         public void AssertThrows<E>(Action a)
             where E : Exception
         {
@@ -85,5 +86,6 @@ namespace Tests
 
             e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
+#pragma warning restore xUnit1013 // Public method should be marked as test        
     }
 }

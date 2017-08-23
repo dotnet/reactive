@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.0;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp1.1;net461</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
@@ -17,10 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta1-build1279" />
-    <PackageReference Include="xunit" Version="2.3.0-beta1-build3561" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170601-03" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta3-build3705" />
     <PackageReference Include="FluentAssertions" Version="4.19.2 " />
+    
+    <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta3-build3705" />
+
   </ItemGroup>
 
   <ItemGroup>

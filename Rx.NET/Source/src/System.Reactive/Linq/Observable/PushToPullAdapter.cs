@@ -51,8 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             if (!_done)
             {
-                var current = default(TResult);
-                if (TryMoveNext(out current))
+                if (TryMoveNext(out var current))
                 {
                     Current = current;
                     return true;

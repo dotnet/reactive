@@ -22,8 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval()
         {
-            var res = default(IObservable<TResult>);
-            if (_sources.TryGetValue(_selector(), out res))
+            if (_sources.TryGetValue(_selector(), out var res))
                 return res;
 
             return _defaultSource;

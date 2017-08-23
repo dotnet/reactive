@@ -17,8 +17,7 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
 
             // Check to see if it already is and short-circuit
-            var typedSource = source as IAsyncEnumerable<TResult>;
-            if (typedSource != null)
+            if (source is IAsyncEnumerable<TResult> typedSource)
             {
                 return typedSource;
             }

@@ -82,7 +82,7 @@ namespace System.Reactive
                 return false;
 
             var other = (Timestamped<T>)obj;
-            return this.Equals(other);
+            return Equals(other);
         }
 
         /// <summary>

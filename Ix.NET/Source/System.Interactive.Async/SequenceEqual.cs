@@ -60,11 +60,9 @@ namespace System.Linq
         private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer,
                                                                 CancellationToken cancellationToken)
         {
-            var firstCol = first as ICollection<TSource>;
-            if (firstCol != null)
+            if (first is ICollection<TSource> firstCol)
             {
-                var secondCol = second as ICollection<TSource>;
-                if (secondCol != null && firstCol.Count != secondCol.Count)
+                if (second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
                 {
                     return false;
                 }

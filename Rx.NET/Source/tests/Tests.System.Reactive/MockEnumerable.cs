@@ -23,7 +23,7 @@ namespace ReactiveTests
             if (underlyingEnumerable == null)
                 throw new ArgumentNullException(nameof(underlyingEnumerable));
 
-            this.Scheduler = scheduler;
+            Scheduler = scheduler;
             this.underlyingEnumerable = underlyingEnumerable;
         }
 

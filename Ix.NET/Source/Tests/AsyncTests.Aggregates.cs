@@ -48,7 +48,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate((x, y) => x * y);
-            Assert.Equal(ys.Result, 24);
+            Assert.Equal(24, ys.Result);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(ys.Result, 24);
+            Assert.Equal(24, ys.Result);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Tests
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y);
-            Assert.Equal(ys.Result, 1);
+            Assert.Equal(1, ys.Result);
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(ys.Result, 25);
+            Assert.Equal(25, ys.Result);
         }
 
         [Fact]
@@ -124,7 +124,7 @@ namespace Tests
         {
             var xs = new int[0].ToAsyncEnumerable();
             var ys = xs.Aggregate(1, (x, y) => x * y, x => x + 1);
-            Assert.Equal(ys.Result, 2);
+            Assert.Equal(2, ys.Result);
         }
 
         [Fact]
@@ -169,16 +169,16 @@ namespace Tests
         [Fact]
         public void Count1()
         {
-            Assert.Equal(new int[0].ToAsyncEnumerable().Count().Result, 0);
-            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count().Result, 3);
+            Assert.Equal(0, new int[0].ToAsyncEnumerable().Count().Result);
+            Assert.Equal(3, new[] { 1, 2, 3 }.ToAsyncEnumerable().Count().Result);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).Count().Wait(WaitTimeoutMs));
         }
 
         [Fact]
         public void Count2()
         {
-            Assert.Equal(new int[0].ToAsyncEnumerable().Count(x => x < 3).Result, 0);
-            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3).Result, 2);
+            Assert.Equal(0, new int[0].ToAsyncEnumerable().Count(x => x < 3).Result);
+            Assert.Equal(2, new[] { 1, 2, 3 }.ToAsyncEnumerable().Count(x => x < 3).Result);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).Count(x => x < 3).Wait(WaitTimeoutMs));
         }
 
@@ -205,16 +205,16 @@ namespace Tests
         [Fact]
         public void LongCount1()
         {
-            Assert.Equal(new int[0].ToAsyncEnumerable().LongCount().Result, 0);
-            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result, 3);
+            Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount().Result);
+            Assert.Equal(3, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount().Wait(WaitTimeoutMs));
         }
 
         [Fact]
         public void LongCount2()
         {
-            Assert.Equal(new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result, 0);
-            Assert.Equal(new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result, 2);
+            Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result);
+            Assert.Equal(2, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result);
             AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount(x => x < 3).Wait(WaitTimeoutMs));
         }
 
@@ -1306,8 +1306,10 @@ namespace Tests
         {
             var xs = new[] { 1, 4, 2 }.ToAsyncEnumerable();
             var res = xs.ToLookup(x => x % 2).Result;
+#pragma warning disable IDE0007 // Use implicit type
             foreach (IGrouping<int, int> g in (IEnumerable)res)
                 Assert.True(g.Key == 0 || g.Key == 1);
+#pragma warning restore IDE0007 // Use implicit type
         }
 
         [Fact]

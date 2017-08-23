@@ -30,8 +30,7 @@ namespace System.Reactive
             _stack = new Stack<IEnumerator<IObservable<TSource>>>();
             _length = new Stack<int?>();
 
-            var e = default(IEnumerator<IObservable<TSource>>);
-            if (!TryGetEnumerator(sources, out e))
+            if (!TryGetEnumerator(sources, out var e))
                 return Disposable.Empty;
 
             _stack.Push(e);
@@ -139,8 +138,7 @@ namespace System.Reactive
                     var nextSeq = Extract(next);
                     if (nextSeq != null)
                     {
-                        var nextEnumerator = default(IEnumerator<IObservable<TSource>>);
-                        if (!TryGetEnumerator(nextSeq, out nextEnumerator))
+                        if (!TryGetEnumerator(nextSeq, out var nextEnumerator))
                             return;
 
                         _stack.Push(nextEnumerator);

@@ -339,8 +339,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public bool Remove(TKey key)
         {
-            var value = default(TValue);
-            return _map.TryRemove(key, out value);
+            return _map.TryRemove(key, out var value);
         }
     }
 }

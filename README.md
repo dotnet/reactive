@@ -4,7 +4,7 @@ Reactive Extensions
 Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
 AppVeyor<br>([home](https://ci.appveyor.com/project/dotnetfoundation/rx-net)) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg) | ![#](https://img.shields.io/appveyor/ci/dotnetfoundation/rx-net/master.svg)
-NuGet.org | ![#](https://img.shields.io/nuget/v/System.Reactive.svg) | ![#](https://img.shields.io/nuget/v/System.Interactive.svg)
+NuGet.org | [![#](https://img.shields.io/nuget/v/System.Reactive.svg)](https://www.nuget.org/packages/System.Reactive/) | [![#](https://img.shields.io/nuget/v/System.Interactive.svg)](https://www.nuget.org/packages/System.Interactive/)
 MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Reactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Reactive.svg) | ![#](https://img.shields.io/dotnet.myget/rx/vpre/System.Interactive.svg)<br>![#](https://img.shields.io/dotnet.myget/rx/v/System.Interactive.svg)  
 
 ### Join the conversation

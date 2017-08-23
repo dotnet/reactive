@@ -333,8 +333,7 @@ namespace System.Linq
             {
                 Debug.Assert(i < _count);
 
-                var res = default(RefCount);
-                if (!_list.TryGetValue(i, out res))
+                if (!_list.TryGetValue(i, out var res))
                     throw new InvalidOperationException("Element no longer available in the buffer.");
 
                 var val = res.Value;

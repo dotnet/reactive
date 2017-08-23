@@ -1822,7 +1822,7 @@ namespace Tests
             var ys = xs.OrderBy(x => x);
 
             var e = ys.GetEnumerator();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
                 HasNext(e, i);
             NoNext(e);
         }
@@ -1852,7 +1852,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
-            var ys = xs.OrderBy<int, int>(x => x).ThenBy<int, int>(x => { throw ex; });
+            var ys = xs.OrderBy(x => x).ThenBy<int, int>(x => { throw ex; });
 
             var e = ys.GetEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -1865,7 +1865,7 @@ namespace Tests
             var ys = xs.OrderByDescending(x => x);
 
             var e = ys.GetEnumerator();
-            for (int i = 9; i >= 0; i--)
+            for (var i = 9; i >= 0; i--)
                 HasNext(e, i);
             NoNext(e);
         }
@@ -2045,7 +2045,7 @@ namespace Tests
             var e = res.GetEnumerator();
 
             Assert.True(e.MoveNext().Result);
-            Assert.Equal(e.Current.Key, 2);
+            Assert.Equal(2, e.Current.Key);
             var g1 = e.Current.GetEnumerator();
             HasNext(g1, xs[0]);
             HasNext(g1, xs[2]);
@@ -2054,19 +2054,19 @@ namespace Tests
             NoNext(g1);
 
             Assert.True(e.MoveNext().Result);
-            Assert.Equal(e.Current.Key, 6);
+            Assert.Equal(6, e.Current.Key);
             var g2 = e.Current.GetEnumerator();
             HasNext(g2, xs[1]);
             NoNext(g2);
 
             Assert.True(e.MoveNext().Result);
-            Assert.Equal(e.Current.Key, 1);
+            Assert.Equal(1, e.Current.Key);
             var g3 = e.Current.GetEnumerator();
             HasNext(g3, xs[3]);
             NoNext(g3);
 
             Assert.True(e.MoveNext().Result);
-            Assert.Equal(e.Current.Key, 4);
+            Assert.Equal(4, e.Current.Key);
             var g4 = e.Current.GetEnumerator();
             HasNext(g4, xs[6]);
             NoNext(g4);
@@ -2095,19 +2095,19 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 2);
+            Assert.Equal(2, g1.Key);
 
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
-            Assert.Equal(g2.Key, 6);
+            Assert.Equal(6, g2.Key);
 
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
-            Assert.Equal(g3.Key, 1);
+            Assert.Equal(1, g3.Key);
 
             Assert.True(e.MoveNext().Result);
             var g4 = e.Current;
-            Assert.Equal(g4.Key, 4);
+            Assert.Equal(4, g4.Key);
 
             NoNext(e);
 
@@ -2255,7 +2255,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 0);
+            Assert.Equal(0, g1.Key);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
@@ -2265,7 +2265,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
-            Assert.Equal(g2.Key, 1);
+            Assert.Equal(1, g2.Key);
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
@@ -2274,7 +2274,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
-            Assert.Equal(g3.Key, 2);
+            Assert.Equal(2, g3.Key);
             var g3e = g3.GetEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
@@ -2320,7 +2320,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 0);
+            Assert.Equal(0, g1.Key);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 0);
             HasNext(g1e, 3);
@@ -2330,7 +2330,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
-            Assert.Equal(g2.Key, 1);
+            Assert.Equal(1, g2.Key);
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 1);
             HasNext(g2e, 4);
@@ -2339,7 +2339,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
-            Assert.Equal(g3.Key, 2);
+            Assert.Equal(2, g3.Key);
             var g3e = g3.GetEnumerator();
             HasNext(g3e, 2);
             HasNext(g3e, 5);
@@ -2359,7 +2359,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 0);
+            Assert.Equal(0, g1.Key);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
@@ -2369,7 +2369,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
-            Assert.Equal(g2.Key, 1);
+            Assert.Equal(1, g2.Key);
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
@@ -2378,7 +2378,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
-            Assert.Equal(g3.Key, 2);
+            Assert.Equal(2, g3.Key);
             var g3e = g3.GetEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
@@ -2424,7 +2424,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 0);
+            Assert.Equal(0, g1.Key);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
@@ -2435,7 +2435,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
-            Assert.Equal(g2.Key, 1);
+            Assert.Equal(1, g2.Key);
             var g2e = g2.GetEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
@@ -2445,7 +2445,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
-            Assert.Equal(g3.Key, 2);
+            Assert.Equal(2, g3.Key);
             var g3e = g3.GetEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
@@ -2480,7 +2480,7 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
-            Assert.Equal(g1.Key, 0);
+            Assert.Equal(0, g1.Key);
             var g1e = g1.GetEnumerator();
             HasNext(g1e, 'a');
 
@@ -2810,7 +2810,7 @@ namespace Tests
             {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
+                if (obj.GetType() != GetType()) return false;
                 return Equals((Kvp)obj);
             }
 
@@ -3445,7 +3445,7 @@ namespace Tests
         [Fact]
         public void TakeLast_BugFix_TakeLast_Zero_TakesForever()
         {
-            bool isSet = false;
+            var isSet = false;
             new int[] { 1, 2, 3, 4 }.ToAsyncEnumerable()
                 .TakeLast(0)
                 .ForEachAsync(_ => { isSet = true; })

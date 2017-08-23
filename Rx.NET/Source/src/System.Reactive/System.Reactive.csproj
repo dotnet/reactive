@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
     <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
     <Description>Reactive Extensions (Rx) for .NET</Description>
@@ -23,6 +23,10 @@
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
   </ItemGroup>
   
   <!-- UWP -->
@@ -63,9 +67,6 @@
     <EmbeddedResource Update="Strings_Linq.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Linq.Designer.cs" />
     <EmbeddedResource Update="Strings_PlatformServices.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
     <EmbeddedResource Update="Strings_Providers.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Providers.Designer.cs" />    
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

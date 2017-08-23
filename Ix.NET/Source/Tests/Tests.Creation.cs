@@ -56,14 +56,14 @@ namespace Tests
                 }
             });
 
-            int j = 0;
-            foreach (int elem in xs)
+            var j = 0;
+            foreach (var elem in xs)
             {
-                Assert.Equal(elem, j);
+                Assert.Equal(j, elem);
                 j++;
             }
 
-            Assert.Equal(j, 10);
+            Assert.Equal(10, j);
         }
 
         [Fact]
@@ -85,14 +85,14 @@ namespace Tests
                 }
             });
 
-            int j = 0;
-            foreach (int elem in xs)
+            var j = 0;
+            foreach (var elem in xs)
             {
                 Assert.Equal(elem, j);
                 j++;
             }
 
-            Assert.Equal(j, 10);
+            Assert.Equal(10, j);
         }
 
         [Fact]

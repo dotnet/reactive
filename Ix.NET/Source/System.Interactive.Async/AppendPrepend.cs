@@ -18,8 +18,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var appendable = source as AppendPrepentAsyncIterator<TSource>;
-            if (appendable != null)
+            if (source is AppendPrepentAsyncIterator<TSource> appendable)
             {
                 return appendable.Append(element);
             }
@@ -32,8 +31,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            var appendable = source as AppendPrepentAsyncIterator<TSource>;
-            if (appendable != null)
+            if (source is AppendPrepentAsyncIterator<TSource> appendable)
             {
                 return appendable.Prepend(element);
             }
@@ -197,8 +195,7 @@ namespace System.Linq
                     index = 1;
                 }
 
-                var sourceCollection = source as ICollection<TSource>;
-                if (sourceCollection != null)
+                if (source is ICollection<TSource> sourceCollection)
                 {
                     sourceCollection.CopyTo(array, index);
                 }
@@ -253,8 +250,7 @@ namespace System.Linq
 
             public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                var listProv = source as IIListProvider<TSource>;
-                if (listProv != null)
+                if (source is IIListProvider<TSource> listProv)
                 {
                     var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + 1;
@@ -433,8 +429,7 @@ namespace System.Linq
                     ++index;
                 }
 
-                var sourceCollection = source as ICollection<TSource>;
-                if (sourceCollection != null)
+                if (source is ICollection<TSource> sourceCollection)
                 {
                     sourceCollection.CopyTo(array, index);
                 }
@@ -496,8 +491,7 @@ namespace System.Linq
 
             public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                var listProv = source as IIListProvider<TSource>;
-                if (listProv != null)
+                if (source is IIListProvider<TSource> listProv)
                 {
                     var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + (appended == null ? 0 : appended.Count) + (prepended == null ? 0 : prepended.Count);

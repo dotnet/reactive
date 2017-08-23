@@ -19,7 +19,7 @@ namespace Microsoft.Reactive.Testing
                 throw new ArgumentNullException(nameof(scheduler));
 
             this.scheduler = scheduler;
-            this.messages = new List<Recorded<Notification<T>>>();
+            messages = new List<Recorded<Notification<T>>>();
         }
 
         public void OnNext(T value)

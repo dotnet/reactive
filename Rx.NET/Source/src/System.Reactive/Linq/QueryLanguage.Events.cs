@@ -264,11 +264,7 @@ namespace System.Reactive.Linq
 
         private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
         {
-            var addMethod = default(MethodInfo);
-            var removeMethod = default(MethodInfo);
-            var delegateType = default(Type);
-            var isWinRT = default(bool);
-            ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out addMethod, out removeMethod, out delegateType, out isWinRT);
+            ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);
 
 #if HAS_WINRT
             if (isWinRT)

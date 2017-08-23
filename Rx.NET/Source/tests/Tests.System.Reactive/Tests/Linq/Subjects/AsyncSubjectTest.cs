@@ -308,14 +308,14 @@ namespace ReactiveTests.Tests
         public void Await_Blocking()
         {
             var s = new AsyncSubject<int>();
-            GetResult_Blocking(s.GetAwaiter());
+            GetResult_BlockingImpl(s.GetAwaiter());
         }
 
         [Fact]
         public void Await_Throw()
         {
             var s = new AsyncSubject<int>();
-            GetResult_Blocking_Throw(s.GetAwaiter());
+            GetResult_Blocking_ThrowImpl(s.GetAwaiter());
         }
 #endif
 
@@ -331,10 +331,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void GetResult_Blocking()
         {
-            GetResult_Blocking(new AsyncSubject<int>());
+            GetResult_BlockingImpl(new AsyncSubject<int>());
         }
 
-        private void GetResult_Blocking(AsyncSubject<int> s)
+        private void GetResult_BlockingImpl(AsyncSubject<int> s)
         {
             Assert.False(s.IsCompleted);
 
@@ -359,10 +359,10 @@ namespace ReactiveTests.Tests
         [Fact]
         public void GetResult_Blocking_Throw()
         {
-            GetResult_Blocking_Throw(new AsyncSubject<int>());
+            GetResult_Blocking_ThrowImpl(new AsyncSubject<int>());
         }
 
-        private void GetResult_Blocking_Throw(AsyncSubject<int> s)
+        private void GetResult_Blocking_ThrowImpl(AsyncSubject<int> s)
         {
             Assert.False(s.IsCompleted);
 

@@ -343,8 +343,7 @@ namespace System.Linq
                         return current.next;
                     }
 
-                    var prevN = current.previousConcat as ConcatNAsyncIterator<TSource>;
-                    if (prevN != null)
+                    if (current.previousConcat is ConcatNAsyncIterator<TSource> prevN)
                     {
                         current = prevN;
                         continue;

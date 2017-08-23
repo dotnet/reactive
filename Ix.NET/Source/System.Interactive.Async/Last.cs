@@ -91,8 +91,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            var list = source as IList<TSource>;
-            if (list != null)
+            if (source is IList<TSource> list)
             {
                 var count = list.Count;
                 if (count > 0)
@@ -120,8 +119,7 @@ namespace System.Linq
             var last = default(TSource);
             var hasLast = false;
 
-            var list = source as IList<TSource>;
-            if (list != null)
+            if (source is IList<TSource> list)
             {
                 var count = list.Count;
                 if (count > 0)

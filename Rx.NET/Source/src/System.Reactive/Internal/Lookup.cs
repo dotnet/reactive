@@ -19,9 +19,8 @@ namespace System.Reactive
 
         public void Add(K key, E element)
         {
-            var list = default(List<E>);
 
-            if (!_dictionary.TryGetValue(key, out list))
+            if (!_dictionary.TryGetValue(key, out var list))
             {
                 _dictionary[key] = list = new List<E>();
             }
@@ -37,9 +36,8 @@ namespace System.Reactive
         {
             get
             {
-                var list = default(List<E>);
 
-                if (!_dictionary.TryGetValue(key, out list))
+                if (!_dictionary.TryGetValue(key, out var list))
                     return Enumerable.Empty<E>();
 
                 return Hide(list);

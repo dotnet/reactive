@@ -61,8 +61,7 @@ namespace System.Reactive.PlatformServices
             {
                 foreach (var entry in s_systemClockChanged)
                 {
-                    var scheduler = default(LocalScheduler);
-                    if (entry.TryGetTarget(out scheduler))
+                    if (entry.TryGetTarget(out var scheduler))
                     {
                         scheduler.SystemClockChanged(sender, e);
                     }
@@ -124,8 +123,7 @@ namespace System.Reactive.PlatformServices
 
                 foreach (var handler in s_systemClockChanged)
                 {
-                    var scheduler = default(LocalScheduler);
-                    if (!handler.TryGetTarget(out scheduler))
+                    if (!handler.TryGetTarget(out var scheduler))
                     {
                         if (remove == null)
                         {
