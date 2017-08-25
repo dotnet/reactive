@@ -11,7 +11,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     #region Binary
 
-    internal sealed class CombineLatest<TFirst, TSecond, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<TFirst, TSecond, TResult> : Producer<TResult, CombineLatest<TFirst, TSecond, TResult>._>
     {
         private readonly IObservable<TFirst> _first;
         private readonly IObservable<TSecond> _second;
@@ -24,14 +24,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_resultSelector, observer, cancel);
-            setSink(sink);
-            return sink.Run(_first, _second);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
-        private sealed class _ : Sink<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
+
+        internal sealed class _ : Sink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -392,7 +389,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
     #region N-ary
 
-    internal sealed class CombineLatest<TSource, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<TSource, TResult> : Producer<TResult, CombineLatest<TSource, TResult>._>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
         private readonly Func<IList<TSource>, TResult> _resultSelector;
@@ -403,14 +400,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_resultSelector, observer, cancel);
-            setSink(sink);
-            return sink.Run(_sources);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
-        private sealed class _ : Sink<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+
+        internal sealed class _ : Sink<TResult>
         {
             private readonly Func<IList<TSource>, TResult> _resultSelector;
 

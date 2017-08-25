@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Cast<TSource, TResult> : Producer<TResult> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
+    internal sealed class Cast<TSource, TResult> : Producer<TResult, Cast<TSource, TResult>._> /* Could optimize further by deriving from Select<TResult> and providing Combine<TResult2>. We're not doing this (yet) for debuggability. */
     {
         private readonly IObservable<TSource> _source;
 
@@ -13,14 +13,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TResult>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<TResult>, IObserver<TSource>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

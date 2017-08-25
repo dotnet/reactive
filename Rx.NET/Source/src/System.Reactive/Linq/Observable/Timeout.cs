@@ -9,7 +9,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Timeout<TSource>
     {
-        internal sealed class Relative : Producer<TSource>
+        internal sealed class Relative : Producer<TSource, Relative._>
         {
             private readonly IObservable<TSource> _source;
             private readonly TimeSpan _dueTime;
@@ -24,14 +24,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run(_source);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => sink.Run(_source);
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private readonly TimeSpan _dueTime;
                 private readonly IObservable<TSource> _other;
@@ -151,7 +148,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Absolute : Producer<TSource>
+        internal sealed class Absolute : Producer<TSource, Absolute._>
         {
             private readonly IObservable<TSource> _source;
             private readonly DateTimeOffset _dueTime;
@@ -166,14 +163,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_other, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_other, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => sink.Run(this);
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private readonly IObservable<TSource> _other;
 
@@ -263,7 +257,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Timeout<TSource, TTimeout> : Producer<TSource>
+    internal sealed class Timeout<TSource, TTimeout> : Producer<TSource, Timeout<TSource, TTimeout>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TTimeout> _firstTimeout;
@@ -278,14 +272,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
             private readonly IObservable<TSource> _other;

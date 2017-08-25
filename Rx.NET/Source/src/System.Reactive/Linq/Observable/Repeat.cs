@@ -9,7 +9,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Repeat<TResult>
     {
-        internal sealed class Forever : Producer<TResult>
+        internal sealed class Forever : Producer<TResult, Forever._>
         {
             private readonly TResult _value;
             private readonly IScheduler _scheduler;
@@ -20,14 +20,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_value, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
 
-            private sealed class _ : Sink<TResult>
+            protected override IDisposable Run(_ sink) => sink.Run(this);
+
+            internal sealed class _ : Sink<TResult>
             {
                 private readonly TResult _value;
 
@@ -67,7 +64,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Count : Producer<TResult>
+        internal sealed class Count : Producer<TResult, Count._>
         {
             private readonly TResult _value;
             private readonly IScheduler _scheduler;
@@ -80,14 +77,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _repeatCount = repeatCount;
             }
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_value, observer, cancel);
-                setSink(sink);
-                return sink.Run(this);
-            }
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
 
-            private sealed class _ : Sink<TResult>
+            protected override IDisposable Run(_ sink) => sink.Run(this);
+
+            internal sealed class _ : Sink<TResult>
             {
                 private readonly TResult _value;
 

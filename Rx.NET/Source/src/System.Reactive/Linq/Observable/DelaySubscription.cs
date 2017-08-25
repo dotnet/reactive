@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal abstract class DelaySubscription<TSource> : Producer<TSource>
+    internal abstract class DelaySubscription<TSource> : Producer<TSource, DelaySubscription<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly IScheduler _scheduler;
@@ -27,12 +27,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return _scheduler.Schedule(sink, _dueTime, Subscribe);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+
+            protected override IDisposable Run(_ sink) => _scheduler.Schedule(sink, _dueTime, Subscribe);
         }
 
         internal sealed class Absolute : DelaySubscription<TSource>
@@ -45,12 +42,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(observer, cancel);
-                setSink(sink);
-                return _scheduler.Schedule(sink, _dueTime, Subscribe);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+
+            protected override IDisposable Run(_ sink) => _scheduler.Schedule(sink, _dueTime, Subscribe);
         }
 
         private IDisposable Subscribe(IScheduler _, _ sink)
@@ -58,7 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
             return _source.SubscribeSafe(sink);
         }
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

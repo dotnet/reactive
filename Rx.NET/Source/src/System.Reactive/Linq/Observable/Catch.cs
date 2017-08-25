@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Catch<TSource> : Producer<TSource>
+    internal sealed class Catch<TSource> : Producer<TSource, Catch<TSource>._>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 
@@ -16,14 +16,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(_sources);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : TailRecursiveSink<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+
+        internal sealed class _ : TailRecursiveSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -80,7 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class Catch<TSource, TException> : Producer<TSource> where TException : Exception
+    internal sealed class Catch<TSource, TException> : Producer<TSource, Catch<TSource, TException>._> where TException : Exception
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TException, IObservable<TSource>> _handler;
@@ -91,14 +88,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _handler = handler;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_handler, observer, cancel);
-            setSink(sink);
-            return sink.Run(_source);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_handler, observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(_source);
+
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly Func<TException, IObservable<TSource>> _handler;
 

@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class AverageDouble : Producer<double>
+    internal sealed class AverageDouble : Producer<double, AverageDouble._>
     {
         private readonly IObservable<double> _source;
 
@@ -13,14 +13,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double>, IObserver<double>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double>, IObserver<double>
         {
             private double _sum;
             private long _count;
@@ -72,7 +69,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageSingle : Producer<float>
+    internal sealed class AverageSingle : Producer<float, AverageSingle._>
     {
         private readonly IObservable<float> _source;
 
@@ -81,14 +78,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<float> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<float> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<float>, IObserver<float>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<float>, IObserver<float>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -140,7 +134,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageDecimal : Producer<decimal>
+    internal sealed class AverageDecimal : Producer<decimal, AverageDecimal._>
     {
         private readonly IObservable<decimal> _source;
 
@@ -149,14 +143,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<decimal> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<decimal> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<decimal>, IObserver<decimal>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<decimal>, IObserver<decimal>
         {
             private decimal _sum;
             private long _count;
@@ -208,7 +199,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageInt32 : Producer<double>
+    internal sealed class AverageInt32 : Producer<double, AverageInt32._>
     {
         private readonly IObservable<int> _source;
 
@@ -217,14 +208,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double>, IObserver<int>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double>, IObserver<int>
         {
             private long _sum;
             private long _count;
@@ -276,7 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageInt64 : Producer<double>
+    internal sealed class AverageInt64 : Producer<double, AverageInt64._>
     {
         private readonly IObservable<long> _source;
 
@@ -285,14 +273,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double>, IObserver<long>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double>, IObserver<long>
         {
             private long _sum;
             private long _count;
@@ -344,7 +329,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageDoubleNullable : Producer<double?>
+    internal sealed class AverageDoubleNullable : Producer<double?, AverageDoubleNullable._>
     {
         private readonly IObservable<double?> _source;
 
@@ -353,14 +338,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double?> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double?>, IObserver<double?>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double?>, IObserver<double?>
         {
             private double _sum;
             private long _count;
@@ -415,7 +397,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageSingleNullable : Producer<float?>
+    internal sealed class AverageSingleNullable : Producer<float?, AverageSingleNullable._>
     {
         private readonly IObservable<float?> _source;
 
@@ -424,14 +406,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<float?> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<float?> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<float?>, IObserver<float?>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<float?>, IObserver<float?>
         {
             private double _sum; // NOTE: Uses a different accumulator type (double), conform LINQ to Objects.
             private long _count;
@@ -486,7 +465,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageDecimalNullable : Producer<decimal?>
+    internal sealed class AverageDecimalNullable : Producer<decimal?, AverageDecimalNullable._>
     {
         private readonly IObservable<decimal?> _source;
 
@@ -495,14 +474,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<decimal?> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<decimal?> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<decimal?>, IObserver<decimal?>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<decimal?>, IObserver<decimal?>
         {
             private decimal _sum;
             private long _count;
@@ -557,7 +533,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageInt32Nullable : Producer<double?>
+    internal sealed class AverageInt32Nullable : Producer<double?, AverageInt32Nullable._>
     {
         private readonly IObservable<int?> _source;
 
@@ -566,14 +542,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double?> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double?>, IObserver<int?>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double?>, IObserver<int?>
         {
             private long _sum;
             private long _count;
@@ -628,7 +601,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class AverageInt64Nullable : Producer<double?>
+    internal sealed class AverageInt64Nullable : Producer<double?, AverageInt64Nullable._>
     {
         private readonly IObservable<long?> _source;
 
@@ -637,14 +610,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<double?> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<double?>, IObserver<long?>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<double?>, IObserver<long?>
         {
             private long _sum;
             private long _count;

@@ -6,7 +6,7 @@ using System.Reactive.Concurrency;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Empty<TResult> : Producer<TResult>
+    internal sealed class Empty<TResult> : Producer<TResult, Empty<TResult>._>
     {
         private readonly IScheduler _scheduler;
 
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(_scheduler);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
+
+        internal sealed class _ : Sink<TResult>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class OnErrorResumeNext<TSource> : Producer<TSource>
+    internal sealed class OnErrorResumeNext<TSource> : Producer<TSource, OnErrorResumeNext<TSource>._>
     {
         private readonly IEnumerable<IObservable<TSource>> _sources;
 
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(_sources);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : TailRecursiveSink<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+
+        internal sealed class _ : TailRecursiveSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

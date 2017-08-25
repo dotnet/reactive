@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Multicast<TSource, TIntermediate, TResult> : Producer<TResult>
+    internal sealed class Multicast<TSource, TIntermediate, TResult> : Producer<TResult, Multicast<TSource, TIntermediate, TResult>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<ISubject<TSource, TIntermediate>> _subjectSelector;
@@ -20,14 +20,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _selector = selector;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TResult>, IObserver<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TResult>, IObserver<TResult>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

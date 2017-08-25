@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Switch<TSource> : Producer<TSource>
+    internal sealed class Switch<TSource> : Producer<TSource, Switch<TSource>._>
     {
         private readonly IObservable<IObservable<TSource>> _sources;
 
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
         {
             private readonly object _gate = new object();
 

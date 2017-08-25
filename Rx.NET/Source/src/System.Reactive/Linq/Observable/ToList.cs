@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ToList<TSource> : Producer<IList<TSource>>
+    internal sealed class ToList<TSource> : Producer<IList<TSource>, ToList<TSource>._>
     {
         private readonly IObservable<TSource> _source;
 
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<IList<TSource>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<IList<TSource>>, IObserver<TSource>
         {
             private readonly List<TSource> _list;
 

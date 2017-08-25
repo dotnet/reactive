@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class OfType<TSource, TResult> : Producer<TResult>
+    internal sealed class OfType<TSource, TResult> : Producer<TResult, OfType<TSource, TResult>._>
     {
         private readonly IObservable<TSource> _source;
 
@@ -13,14 +13,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TResult>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<TResult>, IObserver<TSource>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

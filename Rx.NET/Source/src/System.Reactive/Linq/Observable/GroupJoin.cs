@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> : Producer<TResult>
+    internal sealed class GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> : Producer<TResult, GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>._>
     {
         private readonly IObservable<TLeft> _left;
         private readonly IObservable<TRight> _right;
@@ -25,14 +25,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        private sealed class _ : Sink<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TResult>
         {
             private readonly object _gate = new object();
             private readonly CompositeDisposable _group = new CompositeDisposable();

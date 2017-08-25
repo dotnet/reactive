@@ -10,7 +10,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class TakeLast<TSource>
     {
-        internal sealed class Count : Producer<TSource>
+        internal sealed class Count : Producer<TSource, Count._>
         {
             private readonly IObservable<TSource> _source;
             private readonly int _count;
@@ -23,14 +23,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => sink.Run();
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -117,7 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Time : Producer<TSource>
+        internal sealed class Time : Producer<TSource, Time._>
         {
             private readonly IObservable<TSource> _source;
             private readonly TimeSpan _duration;
@@ -132,14 +129,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return sink.Run();
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => sink.Run();
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 

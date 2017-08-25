@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ElementAt<TSource> : Producer<TSource>
+    internal sealed class ElementAt<TSource> : Producer<TSource, ElementAt<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly int _index;
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _index = index;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_index, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_index, observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private int _i;
 

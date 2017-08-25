@@ -6,7 +6,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Do<TSource>
     {
-        internal sealed class OnNext : Producer<TSource>
+        internal sealed class OnNext : Producer<TSource, OnNext._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Action<TSource> _onNext;
@@ -17,14 +17,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onNext = onNext;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_onNext, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_onNext, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private readonly Action<TSource> _onNext;
 
@@ -64,7 +61,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Observer : Producer<TSource>
+        internal sealed class Observer : Producer<TSource, Observer._>
         {
             private readonly IObservable<TSource> _source;
             private readonly IObserver<TSource> _observer;
@@ -75,14 +72,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer = observer;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_observer, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_observer, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 private readonly IObserver<TSource> _doObserver;
 
@@ -144,7 +138,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class Actions : Producer<TSource>
+        internal sealed class Actions : Producer<TSource, Actions._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Action<TSource> _onNext;
@@ -159,14 +153,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onCompleted = onCompleted;
             }
 
-            protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(this, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-            private sealed class _ : Sink<TSource>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+            internal sealed class _ : Sink<TSource>, IObserver<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
