@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>System.Linq.Expressions.CompilerServices</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Provides a set of LINQ expression tree utilities used to analyze, rewrite, and evaluate expressions.</Description>
+    <Product>Rx</Product>
+    <Company>Microsoft Corporation</Company>
+    <Authors>Microsoft</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Reactive.Bcl.Memory.Pooling\Microsoft.Reactive.Bcl.Memory.Pooling.csproj" />
+  </ItemGroup>
+
+</Project>
