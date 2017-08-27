@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Reactive.Bcl.Linq.Expressions.CompilerServices", "Microsoft.Reactive.Bcl.Linq.Expressions.CompilerServices\Microsoft.Reactive.Bcl.Linq.Expressions.CompilerServices.csproj", "{91A75A72-ED83-445A-8EDD-2CCACA20A4D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Reactive.Bcl.Memory.Pooling", "Microsoft.Reactive.Bcl.Memory.Pooling\Microsoft.Reactive.Bcl.Memory.Pooling.csproj", "{0D30BB06-70B2-40CC-8CA2-FD464BE69AC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91A75A72-ED83-445A-8EDD-2CCACA20A4D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91A75A72-ED83-445A-8EDD-2CCACA20A4D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91A75A72-ED83-445A-8EDD-2CCACA20A4D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91A75A72-ED83-445A-8EDD-2CCACA20A4D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D30BB06-70B2-40CC-8CA2-FD464BE69AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D30BB06-70B2-40CC-8CA2-FD464BE69AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D30BB06-70B2-40CC-8CA2-FD464BE69AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D30BB06-70B2-40CC-8CA2-FD464BE69AC0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1F8B2C0-2E4A-4077-BC6C-F086DD7DF176}
+	EndGlobalSection
+EndGlobal
