@@ -28,6 +28,7 @@ local.properties
 # PDT-specific
 .buildpath
 
+_NCrunch*
 
 #################
 ## Visual Studio

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Main Library used to express queries over enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Main Library</AssemblyTitle>
+    <Authors>Microsoft</Authors>
+    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\System.Interactive.rd.xml" />
+  </ItemGroup>
+
+</Project>

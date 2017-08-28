@@ -14,10 +14,20 @@ Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder
 
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
-- NuGet v2 feed url (VS 2012+): `https://dotnet.myget.org/F/rx/`
-- Symbol server url: `https://dotnet.myget.org/F/rx/symbols/`
 
-### Breaking changes
+### v4.0 changes
+Due to the [overwhelming](https://github.com/Reactive-Extensions/Rx.NET/issues/299) [pain](https://github.com/Reactive-Extensions/Rx.NET/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/Reactive-Extensions/Rx.NET/issues/205) caused, we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
+
+#### Supported Platforms
+Rx 4.0 supports the following platforms
+
+- .NET Framework 4.5+
+- .NET Standard 1.3+ (including .NET Core, Xamarin and others)
+- UWP
+
+Notably, Windows 8, Windows Phone 8 and legacy PCL libraries are no longer supported. 
+
+### v3.0 breaking changes
 The NuGet packages have changed their package naming in the move from v2.x.x to v3.0.0
  * ~~`Rx-Main`~~ is now [`System.Reactive`](https://www.nuget.org/packages/System.Reactive/)
  * ~~`Rx-Core`~~ is now [`System.Reactive.Core`](https://www.nuget.org/packages/System.Reactive.Core/)
@@ -76,7 +86,7 @@ Interactive Extensions
 -----------------------
 * __Ix.NET__: *(included in this repository)* The Interactive Extensions (Ix) is a .NET library which extends LINQ to Objects to provide many of the operators available in Rx but targeted for IEnumerable<T>.
 * [IxJS](https://github.com/ReactiveX/IxJS): An implementation of LINQ to Objects and the Interactive Extensions (Ix) in JavaScript.
-* [IxCpp](https://github.com/Reactive-Extensions/RxCpp): An implantation of LINQ for Native Developers in C++
+* [IxCpp](https://github.com/Reactive-Extensions/RxCpp): An implementation of LINQ for Native Developers in C++
 
 Applications
 -------------

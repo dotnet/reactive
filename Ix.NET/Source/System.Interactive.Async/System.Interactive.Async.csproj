@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
+    <TargetFrameworks>net45;net46;netstandard1.0;netstandard1.3</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\System.Interactive.Async.rd.xml" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Interactive Extensions Async Providers Library used to build query providers and express queries over async enumerable sequences.</Description>
+    <AssemblyTitle>Interactive Extensions - Async Providers Library</AssemblyTitle>
+    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\System.Interactive.Async.Providers.rd.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AsyncQueryable.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryable.Generated.cs" />
+    <Compile Update="AsyncQueryable.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryable.Generated.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+</Project>

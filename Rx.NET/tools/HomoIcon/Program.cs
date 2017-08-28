@@ -222,7 +222,7 @@ using System.Runtime.Remoting.Lifetime;
                             where ptgtd.GetGenericArguments().Count() > 5
                             select pi;
 
-                var isLargeArity = funky.Any();
+                //var isLargeArity = funky.Any();
 
                 var hasTask = p.Any(pa => ContainsTask(pa.ParameterType));
 
@@ -353,10 +353,10 @@ using System.Runtime.Remoting.Lifetime;
                 //    if (nulls.Contains("lease"))
                 //        nulls.Remove("lease");
                 //}
-                if (isLargeArity)
-                {
-                    WriteLine("#if !NO_LARGEARITY", true);
-                }
+                //if (isLargeArity)
+                //{
+                //    WriteLine("#if !NO_LARGEARITY", true);
+                //}
 
                 var isFep = m.Name == "FromEventPattern";
                 var isGenFep = isFep && m.GetGenericArguments().Any(a => a.Name == "TEventArgs");
@@ -498,8 +498,8 @@ using System.Runtime.Remoting.Lifetime;
                     WriteLine("#endif", true);
                 if (isExp)
                     WriteLine("#endif", true);
-                if (isLargeArity)
-                    WriteLine("#endif", true);
+                //if (isLargeArity)
+                //    WriteLine("#endif", true);
                 WriteLine("");
             }
 
@@ -552,8 +552,8 @@ using System.Runtime.Remoting.Lifetime;
             {
                 for (int i = 0; i <= 16; i++)
                 {
-                    if (i == 5)
-                        WriteLine("#if !NO_LARGEARITY", true);
+                    //if (i == 5)
+                    //    WriteLine("#if !NO_LARGEARITY", true);
 
                     foreach (var withScheduler in new[] { false, true })
                     {
@@ -683,8 +683,8 @@ using System.Runtime.Remoting.Lifetime;
                         WriteLine("");
                     }
 
-                    if (i == 16)
-                        WriteLine("#endif", true);
+                    //if (i == 16)
+                    //    WriteLine("#endif", true);
                 }
             }
 
@@ -694,8 +694,8 @@ using System.Runtime.Remoting.Lifetime;
             {
                 for (int i = 0; i < 15; i++)
                 {
-                    if (i == 3)
-                        WriteLine("#if !NO_LARGEARITY", true);
+                    //if (i == 3)
+                    //    WriteLine("#if !NO_LARGEARITY", true);
 
                     var genArgs = default(string[]);
                     var lamPars = default(string[]);
@@ -823,8 +823,8 @@ using System.Runtime.Remoting.Lifetime;
                     WriteLine("}");
                     WriteLine("");
 
-                    if (i == 14)
-                        WriteLine("#endif", true);
+                    //if (i == 14)
+                    //    WriteLine("#endif", true);
                 }
             }
         }

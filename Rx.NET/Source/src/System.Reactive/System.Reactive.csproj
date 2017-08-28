@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
+    <Description>Reactive Extensions (Rx) for .NET</Description>
+  </PropertyGroup>
+
+
+  <ItemGroup>    
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />        
+    <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+    <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
+  </ItemGroup>
+  
+  <!-- UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">      
+    <PackageReference Include="System.ComponentModel" Version="4.0.1" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
+    <Compile Include="Platforms\UWP\**\*.cs" />
+  </ItemGroup>
+  
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'uap10.0'">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
+    <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_WindowsThreading.resx" />
+    <EmbeddedResource Update="Platforms\Windows\Strings_WindowsThreading.resx" Generator="ResXFileCodeGenerator" CustomToolNamespace="System.Reactive" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+  </ItemGroup>
+  
+  <!-- Desktop -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>
+  
+  <!-- Designer support -->
+  <ItemGroup>
+    <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
+    <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="CombineLatest.Generated.tt" />
+    <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />
+    <Compile Update="Strings_Core.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Core.resx" />
+    <Compile Update="Strings_Linq.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Linq.resx" />
+    <Compile Update="Strings_PlatformServices.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_PlatformServices.resx" />
+    <Compile Update="Strings_Providers.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Providers.resx" />
+    <EmbeddedResource Update="Strings_Core.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Core.Designer.cs" />
+    <EmbeddedResource Update="Strings_Linq.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Linq.Designer.cs" />
+    <EmbeddedResource Update="Strings_PlatformServices.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
+    <EmbeddedResource Update="Strings_Providers.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Providers.Designer.cs" />    
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  
+</Project>

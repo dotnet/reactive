@@ -1,8 +1,7 @@
-assembly-versioning-scheme: None
 mode: ContinuousDeployment
 tag-prefix: '[vV]'
 continuous-delivery-fallback-tag: ci
-next-version: 3.1.0
+next-version: 4.0.0
 major-version-bump-message: '\+semver:\s?(breaking|major)'
 minor-version-bump-message: '\+semver:\s?(feature|minor)'
 patch-version-bump-message: '\+semver:\s?(fix|patch)'
@@ -13,44 +12,20 @@ commit-message-incrementing: Enabled
 branches:
   master:
     mode: ContinuousDeployment
-    tag: build
-    increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-  releases?[/-]:
+    tag: preview
+  release:
     mode: ContinuousDeployment
     tag: rc
-    increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-  features?[/-]:
+  feature:
     mode: ContinuousDeployment
-    tag: useBranchName
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: false
-  (pull|pull\-requests|pr)[/-]:
+  pull-request:
     mode: ContinuousDeployment
     tag: PullReq
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)[-/]'
-    track-merge-target: false
-  hotfix(es)?[/-]:
+  hotfix:
     mode: ContinuousDeployment
     tag: beta
-    increment: Patch
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: false
-  support[/-]:
+  support:
     mode: ContinuousDeployment
-    tag: ''
-    increment: Patch
-    prevent-increment-of-merged-branch-version: true
-    track-merge-target: false
-  dev(elop)?(ment)?$:
+  develop:
     mode: ContinuousDeployment
-    tag: dev
-    increment: Minor
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: true
+    tag: alpha
