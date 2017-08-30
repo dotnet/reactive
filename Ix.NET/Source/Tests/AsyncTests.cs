@@ -3,22 +3,17 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using Xunit;
 using FluentAssertions;
-
+using Xunit;
 
 namespace Tests
 {
     public partial class AsyncTests
     {
-#pragma warning disable xUnit1013 // Public method should be marked as test        
+#pragma warning disable xUnit1013 // Public method should be marked as test
         public void AssertThrows<E>(Action a)
             where E : Exception
         {
@@ -86,6 +81,6 @@ namespace Tests
 
             e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
-#pragma warning restore xUnit1013 // Public method should be marked as test        
+#pragma warning restore xUnit1013 // Public method should be marked as test
     }
 }
