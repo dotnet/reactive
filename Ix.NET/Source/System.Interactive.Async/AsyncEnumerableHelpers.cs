@@ -45,7 +45,7 @@ namespace System.Collections.Generic
             {
                 using (var en = source.GetAsyncEnumerator())
                 {
-                    if (await en.MoveNextAsync()
+                    if (await en.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
                     {
                         const int DefaultCapacity = 4;
@@ -53,7 +53,7 @@ namespace System.Collections.Generic
                         arr[0] = en.Current;
                         var count = 1;
 
-                        while (await en.MoveNextAsync()
+                        while (await en.MoveNextAsync(cancellationToken)
                                        .ConfigureAwait(false))
                         {
                             if (count == arr.Length)
