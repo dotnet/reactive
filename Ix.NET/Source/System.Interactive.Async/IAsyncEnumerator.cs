@@ -32,7 +32,7 @@ namespace System.Collections.Generic
     /// <summary>
     /// Provides a set of extension methods for <see cref="IAsyncEnumerator{T}"/>.
     /// </summary>
-    public static class AsyncEnumeratorExtensions
+    public static class AsyncEnumerator
     {
         /// <summary>
         ///     Advances the enumerator to the next element in the sequence, returning the result asynchronously.
