@@ -92,18 +92,6 @@ namespace Tests
         }
 
         [Fact]
-        public void Select6()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10);
-            var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
-
-            var e = ys.GetAsyncEnumerator();
-            HasNext(e, 'd');
-            HasNext(e, 'e');
-            HasNext(e, 'f');
-        }
-
-        [Fact]
         public async Task Select7()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
@@ -120,32 +108,6 @@ namespace Tests
 
             await SequenceIdentity(ys);
         }
-
-
-        [Fact]
-        public void SelectWhere1()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10);
-            var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
-
-            var e = ys.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 4);
-            HasNext(e, 6);
-        }
-
-        [Fact]
-        public void WhereSelect1()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10);
-            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
-
-            var e = ys.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 4);
-            HasNext(e, 6);
-        }
-
 
         [Fact]
         public void SelectWhere2()
@@ -182,15 +144,6 @@ namespace Tests
             HasNext(e, 4);
             HasNext(e, 6);
             NoNext(e);
-        }
-
-        [Fact]
-        public async Task WhereSelect4()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10).Take(5);
-            var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
-
-            await SequenceIdentity(ys);
         }
 
         [Fact]
@@ -1492,34 +1445,6 @@ namespace Tests
         }
 
         [Fact]
-        public async Task DefaultIfEmpty16()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10)
-                .Take(5)
-                .Reverse() // so we have an ilist provider 
-                .DefaultIfEmpty(24)
-                .Append(5); // for the onlyIsCheap to true
-
-            var r = new[] { 4, 3, 2, 1, 0, 5 };
-
-            Assert.Equal(r, await xs.ToArray());
-        }
-
-        [Fact]
-        public async Task DefaultIfEmpty17()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10)
-                .Take(5)
-                .DefaultIfEmpty(24)
-                .Append(5); // for the onlyIsCheap to true
-
-            var r = new[] { 0, 1, 2, 3, 4, 5};
-
-            Assert.Equal(r, await xs.ToArray());
-        }
-
-
-        [Fact]
         public void Distinct_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null));
@@ -1739,35 +1664,6 @@ namespace Tests
 
             Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
         }
-
-        [Fact]
-        public async Task Reverse10()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
-            var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
-
-            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToArray());
-        }
-
-        [Fact]
-        public async Task Reverse11()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
-            var ys = xs.Reverse().Prepend(4); // to trigger onlyIfCheap
-
-            Assert.Equal(new[] { 4, 3, 2, 1 }, await ys.ToList());
-        }
-
-
-        [Fact]
-        public async Task Reverse12()
-        {
-            var xs = new CancellationTestAsyncEnumerable(10).Skip(1).Take(3);
-            var ys = xs.Reverse().Prepend(4).Prepend(5); // to trigger onlyIfCheap
-
-            Assert.Equal(new[] { 5, 4, 3, 2, 1 }, await ys.ToArray());
-        }
-
 
         [Fact]
         public void OrderBy_Null()

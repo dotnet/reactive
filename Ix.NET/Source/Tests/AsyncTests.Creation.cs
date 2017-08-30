@@ -395,46 +395,6 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Using6()
-        {
-            var i = 0;
-            var disposed = new TaskCompletionSource<bool>();
-
-            var xs = AsyncEnumerable.Using(
-                () =>
-                {
-                    i++;
-                    return new MyD(() => { disposed.TrySetResult(true); });
-                },
-                _ => new CancellationTestAsyncEnumerable(2) // need to use this to verify we actually cancel
-            );
-
-            Assert.Equal(0, i);
-
-            var e = xs.GetAsyncEnumerator();
-            Assert.Equal(1, i);
-
-            HasNext(e, 0);
-            HasNext(e, 1);
-
-            var cts = new CancellationTokenSource();
-            var t = e.MoveNextAsync(cts.Token);
-            cts.Cancel();
-
-            try
-            {
-                t.Wait(WaitTimeoutMs);
-            }
-            catch (AggregateException ex)
-            {
-                ex.Flatten().Handle(inner => inner is TaskCanceledException);
-            }
-
-            Assert.True(disposed.Task.IsCompleted);
-            Assert.True(await disposed.Task);
-        }
-
-        [Fact]
         public async Task Using7()
         {
             var i = 0;
