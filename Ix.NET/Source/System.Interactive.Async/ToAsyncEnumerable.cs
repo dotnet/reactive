@@ -67,7 +67,7 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    if (!e.MoveNext(CancellationToken.None)
+                    if (!e.MoveNextAsync(CancellationToken.None)
                           .Result)
                         break;
                     var c = e.Current;

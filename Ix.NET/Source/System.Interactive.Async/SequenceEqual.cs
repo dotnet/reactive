@@ -71,17 +71,17 @@ namespace System.Linq
             using (var e1 = first.GetAsyncEnumerator())
             using (var e2 = second.GetAsyncEnumerator())
             {
-                while (await e1.MoveNext(cancellationToken)
+                while (await e1.MoveNextAsync(cancellationToken)
                                .ConfigureAwait(false))
                 {
-                    if (!(await e2.MoveNext(cancellationToken)
+                    if (!(await e2.MoveNextAsync(cancellationToken)
                                   .ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
                     {
                         return false;
                     }
                 }
 
-                return !await e2.MoveNext(cancellationToken)
+                return !await e2.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false);
             }
         }

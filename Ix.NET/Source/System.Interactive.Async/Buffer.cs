@@ -89,7 +89,7 @@ namespace System.Linq
                         {
                             if (!stopped)
                             {
-                                if (await enumerator.MoveNext(cancellationToken)
+                                if (await enumerator.MoveNextAsync(cancellationToken)
                                                     .ConfigureAwait(false))
                                 {
                                     var item = enumerator.Current;

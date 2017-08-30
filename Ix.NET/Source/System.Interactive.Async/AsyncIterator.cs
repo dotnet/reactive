@@ -73,7 +73,7 @@ namespace System.Linq
                 }
             }
 
-            public async Task<bool> MoveNext(CancellationToken cancellationToken)
+            public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
             {
                 // Note: MoveNext *must* be implemented as an async method to ensure
                 // that any exceptions thrown from the MoveNextCore call are handled 

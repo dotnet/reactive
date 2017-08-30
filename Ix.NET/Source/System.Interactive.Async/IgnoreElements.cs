@@ -57,7 +57,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNextAsync(cancellationToken)
                                                .ConfigureAwait(false))
                         {
                             // Do nothing, we're ignoring these elements

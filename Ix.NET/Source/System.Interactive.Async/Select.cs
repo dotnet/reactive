@@ -93,7 +93,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
+                        if (await enumerator.MoveNextAsync(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             current = selector(enumerator.Current);
@@ -151,7 +151,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNext(cancellationToken)
+                        if (await enumerator.MoveNextAsync(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             checked

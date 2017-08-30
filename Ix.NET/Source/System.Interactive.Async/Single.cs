@@ -101,13 +101,13 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
                 var result = e.Current;
-                if (await e.MoveNext(cancellationToken)
+                if (await e.MoveNextAsync(cancellationToken)
                            .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
@@ -130,14 +130,14 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     return default(TSource);
                 }
 
                 var result = e.Current;
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     return result;

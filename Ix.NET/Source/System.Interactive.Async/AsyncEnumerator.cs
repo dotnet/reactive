@@ -22,7 +22,7 @@ namespace System.Collections.Generic
             if (enumerator == null)
                 throw new ArgumentNullException(nameof(enumerator));
 
-            return enumerator.MoveNext(CancellationToken.None);
+            return enumerator.MoveNextAsync(CancellationToken.None);
         }
     }
 }

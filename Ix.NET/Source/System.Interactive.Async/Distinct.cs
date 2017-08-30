@@ -141,7 +141,7 @@ namespace System.Linq
                 var s = new Set<TKey>(comparer);
                 using (var enu = source.GetAsyncEnumerator())
                 {
-                    while (await enu.MoveNext(cancellationToken)
+                    while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         var item = enu.Current;
@@ -178,7 +178,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (!await enumerator.MoveNext(cancellationToken)
+                        if (!await enumerator.MoveNextAsync(cancellationToken)
                                              .ConfigureAwait(false))
                         {
                             Dispose();
@@ -193,7 +193,7 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNextAsync(cancellationToken)
                                                .ConfigureAwait(false))
                         {
                             element = enumerator.Current;
@@ -217,7 +217,7 @@ namespace System.Linq
                 var r = new List<TSource>();
                 using (var enu = source.GetAsyncEnumerator())
                 {
-                    while (await enu.MoveNext(cancellationToken)
+                    while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         var item = enu.Current;
@@ -291,7 +291,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (!await enumerator.MoveNext(cancellationToken)
+                        if (!await enumerator.MoveNextAsync(cancellationToken)
                                              .ConfigureAwait(false))
                         {
                             Dispose();
@@ -306,7 +306,7 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNextAsync(cancellationToken)
                                                .ConfigureAwait(false))
                         {
                             element = enumerator.Current;
@@ -329,7 +329,7 @@ namespace System.Linq
                 var s = new Set<TSource>(comparer);
                 using (var enu = source.GetAsyncEnumerator())
                 {
-                    while (await enu.MoveNext(cancellationToken)
+                    while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         s.Add(enu.Current);
@@ -385,7 +385,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNextAsync(cancellationToken)
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -456,7 +456,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNext(cancellationToken)
+                        while (await enumerator.MoveNextAsync(cancellationToken)
                                                .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;

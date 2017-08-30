@@ -495,7 +495,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
@@ -503,7 +503,7 @@ namespace System.Linq
                 var resKey = keySelector(current);
                 result.Add(current);
 
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var cur = e.Current;

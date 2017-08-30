@@ -185,7 +185,7 @@ namespace System.Linq
                 var e = source.GetAsyncEnumerator();
 
                 var f = default(Action);
-                f = () => e.MoveNext(ctd.Token)
+                f = () => e.MoveNextAsync(ctd.Token)
                            .ContinueWith(t =>
                                          {
                                              if (t.IsFaulted)

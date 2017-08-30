@@ -111,10 +111,10 @@ namespace System.Linq
                     _comparer = comparer;
                 }
 
-                public async Task<bool> MoveNext(CancellationToken cancellationToken)
+                public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
                 {
                     // nothing to do 
-                    if (!await _outer.MoveNext(cancellationToken)
+                    if (!await _outer.MoveNextAsync(cancellationToken)
                                      .ConfigureAwait(false))
                     {
                         return false;

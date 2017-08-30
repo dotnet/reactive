@@ -62,7 +62,7 @@ namespace System.Linq
 
             protected async Task<bool> LoadFromEnumerator(CancellationToken cancellationToken)
             {
-                if (await enumerator.MoveNext(cancellationToken)
+                if (await enumerator.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                 {
                     current = enumerator.Current;
@@ -203,7 +203,7 @@ namespace System.Linq
                 {
                     using (var en = source.GetAsyncEnumerator())
                     {
-                        while (await en.MoveNext(cancellationToken)
+                        while (await en.MoveNextAsync(cancellationToken)
                                        .ConfigureAwait(false))
                         {
                             array[index] = en.Current;
@@ -233,7 +233,7 @@ namespace System.Linq
 
                 using (var en = source.GetAsyncEnumerator())
                 {
-                    while (await en.MoveNext(cancellationToken)
+                    while (await en.MoveNextAsync(cancellationToken)
                                    .ConfigureAwait(false))
                     {
                         list.Add(en.Current);
@@ -437,7 +437,7 @@ namespace System.Linq
                 {
                     using (var en = source.GetAsyncEnumerator())
                     {
-                        while (await en.MoveNext(cancellationToken)
+                        while (await en.MoveNextAsync(cancellationToken)
                                        .ConfigureAwait(false))
                         {
                             array[index] = en.Current;
@@ -467,7 +467,7 @@ namespace System.Linq
 
                 using (var en = source.GetAsyncEnumerator())
                 {
-                    while (await en.MoveNext(cancellationToken)
+                    while (await en.MoveNextAsync(cancellationToken)
                                    .ConfigureAwait(false))
                     {
                         list.Add(en.Current);

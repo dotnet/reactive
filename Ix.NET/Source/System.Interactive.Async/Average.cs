@@ -385,7 +385,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
@@ -395,7 +395,7 @@ namespace System.Linq
                 long count = 1;
                 checked
                 {
-                    while (await e.MoveNext(cancellationToken)
+                    while (await e.MoveNextAsync(cancellationToken)
                                   .ConfigureAwait(false))
                     {
                         sum += e.Current;
@@ -411,7 +411,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var v = e.Current;
@@ -421,7 +421,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNext(cancellationToken)
+                            while (await e.MoveNextAsync(cancellationToken)
                                           .ConfigureAwait(false))
                             {
                                 v = e.Current;
@@ -445,7 +445,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
@@ -455,7 +455,7 @@ namespace System.Linq
                 long count = 1;
                 checked
                 {
-                    while (await e.MoveNext(cancellationToken)
+                    while (await e.MoveNextAsync(cancellationToken)
                                   .ConfigureAwait(false))
                     {
                         sum += e.Current;
@@ -471,7 +471,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var v = e.Current;
@@ -481,7 +481,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNext(cancellationToken)
+                            while (await e.MoveNextAsync(cancellationToken)
                                           .ConfigureAwait(false))
                             {
                                 v = e.Current;
@@ -505,7 +505,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
@@ -513,7 +513,7 @@ namespace System.Linq
 
                 var sum = e.Current;
                 long count = 1;
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     // There is an opportunity to short-circuit here, in that if e.Current is
@@ -531,7 +531,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var v = e.Current;
@@ -541,7 +541,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNext(cancellationToken)
+                            while (await e.MoveNextAsync(cancellationToken)
                                           .ConfigureAwait(false))
                             {
                                 v = e.Current;
@@ -565,7 +565,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
@@ -573,7 +573,7 @@ namespace System.Linq
 
                 double sum = e.Current;
                 long count = 1;
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     sum += e.Current;
@@ -588,7 +588,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var v = e.Current;
@@ -598,7 +598,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNext(cancellationToken)
+                            while (await e.MoveNextAsync(cancellationToken)
                                           .ConfigureAwait(false))
                             {
                                 v = e.Current;
@@ -622,7 +622,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                if (!await e.MoveNext(cancellationToken)
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
@@ -630,7 +630,7 @@ namespace System.Linq
 
                 var sum = e.Current;
                 long count = 1;
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     sum += e.Current;
@@ -645,7 +645,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNext(cancellationToken)
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var v = e.Current;
@@ -653,7 +653,7 @@ namespace System.Linq
                     {
                         var sum = v.GetValueOrDefault();
                         long count = 1;
-                        while (await e.MoveNext(cancellationToken)
+                        while (await e.MoveNextAsync(cancellationToken)
                                       .ConfigureAwait(false))
                         {
                             v = e.Current;

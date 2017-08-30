@@ -160,7 +160,7 @@ namespace Tests
 
             var e = ys.GetAsyncEnumerator();
             var cts = new CancellationTokenSource();
-            var t = e.MoveNext(cts.Token);
+            var t = e.MoveNextAsync(cts.Token);
 
             cts.Cancel();
 
@@ -195,7 +195,7 @@ namespace Tests
 
             var e = xs.GetAsyncEnumerator();
             var cts = new CancellationTokenSource();
-            var t = e.MoveNext(cts.Token);
+            var t = e.MoveNextAsync(cts.Token);
 
             cts.Cancel();
 
@@ -244,7 +244,7 @@ namespace Tests
 
                 public int Current => i;
                 
-                public async Task<bool> MoveNext(CancellationToken cancellationToken)
+                public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
                 {
                     LastToken = cancellationToken;
                     MoveNextWasCalled = true;
@@ -322,7 +322,7 @@ namespace Tests
                 () =>
                 {
                     // This call *will* block
-                    t = e.MoveNext(cts.Token);
+                    t = e.MoveNextAsync(cts.Token);
                 });
          
 
@@ -416,7 +416,7 @@ namespace Tests
                     _disposeCounter.DisposeCount++;
                 }
 
-                public Task<bool> MoveNext(CancellationToken _)
+                public Task<bool> MoveNextAsync(CancellationToken _)
                 {
                     return Task.Factory.StartNew(() => false);
                 }
@@ -442,7 +442,7 @@ namespace Tests
             return AsyncEnumerable.CreateEnumerable<T>(() =>
             {
                 var e = source.GetAsyncEnumerator();
-                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNext, () => e.Current, () => { e.Dispose(); a(); });
+                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNextAsync, () => e.Current, () => { e.Dispose(); a(); });
             });
         }
 

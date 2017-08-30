@@ -418,7 +418,7 @@ namespace Tests
             HasNext(e, 1);
 
             var cts = new CancellationTokenSource();
-            var t = e.MoveNext(cts.Token);
+            var t = e.MoveNextAsync(cts.Token);
             cts.Cancel();
 
             try

@@ -404,7 +404,7 @@ namespace Tests
 
             var cts = new CancellationTokenSource();
 
-            var t = e.MoveNext(cts.Token);
+            var t = e.MoveNextAsync(cts.Token);
             cts.Cancel();
             t.Wait(WaitTimeoutMs);
 
