@@ -15,6 +15,6 @@ namespace System.Collections.Generic
         ///     Gets an asynchronous enumerator over the sequence.
         /// </summary>
         /// <returns>Enumerator for asynchronous enumeration over the sequence.</returns>
-        IAsyncEnumerator<T> GetEnumerator();
+        IAsyncEnumerator<T> GetAsyncEnumerator();
     }
 }

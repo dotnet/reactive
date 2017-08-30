@@ -68,8 +68,8 @@ namespace System.Linq
                 }
             }
 
-            using (var e1 = first.GetEnumerator())
-            using (var e2 = second.GetEnumerator())
+            using (var e1 = first.GetAsyncEnumerator())
+            using (var e2 = second.GetAsyncEnumerator())
             {
                 while (await e1.MoveNext(cancellationToken)
                                .ConfigureAwait(false))

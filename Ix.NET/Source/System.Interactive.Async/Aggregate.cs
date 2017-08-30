@@ -81,7 +81,7 @@ namespace System.Linq
         {
             var acc = seed;
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -98,7 +98,7 @@ namespace System.Linq
             var first = true;
             var acc = default(TSource);
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))

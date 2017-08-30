@@ -27,7 +27,7 @@ namespace Tests
         public void ToAsyncEnumerable1()
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -40,7 +40,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
@@ -68,7 +68,7 @@ namespace Tests
 
             Assert.False(subscribed);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(subscribed);
 
@@ -93,7 +93,7 @@ namespace Tests
 
             Assert.False(subscribed);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(subscribed);
 
@@ -106,7 +106,7 @@ namespace Tests
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
 
             var xs = set.ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -231,7 +231,7 @@ namespace Tests
             var task = Task.Factory.StartNew(() => 36);
 
             var xs = task.ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             Assert.Equal(36, e.Current);
@@ -246,7 +246,7 @@ namespace Tests
             tcs.SetException(ex);
 
             var xs = tcs.Task.ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
@@ -258,7 +258,7 @@ namespace Tests
             tcs.SetCanceled();
 
             var xs = tcs.Task.ToAsyncEnumerable();
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }

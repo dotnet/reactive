@@ -54,7 +54,7 @@ namespace System.Linq
             protected void GetSourceEnumerator()
             {
                 Debug.Assert(enumerator == null);
-                enumerator = source.GetEnumerator();
+                enumerator = source.GetAsyncEnumerator();
             }
 
             public abstract AppendPrepentAsyncIterator<TSource> Append(TSource item);
@@ -201,7 +201,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    using (var en = source.GetEnumerator())
+                    using (var en = source.GetAsyncEnumerator())
                     {
                         while (await en.MoveNext(cancellationToken)
                                        .ConfigureAwait(false))
@@ -231,7 +231,7 @@ namespace System.Linq
                 }
 
 
-                using (var en = source.GetEnumerator())
+                using (var en = source.GetAsyncEnumerator())
                 {
                     while (await en.MoveNext(cancellationToken)
                                    .ConfigureAwait(false))
@@ -435,7 +435,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    using (var en = source.GetEnumerator())
+                    using (var en = source.GetAsyncEnumerator())
                     {
                         while (await en.MoveNext(cancellationToken)
                                        .ConfigureAwait(false))
@@ -465,7 +465,7 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-                using (var en = source.GetEnumerator())
+                using (var en = source.GetAsyncEnumerator())
                 {
                     while (await en.MoveNext(cancellationToken)
                                    .ConfigureAwait(false))

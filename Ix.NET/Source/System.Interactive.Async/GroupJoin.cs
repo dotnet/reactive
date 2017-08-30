@@ -75,9 +75,9 @@ namespace System.Linq
                 _comparer = comparer;
             }
 
-            public IAsyncEnumerator<TResult> GetEnumerator()
+            public IAsyncEnumerator<TResult> GetAsyncEnumerator()
                 => new GroupJoinAsyncEnumerator(
-                    _outer.GetEnumerator(),
+                    _outer.GetAsyncEnumerator(),
                     _inner,
                     _outerKeySelector,
                     _innerKeySelector,

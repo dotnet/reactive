@@ -78,7 +78,7 @@ namespace System.Linq
                                     var src = queue.Dequeue();
 
                                     enumerator?.Dispose();
-                                    enumerator = src.GetEnumerator();
+                                    enumerator = src.GetAsyncEnumerator();
 
                                     continue; // loop
                                 }

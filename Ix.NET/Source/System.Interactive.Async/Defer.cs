@@ -18,7 +18,7 @@ namespace System.Linq
 
             return CreateEnumerable(
                 () => factory()
-                    .GetEnumerator());
+                    .GetAsyncEnumerator());
         }
     }
 }

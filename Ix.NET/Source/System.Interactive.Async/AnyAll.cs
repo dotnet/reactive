@@ -65,7 +65,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 return await e.MoveNext(cancellationToken).ConfigureAwait(false);
             }
@@ -73,7 +73,7 @@ namespace System.Linq
 
         private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -87,7 +87,7 @@ namespace System.Linq
 
         private static async Task<bool> Any_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))

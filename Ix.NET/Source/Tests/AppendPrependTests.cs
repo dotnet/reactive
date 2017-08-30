@@ -27,7 +27,7 @@ namespace Tests
 
             var res = xs.Append(4);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             HasNext(e, 1);
             HasNext(e, 2);
@@ -125,7 +125,7 @@ namespace Tests
                         .Append(5)
                         .Append(6);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             HasNext(e, 1);
             HasNext(e, 2);
@@ -243,7 +243,7 @@ namespace Tests
 
             var res = xs.Prepend(4);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             HasNext(e, 4);
             HasNext(e, 1);
@@ -355,7 +355,7 @@ namespace Tests
                         .Prepend(5)
                         .Prepend(6);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             HasNext(e, 6);
             HasNext(e, 5);
@@ -479,7 +479,7 @@ namespace Tests
                         .Prepend(9)
                         .Prepend(10);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             
 
             HasNext(e, 10);
@@ -614,7 +614,7 @@ namespace Tests
             var res = xs.Append(4)
                         .Prepend(5);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             
             HasNext(e, 5);
             HasNext(e, 1);

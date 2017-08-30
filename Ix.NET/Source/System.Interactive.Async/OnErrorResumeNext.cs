@@ -100,7 +100,7 @@ namespace System.Linq
                                     break; // while -- done, nothing else to do
                                 }
 
-                                enumerator = sourcesEnumerator.Current.GetEnumerator();
+                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator();
                             }
 
                             try

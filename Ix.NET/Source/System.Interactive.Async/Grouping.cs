@@ -504,9 +504,9 @@ namespace System.Linq.Internal
             }
         }
 
-        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetEnumerator()
+        IAsyncEnumerator<TElement> IAsyncEnumerable<TElement>.GetAsyncEnumerator()
         {
-            return this.ToAsyncEnumerable().GetEnumerator();
+            return this.ToAsyncEnumerable().GetAsyncEnumerator();
         }
     }
 }

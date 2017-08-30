@@ -105,7 +105,7 @@ namespace System.Linq
                                 {
                                     // make sure we dispose the previous one if we're about to replace it
                                     currentEnumerator?.Dispose();
-                                    currentEnumerator = outerEnumerator.Current.GetEnumerator();
+                                    currentEnumerator = outerEnumerator.Current.GetAsyncEnumerator();
                                    
                                     mode = State_While;
                                     goto case State_While;
@@ -191,7 +191,7 @@ namespace System.Linq
                     {
                         break;
                     }
-                    using (var e = source.GetEnumerator())
+                    using (var e = source.GetAsyncEnumerator())
                     {
                         while (await e.MoveNext(cancellationToken)
                                       .ConfigureAwait(false))
@@ -245,7 +245,7 @@ namespace System.Linq
                 if (state == AsyncIteratorState.Allocated)
                 {
                     enumerator = GetAsyncEnumerable(0)
-                        .GetEnumerator();
+                        .GetAsyncEnumerator();
                     state = AsyncIteratorState.Iterating;
                     counter = 2;
                 }
@@ -266,7 +266,7 @@ namespace System.Linq
                         if (next != null)
                         {
                             enumerator.Dispose();
-                            enumerator = next.GetEnumerator();
+                            enumerator = next.GetAsyncEnumerator();
                             continue;
                         }
 

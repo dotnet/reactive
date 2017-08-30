@@ -25,7 +25,7 @@ namespace System.Linq
                 threadId = Environment.CurrentManagedThreadId;
             }
 
-            public IAsyncEnumerator<TSource> GetEnumerator()
+            public IAsyncEnumerator<TSource> GetAsyncEnumerator()
             {
                 var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId ?
                     this :

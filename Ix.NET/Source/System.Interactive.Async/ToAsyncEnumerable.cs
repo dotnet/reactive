@@ -63,7 +63,7 @@ namespace System.Linq
 
         private static IEnumerable<TSource> ToEnumerable_<TSource>(IAsyncEnumerable<TSource> source)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (true)
                 {

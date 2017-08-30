@@ -110,7 +110,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
                         while (currentCount > 0 && await enumerator.MoveNext(cancellationToken)
@@ -180,7 +180,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         queue = new Queue<TSource>();
 
                         state = AsyncIteratorState.Iterating;
@@ -246,7 +246,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
                         while (await enumerator.MoveNext(cancellationToken)
@@ -323,7 +323,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         index = -1;
 
                         // skip elements as requested

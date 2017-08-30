@@ -94,7 +94,7 @@ namespace System.Linq
                 return list[0];
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (await e.MoveNext(cancellationToken)
                            .ConfigureAwait(false))
@@ -113,7 +113,7 @@ namespace System.Linq
                 return list[0];
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (await e.MoveNext(cancellationToken)
                            .ConfigureAwait(false))

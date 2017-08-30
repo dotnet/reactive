@@ -98,7 +98,7 @@ namespace System.Linq
         private static async Task ForEachAsync_<TSource>(IAsyncEnumerable<TSource> source, Action<TSource, int> action, CancellationToken cancellationToken)
         {
             var index = 0;
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))

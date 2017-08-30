@@ -114,7 +114,7 @@ namespace System.Linq
                         if (!isInfinite && currentCount-- == 0)
                             break;
 
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 

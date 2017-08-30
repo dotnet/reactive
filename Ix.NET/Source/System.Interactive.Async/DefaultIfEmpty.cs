@@ -64,7 +64,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         if (await enumerator.MoveNext(cancellationToken)
                                             .ConfigureAwait(false))
                         {

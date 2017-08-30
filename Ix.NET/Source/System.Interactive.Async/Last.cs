@@ -100,7 +100,7 @@ namespace System.Linq
                 }
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -128,7 +128,7 @@ namespace System.Linq
                 }
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))

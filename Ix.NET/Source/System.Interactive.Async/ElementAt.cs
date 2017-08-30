@@ -58,7 +58,7 @@ namespace System.Linq
 
             if (index >= 0)
             {
-                using (var e = source.GetEnumerator())
+                using (var e = source.GetAsyncEnumerator())
                 {
                     while (await e.MoveNext(cancellationToken)
                                   .ConfigureAwait(false))
@@ -80,7 +80,7 @@ namespace System.Linq
         {
             if (index >= 0)
             {
-                using (var e = source.GetEnumerator())
+                using (var e = source.GetAsyncEnumerator())
                 {
                     while (await e.MoveNext(cancellationToken)
                                   .ConfigureAwait(false))

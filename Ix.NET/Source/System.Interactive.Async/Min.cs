@@ -493,7 +493,7 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))

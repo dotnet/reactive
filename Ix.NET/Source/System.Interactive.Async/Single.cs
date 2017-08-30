@@ -99,7 +99,7 @@ namespace System.Linq
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -128,7 +128,7 @@ namespace System.Linq
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))

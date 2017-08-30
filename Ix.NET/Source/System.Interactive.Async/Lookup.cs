@@ -196,7 +196,7 @@ namespace System.Linq.Internal
             Debug.Assert(elementSelector != null);
 
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetEnumerator())
+            using (var enu = source.GetAsyncEnumerator())
             {
                 while (await enu.MoveNext(cancellationToken)
                                 .ConfigureAwait(false))
@@ -215,7 +215,7 @@ namespace System.Linq.Internal
             Debug.Assert(keySelector != null);
 
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetEnumerator())
+            using (var enu = source.GetAsyncEnumerator())
             {
                 while (await enu.MoveNext(cancellationToken)
                                 .ConfigureAwait(false))
@@ -231,7 +231,7 @@ namespace System.Linq.Internal
         internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetEnumerator())
+            using (var enu = source.GetAsyncEnumerator())
             {
                 while (await enu.MoveNext(cancellationToken)
                                 .ConfigureAwait(false))
@@ -357,9 +357,9 @@ namespace System.Linq.Internal
             return Task.FromResult(Count);
         }
 
-        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetEnumerator()
+        IAsyncEnumerator<IAsyncGrouping<TKey, TElement>> IAsyncEnumerable<IAsyncGrouping<TKey, TElement>>.GetAsyncEnumerator()
         {
-            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetEnumerator();
+            return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator();
         }
 
         Task<List<IAsyncGrouping<TKey, TElement>>> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)

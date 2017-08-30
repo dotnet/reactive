@@ -66,7 +66,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = enumerable.GetEnumerator();
+                        enumerator = enumerable.GetAsyncEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 

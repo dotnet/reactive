@@ -50,7 +50,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(x => (char)('a' + x));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 'a');
             HasNext(e, 'b');
             HasNext(e, 'c');
@@ -63,7 +63,7 @@ namespace Tests
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
             var ys = xs.Select((x, i) => (char)('a' + i));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 'a');
             HasNext(e, 'b');
             HasNext(e, 'c');
@@ -76,7 +76,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(x => 1 / x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
         }
 
@@ -86,7 +86,7 @@ namespace Tests
             var xs = new[] { 8, 5, 7 }.ToAsyncEnumerable();
             var ys = xs.Select((x, i) => 1 / i);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is DivideByZeroException);
         }
 
@@ -96,7 +96,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 'd');
             HasNext(e, 'e');
             HasNext(e, 'f');
@@ -109,7 +109,7 @@ namespace Tests
             var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Select(i => i + 3).Select(x => (char)('a' + x));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 'd');
             HasNext(e, 'e');
             HasNext(e, 'f');
@@ -140,7 +140,7 @@ namespace Tests
             var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 4);
             HasNext(e, 6);
@@ -152,7 +152,7 @@ namespace Tests
             var xs = new CancellationTestAsyncEnumerable(10);
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 4);
             HasNext(e, 6);
@@ -165,7 +165,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Select(i => i + 2).Where(i => i % 2 == 0);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 4);
             NoNext(e);
@@ -178,7 +178,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 4);
             NoNext(e);
@@ -190,7 +190,7 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = xs.Where(i => i % 2 == 0).Select(i => i + 2).Select(i => i + 2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 4);
             HasNext(e, 6);
             NoNext(e);
@@ -219,7 +219,7 @@ namespace Tests
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where(x => x % 2 == 0);
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 8);
             HasNext(e, 4);
             HasNext(e, 6);
@@ -234,7 +234,7 @@ namespace Tests
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where((x, i) => i % 2 == 0);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 8);
             HasNext(e, 7);
             HasNext(e, 6);
@@ -250,7 +250,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var ys = xs.Where(x => { if (x == 4) throw ex; return true; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 8);
             HasNext(e, 5);
             HasNext(e, 7);
@@ -264,7 +264,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var ys = xs.Where((x, i) => { if (i == 3) throw ex; return true; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 8);
             HasNext(e, 5);
             HasNext(e, 7);
@@ -278,7 +278,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Where(x => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -289,7 +289,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
 
             var ys = xs.Where((x, i) => true);
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -299,7 +299,7 @@ namespace Tests
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where(x => x % 2 == 0).Where(x => x > 5);
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 8);
             HasNext(e, 6);
             NoNext(e);
@@ -346,7 +346,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
@@ -369,7 +369,7 @@ namespace Tests
                     return AsyncEnumerable.Throw<int>(ex);
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
@@ -383,7 +383,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -400,7 +400,7 @@ namespace Tests
                     throw ex;
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
@@ -413,7 +413,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 5, x).ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 5);
             HasNext(e, 6);
             HasNext(e, 7);
@@ -436,7 +436,7 @@ namespace Tests
                     return AsyncEnumerable.Throw<int>(ex);
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
@@ -450,7 +450,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -467,7 +467,7 @@ namespace Tests
                     throw ex;
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 0);
             HasNext(e, 0);
             HasNext(e, 1);
@@ -480,7 +480,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany(x => Enumerable.Range(3, x).ToAsyncEnumerable(), (x, y) => x * y);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 6);
             HasNext(e, 8);
@@ -496,7 +496,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.SelectMany((x, i) => Enumerable.Range(i + 3, x).ToAsyncEnumerable(), (x, y) => x * y);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 8);
             HasNext(e, 10);
@@ -518,7 +518,7 @@ namespace Tests
                 return x * y;
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 6);
             HasNext(e, 8);
@@ -538,7 +538,7 @@ namespace Tests
                 return x * y;
             });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 8);
             HasNext(e, 10);
@@ -593,7 +593,7 @@ namespace Tests
             var xs = new object[] { 1, 1.2, true, 4, "" }.ToAsyncEnumerable();
             var ys = xs.OfType<int>();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 4);
             NoNext(e);
@@ -611,7 +611,7 @@ namespace Tests
             var xs = new object[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Cast<int>();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -676,7 +676,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => sum += x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             Assert.Equal(1, sum);
             HasNext(e, 2);
@@ -695,7 +695,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -708,7 +708,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => sum += x, ex => { fail = true; }, () => { done = true; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             Assert.Equal(1, sum);
             HasNext(e, 2);
@@ -731,7 +731,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Do(x => sum += x, () => { done = true; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             Assert.Equal(1, sum);
             HasNext(e, 2);
@@ -755,7 +755,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; }, () => { done = true; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ex_.InnerException == ex);
 
             Assert.False(hasv);
@@ -772,7 +772,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ex_.InnerException == ex);
 
             Assert.False(hasv);
@@ -943,7 +943,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(-2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -953,7 +953,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -965,7 +965,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(10);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -979,7 +979,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Take(0);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -990,7 +990,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Take(2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1018,7 +1018,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => x < 3);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -1030,7 +1030,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => false);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1040,7 +1040,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1054,7 +1054,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => x < 3);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -1067,7 +1067,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1077,7 +1077,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => i < 2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -1089,7 +1089,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => false);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1099,7 +1099,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1114,7 +1114,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.TakeWhile((x, i) => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1159,7 +1159,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             NoNext(e);
@@ -1171,7 +1171,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(10);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1181,7 +1181,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.Skip(0);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1196,7 +1196,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Skip(2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1224,7 +1224,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             NoNext(e);
@@ -1236,7 +1236,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => false);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1250,7 +1250,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1260,7 +1260,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4, 3, 2, 1 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => x < 3);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             HasNext(e, 3);
@@ -1276,7 +1276,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1286,7 +1286,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => i < 2);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             NoNext(e);
@@ -1298,7 +1298,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => false);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1312,7 +1312,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1323,7 +1323,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var ys = xs.SkipWhile((x, i) => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1357,7 +1357,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 0);
             NoNext(e);
         }
@@ -1367,7 +1367,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
             NoNext(e);
         }
@@ -1377,7 +1377,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Return<int>(42).DefaultIfEmpty();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
             NoNext(e);
         }
@@ -1387,7 +1387,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Return<int>(42).DefaultIfEmpty(24);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
             NoNext(e);
         }
@@ -1397,7 +1397,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1410,7 +1410,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().DefaultIfEmpty(24);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1424,7 +1424,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1434,7 +1434,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty(24);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1545,7 +1545,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -1559,7 +1559,7 @@ namespace Tests
         {
             var xs = new[] { 1, -2, -1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct(new Eq());
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, -2);
             HasNext(e, 3);
@@ -1641,7 +1641,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct(k => k);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             
             NoNext(e);
         }
@@ -1651,7 +1651,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().Distinct();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             NoNext(e);
         }
@@ -1668,7 +1668,7 @@ namespace Tests
             var xs = AsyncEnumerable.Empty<int>();
             var ys = xs.Reverse();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -1678,7 +1678,7 @@ namespace Tests
             var xs = AsyncEnumerable.Return(42);
             var ys = xs.Reverse();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 42);
             NoNext(e);
         }
@@ -1689,7 +1689,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.Reverse();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 2);
             HasNext(e, 1);
@@ -1703,7 +1703,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.Reverse();
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1821,7 +1821,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             for (var i = 0; i < 10; i++)
                 HasNext(e, i);
             NoNext(e);
@@ -1834,7 +1834,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy<int, int>(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1854,7 +1854,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy(x => x).ThenBy<int, int>(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1864,7 +1864,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderByDescending(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             for (var i = 9; i >= 0; i--)
                 HasNext(e, i);
             NoNext(e);
@@ -1877,7 +1877,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderByDescending<int, int>(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -1897,7 +1897,7 @@ namespace Tests
             var xs = new[] { 2, 6, 1, 5, 7, 8, 9, 3, 4, 0 }.ToAsyncEnumerable();
             var ys = xs.OrderBy<int, int>(x => x).ThenByDescending<int, int>(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -2042,11 +2042,11 @@ namespace Tests
 
             var res = ys.GroupBy(x => x.Age / 10);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             Assert.Equal(2, e.Current.Key);
-            var g1 = e.Current.GetEnumerator();
+            var g1 = e.Current.GetAsyncEnumerator();
             HasNext(g1, xs[0]);
             HasNext(g1, xs[2]);
             HasNext(g1, xs[4]);
@@ -2055,19 +2055,19 @@ namespace Tests
 
             Assert.True(e.MoveNext().Result);
             Assert.Equal(6, e.Current.Key);
-            var g2 = e.Current.GetEnumerator();
+            var g2 = e.Current.GetAsyncEnumerator();
             HasNext(g2, xs[1]);
             NoNext(g2);
 
             Assert.True(e.MoveNext().Result);
             Assert.Equal(1, e.Current.Key);
-            var g3 = e.Current.GetEnumerator();
+            var g3 = e.Current.GetAsyncEnumerator();
             HasNext(g3, xs[3]);
             NoNext(g3);
 
             Assert.True(e.MoveNext().Result);
             Assert.Equal(4, e.Current.Key);
-            var g4 = e.Current.GetEnumerator();
+            var g4 = e.Current.GetAsyncEnumerator();
             HasNext(g4, xs[6]);
             NoNext(g4);
 
@@ -2091,7 +2091,7 @@ namespace Tests
 
             var res = ys.GroupBy(x => x.Age / 10);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
@@ -2111,22 +2111,22 @@ namespace Tests
 
             NoNext(e);
 
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, xs[0]);
             HasNext(g1e, xs[2]);
             HasNext(g1e, xs[4]);
             HasNext(g1e, xs[5]);
             NoNext(g1e);
 
-            var g2e = g2.GetEnumerator();
+            var g2e = g2.GetAsyncEnumerator();
             HasNext(g2e, xs[1]);
             NoNext(g2e);
 
-            var g3e = g3.GetEnumerator();
+            var g3e = g3.GetAsyncEnumerator();
             HasNext(g3e, xs[3]);
             NoNext(g3e);
 
-            var g4e = g4.GetEnumerator();
+            var g4e = g4.GetAsyncEnumerator();
             HasNext(g4e, xs[6]);
             NoNext(g4e);
         }
@@ -2137,7 +2137,7 @@ namespace Tests
             var xs = AsyncEnumerable.Empty<int>();
             var ys = xs.GroupBy(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -2148,7 +2148,7 @@ namespace Tests
             var xs = AsyncEnumerable.Throw<int>(ex);
             var ys = xs.GroupBy(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -2158,7 +2158,7 @@ namespace Tests
             var xs = GetXs().ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
 
@@ -2185,7 +2185,7 @@ namespace Tests
             var xs = GetXs().ToAsyncEnumerable();
             var ys = xs.GroupBy(x => x);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
 
@@ -2213,7 +2213,7 @@ namespace Tests
             var xs = AsyncEnumerable.Return(42);
             var ys = xs.GroupBy<int, int>(x => { throw ex; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -2224,7 +2224,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = xs.GroupBy<int, int>(x => { if (x == 3) throw ex; return x; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
 
@@ -2251,12 +2251,12 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
             HasNext(g1e, 'g');
@@ -2266,7 +2266,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
-            var g2e = g2.GetEnumerator();
+            var g2e = g2.GetAsyncEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
             HasNext(g2e, 'h');
@@ -2275,7 +2275,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
-            var g3e = g3.GetEnumerator();
+            var g3e = g3.GetAsyncEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
             HasNext(g3e, 'i');
@@ -2290,7 +2290,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, "0 - adgj");
             HasNext(e, "1 - beh");
             HasNext(e, "2 - cfi");
@@ -2303,7 +2303,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, "0 - 0369");
             HasNext(e, "1 - 147");
             HasNext(e, "2 - 258");
@@ -2316,12 +2316,12 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 0);
             HasNext(g1e, 3);
             HasNext(g1e, 6);
@@ -2331,7 +2331,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
-            var g2e = g2.GetEnumerator();
+            var g2e = g2.GetAsyncEnumerator();
             HasNext(g2e, 1);
             HasNext(g2e, 4);
             HasNext(g2e, 7);
@@ -2340,7 +2340,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
-            var g3e = g3.GetEnumerator();
+            var g3e = g3.GetAsyncEnumerator();
             HasNext(g3e, 2);
             HasNext(g3e, 5);
             HasNext(g3e, 8);
@@ -2355,12 +2355,12 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
             HasNext(g1e, 'g');
@@ -2370,7 +2370,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
-            var g2e = g2.GetEnumerator();
+            var g2e = g2.GetAsyncEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
             HasNext(g2e, 'h');
@@ -2379,7 +2379,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
-            var g3e = g3.GetEnumerator();
+            var g3e = g3.GetAsyncEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
             HasNext(g3e, 'i');
@@ -2394,7 +2394,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, "0 - adgj");
             HasNext(e, "1 - beh");
             HasNext(e, "2 - cfi");
@@ -2407,7 +2407,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result, new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, "0 - 0369");
             HasNext(e, "1 - 147");
             HasNext(e, "2 - 258");
@@ -2420,12 +2420,12 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 'a');
             HasNext(g1e, 'd');
             HasNext(g1e, 'g');
@@ -2436,7 +2436,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g2 = e.Current;
             Assert.Equal(1, g2.Key);
-            var g2e = g2.GetEnumerator();
+            var g2e = g2.GetAsyncEnumerator();
             HasNext(g2e, 'b');
             HasNext(g2e, 'e');
             HasNext(g2e, 'h');
@@ -2446,7 +2446,7 @@ namespace Tests
             Assert.True(e.MoveNext().Result);
             var g3 = e.Current;
             Assert.Equal(2, g3.Key);
-            var g3e = g3.GetEnumerator();
+            var g3e = g3.GetAsyncEnumerator();
             HasNext(g3e, 'c');
             HasNext(g3e, 'f');
             HasNext(g3e, 'i');
@@ -2464,7 +2464,7 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             e.Dispose();
 
             Assert.False(e.MoveNext().Result);
@@ -2476,12 +2476,12 @@ namespace Tests
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             var g1 = e.Current;
             Assert.Equal(0, g1.Key);
-            var g1e = g1.GetEnumerator();
+            var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 'a');
 
             e.Dispose();
@@ -2878,7 +2878,7 @@ namespace Tests
 
             Assert.NotSame(xs, ys);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
             NoNext(e);
         }
@@ -2896,7 +2896,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -2913,7 +2913,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat(3);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -2932,7 +2932,7 @@ namespace Tests
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(3);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 1);
@@ -2950,7 +2950,7 @@ namespace Tests
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(0);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             NoNext(e);
         }
@@ -2976,7 +2976,7 @@ namespace Tests
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
         }
 
@@ -2985,7 +2985,7 @@ namespace Tests
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat(3);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
         }
 
@@ -3013,7 +3013,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().IgnoreElements();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             NoNext(e);
 
             AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
@@ -3024,7 +3024,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Return(42).IgnoreElements();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             NoNext(e);
 
             AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
@@ -3035,7 +3035,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Range(0, 10).IgnoreElements();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             NoNext(e);
 
             AssertThrows<InvalidOperationException>(() => { var ignored = e.Current; });
@@ -3047,7 +3047,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerable.Throw<int>(ex).IgnoreElements();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -3071,7 +3071,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Empty<int>().StartWith(1, 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -3082,7 +3082,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Return<int>(0).StartWith(1, 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 0);
@@ -3095,7 +3095,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerable.Throw<int>(ex).StartWith(1, 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -3117,7 +3117,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
@@ -3136,7 +3136,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(3, 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2, 3 }));
@@ -3155,7 +3155,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Buffer(2, 3);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.True(e.MoveNext().Result);
             Assert.True(e.Current.SequenceEqual(new[] { 1, 2 }));
@@ -3195,7 +3195,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 2, 3, 4, 4, 4, 4, 5, 6, 6, 7, 3, 2, 2, 1, 1 }.ToAsyncEnumerable().DistinctUntilChanged();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -3214,7 +3214,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4, 3, 5, 2 }.ToAsyncEnumerable().DistinctUntilChanged(x => (x + 1) / 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 3);
             HasNext(e, 5);
@@ -3228,7 +3228,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4, 3, 5, 2 }.ToAsyncEnumerable().DistinctUntilChanged(x => { if (x == 4) throw ex; return x; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -3263,7 +3263,7 @@ namespace Tests
         {
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerable.Return(x - 1).Repeat(x - 1));
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 3);
             HasNext(e, 1);
@@ -3280,7 +3280,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => { throw ex; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -3289,7 +3289,7 @@ namespace Tests
         {
             var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => null);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 2);
             HasNext(e, 3);
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NullReferenceException);
@@ -3318,7 +3318,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => x + y);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 9);
             HasNext(e, 11);
             HasNext(e, 14);
@@ -3330,7 +3330,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y) => x + y);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 6);
             NoNext(e);
@@ -3342,7 +3342,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan(8, (x, y) => { throw ex; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -3352,7 +3352,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Scan((x, y) => { throw ex; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -3388,7 +3388,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Distinct(x => x / 2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 4);
@@ -3406,7 +3406,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(-2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -3415,7 +3415,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             NoNext(e);
@@ -3426,7 +3426,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(5);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -3455,7 +3455,7 @@ namespace Tests
 
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(0);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             
             NoNext(e);
         }
@@ -3471,7 +3471,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(2);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             NoNext(e);
@@ -3482,7 +3482,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(5);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -3499,7 +3499,7 @@ namespace Tests
         {
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().SkipLast(0);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             HasNext(e, 1);
             HasNext(e, 2);

@@ -29,7 +29,7 @@ namespace Tests
         {
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -45,7 +45,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -58,7 +58,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var ys = AsyncEnumerable.Throw<int>(ex).Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -71,7 +71,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Concat(xs, ys, zs);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -93,7 +93,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Concat(xs, ys, zs);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -107,7 +107,7 @@ namespace Tests
         {
             var res = AsyncEnumerable.Concat(ConcatXss());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -126,7 +126,7 @@ namespace Tests
 
             var res = ws.Concat(xs).Concat(ys).Concat(zs);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -227,7 +227,7 @@ namespace Tests
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => x * y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1 * 4);
             HasNext(e, 2 * 5);
             HasNext(e, 3 * 6);
@@ -241,7 +241,7 @@ namespace Tests
             var ys = new[] { 4, 5, 6, 7 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => x * y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1 * 4);
             HasNext(e, 2 * 5);
             HasNext(e, 3 * 6);
@@ -255,7 +255,7 @@ namespace Tests
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => x * y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1 * 4);
             HasNext(e, 2 * 5);
             HasNext(e, 3 * 6);
@@ -270,7 +270,7 @@ namespace Tests
             var ys = AsyncEnumerable.Throw<int>(ex);
             var res = xs.Zip(ys, (x, y) => x * y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -282,7 +282,7 @@ namespace Tests
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => x * y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -294,7 +294,7 @@ namespace Tests
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => { if (x > 0) throw ex; return x * y; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -326,7 +326,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -342,7 +342,7 @@ namespace Tests
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Union(ys, new Eq());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, -3);
@@ -369,7 +369,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Intersect(ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 3);
             NoNext(e);
@@ -382,7 +382,7 @@ namespace Tests
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Intersect(ys, new Eq());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, -3);
             NoNext(e);
@@ -417,7 +417,7 @@ namespace Tests
             var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
             var res = xs.Except(ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 2);
             NoNext(e);
         }
@@ -429,7 +429,7 @@ namespace Tests
             var ys = new[] { 3, 5, -1, 4 }.ToAsyncEnumerable();
             var res = xs.Except(ys, new Eq());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 2);
             NoNext(e);
         }
@@ -648,7 +648,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, "0 - 639");
             HasNext(e, "1 - 474");
             HasNext(e, "2 - 28");
@@ -663,7 +663,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, "0 - 36");
             HasNext(e, "1 - 4");
             HasNext(e, "2 - ");
@@ -679,7 +679,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -692,7 +692,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -705,7 +705,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => { throw ex; }, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -718,7 +718,7 @@ namespace Tests
 
             var res = xs.GroupJoin(ys, x => x % 3, y => { throw ex; }, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -735,7 +735,7 @@ namespace Tests
                 return x + " - " + i.Aggregate("", (s, j) => s + j).Result;
             });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, "0 - 36");
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
@@ -765,7 +765,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 0 + 3);
             HasNext(e, 0 + 6);
             HasNext(e, 1 + 4);
@@ -780,7 +780,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 3 + 0);
             HasNext(e, 6 + 0);
             HasNext(e, 4 + 1);
@@ -795,7 +795,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 0 + 3);
             HasNext(e, 0 + 6);
             NoNext(e);
@@ -809,7 +809,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 3 + 0);
             HasNext(e, 6 + 0);
             NoNext(e);
@@ -824,7 +824,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -837,7 +837,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -850,7 +850,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => { throw ex; }, y => y, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -863,7 +863,7 @@ namespace Tests
 
             var res = xs.Join(ys, x => x, y => { throw ex; }, (x, y) => x + y);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -876,7 +876,7 @@ namespace Tests
 
             var res = xs.Join<int, int, int, int>(ys, x => x, y => y, (x, y) => { throw ex; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -915,7 +915,7 @@ namespace Tests
                                        .Join(orders.ToAsyncEnumerable(), c => c.CustomerId, o => o.CustomerId,
                                             (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
 
-            var e = asyncResult.GetEnumerator();
+            var e = asyncResult.GetAsyncEnumerator();
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
@@ -948,7 +948,7 @@ namespace Tests
                                        .Join(orders.ToAsyncEnumerable(), c => c.CustomerId, o => o.CustomerId,
                                             (c, o) => new CustomerOrder { CustomerId = c.CustomerId, OrderId = o.OrderId });
 
-            var e = asyncResult.GetEnumerator();
+            var e = asyncResult.GetAsyncEnumerator();
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 1 });
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 2 });
             HasNext(e, new CustomerOrder { CustomerId = "ALFKI", OrderId = 3 });
@@ -974,7 +974,7 @@ namespace Tests
 
             var res = xs.SelectMany(ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 3);
             HasNext(e, 4);
             HasNext(e, 3);

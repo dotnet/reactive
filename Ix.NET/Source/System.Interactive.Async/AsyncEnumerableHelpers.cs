@@ -43,7 +43,7 @@ namespace System.Collections.Generic
             }
             else
             {
-                using (var en = source.GetEnumerator())
+                using (var en = source.GetAsyncEnumerator())
                 {
                     if (await en.MoveNext(cancellationToken)
                                 .ConfigureAwait(false))

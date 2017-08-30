@@ -114,7 +114,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetEnumerator();
+                        sourceEnumerator = source.GetAsyncEnumerator();
                         mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -128,7 +128,7 @@ namespace System.Linq
                                 {
                                     resultEnumerator?.Dispose();
                                     resultEnumerator = selector(sourceEnumerator.Current)
-                                        .GetEnumerator();
+                                        .GetAsyncEnumerator();
 
                                     mode = State_Result;
                                     goto case State_Result;
@@ -209,7 +209,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetEnumerator();
+                        sourceEnumerator = source.GetAsyncEnumerator();
                         mode = State_Source;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -224,7 +224,7 @@ namespace System.Linq
                                     resultEnumerator?.Dispose();
                                     currentSource = sourceEnumerator.Current;
                                     resultEnumerator = collectionSelector(currentSource)
-                                        .GetEnumerator();
+                                        .GetAsyncEnumerator();
 
                                     mode = State_Result;
                                     goto case State_Result;
@@ -306,7 +306,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetEnumerator();
+                        sourceEnumerator = source.GetAsyncEnumerator();
                         index = -1;
                         mode = State_Source;
                         state = AsyncIteratorState.Iterating;
@@ -328,7 +328,7 @@ namespace System.Linq
                                     }
 
                                     resultEnumerator = collectionSelector(currentSource, index)
-                                        .GetEnumerator();
+                                        .GetAsyncEnumerator();
 
                                     mode = State_Result;
                                     goto case State_Result;
@@ -404,7 +404,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        sourceEnumerator = source.GetEnumerator();
+                        sourceEnumerator = source.GetAsyncEnumerator();
                         index = -1;
                         mode = State_Source;
                         state = AsyncIteratorState.Iterating;
@@ -423,7 +423,7 @@ namespace System.Linq
                                         index++;
                                     }
                                     resultEnumerator = selector(sourceEnumerator.Current, index)
-                                        .GetEnumerator();
+                                        .GetAsyncEnumerator();
 
                                     mode = State_Result;
                                     goto case State_Result;

@@ -110,7 +110,7 @@ namespace Tests
 
             var ys = xs.Select(x => x + 1);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
 
             // We have to call move next because otherwise the internal enumerator is never allocated
             await e.MoveNext();
@@ -139,7 +139,7 @@ namespace Tests
             var ex = new Exception("Bang!");
             var ys = xs.Select(x => { if (x == 1) throw ex; return x; });
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             await Assert.ThrowsAsync<Exception>(() => e.MoveNext());
 
             var result = await disposed.Task;
@@ -158,7 +158,7 @@ namespace Tests
 
             var ys = xs.Select(x => x + 1).Where(x => true);
 
-            var e = ys.GetEnumerator();
+            var e = ys.GetAsyncEnumerator();
             var cts = new CancellationTokenSource();
             var t = e.MoveNext(cts.Token);
 
@@ -193,7 +193,7 @@ namespace Tests
         {
             var xs = new CancellationTestAsyncEnumerable().Select(x => x).Where(x => true);
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             var cts = new CancellationTokenSource();
             var t = e.MoveNext(cts.Token);
 
@@ -221,7 +221,7 @@ namespace Tests
             {
                 this.iterationsBeforeDelay = iterationsBeforeDelay;
             }
-            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetEnumerator() => GetEnumerator();
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator() => GetEnumerator();
 
             public TestEnumerator GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
 
@@ -313,7 +313,7 @@ namespace Tests
             var isRunningEvent = new ManualResetEvent(false);
             var xs = Blocking(evt, isRunningEvent).ToAsyncEnumerable();
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
             var cts = new CancellationTokenSource();
 
 
@@ -397,7 +397,7 @@ namespace Tests
         {
             public int DisposeCount { get; private set; }
 
-            public IAsyncEnumerator<object> GetEnumerator()
+            public IAsyncEnumerator<object> GetAsyncEnumerator()
             {
                 return new Enumerator(this);
             }
@@ -441,7 +441,7 @@ namespace Tests
         {
             return AsyncEnumerable.CreateEnumerable<T>(() =>
             {
-                var e = source.GetEnumerator();
+                var e = source.GetAsyncEnumerator();
                 return AsyncEnumerable.CreateEnumerator<T>(e.MoveNext, () => e.Current, () => { e.Dispose(); a(); });
             });
         }

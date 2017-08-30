@@ -92,7 +92,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         isDone = false;
 
                         state = AsyncIteratorState.Iterating;
@@ -118,7 +118,7 @@ namespace System.Linq
                                     // invoking the handler, but we use this order to preserve
                                     // current behavior
                                     var err = handler(ex)
-                                        .GetEnumerator();
+                                        .GetAsyncEnumerator();
                                     enumerator?.Dispose();
                                     enumerator = err;
                                     isDone = true;
@@ -207,7 +207,7 @@ namespace System.Linq
                                 }
 
                                 error = null;
-                                enumerator = sourcesEnumerator.Current.GetEnumerator();
+                                enumerator = sourcesEnumerator.Current.GetAsyncEnumerator();
                             }
 
                             try

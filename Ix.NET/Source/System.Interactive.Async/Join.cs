@@ -107,7 +107,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        outerEnumerator = outer.GetEnumerator();
+                        outerEnumerator = outer.GetAsyncEnumerator();
                         mode = State_If;
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;

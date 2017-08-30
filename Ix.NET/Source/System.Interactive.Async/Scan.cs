@@ -72,7 +72,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         accumulated = seed;
 
                         state = AsyncIteratorState.Iterating;
@@ -138,7 +138,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         hasSeed = false;
                         accumulated = default(TSource);
 

@@ -182,7 +182,7 @@ namespace System.Linq
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var ctd = new CancellationTokenDisposable();
-                var e = source.GetEnumerator();
+                var e = source.GetAsyncEnumerator();
 
                 var f = default(Action);
                 f = () => e.MoveNext(ctd.Token)

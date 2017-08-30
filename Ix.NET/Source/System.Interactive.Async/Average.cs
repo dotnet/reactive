@@ -383,7 +383,7 @@ namespace System.Linq
 
         private static async Task<double> Average_(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -409,7 +409,7 @@ namespace System.Linq
 
         private static async Task<double?> Average_(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -443,7 +443,7 @@ namespace System.Linq
 
         private static async Task<double> Average_(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -469,7 +469,7 @@ namespace System.Linq
 
         private static async Task<double?> Average_(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -503,7 +503,7 @@ namespace System.Linq
 
         private static async Task<double> Average_(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -529,7 +529,7 @@ namespace System.Linq
 
         private static async Task<double?> Average_(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -563,7 +563,7 @@ namespace System.Linq
 
         private static async Task<float> Average_(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -586,7 +586,7 @@ namespace System.Linq
 
         private static async Task<float?> Average_(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))
@@ -620,7 +620,7 @@ namespace System.Linq
 
         private static async Task<decimal> Average_(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 if (!await e.MoveNext(cancellationToken)
                             .ConfigureAwait(false))
@@ -643,7 +643,7 @@ namespace System.Linq
 
         private static async Task<decimal?> Average_(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetEnumerator())
+            using (var e = source.GetAsyncEnumerator())
             {
                 while (await e.MoveNext(cancellationToken)
                               .ConfigureAwait(false))

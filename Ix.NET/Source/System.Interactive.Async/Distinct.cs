@@ -139,7 +139,7 @@ namespace System.Linq
 
                 var count = 0;
                 var s = new Set<TKey>(comparer);
-                using (var enu = source.GetEnumerator())
+                using (var enu = source.GetAsyncEnumerator())
                 {
                     while (await enu.MoveNext(cancellationToken)
                                     .ConfigureAwait(false))
@@ -177,7 +177,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         if (!await enumerator.MoveNext(cancellationToken)
                                              .ConfigureAwait(false))
                         {
@@ -215,7 +215,7 @@ namespace System.Linq
             {
                 var s = new Set<TKey>(comparer);
                 var r = new List<TSource>();
-                using (var enu = source.GetEnumerator())
+                using (var enu = source.GetAsyncEnumerator())
                 {
                     while (await enu.MoveNext(cancellationToken)
                                     .ConfigureAwait(false))
@@ -290,7 +290,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         if (!await enumerator.MoveNext(cancellationToken)
                                              .ConfigureAwait(false))
                         {
@@ -327,7 +327,7 @@ namespace System.Linq
             private async Task<Set<TSource>> FillSet(CancellationToken cancellationToken)
             {
                 var s = new Set<TSource>(comparer);
-                using (var enu = source.GetEnumerator())
+                using (var enu = source.GetAsyncEnumerator())
                 {
                     while (await enu.MoveNext(cancellationToken)
                                     .ConfigureAwait(false))
@@ -380,7 +380,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
@@ -451,7 +451,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 

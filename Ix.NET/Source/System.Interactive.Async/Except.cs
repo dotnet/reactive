@@ -80,7 +80,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        firstEnumerator = first.GetEnumerator();
+                        firstEnumerator = first.GetAsyncEnumerator();
                         set = new Set<TSource>(comparer);
                         setFilled = false;
                         fillSetTask = FillSet(cancellationToken);

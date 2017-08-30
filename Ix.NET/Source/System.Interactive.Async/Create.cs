@@ -65,7 +65,7 @@ namespace System.Linq
                 this.getEnumerator = getEnumerator;
             }
 
-            public IAsyncEnumerator<T> GetEnumerator()
+            public IAsyncEnumerator<T> GetAsyncEnumerator()
             {
                 return getEnumerator();
             }
@@ -87,7 +87,7 @@ namespace System.Linq
                 this.dispose = dispose;
 
                 // Explicit call to initialize enumerator mode
-                GetEnumerator();
+                GetAsyncEnumerator();
             }
 
             public override AsyncIterator<T> Clone()

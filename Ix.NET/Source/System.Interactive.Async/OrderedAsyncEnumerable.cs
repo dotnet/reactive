@@ -104,7 +104,7 @@ namespace System.Linq
             }
             else
             {
-                parentEnumerator = parent.GetEnumerator();
+                parentEnumerator = parent.GetAsyncEnumerator();
                 await parent.Initialize(cancellationToken)
                             .ConfigureAwait(false);
                 enumerable = parent.enumerable.CreateOrderedEnumerable(keySelector, comparer, @descending);

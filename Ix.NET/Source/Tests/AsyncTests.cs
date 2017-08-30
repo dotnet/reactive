@@ -67,8 +67,8 @@ namespace Tests
 
         public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
         {
-            var en1 = enumerable.GetEnumerator();
-            var en2 = enumerable.GetEnumerator();
+            var en1 = enumerable.GetAsyncEnumerator();
+            var en2 = enumerable.GetAsyncEnumerator();
 
             Assert.Equal(en1.GetType(), en2.GetType());
 

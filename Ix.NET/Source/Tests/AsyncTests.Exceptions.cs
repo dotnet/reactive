@@ -35,7 +35,7 @@ namespace Tests
 
             var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -55,7 +55,7 @@ namespace Tests
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -82,7 +82,7 @@ namespace Tests
 
             var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -109,7 +109,7 @@ namespace Tests
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -130,7 +130,7 @@ namespace Tests
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { if (ex_.Message == "Bang!") throw ex2; return ys; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -148,7 +148,7 @@ namespace Tests
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return xs; });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -173,7 +173,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Catch(xs, ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -190,7 +190,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Catch(xs, ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -210,7 +210,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Catch(new[] { xs, xs, ys, ys });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -228,7 +228,7 @@ namespace Tests
         {
             var res = CatchXss().Catch();
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -251,7 +251,7 @@ namespace Tests
 
             var res = AsyncEnumerable.Catch(new[] { xs, xs });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -267,7 +267,7 @@ namespace Tests
         {
             var res = AsyncEnumerable.Catch(Enumerable.Empty<IAsyncEnumerable<int>>());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -312,7 +312,7 @@ namespace Tests
 
             var xs = AsyncEnumerable.Empty<int>().Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
             NoNext(e);
@@ -327,7 +327,7 @@ namespace Tests
 
             var xs = AsyncEnumerable.Return(42).Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
             HasNext(e, 42);
@@ -347,7 +347,7 @@ namespace Tests
 
             var xs = AsyncEnumerable.Throw<int>(ex).Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
             AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -362,7 +362,7 @@ namespace Tests
 
             var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
             HasNext(e, 1);
@@ -383,7 +383,7 @@ namespace Tests
 
             var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
             HasNext(e, 1);
@@ -400,7 +400,7 @@ namespace Tests
 
             var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { b = true; });
 
-            var e = xs.GetEnumerator();
+            var e = xs.GetAsyncEnumerator();
 
             var cts = new CancellationTokenSource();
 
@@ -439,7 +439,7 @@ namespace Tests
 
             var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -459,7 +459,7 @@ namespace Tests
 
             var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -479,7 +479,7 @@ namespace Tests
 
             var res = AsyncEnumerable.OnErrorResumeNext(new[] { xs, xs, ys, ys });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -500,7 +500,7 @@ namespace Tests
         {
             var res = OnErrorResumeNextXss().OnErrorResumeNext();
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -523,7 +523,7 @@ namespace Tests
 
             var res = AsyncEnumerable.OnErrorResumeNext(new[] { xs, xs });
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -538,7 +538,7 @@ namespace Tests
         {
             var res = AsyncEnumerable.OnErrorResumeNext(Enumerable.Empty<IAsyncEnumerable<int>>());
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             NoNext(e);
         }
 
@@ -569,7 +569,7 @@ namespace Tests
 
             var res = xs.Retry();
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);
@@ -585,7 +585,7 @@ namespace Tests
 
             var res = xs.Retry();
 
-            var e = res.GetEnumerator();
+            var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
             HasNext(e, 3);

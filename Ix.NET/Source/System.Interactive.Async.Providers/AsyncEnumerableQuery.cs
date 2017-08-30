@@ -144,7 +144,7 @@ namespace System.Linq
         /// Gets an enumerator to enumerate the elements in the sequence.
         /// </summary>
         /// <returns>A new enumerator instance used to enumerate the elements in the sequence.</returns>
-        public IAsyncEnumerator<T> GetEnumerator()
+        public IAsyncEnumerator<T> GetAsyncEnumerator()
         {
             if (_enumerable == null)
             {
@@ -152,7 +152,7 @@ namespace System.Linq
                 _enumerable = expression.Compile()();
             }
 
-            return _enumerable.GetEnumerator();
+            return _enumerable.GetAsyncEnumerator();
         }
 
         /// <summary>

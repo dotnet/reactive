@@ -76,7 +76,7 @@ namespace System.Linq
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        enumerator = source.GetEnumerator();
+                        enumerator = source.GetAsyncEnumerator();
                         buffers = new Queue<IList<TSource>>();
                         index = 0;
                         stopped = false;
