@@ -45,6 +45,11 @@ namespace System.Collections.Generic
         /// </returns>
         public static Task<bool> MoveNextAsync<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
         {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
             return source.MoveNextAsync();
         }
     }
