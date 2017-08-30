@@ -60,7 +60,7 @@ namespace System.Linq
             public abstract AppendPrepentAsyncIterator<TSource> Append(TSource item);
             public abstract AppendPrepentAsyncIterator<TSource> Prepend(TSource item);
 
-            protected async Task<bool> LoadFromEnumerator(CancellationToken cancellationToken)
+            protected async Task<bool> LoadFromEnumerator()
             {
                 if (await enumerator.MoveNextAsync()
                                     .ConfigureAwait(false))
@@ -111,7 +111,7 @@ namespace System.Linq
             }
 
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -135,7 +135,7 @@ namespace System.Linq
 
                         if (enumerator != null)
                         {
-                            if (await LoadFromEnumerator(cancellationToken)
+                            if (await LoadFromEnumerator()
                                 .ConfigureAwait(false))
                             {
                                 return true;
@@ -341,7 +341,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -371,7 +371,7 @@ namespace System.Linq
                                 goto case 3;
 
                             case 3:
-                                if (await LoadFromEnumerator(cancellationToken)
+                                if (await LoadFromEnumerator()
                                         .ConfigureAwait(false))
                                 {
                                     return true;

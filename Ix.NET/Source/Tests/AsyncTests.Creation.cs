@@ -27,7 +27,7 @@ namespace Tests
         public void Create_Iterator_Throws()
         {
      
-           var iter = AsyncEnumerable.CreateEnumerator<int>(c => Task.FromResult(true), () => 3, () => { });
+           var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => { });
 
             var enu = (IAsyncEnumerable<int>)iter;
 

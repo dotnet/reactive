@@ -19,7 +19,7 @@ namespace System.Linq
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, Task<bool>> moveNext, Func<T> current, Action dispose)
+        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             if (moveNext == null)
                 throw new ArgumentNullException(nameof(moveNext));
@@ -29,10 +29,10 @@ namespace System.Linq
             return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
 
-        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<CancellationToken, TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
+        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
         {
             var self = new AnonymousAsyncIterator<T>(
-                async ct =>
+                async () =>
                 {
                     var tcs = new TaskCompletionSource<bool>();
 
@@ -42,11 +42,8 @@ namespace System.Linq
                             tcs.TrySetCanceled();
                         });
 
-                    using (ct.Register(stop))
-                    {
-                        return await moveNext(ct, tcs)
-                                   .ConfigureAwait(false);
-                    }
+                    return await moveNext(tcs)
+                                .ConfigureAwait(false);
                 },
                 current,
                 dispose
@@ -75,10 +72,10 @@ namespace System.Linq
         {
             private readonly Func<T> currentFunc;
             private readonly Action dispose;
-            private readonly Func<CancellationToken, Task<bool>> moveNext;
+            private readonly Func<Task<bool>> moveNext;
 
 
-            public AnonymousAsyncIterator(Func<CancellationToken, Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
+            public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
             {
                 Debug.Assert(moveNext != null);
 
@@ -102,7 +99,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -111,7 +108,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await moveNext(cancellationToken).ConfigureAwait(false))
+                        if (await moveNext().ConfigureAwait(false))
                         {
                             current = currentFunc();
                             return true;

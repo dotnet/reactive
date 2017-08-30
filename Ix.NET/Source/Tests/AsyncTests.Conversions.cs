@@ -451,7 +451,7 @@ namespace Tests
 
             var ae = AsyncEnumerable.CreateEnumerable(
                 () => AsyncEnumerable.CreateEnumerator<int>(
-                    ct => Task.FromResult(false),
+                    () => Task.FromResult(false),
                     () => { throw new InvalidOperationException(); },
                     () => { evt.Set(); }));
 
@@ -485,7 +485,7 @@ namespace Tests
 
             var ae = AsyncEnumerable.CreateEnumerable(
                 () => AsyncEnumerable.CreateEnumerator(
-                    async ct =>
+                    async () =>
                     {
                         await subscriptionAssignedTcs.Task;
                         return true;
@@ -527,7 +527,7 @@ namespace Tests
 
             var ae = AsyncEnumerable.CreateEnumerable(
                 () => AsyncEnumerable.CreateEnumerator(
-                    async ct =>
+                    async () =>
                     {
                         await subscriptionAssignedTcs.Task;
 

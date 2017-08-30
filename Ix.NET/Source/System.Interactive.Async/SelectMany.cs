@@ -109,7 +109,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -204,7 +204,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -301,7 +301,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -399,7 +399,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {

@@ -24,7 +24,7 @@ namespace System.Linq
                     var subscription = source.Subscribe(observer);
 
                     return CreateEnumerator(
-                        (ct, tcs) =>
+                        tcs =>
                         {
                             var hasValue = false;
                             var hasCompleted = false;

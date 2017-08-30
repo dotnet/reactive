@@ -83,7 +83,7 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -140,7 +140,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -206,7 +206,7 @@ namespace System.Linq
                 return new SelectIListIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
 
-            protected override Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override Task<bool> MoveNextCore()
             {
                 switch (state)
                 {

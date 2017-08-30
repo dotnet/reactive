@@ -86,7 +86,7 @@ namespace System.Linq
 
                 try
                 {
-                    var result = await MoveNextCore(default(CancellationToken))
+                    var result = await MoveNextCore()
                                         .ConfigureAwait(false);
 
                     currentIsInvalid = !result; // if move next is false, invalid otherwise valid
@@ -113,7 +113,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIterator<TSource>(this, predicate);
             }
 
-            protected abstract Task<bool> MoveNextCore(CancellationToken cancellationToken);
+            protected abstract Task<bool> MoveNextCore();
 
             protected virtual void OnGetEnumerator()
             {

@@ -90,12 +90,12 @@ namespace System.Linq
             }
 
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        items = await source.ToArray(cancellationToken)
+                        items = await source.ToArray()
                                             .ConfigureAwait(false);
                         index = items.Length - 1;
 

@@ -83,7 +83,7 @@ namespace System.Linq
                 return new WhereEnumerableAsyncIterator<TSource>(source, CombinePredicates(this.predicate, predicate));
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -144,7 +144,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -218,7 +218,7 @@ namespace System.Linq
                 return new WhereSelectEnumerableAsyncIterator<TSource, TResult1>(source, predicate, CombineSelectors(this.selector, selector));
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {

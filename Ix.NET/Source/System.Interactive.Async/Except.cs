@@ -75,7 +75,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -83,7 +83,7 @@ namespace System.Linq
                         firstEnumerator = first.GetAsyncEnumerator();
                         set = new Set<TSource>(comparer);
                         setFilled = false;
-                        fillSetTask = FillSet(cancellationToken);
+                        fillSetTask = FillSet();
 
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
@@ -127,9 +127,9 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task FillSet(CancellationToken cancellationToken)
+            private async Task FillSet()
             {
-                var array = await second.ToArray(cancellationToken)
+                var array = await second.ToArray()
                                         .ConfigureAwait(false);
                 foreach (var t in array)
                 {

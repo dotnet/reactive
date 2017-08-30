@@ -48,7 +48,7 @@ namespace System.Linq
         {
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
-                    (ct, tcs) => tcs.Task,
+                    tcs => tcs.Task,
                     null,
                     null)
             );

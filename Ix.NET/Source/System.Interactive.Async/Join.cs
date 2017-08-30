@@ -102,7 +102,7 @@ namespace System.Linq
             const int State_For = 3;
             const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {

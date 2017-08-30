@@ -86,7 +86,7 @@ namespace System.Linq
             const int State_OuterNext = 1;
             const int State_While = 4;
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
 
                 switch (state)
@@ -240,7 +240,7 @@ namespace System.Linq
                 base.Dispose();
             }
 
-            protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
+            protected override async Task<bool> MoveNextCore()
             {
                 if (state == AsyncIteratorState.Allocated)
                 {
