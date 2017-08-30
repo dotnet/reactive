@@ -96,7 +96,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                if (await e.MoveNextAsync(cancellationToken)
+                if (await e.MoveNextAsync()
                            .ConfigureAwait(false))
                 {
                     return e.Current;
@@ -115,7 +115,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                if (await e.MoveNextAsync(cancellationToken)
+                if (await e.MoveNextAsync()
                            .ConfigureAwait(false))
                 {
                     return e.Current;

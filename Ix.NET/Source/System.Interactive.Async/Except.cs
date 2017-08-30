@@ -95,7 +95,7 @@ namespace System.Linq
                             if (!setFilled)
                             {
                                 // This is here so we don't need to call Task.WhenAll each time after the set is filled
-                                var moveNextTask = firstEnumerator.MoveNextAsync(cancellationToken);
+                                var moveNextTask = firstEnumerator.MoveNextAsync();
                                 await Task.WhenAll(moveNextTask, fillSetTask)
                                           .ConfigureAwait(false);
                                 setFilled = true;
@@ -103,7 +103,7 @@ namespace System.Linq
                             }
                             else
                             {
-                                moveNext = await firstEnumerator.MoveNextAsync(cancellationToken)
+                                moveNext = await firstEnumerator.MoveNextAsync()
                                                                 .ConfigureAwait(false);
                             }
 

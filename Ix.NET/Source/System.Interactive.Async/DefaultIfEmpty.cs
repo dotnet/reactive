@@ -65,7 +65,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             current = enumerator.Current;
@@ -82,7 +82,7 @@ namespace System.Linq
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             current = enumerator.Current;

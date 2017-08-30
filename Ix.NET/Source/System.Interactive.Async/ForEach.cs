@@ -100,7 +100,7 @@ namespace System.Linq
             var index = 0;
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNextAsync(cancellationToken)
+                while (await e.MoveNextAsync()
                               .ConfigureAwait(false))
                 {
                     action(e.Current, checked(index++));

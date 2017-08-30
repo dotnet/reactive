@@ -79,7 +79,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                              .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -147,7 +147,7 @@ namespace System.Linq
 
                     case AsyncIteratorState.Iterating:
 
-                        while (await enumerator.MoveNextAsync(cancellationToken)
+                        while (await enumerator.MoveNextAsync()
                                                .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;

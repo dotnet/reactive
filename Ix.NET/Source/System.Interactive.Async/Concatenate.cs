@@ -113,7 +113,7 @@ namespace System.Linq
 
                                 break;
                             case State_While:
-                                if (await currentEnumerator.MoveNextAsync(cancellationToken)
+                                if (await currentEnumerator.MoveNextAsync()
                                                            .ConfigureAwait(false))
                                 {
                                     current = currentEnumerator.Current;
@@ -193,7 +193,7 @@ namespace System.Linq
                     }
                     using (var e = source.GetAsyncEnumerator())
                     {
-                        while (await e.MoveNextAsync(cancellationToken)
+                        while (await e.MoveNextAsync()
                                       .ConfigureAwait(false))
                         {
                             list.Add(e.Current);
@@ -254,7 +254,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             current = enumerator.Current;

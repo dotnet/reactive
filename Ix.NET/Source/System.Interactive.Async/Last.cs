@@ -102,7 +102,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNextAsync(cancellationToken)
+                while (await e.MoveNextAsync()
                               .ConfigureAwait(false))
                 {
                     hasLast = true;
@@ -130,7 +130,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNextAsync(cancellationToken)
+                while (await e.MoveNextAsync()
                               .ConfigureAwait(false))
                 {
                     hasLast = true;

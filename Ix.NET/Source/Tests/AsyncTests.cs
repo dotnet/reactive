@@ -87,5 +87,53 @@ namespace Tests
             e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
 #pragma warning restore xUnit1013 // Public method should be marked as test        
+
+        /// <summary>
+        /// Waits WaitTimeoutMs or until cancellation is requested. If cancellation was not requested, MoveNext returns true.
+        /// </summary>
+        internal sealed class CancellationTestAsyncEnumerable : IAsyncEnumerable<int>
+        {
+            private readonly int iterationsBeforeDelay;
+
+            public CancellationTestAsyncEnumerable(int iterationsBeforeDelay = 0)
+            {
+                this.iterationsBeforeDelay = iterationsBeforeDelay;
+            }
+            IAsyncEnumerator<int> IAsyncEnumerable<int>.GetAsyncEnumerator() => GetEnumerator();
+
+            public TestEnumerator GetEnumerator() => new TestEnumerator(iterationsBeforeDelay);
+
+
+            internal sealed class TestEnumerator : IAsyncEnumerator<int>
+            {
+                private readonly int iterationsBeforeDelay;
+
+                public TestEnumerator(int iterationsBeforeDelay)
+                {
+                    this.iterationsBeforeDelay = iterationsBeforeDelay;
+                }
+                int i = -1;
+                public void Dispose()
+                {
+                }
+
+                public bool MoveNextWasCalled { get; private set; }
+
+                public int Current => i;
+
+                public async Task<bool> MoveNextAsync()
+                {
+                    MoveNextWasCalled = true;
+
+                    i++;
+                    if (Current >= iterationsBeforeDelay)
+                    {
+                        await Task.Delay(WaitTimeoutMs);
+                    }
+
+                    return true;
+                }
+            }
+        }
     }
 }

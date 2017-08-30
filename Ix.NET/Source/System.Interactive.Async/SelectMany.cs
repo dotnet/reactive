@@ -123,7 +123,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync(cancellationToken)
+                                if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     resultEnumerator?.Dispose();
@@ -136,7 +136,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync(cancellationToken)
+                                if (await resultEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     current = resultEnumerator.Current;
@@ -218,7 +218,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync(cancellationToken)
+                                if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     resultEnumerator?.Dispose();
@@ -232,7 +232,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync(cancellationToken)
+                                if (await resultEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     current = resultSelector(currentSource, resultEnumerator.Current);
@@ -316,7 +316,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync(cancellationToken)
+                                if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     resultEnumerator?.Dispose();
@@ -336,7 +336,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync(cancellationToken)
+                                if (await resultEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     current = resultSelector(currentSource, resultEnumerator.Current);
@@ -414,7 +414,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync(cancellationToken)
+                                if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     resultEnumerator?.Dispose();
@@ -431,7 +431,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync(cancellationToken)
+                                if (await resultEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
                                     current = resultEnumerator.Current;

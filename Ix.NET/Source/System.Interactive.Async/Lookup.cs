@@ -198,7 +198,7 @@ namespace System.Linq.Internal
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetAsyncEnumerator())
             {
-                while (await enu.MoveNextAsync(cancellationToken)
+                while (await enu.MoveNextAsync()
                                 .ConfigureAwait(false))
                 {
                     lookup.GetGrouping(keySelector(enu.Current), create: true)
@@ -217,7 +217,7 @@ namespace System.Linq.Internal
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetAsyncEnumerator())
             {
-                while (await enu.MoveNextAsync(cancellationToken)
+                while (await enu.MoveNextAsync()
                                 .ConfigureAwait(false))
                 {
                     lookup.GetGrouping(keySelector(enu.Current), create: true)

@@ -78,8 +78,8 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
 
                         // We kick these off and join so they can potentially run in parallel
-                        var ft = firstEnumerator.MoveNextAsync(cancellationToken);
-                        var st = secondEnumerator.MoveNextAsync(cancellationToken);
+                        var ft = firstEnumerator.MoveNextAsync();
+                        var st = secondEnumerator.MoveNextAsync();
                         await Task.WhenAll(ft, st)
                                   .ConfigureAwait(false);
 

@@ -86,7 +86,7 @@ namespace System.Linq
                                 break; // while
                             }
 
-                            if (await enumerator.MoveNextAsync(cancellationToken)
+                            if (await enumerator.MoveNextAsync()
                                                 .ConfigureAwait(false))
                             {
                                 var item = enumerator.Current;

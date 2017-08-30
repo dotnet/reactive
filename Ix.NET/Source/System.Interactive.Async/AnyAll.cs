@@ -67,7 +67,7 @@ namespace System.Linq
 
             using (var e = source.GetAsyncEnumerator())
             {
-                return await e.MoveNextAsync(cancellationToken).ConfigureAwait(false);
+                return await e.MoveNextAsync().ConfigureAwait(false);
             }
         }
 
@@ -75,7 +75,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNextAsync(cancellationToken)
+                while (await e.MoveNextAsync()
                               .ConfigureAwait(false))
                 {
                     if (!predicate(e.Current))
@@ -89,7 +89,7 @@ namespace System.Linq
         {
             using (var e = source.GetAsyncEnumerator())
             {
-                while (await e.MoveNextAsync(cancellationToken)
+                while (await e.MoveNextAsync()
                               .ConfigureAwait(false))
                 {
                     if (predicate(e.Current))

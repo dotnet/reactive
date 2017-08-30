@@ -102,7 +102,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (currentCount > 0 && await enumerator.MoveNextAsync(cancellationToken)
+                        if (currentCount > 0 && await enumerator.MoveNextAsync()
                                                                 .ConfigureAwait(false))
                         {
                             current = enumerator.Current;
@@ -171,7 +171,7 @@ namespace System.Linq
                         {
                             if (!isDone)
                             {
-                                if (await enumerator.MoveNextAsync(cancellationToken)
+                                if (await enumerator.MoveNextAsync()
                                                     .ConfigureAwait(false))
                                 {
                                     if (count > 0)
@@ -256,7 +256,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -321,7 +321,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;

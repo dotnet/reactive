@@ -116,7 +116,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_If:
-                                if (await outerEnumerator.MoveNextAsync(cancellationToken)
+                                if (await outerEnumerator.MoveNextAsync()
                                                          .ConfigureAwait(false))
                                 {
                                     lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer).ConfigureAwait(false);
@@ -155,7 +155,7 @@ namespace System.Linq
                                 return true;
 
                             case State_While:
-                                var hasNext = await outerEnumerator.MoveNextAsync(cancellationToken).ConfigureAwait(false);
+                                var hasNext = await outerEnumerator.MoveNextAsync().ConfigureAwait(false);
                                 if (hasNext)
                                 {
                                     goto case State_DoLoop;

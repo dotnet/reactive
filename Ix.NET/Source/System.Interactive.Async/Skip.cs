@@ -113,7 +113,7 @@ namespace System.Linq
                         enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
-                        while (currentCount > 0 && await enumerator.MoveNextAsync(cancellationToken)
+                        while (currentCount > 0 && await enumerator.MoveNextAsync()
                                                                    .ConfigureAwait(false))
                         {
                             currentCount--;
@@ -126,7 +126,7 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync(cancellationToken)
+                        if (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             current = enumerator.Current;
@@ -188,7 +188,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync(cancellationToken)
+                        while (await enumerator.MoveNextAsync()
                                             .ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
@@ -249,7 +249,7 @@ namespace System.Linq
                         enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync(cancellationToken)
+                        while (await enumerator.MoveNextAsync()
                                                .ConfigureAwait(false))
                         {
                             var element = enumerator.Current;
@@ -263,7 +263,7 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync(cancellationToken)
+                        if (doMoveNext && await enumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                         {
                             current = enumerator.Current;
@@ -327,7 +327,7 @@ namespace System.Linq
                         index = -1;
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync(cancellationToken)
+                        while (await enumerator.MoveNextAsync()
                                                .ConfigureAwait(false))
                         {
                             checked
@@ -346,7 +346,7 @@ namespace System.Linq
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync(cancellationToken)
+                        if (doMoveNext && await enumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                         {
                             current = enumerator.Current;

@@ -105,7 +105,7 @@ namespace System.Linq
                             {
                                 try
                                 {
-                                    if (await enumerator.MoveNextAsync(cancellationToken)
+                                    if (await enumerator.MoveNextAsync()
                                                         .ConfigureAwait(false))
                                     {
                                         current = enumerator.Current;
@@ -126,7 +126,7 @@ namespace System.Linq
                                 }
                             }
 
-                            if (await enumerator.MoveNextAsync(cancellationToken)
+                            if (await enumerator.MoveNextAsync()
                                                 .ConfigureAwait(false))
                             {
                                 current = enumerator.Current;
@@ -212,7 +212,7 @@ namespace System.Linq
 
                             try
                             {
-                                if (await enumerator.MoveNextAsync(cancellationToken)
+                                if (await enumerator.MoveNextAsync()
                                                     .ConfigureAwait(false))
                                 {
                                     current = enumerator.Current;

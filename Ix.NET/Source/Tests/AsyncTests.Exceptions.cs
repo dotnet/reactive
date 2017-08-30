@@ -393,24 +393,6 @@ namespace Tests
             Assert.True(b);
         }
 
-        //[Fact]
-        public void Finally6()
-        {
-            var b = false;
-
-            var xs = new[] { 1, 2 }.ToAsyncEnumerable().Finally(() => { b = true; });
-
-            var e = xs.GetAsyncEnumerator();
-
-            var cts = new CancellationTokenSource();
-
-            var t = e.MoveNextAsync(cts.Token);
-            cts.Cancel();
-            t.Wait(WaitTimeoutMs);
-
-            Assert.True(b);
-        }
-
         [Fact]
         public async Task Finally7()
         {

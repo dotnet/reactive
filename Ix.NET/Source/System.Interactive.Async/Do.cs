@@ -122,7 +122,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         try
                         {
-                            if (await enumerator.MoveNextAsync(cancellationToken)
+                            if (await enumerator.MoveNextAsync()
                                                 .ConfigureAwait(false))
                             {
                                 current = enumerator.Current;
