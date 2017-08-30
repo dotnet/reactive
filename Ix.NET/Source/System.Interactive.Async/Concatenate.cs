@@ -193,7 +193,7 @@ namespace System.Linq
                     }
                     using (var e = source.GetAsyncEnumerator())
                     {
-                        while (await e.MoveNextAsync()
+                        while (await e.MoveNextAsync(cancellationToken)
                                       .ConfigureAwait(false))
                         {
                             list.Add(e.Current);

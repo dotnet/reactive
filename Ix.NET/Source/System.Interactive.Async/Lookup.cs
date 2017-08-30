@@ -189,7 +189,7 @@ namespace System.Linq.Internal
             }
         }
         
-        internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default(CancellationToken))
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -198,7 +198,7 @@ namespace System.Linq.Internal
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetAsyncEnumerator())
             {
-                while (await enu.MoveNextAsync()
+                while (await enu.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
                 {
                     lookup.GetGrouping(keySelector(enu.Current), create: true)
@@ -209,7 +209,7 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector,  IEqualityComparer<TKey> comparer)
+        internal static async Task<Lookup<TKey, TElement>> CreateAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector,  IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default(CancellationToken))
         {
             Debug.Assert(source != null);
             Debug.Assert(keySelector != null);
@@ -217,7 +217,7 @@ namespace System.Linq.Internal
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetAsyncEnumerator())
             {
-                while (await enu.MoveNextAsync()
+                while (await enu.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
                 {
                     lookup.GetGrouping(keySelector(enu.Current), create: true)

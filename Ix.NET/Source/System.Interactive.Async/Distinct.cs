@@ -217,7 +217,7 @@ namespace System.Linq
                 var r = new List<TSource>();
                 using (var enu = source.GetAsyncEnumerator())
                 {
-                    while (await enu.MoveNextAsync()
+                    while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         var item = enu.Current;
@@ -329,7 +329,7 @@ namespace System.Linq
                 var s = new Set<TSource>(comparer);
                 using (var enu = source.GetAsyncEnumerator())
                 {
-                    while (await enu.MoveNextAsync()
+                    while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         s.Add(enu.Current);
