@@ -113,16 +113,16 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
 
             // We have to call move next because otherwise the internal enumerator is never allocated
-            await e.MoveNext();
+            await e.MoveNextAsync();
             e.Dispose();
 
             await disposed.Task;
 
             Assert.True(disposed.Task.Result);
 
-            Assert.False(e.MoveNext().Result);
+            Assert.False(e.MoveNextAsync().Result);
 
-            var next = await e.MoveNext();
+            var next = await e.MoveNextAsync();
             Assert.False(next);
         }
 
@@ -140,7 +140,7 @@ namespace Tests
             var ys = xs.Select(x => { if (x == 1) throw ex; return x; });
 
             var e = ys.GetAsyncEnumerator();
-            await Assert.ThrowsAsync<Exception>(() => e.MoveNext());
+            await Assert.ThrowsAsync<Exception>(() => e.MoveNextAsync());
 
             var result = await disposed.Task;
             Assert.True(result);

@@ -51,12 +51,12 @@ namespace Tests
 
         public void NoNext<T>(IAsyncEnumerator<T> e)
         {
-            Assert.False(e.MoveNext().Result);
+            Assert.False(e.MoveNextAsync().Result);
         }
 
         public void HasNext<T>(IAsyncEnumerator<T> e, T value)
         {
-            Assert.True(e.MoveNext().Result);
+            Assert.True(e.MoveNextAsync().Result);
             Assert.Equal(value, e.Current);
         }
 

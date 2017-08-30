@@ -42,7 +42,7 @@ namespace Tests
             var xs = ToAsyncEnumerable_Sequence(ex).ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
-            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         private IEnumerable<int> ToAsyncEnumerable_Sequence(Exception e)
@@ -97,7 +97,7 @@ namespace Tests
 
             Assert.True(subscribed);
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -233,9 +233,9 @@ namespace Tests
             var xs = task.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
 
-            Assert.True(e.MoveNext().Result);
+            Assert.True(e.MoveNextAsync().Result);
             Assert.Equal(36, e.Current);
-            Assert.False(e.MoveNext().Result);
+            Assert.False(e.MoveNextAsync().Result);
         }
 
         [Fact]
@@ -248,7 +248,7 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -260,7 +260,7 @@ namespace Tests
             var xs = tcs.Task.ToAsyncEnumerable();
             var e = xs.GetAsyncEnumerator();
 
-            AssertThrows<Exception>(() => e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() is TaskCanceledException);
         }
 
         class MyObservable<T> : IObservable<T>
