@@ -32,7 +32,6 @@ namespace Tests
             en.MoveNext();
 
             Assert.True(en.MoveNextWasCalled);
-            Assert.Equal(CancellationToken.None, en.LastToken);
         }
 
         [Fact]

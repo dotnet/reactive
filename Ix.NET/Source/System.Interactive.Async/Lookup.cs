@@ -228,12 +228,12 @@ namespace System.Linq.Internal
             return lookup;
         }
 
-        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken)
+        internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
             using (var enu = source.GetAsyncEnumerator())
             {
-                while (await enu.MoveNextAsync(cancellationToken)
+                while (await enu.MoveNextAsync()
                                 .ConfigureAwait(false))
                 {
                     var key = keySelector(enu.Current);

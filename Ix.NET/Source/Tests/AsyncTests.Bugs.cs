@@ -239,22 +239,20 @@ namespace Tests
                 {
                 }
 
-                public CancellationToken LastToken { get; private set; }
                 public bool MoveNextWasCalled { get; private set; }
 
                 public int Current => i;
                 
-                public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
+                public async Task<bool> MoveNextAsync()
                 {
-                    LastToken = cancellationToken;
                     MoveNextWasCalled = true;
                   
                     i++;
                     if (Current >= iterationsBeforeDelay)
                     {
-                        await Task.Delay(WaitTimeoutMs, cancellationToken);
+                        await Task.Delay(WaitTimeoutMs);
                     }
-                    cancellationToken.ThrowIfCancellationRequested();
+
                     return true;
                 }
             }
@@ -416,7 +414,7 @@ namespace Tests
                     _disposeCounter.DisposeCount++;
                 }
 
-                public Task<bool> MoveNextAsync(CancellationToken _)
+                public Task<bool> MoveNextAsync()
                 {
                     return Task.Factory.StartNew(() => false);
                 }

@@ -111,10 +111,10 @@ namespace System.Linq
                     _comparer = comparer;
                 }
 
-                public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
+                public async Task<bool> MoveNextAsync()
                 {
                     // nothing to do 
-                    if (!await _outer.MoveNextAsync(cancellationToken)
+                    if (!await _outer.MoveNextAsync()
                                      .ConfigureAwait(false))
                     {
                         return false;
@@ -122,7 +122,7 @@ namespace System.Linq
 
                     if (_lookup == null)
                     {
-                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer, cancellationToken)
+                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer)
                                                 .ConfigureAwait(false);
                     }
 

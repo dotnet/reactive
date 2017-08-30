@@ -73,7 +73,7 @@ namespace System.Linq
                 }
             }
 
-            public async Task<bool> MoveNextAsync(CancellationToken cancellationToken)
+            public async Task<bool> MoveNextAsync()
             {
                 // Note: MoveNext *must* be implemented as an async method to ensure
                 // that any exceptions thrown from the MoveNextCore call are handled 
@@ -84,27 +84,20 @@ namespace System.Linq
                     return false;
                 }
 
-                using (cancellationToken.Register(Dispose))
-                using (var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cancellationTokenSource.Token))
+                try
                 {
-                    try
-                    {
-                        // Short circuit and don't even call MoveNexCore
-                        cancellationToken.ThrowIfCancellationRequested();
+                    var result = await MoveNextCore(default(CancellationToken))
+                                        .ConfigureAwait(false);
 
-                        var result = await MoveNextCore(cts.Token)
-                                         .ConfigureAwait(false);
+                    currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 
-                        currentIsInvalid = !result; // if move next is false, invalid otherwise valid
-
-                        return result;
-                    }
-                    catch
-                    {
-                        currentIsInvalid = true;
-                        Dispose();
-                        throw;
-                    }
+                    return result;
+                }
+                catch
+                {
+                    currentIsInvalid = true;
+                    Dispose();
+                    throw;
                 }
             }
 

@@ -119,7 +119,7 @@ namespace System.Linq
                                 if (await outerEnumerator.MoveNextAsync(cancellationToken)
                                                          .ConfigureAwait(false))
                                 {
-                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer, cancellationToken).ConfigureAwait(false);
+                                    lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer).ConfigureAwait(false);
 
                                     if (lookup.Count != 0)
                                     {
