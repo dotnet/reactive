@@ -5,9 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tests
@@ -17,7 +15,7 @@ namespace Tests
         [Fact]
         public void Catch_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(AsyncEnumerable.Return(42), default(Func<Exception, IAsyncEnumerable<int>>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
