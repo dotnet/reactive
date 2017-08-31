@@ -41,15 +41,9 @@ namespace System.Linq
 
         public T Current { get; private set; }
 
-        public IAwaiter GetAwaiter()
-        {
-            return this;
-        }
+        public IAwaiter GetAwaiter() => this;
 
-        public bool IsCompleted
-        {
-            get { return false; }
-        }
+        public bool IsCompleted => false;
 
         public void GetResult()
         {
@@ -79,10 +73,7 @@ namespace System.Linq
             return this;
         }
 
-        public Yielder<T> GetEnumerator()
-        {
-            return this;
-        }
+        public Yielder<T> GetEnumerator() => this;
 
         public bool MoveNext()
         {
