@@ -397,10 +397,7 @@ namespace System.Linq.Internal
         internal TKey _key;
         internal Grouping<TKey, TElement> _next;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<TElement> GetEnumerator()
         {
@@ -412,20 +409,11 @@ namespace System.Linq.Internal
 
         // DDB195907: implement IGrouping<>.Key implicitly
         // so that WPF binding works on this property.
-        public TKey Key
-        {
-            get { return _key; }
-        }
+        public TKey Key => _key;
 
-        int ICollection<TElement>.Count
-        {
-            get { return _count; }
-        }
+        int ICollection<TElement>.Count => _count;
 
-        bool ICollection<TElement>.IsReadOnly
-        {
-            get { return true; }
-        }
+        bool ICollection<TElement>.IsReadOnly => true;
 
         void ICollection<TElement>.Add(TElement item)
         {
@@ -452,10 +440,7 @@ namespace System.Linq.Internal
             throw new NotSupportedException(Strings.NOT_SUPPORTED);
         }
 
-        int IList<TElement>.IndexOf(TElement item)
-        {
-            return Array.IndexOf(_elements, item, 0, _count);
-        }
+        int IList<TElement>.IndexOf(TElement item) => Array.IndexOf(_elements, item, 0, _count);
 
         void IList<TElement>.Insert(int index, TElement item)
         {
