@@ -27,7 +27,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, false, null);
+            return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, descending: false, parent: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -49,7 +49,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, true, null);
+            return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, descending: true, parent: null);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -71,7 +71,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.CreateOrderedEnumerable(keySelector, comparer, false);
+            return source.CreateOrderedEnumerable(keySelector, comparer, descending: false);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenByDescending<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -93,7 +93,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.CreateOrderedEnumerable(keySelector, comparer, true);
+            return source.CreateOrderedEnumerable(keySelector, comparer, descending: true);
         }
     }
 }
