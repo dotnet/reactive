@@ -10,14 +10,12 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
 
-            return Max_(source, comparer, cancellationToken);
+            return Max(source, CancellationToken.None);
         }
 
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -29,23 +27,24 @@ namespace System.Linq
             return source.Aggregate((x, y) => comparer.Compare(x, y) >= 0 ? x : y, cancellationToken);
         }
 
-        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
+        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
 
-            return source.Select(selector)
-                         .Max(cancellationToken);
+            return source.Max(comparer, CancellationToken.None);
         }
 
-        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
 
-            return Max(source, CancellationToken.None);
+            return Max_(source, comparer, cancellationToken);
         }
 
         public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
@@ -58,14 +57,15 @@ namespace System.Linq
             return Max(source, selector, CancellationToken.None);
         }
 
-        public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer)
+        public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
 
-            return source.Max(comparer, CancellationToken.None);
+            return source.Select(selector)
+                         .Max(cancellationToken);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)

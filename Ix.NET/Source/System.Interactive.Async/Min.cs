@@ -10,26 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (selector == null)
-                throw new ArgumentNullException(nameof(selector));
-
-            return Min(source, selector, CancellationToken.None);
-        }
-
-        public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (comparer == null)
-                throw new ArgumentNullException(nameof(comparer));
-
-            return Min_(source, comparer, cancellationToken);
-        }
-
         public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
@@ -55,6 +35,26 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return source.Min(comparer, CancellationToken.None);
+        }
+
+        public static Task<TSource> Min<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (comparer == null)
+                throw new ArgumentNullException(nameof(comparer));
+
+            return Min_(source, comparer, cancellationToken);
+        }
+
+        public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Min(source, selector, CancellationToken.None);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, TResult> selector, CancellationToken cancellationToken)
