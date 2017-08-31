@@ -8,6 +8,16 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return source.OrderBy(keySelector, Comparer<TKey>.Default);
+        }
+
         public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -20,14 +30,14 @@ namespace System.Linq
             return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, false, null);
         }
 
-        public static IOrderedAsyncEnumerable<TSource> OrderBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.OrderBy(keySelector, Comparer<TKey>.Default);
+            return source.OrderByDescending(keySelector, Comparer<TKey>.Default);
         }
 
         public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
@@ -40,16 +50,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return new OrderedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer, true, null);
-        }
-
-        public static IOrderedAsyncEnumerable<TSource> OrderByDescending<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-
-            return source.OrderByDescending(keySelector, Comparer<TKey>.Default);
         }
 
         public static IOrderedAsyncEnumerable<TSource> ThenBy<TSource, TKey>(this IOrderedAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
