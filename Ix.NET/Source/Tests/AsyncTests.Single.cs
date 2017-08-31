@@ -3138,8 +3138,8 @@ namespace Tests
         [Fact]
         public void Expand_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(default(IAsyncEnumerable<int>), x => null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(AsyncEnumerable.Return(42), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(AsyncEnumerable.Return(42), default(Func<int, IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -3162,7 +3162,7 @@ namespace Tests
         public void Expand2()
         {
             var ex = new Exception("Bang!");
-            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => { throw ex; });
+            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(new Func<int, IAsyncEnumerable<int>>(x => { throw ex; }));
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -3171,7 +3171,7 @@ namespace Tests
         [Fact]
         public void Expand3()
         {
-            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => null);
+            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => default(IAsyncEnumerable<int>));
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 2);
