@@ -217,7 +217,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(null, AsyncEnumerable.Return(42), (x, y) => x + y));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), null, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int, int>)));
         }
 
         [Fact]
