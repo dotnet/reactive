@@ -133,6 +133,11 @@ namespace System.Linq
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }
 
+        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            return (await MinBy(source, x => x, comparer, cancellationToken)
+                        .ConfigureAwait(false)).First();
+        }
 
         private static async Task<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
         {
@@ -142,7 +147,7 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync()
+                if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
@@ -150,7 +155,7 @@ namespace System.Linq
                 var resKey = keySelector(current);
                 result.Add(current);
 
-                while (await e.MoveNextAsync()
+                while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     var cur = e.Current;
@@ -177,12 +182,6 @@ namespace System.Linq
             }
 
             return result;
-        }
-
-        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            return (await MinBy(source, x => x, comparer, cancellationToken)
-                        .ConfigureAwait(false)).First();
         }
     }
 }
