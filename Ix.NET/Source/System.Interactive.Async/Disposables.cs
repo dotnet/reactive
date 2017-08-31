@@ -6,17 +6,11 @@ using System.Threading;
 
 namespace System.Linq
 {
-    class CancellationTokenDisposable : IDisposable
+    internal sealed class CancellationTokenDisposable : IDisposable
     {
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        public CancellationToken Token
-        {
-            get
-            {
-                return cts.Token;
-            }
-        }
+        public CancellationToken Token => cts.Token;
 
         public void Dispose()
         {
@@ -27,20 +21,14 @@ namespace System.Linq
         }
     }
 
-    static class Disposable
+    internal static class Disposable
     {
-        public static IDisposable Create(IDisposable d1, IDisposable d2)
-        {
-            return new BinaryDisposable(d1, d2);
-        }
+        public static IDisposable Create(IDisposable d1, IDisposable d2) => new BinaryDisposable(d1, d2);
 
-        public static IDisposable Create(Action action)
-        {
-            return new AnonymousDisposable(action);
-        }
+        public static IDisposable Create(Action action) => new AnonymousDisposable(action);
     }
 
-    class BinaryDisposable : IDisposable
+    internal sealed class BinaryDisposable : IDisposable
     {
         private IDisposable _d1;
         private IDisposable _d2;
@@ -67,7 +55,7 @@ namespace System.Linq
         }
     }
 
-    class AnonymousDisposable : IDisposable
+    internal sealed class AnonymousDisposable : IDisposable
     {
         private Action _action;
 
@@ -76,6 +64,6 @@ namespace System.Linq
             _action = action;
         }
 
-        public void Dispose() => _action();
+        public void Dispose() => Interlocked.Exchange(ref _action, null)?.Invoke();
     }
 }
