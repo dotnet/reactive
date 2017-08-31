@@ -10,6 +10,16 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return first.Intersect(second, EqualityComparer<TSource>.Default);
+        }
+
         public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer)
         {
             if (first == null)
@@ -20,17 +30,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return new IntersectAsyncIterator<TSource>(first, second, comparer);
-        }
-
-
-        public static IAsyncEnumerable<TSource> Intersect<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
-        {
-            if (first == null)
-                throw new ArgumentNullException(nameof(first));
-            if (second == null)
-                throw new ArgumentNullException(nameof(second));
-
-            return first.Intersect(second, EqualityComparer<TSource>.Default);
         }
 
         private sealed class IntersectAsyncIterator<TSource> : AsyncIterator<TSource>
