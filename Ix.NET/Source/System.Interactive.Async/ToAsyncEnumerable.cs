@@ -69,10 +69,11 @@ namespace System.Linq
             {
                 while (true)
                 {
-                    if (!e.MoveNextAsync()
-                          .Result)
+                    if (!e.MoveNextAsync().Result)
                         break;
+
                     var c = e.Current;
+
                     yield return c;
                 }
             }
@@ -279,6 +280,7 @@ namespace System.Linq
                     enumerator.Dispose();
                     enumerator = null;
                 }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -290,15 +292,18 @@ namespace System.Linq
                         enumerator = source.GetEnumerator();
                         state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
+
                     case AsyncIteratorState.Iterating:
                         if (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
                             return true;
                         }
+
                         await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
+
                 return false;
             }
 

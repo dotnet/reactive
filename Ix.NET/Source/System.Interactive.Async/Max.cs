@@ -64,8 +64,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector)
-                         .Max(cancellationToken);
+            return source.Select(selector).Max(cancellationToken);
         }
 
         public static Task<TResult> Max<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
@@ -85,8 +84,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector)
-                         .Max(cancellationToken);
+            return source.Select(selector).Max(cancellationToken);
         }
 
         public static Task<IList<TSource>> MaxBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -135,8 +133,7 @@ namespace System.Linq
 
         private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            return (await MaxBy(source, x => x, comparer, cancellationToken)
-                        .ConfigureAwait(false)).First();
+            return (await MaxBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
         }
     }
 }

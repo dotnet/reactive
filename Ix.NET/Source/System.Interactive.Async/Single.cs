@@ -53,8 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Single(cancellationToken);
+            return source.Where(predicate).Single(cancellationToken);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -64,8 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Single(cancellationToken);
+            return source.Where(predicate).Single(cancellationToken);
         }
 
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
@@ -111,8 +109,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .SingleOrDefault(cancellationToken);
+            return source.Where(predicate).SingleOrDefault(cancellationToken);
         }
 
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -122,8 +119,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .SingleOrDefault(cancellationToken);
+            return source.Where(predicate).SingleOrDefault(cancellationToken);
         }
 
         private static async Task<TSource> Single_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -135,6 +131,7 @@ namespace System.Linq
                     case 0: throw new InvalidOperationException(Strings.NO_ELEMENTS);
                     case 1: return list[0];
                 }
+
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
@@ -142,17 +139,17 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
+
                 var result = e.Current;
-                if (await e.MoveNextAsync(cancellationToken)
-                           .ConfigureAwait(false))
+                if (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
                 }
+
                 return result;
             }
             finally
@@ -170,6 +167,7 @@ namespace System.Linq
                     case 0: return default(TSource);
                     case 1: return list[0];
                 }
+
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
@@ -177,15 +175,13 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return default(TSource);
                 }
 
                 var result = e.Current;
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return result;
                 }

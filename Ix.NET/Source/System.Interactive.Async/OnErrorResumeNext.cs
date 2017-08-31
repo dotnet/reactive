@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -20,7 +17,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return OnErrorResumeNext_(new[] {first, second});
+            return OnErrorResumeNext_(new[] { first, second });
         }
 
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(params IAsyncEnumerable<TSource>[] sources)
@@ -105,8 +102,7 @@ namespace System.Linq
 
                             try
                             {
-                                if (await enumerator.MoveNextAsync()
-                                                    .ConfigureAwait(false))
+                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = enumerator.Current;
                                     return true;
@@ -123,7 +119,6 @@ namespace System.Linq
                         }
 
                         break; // case
-                        
                 }
 
                 await DisposeAsync().ConfigureAwait(false);

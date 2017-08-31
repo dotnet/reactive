@@ -36,8 +36,7 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var array = await source.ToArray(cancellationToken)
-                                        .ConfigureAwait(false);
+                var array = await source.ToArray(cancellationToken).ConfigureAwait(false);
 
                 // Array.Reverse() involves boxing for non-primitive value types, but
                 // checking that has its own cost, so just use this approach for all types.
@@ -53,8 +52,7 @@ namespace System.Linq
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var list = await source.ToList(cancellationToken)
-                                       .ConfigureAwait(false);
+                var list = await source.ToList(cancellationToken).ConfigureAwait(false);
 
                 list.Reverse();
                 return list;
@@ -89,14 +87,12 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-
             protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
                     case AsyncIteratorState.Allocated:
-                        items = await source.ToArray()
-                                            .ConfigureAwait(false);
+                        items = await source.ToArray().ConfigureAwait(false);
                         index = items.Length - 1;
 
                         state = AsyncIteratorState.Iterating;

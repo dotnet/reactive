@@ -64,8 +64,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector)
-                         .Min(cancellationToken);
+            return source.Select(selector).Min(cancellationToken);
         }
 
         public static Task<TResult> Min<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TResult>> selector)
@@ -85,8 +84,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Select(selector)
-                         .Min(cancellationToken);
+            return source.Select(selector).Min(cancellationToken);
         }
 
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector)
@@ -135,8 +133,7 @@ namespace System.Linq
 
         private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
-            return (await MinBy(source, x => x, comparer, cancellationToken)
-                        .ConfigureAwait(false)).First();
+            return (await MinBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
         }
 
         private static async Task<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
@@ -147,16 +144,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
 
                 var current = e.Current;
                 var resKey = keySelector(current);
                 result.Add(current);
 
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var cur = e.Current;
                     var key = keySelector(cur);
@@ -168,10 +163,7 @@ namespace System.Linq
                     }
                     else if (cmp > 0)
                     {
-                        result = new List<TSource>
-                        {
-                            cur
-                        };
+                        result = new List<TSource> { cur };
                         resKey = key;
                     }
                 }

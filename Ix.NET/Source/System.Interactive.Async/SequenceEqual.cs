@@ -55,8 +55,7 @@ namespace System.Linq
             return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);
         }
 
-        private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer,
-                                                                CancellationToken cancellationToken)
+        private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
             {

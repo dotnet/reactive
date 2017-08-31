@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -64,6 +63,7 @@ namespace System.Linq
                 await parentEnumerator.DisposeAsync().ConfigureAwait(false);
                 parentEnumerator = null;
             }
+
             await base.DisposeAsync().ConfigureAwait(false);
         }
 
@@ -73,8 +73,7 @@ namespace System.Linq
             {
                 case AsyncEnumerable.AsyncIteratorState.Allocated:
 
-                    await Initialize()
-                        .ConfigureAwait(false);
+                    await Initialize().ConfigureAwait(false);
 
                     enumerator = enumerable.GetEnumerator();
                     state = AsyncEnumerable.AsyncIteratorState.Iterating;
@@ -98,15 +97,13 @@ namespace System.Linq
         {
             if (parent == null)
             {
-                var buffer = await source.ToList()
-                                         .ConfigureAwait(false);
+                var buffer = await source.ToList().ConfigureAwait(false);
                 enumerable = (!@descending ? buffer.OrderBy(keySelector, comparer) : buffer.OrderByDescending(keySelector, comparer));
             }
             else
             {
                 parentEnumerator = parent.GetAsyncEnumerator();
-                await parent.Initialize()
-                            .ConfigureAwait(false);
+                await parent.Initialize().ConfigureAwait(false);
                 enumerable = parent.enumerable.CreateOrderedEnumerable(keySelector, comparer, @descending);
             }
         }

@@ -123,7 +123,6 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
-
             protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
@@ -132,21 +131,21 @@ namespace System.Linq
                         enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
-                        while (currentCount > 0 && await enumerator.MoveNextAsync()
-                                                                   .ConfigureAwait(false))
+                        while (currentCount > 0 && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             currentCount--;
                         }
+
                         if (currentCount <= 0)
                         {
                             state = AsyncIteratorState.Iterating;
                             goto case AsyncIteratorState.Iterating;
                         }
+
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
@@ -188,6 +187,7 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 queue = null; // release the memory
 
                 await base.DisposeAsync().ConfigureAwait(false);
@@ -207,11 +207,11 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             queue.Enqueue(item);
+
                             if (queue.Count > count)
                             {
                                 current = queue.Dequeue();
@@ -268,8 +268,7 @@ namespace System.Linq
                         enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var element = enumerator.Current;
                             if (!predicate(element))
@@ -279,15 +278,16 @@ namespace System.Linq
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
+
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
                         }
+
                         if (!doMoveNext)
                         {
                             current = enumerator.Current;
@@ -346,8 +346,7 @@ namespace System.Linq
                         index = -1;
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
@@ -362,15 +361,16 @@ namespace System.Linq
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
+
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
                         }
+
                         if (!doMoveNext)
                         {
                             current = enumerator.Current;
@@ -427,8 +427,7 @@ namespace System.Linq
                         enumerator = source.GetAsyncEnumerator();
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var element = enumerator.Current;
                             if (!await predicate(element).ConfigureAwait(false))
@@ -438,15 +437,16 @@ namespace System.Linq
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
+
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
                         }
+
                         if (!doMoveNext)
                         {
                             current = enumerator.Current;
@@ -505,8 +505,7 @@ namespace System.Linq
                         index = -1;
 
                         // skip elements as requested
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
@@ -521,15 +520,16 @@ namespace System.Linq
                                 goto case AsyncIteratorState.Iterating;
                             }
                         }
+
                         break;
 
                     case AsyncIteratorState.Iterating:
-                        if (doMoveNext && await enumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                        if (doMoveNext && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
                         }
+
                         if (!doMoveNext)
                         {
                             current = enumerator.Current;

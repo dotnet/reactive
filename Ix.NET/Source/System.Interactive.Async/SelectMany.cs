@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -123,8 +122,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (resultEnumerator != null)
                                     {
@@ -140,8 +138,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = resultEnumerator.Current;
                                     return true;
@@ -222,8 +219,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (resultEnumerator != null)
                                     {
@@ -240,8 +236,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = resultSelector(currentSource, resultEnumerator.Current);
                                     return true;
@@ -324,8 +319,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (resultEnumerator != null)
                                     {
@@ -339,8 +333,7 @@ namespace System.Linq
                                         index++;
                                     }
 
-                                    resultEnumerator = collectionSelector(currentSource, index)
-                                        .GetAsyncEnumerator();
+                                    resultEnumerator = collectionSelector(currentSource, index).GetAsyncEnumerator();
 
                                     mode = State_Result;
                                     goto case State_Result;
@@ -348,8 +341,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = resultSelector(currentSource, resultEnumerator.Current);
                                     return true;
@@ -426,8 +418,7 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_Source:
-                                if (await sourceEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await sourceEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (resultEnumerator != null)
                                     {
@@ -447,8 +438,7 @@ namespace System.Linq
                                 break;
 
                             case State_Result:
-                                if (await resultEnumerator.MoveNextAsync()
-                                                          .ConfigureAwait(false))
+                                if (await resultEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = resultEnumerator.Current;
                                     return true;

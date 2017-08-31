@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -90,11 +88,15 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.Aggregate(new Dictionary<TKey, TElement>(comparer), (d, x) =>
-                                                                              {
-                                                                                  d.Add(keySelector(x), elementSelector(x));
-                                                                                  return d;
-                                                                              }, cancellationToken);
+            return source.Aggregate(
+                new Dictionary<TKey, TElement>(comparer),
+                (d, x) =>
+                {
+                    d.Add(keySelector(x), elementSelector(x));
+                    return d;
+                },
+                cancellationToken
+            );
         }
 
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, CancellationToken cancellationToken)
@@ -147,11 +149,15 @@ namespace System.Linq
             if (source is IIListProvider<TSource> listProvider)
                 return listProvider.ToListAsync(cancellationToken);
 
-            return source.Aggregate(new List<TSource>(), (list, x) =>
-                                                         {
-                                                             list.Add(x);
-                                                             return list;
-                                                         }, cancellationToken);
+            return source.Aggregate(
+                new List<TSource>(),
+                (list, x) =>
+                {
+                    list.Add(x);
+                    return list;
+                },
+                cancellationToken
+            );
         }
     }
 }

@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -16,8 +15,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Enumerable.Repeat(element, count)
-                             .ToAsyncEnumerable();
+            return Enumerable.Repeat(element, count).ToAsyncEnumerable();
         }
 
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
@@ -116,18 +114,17 @@ namespace System.Linq
 
                         enumerator = source.GetAsyncEnumerator();
                         state = AsyncIteratorState.Iterating;
+
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;
                         }
 
                         goto case AsyncIteratorState.Allocated;
-
                 }
 
                 await DisposeAsync().ConfigureAwait(false);

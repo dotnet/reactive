@@ -121,8 +121,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        if (currentCount > 0 && await enumerator.MoveNextAsync()
-                                                                .ConfigureAwait(false))
+                        if (currentCount > 0 && await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             currentCount--;
@@ -166,11 +165,11 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 queue = null; // release the memory
 
                 await base.DisposeAsync().ConfigureAwait(false);
             }
-
 
             protected override async Task<bool> MoveNextCore()
             {
@@ -190,8 +189,7 @@ namespace System.Linq
                         {
                             if (!isDone)
                             {
-                                if (await enumerator.MoveNextAsync()
-                                                    .ConfigureAwait(false))
+                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     if (count > 0)
                                     {
@@ -275,14 +273,14 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             if (!predicate(item))
                             {
                                 break;
                             }
+
                             current = item;
                             return true;
                         }
@@ -340,8 +338,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             checked
@@ -353,6 +350,7 @@ namespace System.Linq
                             {
                                 break;
                             }
+
                             current = item;
                             return true;
                         }
@@ -409,14 +407,14 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             if (!await predicate(item).ConfigureAwait(false))
                             {
                                 break;
                             }
+
                             current = item;
                             return true;
                         }
@@ -474,8 +472,7 @@ namespace System.Linq
 
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             checked
@@ -487,6 +484,7 @@ namespace System.Linq
                             {
                                 break;
                             }
+
                             current = item;
                             return true;
                         }
