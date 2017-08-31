@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 using System.Threading.Tasks;
 using System.Threading;
@@ -18,22 +17,19 @@ namespace Tests
         [Fact]
         public void Create_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<IAsyncEnumerator<int>>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => Task.FromResult(true)));
-       
         }
 
         [Fact]
         public void Create_Iterator_Throws()
         {
-     
-           var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => Task.FromResult(true));
+            var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => Task.FromResult(true));
 
             var enu = (IAsyncEnumerable<int>)iter;
 
             AssertThrows<NotSupportedException>(() => enu.GetAsyncEnumerator());
         }
-
 
         [Fact]
         public void Return()
@@ -56,8 +52,8 @@ namespace Tests
         [Fact]
         public async Task Empty_Null()
         {
-           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null));
-           await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.IsEmpty<int>(null, CancellationToken.None));
         }
 
         [Fact]
@@ -181,7 +177,7 @@ namespace Tests
         [Fact]
         public void Defer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -338,7 +334,7 @@ namespace Tests
             Assert.Equal(0, i);
 
             AssertThrows<Exception>(() => xs.GetAsyncEnumerator(), ex_ => ex_ == ex);
-            
+
             Assert.Equal(1, d);
         }
 
