@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -27,7 +24,6 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-
             return new GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
         }
 
@@ -46,9 +42,6 @@ namespace System.Linq
 
             return outer.GroupJoin(inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
-
-       
-
 
         private sealed class GroupJoinAsyncEnumerable<TOuter, TInner, TKey, TResult> : IAsyncEnumerable<TResult>
         {
@@ -114,16 +107,14 @@ namespace System.Linq
                 public async Task<bool> MoveNextAsync()
                 {
                     // nothing to do 
-                    if (!await _outer.MoveNextAsync()
-                                     .ConfigureAwait(false))
+                    if (!await _outer.MoveNextAsync().ConfigureAwait(false))
                     {
                         return false;
                     }
 
                     if (_lookup == null)
                     {
-                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer)
-                                                .ConfigureAwait(false);
+                        _lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(_inner, _innerKeySelector, _comparer).ConfigureAwait(false);
                     }
 
                     var item = _outer.Current;
