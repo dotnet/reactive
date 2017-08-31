@@ -41,7 +41,7 @@ namespace System.Linq
                 yield return x;
         }
 
-        private class AnonymousEnumerable<TResult> : IEnumerable<TResult>
+        private sealed class AnonymousEnumerable<TResult> : IEnumerable<TResult>
         {
             private readonly Func<IEnumerator<TResult>> _getEnumerator;
 
