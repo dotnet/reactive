@@ -10,46 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return All(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return All(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return All_(source, predicate, cancellationToken);
-        }
-
-        public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return All_(source, predicate, cancellationToken);
-        }
-
         public static Task<bool> Any<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -113,46 +73,6 @@ namespace System.Linq
             {
                 await e.DisposeAsync().ConfigureAwait(false);
             }
-        }
-
-        private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator();
-
-            try
-            {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    if (!predicate(e.Current))
-                        return false;
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-
-            return true;
-        }
-
-        private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
-        {
-            var e = source.GetAsyncEnumerator();
-
-            try
-            {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    if (!await predicate(e.Current).ConfigureAwait(false))
-                        return false;
-                }
-            }
-            finally
-            {
-                await e.DisposeAsync().ConfigureAwait(false);
-            }
-
-            return true;
         }
 
         private static async Task<bool> Any_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
