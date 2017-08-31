@@ -18,6 +18,14 @@ namespace System.Linq
             return Single(source, CancellationToken.None);
         }
 
+        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Single_(source, cancellationToken);
+        }
+
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -28,24 +36,6 @@ namespace System.Linq
             return Single(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return Single(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return Single_(source, cancellationToken);
-        }
-
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -54,6 +44,16 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).Single(cancellationToken);
+        }
+
+        public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return Single(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -74,6 +74,14 @@ namespace System.Linq
             return SingleOrDefault(source, CancellationToken.None);
         }
 
+        public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return SingleOrDefault_(source, cancellationToken);
+        }
+
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
@@ -84,24 +92,6 @@ namespace System.Linq
             return SingleOrDefault(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return SingleOrDefault(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return SingleOrDefault_(source, cancellationToken);
-        }
-
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -110,6 +100,16 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(predicate));
 
             return source.Where(predicate).SingleOrDefault(cancellationToken);
+        }
+
+        public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return SingleOrDefault(source, predicate, CancellationToken.None);
         }
 
         public static Task<TSource> SingleOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
