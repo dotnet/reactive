@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -122,8 +121,7 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         try
                         {
-                            if (await enumerator.MoveNextAsync()
-                                                .ConfigureAwait(false))
+                            if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
                                 current = enumerator.Current;
                                 onNext(current);

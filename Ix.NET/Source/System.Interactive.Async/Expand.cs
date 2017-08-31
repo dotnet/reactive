@@ -90,8 +90,7 @@ namespace System.Linq
                                 break; // while
                             }
 
-                            if (await enumerator.MoveNextAsync()
-                                                .ConfigureAwait(false))
+                            if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
                                 var item = enumerator.Current;
                                 var next = selector(item);
@@ -99,6 +98,7 @@ namespace System.Linq
                                 current = item;
                                 return true;
                             }
+
                             await enumerator.DisposeAsync().ConfigureAwait(false);
                             enumerator = null;
                         }

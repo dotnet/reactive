@@ -118,15 +118,13 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSet(cancellationToken)
-                            .ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSet(cancellationToken)
-                            .ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s;
             }
 
@@ -144,8 +142,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync()
-                                    .ConfigureAwait(false))
+                    while (await enu.MoveNextAsync().ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(keySelector(item)))
@@ -185,8 +182,8 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (!await enumerator.MoveNextAsync()
-                                             .ConfigureAwait(false))
+
+                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
                             return false;
@@ -196,12 +193,12 @@ namespace System.Linq
                         set = new Set<TKey>(comparer);
                         set.Add(keySelector(element));
                         current = element;
+
                         state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = enumerator.Current;
                             if (set.Add(keySelector(element)))
@@ -218,7 +215,7 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task<List<TSource>> FillSet(CancellationToken cancellationToken)
+            private async Task<List<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
                 var s = new Set<TKey>(comparer);
                 var r = new List<TSource>();
@@ -227,8 +224,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken)
-                                    .ConfigureAwait(false))
+                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         var item = enu.Current;
                         if (s.Add(keySelector(item)))
@@ -264,22 +260,20 @@ namespace System.Linq
 
             public async Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSet(cancellationToken)
-                            .ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToArray();
             }
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSet(cancellationToken)
+                var s = await FillSetAsync(cancellationToken)
                             .ConfigureAwait(false);
                 return s.ToList();
             }
 
             public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                return onlyIfCheap ? -1 : (await FillSet(cancellationToken)
-                                               .ConfigureAwait(false)).Count;
+                return onlyIfCheap ? -1 : (await FillSetAsync(cancellationToken).ConfigureAwait(false)).Count;
             }
 
             public override AsyncIterator<TSource> Clone()
@@ -305,8 +299,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (!await enumerator.MoveNextAsync()
-                                             .ConfigureAwait(false))
+                        if (!await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             await DisposeAsync().ConfigureAwait(false);
                             return false;
@@ -316,12 +309,12 @@ namespace System.Linq
                         set = new Set<TSource>(comparer);
                         set.Add(element);
                         current = element;
+
                         state = AsyncIteratorState.Iterating;
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             element = enumerator.Current;
                             if (set.Add(element))
@@ -338,7 +331,7 @@ namespace System.Linq
                 return false;
             }
 
-            private async Task<Set<TSource>> FillSet(CancellationToken cancellationToken)
+            private async Task<Set<TSource>> FillSetAsync(CancellationToken cancellationToken)
             {
                 var s = new Set<TSource>(comparer);
 
@@ -346,8 +339,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await enu.MoveNextAsync(cancellationToken)
-                                    .ConfigureAwait(false))
+                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         s.Add(enu.Current);
                     }
@@ -406,8 +398,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             var comparerEquals = false;
@@ -416,6 +407,7 @@ namespace System.Linq
                             {
                                 comparerEquals = comparer.Equals(currentValue, item);
                             }
+
                             if (!hasCurrentValue || !comparerEquals)
                             {
                                 hasCurrentValue = true;
@@ -477,8 +469,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             var key = keySelector(item);
