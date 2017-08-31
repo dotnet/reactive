@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -98,15 +97,13 @@ namespace System.Linq
                             {
                                 // This is here so we don't need to call Task.WhenAll each time after the set is filled
                                 var moveNextTask = firstEnumerator.MoveNextAsync();
-                                await Task.WhenAll(moveNextTask, fillSetTask)
-                                          .ConfigureAwait(false);
+                                await Task.WhenAll(moveNextTask, fillSetTask).ConfigureAwait(false);
                                 setFilled = true;
                                 moveNext = moveNextTask.Result;
                             }
                             else
                             {
-                                moveNext = await firstEnumerator.MoveNextAsync()
-                                                                .ConfigureAwait(false);
+                                moveNext = await firstEnumerator.MoveNextAsync().ConfigureAwait(false);
                             }
 
                             if (moveNext)
@@ -129,8 +126,7 @@ namespace System.Linq
 
             private async Task FillSet()
             {
-                var array = await second.ToArray()
-                                        .ConfigureAwait(false);
+                var array = await second.ToArray().ConfigureAwait(false);
                 for (var i = 0; i < array.Length; i++)
                 {
                     set.Add(array[i]);

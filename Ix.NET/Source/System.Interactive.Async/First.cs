@@ -53,8 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .First(cancellationToken);
+            return source.Where(predicate).First(cancellationToken);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -64,8 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .First(cancellationToken);
+            return source.Where(predicate).First(cancellationToken);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
@@ -111,8 +109,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .FirstOrDefault(cancellationToken);
+            return source.Where(predicate).FirstOrDefault(cancellationToken);
         }
 
         public static Task<TSource> FirstOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -122,8 +119,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .FirstOrDefault(cancellationToken);
+            return source.Where(predicate).FirstOrDefault(cancellationToken);
         }
 
         private static async Task<TSource> First_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -138,8 +134,7 @@ namespace System.Linq
 
             try
             {
-                if (await e.MoveNextAsync(cancellationToken)
-                           .ConfigureAwait(false))
+                if (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return e.Current;
                 }
@@ -164,8 +159,7 @@ namespace System.Linq
 
             try
             {
-                if (await e.MoveNextAsync(cancellationToken)
-                           .ConfigureAwait(false))
+                if (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return e.Current;
                 }

@@ -42,7 +42,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return new JoinAsyncIterator<TOuter,TInner,TKey,TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
+            return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, EqualityComparer<TKey>.Default);
         }
 
         internal sealed class JoinAsyncIterator<TOuter, TInner, TKey, TResult> : AsyncIterator<TResult>
@@ -90,17 +90,17 @@ namespace System.Linq
             }
 
             // State machine vars
-            Internal.Lookup<TKey, TInner> lookup;
-            int count;
-            TInner[] elements;
-            int index;
-            TOuter item;
+            private Internal.Lookup<TKey, TInner> lookup;
+            private int count;
+            private TInner[] elements;
+            private int index;
+            private TOuter item;
             private int mode;
 
-            const int State_If = 1;
-            const int State_DoLoop = 2;
-            const int State_For = 3;
-            const int State_While = 4;
+            private const int State_If = 1;
+            private const int State_DoLoop = 2;
+            private const int State_For = 3;
+            private const int State_While = 4;
 
             protected override async Task<bool> MoveNextCore()
             {
@@ -116,19 +116,19 @@ namespace System.Linq
                         switch (mode)
                         {
                             case State_If:
-                                if (await outerEnumerator.MoveNextAsync()
-                                                         .ConfigureAwait(false))
+                                if (await outerEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     lookup = await Internal.Lookup<TKey, TInner>.CreateForJoinAsync(inner, innerKeySelector, comparer).ConfigureAwait(false);
 
                                     if (lookup.Count != 0)
                                     {
                                         mode = State_DoLoop;
-                                        goto case State_DoLoop;   
+                                        goto case State_DoLoop;
                                     }
                                 }
 
                                 break;
+
                             case State_DoLoop:
                                 item = outerEnumerator.Current;
                                 var g = lookup.GetGrouping(outerKeySelector(item), create: false);
@@ -152,6 +152,7 @@ namespace System.Linq
                                 {
                                     mode = State_While;
                                 }
+
                                 return true;
 
                             case State_While:
@@ -161,12 +162,10 @@ namespace System.Linq
                                     goto case State_DoLoop;
                                 }
 
-                             
                                 break;
                         }
 
                         await DisposeAsync().ConfigureAwait(false);
-
                         break;
                 }
 

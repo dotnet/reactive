@@ -53,8 +53,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Last(cancellationToken);
+            return source.Where(predicate).Last(cancellationToken);
         }
 
         public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -64,8 +63,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Last(cancellationToken);
+            return source.Where(predicate).Last(cancellationToken);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
@@ -122,8 +120,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .LastOrDefault(cancellationToken);
+            return source.Where(predicate).LastOrDefault(cancellationToken);
         }
 
         private static async Task<TSource> Last_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -144,8 +141,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     hasLast = true;
                     last = e.Current;
@@ -158,6 +154,7 @@ namespace System.Linq
 
             if (!hasLast)
                 throw new InvalidOperationException(Strings.NO_ELEMENTS);
+
             return last;
         }
 
@@ -179,8 +176,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     hasLast = true;
                     last = e.Current;
