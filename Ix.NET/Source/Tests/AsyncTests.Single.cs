@@ -1006,7 +1006,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.TakeWhile(x => { throw ex; });
+            var ys = xs.TakeWhile(new Func<int, bool>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -1053,7 +1053,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.TakeWhile((x, i) => { throw ex; });
+            var ys = xs.TakeWhile(new Func<int, int, bool>((x, i) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -1215,7 +1215,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile(x => { throw ex; });
+            var ys = xs.SkipWhile(new Func<int, bool>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -1262,7 +1262,7 @@ namespace Tests
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.SkipWhile((x, i) => { throw ex; });
+            var ys = xs.SkipWhile(new Func<int, int, bool>((x, i) => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
