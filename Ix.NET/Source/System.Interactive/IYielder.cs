@@ -26,7 +26,7 @@ namespace System.Linq
         IAwaitable Return(T value);
     }
 
-    internal class Yielder<T> : IYielder<T>, IAwaitable, IAwaiter
+    internal sealed class Yielder<T> : IYielder<T>, IAwaitable, IAwaiter
     {
         private readonly Action<Yielder<T>> _create;
         private Action _continuation;
