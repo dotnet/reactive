@@ -97,6 +97,16 @@ namespace System.Linq
             return source.MinBy(keySelector, CancellationToken.None);
         }
 
+        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return MinBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
+        }
+
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -107,16 +117,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return source.MinBy(keySelector, comparer, CancellationToken.None);
-        }
-
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-
-            return MinBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
@@ -141,6 +141,16 @@ namespace System.Linq
             return source.MinBy(keySelector, CancellationToken.None);
         }
 
+        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            return MinBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
+        }
+
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
         {
             if (source == null)
@@ -151,16 +161,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(comparer));
 
             return source.MinBy(keySelector, comparer, CancellationToken.None);
-        }
-
-        public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (keySelector == null)
-                throw new ArgumentNullException(nameof(keySelector));
-
-            return MinBy(source, keySelector, Comparer<TKey>.Default, cancellationToken);
         }
 
         public static Task<IList<TSource>> MinBy<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer, CancellationToken cancellationToken)
