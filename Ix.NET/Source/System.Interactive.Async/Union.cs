@@ -20,8 +20,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return first.Concat(second)
-                        .Distinct(comparer);
+            return first.Concat(second).Distinct(comparer);
         }
 
         public static IAsyncEnumerable<TSource> Union<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)

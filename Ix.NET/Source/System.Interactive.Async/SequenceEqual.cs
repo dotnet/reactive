@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,12 +58,9 @@ namespace System.Linq
         private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer,
                                                                 CancellationToken cancellationToken)
         {
-            if (first is ICollection<TSource> firstCol)
+            if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
             {
-                if (second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
-                {
-                    return false;
-                }
+                return false;
             }
 
             var e1 = first.GetAsyncEnumerator();
@@ -76,18 +71,15 @@ namespace System.Linq
 
                 try
                 {
-                    while (await e1.MoveNextAsync()
-                                   .ConfigureAwait(false))
+                    while (await e1.MoveNextAsync().ConfigureAwait(false))
                     {
-                        if (!(await e2.MoveNextAsync()
-                                      .ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
+                        if (!(await e2.MoveNextAsync().ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
                         {
                             return false;
                         }
                     }
 
-                    return !await e2.MoveNextAsync()
-                                    .ConfigureAwait(false);
+                    return !await e2.MoveNextAsync().ConfigureAwait(false);
                 }
                 finally
                 {

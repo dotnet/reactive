@@ -99,6 +99,7 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -122,8 +123,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             if (predicate(item))
@@ -170,6 +170,7 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -184,8 +185,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
@@ -234,6 +234,7 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -252,8 +253,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             if (await predicate(item).ConfigureAwait(false))
@@ -300,6 +300,7 @@ namespace System.Linq
                     await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
@@ -314,8 +315,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             checked
                             {
@@ -387,8 +387,7 @@ namespace System.Linq
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
-                        while (await enumerator.MoveNextAsync()
-                                               .ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             var item = enumerator.Current;
                             if (predicate(item))

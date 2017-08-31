@@ -66,6 +66,7 @@ namespace System.Linq
                     await firstEnumerator.DisposeAsync().ConfigureAwait(false);
                     firstEnumerator = null;
                 }
+
                 if (secondEnumerator != null)
                 {
                     await secondEnumerator.DisposeAsync().ConfigureAwait(false);
@@ -91,8 +92,7 @@ namespace System.Linq
                         // We kick these off and join so they can potentially run in parallel
                         var ft = firstEnumerator.MoveNextAsync();
                         var st = secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft, st)
-                                  .ConfigureAwait(false);
+                        await Task.WhenAll(ft, st).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {
@@ -140,6 +140,7 @@ namespace System.Linq
                     await firstEnumerator.DisposeAsync().ConfigureAwait(false);
                     firstEnumerator = null;
                 }
+
                 if (secondEnumerator != null)
                 {
                     await secondEnumerator.DisposeAsync().ConfigureAwait(false);
@@ -165,8 +166,7 @@ namespace System.Linq
                         // We kick these off and join so they can potentially run in parallel
                         var ft = firstEnumerator.MoveNextAsync();
                         var st = secondEnumerator.MoveNextAsync();
-                        await Task.WhenAll(ft, st)
-                                  .ConfigureAwait(false);
+                        await Task.WhenAll(ft, st).ConfigureAwait(false);
 
                         if (ft.Result && st.Result)
                         {
