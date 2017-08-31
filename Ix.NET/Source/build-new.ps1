@@ -21,13 +21,13 @@ Remove-Item $outputPath -Force -Recurse
 md -Force $outputLocation | Out-Null
 
 if (!(Test-Path .\nuget.exe)) {
-    wget "https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe" -outfile .\nuget.exe
+    wget "https://dist.nuget.org/win-x86-commandline/v4.3.0/nuget.exe" -outfile .\nuget.exe
 }
 
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.21-beta -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.37-beta -pre -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
