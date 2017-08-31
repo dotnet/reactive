@@ -2095,7 +2095,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = AsyncEnumerable.Return(42);
-            var ys = xs.GroupBy<int, int>(x => { throw ex; });
+            var ys = xs.GroupBy<int, int>(new Func<int, int>(x => { throw ex; }));
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);

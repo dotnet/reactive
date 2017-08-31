@@ -571,22 +571,6 @@ namespace System.Linq.Internal
             }
         }
 
-        public IEnumerable<TResult> ApplyResultSelector<TResult>(Func<TKey, IAsyncEnumerable<TElement>, TResult> resultSelector)
-        {
-            var g = _lastGrouping;
-            if (g != null)
-            {
-                do
-                {
-                    g = g._next;
-                    g.Trim();
-
-                    var result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
-                    yield return result;
-                } while (g != _lastGrouping);
-            }
-        }
-
         internal static async Task<LookupWithTask<TKey, TElement>> CreateAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, Func<TSource, Task<TElement>> elementSelector, IEqualityComparer<TKey> comparer, CancellationToken cancellationToken = default(CancellationToken))
         {
             Debug.Assert(source != null);
