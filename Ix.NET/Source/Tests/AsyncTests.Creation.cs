@@ -5,9 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -266,8 +266,8 @@ namespace Tests
         [Fact]
         public void Using_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(null, _ => null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(() => new MyD(null), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(null, _ => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(() => new MyD(null), default(Func<IDisposable, IAsyncEnumerable<int>>)));
         }
 
         [Fact]
