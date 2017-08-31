@@ -147,7 +147,7 @@ namespace System.Linq
                 return new GroupedResultAsyncEnumerable<TSource, TKey, TResult>(source, keySelector, resultSelector, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -156,7 +156,7 @@ namespace System.Linq
                     lookup = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -176,7 +176,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
@@ -236,7 +236,7 @@ namespace System.Linq
                 return new GroupedAsyncEnumerable<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -245,7 +245,7 @@ namespace System.Linq
                     lookup = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -265,7 +265,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
@@ -321,7 +321,7 @@ namespace System.Linq
             {
                 return new GroupedAsyncEnumerable<TSource, TKey>(source, keySelector, comparer);
             }
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -330,7 +330,7 @@ namespace System.Linq
                     lookup = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -350,7 +350,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 

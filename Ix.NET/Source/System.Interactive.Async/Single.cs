@@ -99,7 +99,9 @@ namespace System.Linq
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -113,6 +115,10 @@ namespace System.Linq
                     throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
                 }
                 return result;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
             }
         }
 
@@ -128,7 +134,9 @@ namespace System.Linq
                 throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -143,6 +151,11 @@ namespace System.Linq
                     return result;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             throw new InvalidOperationException(Strings.MORE_THAN_ONE_ELEMENT);
         }
     }

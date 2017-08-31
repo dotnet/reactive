@@ -67,15 +67,15 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
@@ -100,7 +100,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
@@ -129,15 +129,15 @@ namespace System.Linq
                 return new SelectEnumerableWithIndexAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -162,7 +162,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
@@ -190,7 +190,7 @@ namespace System.Linq
                 return new SelectIListIterator<TSource, TResult>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -198,7 +198,7 @@ namespace System.Linq
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
@@ -206,7 +206,7 @@ namespace System.Linq
                 return new SelectIListIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -219,14 +219,14 @@ namespace System.Linq
                         if (enumerator.MoveNext())
                         {
                             current = selector(enumerator.Current);
-                            return Task.FromResult(true);
+                            return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
-                return Task.FromResult(false);
+                return false;
             }
         }
     }

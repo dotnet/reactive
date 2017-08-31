@@ -63,7 +63,7 @@ namespace System.Linq
                 return new OnErrorResumeNextAsyncIterator<TSource>(sources);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (sourcesEnumerator != null)
                 {
@@ -73,11 +73,11 @@ namespace System.Linq
 
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -118,15 +118,15 @@ namespace System.Linq
                             }
 
                             // Done with the current one, go to the next
-                            enumerator.Dispose();
+                            await enumerator.DisposeAsync().ConfigureAwait(false);
                             enumerator = null;
                         }
 
                         break; // case
                         
                 }
-                
-                Dispose();
+
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

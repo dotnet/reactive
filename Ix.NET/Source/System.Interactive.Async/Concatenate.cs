@@ -61,7 +61,7 @@ namespace System.Linq
                 return new ConcatEnumerableAsyncIterator<TSource>(source);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
@@ -71,11 +71,11 @@ namespace System.Linq
 
                 if (currentEnumerator != null)
                 {
-                    currentEnumerator.Dispose();
+                    await currentEnumerator.DisposeAsync().ConfigureAwait(false);
                     currentEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
@@ -104,7 +104,11 @@ namespace System.Linq
                                 if (outerEnumerator.MoveNext())
                                 {
                                     // make sure we dispose the previous one if we're about to replace it
-                                    currentEnumerator?.Dispose();
+                                    if (currentEnumerator != null)
+                                    {
+                                        await currentEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     currentEnumerator = outerEnumerator.Current.GetAsyncEnumerator();
                                    
                                     mode = State_While;
@@ -125,7 +129,7 @@ namespace System.Linq
                    
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
@@ -191,13 +195,20 @@ namespace System.Linq
                     {
                         break;
                     }
-                    using (var e = source.GetAsyncEnumerator())
+
+                    var e = source.GetAsyncEnumerator();
+
+                    try
                     {
                         while (await e.MoveNextAsync(cancellationToken)
                                       .ConfigureAwait(false))
                         {
                             list.Add(e.Current);
                         }
+                    }
+                    finally
+                    {
+                        await e.DisposeAsync().ConfigureAwait(false);
                     }
                 }
 
@@ -229,15 +240,15 @@ namespace System.Linq
                 return count;
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -265,12 +276,12 @@ namespace System.Linq
                         var next = GetAsyncEnumerable(counter++ - 1);
                         if (next != null)
                         {
-                            enumerator.Dispose();
+                            await enumerator.DisposeAsync().ConfigureAwait(false);
                             enumerator = next.GetAsyncEnumerator();
                             continue;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                     }
                 }

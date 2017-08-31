@@ -11,7 +11,7 @@ namespace System.Collections.Generic
     ///     retrieved asynchronously.
     /// </summary>
     /// <typeparam name="T">Element type.</typeparam>
-    public interface IAsyncEnumerator<out T> : IDisposable
+    public interface IAsyncEnumerator<out T> : IAsyncDisposable
     {
         /// <summary>
         ///     Gets the current element in the iteration.

@@ -377,7 +377,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Finally5()
+        public async Task Finally5()
         {
             var b = false;
 
@@ -388,7 +388,7 @@ namespace Tests
             Assert.False(b);
             HasNext(e, 1);
 
-            e.Dispose();
+            await e.DisposeAsync();
 
             Assert.True(b);
         }

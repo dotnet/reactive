@@ -65,15 +65,23 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 return await e.MoveNextAsync(cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
             }
         }
 
         private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -82,12 +90,19 @@ namespace System.Linq
                         return false;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             return true;
         }
 
         private static async Task<bool> Any_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -96,6 +111,11 @@ namespace System.Linq
                         return true;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             return false;
         }
     }

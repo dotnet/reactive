@@ -114,7 +114,7 @@ namespace Tests
 
             // We have to call move next because otherwise the internal enumerator is never allocated
             await e.MoveNextAsync();
-            e.Dispose();
+            await e.DisposeAsync();
 
             await disposed.Task;
 
@@ -212,9 +212,10 @@ namespace Tests
                     _disposeCounter = disposeCounter;
                 }
 
-                public void Dispose()
+                public Task DisposeAsync()
                 {
                     _disposeCounter.DisposeCount++;
+                    return Task.FromResult(true);
                 }
 
                 public Task<bool> MoveNextAsync()
@@ -243,7 +244,7 @@ namespace Tests
             return AsyncEnumerable.CreateEnumerable<T>(() =>
             {
                 var e = source.GetAsyncEnumerator();
-                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNextAsync, () => e.Current, () => { e.Dispose(); a(); });
+                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNextAsync, () => e.Current, async () => { await e.DisposeAsync(); a(); });
             });
         }
 

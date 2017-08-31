@@ -92,21 +92,21 @@ namespace System.Linq
                 return new SelectManyAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (sourceEnumerator != null)
                 {
-                    sourceEnumerator.Dispose();
+                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
                     sourceEnumerator = null;
                 }
 
                 if (resultEnumerator != null)
                 {
-                    resultEnumerator.Dispose();
+                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     resultEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -126,7 +126,11 @@ namespace System.Linq
                                 if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
-                                    resultEnumerator?.Dispose();
+                                    if (resultEnumerator != null)
+                                    {
+                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     resultEnumerator = selector(sourceEnumerator.Current)
                                         .GetAsyncEnumerator();
 
@@ -150,7 +154,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -185,23 +189,23 @@ namespace System.Linq
                 return new SelectManyAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (sourceEnumerator != null)
                 {
-                    sourceEnumerator.Dispose();
+                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
                     sourceEnumerator = null;
                 }
 
                 if (resultEnumerator != null)
                 {
-                    resultEnumerator.Dispose();
+                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     resultEnumerator = null;
                 }
 
                 currentSource = default(TSource);
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -221,7 +225,11 @@ namespace System.Linq
                                 if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
-                                    resultEnumerator?.Dispose();
+                                    if (resultEnumerator != null)
+                                    {
+                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     currentSource = sourceEnumerator.Current;
                                     resultEnumerator = collectionSelector(currentSource)
                                         .GetAsyncEnumerator();
@@ -246,7 +254,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -282,23 +290,23 @@ namespace System.Linq
                 return new SelectManyWithIndexAsyncIterator<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (sourceEnumerator != null)
                 {
-                    sourceEnumerator.Dispose();
+                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
                     sourceEnumerator = null;
                 }
 
                 if (resultEnumerator != null)
                 {
-                    resultEnumerator.Dispose();
+                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     resultEnumerator = null;
                 }
 
                 currentSource = default(TSource);
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -319,7 +327,11 @@ namespace System.Linq
                                 if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
-                                    resultEnumerator?.Dispose();
+                                    if (resultEnumerator != null)
+                                    {
+                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     currentSource = sourceEnumerator.Current;
 
                                     checked
@@ -350,7 +362,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -382,21 +394,21 @@ namespace System.Linq
                 return new SelectManyWithIndexAsyncIterator<TSource, TResult>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (sourceEnumerator != null)
                 {
-                    sourceEnumerator.Dispose();
+                    await sourceEnumerator.DisposeAsync().ConfigureAwait(false);
                     sourceEnumerator = null;
                 }
 
                 if (resultEnumerator != null)
                 {
-                    resultEnumerator.Dispose();
+                    await resultEnumerator.DisposeAsync().ConfigureAwait(false);
                     resultEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -417,7 +429,11 @@ namespace System.Linq
                                 if (await sourceEnumerator.MoveNextAsync()
                                                           .ConfigureAwait(false))
                                 {
-                                    resultEnumerator?.Dispose();
+                                    if (resultEnumerator != null)
+                                    {
+                                        await resultEnumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     checked
                                     {
                                         index++;
@@ -445,7 +461,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

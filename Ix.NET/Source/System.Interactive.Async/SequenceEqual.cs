@@ -68,21 +68,35 @@ namespace System.Linq
                 }
             }
 
-            using (var e1 = first.GetAsyncEnumerator())
-            using (var e2 = second.GetAsyncEnumerator())
-            {
-                while (await e1.MoveNextAsync()
-                               .ConfigureAwait(false))
-                {
-                    if (!(await e2.MoveNextAsync()
-                                  .ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
-                    {
-                        return false;
-                    }
-                }
+            var e1 = first.GetAsyncEnumerator();
 
-                return !await e2.MoveNextAsync()
-                                .ConfigureAwait(false);
+            try
+            {
+                var e2 = second.GetAsyncEnumerator();
+
+                try
+                {
+                    while (await e1.MoveNextAsync()
+                                   .ConfigureAwait(false))
+                    {
+                        if (!(await e2.MoveNextAsync()
+                                      .ConfigureAwait(false) && comparer.Equals(e1.Current, e2.Current)))
+                        {
+                            return false;
+                        }
+                    }
+
+                    return !await e2.MoveNextAsync()
+                                    .ConfigureAwait(false);
+                }
+                finally
+                {
+                    await e2.DisposeAsync().ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                await e1.DisposeAsync().ConfigureAwait(false);
             }
         }
     }

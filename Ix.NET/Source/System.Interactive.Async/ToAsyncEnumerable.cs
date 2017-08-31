@@ -49,7 +49,7 @@ namespace System.Linq
                             return false;
                         },
                         () => value,
-                        () => { });
+                        () => TaskExt.True);
                 });
         }
 
@@ -63,7 +63,9 @@ namespace System.Linq
 
         private static IEnumerable<TSource> ToEnumerable_<TSource>(IAsyncEnumerable<TSource> source)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (true)
                 {
@@ -73,6 +75,10 @@ namespace System.Linq
                     var c = e.Current;
                     yield return c;
                 }
+            }
+            finally
+            {
+                e.DisposeAsync().Wait();
             }
         }
 
@@ -94,7 +100,7 @@ namespace System.Linq
                 return new AsyncEnumerableAdapter<T>(source);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -102,10 +108,10 @@ namespace System.Linq
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -118,14 +124,14 @@ namespace System.Linq
                         if (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
-                            return Task.FromResult(true);
+                            return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
-                
-                return Task.FromResult(false);
+
+                return false;
             }
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize
@@ -163,7 +169,7 @@ namespace System.Linq
                 return new AsyncIListEnumerableAdapter<T>(source);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
@@ -171,10 +177,10 @@ namespace System.Linq
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -187,14 +193,14 @@ namespace System.Linq
                         if (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
-                            return Task.FromResult(true);
+                            return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
-                return Task.FromResult(false);
+                return false;
             }
 
             public override IAsyncEnumerable<TResult> Select<TResult>(Func<T, TResult> selector)
@@ -266,17 +272,17 @@ namespace System.Linq
                 return new AsyncICollectionEnumerableAdapter<T>(source);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
                     enumerator.Dispose();
                     enumerator = null;
                 }
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -288,12 +294,12 @@ namespace System.Linq
                         if (enumerator.MoveNext())
                         {
                             current = enumerator.Current;
-                            return Task.FromResult(true);
+                            return true;
                         }
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
-                return Task.FromResult(false);
+                return false;
             }
 
             // These optimizations rely on the Sys.Linq impls from IEnumerable to optimize

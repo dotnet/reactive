@@ -383,7 +383,9 @@ namespace System.Linq
 
         private static async Task<double> Average_(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -405,11 +407,17 @@ namespace System.Linq
 
                 return (double)sum/count;
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task<double?> Average_(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -437,13 +445,19 @@ namespace System.Linq
                     }
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
 
             return null;
         }
 
         private static async Task<double> Average_(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -465,11 +479,17 @@ namespace System.Linq
 
                 return (double)sum/count;
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task<double?> Average_(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -497,13 +517,19 @@ namespace System.Linq
                     }
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
 
             return null;
         }
 
         private static async Task<double> Average_(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -525,11 +551,17 @@ namespace System.Linq
 
                 return sum/count;
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task<double?> Average_(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -557,13 +589,19 @@ namespace System.Linq
                     }
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
 
             return null;
         }
 
         private static async Task<float> Average_(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -582,11 +620,17 @@ namespace System.Linq
 
                 return (float)(sum/count);
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task<float?> Average_(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -614,13 +658,19 @@ namespace System.Linq
                     }
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
 
             return null;
         }
 
         private static async Task<decimal> Average_(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync(cancellationToken)
                             .ConfigureAwait(false))
@@ -639,11 +689,17 @@ namespace System.Linq
 
                 return sum/count;
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         private static async Task<decimal?> Average_(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -667,6 +723,10 @@ namespace System.Linq
                         return sum/count;
                     }
                 }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
             }
 
             return null;

@@ -133,10 +133,7 @@ namespace System.Linq
 
                 public TResult Current { get; private set; }
 
-                public void Dispose()
-                {
-                    _outer.Dispose();
-                }
+                public Task DisposeAsync() => _outer.DisposeAsync();
             }
         }
     }

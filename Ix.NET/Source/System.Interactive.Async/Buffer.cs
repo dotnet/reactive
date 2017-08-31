@@ -58,17 +58,17 @@ namespace System.Linq
                 return new BufferAsyncIterator<TSource>(source, count, skip);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
                 buffers = null;
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -113,7 +113,7 @@ namespace System.Linq
                                     continue; // loop
                                 }
                                 stopped = true;
-                                enumerator.Dispose();
+                                await enumerator.DisposeAsync().ConfigureAwait(false);
                                 enumerator = null;
 
                                 continue; // loop
@@ -131,7 +131,7 @@ namespace System.Linq
                         break; // case
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

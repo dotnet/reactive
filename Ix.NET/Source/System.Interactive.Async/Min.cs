@@ -493,7 +493,9 @@ namespace System.Linq
         {
             var result = new List<TSource>();
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (!await e.MoveNextAsync()
                             .ConfigureAwait(false))
@@ -523,6 +525,10 @@ namespace System.Linq
                         resKey = key;
                     }
                 }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
             }
 
             return result;

@@ -69,21 +69,24 @@ namespace System.Linq
                     return true;
                 }
 
-                enumerator?.Dispose();
-                enumerator = null;
+                if (enumerator != null)
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                    enumerator = null;
+                }
 
                 return false;
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             public abstract Task<TSource[]> ToArrayAsync(CancellationToken cancellationToken);
@@ -151,7 +154,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
 
@@ -201,7 +204,9 @@ namespace System.Linq
                 }
                 else
                 {
-                    using (var en = source.GetAsyncEnumerator())
+                    var en = source.GetAsyncEnumerator();
+
+                    try
                     {
                         while (await en.MoveNextAsync(cancellationToken)
                                        .ConfigureAwait(false))
@@ -209,6 +214,10 @@ namespace System.Linq
                             array[index] = en.Current;
                             ++index;
                         }
+                    }
+                    finally
+                    {
+                        await en.DisposeAsync().ConfigureAwait(false);
                     }
                 }
 
@@ -231,13 +240,19 @@ namespace System.Linq
                 }
 
 
-                using (var en = source.GetAsyncEnumerator())
+                var en = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await en.MoveNextAsync(cancellationToken)
                                    .ConfigureAwait(false))
                     {
                         list.Add(en.Current);
                     }
+                }
+                finally
+                {
+                    await en.DisposeAsync().ConfigureAwait(false);
                 }
 
                 if (appending)
@@ -330,7 +345,7 @@ namespace System.Linq
             int mode;
             IEnumerator<TSource> appendedEnumerator;
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (appendedEnumerator != null)
                 {
@@ -338,7 +353,7 @@ namespace System.Linq
                     appendedEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -399,7 +414,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
 
@@ -435,7 +450,9 @@ namespace System.Linq
                 }
                 else
                 {
-                    using (var en = source.GetAsyncEnumerator())
+                    var en = source.GetAsyncEnumerator();
+
+                    try
                     {
                         while (await en.MoveNextAsync(cancellationToken)
                                        .ConfigureAwait(false))
@@ -443,6 +460,10 @@ namespace System.Linq
                             array[index] = en.Current;
                             ++index;
                         }
+                    }
+                    finally
+                    {
+                        await en.DisposeAsync().ConfigureAwait(false);
                     }
                 }
 
@@ -465,7 +486,9 @@ namespace System.Linq
                     list.Add(n.Item);
                 }
 
-                using (var en = source.GetAsyncEnumerator())
+                var en = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await en.MoveNextAsync(cancellationToken)
                                    .ConfigureAwait(false))
@@ -473,15 +496,18 @@ namespace System.Linq
                         list.Add(en.Current);
                     }
                 }
-                
+                finally
+                {
+                    await en.DisposeAsync().ConfigureAwait(false);
+                }
+
                 if (appended != null)
                 {
-
-                    using (var en = appended.GetEnumerator())
+                    using (var en2 = appended.GetEnumerator())
                     {
-                        while (en.MoveNext())
+                        while (en2.MoveNext())
                         {
-                            list.Add(en.Current);
+                            list.Add(en2.Current);
                         }
                     }
                 }

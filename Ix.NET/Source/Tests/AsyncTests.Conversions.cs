@@ -453,7 +453,7 @@ namespace Tests
                 () => AsyncEnumerable.CreateEnumerator<int>(
                     () => Task.FromResult(false),
                     () => { throw new InvalidOperationException(); },
-                    () => { evt.Set(); }));
+                    () => { evt.Set(); return Task.FromResult(true); }));
 
             ae
                 .ToObservable()
@@ -491,7 +491,7 @@ namespace Tests
                         return true;
                     },
                     () => 1,
-                    () => { evt.Set(); }));
+                    () => { evt.Set(); return Task.FromResult(true); }));
 
             subscription = ae
                 .ToObservable()
@@ -535,7 +535,7 @@ namespace Tests
                         return true;
                     },
                     () => 1,
-                    () => { evt.Set(); }));
+                    () => { evt.Set(); return Task.FromResult(true); }));
 
             subscription = ae
                 .ToObservable()

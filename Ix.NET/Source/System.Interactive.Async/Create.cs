@@ -19,7 +19,7 @@ namespace System.Linq
             return new AnonymousAsyncEnumerable<T>(getEnumerator);
         }
 
-        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<Task<bool>> moveNext, Func<T> current, Action dispose)
+        public static IAsyncEnumerator<T> CreateEnumerator<T>(Func<Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
         {
             if (moveNext == null)
                 throw new ArgumentNullException(nameof(moveNext));
@@ -29,7 +29,7 @@ namespace System.Linq
             return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
 
-        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Action dispose)
+        private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
         {
             var self = new AnonymousAsyncIterator<T>(
                 async () =>
@@ -71,11 +71,11 @@ namespace System.Linq
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
         {
             private readonly Func<T> currentFunc;
-            private readonly Action dispose;
+            private readonly Func<Task> dispose;
             private readonly Func<Task<bool>> moveNext;
 
 
-            public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
+            public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Func<Task> dispose)
             {
                 Debug.Assert(moveNext != null);
 
@@ -92,11 +92,14 @@ namespace System.Linq
                 throw new NotSupportedException("AnonymousAsyncIterator cannot be cloned. It is only intended for use as an iterator.");
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
-                dispose?.Invoke();
+                if (dispose != null)
+                {
+                    await dispose().ConfigureAwait(false);
+                }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -114,7 +117,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 

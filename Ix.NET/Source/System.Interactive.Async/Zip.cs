@@ -48,20 +48,20 @@ namespace System.Linq
                 return new ZipAsyncIterator<TFirst, TSecond, TResult>(first, second, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (firstEnumerator != null)
                 {
-                    firstEnumerator.Dispose();
+                    await firstEnumerator.DisposeAsync().ConfigureAwait(false);
                     firstEnumerator = null;
                 }
                 if (secondEnumerator != null)
                 {
-                    secondEnumerator.Dispose();
+                    await secondEnumerator.DisposeAsync().ConfigureAwait(false);
                     secondEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -89,7 +89,7 @@ namespace System.Linq
                             return true;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 

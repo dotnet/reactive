@@ -19,7 +19,7 @@ namespace Tests
         public void Create_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => {}));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => Task.FromResult(true)));
        
         }
 
@@ -27,7 +27,7 @@ namespace Tests
         public void Create_Iterator_Throws()
         {
      
-           var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => { });
+           var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => Task.FromResult(true));
 
             var enu = (IAsyncEnumerable<int>)iter;
 
@@ -43,14 +43,14 @@ namespace Tests
         }
 
         [Fact]
-        public void Never()
+        public async Task Never()
         {
             var xs = AsyncEnumerable.Never<int>();
 
             var e = xs.GetAsyncEnumerator();
             Assert.False(e.MoveNextAsync().IsCompleted); // Very rudimentary check
             AssertThrows<InvalidOperationException>(() => Nop(e.Current));
-            e.Dispose();
+            await e.DisposeAsync();
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat3()
+        public async Task Repeat3()
         {
             var xs = AsyncEnumerable.Repeat(2);
 
@@ -167,7 +167,7 @@ namespace Tests
             HasNext(e, 2);
             HasNext(e, 2);
             HasNext(e, 2);
-            e.Dispose();
+            await e.DisposeAsync();
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Generate1()
+        public async Task Generate1()
         {
             var xs = AsyncEnumerable.Generate(0, x => x < 5, x => x + 1, x => x * x);
 
@@ -224,7 +224,7 @@ namespace Tests
             HasNext(e, 9);
             HasNext(e, 16);
             NoNext(e);
-            e.Dispose();
+            await e.DisposeAsync();
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Using2()
+        public async Task Using2()
         {
             var i = 0;
             var d = 0;
@@ -315,7 +315,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             Assert.Equal(1, i);
 
-            e.Dispose();
+            await e.DisposeAsync();
             Assert.Equal(1, d);
         }
 

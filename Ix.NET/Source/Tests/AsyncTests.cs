@@ -67,8 +67,8 @@ namespace Tests
 
             Assert.Equal(en1.GetType(), en2.GetType());
 
-            en1.Dispose();
-            en2.Dispose();
+            await en1.DisposeAsync();
+            await en2.DisposeAsync();
 
             var e1t = enumerable.ToList();
             var e2t = enumerable.ToList();

@@ -43,7 +43,9 @@ namespace System.Collections.Generic
             }
             else
             {
-                using (var en = source.GetAsyncEnumerator())
+                var en = source.GetAsyncEnumerator();
+
+                try
                 {
                     if (await en.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
@@ -91,6 +93,10 @@ namespace System.Collections.Generic
                         result.array = arr;
                         return result;
                     }
+                }
+                finally
+                {
+                    await en.DisposeAsync().ConfigureAwait(false);
                 }
             }
 

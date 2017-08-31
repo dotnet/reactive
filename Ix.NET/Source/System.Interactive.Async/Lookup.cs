@@ -196,7 +196,10 @@ namespace System.Linq.Internal
             Debug.Assert(elementSelector != null);
 
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetAsyncEnumerator())
+
+            var enu = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await enu.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
@@ -204,6 +207,10 @@ namespace System.Linq.Internal
                     lookup.GetGrouping(keySelector(enu.Current), create: true)
                           .Add(elementSelector(enu.Current));
                 }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
             }
 
             return lookup;
@@ -215,7 +222,10 @@ namespace System.Linq.Internal
             Debug.Assert(keySelector != null);
 
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetAsyncEnumerator())
+
+            var enu = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await enu.MoveNextAsync(cancellationToken)
                                 .ConfigureAwait(false))
@@ -224,6 +234,10 @@ namespace System.Linq.Internal
                           .Add(enu.Current);
                 }
             }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
+            }
 
             return lookup;
         }
@@ -231,7 +245,10 @@ namespace System.Linq.Internal
         internal static async Task<Lookup<TKey, TElement>> CreateForJoinAsync(IAsyncEnumerable<TElement> source, Func<TElement, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             var lookup = new Lookup<TKey, TElement>(comparer);
-            using (var enu = source.GetAsyncEnumerator())
+
+            var enu = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await enu.MoveNextAsync()
                                 .ConfigureAwait(false))
@@ -243,6 +260,10 @@ namespace System.Linq.Internal
                               .Add(enu.Current);
                     }
                 }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
             }
 
             return lookup;

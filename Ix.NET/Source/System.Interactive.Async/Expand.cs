@@ -44,17 +44,17 @@ namespace System.Linq
                 return new ExpandAsyncIterator<TSource>(source, selector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
                 queue = null;
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -77,7 +77,11 @@ namespace System.Linq
                                 {
                                     var src = queue.Dequeue();
 
-                                    enumerator?.Dispose();
+                                    if (enumerator != null)
+                                    {
+                                        await enumerator.DisposeAsync().ConfigureAwait(false);
+                                    }
+
                                     enumerator = src.GetAsyncEnumerator();
 
                                     continue; // loop
@@ -95,14 +99,14 @@ namespace System.Linq
                                 current = item;
                                 return true;
                             }
-                            enumerator.Dispose();
+                            await enumerator.DisposeAsync().ConfigureAwait(false);
                             enumerator = null;
                         }
 
                         break; // case
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

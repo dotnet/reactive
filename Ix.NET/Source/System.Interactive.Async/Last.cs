@@ -100,7 +100,9 @@ namespace System.Linq
                 }
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -109,6 +111,11 @@ namespace System.Linq
                     last = e.Current;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             if (!hasLast)
                 throw new InvalidOperationException(Strings.NO_ELEMENTS);
             return last;
@@ -128,7 +135,9 @@ namespace System.Linq
                 }
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -137,6 +146,11 @@ namespace System.Linq
                     last = e.Current;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             return !hasLast ? default(TSource) : last;
         }
     }

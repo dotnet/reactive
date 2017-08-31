@@ -139,7 +139,10 @@ namespace System.Linq
 
                 var count = 0;
                 var s = new Set<TKey>(comparer);
-                using (var enu = source.GetAsyncEnumerator())
+
+                var enu = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await enu.MoveNextAsync()
                                     .ConfigureAwait(false))
@@ -151,6 +154,10 @@ namespace System.Linq
                         }
                     }
                 }
+                finally
+                {
+                    await enu.DisposeAsync().ConfigureAwait(false);
+                }
 
                 return count;
             }
@@ -160,16 +167,16 @@ namespace System.Linq
                 return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                     set = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -181,7 +188,7 @@ namespace System.Linq
                         if (!await enumerator.MoveNextAsync()
                                              .ConfigureAwait(false))
                         {
-                            Dispose();
+                            await DisposeAsync().ConfigureAwait(false);
                             return false;
                         }
 
@@ -207,7 +214,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
 
@@ -215,7 +222,10 @@ namespace System.Linq
             {
                 var s = new Set<TKey>(comparer);
                 var r = new List<TSource>();
-                using (var enu = source.GetAsyncEnumerator())
+
+                var enu = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
@@ -226,6 +236,10 @@ namespace System.Linq
                             r.Add(item);
                         }
                     }
+                }
+                finally
+                {
+                    await enu.DisposeAsync().ConfigureAwait(false);
                 }
 
                 return r;
@@ -273,16 +287,16 @@ namespace System.Linq
                 return new DistinctAsyncIterator<TSource>(source, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                     set = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -294,7 +308,7 @@ namespace System.Linq
                         if (!await enumerator.MoveNextAsync()
                                              .ConfigureAwait(false))
                         {
-                            Dispose();
+                            await DisposeAsync().ConfigureAwait(false);
                             return false;
                         }
 
@@ -320,20 +334,27 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
 
             private async Task<Set<TSource>> FillSet(CancellationToken cancellationToken)
             {
                 var s = new Set<TSource>(comparer);
-                using (var enu = source.GetAsyncEnumerator())
+
+                var enu = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await enu.MoveNextAsync(cancellationToken)
                                     .ConfigureAwait(false))
                     {
                         s.Add(enu.Current);
                     }
+                }
+                finally
+                {
+                    await enu.DisposeAsync().ConfigureAwait(false);
                 }
 
                 return s;
@@ -363,16 +384,16 @@ namespace System.Linq
                 return new DistinctUntilChangedAsyncIterator<TSource>(source, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                     currentValue = default(TSource);
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -407,7 +428,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -434,16 +455,16 @@ namespace System.Linq
                 return new DistinctUntilChangedAsyncIterator<TSource, TKey>(source, keySelector, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                     currentKeyValue = default(TKey);
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -479,7 +500,7 @@ namespace System.Linq
                         break; // case
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

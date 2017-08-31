@@ -93,15 +93,15 @@ namespace System.Linq
                 return new SkipAsyncIterator<TSource>(source, count);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
 
@@ -136,7 +136,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -162,16 +162,16 @@ namespace System.Linq
                 return new SkipLastAsyncIterator<TSource>(source, count);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
                 queue = null; // release the memory
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
 
@@ -203,7 +203,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -230,15 +230,15 @@ namespace System.Linq
                 return new SkipWhileAsyncIterator<TSource>(source, predicate);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -279,7 +279,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -307,15 +307,15 @@ namespace System.Linq
                 return new SkipWhileWithIndexAsyncIterator<TSource>(source, predicate);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -362,7 +362,7 @@ namespace System.Linq
                         break;
                 }
 
-                Dispose();
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }

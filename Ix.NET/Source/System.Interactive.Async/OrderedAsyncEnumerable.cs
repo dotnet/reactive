@@ -51,7 +51,7 @@ namespace System.Linq
         }
 
 
-        public override void Dispose()
+        public override async Task DisposeAsync()
         {
             if (enumerator != null)
             {
@@ -61,10 +61,10 @@ namespace System.Linq
 
             if (parentEnumerator != null)
             {
-                parentEnumerator.Dispose();
+                await parentEnumerator.DisposeAsync().ConfigureAwait(false);
                 parentEnumerator = null;
             }
-            base.Dispose();
+            await base.DisposeAsync().ConfigureAwait(false);
         }
 
         protected override async Task<bool> MoveNextCore()
@@ -87,7 +87,7 @@ namespace System.Linq
                         return true;
                     }
 
-                    Dispose();
+                    await DisposeAsync().ConfigureAwait(false);
                     break;
             }
 

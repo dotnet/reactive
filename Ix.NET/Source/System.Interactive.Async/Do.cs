@@ -99,15 +99,15 @@ namespace System.Linq
                 return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (enumerator != null)
                 {
-                    enumerator.Dispose();
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
                     enumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -143,7 +143,7 @@ namespace System.Linq
 
                         onCompleted?.Invoke();
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 

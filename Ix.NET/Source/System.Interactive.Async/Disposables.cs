@@ -32,6 +32,11 @@ namespace System.Linq
         {
             return new BinaryDisposable(d1, d2);
         }
+
+        public static IDisposable Create(Action action)
+        {
+            return new AnonymousDisposable(action);
+        }
     }
 
     class BinaryDisposable : IDisposable
@@ -59,5 +64,17 @@ namespace System.Linq
                 }
             }
         }
+    }
+
+    class AnonymousDisposable : IDisposable
+    {
+        private Action _action;
+
+        public AnonymousDisposable(Action action)
+        {
+            _action = action;
+        }
+
+        public void Dispose() => _action();
     }
 }

@@ -63,17 +63,17 @@ namespace System.Linq
                 return new IntersectAsyncIterator<TSource>(first, second, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (firstEnumerator != null)
                 {
-                    firstEnumerator.Dispose();
+                    await firstEnumerator.DisposeAsync().ConfigureAwait(false);
                     firstEnumerator = null;
                 }
 
                 set = null;
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -120,7 +120,7 @@ namespace System.Linq
                             }
                         } while (moveNext);
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 

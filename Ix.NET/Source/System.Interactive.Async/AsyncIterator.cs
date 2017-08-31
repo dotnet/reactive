@@ -10,6 +10,8 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        private static readonly Task CompletedTask = Task.FromResult(true); // TODO: Change to Task.CompletedTask when all build targets allow.
+
         internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
         {
             private readonly int threadId;
@@ -40,7 +42,7 @@ namespace System.Linq
                 }
                 catch
                 {
-                    enumerator.Dispose();
+                    enumerator.DisposeAsync(); // REVIEW: fire-and-forget?
                     throw;
                 }
 
@@ -48,7 +50,7 @@ namespace System.Linq
             }
 
 
-            public virtual void Dispose()
+            public virtual Task DisposeAsync()
             {
                 if (cancellationTokenSource != null)
                 {
@@ -61,6 +63,8 @@ namespace System.Linq
 
                 current = default(TSource);
                 state = AsyncIteratorState.Disposed;
+
+                return CompletedTask;
             }
 
             public TSource Current
@@ -96,7 +100,7 @@ namespace System.Linq
                 catch
                 {
                     currentIsInvalid = true;
-                    Dispose();
+                    await DisposeAsync().ConfigureAwait(false);
                     throw;
                 }
             }

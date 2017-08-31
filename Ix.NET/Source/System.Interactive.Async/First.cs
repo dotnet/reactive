@@ -94,7 +94,9 @@ namespace System.Linq
                 return list[0];
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (await e.MoveNextAsync(cancellationToken)
                            .ConfigureAwait(false))
@@ -102,6 +104,11 @@ namespace System.Linq
                     return e.Current;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
 
@@ -113,7 +120,9 @@ namespace System.Linq
                 return list[0];
             }
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 if (await e.MoveNextAsync(cancellationToken)
                            .ConfigureAwait(false))
@@ -121,6 +130,11 @@ namespace System.Linq
                     return e.Current;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             return default(TSource);
         }
     }

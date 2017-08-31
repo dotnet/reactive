@@ -51,14 +51,14 @@ namespace System.Linq
                 return new GenerateAsyncIterator<TState, TResult>(initialState, condition, iterate, resultSelector);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 currentState = default(TState);
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
-            protected override Task<bool> MoveNextCore()
+            protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
                 {
@@ -80,13 +80,14 @@ namespace System.Linq
                         if (condition(currentState))
                         {
                             current = resultSelector(currentState);
-                            return TaskExt.True;
+                            return true;
                         }
                         break;
                 }
 
-                Dispose();
-                return TaskExt.False;
+                await DisposeAsync().ConfigureAwait(false);
+
+                return false;
             }
         }
     }

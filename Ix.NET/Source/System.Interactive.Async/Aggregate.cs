@@ -81,13 +81,19 @@ namespace System.Linq
         {
             var acc = seed;
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
                 {
                     acc = accumulator(acc, e.Current);
                 }
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
             }
 
             return resultSelector(acc);
@@ -98,7 +104,9 @@ namespace System.Linq
             var first = true;
             var acc = default(TSource);
 
-            using (var e = source.GetAsyncEnumerator())
+            var e = source.GetAsyncEnumerator();
+
+            try
             {
                 while (await e.MoveNextAsync(cancellationToken)
                               .ConfigureAwait(false))
@@ -107,6 +115,11 @@ namespace System.Linq
                     first = false;
                 }
             }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+
             if (first)
                 throw new InvalidOperationException(Strings.NO_ELEMENTS);
             return acc;

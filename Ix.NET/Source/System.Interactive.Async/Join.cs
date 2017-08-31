@@ -78,15 +78,15 @@ namespace System.Linq
                 return new JoinAsyncIterator<TOuter, TInner, TKey, TResult>(outer, inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
             }
 
-            public override void Dispose()
+            public override async Task DisposeAsync()
             {
                 if (outerEnumerator != null)
                 {
-                    outerEnumerator.Dispose();
+                    await outerEnumerator.DisposeAsync().ConfigureAwait(false);
                     outerEnumerator = null;
                 }
 
-                base.Dispose();
+                await base.DisposeAsync().ConfigureAwait(false);
             }
 
             // State machine vars
@@ -165,7 +165,7 @@ namespace System.Linq
                                 break;
                         }
 
-                        Dispose();
+                        await DisposeAsync().ConfigureAwait(false);
 
                         break;
                 }

@@ -2299,7 +2299,7 @@ namespace Tests
         }
 
         [Fact]
-        public void GroupBy16()
+        public async Task GroupBy16()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -2315,7 +2315,7 @@ namespace Tests
             HasNext(g1e, 'g');
             HasNext(g1e, 'j');
             NoNext(g1e);
-            g1e.Dispose();
+            await g1e.DisposeAsync();
 
             Assert.True(e.MoveNextAsync().Result);
             var g2 = e.Current;
@@ -2325,7 +2325,7 @@ namespace Tests
             HasNext(g2e, 'e');
             HasNext(g2e, 'h');
             NoNext(g2e);
-            g2e.Dispose();
+            await g2e.DisposeAsync();
 
             Assert.True(e.MoveNextAsync().Result);
             var g3 = e.Current;
@@ -2335,27 +2335,27 @@ namespace Tests
             HasNext(g3e, 'f');
             HasNext(g3e, 'i');
             NoNext(g3e);
-            g3e.Dispose();
+            await g3e.DisposeAsync();
 
             NoNext(e);
 
-            e.Dispose();
+            await e.DisposeAsync();
         }
 
         [Fact]
-        public void GroupBy17()
+        public async Task GroupBy17()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
 
             var e = ys.GetAsyncEnumerator();
-            e.Dispose();
+            await e.DisposeAsync();
 
             Assert.False(e.MoveNextAsync().Result);
         }
 
         [Fact]
-        public void GroupBy18()
+        public async Task GroupBy18()
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x, x => (char)('a' + x), new EqMod(3));
@@ -2368,13 +2368,13 @@ namespace Tests
             var g1e = g1.GetAsyncEnumerator();
             HasNext(g1e, 'a');
 
-            e.Dispose();
+            await e.DisposeAsync();
 
             HasNext(g1e, 'd');
             HasNext(g1e, 'g');
             HasNext(g1e, 'j');
             NoNext(g1e);
-            g1e.Dispose();
+            await g1e.DisposeAsync();
 
             Assert.False(e.MoveNextAsync().Result);
         }

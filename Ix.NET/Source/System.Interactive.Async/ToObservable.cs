@@ -71,6 +71,7 @@ namespace System.Linq
                         {
                             subscription.Dispose();
                             // Should we cancel in-flight operations somehow?
+                            return TaskExt.True;
                         });
                 });
         }
@@ -186,16 +187,16 @@ namespace System.Linq
 
                 var f = default(Action);
                 f = () => e.MoveNextAsync()
-                           .ContinueWith(t =>
+                           .ContinueWith(async t =>
                                          {
                                              if (t.IsFaulted)
                                              {
                                                  observer.OnError(t.Exception);
-                                                 e.Dispose();
+                                                 await e.DisposeAsync().ConfigureAwait(false);
                                              }
                                              else if (t.IsCanceled)
                                              {
-                                                 e.Dispose();
+                                                 await e.DisposeAsync().ConfigureAwait(false);
                                              }
                                              else if (t.IsCompleted)
                                              {
@@ -213,14 +214,14 @@ namespace System.Linq
                                                  else
                                                  {
                                                      observer.OnCompleted();
-                                                     e.Dispose();
+                                                     await e.DisposeAsync().ConfigureAwait(false);
                                                  }
                                              }
                                          }, ctd.Token);
 
                 f();
 
-                return Disposable.Create(ctd, e);
+                return Disposable.Create(ctd, Disposable.Create(() => { e.DisposeAsync(); /* REVIEW: fire-and-forget? */ }));
             }
         }
     }

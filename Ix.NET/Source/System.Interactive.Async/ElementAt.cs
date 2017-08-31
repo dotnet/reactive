@@ -58,7 +58,9 @@ namespace System.Linq
 
             if (index >= 0)
             {
-                using (var e = source.GetAsyncEnumerator())
+                var e = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await e.MoveNextAsync(cancellationToken)
                                   .ConfigureAwait(false))
@@ -71,6 +73,10 @@ namespace System.Linq
                         index--;
                     }
                 }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
             }
 
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -80,7 +86,9 @@ namespace System.Linq
         {
             if (index >= 0)
             {
-                using (var e = source.GetAsyncEnumerator())
+                var e = source.GetAsyncEnumerator();
+
+                try
                 {
                     while (await e.MoveNextAsync(cancellationToken)
                                   .ConfigureAwait(false))
@@ -92,6 +100,10 @@ namespace System.Linq
 
                         index--;
                     }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
                 }
             }
 
