@@ -4,7 +4,7 @@
 
 namespace System.Threading.Tasks
 {
-    static class TaskExt
+    internal static class TaskExt
     {
         public static readonly Task<bool> True = Task.FromResult(true);
         public static readonly Task<bool> False = Task.FromResult(false);
