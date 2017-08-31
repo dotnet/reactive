@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,10 +20,7 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TValue> Empty<TValue>()
         {
-            return CreateEnumerable(
-                () => CreateEnumerator<TValue>(
-                    ct => TaskExt.False, null, null)
-            );
+            return CreateEnumerable(() => CreateEnumerator<TValue>(ct => TaskExt.False, current: null, dispose: null));
         }
 
         public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source)
@@ -46,12 +41,7 @@ namespace System.Linq
 
         public static IAsyncEnumerable<TValue> Never<TValue>()
         {
-            return CreateEnumerable(
-                () => CreateEnumerator<TValue>(
-                    tcs => tcs.Task,
-                    null,
-                    null)
-            );
+            return CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
         }
 
 
@@ -73,15 +63,14 @@ namespace System.Linq
                         tcs.TrySetException(exception);
                         return tcs.Task;
                     },
-                    null,
-                    null)
+                    current: null,
+                    dispose: null)
             );
         }
 
         private static async Task<bool> IsEmpty_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            return !await source.Any(cancellationToken)
-                                .ConfigureAwait(false);
+            return !await source.Any(cancellationToken).ConfigureAwait(false);
         }
     }
 }

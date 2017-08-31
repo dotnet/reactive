@@ -13,8 +13,7 @@ namespace System.Collections.Generic
     {
         internal static async Task<T[]> ToArray<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
         {
-            var result = await ToArrayWithLength(source, cancellationToken)
-                             .ConfigureAwait(false);
+            var result = await ToArrayWithLength(source, cancellationToken).ConfigureAwait(false);
             Array.Resize(ref result.array, result.length);
             return result.array;
         }
@@ -47,16 +46,14 @@ namespace System.Collections.Generic
 
                 try
                 {
-                    if (await en.MoveNextAsync(cancellationToken)
-                                .ConfigureAwait(false))
+                    if (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         const int DefaultCapacity = 4;
                         var arr = new T[DefaultCapacity];
                         arr[0] = en.Current;
                         var count = 1;
 
-                        while (await en.MoveNextAsync(cancellationToken)
-                                       .ConfigureAwait(false))
+                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                         {
                             if (count == arr.Length)
                             {

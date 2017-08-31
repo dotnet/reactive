@@ -83,8 +83,8 @@ namespace System.Linq
             private IAsyncEnumerator<TSource> currentEnumerator;
             private int mode;
 
-            const int State_OuterNext = 1;
-            const int State_While = 4;
+            private const int State_OuterNext = 1;
+            private const int State_While = 4;
 
             protected override async Task<bool> MoveNextCore()
             {
@@ -117,8 +117,7 @@ namespace System.Linq
 
                                 break;
                             case State_While:
-                                if (await currentEnumerator.MoveNextAsync()
-                                                           .ConfigureAwait(false))
+                                if (await currentEnumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = currentEnumerator.Current;
                                     return true;
@@ -200,8 +199,7 @@ namespace System.Linq
 
                     try
                     {
-                        while (await e.MoveNextAsync(cancellationToken)
-                                      .ConfigureAwait(false))
+                        while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                         {
                             list.Add(e.Current);
                         }
@@ -255,8 +253,7 @@ namespace System.Linq
             {
                 if (state == AsyncIteratorState.Allocated)
                 {
-                    enumerator = GetAsyncEnumerable(0)
-                        .GetAsyncEnumerator();
+                    enumerator = GetAsyncEnumerable(0).GetAsyncEnumerator();
                     state = AsyncIteratorState.Iterating;
                     counter = 2;
                 }
@@ -265,8 +262,7 @@ namespace System.Linq
                 {
                     while (true)
                     {
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;

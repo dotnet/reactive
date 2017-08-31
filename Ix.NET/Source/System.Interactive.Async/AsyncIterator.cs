@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        private static readonly Task CompletedTask = Task.FromResult(true); // TODO: Change to Task.CompletedTask when all build targets allow.
+        private static readonly Task CompletedTask = TaskExt.True;
 
         internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
         {
@@ -49,7 +49,6 @@ namespace System.Linq
                 return enumerator;
             }
 
-
             public virtual Task DisposeAsync()
             {
                 if (cancellationTokenSource != null)
@@ -73,6 +72,7 @@ namespace System.Linq
                 {
                     if (currentIsInvalid)
                         throw new InvalidOperationException("Enumerator is in an invalid state");
+
                     return current;
                 }
             }
@@ -90,8 +90,7 @@ namespace System.Linq
 
                 try
                 {
-                    var result = await MoveNextCore()
-                                        .ConfigureAwait(false);
+                    var result = await MoveNextCore().ConfigureAwait(false);
 
                     currentIsInvalid = !result; // if move next is false, invalid otherwise valid
 

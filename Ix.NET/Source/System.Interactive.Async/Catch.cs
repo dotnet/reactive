@@ -46,7 +46,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return new[] {first, second}.Catch_();
+            return new[] { first, second }.Catch_();
         }
 
         private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -105,8 +105,7 @@ namespace System.Linq
                             {
                                 try
                                 {
-                                    if (await enumerator.MoveNextAsync()
-                                                        .ConfigureAwait(false))
+                                    if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                                     {
                                         current = enumerator.Current;
                                         return true;
@@ -131,8 +130,7 @@ namespace System.Linq
                                 }
                             }
 
-                            if (await enumerator.MoveNextAsync()
-                                                .ConfigureAwait(false))
+                            if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                             {
                                 current = enumerator.Current;
                                 return true;
@@ -217,8 +215,7 @@ namespace System.Linq
 
                             try
                             {
-                                if (await enumerator.MoveNextAsync()
-                                                    .ConfigureAwait(false))
+                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     current = enumerator.Current;
                                     return true;

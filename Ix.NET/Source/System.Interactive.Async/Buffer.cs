@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -89,8 +88,7 @@ namespace System.Linq
                         {
                             if (!stopped)
                             {
-                                if (await enumerator.MoveNextAsync()
-                                                    .ConfigureAwait(false))
+                                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                                 {
                                     var item = enumerator.Current;
                                     if (index++ % skip == 0)
@@ -103,8 +101,7 @@ namespace System.Linq
                                         buffer.Add(item);
                                     }
 
-                                    if (buffers.Count > 0 && buffers.Peek()
-                                                                    .Count == count)
+                                    if (buffers.Count > 0 && buffers.Peek().Count == count)
                                     {
                                         current = buffers.Dequeue();
                                         return true;

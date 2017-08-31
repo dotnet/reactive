@@ -1,10 +1,8 @@
-﻿// // Licensed to the .NET Foundation under one or more agreements.
-// // The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// // See the LICENSE file in the project root for more information. 
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -76,8 +74,7 @@ namespace System.Linq
             return Aggregate_(source, accumulator, cancellationToken);
         }
 
-        private static async Task<TResult> Aggregate_<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed,
-                                                                                     Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
+        private static async Task<TResult> Aggregate_<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
         {
             var acc = seed;
 
@@ -85,8 +82,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     acc = accumulator(acc, e.Current);
                 }
@@ -108,8 +104,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     acc = first ? e.Current : accumulator(acc, e.Current);
                     first = false;
@@ -122,6 +117,7 @@ namespace System.Linq
 
             if (first)
                 throw new InvalidOperationException(Strings.NO_ELEMENTS);
+
             return acc;
         }
     }

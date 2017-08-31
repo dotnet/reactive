@@ -65,8 +65,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             state = AsyncIteratorState.Iterating;
@@ -77,13 +76,12 @@ namespace System.Linq
                             await enumerator.DisposeAsync().ConfigureAwait(false);
                             enumerator = null;
 
-                            state = AsyncIteratorState.Disposed; 
+                            state = AsyncIteratorState.Disposed;
                         }
                         return true;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync()
-                                            .ConfigureAwait(false))
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
                             current = enumerator.Current;
                             return true;

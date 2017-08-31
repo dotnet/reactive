@@ -1,10 +1,8 @@
-﻿// // Licensed to the .NET Foundation under one or more agreements.
-// // The .NET Foundation licenses this file to you under the Apache 2.0 License.
-// // See the LICENSE file in the project root for more information. 
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -123,8 +121,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     if (!predicate(e.Current))
                         return false;
@@ -144,8 +141,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     if (!await predicate(e.Current).ConfigureAwait(false))
                         return false;
@@ -165,8 +161,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     if (predicate(e.Current))
                         return true;
@@ -186,8 +181,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     if (await predicate(e.Current).ConfigureAwait(false))
                         return true;

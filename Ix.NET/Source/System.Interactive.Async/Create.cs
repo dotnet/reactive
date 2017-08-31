@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -36,22 +35,18 @@ namespace System.Linq
                 {
                     var tcs = new TaskCompletionSource<bool>();
 
-                    var stop = new Action(
-                        () =>
-                        {
-                            tcs.TrySetCanceled();
-                        });
+                    var stop = new Action(() => tcs.TrySetCanceled());
 
-                    return await moveNext(tcs)
-                                .ConfigureAwait(false);
+                    return await moveNext(tcs).ConfigureAwait(false);
                 },
                 current,
                 dispose
             );
+
             return self;
         }
 
-        private class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
+        private sealed class AnonymousAsyncEnumerable<T> : IAsyncEnumerable<T>
         {
             private readonly Func<IAsyncEnumerator<T>> getEnumerator;
 
@@ -62,10 +57,7 @@ namespace System.Linq
                 this.getEnumerator = getEnumerator;
             }
 
-            public IAsyncEnumerator<T> GetAsyncEnumerator()
-            {
-                return getEnumerator();
-            }
+            public IAsyncEnumerator<T> GetAsyncEnumerator() => getEnumerator();
         }
 
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
@@ -73,7 +65,6 @@ namespace System.Linq
             private readonly Func<T> currentFunc;
             private readonly Func<Task> dispose;
             private readonly Func<Task<bool>> moveNext;
-
 
             public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Func<Task> dispose)
             {

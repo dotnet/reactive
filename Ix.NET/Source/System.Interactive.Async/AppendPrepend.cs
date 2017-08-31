@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,10 +58,9 @@ namespace System.Linq
             public abstract AppendPrepentAsyncIterator<TSource> Append(TSource item);
             public abstract AppendPrepentAsyncIterator<TSource> Prepend(TSource item);
 
-            protected async Task<bool> LoadFromEnumerator()
+            protected async Task<bool> LoadFromEnumeratorAsync()
             {
-                if (await enumerator.MoveNextAsync()
-                                    .ConfigureAwait(false))
+                if (await enumerator.MoveNextAsync().ConfigureAwait(false))
                 {
                     current = enumerator.Current;
                     return true;
@@ -113,7 +110,6 @@ namespace System.Linq
                 return new AppendPrepend1AsyncIterator<TSource>(source, item, appending);
             }
 
-
             protected override async Task<bool> MoveNextCore()
             {
                 switch (state)
@@ -133,12 +129,12 @@ namespace System.Linq
                         if (!hasEnumerator)
                         {
                             GetSourceEnumerator();
-                            hasEnumerator = true;   
+                            hasEnumerator = true;
                         }
 
                         if (enumerator != null)
                         {
-                            if (await LoadFromEnumerator()
+                            if (await LoadFromEnumeratorAsync()
                                 .ConfigureAwait(false))
                             {
                                 return true;
@@ -208,8 +204,7 @@ namespace System.Linq
 
                     try
                     {
-                        while (await en.MoveNextAsync(cancellationToken)
-                                       .ConfigureAwait(false))
+                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                         {
                             array[index] = en.Current;
                             ++index;
@@ -244,8 +239,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await en.MoveNextAsync(cancellationToken)
-                                   .ConfigureAwait(false))
+                    while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         list.Add(en.Current);
                     }
@@ -362,7 +356,7 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         mode = 1;
-                        state = AsyncIteratorState.Iterating; 
+                        state = AsyncIteratorState.Iterating;
                         goto case AsyncIteratorState.Iterating;
 
                     case AsyncIteratorState.Iterating:
@@ -386,8 +380,7 @@ namespace System.Linq
                                 goto case 3;
 
                             case 3:
-                                if (await LoadFromEnumerator()
-                                        .ConfigureAwait(false))
+                                if (await LoadFromEnumeratorAsync().ConfigureAwait(false))
                                 {
                                     return true;
                                 }
@@ -400,7 +393,7 @@ namespace System.Linq
                                 }
 
                                 break;
-                                
+
 
                             case 4:
                                 if (appendedEnumerator.MoveNext())
@@ -490,8 +483,7 @@ namespace System.Linq
 
                 try
                 {
-                    while (await en.MoveNextAsync(cancellationToken)
-                                   .ConfigureAwait(false))
+                    while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         list.Add(en.Current);
                     }

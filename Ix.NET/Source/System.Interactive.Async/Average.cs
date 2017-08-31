@@ -16,8 +16,7 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
@@ -26,8 +25,7 @@ namespace System.Linq
                 long count = 1;
                 checked
                 {
-                    while (await e.MoveNextAsync(cancellationToken)
-                                  .ConfigureAwait(false))
+                    while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         sum += e.Current;
                         ++count;
@@ -48,8 +46,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var v = e.Current;
                     if (v.HasValue)
@@ -58,8 +55,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNextAsync(cancellationToken)
-                                          .ConfigureAwait(false))
+                            while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                             {
                                 v = e.Current;
                                 if (v.HasValue)
@@ -88,8 +84,7 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
@@ -98,8 +93,7 @@ namespace System.Linq
                 long count = 1;
                 checked
                 {
-                    while (await e.MoveNextAsync(cancellationToken)
-                                  .ConfigureAwait(false))
+                    while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                     {
                         sum += e.Current;
                         ++count;
@@ -120,8 +114,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var v = e.Current;
                     if (v.HasValue)
@@ -130,8 +123,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNextAsync(cancellationToken)
-                                          .ConfigureAwait(false))
+                            while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                             {
                                 v = e.Current;
                                 if (v.HasValue)
@@ -160,16 +152,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
                 var sum = e.Current;
                 long count = 1;
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     // There is an opportunity to short-circuit here, in that if e.Current is
                     // ever NaN then the result will always be NaN. Assuming that this case is
@@ -192,8 +182,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var v = e.Current;
                     if (v.HasValue)
@@ -202,8 +191,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNextAsync(cancellationToken)
-                                          .ConfigureAwait(false))
+                            while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                             {
                                 v = e.Current;
                                 if (v.HasValue)
@@ -232,16 +220,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
                 double sum = e.Current;
                 long count = 1;
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     sum += e.Current;
                     ++count;
@@ -261,8 +247,7 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var v = e.Current;
                     if (v.HasValue)
@@ -271,8 +256,7 @@ namespace System.Linq
                         long count = 1;
                         checked
                         {
-                            while (await e.MoveNextAsync(cancellationToken)
-                                          .ConfigureAwait(false))
+                            while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                             {
                                 v = e.Current;
                                 if (v.HasValue)
@@ -301,16 +285,14 @@ namespace System.Linq
 
             try
             {
-                if (!await e.MoveNextAsync(cancellationToken)
-                            .ConfigureAwait(false))
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     throw new InvalidOperationException(Strings.NO_ELEMENTS);
                 }
 
                 var sum = e.Current;
                 long count = 1;
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     sum += e.Current;
                     ++count;
@@ -330,16 +312,14 @@ namespace System.Linq
 
             try
             {
-                while (await e.MoveNextAsync(cancellationToken)
-                              .ConfigureAwait(false))
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     var v = e.Current;
                     if (v.HasValue)
                     {
                         var sum = v.GetValueOrDefault();
                         long count = 1;
-                        while (await e.MoveNextAsync(cancellationToken)
-                                      .ConfigureAwait(false))
+                        while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                         {
                             v = e.Current;
                             if (v.HasValue)

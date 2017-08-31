@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,8 +35,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
+            return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -48,8 +45,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
+            return source.Where(predicate).Aggregate(0, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<int> Count<TSource>(this IAsyncEnumerable<TSource> source)
@@ -95,8 +91,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
+            return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -106,8 +101,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate)
-                         .Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
+            return source.Where(predicate).Aggregate(0L, (c, _) => checked(c + 1), cancellationToken);
         }
 
         public static Task<long> LongCount<TSource>(this IAsyncEnumerable<TSource> source)
