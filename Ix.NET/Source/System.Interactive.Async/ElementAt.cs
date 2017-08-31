@@ -10,6 +10,14 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return ElementAt(source, index, CancellationToken.None);
+        }
+
         public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
@@ -20,12 +28,12 @@ namespace System.Linq
             return ElementAt_(source, index, cancellationToken);
         }
 
-        public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index)
+        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return ElementAt(source, index, CancellationToken.None);
+            return ElementAtOrDefault(source, index, CancellationToken.None);
         }
 
         public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
@@ -36,14 +44,6 @@ namespace System.Linq
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             return ElementAtOrDefault_(source, index, cancellationToken);
-        }
-
-        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return ElementAtOrDefault(source, index, CancellationToken.None);
         }
 
         private static async Task<TSource> ElementAt_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
