@@ -447,8 +447,7 @@ namespace System.Linq
 
                     try
                     {
-                        while (await en.MoveNextAsync(cancellationToken)
-                                       .ConfigureAwait(false))
+                        while (await en.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                         {
                             array[index] = en.Current;
                             ++index;
