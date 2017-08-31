@@ -10,25 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource[]> ToArray<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return ToArray(source, CancellationToken.None);
-        }
-
-        public static Task<TSource[]> ToArray<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            if (source is IIListProvider<TSource> arrayProvider)
-                return arrayProvider.ToArrayAsync(cancellationToken);
-
-            return AsyncEnumerableHelpers.ToArray(source, cancellationToken);
-        }
-
         public static Task<Dictionary<TKey, TElement>> ToDictionary<TSource, TKey, TElement>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey> comparer)
         {
             if (source == null)
@@ -131,33 +112,6 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(keySelector));
 
             return source.ToDictionary(keySelector, x => x, EqualityComparer<TKey>.Default, cancellationToken);
-        }
-
-        public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return ToList(source, CancellationToken.None);
-        }
-
-        public static Task<List<TSource>> ToList<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            if (source is IIListProvider<TSource> listProvider)
-                return listProvider.ToListAsync(cancellationToken);
-
-            return source.Aggregate(
-                new List<TSource>(),
-                (list, x) =>
-                {
-                    list.Add(x);
-                    return list;
-                },
-                cancellationToken
-            );
         }
     }
 }
