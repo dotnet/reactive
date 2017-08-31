@@ -180,7 +180,9 @@ namespace System.Linq.Internal
                 {
                     g = g._next;
                     g.Trim();
-                    yield return resultSelector(g._key, g._elements.ToAsyncEnumerable());
+
+                    var result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                    yield return result;
                 } while (g != _lastGrouping);
             }
         }
@@ -223,8 +225,8 @@ namespace System.Linq.Internal
             {
                 while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    lookup.GetGrouping(keySelector(enu.Current), create: true)
-                          .Add(enu.Current);
+                    var key = keySelector(enu.Current);
+                    lookup.GetGrouping(key, create: true).Add(enu.Current);
                 }
             }
             finally
@@ -340,7 +342,9 @@ namespace System.Linq.Internal
                 {
                     g = g._next;
                     g.Trim();
-                    list.Add(resultSelector(g._key, g._elements.ToAsyncEnumerable()));
+
+                    var result = resultSelector(g._key, g._elements.ToAsyncEnumerable());
+                    list.Add(result);
                 } while (g != _lastGrouping);
             }
 
