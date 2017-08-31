@@ -10,8 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        private static readonly Task CompletedTask = TaskExt.True;
-
         internal abstract class AsyncIterator<TSource> : IAsyncEnumerable<TSource>, IAsyncEnumerator<TSource>
         {
             private readonly int threadId;
@@ -57,13 +55,14 @@ namespace System.Linq
                     {
                         cancellationTokenSource.Cancel();
                     }
+
                     cancellationTokenSource.Dispose();
                 }
 
                 current = default(TSource);
                 state = AsyncIteratorState.Disposed;
 
-                return CompletedTask;
+                return TaskExt.CompletedTask;
             }
 
             public TSource Current
