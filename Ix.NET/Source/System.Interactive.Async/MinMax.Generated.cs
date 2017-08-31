@@ -46,6 +46,26 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
+        public static Task<int> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<int> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
         public static Task<long> Max(this IAsyncEnumerable<long> source)
         {
             if (source == null)
@@ -73,6 +93,26 @@ namespace System.Linq
         }
 
         public static Task<long> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
+        public static Task<long> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<long> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -118,6 +158,26 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
+        public static Task<float> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<float> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
         public static Task<double> Max(this IAsyncEnumerable<double> source)
         {
             if (source == null)
@@ -145,6 +205,26 @@ namespace System.Linq
         }
 
         public static Task<double> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
+        public static Task<double> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<double> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -190,6 +270,26 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
+        public static Task<decimal> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<decimal> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
         public static Task<int?> Max(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
@@ -217,6 +317,26 @@ namespace System.Linq
         }
 
         public static Task<int?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
+        public static Task<int?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<int?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -262,6 +382,26 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
+        public static Task<long?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<long?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
         public static Task<float?> Max(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
@@ -289,6 +429,26 @@ namespace System.Linq
         }
 
         public static Task<float?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
+        public static Task<float?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<float?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -334,6 +494,26 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
+        public static Task<double?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<double?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
         public static Task<decimal?> Max(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
@@ -361,6 +541,26 @@ namespace System.Linq
         }
 
         public static Task<decimal?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(cancellationToken);
+        }
+
+        public static Task<decimal?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Max(CancellationToken.None);
+        }
+
+        public static Task<decimal?> Max<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -406,6 +606,26 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
+        public static Task<int> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<int> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
         public static Task<long> Min(this IAsyncEnumerable<long> source)
         {
             if (source == null)
@@ -433,6 +653,26 @@ namespace System.Linq
         }
 
         public static Task<long> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
+        public static Task<long> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<long> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -478,6 +718,26 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
+        public static Task<float> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<float> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
         public static Task<double> Min(this IAsyncEnumerable<double> source)
         {
             if (source == null)
@@ -505,6 +765,26 @@ namespace System.Linq
         }
 
         public static Task<double> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
+        public static Task<double> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<double> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -550,6 +830,26 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
+        public static Task<decimal> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<decimal> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
         public static Task<int?> Min(this IAsyncEnumerable<int?> source)
         {
             if (source == null)
@@ -577,6 +877,26 @@ namespace System.Linq
         }
 
         public static Task<int?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
+        public static Task<int?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<int?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<int?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -622,6 +942,26 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
+        public static Task<long?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<long?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<long?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
         public static Task<float?> Min(this IAsyncEnumerable<float?> source)
         {
             if (source == null)
@@ -649,6 +989,26 @@ namespace System.Linq
         }
 
         public static Task<float?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
+        public static Task<float?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<float?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<float?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -694,6 +1054,26 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
+        public static Task<double?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<double?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<double?>> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
         public static Task<decimal?> Min(this IAsyncEnumerable<decimal?> source)
         {
             if (source == null)
@@ -721,6 +1101,26 @@ namespace System.Linq
         }
 
         public static Task<decimal?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(cancellationToken);
+        }
+
+        public static Task<decimal?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return source.Select(selector).Min(CancellationToken.None);
+        }
+
+        public static Task<decimal?> Min<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<decimal?>> selector, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
