@@ -8,7 +8,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
     <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;SIGNED</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'netstandard1.4'">
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;SIGNED</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
