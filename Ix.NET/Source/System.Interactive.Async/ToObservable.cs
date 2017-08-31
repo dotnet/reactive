@@ -82,7 +82,7 @@ namespace System.Linq
             return new ToObservableObservable<TSource>(source);
         }
 
-        private class ToAsyncEnumerableObserver<T> : IObserver<T>
+        private sealed class ToAsyncEnumerableObserver<T> : IObserver<T>
         {
             public readonly Queue<T> Values;
 
@@ -160,7 +160,7 @@ namespace System.Linq
             }
         }
 
-        private class ToObservableObservable<T> : IObservable<T>
+        private sealed class ToObservableObservable<T> : IObservable<T>
         {
             private readonly IAsyncEnumerable<T> source;
 
