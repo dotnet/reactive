@@ -20,6 +20,16 @@ namespace System.Linq
             return new FinallyAsyncIterator<TSource>(source, finallyAction);
         }
 
+        public static IAsyncEnumerable<TSource> Finally<TSource>(this IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (finallyAction == null)
+                throw new ArgumentNullException(nameof(finallyAction));
+
+            return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
+        }
+
         private sealed class FinallyAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly Action finallyAction;
@@ -49,6 +59,64 @@ namespace System.Linq
                     enumerator = null;
 
                     finallyAction();
+                }
+
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async Task<bool> MoveNextCore()
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetAsyncEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        {
+                            current = enumerator.Current;
+                            return true;
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+
+        private sealed class FinallyAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<Task> finallyAction;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public FinallyAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<Task> finallyAction)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(finallyAction != null);
+
+                this.source = source;
+                this.finallyAction = finallyAction;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new FinallyAsyncIteratorWithTask<TSource>(source, finallyAction);
+            }
+
+            public override async Task DisposeAsync()
+            {
+                if (enumerator != null)
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                    enumerator = null;
+
+                    await finallyAction().ConfigureAwait(false);
                 }
 
                 await base.DisposeAsync().ConfigureAwait(false);
