@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -56,11 +53,10 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() => selector(source.Share())
-                              .GetEnumerator());
+            return Create(() => selector(source.Share()).GetEnumerator());
         }
 
-        private class SharedBuffer<T> : IBuffer<T>
+        private sealed class SharedBuffer<T> : IBuffer<T>
         {
             private bool _disposed;
             private IEnumerator<T> _source;

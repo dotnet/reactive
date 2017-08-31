@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -60,8 +57,7 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() => selector(source.Memoize())
-                              .GetEnumerator());
+            return Create(() => selector(source.Memoize()).GetEnumerator());
         }
 
         /// <summary>
@@ -113,11 +109,10 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() => selector(source.Memoize(readerCount))
-                              .GetEnumerator());
+            return Create(() => selector(source.Memoize(readerCount)).GetEnumerator());
         }
 
-        private class MemoizedBuffer<T> : IBuffer<T>
+        private sealed class MemoizedBuffer<T> : IBuffer<T>
         {
             private IRefCountList<T> _buffer;
             private bool _disposed;
@@ -245,9 +240,7 @@ namespace System.Linq
         }
     }
 
-
-
-    interface IRefCountList<T>
+    internal interface IRefCountList<T>
     {
         void Clear();
 
@@ -263,7 +256,7 @@ namespace System.Linq
         void Done(int index);
     }
 
-    class MaxRefCountList<T> : IRefCountList<T>
+    internal sealed class MaxRefCountList<T> : IRefCountList<T>
     {
         private IList<T> _list = new List<T>();
 
@@ -292,7 +285,7 @@ namespace System.Linq
         }
     }
 
-    class RefCountList<T> : IRefCountList<T>
+    internal sealed class RefCountList<T> : IRefCountList<T>
     {
         private int _readerCount;
         private readonly IDictionary<int, RefCount> _list;
@@ -360,7 +353,7 @@ namespace System.Linq
             _readerCount--;
         }
 
-        class RefCount
+        private sealed class RefCount
         {
             public int Count;
             public T Value;
