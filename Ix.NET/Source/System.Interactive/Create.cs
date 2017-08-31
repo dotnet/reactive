@@ -50,15 +50,9 @@ namespace System.Linq
                 _getEnumerator = getEnumerator;
             }
 
-            public IEnumerator<TResult> GetEnumerator()
-            {
-                return _getEnumerator();
-            }
+            public IEnumerator<TResult> GetEnumerator() => _getEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }
