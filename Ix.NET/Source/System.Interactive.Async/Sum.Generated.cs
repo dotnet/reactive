@@ -295,7 +295,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((int?)0, (x, y) => x + y, CancellationToken.None);
+            return source.Aggregate((int?)0, (x, y) => x + y.GetValueOrDefault(), CancellationToken.None);
         }
 
         public static Task<int?> Sum(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
@@ -351,7 +351,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((long?)0L, (x, y) => x + y, CancellationToken.None);
+            return source.Aggregate((long?)0L, (x, y) => x + y.GetValueOrDefault(), CancellationToken.None);
         }
 
         public static Task<long?> Sum(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
@@ -407,7 +407,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((float?)0.0f, (x, y) => x + y, CancellationToken.None);
+            return source.Aggregate((float?)0.0f, (x, y) => x + y.GetValueOrDefault(), CancellationToken.None);
         }
 
         public static Task<float?> Sum(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
@@ -463,7 +463,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((double?)0.0, (x, y) => x + y, CancellationToken.None);
+            return source.Aggregate((double?)0.0, (x, y) => x + y.GetValueOrDefault(), CancellationToken.None);
         }
 
         public static Task<double?> Sum(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
@@ -519,7 +519,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((decimal?)0m, (x, y) => x + y, CancellationToken.None);
+            return source.Aggregate((decimal?)0m, (x, y) => x + y.GetValueOrDefault(), CancellationToken.None);
         }
 
         public static Task<decimal?> Sum(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
