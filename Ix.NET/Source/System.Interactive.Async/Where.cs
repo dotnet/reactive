@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -37,10 +36,40 @@ namespace System.Linq
             return new WhereEnumerableWithIndexAsyncIterator<TSource>(source, predicate);
         }
 
-        private static Func<TSource, bool> CombinePredicates<TSource>(Func<TSource, bool> predicate1, Func<TSource, bool> predicate2)
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
 
+            if (source is AsyncIterator<TSource> iterator)
+            {
+                return iterator.Where(predicate);
+            }
+
+            // TODO: Can we add array/list optimizations here, does it make sense?
+            return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, predicate);
+        }
+
+        public static IAsyncEnumerable<TSource> Where<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+        }
+
+        private static Func<TSource, bool> CombinePredicates<TSource>(Func<TSource, bool> predicate1, Func<TSource, bool> predicate2)
         {
             return x => predicate1(x) && predicate2(x);
+        }
+
+        private static Func<TSource, Task<bool>> CombinePredicates<TSource>(Func<TSource, Task<bool>> predicate1, Func<TSource, Task<bool>> predicate2)
+        {
+            return async x => await predicate1(x).ConfigureAwait(false) && await predicate2(x).ConfigureAwait(false);
         }
 
         internal sealed class WhereEnumerableAsyncIterator<TSource> : AsyncIterator<TSource>
@@ -164,6 +193,136 @@ namespace System.Linq
                             }
                             var item = enumerator.Current;
                             if (predicate(item, index))
+                            {
+                                current = item;
+                                return true;
+                            }
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+
+        internal sealed class WhereEnumerableAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, Task<bool>> predicate;
+            private readonly IAsyncEnumerable<TSource> source;
+            private IAsyncEnumerator<TSource> enumerator;
+
+            public WhereEnumerableAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(predicate != null);
+
+                this.source = source;
+                this.predicate = predicate;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, predicate);
+            }
+
+            public override async Task DisposeAsync()
+            {
+                if (enumerator != null)
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                    enumerator = null;
+                }
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            public override IAsyncEnumerable<TSource> Where(Func<TSource, Task<bool>> predicate)
+            {
+                return new WhereEnumerableAsyncIteratorWithTask<TSource>(source, CombinePredicates(this.predicate, predicate));
+            }
+
+            protected override async Task<bool> MoveNextCore()
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetAsyncEnumerator();
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (await enumerator.MoveNextAsync()
+                                               .ConfigureAwait(false))
+                        {
+                            var item = enumerator.Current;
+                            if (await predicate(item).ConfigureAwait(false))
+                            {
+                                current = item;
+                                return true;
+                            }
+                        }
+
+                        await DisposeAsync().ConfigureAwait(false);
+                        break;
+                }
+
+                return false;
+            }
+        }
+
+        internal sealed class WhereEnumerableWithIndexAsyncIteratorWithTask<TSource> : AsyncIterator<TSource>
+        {
+            private readonly Func<TSource, int, Task<bool>> predicate;
+            private readonly IAsyncEnumerable<TSource> source;
+
+            private IAsyncEnumerator<TSource> enumerator;
+            private int index;
+
+            public WhereEnumerableWithIndexAsyncIteratorWithTask(IAsyncEnumerable<TSource> source, Func<TSource, int, Task<bool>> predicate)
+            {
+                Debug.Assert(source != null);
+                Debug.Assert(predicate != null);
+
+                this.source = source;
+                this.predicate = predicate;
+            }
+
+            public override AsyncIterator<TSource> Clone()
+            {
+                return new WhereEnumerableWithIndexAsyncIteratorWithTask<TSource>(source, predicate);
+            }
+
+            public override async Task DisposeAsync()
+            {
+                if (enumerator != null)
+                {
+                    await enumerator.DisposeAsync().ConfigureAwait(false);
+                    enumerator = null;
+                }
+                await base.DisposeAsync().ConfigureAwait(false);
+            }
+
+            protected override async Task<bool> MoveNextCore()
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        enumerator = source.GetAsyncEnumerator();
+                        index = -1;
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
+
+                    case AsyncIteratorState.Iterating:
+                        while (await enumerator.MoveNextAsync()
+                                               .ConfigureAwait(false))
+                        {
+                            checked
+                            {
+                                index++;
+                            }
+                            var item = enumerator.Current;
+                            if (await predicate(item, index).ConfigureAwait(false))
                             {
                                 current = item;
                                 return true;

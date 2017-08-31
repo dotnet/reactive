@@ -112,9 +112,19 @@ namespace System.Linq
                 return new SelectEnumerableAsyncIterator<TSource, TResult>(this, selector);
             }
 
+            public virtual IAsyncEnumerable<TResult> Select<TResult>(Func<TSource, Task<TResult>> selector)
+            {
+                return new SelectEnumerableAsyncIteratorWithTask<TSource, TResult>(this, selector);
+            }
+
             public virtual IAsyncEnumerable<TSource> Where(Func<TSource, bool> predicate)
             {
                 return new WhereEnumerableAsyncIterator<TSource>(this, predicate);
+            }
+
+            public virtual IAsyncEnumerable<TSource> Where(Func<TSource, Task<bool>> predicate)
+            {
+                return new WhereEnumerableAsyncIteratorWithTask<TSource>(this, predicate);
             }
 
             protected abstract Task<bool> MoveNextCore();
