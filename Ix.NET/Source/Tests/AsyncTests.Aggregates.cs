@@ -230,10 +230,10 @@ namespace Tests
         public async Task All_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(null, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(null, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), null, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -262,7 +262,7 @@ namespace Tests
         public void All4()
         {
             var ex = new Exception("Bang!");
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().All(x => { throw ex; });
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().All(new Func<int, bool>(x => { throw ex; }));
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -271,11 +271,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(null, x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(null, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(null, x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), null, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -304,7 +304,7 @@ namespace Tests
         public void Any4()
         {
             var ex = new Exception("Bang!");
-            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(x => { throw ex; });
+            var res = new[] { 2, 8, 4 }.ToAsyncEnumerable().Any(new Func<int, bool>(x => { throw ex; }));
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
