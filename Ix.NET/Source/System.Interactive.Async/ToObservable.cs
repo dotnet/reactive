@@ -116,10 +116,7 @@ namespace System.Linq
                     }
                 }
 
-                if (tcs != null)
-                {
-                    tcs.TrySetResult(false);
-                }
+                tcs?.TrySetResult(false);
             }
 
             public void OnError(Exception error)
@@ -137,10 +134,7 @@ namespace System.Linq
                     }
                 }
 
-                if (tcs != null)
-                {
-                    tcs.TrySetException(error);
-                }
+                tcs?.TrySetException(error);
             }
 
             public void OnNext(T value)
@@ -162,10 +156,7 @@ namespace System.Linq
                     }
                 }
 
-                if (tcs != null)
-                {
-                    tcs.TrySetResult(true);
-                }
+                tcs?.TrySetResult(true);
             }
         }
 
