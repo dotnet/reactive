@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Average.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+    </None>
     <None Include="MinMax.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -25,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Average.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Average.Generated.cs</LastGenOutput>
+    </None>
     <None Update="MinMax.Generated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
@@ -40,6 +49,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Average.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Average.Generated.tt</DependentUpon>
+    </Compile>
     <Compile Update="MinMax.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
