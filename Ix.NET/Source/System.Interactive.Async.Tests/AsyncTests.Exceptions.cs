@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -15,13 +15,13 @@ namespace Tests
         [Fact]
         public void Catch_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int, Exception>(AsyncEnumerable.Return(42), default(Func<Exception, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int, Exception>(AsyncEnumerable.Return(42), default(Func<Exception, IAsyncEnumerable<int>>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IAsyncEnumerable<int>[])));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Catch<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.Catch(xs, ys);
+            var res = AsyncEnumerableEx.Catch(xs, ys);
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -186,7 +186,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.Catch(xs, ys);
+            var res = AsyncEnumerableEx.Catch(xs, ys);
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -206,7 +206,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.Catch(new[] { xs, xs, ys, ys });
+            var res = AsyncEnumerableEx.Catch(new[] { xs, xs, ys, ys });
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -247,7 +247,7 @@ namespace Tests
 
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
 
-            var res = AsyncEnumerable.Catch(new[] { xs, xs });
+            var res = AsyncEnumerableEx.Catch(new[] { xs, xs });
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -263,7 +263,7 @@ namespace Tests
         [Fact]
         public void Catch12()
         {
-            var res = AsyncEnumerable.Catch(Enumerable.Empty<IAsyncEnumerable<int>>());
+            var res = AsyncEnumerableEx.Catch(Enumerable.Empty<IAsyncEnumerable<int>>());
 
             var e = res.GetAsyncEnumerator();
             NoNext(e);
@@ -277,7 +277,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.Catch(new[] { xs, xs, ys, ys });
+            var res = AsyncEnumerableEx.Catch(new[] { xs, xs, ys, ys });
 
             await SequenceIdentity(res);
         }
