@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TSource> Skip<TSource>(this IAsyncEnumerable<TSource> source, int count)
+        public static IAsyncEnumerable<TSource> SkipLast<TSource>(this IAsyncEnumerable<TSource> source, int count)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -27,29 +27,28 @@ namespace System.Linq
                 count = 0;
             }
 
-            return new SkipAsyncIterator<TSource>(source, count);
+            return new SkipLastAsyncIterator<TSource>(source, count);
         }
 
-        private sealed class SkipAsyncIterator<TSource> : AsyncIterator<TSource>
+        private sealed class SkipLastAsyncIterator<TSource> : AsyncIterator<TSource>
         {
             private readonly int count;
             private readonly IAsyncEnumerable<TSource> source;
 
-            private int currentCount;
             private IAsyncEnumerator<TSource> enumerator;
+            private Queue<TSource> queue;
 
-            public SkipAsyncIterator(IAsyncEnumerable<TSource> source, int count)
+            public SkipLastAsyncIterator(IAsyncEnumerable<TSource> source, int count)
             {
                 Debug.Assert(source != null);
 
                 this.source = source;
                 this.count = count;
-                currentCount = count;
             }
 
             public override AsyncIterator<TSource> Clone()
             {
-                return new SkipAsyncIterator<TSource>(source, count);
+                return new SkipLastAsyncIterator<TSource>(source, count);
             }
 
             public override async Task DisposeAsync()
@@ -60,8 +59,11 @@ namespace System.Linq
                     enumerator = null;
                 }
 
+                queue = null; // release the memory
+
                 await base.DisposeAsync().ConfigureAwait(false);
             }
+
 
             protected override async Task<bool> MoveNextCore()
             {
@@ -69,26 +71,23 @@ namespace System.Linq
                 {
                     case AsyncIteratorState.Allocated:
                         enumerator = source.GetAsyncEnumerator();
+                        queue = new Queue<TSource>();
 
-                        // skip elements as requested
-                        while (currentCount > 0 && await enumerator.MoveNextAsync().ConfigureAwait(false))
-                        {
-                            currentCount--;
-                        }
+                        state = AsyncIteratorState.Iterating;
+                        goto case AsyncIteratorState.Iterating;
 
-                        if (currentCount <= 0)
-                        {
-                            state = AsyncIteratorState.Iterating;
-                            goto case AsyncIteratorState.Iterating;
-                        }
-
-                        break;
 
                     case AsyncIteratorState.Iterating:
-                        if (await enumerator.MoveNextAsync().ConfigureAwait(false))
+                        while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            current = enumerator.Current;
-                            return true;
+                            var item = enumerator.Current;
+                            queue.Enqueue(item);
+
+                            if (queue.Count > count)
+                            {
+                                current = queue.Dequeue();
+                                return true;
+                            }
                         }
 
                         break;
