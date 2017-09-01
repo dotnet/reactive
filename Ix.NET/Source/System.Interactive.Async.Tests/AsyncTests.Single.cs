@@ -572,24 +572,24 @@ namespace Tests
         [Fact]
         public void Do_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(null, x => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), default(Action<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, x => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), default(Action<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(null, x => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, x => { }, () => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), () => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(null, x => { }, ex => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), ex => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action<Exception>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, x => { }, ex => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), ex => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action<Exception>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(null, x => { }, ex => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), ex => { }, () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action<Exception>), () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), x => { }, ex => { }, default(Action)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, x => { }, ex => { }, () => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), default(Action<int>), ex => { }, () => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), x => { }, default(Action<Exception>), () => { }));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), x => { }, ex => { }, default(Action)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(null, new MyObs()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Do<int>(AsyncEnumerable.Return(42), default(IObserver<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, new MyObs()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(AsyncEnumerable.Return(42), default(IObserver<int>)));
         }
 
         class MyObs : IObserver<int>
