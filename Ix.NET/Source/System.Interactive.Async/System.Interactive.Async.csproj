@@ -12,62 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Average.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Average.Generated.tt</DependentUpon>
-    </None>
-    <None Include="MinMax.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MinMax.Generated.tt</DependentUpon>
-    </None>
-    <None Include="Sum.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Sum.Generated.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Average.Generated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Average.Generated.cs</LastGenOutput>
-    </None>
-    <None Update="MinMax.Generated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>MinMax.Generated.cs</LastGenOutput>
-    </None>
-    <None Update="Sum.Generated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Sum.Generated.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Average.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Average.Generated.tt</DependentUpon>
-    </Compile>
-    <Compile Update="MinMax.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MinMax.Generated.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Sum.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Sum.Generated.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

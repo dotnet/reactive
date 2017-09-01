@@ -536,10 +536,10 @@ namespace Tests
         [Fact]
         public void Retry_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Retry<int>(default(IAsyncEnumerable<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Retry<int>(default(IAsyncEnumerable<int>), 1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Retry<int>(AsyncEnumerable.Return(42), -1));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Retry<int>(default(IAsyncEnumerable<int>), 1));
+            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Retry<int>(AsyncEnumerable.Return(42), -1));
         }
 
         [Fact]
