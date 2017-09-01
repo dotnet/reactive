@@ -97,8 +97,7 @@ namespace System.Linq
 
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
-                var s = await FillSetAsync(cancellationToken)
-                            .ConfigureAwait(false);
+                var s = await FillSetAsync(cancellationToken).ConfigureAwait(false);
                 return s.ToList();
             }
 
