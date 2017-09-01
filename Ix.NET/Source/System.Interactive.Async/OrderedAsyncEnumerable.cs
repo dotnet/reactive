@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    internal abstract class OrderedAsyncEnumerable<TElement> : AsyncEnumerable.AsyncIterator<TElement>, IOrderedAsyncEnumerable<TElement>
+    internal abstract class OrderedAsyncEnumerable<TElement> : AsyncIterator<TElement>, IOrderedAsyncEnumerable<TElement>
     {
         internal IOrderedEnumerable<TElement> enumerable;
         internal IAsyncEnumerable<TElement> source;
@@ -49,7 +49,7 @@ namespace System.Linq
             this.parent = parent;
         }
 
-        public override AsyncEnumerable.AsyncIterator<TElement> Clone()
+        public override AsyncIterator<TElement> Clone()
         {
             return new OrderedAsyncEnumerable<TElement, TKey>(source, keySelector, comparer, descending, parent);
         }
@@ -75,15 +75,15 @@ namespace System.Linq
         {
             switch (state)
             {
-                case AsyncEnumerable.AsyncIteratorState.Allocated:
+                case AsyncIteratorState.Allocated:
 
                     await Initialize().ConfigureAwait(false);
 
                     enumerator = enumerable.GetEnumerator();
-                    state = AsyncEnumerable.AsyncIteratorState.Iterating;
-                    goto case AsyncEnumerable.AsyncIteratorState.Iterating;
+                    state = AsyncIteratorState.Iterating;
+                    goto case AsyncIteratorState.Iterating;
 
-                case AsyncEnumerable.AsyncIteratorState.Iterating:
+                case AsyncIteratorState.Iterating:
                     if (enumerator.MoveNext())
                     {
                         current = enumerator.Current;
@@ -136,7 +136,7 @@ namespace System.Linq
             this.parent = parent;
         }
 
-        public override AsyncEnumerable.AsyncIterator<TElement> Clone()
+        public override AsyncIterator<TElement> Clone()
         {
             return new OrderedAsyncEnumerableWithTask<TElement, TKey>(source, keySelector, comparer, descending, parent);
         }
@@ -162,15 +162,15 @@ namespace System.Linq
         {
             switch (state)
             {
-                case AsyncEnumerable.AsyncIteratorState.Allocated:
+                case AsyncIteratorState.Allocated:
 
                     await Initialize().ConfigureAwait(false);
 
                     enumerator = enumerable.GetEnumerator();
-                    state = AsyncEnumerable.AsyncIteratorState.Iterating;
-                    goto case AsyncEnumerable.AsyncIteratorState.Iterating;
+                    state = AsyncIteratorState.Iterating;
+                    goto case AsyncIteratorState.Iterating;
 
-                case AsyncEnumerable.AsyncIteratorState.Iterating:
+                case AsyncIteratorState.Iterating:
                     if (enumerator.MoveNext())
                     {
                         current = enumerator.Current;
