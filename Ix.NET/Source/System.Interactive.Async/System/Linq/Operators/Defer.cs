@@ -4,10 +4,11 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static System.Linq.AsyncEnumerable;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableEx
     {
         public static IAsyncEnumerable<TSource> Defer<TSource>(Func<IAsyncEnumerable<TSource>> factory)
         {

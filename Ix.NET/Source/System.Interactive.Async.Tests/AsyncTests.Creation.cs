@@ -177,14 +177,14 @@ namespace Tests
         [Fact]
         public void Defer_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
         public void Defer1()
         {
             var x = 0;
-            var xs = AsyncEnumerable.Defer<int>(() => new[] { x }.ToAsyncEnumerable());
+            var xs = AsyncEnumerableEx.Defer<int>(() => new[] { x }.ToAsyncEnumerable());
 
             {
                 var e = xs.GetAsyncEnumerator();
