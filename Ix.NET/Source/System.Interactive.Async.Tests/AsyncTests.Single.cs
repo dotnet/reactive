@@ -4,12 +4,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
-using Xunit;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
+
 namespace Tests
 {
 
@@ -251,7 +250,7 @@ namespace Tests
         {
             var xs = new[] { 8, 5, 7, 4, 6, 9, 2, 1, 0 }.ToAsyncEnumerable();
             var ys = xs.Where(x => x % 2 == 0);
-            
+
             await SequenceIdentity(ys);
         }
 
@@ -563,7 +562,7 @@ namespace Tests
         [Fact]
         public void Cast2()
         {
-            var xs = new [] { new EventArgs(), new EventArgs(), new EventArgs() }.ToAsyncEnumerable();
+            var xs = new[] { new EventArgs(), new EventArgs(), new EventArgs() }.ToAsyncEnumerable();
             var ys = xs.Cast<EventArgs>();
 
             Assert.Same(xs, ys);
@@ -1333,7 +1332,7 @@ namespace Tests
         public async Task DefaultIfEmpty11()
         {
             var xs = AsyncEnumerable.Empty<int>().DefaultIfEmpty(42);
-            
+
             Assert.Equal(1, await xs.Count());
         }
 
@@ -1415,8 +1414,8 @@ namespace Tests
         public async Task Distinct3()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
-            
-            var res = new [] { 1, 2, 3, 5, 4 };
+
+            var res = new[] { 1, 2, 3, 5, 4 };
             Assert.True(res.SequenceEqual(await xs.ToArray()));
         }
 
@@ -1433,7 +1432,7 @@ namespace Tests
         public async Task Distinct5()
         {
             var xs = new[] { 1, 2, 1, 3, 5, 2, 1, 4 }.ToAsyncEnumerable().Distinct();
-            
+
             Assert.Equal(5, await xs.Count());
         }
 
@@ -1485,7 +1484,7 @@ namespace Tests
             var xs = AsyncEnumerable.Empty<int>().Distinct(k => k);
 
             var e = xs.GetAsyncEnumerator();
-            
+
             NoNext(e);
         }
 
@@ -1988,7 +1987,7 @@ namespace Tests
             //var g2e = g2.GetEnumerator();
             //HasNext(g2e, 43);
 
-            
+
             //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
             //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
         }
@@ -2010,7 +2009,7 @@ namespace Tests
             //HasNext(g1e, 42);
             //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single().Message == "Bang!");
 
-                    
+
         }
 
         static IEnumerable<int> GetXs()
@@ -2054,7 +2053,7 @@ namespace Tests
             //var g2e = g2.GetEnumerator();
             //HasNext(g2e, 2);
 
-           
+
             //AssertThrows<Exception>(() => g1e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
             //AssertThrows<Exception>(() => g2e.MoveNext().Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
@@ -2326,7 +2325,7 @@ namespace Tests
 
             var ys = xs.ToAsyncEnumerable();
 
-            var res = ys.GroupBy(x => x.Item/10);
+            var res = ys.GroupBy(x => x.Item / 10);
 
             await SequenceIdentity(res);
         }
@@ -2359,7 +2358,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x), (k, cs) => k + " - " + cs.Aggregate("", (a, c) => a + c).Result);
-            
+
             Assert.Equal(3, await ys.Count());
         }
 
@@ -2388,7 +2387,7 @@ namespace Tests
 
             var gg1 = gar[0];
             var gg1a = await gg1.ToArray();
-            
+
             Assert.Equal(g1a, gg1a);
 
             var gg2 = gar[1];
@@ -2398,7 +2397,7 @@ namespace Tests
 
             var gg3 = gar[2];
             var gg3a = await gg3.ToArray();
-            Assert.Equal(g3a, gg3a); 
+            Assert.Equal(g3a, gg3a);
         }
 
         [Fact]
@@ -2433,7 +2432,7 @@ namespace Tests
         {
             var xs = AsyncEnumerable.Range(0, 10);
             var ys = xs.GroupBy(x => x % 3, x => (char)('a' + x));
-            
+
             var gar = await ys.ToList();
 
             Assert.Equal(3, gar.Count);
@@ -2632,7 +2631,7 @@ namespace Tests
             {
                 unchecked
                 {
-                    return ((Key != null ? Key.GetHashCode() : 0)*397) ^ Item;
+                    return ((Key != null ? Key.GetHashCode() : 0) * 397) ^ Item;
                 }
             }
 
@@ -3270,7 +3269,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable().TakeLast(0);
 
             var e = xs.GetAsyncEnumerator();
-            
+
             NoNext(e);
         }
 

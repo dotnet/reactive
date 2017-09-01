@@ -622,7 +622,7 @@ namespace Tests
                 throw new NotImplementedException();
             }
         }
-        
+
         [Fact]
         public void GroupJoin_Null()
         {
@@ -729,7 +729,8 @@ namespace Tests
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
-            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => {
+            var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) =>
+            {
                 if (x == 1)
                     throw ex;
                 return x + " - " + i.Aggregate("", (s, j) => s + j).Result;

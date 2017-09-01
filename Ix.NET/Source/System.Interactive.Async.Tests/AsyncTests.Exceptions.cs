@@ -400,9 +400,9 @@ namespace Tests
             await SequenceIdentity(xs);
             Assert.Equal(2, i);
         }
-    
 
-    [Fact]
+
+        [Fact]
         public void OnErrorResumeNext_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));

@@ -4,12 +4,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using System.Threading;
 
 namespace Tests
 {
@@ -171,11 +169,11 @@ namespace Tests
             var xs = set.ToAsyncEnumerable();
 
             var xc = xs as ICollection<int>;
-            
+
             Assert.NotNull(xc);
 
             Assert.False(xc.IsReadOnly);
-            
+
             xc.Add(5);
 
 
