@@ -250,7 +250,7 @@ foreach (var p in m.GetParameters())
         any = true;
 #>
             if (<#=p.Name#> == null)
-                throw new ArgumentNullException("<#=p.Name#>");
+                throw new ArgumentNullException(nameof(<#=p.Name#>));
 <#
     }
 }
