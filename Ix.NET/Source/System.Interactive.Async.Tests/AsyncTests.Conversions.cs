@@ -165,7 +165,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerabl11()
+        public void ToAsyncEnumerable11()
         {
             var set = new HashSet<int>(new[] { 1, 2, 3, 4 });
             var xs = set.ToAsyncEnumerable();
@@ -191,7 +191,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToAsyncEnumerabl12()
+        public void ToAsyncEnumerable12()
         {
             var set = new List<int> { 1, 2, 3, 4 };
             var xs = set.ToAsyncEnumerable();
