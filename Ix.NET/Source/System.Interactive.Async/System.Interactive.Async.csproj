@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Interactive Extensions Async Library used to express queries over asynchronous enumerable sequences.</Description>
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
-    <TargetFrameworks>net45;net46;netstandard1.0;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net46;netstandard1.4</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
   </PropertyGroup>
 
@@ -27,6 +27,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Sum.Generated.tt</DependentUpon>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
 
   <ItemGroup>
