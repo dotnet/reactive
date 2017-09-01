@@ -17,11 +17,6 @@ namespace System.Linq
             return source.Select(x => x);
         }
 
-        public static IAsyncEnumerable<TValue> Empty<TValue>()
-        {
-            return CreateEnumerable(() => CreateEnumerator<TValue>(ct => TaskExt.False, current: null, dispose: null));
-        }
-
         public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
         {
             return new[] { value }.ToAsyncEnumerable();
