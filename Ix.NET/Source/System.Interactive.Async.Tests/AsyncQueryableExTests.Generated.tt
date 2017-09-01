@@ -1,6 +1,7 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="$(ProjectDir)\..\System.Linq.Async\bin\$(Configuration)\net46\System.Linq.Async.dll" #>
+<#@ assembly name="$(ProjectDir)\..\System.Interactive.Async\bin\$(Configuration)\net46\System.Interactive.Async.dll" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Threading" #>
@@ -108,11 +109,11 @@ using Xunit;
 
 namespace Tests
 {
-    public class AsyncQueryableExTests
+    public class AsyncQueryableTests
     {
 <#
 // NOTE: Just including extension methods
-foreach (var m in typeof(AsyncEnumerable).GetMethods()
+foreach (var m in typeof(AsyncEnumerableEx).GetMethods()
                         .Where(m => m.IsStatic)
                         .Where(m => !exclude.Contains(m.Name))
                         .Where(m => m.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), true))
@@ -414,7 +415,7 @@ if (indexes.Count != 0)
         var args = string.Join(", ", Enumerable.Range(0, len).Select(k => k == idx ? nulls[k] : vals[k]).ToArray());
         var nullArg = tm.GetParameters()[idx].Name;
 #>
-            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.<#=opName#>(<#=args#>), ane => ane.ParamName == "<#=nullArg#>");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.<#=opName#>(<#=args#>), ane => ane.ParamName == "<#=nullArg#>");
 <#
     }
 #>
@@ -425,7 +426,7 @@ if (indexes.Count != 0)
 {
     var args = string.Join(", ", vals);
 #>
-            var res = AsyncQueryable.<#=opName#>(<#=args#>);
+            var res = AsyncQueryableEx.<#=opName#>(<#=args#>);
 <#
     var tmRet = tm.ReturnType;
 

@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="AsyncQueryable.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryable.Generated.cs" />
-    <Compile Update="AsyncQueryable.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryable.Generated.tt" />
+    <None Update="System\Linq\AsyncQueryableEx.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryableEx.Generated.cs" />
+    <Compile Update="System\Linq\AsyncQueryableEx.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableEx.Generated.tt" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,4 +12,19 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="System\Linq\AsyncQueryable.Generated.cs">
+      <DependentUpon>AsyncQueryable.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="System\Linq\AsyncQueryable.Generated.tt">
+      <LastGenOutput>AsyncQueryable.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
 </Project>

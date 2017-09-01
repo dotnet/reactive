@@ -29,8 +29,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="AsyncQueryableExTests.Generated.tt">
+      <LastGenOutput>AsyncQueryableExTests.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="AsyncQueryableTests.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="AsyncQueryableTests.Generated.cs" />
-    <Compile Update="AsyncQueryableTests.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="AsyncQueryableTests.Generated.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="AsyncQueryableExTests.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncQueryableExTests.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="AsyncQueryableTests.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsyncQueryableTests.Generated.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
