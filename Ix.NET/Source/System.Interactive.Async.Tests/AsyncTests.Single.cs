@@ -317,53 +317,6 @@ namespace Tests
         }
 
         [Fact]
-        public void OfType_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(null));
-        }
-
-        [Fact]
-        public void OfType()
-        {
-            var xs = new object[] { 1, 1.2, true, 4, "" }.ToAsyncEnumerable();
-            var ys = xs.OfType<int>();
-
-            var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 4);
-            NoNext(e);
-        }
-
-        [Fact]
-        public void Cast_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(null));
-        }
-
-        [Fact]
-        public void Cast1()
-        {
-            var xs = new object[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = xs.Cast<int>();
-
-            var e = ys.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
-        }
-
-        [Fact]
-        public void Cast2()
-        {
-            var xs = new[] { new EventArgs(), new EventArgs(), new EventArgs() }.ToAsyncEnumerable();
-            var ys = xs.Cast<EventArgs>();
-
-            Assert.Same(xs, ys);
-        }
-
-        [Fact]
         public void Do_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Do<int>(null, x => { }));
