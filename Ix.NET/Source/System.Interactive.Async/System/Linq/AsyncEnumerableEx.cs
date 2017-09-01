@@ -5,17 +5,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using static System.Linq.AsyncEnumerable;
 
 namespace System.Linq
 {
     public static partial class AsyncEnumerableEx
     {
-        public static IAsyncEnumerable<TValue> Never<TValue>()
-        {
-            return CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
-        }
-
         private static IAsyncEnumerator<T> CreateEnumerator<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
         {
             var self = new AnonymousAsyncIterator<T>(
