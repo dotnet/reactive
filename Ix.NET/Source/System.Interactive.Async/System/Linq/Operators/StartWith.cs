@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableEx
     {
         public static IAsyncEnumerable<TSource> StartWith<TSource>(this IAsyncEnumerable<TSource> source, params TSource[] values)
         {
