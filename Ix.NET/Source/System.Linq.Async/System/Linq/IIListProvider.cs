@@ -11,7 +11,7 @@ namespace System.Linq
     /// <summary>
     /// An iterator that can produce an array or <see cref="List{TElement}"/> through an optimized path.
     /// </summary>
-    internal interface IIListProvider<TElement> : IAsyncEnumerable<TElement>
+    public interface IIListProvider<TElement> : IAsyncEnumerable<TElement>
     {
         /// <summary>
         /// Produce an array of the sequence through an optimized path.

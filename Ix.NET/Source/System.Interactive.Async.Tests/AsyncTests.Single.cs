@@ -1450,7 +1450,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(null, new Eq()));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int>(AsyncEnumerable.Return(42), null));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct<int, int>(AsyncEnumerable.Return(42), (Func<int, int>)null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(AsyncEnumerable.Return(42), (Func<int, int>)null));
         }
 
         [Fact]
@@ -3259,12 +3259,12 @@ namespace Tests
         [Fact]
         public void DistinctKey_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(default(IAsyncEnumerable<int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Distinct(AsyncEnumerable.Return(42), x => x, null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), x => x, null));
         }
 
         [Fact]
