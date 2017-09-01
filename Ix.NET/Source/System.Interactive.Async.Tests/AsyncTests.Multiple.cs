@@ -962,8 +962,8 @@ namespace Tests
         [Fact]
         public void SelectManyMultiple_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.SelectMany<int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
         }
 
         [Fact]

@@ -10,16 +10,6 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TOther> SelectMany<TSource, TOther>(this IAsyncEnumerable<TSource> source, IAsyncEnumerable<TOther> other)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
-
-            return source.SelectMany(_ => other);
-        }
-
         public static IAsyncEnumerable<TResult> SelectMany<TSource, TResult>(this IAsyncEnumerable<TSource> source, Func<TSource, IAsyncEnumerable<TResult>> selector)
         {
             if (source == null)
