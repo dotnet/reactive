@@ -86,5 +86,34 @@ namespace System.Linq
 
             return source.Select(selector).Min(cancellationToken);
         }
+
+        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator();
+
+            try
+            {
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+
+                var min = e.Current;
+
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    var cur = e.Current;
+
+                    if (comparer.Compare(cur, min) < 0)
+                    {
+                        min = cur;
+                    }
+                }
+
+                return min;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
     }
 }

@@ -98,11 +98,6 @@ namespace System.Linq
             return ExtremaBy(source, keySelector, (key, minValue) => -comparer.Compare(key, minValue), cancellationToken);
         }
 
-        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            return (await MinBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
-        }
-
         private static async Task<IList<TSource>> ExtremaBy<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TKey, TKey, int> compare, CancellationToken cancellationToken)
         {
             var result = new List<TSource>();

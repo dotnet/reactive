@@ -97,10 +97,5 @@ namespace System.Linq
 
             return ExtremaBy(source, keySelector, (key, minValue) => comparer.Compare(key, minValue), cancellationToken);
         }
-
-        private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
-        {
-            return (await MaxBy(source, x => x, comparer, cancellationToken).ConfigureAwait(false)).First();
-        }
     }
 }

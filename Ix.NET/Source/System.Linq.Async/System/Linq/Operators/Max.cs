@@ -86,5 +86,34 @@ namespace System.Linq
 
             return source.Select(selector).Max(cancellationToken);
         }
+
+        private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        {
+            var e = source.GetAsyncEnumerator();
+
+            try
+            {
+                if (!await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    throw new InvalidOperationException(Strings.NO_ELEMENTS);
+
+                var max = e.Current;
+
+                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    var cur = e.Current;
+
+                    if (comparer.Compare(cur, max) > 0)
+                    {
+                        max = cur;
+                    }
+                }
+
+                return max;
+            }
+            finally
+            {
+                await e.DisposeAsync().ConfigureAwait(false);
+            }
+        }
     }
 }
