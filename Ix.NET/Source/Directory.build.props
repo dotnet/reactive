@@ -14,23 +14,19 @@
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
     <NoWarn>$(NoWarn);1701;1702;CS1591</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(NCrunch)' == '' and '$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.2" PrivateAssets="All" /> 
+  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.2.0" PrivateAssets="All" /> 
   </ItemGroup>
   
-    <!-- Workaround -->
-  <Target Name="GetPackagingOutputs" />
-  
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>2.0.21-beta</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>2.0.37-beta</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.21-beta" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.37-beta" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4337 -->

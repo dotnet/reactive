@@ -101,67 +101,70 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Tests\AssertEx.cs">
-      <Link>AssertEx.cs</Link>
+    <Compile Include="..\System.Interactive.Async.Tests\AppendPrependTests.cs">
+      <Link>AppendPrependTests.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncQueryableTests.Generated.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncEnumerableQueryTest.cs">
+      <Link>AsyncEnumerableQueryTest.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncQueryableTests.Generated.cs">
       <Link>AsyncQueryableTests.Generated.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Aggregates.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Aggregates.cs">
       <Link>AsyncTests.Aggregates.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Bugs.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Bugs.cs">
       <Link>AsyncTests.Bugs.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Conversions.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Conversions.cs">
       <Link>AsyncTests.Conversions.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Creation.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Creation.cs">
       <Link>AsyncTests.Creation.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.cs">
       <Link>AsyncTests.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Exceptions.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Exceptions.cs">
       <Link>AsyncTests.Exceptions.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Multiple.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Multiple.cs">
       <Link>AsyncTests.Multiple.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\AsyncTests.Single.cs">
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Single.cs">
       <Link>AsyncTests.Single.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\NopObserver.cs">
+    <Compile Include="..\System.Interactive.Tests\AssertEx.cs">
+      <Link>AssertEx.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\NopObserver.cs">
       <Link>NopObserver.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\TaskExtTests.cs">
-      <Link>TaskExtTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Tests\Tests.Aggregates.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Aggregates.cs">
       <Link>Tests.Aggregates.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Buffering.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Buffering.cs">
       <Link>Tests.Buffering.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Creation.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Creation.cs">
       <Link>Tests.Creation.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.cs">
       <Link>Tests.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Exceptions.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Exceptions.cs">
       <Link>Tests.Exceptions.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Imperative.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Imperative.cs">
       <Link>Tests.Imperative.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Multiple.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Multiple.cs">
       <Link>Tests.Multiple.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Qbservable.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Qbservable.cs">
       <Link>Tests.Qbservable.cs</Link>
     </Compile>
-    <Compile Include="..\Tests\Tests.Single.cs">
+    <Compile Include="..\System.Interactive.Tests\Tests.Single.cs">
       <Link>Tests.Single.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
@@ -176,6 +179,11 @@
     <None Include="System.Interactive.Tests.Uwp.DeviceRunner_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\System.Interactive.Async.Tests\AsyncQueryableTests.Generated.tt">
+      <Link>AsyncQueryableTests.Generated.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncQueryableTests.Generated1.cs</LastGenOutput>
+    </Content>
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -191,23 +199,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Interactive">
-      <HintPath>..\System.Interactive\bin\$(Configuration)\netstandard1.0\System.Interactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Interactive.Async">
-      <HintPath>..\System.Interactive.Async\bin\$(Configuration)\netstandard1.0\System.Interactive.Async.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Interactive.Async.Providers">
-      <HintPath>..\System.Interactive.Async.Providers\bin\$(Configuration)\netstandard1.0\System.Interactive.Async.Providers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Interactive.Providers">
-      <HintPath>..\System.Interactive.Providers\bin\$(Configuration)\netstandard1.0\System.Interactive.Providers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceModel.Internals">
-      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\System.ServiceModel.Internals\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Internals.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
@@ -217,6 +208,15 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\ReactiveX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+    <ProjectReference Include="..\System.Interactive.Providers\System.Interactive.Providers.csproj" />
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" />
+    <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
