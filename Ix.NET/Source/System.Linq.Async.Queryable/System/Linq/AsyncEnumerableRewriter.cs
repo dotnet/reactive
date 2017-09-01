@@ -423,9 +423,14 @@ namespace System.Linq
         private static MethodInfo FindMethod(Type type, string name, ReadOnlyCollection<Expression> args, Type[] typeArgs, BindingFlags flags)
         {
             //
+            // Support the enumerable methods to be defined on another type.
+            //
+            var targetType = type.GetTypeInfo().GetCustomAttribute<LocalQueryMethodImplementationTypeAttribute>()?.TargetType ?? type;
+
+            //
             // Get all the candidates based on name and fail if none are found.
             //
-            var methods = type.GetMethods(flags).Where(m => m.Name == name).ToArray();
+            var methods = targetType.GetMethods(flags).Where(m => m.Name == name).ToArray();
             if (methods.Length == 0)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not find method with name '{0}' on type '{1}'.", name, type));

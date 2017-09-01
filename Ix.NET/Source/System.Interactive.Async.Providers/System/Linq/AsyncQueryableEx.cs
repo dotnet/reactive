@@ -11,6 +11,7 @@ namespace System.Linq
     /// <summary>
     /// Provides a set of extension methods for asynchronous enumerable sequences represented using expression trees.
     /// </summary>
+    [LocalQueryMethodImplementationType(typeof(AsyncEnumerableEx))]
     public static partial class AsyncQueryableEx
     {
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
