@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableEx
     {
         public static IAsyncEnumerable<TResult> Generate<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {

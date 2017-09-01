@@ -203,15 +203,15 @@ namespace Tests
         [Fact]
         public void Generate_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Generate<int, int>(0, null, x => x, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Generate<int, int>(0, x => true, null, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Generate<int, int>(0, x => true, x => x, null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, null, x => x, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, null, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, x => true, x => x, null));
         }
 
         [Fact]
         public async Task Generate1()
         {
-            var xs = AsyncEnumerable.Generate(0, x => x < 5, x => x + 1, x => x * x);
+            var xs = AsyncEnumerableEx.Generate(0, x => x < 5, x => x + 1, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 0);
@@ -227,7 +227,7 @@ namespace Tests
         public void Generate2()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Generate(0, x => { throw ex; }, x => x + 1, x => x * x);
+            var xs = AsyncEnumerableEx.Generate(0, x => { throw ex; }, x => x + 1, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
@@ -237,7 +237,7 @@ namespace Tests
         public void Generate3()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Generate(0, x => true, x => x + 1, x => { if (x == 1) throw ex; return x * x; });
+            var xs = AsyncEnumerableEx.Generate(0, x => true, x => x + 1, x => { if (x == 1) throw ex; return x * x; });
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 0);
@@ -248,7 +248,7 @@ namespace Tests
         public void Generate4()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Generate(0, x => true, x => { throw ex; }, x => x * x);
+            var xs = AsyncEnumerableEx.Generate(0, x => true, x => { throw ex; }, x => x * x);
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 0);
@@ -258,7 +258,7 @@ namespace Tests
         [Fact]
         public async Task Generate5()
         {
-            var xs = AsyncEnumerable.Generate(0, x => x < 5, x => x + 1, x => x * x);
+            var xs = AsyncEnumerableEx.Generate(0, x => x < 5, x => x + 1, x => x * x);
 
             await SequenceIdentity(xs);
         }

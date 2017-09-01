@@ -39,7 +39,7 @@ namespace Tests
         {
             try
             {
-                var asyncEnumerable = AsyncEnumerable.Generate(15, (x) => { throw new InvalidOperationException(); }, (x) => { return 20; }, (x) => { return 2; });
+                var asyncEnumerable = AsyncEnumerableEx.Generate(15, (x) => { throw new InvalidOperationException(); }, (x) => { return 20; }, (x) => { return 2; });
                 await asyncEnumerable.ToArray();
             }
             catch (AggregateException)
