@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
     <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+    <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
   </ItemGroup>
 
   <ItemGroup>

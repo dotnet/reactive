@@ -41,7 +41,7 @@ namespace Tests
         [Fact]
         public async Task Never()
         {
-            var xs = AsyncEnumerable.Never<int>();
+            var xs = AsyncEnumerableEx.Never<int>();
 
             var e = xs.GetAsyncEnumerator();
             Assert.False(e.MoveNextAsync().IsCompleted); // Very rudimentary check

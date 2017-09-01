@@ -4,4 +4,8 @@
     <TargetFrameworks>net46;netstandard1.4</TargetFrameworks>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="System\Linq\Operators\" />
+  </ItemGroup>
+
 </Project>

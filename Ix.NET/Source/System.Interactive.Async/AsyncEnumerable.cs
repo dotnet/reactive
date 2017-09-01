@@ -22,11 +22,6 @@ namespace System.Linq
             return CreateEnumerable(() => CreateEnumerator<TValue>(ct => TaskExt.False, current: null, dispose: null));
         }
 
-        public static IAsyncEnumerable<TValue> Never<TValue>()
-        {
-            return CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
-        }
-
         public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
         {
             return new[] { value }.ToAsyncEnumerable();
