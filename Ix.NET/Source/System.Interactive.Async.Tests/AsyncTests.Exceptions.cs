@@ -405,10 +405,10 @@ namespace Tests
     [Fact]
         public void OnErrorResumeNext_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>[])));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -417,7 +417,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
+            var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -437,7 +437,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
+            var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -457,7 +457,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.OnErrorResumeNext(new[] { xs, xs, ys, ys });
+            var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs, ys, ys });
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -501,7 +501,7 @@ namespace Tests
 
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
 
-            var res = AsyncEnumerable.OnErrorResumeNext(new[] { xs, xs });
+            var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs });
 
             var e = res.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -516,7 +516,7 @@ namespace Tests
         [Fact]
         public void OnErrorResumeNext12()
         {
-            var res = AsyncEnumerable.OnErrorResumeNext(Enumerable.Empty<IAsyncEnumerable<int>>());
+            var res = AsyncEnumerableEx.OnErrorResumeNext(Enumerable.Empty<IAsyncEnumerable<int>>());
 
             var e = res.GetAsyncEnumerator();
             NoNext(e);
@@ -528,7 +528,7 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
-            var res = AsyncEnumerable.OnErrorResumeNext(xs, ys);
+            var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
 
             await SequenceIdentity(res);
         }
