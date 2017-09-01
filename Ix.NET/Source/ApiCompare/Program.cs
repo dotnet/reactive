@@ -29,8 +29,10 @@ namespace ApiCompare
             "Cast",    // Non-generic methods
             "OfType",  // Non-generic methods
 
-            "AsEnumerable",      // Trivially renamed
-            "AsAsyncEnumerable"  // Trivially renamed
+            "AsEnumerable",       // Trivially renamed
+            "AsAsyncEnumerable",  // Trivially renamed
+
+            "ForEachAsync",  // "foreach await" language substitute for the time being
         };
 
         private static readonly TypeSubstitutor subst = new TypeSubstitutor(new Dictionary<Type, Type>
