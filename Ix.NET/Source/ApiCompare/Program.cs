@@ -21,6 +21,18 @@ namespace ApiCompare
         private static readonly Type asyncOrderedInterfaceType = typeof(IOrderedAsyncEnumerable<>);
         private static readonly Type syncOrderedInterfaceType = typeof(IOrderedEnumerable<>);
 
+        private static readonly string[] exceptions = new[]
+        {
+            "SkipLast",  // In .NET Core 2.0
+            "TakeLast",  // In .NET Core 2.0
+
+            "Cast",    // Non-generic methods
+            "OfType",  // Non-generic methods
+
+            "AsEnumerable",      // Trivially renamed
+            "AsAsyncEnumerable"  // Trivially renamed
+        };
+
         private static readonly TypeSubstitutor subst = new TypeSubstitutor(new Dictionary<Type, Type>
         {
             { asyncInterfaceType, syncInterfaceType },
@@ -38,8 +50,8 @@ namespace ApiCompare
 
         static void Compare(Type syncOperatorsType, Type asyncOperatorsType)
         {
-            var syncOperators = GetQueryOperators(new[] { syncInterfaceType, syncOrderedInterfaceType}, syncOperatorsType);
-            var asyncOperators = GetQueryOperators(new[] { asyncInterfaceType, asyncOrderedInterfaceType }, asyncOperatorsType);
+            var syncOperators = GetQueryOperators(new[] { syncInterfaceType, syncOrderedInterfaceType}, syncOperatorsType, exceptions);
+            var asyncOperators = GetQueryOperators(new[] { asyncInterfaceType, asyncOrderedInterfaceType }, asyncOperatorsType, exceptions);
 
             CompareFactories(syncOperators.Factories, asyncOperators.Factories);
             CompareQueryOperators(syncOperators.QueryOperators, asyncOperators.QueryOperators);
@@ -354,13 +366,13 @@ namespace ApiCompare
             }
         }
 
-        static Operators GetQueryOperators(Type[] interfaceTypes, Type operatorsType)
+        static Operators GetQueryOperators(Type[] interfaceTypes, Type operatorsType, string[] exclude)
         {
             //
             // Get all the static methods.
             //
 
-            var methods = operatorsType.GetMethods(BindingFlags.Public | BindingFlags.Static);
+            var methods = operatorsType.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(m => !exclude.Contains(m.Name));
 
             //
             // Get extension methods. These can be either operators or aggregates.
