@@ -17,7 +17,7 @@ namespace System.Linq
         /// <summary>
         /// Gets the local Queryable provider.
         /// </summary>
-        public static IQueryProvider Provider => new QueryProviderShim();
+        public static IQueryProvider Provider { get; } = new QueryProviderShim();
 
         private sealed class QueryProviderShim : IQueryProvider
         {
