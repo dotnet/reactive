@@ -8,18 +8,12 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TResult> Cast<TResult>(this IAsyncEnumerable<object> source)
+        public static IAsyncEnumerable<TType> OfType<TType>(this IAsyncEnumerable<object> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            // Check to see if it already is and short-circuit
-            if (source is IAsyncEnumerable<TResult> typedSource)
-            {
-                return typedSource;
-            }
-
-            return source.Select(x => (TResult)x);
+            return source.Where(x => x is TType).Cast<TType>();
         }
     }
 }
