@@ -2889,7 +2889,7 @@ namespace Tests
         [Fact]
         public void IgnoreElements_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.IgnoreElements(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.IgnoreElements(default(IAsyncEnumerable<int>)));
         }
 
         [Fact]
