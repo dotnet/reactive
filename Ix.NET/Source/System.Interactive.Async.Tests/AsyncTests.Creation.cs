@@ -266,8 +266,8 @@ namespace Tests
         [Fact]
         public void Using_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(null, _ => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Using<int, IDisposable>(() => new MyD(null), default(Func<IDisposable, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(null, _ => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Using<int, IDisposable>(() => new MyD(null), default(Func<IDisposable, IAsyncEnumerable<int>>)));
         }
 
         [Fact]
@@ -276,7 +276,7 @@ namespace Tests
             var i = 0;
             var d = 0;
 
-            var xs = AsyncEnumerable.Using(
+            var xs = AsyncEnumerableEx.Using(
                 () =>
                 {
                     i++;
@@ -297,7 +297,7 @@ namespace Tests
             var i = 0;
             var d = 0;
 
-            var xs = AsyncEnumerable.Using(
+            var xs = AsyncEnumerableEx.Using(
                 () =>
                 {
                     i++;
@@ -322,7 +322,7 @@ namespace Tests
             var i = 0;
             var d = 0;
 
-            var xs = AsyncEnumerable.Using<int, MyD>(
+            var xs = AsyncEnumerableEx.Using<int, MyD>(
                 () =>
                 {
                     i++;
@@ -344,7 +344,7 @@ namespace Tests
             var i = 0;
             var disposed = new TaskCompletionSource<bool>();
 
-            var xs = AsyncEnumerable.Using(
+            var xs = AsyncEnumerableEx.Using(
                 () =>
                 {
                     i++;
@@ -371,7 +371,7 @@ namespace Tests
             var i = 0;
             var disposed = new TaskCompletionSource<bool>();
 
-            var xs = AsyncEnumerable.Using(
+            var xs = AsyncEnumerableEx.Using(
                 () =>
                 {
                     i++;
@@ -396,7 +396,7 @@ namespace Tests
             var i = 0;
             var d = 0;
 
-            var xs = AsyncEnumerable.Using(
+            var xs = AsyncEnumerableEx.Using(
                 () =>
                 {
                     i++;
