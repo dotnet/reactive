@@ -10,6 +10,11 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
+        public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
+        {
+            return new RepeatElementAsyncIterator<TResult>(element);
+        }
+
         public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element, int count)
         {
             if (count < 0)
@@ -18,9 +23,12 @@ namespace System.Linq
             return Enumerable.Repeat(element, count).ToAsyncEnumerable();
         }
 
-        public static IAsyncEnumerable<TResult> Repeat<TResult>(TResult element)
+        public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
         {
-            return new RepeatElementAsyncIterator<TResult>(element);
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return new RepeatSequenceAsyncIterator<TSource>(source, -1);
         }
 
         public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source, int count)
@@ -31,14 +39,6 @@ namespace System.Linq
                 throw new ArgumentOutOfRangeException(nameof(count));
 
             return new RepeatSequenceAsyncIterator<TSource>(source, count);
-        }
-
-        public static IAsyncEnumerable<TSource> Repeat<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return new RepeatSequenceAsyncIterator<TSource>(source, -1);
         }
 
         private sealed class RepeatElementAsyncIterator<TResult> : AsyncIterator<TResult>
