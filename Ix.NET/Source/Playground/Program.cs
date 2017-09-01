@@ -25,7 +25,7 @@ namespace Playground
             await Task.Yield();
         }
 
-        [Demo(1, "LINQ to Objects for IEnumerable<T>")]
+        [Demo(11, "LINQ to Objects for IEnumerable<T>")]
         static void Linq()
         {
             var xs = new List<int> { 1, 2, 3 };
@@ -37,7 +37,19 @@ namespace Playground
             }
         }
 
-        [Demo(2, "LINQ to Objects for IEnumerable<T> - Interactive Extensions")]
+        [Demo(12, "LINQ to Objects for IQueryable<T>")]
+        static void LinqQueryable()
+        {
+            var xs = new List<int> { 1, 2, 3 }.AsQueryable();
+            var ys = xs.Where(x => x % 2 == 0);
+
+            foreach (var y in ys)
+            {
+                Console.WriteLine(y);
+            }
+        }
+
+        [Demo(21, "LINQ to Objects for IEnumerable<T> - Interactive Extensions")]
         static void Ix()
         {
             var xs = new List<int> { 1, 2, 3 };
@@ -49,7 +61,19 @@ namespace Playground
             }
         }
 
-        [Demo(3, "LINQ to Objects for IAsyncEnumerable<T>")]
+        [Demo(22, "LINQ to Objects for IQueryable<T> - Interactive Extensions")]
+        static void IxQueryable()
+        {
+            var xs = new List<int> { 1, 2, 3 }.AsQueryable();
+            var ys = xs.Distinct(x => x % 2);
+
+            foreach (var y in ys)
+            {
+                Console.WriteLine(y);
+            }
+        }
+
+        [Demo(31, "LINQ to Objects for IAsyncEnumerable<T>")]
         static async Task AsyncLinq()
         {
             var xs = new List<int> { 1, 2, 3 };
@@ -79,10 +103,59 @@ namespace Playground
 #endif
         }
 
-        [Demo(4, "LINQ to Objects for IAsyncEnumerable<T> - Interactive Extensions")]
+        [Demo(32, "LINQ to Objects for IAsyncQueryable<T>")]
+        static async Task AsyncLinqQueryable()
+        {
+            var xs = new List<int> { 1, 2, 3 }.AsQueryable();
+            var ys = xs.ToAsyncEnumerable().Where(x => x % 2 == 0);
+
+#if CSHARP8
+            foreach await (var y in ys)
+            {
+                Console.WriteLine(y);
+            }
+#else
+            var e = ys.GetAsyncEnumerator();
+
+            try
+            {
+                while (await e.MoveNextAsync())
+                {
+                    var y = e.Current;
+
+                    Console.WriteLine(y);
+                }
+            }
+            finally
+            {
+                await e.DisposeAsync();
+            }
+#endif
+        }
+
+        [Demo(41, "LINQ to Objects for IAsyncEnumerable<T> - Interactive Extensions")]
         static async Task AsyncIx()
         {
             var xs = new List<int> { 1, 2, 3 };
+            var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
+
+#if CSHARP8
+            foreach await (var y in ys)
+            {
+                Console.WriteLine(y);
+            }
+#else
+            await ys.ForEachAsync(y =>
+            {
+                Console.WriteLine(y);
+            });
+#endif
+        }
+
+        [Demo(42, "LINQ to Objects for IAsyncQueryable<T> - Interactive Extensions")]
+        static async Task AsyncIxQueryable()
+        {
+            var xs = new List<int> { 1, 2, 3 }.AsQueryable();
             var ys = xs.ToAsyncEnumerable().Distinct(x => x % 2);
 
 #if CSHARP8
