@@ -16,7 +16,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (source is AppendPrepentAsyncIterator<TSource> appendable)
+            if (source is AppendPrependAsyncIterator<TSource> appendable)
             {
                 return appendable.Append(element);
             }
@@ -29,7 +29,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (source is AppendPrepentAsyncIterator<TSource> appendable)
+            if (source is AppendPrependAsyncIterator<TSource> appendable)
             {
                 return appendable.Prepend(element);
             }
@@ -37,12 +37,12 @@ namespace System.Linq
             return new AppendPrepend1AsyncIterator<TSource>(source, element, false);
         }
 
-        private abstract class AppendPrepentAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private abstract class AppendPrependAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
         {
             protected readonly IAsyncEnumerable<TSource> source;
             protected IAsyncEnumerator<TSource> enumerator;
 
-            protected AppendPrepentAsyncIterator(IAsyncEnumerable<TSource> source)
+            protected AppendPrependAsyncIterator(IAsyncEnumerable<TSource> source)
             {
                 Debug.Assert(source != null);
 
@@ -55,8 +55,8 @@ namespace System.Linq
                 enumerator = source.GetAsyncEnumerator();
             }
 
-            public abstract AppendPrepentAsyncIterator<TSource> Append(TSource item);
-            public abstract AppendPrepentAsyncIterator<TSource> Prepend(TSource item);
+            public abstract AppendPrependAsyncIterator<TSource> Append(TSource item);
+            public abstract AppendPrependAsyncIterator<TSource> Prepend(TSource item);
 
             protected async Task<bool> LoadFromEnumeratorAsync()
             {
@@ -91,7 +91,7 @@ namespace System.Linq
             public abstract Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken);
         }
 
-        private sealed class AppendPrepend1AsyncIterator<TSource> : AppendPrepentAsyncIterator<TSource>
+        private sealed class AppendPrepend1AsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
         {
             private readonly TSource item;
             private readonly bool appending;
@@ -154,7 +154,7 @@ namespace System.Linq
                 return false;
             }
 
-            public override AppendPrepentAsyncIterator<TSource> Append(TSource element)
+            public override AppendPrependAsyncIterator<TSource> Append(TSource element)
             {
                 if (appending)
                 {
@@ -164,7 +164,7 @@ namespace System.Linq
                 return new AppendPrependNAsyncIterator<TSource>(source, new SingleLinkedNode<TSource>(item), new SingleLinkedNode<TSource>(element));
             }
 
-            public override AppendPrepentAsyncIterator<TSource> Prepend(TSource element)
+            public override AppendPrependAsyncIterator<TSource> Prepend(TSource element)
             {
                 if (appending)
                 {
@@ -315,7 +315,7 @@ namespace System.Linq
             }
         }
 
-        private sealed class AppendPrependNAsyncIterator<TSource> : AppendPrepentAsyncIterator<TSource>
+        private sealed class AppendPrependNAsyncIterator<TSource> : AppendPrependAsyncIterator<TSource>
         {
             private readonly SingleLinkedNode<TSource> prepended;
             private readonly SingleLinkedNode<TSource> appended;
@@ -411,12 +411,12 @@ namespace System.Linq
                 return false;
             }
 
-            public override AppendPrepentAsyncIterator<TSource> Append(TSource item)
+            public override AppendPrependAsyncIterator<TSource> Append(TSource item)
             {
                 return new AppendPrependNAsyncIterator<TSource>(source, prepended, appended != null ? appended.Add(item) : new SingleLinkedNode<TSource>(item));
             }
 
-            public override AppendPrepentAsyncIterator<TSource> Prepend(TSource item)
+            public override AppendPrependAsyncIterator<TSource> Prepend(TSource item)
             {
                 return new AppendPrependNAsyncIterator<TSource>(source, prepended != null ? prepended.Add(item) : new SingleLinkedNode<TSource>(item), appended);
             }
