@@ -3138,8 +3138,8 @@ namespace Tests
         [Fact]
         public void Expand_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Expand(AsyncEnumerable.Return(42), default(Func<int, IAsyncEnumerable<int>>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Expand(default(IAsyncEnumerable<int>), x => default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Expand(AsyncEnumerable.Return(42), default(Func<int, IAsyncEnumerable<int>>)));
         }
 
         [Fact]
