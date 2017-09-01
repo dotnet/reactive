@@ -2700,9 +2700,9 @@ namespace Tests
         [Fact]
         public void RepeatSeq_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Repeat(default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Repeat(default(IAsyncEnumerable<int>), 3));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Repeat(AsyncEnumerable.Return(42), -1));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
+            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(AsyncEnumerable.Return(42), -1));
         }
 
         [Fact]

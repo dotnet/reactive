@@ -577,6 +577,28 @@ namespace Tests
         }
 
         [Fact]
+        public void Repeat1()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.Repeat<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryableEx.Repeat<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable());
+            res = res.Take(5);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
+        public void Repeat2()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.Repeat<int>(default(IAsyncQueryable<int>), 1), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryableEx.Repeat<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), 1);
+            res = res.Take(5);
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
         public void Retry1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.Retry<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");

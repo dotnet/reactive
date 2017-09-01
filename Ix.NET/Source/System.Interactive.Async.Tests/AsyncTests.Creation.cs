@@ -155,7 +155,7 @@ namespace Tests
         [Fact]
         public async Task Repeat3()
         {
-            var xs = AsyncEnumerable.Repeat(2);
+            var xs = AsyncEnumerableEx.Repeat(2);
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 2);
@@ -169,7 +169,7 @@ namespace Tests
         [Fact]
         public async Task Repeat4()
         {
-            var xs = AsyncEnumerable.Repeat(2).Take(5);
+            var xs = AsyncEnumerableEx.Repeat(2).Take(5);
 
             await SequenceIdentity(xs);
         }

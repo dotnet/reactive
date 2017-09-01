@@ -768,6 +768,30 @@ namespace System.Linq
 #endif
         }
 
+        public static IAsyncQueryable<TSource> Repeat<TSource>(this IAsyncQueryable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+#if CRIPPLED_REFLECTION
+            return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Repeat<TSource>(default(IAsyncQueryable<TSource>))), source.Expression));
+#else
+            return source.Provider.CreateQuery<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression));
+#endif
+        }
+
+        public static IAsyncQueryable<TSource> Repeat<TSource>(this IAsyncQueryable<TSource> source, int count)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+#if CRIPPLED_REFLECTION
+            return source.Provider.CreateQuery<TSource>(Expression.Call(InfoOf(() => AsyncQueryableEx.Repeat<TSource>(default(IAsyncQueryable<TSource>), default(int))), source.Expression, Expression.Constant(count, typeof(int))));
+#else
+            return source.Provider.CreateQuery<TSource>(Expression.Call(((MethodInfo)MethodBase.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)), source.Expression, Expression.Constant(count, typeof(int))));
+#endif
+        }
+
         public static IAsyncQueryable<TSource> Retry<TSource>(this IAsyncQueryable<TSource> source)
         {
             if (source == null)
