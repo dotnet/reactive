@@ -747,20 +747,6 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEach_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(null, x => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(AsyncEnumerable.Return(42), default(Action<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(null, (x, i) => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(AsyncEnumerable.Return(42), default(Action<int, int>)));
-
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(null, x => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(AsyncEnumerable.Return(42), default(Action<int>), CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(null, (x, i) => { }, CancellationToken.None));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ForEach<int>(AsyncEnumerable.Return(42), default(Action<int, int>), CancellationToken.None));
-        }
-
-        [Fact]
         public void ForEachAsync1()
         {
             var sum = 0;
@@ -771,27 +757,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEach1()
-        {
-            var sum = 0;
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-
-            xs.ForEach(x => sum += x);
-            Assert.Equal(10, sum);
-        }
-
-        [Fact]
         public void ForEachAsync2()
-        {
-            var sum = 0;
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-
-            xs.ForEach((x, i) => sum += x * i);
-            Assert.Equal(1 * 0 + 2 * 1 + 3 * 2 + 4 * 3, sum);
-        }
-
-        [Fact]
-        public void ForEach2()
         {
             var sum = 0;
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
@@ -810,30 +776,12 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEach3()
-        {
-            var ex = new Exception("Bang");
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-
-            AssertThrows<Exception>(() => xs.ForEach(x => { throw ex; }), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-        }
-
-        [Fact]
         public void ForEachAsync4()
         {
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
 
             AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-        }
-
-        [Fact]
-        public void ForEach4()
-        {
-            var ex = new Exception("Bang");
-            var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-
-            AssertThrows<Exception>(() => xs.ForEach((x, i) => { throw ex; }), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
@@ -846,30 +794,12 @@ namespace Tests
         }
 
         [Fact]
-        public void ForEach5()
-        {
-            var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
-
-            AssertThrows<Exception>(() => xs.ForEach(x => { throw ex; }), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-        }
-
-        [Fact]
         public void ForEachAsync6()
         {
             var ex = new Exception("Bang");
             var xs = AsyncEnumerable.Throw<int>(ex);
 
             AssertThrows<Exception>(() => xs.ForEachAsync((x, i) => { throw ex; }).Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
-        }
-
-        [Fact]
-        public void ForEach6()
-        {
-            var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
-
-            AssertThrows<Exception>(() => xs.ForEach((x, i) => { throw ex; }), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
         [Fact]
