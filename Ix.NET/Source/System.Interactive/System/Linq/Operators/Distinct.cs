@@ -8,7 +8,6 @@ namespace System.Linq
 {
     public static partial class EnumerableEx
     {
-
         /// <summary>
         /// Returns elements with a distinct key value by using the default equality comparer to compare key values.
         /// </summary>
