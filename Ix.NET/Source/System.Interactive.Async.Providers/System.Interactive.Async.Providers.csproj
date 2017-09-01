@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" />
+    <ProjectReference Include="..\System.Linq.Async.Queryable\System.Linq.Async.Queryable.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
