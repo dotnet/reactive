@@ -22,8 +22,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return MaxBy(source, x => x, comparer)
-                .First();
+            return MaxBy(source, x => x, comparer).First();
         }
 
         /// <summary>
