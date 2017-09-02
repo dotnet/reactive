@@ -20,63 +20,6 @@ namespace Tests
         private const int WaitTimeoutMs = 5000;
 
         [Fact]
-        public async Task Contains_Null()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(null, 42));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(null, 42, EqualityComparer<int>.Default));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(AsyncEnumerable.Return(42), 42, null));
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(null, 42, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(null, 42, EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Contains<int>(AsyncEnumerable.Return(42), 42, null, CancellationToken.None));
-        }
-
-        [Fact]
-        public void Contains1()
-        {
-            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(3);
-            Assert.True(ys.Result);
-        }
-
-        [Fact]
-        public void Contains2()
-        {
-            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(6);
-            Assert.False(ys.Result);
-        }
-
-        [Fact]
-        public void Contains3()
-        {
-            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(-3, new Eq());
-            Assert.True(ys.Result);
-        }
-
-        [Fact]
-        public void Contains4()
-        {
-            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable();
-            var ys = xs.Contains(-6, new Eq());
-            Assert.False(ys.Result);
-        }
-
-        class Eq : IEqualityComparer<int>
-        {
-            public bool Equals(int x, int y)
-            {
-                return EqualityComparer<int>.Default.Equals(Math.Abs(x), Math.Abs(y));
-            }
-
-            public int GetHashCode(int obj)
-            {
-                return EqualityComparer<int>.Default.GetHashCode(Math.Abs(obj));
-            }
-        }
-
-        [Fact]
         public async Task First_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(null));
@@ -1900,6 +1843,19 @@ namespace Tests
             var xs = new[] { 3, 5, 7, 6, 4, 2 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex)).MaxBy(x => x, Comparer<int>.Default);
 
             AssertThrows<Exception>(() => xs.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+        }
+
+        private sealed class Eq : IEqualityComparer<int>
+        {
+            public bool Equals(int x, int y)
+            {
+                return EqualityComparer<int>.Default.Equals(Math.Abs(x), Math.Abs(y));
+            }
+
+            public int GetHashCode(int obj)
+            {
+                return EqualityComparer<int>.Default.GetHashCode(Math.Abs(obj));
+            }
         }
     }
 }
