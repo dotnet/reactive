@@ -20,6 +20,13 @@ namespace Tests
         private const int WaitTimeoutMs = 5000;
 
         [Fact]
+        public async Task IsEmpty_Null()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null, CancellationToken.None));
+        }
+
+        [Fact]
         public async Task First_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.First<int>(null));

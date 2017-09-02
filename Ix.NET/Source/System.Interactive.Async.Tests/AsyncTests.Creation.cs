@@ -50,30 +50,6 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Empty_Null()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null, CancellationToken.None));
-        }
-
-        [Fact]
-        public void Empty1()
-        {
-            var xs = AsyncEnumerable.Empty<int>();
-            NoNext(xs.GetAsyncEnumerator());
-        }
-
-        [Fact]
-        public void Empty2()
-        {
-            var xs = AsyncEnumerable.Empty<int>();
-
-            var e = xs.GetAsyncEnumerator();
-            Assert.False(e.MoveNextAsync().Result);
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
-        }
-
-        [Fact]
         public void Throw_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Throw<int>(null));
