@@ -6,10 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Xunit;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests
 {
@@ -203,7 +202,6 @@ namespace Tests
 
             Assert.Equal(8, await c.Count());
         }
-
 
         static IEnumerable<IAsyncEnumerable<int>> ConcatXss()
         {
