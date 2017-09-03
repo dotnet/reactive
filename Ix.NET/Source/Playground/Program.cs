@@ -21,8 +21,6 @@ namespace Playground
         static async Task Experiment()
         {
             // Add test code here
-
-            await Task.Yield();
         }
 
         [Demo(11, "LINQ to Objects for IEnumerable<T>")]

@@ -8,6 +8,7 @@ namespace System.Threading.Tasks
     {
         public static readonly Task<bool> True = Task.FromResult(true);
         public static readonly Task<bool> False = Task.FromResult(false);
+        public static readonly Task<bool> Never = new TaskCompletionSource<bool>().Task;
         public static readonly Task CompletedTask = True;
     }
 }
