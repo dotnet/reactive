@@ -26,6 +26,8 @@ namespace ApiCompare
             "SkipLast",  // In .NET Core 2.0
             "TakeLast",  // In .NET Core 2.0
 
+            "ToHashSet",  // In .NET Core 2.0
+
             "Cast",    // Non-generic methods
             "OfType",  // Non-generic methods
 
