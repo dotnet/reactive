@@ -21,26 +21,6 @@ namespace Tests
             };
         }
 
-#if !NO_THREAD
-        static IEnumerable<int> Xs(Action a)
-        {
-            try
-            {
-                var rnd = new Random();
-
-                while (true)
-                {
-                    yield return rnd.Next(0, 43);
-                    Thread.Sleep(rnd.Next(0, 500));
-                }
-            }
-            finally
-            {
-                a();
-            }
-        }
-#endif
-
         [Fact]
         public async void CorrectDispose()
         {
@@ -195,10 +175,7 @@ namespace Tests
                 _dispose = dispose;
             }
 
-            public T Current
-            {
-                get { return _current(); }
-            }
+            public T Current => _current();
 
             public void Dispose() => _dispose();
 
