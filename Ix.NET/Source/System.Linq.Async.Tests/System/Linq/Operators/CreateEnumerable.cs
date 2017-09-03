@@ -9,7 +9,12 @@ using Xunit;
 
 namespace Tests
 {
-    public partial class AsyncTests
+    public class CreateEnumerable : AsyncEnumerableTests
     {
+        [Fact]
+        public void CreateEnumerable_Null()
+        {
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerable<int>(default(Func<IAsyncEnumerator<int>>)));
+        }
     }
 }
