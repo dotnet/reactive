@@ -181,7 +181,6 @@ namespace System.Linq
                         }
 
                         break;
-                        
                 }
 
                 await DisposeAsync().ConfigureAwait(false);
