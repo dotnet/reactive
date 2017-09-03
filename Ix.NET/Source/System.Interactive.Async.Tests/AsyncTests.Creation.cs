@@ -151,32 +151,6 @@ namespace Tests
         }
 
         [Fact]
-        public void Defer_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Defer<int>(default(Func<IAsyncEnumerable<int>>)));
-        }
-
-        [Fact]
-        public void Defer1()
-        {
-            var x = 0;
-            var xs = AsyncEnumerableEx.Defer<int>(() => new[] { x }.ToAsyncEnumerable());
-
-            {
-                var e = xs.GetAsyncEnumerator();
-                HasNext(e, 0);
-                NoNext(e);
-            }
-
-            {
-                x++;
-                var e = xs.GetAsyncEnumerator();
-                HasNext(e, 1);
-                NoNext(e);
-            }
-        }
-
-        [Fact]
         public void Generate_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Generate<int, int>(0, null, x => x, x => x));
