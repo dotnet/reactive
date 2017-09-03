@@ -623,18 +623,5 @@ namespace Tests
             public int OrderId { get; set; }
             public string CustomerId { get; set; }
         }
-
-        private sealed class Eq : IEqualityComparer<int>
-        {
-            public bool Equals(int x, int y)
-            {
-                return EqualityComparer<int>.Default.Equals(Math.Abs(x), Math.Abs(y));
-            }
-
-            public int GetHashCode(int obj)
-            {
-                return EqualityComparer<int>.Default.GetHashCode(Math.Abs(obj));
-            }
-        }
     }
 }
