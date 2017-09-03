@@ -22,13 +22,6 @@ namespace Tests
             Assert.Throws<E>(a);
         }
 
-        [Obsolete("Don't use this, use Assert.ThrowsAsync and await it", true)]
-        public Task AssertThrows<E>(Func<Task> func)
-            where E : Exception
-        {
-            return Assert.ThrowsAsync<E>(func);
-        }
-
         public void AssertThrows<E>(Action a, Func<E, bool> assert)
             where E : Exception
         {
