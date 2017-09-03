@@ -3,10 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Xunit;
 
 namespace Tests
@@ -41,39 +37,6 @@ namespace Tests
             {
                 Assert.True(false);
             }
-        }
-
-        public void NoNext<T>(IAsyncEnumerator<T> e)
-        {
-            Assert.False(e.MoveNextAsync().Result);
-        }
-
-        public void HasNext<T>(IAsyncEnumerator<T> e, T value)
-        {
-            Assert.True(e.MoveNextAsync().Result);
-            Assert.Equal(value, e.Current);
-        }
-
-        public async Task SequenceIdentity<T>(IAsyncEnumerable<T> enumerable)
-        {
-            var en1 = enumerable.GetAsyncEnumerator();
-            var en2 = enumerable.GetAsyncEnumerator();
-
-            Assert.Equal(en1.GetType(), en2.GetType());
-
-            await en1.DisposeAsync();
-            await en2.DisposeAsync();
-
-            var e1t = enumerable.ToList();
-            var e2t = enumerable.ToList();
-
-            await Task.WhenAll(e1t, e2t);
-
-
-            var e1Result = e1t.Result;
-            var e2Result = e2t.Result;
-
-            e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
 #pragma warning restore xUnit1013 // Public method should be marked as test
     }
