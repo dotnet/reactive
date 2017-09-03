@@ -10,12 +10,22 @@ using Xunit;
 
 namespace Tests
 {
-    public partial class AsyncTests
+    public class CreateEnumerator : AsyncEnumerableTests
     {
         [Fact]
-        public void Create_Null()
+        public void CreateEnumerator_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.CreateEnumerator<int>(null, () => 3, () => Task.FromResult(true)));
+        }
+
+        [Fact]
+        public void CreateEnumerator_Throws()
+        {
+            var iter = AsyncEnumerable.CreateEnumerator<int>(() => Task.FromResult(true), () => 3, () => Task.FromResult(true));
+
+            var enu = (IAsyncEnumerable<int>)iter;
+
+            AssertThrows<NotSupportedException>(() => enu.GetAsyncEnumerator());
         }
     }
 }
