@@ -13,6 +13,8 @@ namespace Tests
 {
     public partial class AsyncTests
     {
+        private const int WaitTimeoutMs = 5000;
+
 #pragma warning disable xUnit1013 // Public method should be marked as test
         public void AssertThrows<E>(Action a)
             where E : Exception
