@@ -21,6 +21,28 @@ namespace Tests
         }
 
         [Fact]
+        public async Task RepeatA()
+        {
+            var xs = AsyncEnumerableEx.Repeat(2);
+
+            var e = xs.GetAsyncEnumerator();
+            HasNext(e, 2);
+            HasNext(e, 2);
+            HasNext(e, 2);
+            HasNext(e, 2);
+            HasNext(e, 2);
+            await e.DisposeAsync();
+        }
+
+        [Fact]
+        public async Task RepeatB()
+        {
+            var xs = AsyncEnumerableEx.Repeat(2).Take(5);
+
+            await SequenceIdentity(xs);
+        }
+
+        [Fact]
         public void Repeat1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat();

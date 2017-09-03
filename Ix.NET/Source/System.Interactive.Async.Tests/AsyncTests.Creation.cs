@@ -98,56 +98,5 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             NoNext(e);
         }
-
-        [Fact]
-        public void Repeat_Null()
-        {
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Repeat(0, -1));
-        }
-
-        [Fact]
-        public void Repeat1()
-        {
-            var xs = AsyncEnumerable.Repeat(2, 5);
-
-            var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            NoNext(e);
-        }
-
-        [Fact]
-        public void Repeat2()
-        {
-            var xs = AsyncEnumerable.Repeat(2, 0);
-
-            var e = xs.GetAsyncEnumerator();
-            NoNext(e);
-        }
-
-        [Fact]
-        public async Task Repeat3()
-        {
-            var xs = AsyncEnumerableEx.Repeat(2);
-
-            var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            HasNext(e, 2);
-            await e.DisposeAsync();
-        }
-
-        [Fact]
-        public async Task Repeat4()
-        {
-            var xs = AsyncEnumerableEx.Repeat(2).Take(5);
-
-            await SequenceIdentity(xs);
-        }
     }
 }
