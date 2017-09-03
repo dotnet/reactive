@@ -9,12 +9,6 @@ namespace Tests
 {
     internal class AssertEx
     {
-        internal static void Throws<T>(Action action)
-            where T : Exception
-        {
-            Throws<T>(action, _ => true);
-        }
-
         internal static void Throws<T>(Action action, Func<T, bool> assert)
             where T : Exception
         {
