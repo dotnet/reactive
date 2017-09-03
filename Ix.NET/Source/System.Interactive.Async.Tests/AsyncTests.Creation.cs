@@ -28,26 +28,5 @@ namespace Tests
 
             AssertThrows<NotSupportedException>(() => enu.GetAsyncEnumerator());
         }
-
-        [Fact]
-        public void Throw_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Throw<int>(null));
-        }
-
-        [Fact]
-        public void Throw()
-        {
-            var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
-
-            var e = xs.GetAsyncEnumerator();
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).InnerExceptions.Single() == ex);
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
-        }
-
-        private void Nop(object o)
-        {
-        }
     }
 }
