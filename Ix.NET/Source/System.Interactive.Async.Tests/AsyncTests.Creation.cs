@@ -30,13 +30,6 @@ namespace Tests
         }
 
         [Fact]
-        public void Return()
-        {
-            var xs = AsyncEnumerable.Return(42);
-            HasNext(xs.GetAsyncEnumerator(), 42);
-        }
-
-        [Fact]
         public void Throw_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Throw<int>(null));
