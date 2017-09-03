@@ -53,8 +53,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="System\Linq\Operators\" />
-  </ItemGroup>
-
 </Project>
