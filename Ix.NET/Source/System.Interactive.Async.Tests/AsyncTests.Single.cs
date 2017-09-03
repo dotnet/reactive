@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -54,25 +53,6 @@ namespace Tests
             var e = ys.GetAsyncEnumerator();
             HasNext(e, 4);
             HasNext(e, 6);
-            NoNext(e);
-        }
-
-        [Fact]
-        public void AsAsyncEnumerable_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.AsAsyncEnumerable<int>((IAsyncEnumerable<int>)null));
-        }
-
-        [Fact]
-        public void AsAsyncEnumerable1()
-        {
-            var xs = AsyncEnumerable.Return(42);
-            var ys = xs.AsAsyncEnumerable();
-
-            Assert.NotSame(xs, ys);
-
-            var e = xs.GetAsyncEnumerator();
-            HasNext(e, 42);
             NoNext(e);
         }
 
