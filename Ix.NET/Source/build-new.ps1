@@ -68,6 +68,33 @@ if ($LastExitCode -ne 0) {
         }  
 }
 
+dotnet pack "$scriptPath\System.Interactive.Providers\System.Interactive.Providers.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
+        }  
+}
+
+dotnet pack "$scriptPath\System.Linq.Async\System.Linq.Async.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
+        }  
+}
+
+dotnet pack "$scriptPath\System.Linq.Async.Queryable\System.Linq.Async.Queryable.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+if ($LastExitCode -ne 0) { 
+        Write-Host "Error with build" -Foreground Red
+        if($isAppVeyor) {
+          $host.SetShouldExit($LastExitCode)
+          exit $LastExitCode
+        }  
+}
+
 dotnet pack "$scriptPath\System.Interactive.Async\System.Interactive.Async.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
@@ -78,15 +105,6 @@ if ($LastExitCode -ne 0) {
 }
 
 dotnet pack "$scriptPath\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-if ($LastExitCode -ne 0) { 
-        Write-Host "Error with build" -Foreground Red
-        if($isAppVeyor) {
-          $host.SetShouldExit($LastExitCode)
-          exit $LastExitCode
-        }  
-}
-
-dotnet pack "$scriptPath\System.Interactive.Providers\System.Interactive.Providers.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
