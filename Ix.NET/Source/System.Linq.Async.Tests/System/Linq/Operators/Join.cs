@@ -168,10 +168,11 @@ namespace Tests
         {
             var customers = new List<Customer>
             {
-                new Customer {CustomerId = "ALFKI"},
-                new Customer {CustomerId = "ANANT"},
-                new Customer {CustomerId = "FISSA"}
+                new Customer { CustomerId = "ALFKI" },
+                new Customer { CustomerId = "ANANT" },
+                new Customer { CustomerId = "FISSA" },
             };
+
             var orders = new List<Order>
             {
                 new Order { OrderId = 1, CustomerId = "ALFKI"},
@@ -242,6 +243,9 @@ namespace Tests
 
         public class CustomerOrder : IEquatable<CustomerOrder>
         {
+            public int OrderId { get; set; }
+            public string CustomerId { get; set; }
+
             public bool Equals(CustomerOrder other)
             {
                 if (ReferenceEquals(null, other)) return false;
@@ -274,9 +278,6 @@ namespace Tests
             {
                 return !Equals(left, right);
             }
-
-            public int OrderId { get; set; }
-            public string CustomerId { get; set; }
         }
     }
 }
