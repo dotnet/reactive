@@ -546,33 +546,6 @@ namespace Tests
             NoNext(e);
         }
 
-
-        [Fact]
-        public void SelectManyMultiple_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.SelectMany<int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
-        }
-
-        [Fact]
-        public void SelectManyMultiple1()
-        {
-            var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = new[] { 3, 4 }.ToAsyncEnumerable();
-
-            var res = xs.SelectMany(ys);
-
-            var e = res.GetAsyncEnumerator();
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            NoNext(e);
-        }
-
-
         public class Customer
         {
             public string CustomerId { get; set; }
