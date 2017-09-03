@@ -65,7 +65,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 dotnet pack "$scriptPath\System.Interactive.Providers\System.Interactive.Providers.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
@@ -74,7 +74,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 dotnet pack "$scriptPath\System.Linq.Async\System.Linq.Async.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
@@ -83,7 +83,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 dotnet pack "$scriptPath\System.Linq.Async.Queryable\System.Linq.Async.Queryable.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
@@ -92,7 +92,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 dotnet pack "$scriptPath\System.Interactive.Async\System.Interactive.Async.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
@@ -101,7 +101,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 dotnet pack "$scriptPath\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" -c $configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
@@ -110,7 +110,7 @@ if ($LastExitCode -ne 0) {
         if($isAppVeyor) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
-        }  
+        }
 }
 
 if($hasSignClientSecret) {
@@ -143,25 +143,25 @@ $testDirectory = Join-Path $scriptPath "System.Interactive.Tests"
 
 # Use xUnit CLI as it's significantly faster than vstest (dotnet test)
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover1"
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover1"
 
 if ($LastExitCode -ne 0) { 
-	Write-Host "Error with tests" -Foreground Red
-	if($isAppVeyor) {
-	  $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
-	}  
+    Write-Host "Error with tests" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+      exit $LastExitCode
+    }
 }
 
 $testDirectory = Join-Path $scriptPath "System.Interactive.Async.Tests"  
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Async;+:module=System.Interactive.Providers;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover2"
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover2"
 
 if ($LastExitCode -ne 0) { 
-	Write-Host "Error with tests" -Foreground Red
-	if($isAppVeyor) {
-	  $host.SetShouldExit($LastExitCode)
-	  exit $LastExitCode
-	}  
+    Write-Host "Error with tests" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+      exit $LastExitCode
+    }
 }
 
 .\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe merge /Source="$outputFileDotCover1;$outputFileDotCover2" /Output="$outputFileDotCover"
