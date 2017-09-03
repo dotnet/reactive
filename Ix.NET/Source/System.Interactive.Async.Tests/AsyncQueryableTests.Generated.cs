@@ -4326,6 +4326,44 @@ namespace Tests
         }
 
         [Fact]
+        public void ToHashSet1()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable());
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToHashSet2()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(default(IAsyncQueryable<int>), EqualityComparer<int>.Default), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IEqualityComparer<int>)), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), EqualityComparer<int>.Default);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToHashSet3()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(default(IAsyncQueryable<int>), CancellationToken.None), ane => ane.ParamName == "source");
+
+            var res = AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
+        public void ToHashSet4()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(default(IAsyncQueryable<int>), EqualityComparer<int>.Default, CancellationToken.None), ane => ane.ParamName == "source");
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), default(IEqualityComparer<int>), CancellationToken.None), ane => ane.ParamName == "comparer");
+
+            var res = AsyncQueryable.ToHashSet<int>(new int[] { default(int) }.ToAsyncEnumerable().AsAsyncQueryable(), EqualityComparer<int>.Default, CancellationToken.None);
+            AssertEx.SucceedOrFailProper(() => res.Wait());
+        }
+
+        [Fact]
         public void ToList1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryable.ToList<int>(default(IAsyncQueryable<int>)), ane => ane.ParamName == "source");
