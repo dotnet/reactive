@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -68,35 +67,6 @@ namespace Tests
 
         private void Nop(object o)
         {
-        }
-
-        [Fact]
-        public void Range_Null()
-        {
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerable.Range(0, -1));
-        }
-
-        [Fact]
-        public void Range1()
-        {
-            var xs = AsyncEnumerable.Range(2, 5);
-
-            var e = xs.GetAsyncEnumerator();
-            HasNext(e, 2);
-            HasNext(e, 3);
-            HasNext(e, 4);
-            HasNext(e, 5);
-            HasNext(e, 6);
-            NoNext(e);
-        }
-
-        [Fact]
-        public void Range2()
-        {
-            var xs = AsyncEnumerable.Range(2, 0);
-
-            var e = xs.GetAsyncEnumerator();
-            NoNext(e);
         }
     }
 }
