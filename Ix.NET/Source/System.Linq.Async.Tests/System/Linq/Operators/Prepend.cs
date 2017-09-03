@@ -51,18 +51,14 @@ namespace Tests
         public async Task Prepend3()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
             var res = xs.Prepend(4);
-            var a = new List<int>
-            {
-                4,
-                1,
-                2,
-                3
-            };
+
+            var a = new List<int> { 4, 1, 2, 3 };
+
             var arr = await res.ToList();
             Assert.Equal(a, arr);
         }
-
 
         [Fact]
         public async Task Prepend4()
@@ -73,12 +69,10 @@ namespace Tests
             Assert.Equal(4, await res.Count());
         }
 
-
         [Fact]
         public async Task Prepend5()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4);
 
@@ -91,37 +85,29 @@ namespace Tests
         [Fact]
         public async Task Prepend6()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
             var res = xs.Prepend(4);
-            var a = new List<int>
-            {
-                4,
-                1,
-                2,
-                3
-            };
+
+            var a = new List<int> { 4, 1, 2, 3 };
+
             var arr = await res.ToList();
             Assert.Equal(a, arr);
         }
 
-
         [Fact]
         public async Task Prepend7()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4);
             Assert.Equal(4, await res.Count());
         }
 
-
         [Fact]
         public async Task Prepend8()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4);
 
@@ -167,19 +153,12 @@ namespace Tests
         public async Task PrependN3()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
 
-            var a = new List<int>
-            {
-                6,
-                5,
-                4,
-                1,
-                2,
-                3
-            };
+            var a = new List<int> { 6, 5, 4, 1, 2, 3 };
 
             var arr = await res.ToList();
             Assert.Equal(a, arr);
@@ -193,14 +172,14 @@ namespace Tests
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
+
             Assert.Equal(6, await res.Count());
         }
 
         [Fact]
         public async Task PrependN5()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4)
                         .Prepend(5)
@@ -215,21 +194,13 @@ namespace Tests
         [Fact]
         public async Task PrependN6()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
 
-            var a = new List<int>
-            {
-                6,
-                5,
-                4,
-                1,
-                2,
-                3
-            };
+            var a = new List<int> { 6, 5, 4, 1, 2, 3 };
 
             var arr = await res.ToList();
             Assert.Equal(a, arr);
@@ -238,12 +209,12 @@ namespace Tests
         [Fact]
         public async Task PrependN7()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4)
                         .Prepend(5)
                         .Prepend(6);
+
             Assert.Equal(6, await res.Count());
         }
     }

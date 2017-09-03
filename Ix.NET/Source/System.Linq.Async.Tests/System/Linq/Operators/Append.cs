@@ -51,14 +51,11 @@ namespace Tests
         public async Task Append3()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
             var res = xs.Append(4);
-            var a = new List<int>
-            {
-                1,
-                2,
-                3,
-                4
-            };
+
+            var a = new List<int> { 1, 2, 3, 4 };
+
             var arr = await res.ToList();
             Assert.Equal(a, arr);
         }
@@ -69,14 +66,14 @@ namespace Tests
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
 
             var res = xs.Append(4);
+
             Assert.Equal(4, await res.Count());
         }
 
         [Fact]
         public async Task Append5()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Append(4);
 
@@ -89,26 +86,22 @@ namespace Tests
         [Fact]
         public async Task Append6()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Append(4);
+
             Assert.Equal(4, await res.Count());
         }
 
         [Fact]
         public async Task Append7()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
             var res = xs.Append(4);
-            var a = new List<int>
-            {
-                1,
-                2,
-                3,
-                4
-            };
+
+            var a = new List<int> { 1, 2, 3, 4 };
+
             var arr = await res.ToList();
             Assert.Equal(a, arr);
         }
@@ -153,30 +146,33 @@ namespace Tests
         public async Task AppendN3()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
             var res = xs.Append(4)
                         .Append(5)
                         .Append(6);
 
-            var a = new List<int>
-            {
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
-            };
+            var a = new List<int> { 1, 2, 3, 4, 5, 6 };
 
             var arr = await res.ToList();
             Assert.Equal(a, arr);
         }
 
+        [Fact]
+        public async Task AppendN4()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+
+            var res = xs.Append(4)
+                        .Append(5)
+                        .Append(6);
+
+            Assert.Equal(6, await res.Count());
+        }
 
         [Fact]
         public async Task AppendN5()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Append(4)
                         .Append(5)
@@ -191,21 +187,13 @@ namespace Tests
         [Fact]
         public async Task AppendN6()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
+
             var res = xs.Append(4)
                         .Append(5)
                         .Append(6);
 
-            var a = new List<int>
-            {
-                1,
-                2,
-                3,
-                4,
-                5,
-                6
-            };
+            var a = new List<int> { 1, 2, 3, 4, 5, 6 };
 
             var arr = await res.ToList();
             Assert.Equal(a, arr);
@@ -214,23 +202,12 @@ namespace Tests
         [Fact]
         public async Task AppendN7()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Append(4)
                         .Append(5)
                         .Append(6);
-            Assert.Equal(6, await res.Count());
-        }
 
-        [Fact]
-        public async Task AppenN4()
-        {
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
-
-            var res = xs.Append(4)
-                        .Append(5)
-                        .Append(6);
             Assert.Equal(6, await res.Count());
         }
     }
