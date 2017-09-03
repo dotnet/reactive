@@ -13,15 +13,7 @@ namespace Tests
     public class Repeat : AsyncEnumerableExTests
     {
         [Fact]
-        public void Repeat_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(AsyncEnumerable.Return(42), -1));
-        }
-
-        [Fact]
-        public async Task RepeatA()
+        public async Task RepeatValue1()
         {
             var xs = AsyncEnumerableEx.Repeat(2);
 
@@ -35,7 +27,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task RepeatB()
+        public async Task RepeatValue2()
         {
             var xs = AsyncEnumerableEx.Repeat(2).Take(5);
 
@@ -43,7 +35,15 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat1()
+        public void RepeatSequence_Null()
+        {
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
+            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(AsyncEnumerable.Return(42), -1));
+        }
+
+        [Fact]
+        public void RepeatSequence1()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat();
 
@@ -60,7 +60,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat2()
+        public void RepeatSequence2()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat(3);
 
@@ -78,7 +78,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat3()
+        public void RepeatSequence3()
         {
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(3);
@@ -96,7 +96,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat0()
+        public void RepeatSequence4()
         {
             var i = 0;
             var xs = RepeatXs(() => i++).ToAsyncEnumerable().Repeat(0);
@@ -107,23 +107,15 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Repeat6()
+        public async Task RepeatSequence5()
         {
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Repeat(3);
 
             await SequenceIdentity(xs);
         }
 
-        static IEnumerable<int> RepeatXs(Action started)
-        {
-            started();
-
-            yield return 1;
-            yield return 2;
-        }
-
         [Fact]
-        public void Repeat4()
+        public void RepeatSequence6()
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat();
 
@@ -132,12 +124,20 @@ namespace Tests
         }
 
         [Fact]
-        public void Repeat5()
+        public void RepeatSequence7()
         {
             var xs = new FailRepeat().ToAsyncEnumerable().Repeat(3);
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is NotImplementedException);
+        }
+
+        private static IEnumerable<int> RepeatXs(Action started)
+        {
+            started();
+
+            yield return 1;
+            yield return 2;
         }
 
         private sealed class FailRepeat : IEnumerable<int>
