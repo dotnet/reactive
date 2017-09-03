@@ -12,7 +12,6 @@ namespace Tests
 {
     public partial class AsyncTests
     {
-
         [Fact]
         public void Create_Null()
         {
