@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +25,6 @@ namespace Tests
                         .Prepend(10);
 
             var e = res.GetAsyncEnumerator();
-            
 
             HasNext(e, 10);
             HasNext(e, 9);
@@ -94,12 +92,10 @@ namespace Tests
             Assert.Equal(10, await res.Count());
         }
 
-
         [Fact]
         public async Task AppendPrepend5()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4)
                         .Append(5)
@@ -118,8 +114,7 @@ namespace Tests
         [Fact]
         public async Task AppendPrepend6()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4)
                         .Append(5)
@@ -138,8 +133,7 @@ namespace Tests
         [Fact]
         public async Task AppendPrepend7()
         {
-            var xs = AsyncEnumerable.Range(1, 3)
-                                    .Where(i => true);
+            var xs = AsyncEnumerable.Range(1, 3).Where(i => true);
 
             var res = xs.Prepend(4)
                         .Append(5)
@@ -161,7 +155,7 @@ namespace Tests
                         .Prepend(5);
 
             var e = res.GetAsyncEnumerator();
-            
+
             HasNext(e, 5);
             HasNext(e, 1);
             HasNext(e, 2);
@@ -180,6 +174,5 @@ namespace Tests
 
             await SequenceIdentity(res);
         }
-
     }
 }
