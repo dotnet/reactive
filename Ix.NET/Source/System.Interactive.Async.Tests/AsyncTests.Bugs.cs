@@ -3,14 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Diagnostics;
+using Xunit;
 
 namespace Tests
 {
@@ -23,61 +21,6 @@ namespace Tests
             };
         }
 
-        /*
-        [Fact]
-        public void TestPushPopAsync()
-        {
-            var stack = new Stack<int>();
-            var count = 10;
-
-            var observable = Observable.Generate(
-              0,
-              i => i < count,
-              i => i + 1,
-              i => i,
-              i => TimeSpan.FromMilliseconds(1), // change this to 0 to avoid the problem [1]
-              Scheduler.ThreadPool);
-
-            var task = DoSomethingAsync(observable, stack);
-
-            // we give it a timeout so the test can fail instead of hang
-            task.Wait(TimeSpan.FromSeconds(2));
-
-            Assert.Equal(10, stack.Count);
-        }
-
-        private Task DoSomethingAsync(IObservable<int> observable, Stack<int> stack)
-        {
-            var ae = observable
-              .ToAsyncEnumerable()
-                //.Do(i => Debug.WriteLine("Bug-fixing side effect: " + i))   // [2]
-              .GetEnumerator();
-
-            var tcs = new TaskCompletionSource<object>();
-
-            var a = default(Action);
-            a = new Action(() =>
-            {
-                ae.MoveNext().ContinueWith(t =>
-                {
-                    if (t.Result)
-                    {
-                        var i = ae.Current;
-                        Debug.WriteLine("Doing something with " + i);
-                        Thread.Sleep(50);
-                        stack.Push(i);
-                        a();
-                    }
-                    else
-                        tcs.TrySetResult(null);
-                });
-            });
-
-            a();
-
-            return tcs.Task;
-        }
-        */
 #if !NO_THREAD
         static IEnumerable<int> Xs(Action a)
         {
@@ -239,16 +182,7 @@ namespace Tests
             });
         }
 
-        public static IAsyncEnumerable<T> WithDispose<T>(this IAsyncEnumerable<T> source, Action a)
-        {
-            return AsyncEnumerable.CreateEnumerable<T>(() =>
-            {
-                var e = source.GetAsyncEnumerator();
-                return AsyncEnumerable.CreateEnumerator<T>(e.MoveNextAsync, () => e.Current, async () => { await e.DisposeAsync(); a(); });
-            });
-        }
-
-        class Enumerator<T> : IEnumerator<T>
+        private sealed class Enumerator<T> : IEnumerator<T>
         {
             private readonly Func<bool> _moveNext;
             private readonly Func<T> _current;
@@ -266,26 +200,16 @@ namespace Tests
                 get { return _current(); }
             }
 
-            public void Dispose()
-            {
-                _dispose();
-            }
+            public void Dispose() => _dispose();
 
-            object IEnumerator.Current
-            {
-                get { return Current; }
-            }
+            object IEnumerator.Current => Current;
 
-            public bool MoveNext()
-            {
-                return _moveNext();
-            }
+            public bool MoveNext() => _moveNext();
 
             public void Reset()
             {
                 throw new NotImplementedException();
             }
         }
-
     }
 }
