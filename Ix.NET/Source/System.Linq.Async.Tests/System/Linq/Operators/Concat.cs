@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void Concat_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(null, AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(AsyncEnumerable.Return(42), null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default(IAsyncEnumerable<int>[])));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Concat<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,8 +15,8 @@ namespace Tests
         [Fact]
         public void Where_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(null, x => true));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(null, (x, i) => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default(IAsyncEnumerable<int>), x => true));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(default(IAsyncEnumerable<int>), (x, i) => true));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(AsyncEnumerable.Return<int>(42), default(Func<int, bool>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Where<int>(AsyncEnumerable.Return<int>(42), default(Func<int, int, bool>)));
         }

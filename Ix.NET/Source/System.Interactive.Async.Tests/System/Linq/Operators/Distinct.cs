@@ -15,14 +15,14 @@ namespace Tests
         [Fact]
         public void Distinct_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(AsyncEnumerable.Return(42), (Func<int, int>)null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(AsyncEnumerable.Return(42), default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), x => x, null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), x => x, default(IEqualityComparer<int>)));
         }
 
         [Fact]

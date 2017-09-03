@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,8 +15,8 @@ namespace Tests
         [Fact]
         public void Zip_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(null, AsyncEnumerable.Return(42), (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), null, (x, y) => x + y));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), (x, y) => x + y));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>), (x, y) => x + y));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Zip<int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int, int>)));
         }
 

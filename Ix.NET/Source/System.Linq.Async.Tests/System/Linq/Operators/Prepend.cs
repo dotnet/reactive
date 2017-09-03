@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void Prepend_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Prepend(null, 42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Prepend(default(IAsyncEnumerable<int>), 42));
         }
 
         [Fact]

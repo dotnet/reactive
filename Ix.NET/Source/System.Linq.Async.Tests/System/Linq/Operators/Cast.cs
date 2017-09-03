@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace Tests
         [Fact]
         public void Cast_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Cast<int>(default(IAsyncEnumerable<object>)));
         }
 
         [Fact]

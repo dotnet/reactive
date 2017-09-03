@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,10 @@ namespace Tests
         [Fact]
         public async Task All_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(null, x => true));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(default(IAsyncEnumerable<int>), x => true));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(null, x => true, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
         }
 

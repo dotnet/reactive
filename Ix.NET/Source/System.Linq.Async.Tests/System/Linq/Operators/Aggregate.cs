@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,23 +16,23 @@ namespace Tests
         [Fact]
         public async Task Aggregate_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(null, (x, y) => x + y));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(default(IAsyncEnumerable<int>), (x, y) => x + y));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(AsyncEnumerable.Return(42), default(Func<int, int, int>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(null, 0, (x, y) => x + y));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(default(IAsyncEnumerable<int>), 0, (x, y) => x + y));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(AsyncEnumerable.Return(42), 0, default(Func<int, int, int>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(null, 0, (x, y) => x + y, z => z));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(default(IAsyncEnumerable<int>), 0, (x, y) => x + y, z => z));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(AsyncEnumerable.Return(42), 0, default(Func<int, int, int>), z => z));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(AsyncEnumerable.Return(42), 0, (x, y) => x + y, default(Func<int, int>)));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(null, (x, y) => x + y, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(default(IAsyncEnumerable<int>), (x, y) => x + y, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int>(AsyncEnumerable.Return(42), default(Func<int, int, int>), CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(null, 0, (x, y) => x + y, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(default(IAsyncEnumerable<int>), 0, (x, y) => x + y, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int>(AsyncEnumerable.Return(42), 0, default(Func<int, int, int>), CancellationToken.None));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(null, 0, (x, y) => x + y, z => z, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(default(IAsyncEnumerable<int>), 0, (x, y) => x + y, z => z, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(AsyncEnumerable.Return(42), 0, default(Func<int, int, int>), z => z, CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Aggregate<int, int, int>(AsyncEnumerable.Return(42), 0, (x, y) => x + y, default(Func<int, int>), CancellationToken.None));
         }

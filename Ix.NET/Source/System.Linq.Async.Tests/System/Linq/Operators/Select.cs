@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,8 +15,8 @@ namespace Tests
         [Fact]
         public void Select_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(null, x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(null, (x, i) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default(IAsyncEnumerable<int>), x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(default(IAsyncEnumerable<int>), (x, i) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(AsyncEnumerable.Return<int>(42), default(Func<int, int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Select<int, int>(AsyncEnumerable.Return<int>(42), default(Func<int, int, int>)));
         }

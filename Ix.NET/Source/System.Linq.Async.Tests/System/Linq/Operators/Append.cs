@@ -15,7 +15,7 @@ namespace Tests
         [Fact]
         public void Append_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Append(null, 42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Append(default(IAsyncEnumerable<int>), 42));
         }
 
         [Fact]

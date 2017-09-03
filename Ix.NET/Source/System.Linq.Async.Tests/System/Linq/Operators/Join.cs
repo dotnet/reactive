@@ -15,17 +15,17 @@ namespace Tests
         [Fact]
         public void Join_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(null, AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), null, x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), null, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, null, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(null, AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), null, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), null, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, null, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, null, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, int, int>), EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Join<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
         }
 

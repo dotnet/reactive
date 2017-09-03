@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,37 +15,37 @@ namespace Tests
         [Fact]
         public void GroupBy_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(null, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(AsyncEnumerable.Return(42), default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(null, x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int>(AsyncEnumerable.Return(42), x => x, default(IEqualityComparer<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(null, x => x, x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), x => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(null, x => x, x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), x => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, int>), EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, x => x, default(IEqualityComparer<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(null, x => x, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(null, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(default(IAsyncEnumerable<int>), x => x, (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int>(AsyncEnumerable.Return(42), x => x, (x, ys) => x, default(IEqualityComparer<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(null, x => x, x => x, (x, ys) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, ys) => x));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(null, x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(default(IAsyncEnumerable<int>), x => x, x => x, (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, ys) => x, EqualityComparer<int>.Default));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupBy<int, int, int, int>(AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,7 +15,7 @@ namespace Tests
         [Fact]
         public void Take_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(null, 5));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Take<int>(default(IAsyncEnumerable<int>), 5));
         }
 
         [Fact]

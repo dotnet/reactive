@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace Tests
         [Fact]
         public void OfType_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.OfType<int>(default(IAsyncEnumerable<object>)));
         }
 
         [Fact]

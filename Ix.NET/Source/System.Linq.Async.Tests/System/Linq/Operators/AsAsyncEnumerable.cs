@@ -14,7 +14,7 @@ namespace Tests
         [Fact]
         public void AsAsyncEnumerable_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.AsAsyncEnumerable<int>((IAsyncEnumerable<int>)null));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.AsAsyncEnumerable(default(IAsyncEnumerable<int>)));
         }
 
         [Fact]

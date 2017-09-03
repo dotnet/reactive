@@ -16,8 +16,8 @@ namespace Tests
         [Fact]
         public async Task ToArray_Null()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToArray<int>(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToArray<int>(null, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToArray<int>(default(IAsyncEnumerable<int>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToArray<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
         }
 
         [Fact]
