@@ -12,14 +12,6 @@ namespace Tests
     public partial class AsyncTests
     {
         [Fact]
-        public void MoveNextExtension_Null()
-        {
-            var en = default(IAsyncEnumerator<int>);
-
-            Assert.ThrowsAsync<ArgumentNullException>(() => en.MoveNextAsync());
-        }
-
-        [Fact]
         public void SelectWhere2()
         {
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
