@@ -5,10 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
-using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 // ReSharper disable InvokeAsExtensionMethod
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantTypeArgumentsOfMethod
@@ -18,13 +17,6 @@ namespace Tests
     public partial class AsyncTests
     {
         private const int WaitTimeoutMs = 5000;
-
-        [Fact]
-        public async Task IsEmpty_Null()
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerableEx.IsEmpty<int>(null, CancellationToken.None));
-        }
 
         [Fact]
         public async Task Min_Null()
