@@ -16,6 +16,25 @@ namespace Tests
         public void Distinct_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct<int, int>(AsyncEnumerable.Return(42), (Func<int, int>)null));
+
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>)));
+
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), x => x, null));
+        }
+
+        [Fact]
+        public void Distinct1()
+        {
+            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Distinct(x => x / 2);
+
+            var e = xs.GetAsyncEnumerator();
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 4);
+            NoNext(e);
         }
 
         [Fact]

@@ -1677,28 +1677,5 @@ namespace Tests
 
             await SequenceIdentity(xs);
         }
-
-        [Fact]
-        public void DistinctKey_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>)));
-
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(default(IAsyncEnumerable<int>), x => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), default(Func<int, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Distinct(AsyncEnumerable.Return(42), x => x, null));
-        }
-
-        [Fact]
-        public void DistinctKey1()
-        {
-            var xs = new[] { 1, 2, 3, 4, 5 }.ToAsyncEnumerable().Distinct(x => x / 2);
-
-            var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 4);
-            NoNext(e);
-        }
     }
 }
