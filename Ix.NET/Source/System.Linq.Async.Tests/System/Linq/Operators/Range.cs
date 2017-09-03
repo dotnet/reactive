@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class Range : AsyncEnumerableExTests
+    public class Range : AsyncEnumerableTests
     {
         [Fact]
         public void Range_Null()
