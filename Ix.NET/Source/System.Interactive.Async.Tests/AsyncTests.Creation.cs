@@ -37,17 +37,6 @@ namespace Tests
         }
 
         [Fact]
-        public async Task Never()
-        {
-            var xs = AsyncEnumerableEx.Never<int>();
-
-            var e = xs.GetAsyncEnumerator();
-            Assert.False(e.MoveNextAsync().IsCompleted); // Very rudimentary check
-            AssertThrows<InvalidOperationException>(() => Nop(e.Current));
-            await e.DisposeAsync();
-        }
-
-        [Fact]
         public void Throw_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Throw<int>(null));
