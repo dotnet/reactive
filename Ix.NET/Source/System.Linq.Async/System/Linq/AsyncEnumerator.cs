@@ -14,6 +14,14 @@ namespace System.Collections.Generic
     /// </summary>
     public static class AsyncEnumerator
     {
+        /// <summary>
+        /// Creates a new enumerator using the specified delegates implementing the members of <see cref="IAsyncEnumerator{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
+        /// <param name="moveNext">The delegate implementing the <see cref="IAsyncEnumerator{T}.MoveNextAsync"/> method.</param>
+        /// <param name="current">The delegate implementing the <see cref="IAsyncEnumerator{T}.Current"/> property getter.</param>
+        /// <param name="dispose">The delegate implementing the <see cref="IAsyncDisposable.DisposeAsync"/> method.</param>
+        /// <returns>A new enumerator instance.</returns>
         public static IAsyncEnumerator<T> Create<T>(Func<Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
         {
             if (moveNext == null)
@@ -24,23 +32,10 @@ namespace System.Collections.Generic
             return new AnonymousAsyncIterator<T>(moveNext, current, dispose);
         }
 
-        internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
-        {
-            return new AnonymousAsyncIterator<T>(
-                async () =>
-                {
-                    var tcs = new TaskCompletionSource<bool>();
-
-                    return await moveNext(tcs).ConfigureAwait(false);
-                },
-                current,
-                dispose
-            );
-        }
-
         /// <summary>
         /// Advances the enumerator to the next element in the sequence, returning the result asynchronously.
         /// </summary>
+        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
         /// <param name="source">The enumerator to advance.</param>
         /// <param name="cancellationToken">Cancellation token that can be used to cancel the operation.</param>
         /// <returns>
@@ -55,6 +50,20 @@ namespace System.Collections.Generic
             cancellationToken.ThrowIfCancellationRequested();
 
             return source.MoveNextAsync();
+        }
+
+        internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
+        {
+            return new AnonymousAsyncIterator<T>(
+                async () =>
+                {
+                    var tcs = new TaskCompletionSource<bool>();
+
+                    return await moveNext(tcs).ConfigureAwait(false);
+                },
+                current,
+                dispose
+            );
         }
 
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
