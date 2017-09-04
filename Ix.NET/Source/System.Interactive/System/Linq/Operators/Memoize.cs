@@ -240,22 +240,6 @@ namespace System.Linq
         }
     }
 
-    internal interface IRefCountList<T>
-    {
-        void Clear();
-
-        int Count { get; }
-
-        T this[int i]
-        {
-            get;
-        }
-
-        void Add(T item);
-
-        void Done(int index);
-    }
-
     internal sealed class MaxRefCountList<T> : IRefCountList<T>
     {
         private IList<T> _list = new List<T>();
