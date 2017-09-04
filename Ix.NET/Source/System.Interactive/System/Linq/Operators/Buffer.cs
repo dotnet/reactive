@@ -69,12 +69,4 @@ namespace System.Linq
                 yield return buffers.Dequeue();
         }
     }
-
-    /// <summary>
-    ///     Represents a buffer exposing a shared view over an underlying enumerable sequence.
-    /// </summary>
-    /// <typeparam name="T">Element type.</typeparam>
-    public interface IBuffer<out T> : IEnumerable<T>, IDisposable
-    {
-    }
 }
