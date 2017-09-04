@@ -44,8 +44,6 @@ namespace System.Linq
                 {
                     var tcs = new TaskCompletionSource<bool>();
 
-                    var stop = new Action(() => tcs.TrySetCanceled());
-
                     return await moveNext(tcs).ConfigureAwait(false);
                 },
                 current,
