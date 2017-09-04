@@ -27,14 +27,17 @@ namespace System.Linq
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
+#if NO_TASK_FROMEXCEPTION
+            var tcs = new TaskCompletionSource<bool>();
+            tcs.TrySetException(exception);
+            var moveNextThrows = tcs.Task;
+#else
+            var moveNextThrows = Task.FromException<bool>(exception);
+#endif
+
             return CreateEnumerable(
                 () => CreateEnumerator<TValue>(
-                    ct =>
-                    {
-                        var tcs = new TaskCompletionSource<bool>();
-                        tcs.TrySetException(exception);
-                        return tcs.Task;
-                    },
+                    () => moveNextThrows,
                     current: null,
                     dispose: null)
             );
