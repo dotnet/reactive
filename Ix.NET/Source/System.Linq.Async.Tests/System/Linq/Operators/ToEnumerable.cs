@@ -19,7 +19,7 @@ namespace Tests
         [Fact]
         public void ToEnumerable1()
         {
-            var xs = AsyncEnumerable.Range(42, 1).ToEnumerable();
+            var xs = Return42.ToEnumerable();
             Assert.True(xs.SequenceEqual(new[] { 42 }));
         }
 
