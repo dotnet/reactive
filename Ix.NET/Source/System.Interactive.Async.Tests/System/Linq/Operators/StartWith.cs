@@ -32,12 +32,12 @@ namespace Tests
         [Fact]
         public void StartWith2()
         {
-            var xs = AsyncEnumerable.Return<int>(0).StartWith(1, 2);
+            var xs = Return42.StartWith(40, 41);
 
             var e = xs.GetAsyncEnumerator();
-            HasNext(e, 1);
-            HasNext(e, 2);
-            HasNext(e, 0);
+            HasNext(e, 40);
+            HasNext(e, 41);
+            HasNext(e, 42);
             NoNext(e);
         }
 
@@ -50,7 +50,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);
             HasNext(e, 2);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
         }
     }
 }

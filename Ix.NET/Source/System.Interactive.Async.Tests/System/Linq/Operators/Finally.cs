@@ -64,7 +64,7 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
 
             Assert.False(b);
-            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
+            AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), SingleInnerExceptionMatches(ex));
 
             Assert.True(b);
         }
