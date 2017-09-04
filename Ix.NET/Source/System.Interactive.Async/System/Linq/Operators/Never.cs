@@ -18,9 +18,7 @@ namespace System.Linq
             //         seem correct either, given that we return a *cold* sequence.
             //
 
-            var tcs = new TaskCompletionSource<bool>();
-
-            return AsyncEnumerable.CreateEnumerable(() => AsyncEnumerable.CreateEnumerator<TValue>(() => tcs.Task, current: null, dispose: null));
+            return AsyncEnumerable.CreateEnumerable(() => AsyncEnumerable.CreateEnumerator<TValue>(() => TaskExt.Never, current: null, dispose: null));
         }
     }
 }
