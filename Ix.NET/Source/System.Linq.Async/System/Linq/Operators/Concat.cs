@@ -110,7 +110,7 @@ namespace System.Linq
                                     }
 
                                     currentEnumerator = outerEnumerator.Current.GetAsyncEnumerator();
-                                   
+
                                     mode = State_While;
                                     goto case State_While;
                                 }
@@ -125,7 +125,6 @@ namespace System.Linq
 
                                 // No more on the inner enumerator, move to the next outer
                                 goto case State_OuterNext;
-                   
                         }
 
                         await DisposeAsync().ConfigureAwait(false);
@@ -187,7 +186,7 @@ namespace System.Linq
             public async Task<List<TSource>> ToListAsync(CancellationToken cancellationToken)
             {
                 var list = new List<TSource>();
-                for (var i = 0;; i++)
+                for (var i = 0; ; i++)
                 {
                     var source = GetAsyncEnumerable(i);
                     if (source == null)
@@ -221,7 +220,7 @@ namespace System.Linq
                 }
 
                 var count = 0;
-                for (var i = 0;; i++)
+                for (var i = 0; ; i++)
                 {
                     var source = GetAsyncEnumerable(i);
                     if (source == null)
