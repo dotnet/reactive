@@ -69,8 +69,8 @@ namespace System.Collections.Generic
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
         {
             private readonly Func<T> currentFunc;
-            private readonly Func<Task> dispose;
             private readonly Func<Task<bool>> moveNext;
+            private Func<Task> dispose;
 
             public AnonymousAsyncIterator(Func<Task<bool>> moveNext, Func<T> currentFunc, Func<Task> dispose)
             {
@@ -91,6 +91,8 @@ namespace System.Collections.Generic
 
             public override async Task DisposeAsync()
             {
+                var dispose = Interlocked.Exchange(ref this.dispose, null);
+
                 if (dispose != null)
                 {
                     await dispose().ConfigureAwait(false);
