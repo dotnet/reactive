@@ -13,7 +13,7 @@ namespace Tests
 {
     public class AsyncEnumerableExTests
     {
-        protected static readonly IAsyncEnumerable<int> Return42 = AsyncEnumerable.Return(42);
+        protected static readonly IAsyncEnumerable<int> Return42 = AsyncEnumerableEx.Return(42);
         protected static IAsyncEnumerable<T> Throw<T>(Exception exception) => AsyncEnumerable.Throw<T>(exception);
         protected static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 

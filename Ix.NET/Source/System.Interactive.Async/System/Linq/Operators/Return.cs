@@ -2,18 +2,15 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Linq;
-using Xunit;
+using System.Collections.Generic;
 
-namespace Tests
+namespace System.Linq
 {
-    public class Return : AsyncEnumerableTests
+    public static partial class AsyncEnumerableEx
     {
-        [Fact]
-        public void Return1()
+        public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
         {
-            var xs = Return42;
-            HasNext(xs.GetAsyncEnumerator(), 42);
+            return new[] { value }.ToAsyncEnumerable();
         }
     }
 }

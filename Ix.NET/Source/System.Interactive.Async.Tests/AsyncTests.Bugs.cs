@@ -79,9 +79,12 @@ namespace Tests
         [Fact]
         public async Task TakeOneFromSelectMany()
         {
-            var enumerable = AsyncEnumerable
-                .Return(0)
-                .SelectMany(_ => AsyncEnumerable.Return("Check"))
+            var ret0 = new[] { 0 }.ToAsyncEnumerable();
+            var retCheck = new[] { "Check" }.ToAsyncEnumerable();
+
+            var enumerable =
+                ret0
+                .SelectMany(_ => retCheck)
                 .Take(1)
                 .Do(_ => { });
 
@@ -93,7 +96,7 @@ namespace Tests
         {
             var disposeCounter = new DisposeCounter();
 
-            var result = AsyncEnumerable.Return(1).SelectMany(i => disposeCounter).Select(i => i).ToList().Result;
+            var result = new[] { 1 }.ToAsyncEnumerable().SelectMany(i => disposeCounter).Select(i => i).ToList().Result;
 
             Assert.Equal(0, result.Count);
             Assert.Equal(1, disposeCounter.DisposeCount);
@@ -113,7 +116,7 @@ namespace Tests
         [Fact]
         public void DisposeAfterCreation()
         {
-            var enumerable = AsyncEnumerable.Return(0) as IDisposable;
+            var enumerable = new[] { 1 }.ToAsyncEnumerable() as IDisposable;
             enumerable?.Dispose();
         }
 

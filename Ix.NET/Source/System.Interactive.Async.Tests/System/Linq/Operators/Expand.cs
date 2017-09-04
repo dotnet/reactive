@@ -22,7 +22,7 @@ namespace Tests
         [Fact]
         public void Expand1()
         {
-            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerable.Return(x - 1).Repeat(x - 1));
+            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerableEx.Return(x - 1).Repeat(x - 1));
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 2);
@@ -59,7 +59,7 @@ namespace Tests
         [Fact]
         public async Task Expand4()
         {
-            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerable.Return(x - 1).Repeat(x - 1));
+            var xs = new[] { 2, 3 }.ToAsyncEnumerable().Expand(x => AsyncEnumerableEx.Return(x - 1).Repeat(x - 1));
 
             await SequenceIdentity(xs);
         }

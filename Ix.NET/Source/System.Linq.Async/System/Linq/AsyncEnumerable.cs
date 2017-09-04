@@ -17,11 +17,6 @@ namespace System.Linq
             return source.Select(x => x);
         }
 
-        public static IAsyncEnumerable<TValue> Return<TValue>(TValue value)
-        {
-            return new[] { value }.ToAsyncEnumerable();
-        }
-
         public static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
             if (exception == null)
