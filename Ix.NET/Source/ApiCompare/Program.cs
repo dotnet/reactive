@@ -35,6 +35,10 @@ namespace ApiCompare
             "AsAsyncEnumerable",  // Trivially renamed
 
             "ForEachAsync",  // "foreach await" language substitute for the time being
+
+            "ToAsyncEnumerable",  // First-class conversions
+            "ToEnumerable",       // First-class conversions
+            "ToObservable",       // First-class conversions
         };
 
         private static readonly TypeSubstitutor subst = new TypeSubstitutor(new Dictionary<Type, Type>
@@ -54,7 +58,7 @@ namespace ApiCompare
 
         static void Compare(Type syncOperatorsType, Type asyncOperatorsType)
         {
-            var syncOperators = GetQueryOperators(new[] { syncInterfaceType, syncOrderedInterfaceType}, syncOperatorsType, exceptions);
+            var syncOperators = GetQueryOperators(new[] { syncInterfaceType, syncOrderedInterfaceType }, syncOperatorsType, exceptions);
             var asyncOperators = GetQueryOperators(new[] { asyncInterfaceType, asyncOrderedInterfaceType }, asyncOperatorsType, exceptions);
 
             CompareFactories(syncOperators.Factories, asyncOperators.Factories);
