@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -10,7 +11,16 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Never<TValue>()
         {
-            return AsyncEnumerable.CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
+            //
+            // REVIEW: The C# 8.0 proposed interfaces don't allow for cancellation, so this "Never" is
+            //         as never as never can be; it can't be interrupted *at all*, similar to the sync
+            //         variant in Ix. Passing a *hot* CancellationToken to the Never operator doesn't
+            //         seem correct either, given that we return a *cold* sequence.
+            //
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            return AsyncEnumerable.CreateEnumerable(() => AsyncEnumerable.CreateEnumerator<TValue>(() => tcs.Task, current: null, dispose: null));
         }
     }
 }
