@@ -16,10 +16,10 @@ namespace Tests
         public void Scan_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(default(IAsyncEnumerable<int>), 3, (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(AsyncEnumerable.Return(42), 3, default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(Return42, 3, default(Func<int, int, int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(default(IAsyncEnumerable<int>), (x, y) => x + y));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(AsyncEnumerable.Return(42), default(Func<int, int, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Scan(Return42, default(Func<int, int, int>)));
         }
 
         [Fact]

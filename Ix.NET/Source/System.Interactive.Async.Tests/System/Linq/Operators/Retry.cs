@@ -17,7 +17,7 @@ namespace Tests
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Retry<int>(default(IAsyncEnumerable<int>)));
 
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Retry<int>(default(IAsyncEnumerable<int>), 1));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Retry<int>(AsyncEnumerable.Return(42), -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Retry<int>(Return42, -1));
         }
 
         [Fact]

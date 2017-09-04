@@ -42,7 +42,7 @@ namespace Tests
         [Fact]
         public void DefaultIfEmpty3()
         {
-            var xs = AsyncEnumerable.Return<int>(42).DefaultIfEmpty();
+            var xs = Return42.DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);
@@ -52,7 +52,7 @@ namespace Tests
         [Fact]
         public void DefaultIfEmpty4()
         {
-            var xs = AsyncEnumerable.Return<int>(42).DefaultIfEmpty(24);
+            var xs = Return42.DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 42);

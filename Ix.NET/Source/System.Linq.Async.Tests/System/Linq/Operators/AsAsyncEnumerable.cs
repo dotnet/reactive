@@ -20,7 +20,7 @@ namespace Tests
         [Fact]
         public void AsAsyncEnumerable1()
         {
-            var xs = AsyncEnumerable.Return(42);
+            var xs = Return42;
             var ys = xs.AsAsyncEnumerable();
 
             Assert.NotSame(xs, ys);

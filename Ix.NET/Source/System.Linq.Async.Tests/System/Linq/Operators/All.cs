@@ -17,10 +17,10 @@ namespace Tests
         public async Task All_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.All<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]

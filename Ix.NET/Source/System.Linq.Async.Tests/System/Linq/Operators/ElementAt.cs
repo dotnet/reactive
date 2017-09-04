@@ -17,10 +17,10 @@ namespace Tests
         public async Task ElementAt_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default(IAsyncEnumerable<int>), 0));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(AsyncEnumerable.Return(42), -1));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(Return42, -1));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAt<int>(default(IAsyncEnumerable<int>), 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(AsyncEnumerable.Return(42), -1, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAt<int>(Return42, -1, CancellationToken.None));
         }
 
         [Fact]
@@ -33,14 +33,14 @@ namespace Tests
         [Fact]
         public void ElementAt2()
         {
-            var res = AsyncEnumerable.Return<int>(42).ElementAt(0);
+            var res = Return42.ElementAt(0);
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void ElementAt3()
         {
-            var res = AsyncEnumerable.Return<int>(42).ElementAt(1);
+            var res = Return42.ElementAt(1);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is ArgumentOutOfRangeException);
         }
 

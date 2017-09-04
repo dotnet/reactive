@@ -17,10 +17,10 @@ namespace Tests
         public async Task ElementAtOrDefault_Null()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default(IAsyncEnumerable<int>), 0));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(AsyncEnumerable.Return(42), -1));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ElementAtOrDefault<int>(default(IAsyncEnumerable<int>), 0, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(AsyncEnumerable.Return(42), -1, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => AsyncEnumerable.ElementAtOrDefault<int>(Return42, -1, CancellationToken.None));
         }
 
         [Fact]
@@ -33,14 +33,14 @@ namespace Tests
         [Fact]
         public void ElementAtOrDefault2()
         {
-            var res = AsyncEnumerable.Return<int>(42).ElementAtOrDefault(0);
+            var res = Return42.ElementAtOrDefault(0);
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void ElementAtOrDefault3()
         {
-            var res = AsyncEnumerable.Return<int>(42).ElementAtOrDefault(1);
+            var res = Return42.ElementAtOrDefault(1);
             Assert.Equal(0, res.Result);
         }
 

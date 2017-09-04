@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Single<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -42,21 +42,21 @@ namespace Tests
         [Fact]
         public void Single3()
         {
-            var res = AsyncEnumerable.Return(42).Single(x => x % 2 != 0);
+            var res = Return42.Single(x => x % 2 != 0);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
         }
 
         [Fact]
         public void Single4()
         {
-            var res = AsyncEnumerable.Return(42).Single();
+            var res = Return42.Single();
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void Single5()
         {
-            var res = AsyncEnumerable.Return(42).Single(x => x % 2 == 0);
+            var res = Return42.Single(x => x % 2 == 0);
             Assert.Equal(42, res.Result);
         }
 

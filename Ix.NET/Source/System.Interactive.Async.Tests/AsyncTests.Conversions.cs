@@ -22,7 +22,7 @@ namespace Tests
         [Fact]
         public void ToEnumerable1()
         {
-            var xs = AsyncEnumerable.Return(42).ToEnumerable();
+            var xs = AsyncEnumerable.Range(42, 1).ToEnumerable();
             Assert.True(xs.SequenceEqual(new[] { 42 }));
         }
 
@@ -81,7 +81,7 @@ namespace Tests
             var fail = false;
             var evt = new ManualResetEvent(false);
 
-            var xs = AsyncEnumerable.Return(42).ToObservable();
+            var xs = AsyncEnumerable.Range(42, 1).ToObservable();
             xs.Subscribe(new MyObserver<int>(
                 x =>
                 {

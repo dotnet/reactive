@@ -15,8 +15,8 @@ namespace Tests
         [Fact]
         public void OnErrorResumeNext_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>), Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(Return42, default(IAsyncEnumerable<int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IAsyncEnumerable<int>[])));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.OnErrorResumeNext<int>(default(IEnumerable<IAsyncEnumerable<int>>)));
         }

@@ -15,12 +15,12 @@ namespace Tests
         [Fact]
         public void Except_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42)));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default(IAsyncEnumerable<int>), Return42));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, default(IAsyncEnumerable<int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(AsyncEnumerable.Return(42), null, new Eq()));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(default(IAsyncEnumerable<int>), Return42, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, null, new Eq()));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.Except<int>(Return42, Return42, default(IEqualityComparer<int>)));
         }
 
         [Fact]

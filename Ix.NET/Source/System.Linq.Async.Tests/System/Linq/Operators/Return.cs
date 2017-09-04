@@ -12,7 +12,7 @@ namespace Tests
         [Fact]
         public void Return1()
         {
-            var xs = AsyncEnumerable.Return(42);
+            var xs = Return42;
             HasNext(xs.GetAsyncEnumerator(), 42);
         }
     }

@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Any<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]

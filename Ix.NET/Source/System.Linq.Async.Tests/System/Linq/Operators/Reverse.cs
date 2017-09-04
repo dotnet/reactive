@@ -31,7 +31,7 @@ namespace Tests
         [Fact]
         public void Reverse2()
         {
-            var xs = AsyncEnumerable.Return(42);
+            var xs = Return42;
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();

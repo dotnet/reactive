@@ -32,7 +32,7 @@ namespace Tests
         [Fact]
         public void IgnoreElements2()
         {
-            var xs = AsyncEnumerable.Return(42).IgnoreElements();
+            var xs = Return42.IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
             NoNext(e);

@@ -20,7 +20,7 @@ namespace Tests
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(default(IAsyncEnumerable<int>), EqualityComparer<int>.Default, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(AsyncEnumerable.Return(42), default(IEqualityComparer<int>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.ToHashSet<int>(Return42, default(IEqualityComparer<int>), CancellationToken.None));
         }
 
         [Fact]

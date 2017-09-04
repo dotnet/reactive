@@ -16,7 +16,7 @@ namespace Tests
         public void Finally_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Finally(default(IAsyncEnumerable<int>), () => { }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Finally(AsyncEnumerable.Return(42), default(Action)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Finally(Return42, default(Action)));
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Tests
         {
             var b = false;
 
-            var xs = AsyncEnumerable.Return(42).Finally(() => { b = true; });
+            var xs = Return42.Finally(() => { b = true; });
 
             var e = xs.GetAsyncEnumerator();
 

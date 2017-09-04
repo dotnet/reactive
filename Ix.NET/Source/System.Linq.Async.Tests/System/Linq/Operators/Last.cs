@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.Last<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -42,21 +42,21 @@ namespace Tests
         [Fact]
         public void Last3()
         {
-            var res = AsyncEnumerable.Return(42).Last(x => x % 2 != 0);
+            var res = Return42.Last(x => x % 2 != 0);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() is InvalidOperationException);
         }
 
         [Fact]
         public void Last4()
         {
-            var res = AsyncEnumerable.Return(42).Last();
+            var res = Return42.Last();
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void Last5()
         {
-            var res = AsyncEnumerable.Return(42).Last(x => x % 2 == 0);
+            var res = Return42.Last(x => x % 2 == 0);
             Assert.Equal(42, res.Result);
         }
 

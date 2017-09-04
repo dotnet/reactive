@@ -13,6 +13,8 @@ namespace Tests
 {
     public class AsyncEnumerableTests
     {
+        protected static readonly IAsyncEnumerable<int> Return42 = AsyncEnumerable.Return(42);
+
         protected const int WaitTimeoutMs = 5000;
 
 #pragma warning disable xUnit1013 // Public method should be marked as test

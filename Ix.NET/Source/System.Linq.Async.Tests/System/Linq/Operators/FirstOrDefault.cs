@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.FirstOrDefault<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -42,21 +42,21 @@ namespace Tests
         [Fact]
         public void FirstOrDefault3()
         {
-            var res = AsyncEnumerable.Return(42).FirstOrDefault(x => x % 2 != 0);
+            var res = Return42.FirstOrDefault(x => x % 2 != 0);
             Assert.Equal(0, res.Result);
         }
 
         [Fact]
         public void FirstOrDefault4()
         {
-            var res = AsyncEnumerable.Return(42).FirstOrDefault();
+            var res = Return42.FirstOrDefault();
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void FirstOrDefault5()
         {
-            var res = AsyncEnumerable.Return(42).FirstOrDefault(x => x % 2 == 0);
+            var res = Return42.FirstOrDefault(x => x % 2 == 0);
             Assert.Equal(42, res.Result);
         }
 

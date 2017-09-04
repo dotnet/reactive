@@ -14,18 +14,18 @@ namespace Tests
         [Fact]
         public void GroupJoin_Null()
         {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, y) => x));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default(IAsyncEnumerable<int>), Return42, x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, default(Func<int, int>), x => x, (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, default(Func<int, int>), (x, y) => x));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>)));
 
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default(IAsyncEnumerable<int>), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), default(Func<int, int>), x => x, (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, default(Func<int, int>), (x, y) => x, EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(AsyncEnumerable.Return(42), AsyncEnumerable.Return(42), x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(default(IAsyncEnumerable<int>), Return42, x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, default(IAsyncEnumerable<int>), x => x, x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, default(Func<int, int>), x => x, (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, default(Func<int, int>), (x, y) => x, EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, default(Func<int, IAsyncEnumerable<int>, int>), EqualityComparer<int>.Default));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.GroupJoin<int, int, int, int>(Return42, Return42, x => x, x => x, (x, y) => x, default(IEqualityComparer<int>)));
         }
 
         [Fact]

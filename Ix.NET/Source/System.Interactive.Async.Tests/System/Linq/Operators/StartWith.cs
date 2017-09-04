@@ -15,7 +15,7 @@ namespace Tests
         public void StartWith_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(default(IAsyncEnumerable<int>), new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(AsyncEnumerable.Return(42), default(int[])));
+            AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.StartWith(Return42, default(int[])));
         }
 
         [Fact]

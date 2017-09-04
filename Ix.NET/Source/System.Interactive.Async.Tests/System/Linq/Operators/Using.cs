@@ -31,7 +31,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { d++; });
                 },
-                _ => AsyncEnumerable.Return(42)
+                _ => Return42
             );
 
             Assert.Equal(0, i);
@@ -52,7 +52,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { d++; });
                 },
-                _ => AsyncEnumerable.Return(42)
+                _ => Return42
             );
 
             Assert.Equal(0, i);
@@ -99,7 +99,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { disposed.TrySetResult(true); });
                 },
-                _ => AsyncEnumerable.Return(42)
+                _ => Return42
             );
 
             Assert.Equal(0, i);
@@ -151,7 +151,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { d++; });
                 },
-                _ => AsyncEnumerable.Return(42)
+                _ => Return42
             );
 
             await SequenceIdentity(xs);

@@ -39,7 +39,7 @@ namespace Tests
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>)));
             AssertThrows<ArgumentNullException>(() => AsyncEnumerableEx.Repeat(default(IAsyncEnumerable<int>), 3));
-            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(AsyncEnumerable.Return(42), -1));
+            AssertThrows<ArgumentOutOfRangeException>(() => AsyncEnumerableEx.Repeat(Return42, -1));
         }
 
         [Fact]

@@ -18,11 +18,11 @@ namespace Tests
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(default(IAsyncEnumerable<int>)));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(default(IAsyncEnumerable<int>), x => true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(AsyncEnumerable.Return(42), default(Func<int, bool>)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(Return42, default(Func<int, bool>)));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(default(IAsyncEnumerable<int>), CancellationToken.None));
             await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(default(IAsyncEnumerable<int>), x => true, CancellationToken.None));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(AsyncEnumerable.Return(42), default(Func<int, bool>), CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => AsyncEnumerable.LastOrDefault<int>(Return42, default(Func<int, bool>), CancellationToken.None));
         }
 
         [Fact]
@@ -42,21 +42,21 @@ namespace Tests
         [Fact]
         public void LastOrDefault3()
         {
-            var res = AsyncEnumerable.Return(42).LastOrDefault(x => x % 2 != 0);
+            var res = Return42.LastOrDefault(x => x % 2 != 0);
             Assert.Equal(0, res.Result);
         }
 
         [Fact]
         public void LastOrDefault4()
         {
-            var res = AsyncEnumerable.Return(42).LastOrDefault();
+            var res = Return42.LastOrDefault();
             Assert.Equal(42, res.Result);
         }
 
         [Fact]
         public void LastOrDefault5()
         {
-            var res = AsyncEnumerable.Return(42).LastOrDefault(x => x % 2 == 0);
+            var res = Return42.LastOrDefault(x => x % 2 == 0);
             Assert.Equal(42, res.Result);
         }
 
