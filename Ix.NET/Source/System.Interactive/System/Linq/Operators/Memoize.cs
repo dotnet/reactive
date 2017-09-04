@@ -242,31 +242,17 @@ namespace System.Linq
 
     internal sealed class MaxRefCountList<T> : IRefCountList<T>
     {
-        private IList<T> _list = new List<T>();
+        private readonly IList<T> _list = new List<T>();
 
-        public void Clear()
-        {
-            _list.Clear();
-        }
+        public void Clear() => _list.Clear();
 
-        public int Count
-        {
-            get { return _list.Count; }
-        }
+        public int Count => _list.Count;
 
-        public T this[int i]
-        {
-            get { return _list[i]; }
-        }
+        public T this[int i] => _list[i];
 
-        public void Add(T item)
-        {
-            _list.Add(item);
-        }
+        public void Add(T item) => _list.Add(item);
 
-        public void Done(int index)
-        {
-        }
+        public void Done(int index) { }
     }
 
     internal sealed class RefCountList<T> : IRefCountList<T>
@@ -283,26 +269,13 @@ namespace System.Linq
 
         public int ReaderCount
         {
-            get
-            {
-                return _readerCount;
-            }
-
-            set
-            {
-                _readerCount = value;
-            }
+            get => _readerCount;
+            set => _readerCount = value;
         }
 
-        public void Clear()
-        {
-            _list.Clear();
-        }
+        public void Clear() => _list.Clear();
 
-        public int Count
-        {
-            get { return _count; }
-        }
+        public int Count => _count;
 
         public T this[int i]
         {
@@ -314,8 +287,11 @@ namespace System.Linq
                     throw new InvalidOperationException("Element no longer available in the buffer.");
 
                 var val = res.Value;
+
                 if (--res.Count == 0)
+                {
                     _list.Remove(i);
+                }
 
                 return val;
             }
@@ -324,12 +300,13 @@ namespace System.Linq
         public void Add(T item)
         {
             _list[_count] = new RefCount { Value = item, Count = _readerCount };
+
             _count++;
         }
 
         public void Done(int index)
         {
-            for (int i = index; i < _count; i++)
+            for (var i = index; i < _count; i++)
             {
                 var ignore = this[i];
             }
