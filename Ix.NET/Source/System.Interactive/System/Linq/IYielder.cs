@@ -2,24 +2,22 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Security;
-
 namespace System.Linq
 {
     /// <summary>
-    ///     Interface for yielding elements to enumerator.
+    /// Interface for yielding elements to enumerator.
     /// </summary>
     /// <typeparam name="T">Type of the elements yielded to an enumerator.</typeparam>
     public interface IYielder<in T>
     {
         /// <summary>
-        ///     Stops the enumeration.
+        /// Stops the enumeration.
         /// </summary>
         /// <returns>Awaitable object for use in an asynchronous method.</returns>
         IAwaitable Break();
 
         /// <summary>
-        ///     Yields a value to the enumerator.
+        /// Yields a value to the enumerator.
         /// </summary>
         /// <param name="value">Value to yield return.</param>
         /// <returns>Awaitable object for use in an asynchronous method.</returns>

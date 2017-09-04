@@ -4,8 +4,15 @@
 
 namespace System.Linq
 {
+    /// <summary>
+    /// Interface for objects that can be awaited for the completion of an asynchronous operation.
+    /// </summary>
     public interface IAwaitable
     {
+        /// <summary>
+        /// Gets an awaiter object.
+        /// </summary>
+        /// <returns>Awaiter object.</returns>
         IAwaiter GetAwaiter();
     }
 }
