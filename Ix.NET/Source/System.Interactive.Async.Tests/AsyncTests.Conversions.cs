@@ -14,34 +14,6 @@ namespace Tests
     public partial class AsyncTests
     {
         [Fact]
-        public void ToEnumerable_Null()
-        {
-            AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToEnumerable<int>(null));
-        }
-
-        [Fact]
-        public void ToEnumerable1()
-        {
-            var xs = AsyncEnumerable.Range(42, 1).ToEnumerable();
-            Assert.True(xs.SequenceEqual(new[] { 42 }));
-        }
-
-        [Fact]
-        public void ToEnumerable2()
-        {
-            var xs = AsyncEnumerable.Empty<int>().ToEnumerable();
-            Assert.True(xs.SequenceEqual(new int[0]));
-        }
-
-        [Fact]
-        public void ToEnumerable3()
-        {
-            var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex).ToEnumerable();
-            AssertThrows<Exception>(() => xs.GetEnumerator().MoveNext(), ex_ => ((AggregateException)ex_).InnerExceptions.Single() == ex);
-        }
-
-        [Fact]
         public void ToObservable_Null()
         {
             AssertThrows<ArgumentNullException>(() => AsyncEnumerable.ToObservable<int>(null));
