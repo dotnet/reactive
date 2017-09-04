@@ -52,6 +52,44 @@ namespace System.Collections.Generic
             return source.MoveNextAsync();
         }
 
+        /// <summary>
+        /// Wraps the specified enumerator with an enumerator that checks for cancellation upon every invocation
+        /// of the <see cref="IAsyncEnumerator{T}.MoveNextAsync"/> method.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
+        /// <param name="source">The enumerator to augment with cancellation support.</param>
+        /// <param name="cancellationToken">The cancellation token to observe.</param>
+        /// <returns>An enumerator that honors cancellation requests.</returns>
+        public static IAsyncEnumerator<T> WithCancellation<T>(this IAsyncEnumerator<T> source, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return new AnonymousAsyncIterator<T>(
+                moveNext: () =>
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return source.MoveNextAsync();
+                },
+                currentFunc: () => source.Current,
+                dispose: source.DisposeAsync
+            );
+        }
+
+        /// <summary>
+        /// Wraps the specified enumerator in an enumerable.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements returned by the enumerator.</typeparam>
+        /// <param name="source">The enumerator to wrap.</param>
+        /// <returns>An enumerable wrapping the specified enumerator.</returns>
+        public static IAsyncEnumerable<T> AsEnumerable<T>(this IAsyncEnumerator<T> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return AsyncEnumerable.CreateEnumerable<T>(() => source);
+        }
+
         internal static IAsyncEnumerator<T> Create<T>(Func<TaskCompletionSource<bool>, Task<bool>> moveNext, Func<T> current, Func<Task> dispose)
         {
             return new AnonymousAsyncIterator<T>(
