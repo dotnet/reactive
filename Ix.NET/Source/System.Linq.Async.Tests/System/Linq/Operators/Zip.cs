@@ -67,7 +67,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = AsyncEnumerable.Throw<int>(ex);
+            var ys = Throw<int>(ex);
             var res = xs.Zip(ys, (x, y) => x * y);
 
             var e = res.GetAsyncEnumerator();
@@ -78,7 +78,7 @@ namespace Tests
         public void Zip5()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.Zip(ys, (x, y) => x * y);
 

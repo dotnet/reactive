@@ -30,7 +30,7 @@ namespace Tests
         {
             Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount().Result);
             Assert.Equal(3, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount().Result);
-            AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount().Wait(WaitTimeoutMs));
+            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).LongCount().Wait(WaitTimeoutMs));
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace Tests
         {
             Assert.Equal(0, new int[0].ToAsyncEnumerable().LongCount(x => x < 3).Result);
             Assert.Equal(2, new[] { 1, 2, 3 }.ToAsyncEnumerable().LongCount(x => x < 3).Result);
-            AssertThrows<AggregateException>(() => AsyncEnumerable.Throw<int>(new Exception("Bang!")).LongCount(x => x < 3).Wait(WaitTimeoutMs));
+            AssertThrows<AggregateException>(() => Throw<int>(new Exception("Bang!")).LongCount(x => x < 3).Wait(WaitTimeoutMs));
         }
 
         [Fact]

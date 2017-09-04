@@ -48,7 +48,7 @@ namespace Tests
             var ex = new InvalidOperationException("Bang!");
 
             var err = false;
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
@@ -75,7 +75,7 @@ namespace Tests
             var ex = new InvalidOperationException("Bang!");
 
             var err = false;
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = xs.Catch<int, Exception>(ex_ => { err = true; return ys; });
@@ -102,7 +102,7 @@ namespace Tests
             var ex = new DivideByZeroException();
 
             var err = false;
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return ys; });
@@ -123,7 +123,7 @@ namespace Tests
             var ex = new InvalidOperationException("Bang!");
             var ex2 = new Exception("Oops!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { if (ex_.Message == "Bang!") throw ex2; return ys; });
@@ -142,7 +142,7 @@ namespace Tests
             var ex = new InvalidOperationException("Bang!");
 
             var err = false;
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
 
             var res = xs.Catch<int, InvalidOperationException>(ex_ => { err = true; return xs; });
 
@@ -183,7 +183,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = AsyncEnumerableEx.Catch(xs, ys);
@@ -203,7 +203,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = AsyncEnumerableEx.Catch(new[] { xs, xs, ys, ys });
@@ -236,7 +236,7 @@ namespace Tests
 
         private IEnumerable<IAsyncEnumerable<int>> CatchXss()
         {
-            yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(new Exception("!!!")));
+            yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
             throw new Exception("Bang!");
         }
 
@@ -245,7 +245,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
 
             var res = AsyncEnumerableEx.Catch(new[] { xs, xs });
 
@@ -274,7 +274,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = AsyncEnumerableEx.Catch(new[] { xs, xs, ys, ys });

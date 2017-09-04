@@ -39,7 +39,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
 
             var res = xs.Retry();
 

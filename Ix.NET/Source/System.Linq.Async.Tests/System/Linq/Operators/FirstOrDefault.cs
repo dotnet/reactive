@@ -64,7 +64,7 @@ namespace Tests
         public void FirstOrDefault6()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).FirstOrDefault();
+            var res = Throw<int>(ex).FirstOrDefault();
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -72,7 +72,7 @@ namespace Tests
         public void FirstOrDefault7()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).FirstOrDefault(x => true);
+            var res = Throw<int>(ex).FirstOrDefault(x => true);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 

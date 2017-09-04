@@ -59,7 +59,7 @@ namespace Tests
 
             var b = false;
 
-            var xs = AsyncEnumerable.Throw<int>(ex).Finally(() => { b = true; });
+            var xs = Throw<int>(ex).Finally(() => { b = true; });
 
             var e = xs.GetAsyncEnumerator();
 

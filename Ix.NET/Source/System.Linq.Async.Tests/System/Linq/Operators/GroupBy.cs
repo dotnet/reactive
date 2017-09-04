@@ -172,7 +172,7 @@ namespace Tests
         public void GroupBy4()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.GroupBy(x => x);
 
             var e = ys.GetAsyncEnumerator();

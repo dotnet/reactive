@@ -14,6 +14,7 @@ namespace Tests
     public class AsyncEnumerableExTests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = AsyncEnumerable.Return(42);
+        protected static IAsyncEnumerable<T> Throw<T>(Exception exception) => AsyncEnumerable.Throw<T>(exception);
 
         protected const int WaitTimeoutMs = 5000;
 

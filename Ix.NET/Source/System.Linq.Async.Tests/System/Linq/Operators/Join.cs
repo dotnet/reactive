@@ -91,7 +91,7 @@ namespace Tests
         public void Join5()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = new[] { 0, 1, 2 }.ToAsyncEnumerable();
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
@@ -105,7 +105,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = AsyncEnumerable.Throw<int>(ex);
+            var ys = Throw<int>(ex);
 
             var res = xs.Join(ys, x => x % 3, y => y % 3, (x, y) => x + y);
 

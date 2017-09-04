@@ -40,7 +40,7 @@ namespace Tests
         public void Concat2()
         {
             var ex = new Exception("Bang");
-            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var ys = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
 
             var e = ys.GetAsyncEnumerator();
             HasNext(e, 1);
@@ -53,7 +53,7 @@ namespace Tests
         public void Concat3()
         {
             var ex = new Exception("Bang");
-            var ys = AsyncEnumerable.Throw<int>(ex).Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
+            var ys = Throw<int>(ex).Concat(new[] { 4, 5, 6 }.ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -86,7 +86,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
             var ys = new[] { 4, 5 }.ToAsyncEnumerable();
-            var zs = AsyncEnumerable.Throw<int>(ex);
+            var zs = Throw<int>(ex);
 
             var res = AsyncEnumerable.Concat(xs, ys, zs);
 

@@ -118,7 +118,7 @@ namespace Tests
             var exa = default(Exception);
             var done = false;
             var hasv = false;
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; }, () => { done = true; });
 
             var e = ys.GetAsyncEnumerator();
@@ -135,7 +135,7 @@ namespace Tests
             var ex = new Exception("Bang");
             var exa = default(Exception);
             var hasv = false;
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.Do(x => { hasv = true; }, exx => { exa = exx; });
 
             var e = ys.GetAsyncEnumerator();

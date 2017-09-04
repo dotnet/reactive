@@ -82,7 +82,7 @@ namespace Tests
         public void Where5()
         {
             var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.Where(x => true);
 
             var e = ys.GetAsyncEnumerator();
@@ -93,7 +93,7 @@ namespace Tests
         public void Where6()
         {
             var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
 
             var ys = xs.Where((x, i) => true);
             var e = ys.GetAsyncEnumerator();

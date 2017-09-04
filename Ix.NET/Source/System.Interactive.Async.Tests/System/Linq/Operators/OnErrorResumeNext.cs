@@ -44,7 +44,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = AsyncEnumerableEx.OnErrorResumeNext(xs, ys);
@@ -64,7 +64,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
             var ys = new[] { 4, 5, 6 }.ToAsyncEnumerable();
 
             var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs, ys, ys });
@@ -100,7 +100,7 @@ namespace Tests
 
         private IEnumerable<IAsyncEnumerable<int>> OnErrorResumeNextXss()
         {
-            yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(new Exception("!!!")));
+            yield return new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(new Exception("!!!")));
             throw new Exception("Bang!");
         }
 
@@ -109,7 +109,7 @@ namespace Tests
         {
             var ex = new InvalidOperationException("Bang!");
 
-            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(AsyncEnumerable.Throw<int>(ex));
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable().Concat(Throw<int>(ex));
 
             var res = AsyncEnumerableEx.OnErrorResumeNext(new[] { xs, xs });
 

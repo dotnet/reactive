@@ -64,7 +64,7 @@ namespace Tests
         public void First6()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).First();
+            var res = Throw<int>(ex).First();
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -72,7 +72,7 @@ namespace Tests
         public void First7()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).First(x => true);
+            var res = Throw<int>(ex).First(x => true);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 

@@ -64,7 +64,7 @@ namespace Tests
         public void Last6()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).Last();
+            var res = Throw<int>(ex).Last();
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 
@@ -72,7 +72,7 @@ namespace Tests
         public void Last7()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).Last(x => true);
+            var res = Throw<int>(ex).Last(x => true);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 

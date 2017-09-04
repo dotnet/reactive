@@ -45,7 +45,7 @@ namespace Tests
         public void StartWith3()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex).StartWith(1, 2);
+            var xs = Throw<int>(ex).StartWith(1, 2);
 
             var e = xs.GetAsyncEnumerator();
             HasNext(e, 1);

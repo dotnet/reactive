@@ -68,7 +68,7 @@ namespace Tests
         public void Take4()
         {
             var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.Take(2);
 
             var e = ys.GetAsyncEnumerator();

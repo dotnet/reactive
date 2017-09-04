@@ -54,7 +54,7 @@ namespace Tests
                 if (x < 3)
                     return Enumerable.Range(0, x).ToAsyncEnumerable();
                 else
-                    return AsyncEnumerable.Throw<int>(ex);
+                    return Throw<int>(ex);
             });
 
             var e = ys.GetAsyncEnumerator();
@@ -68,7 +68,7 @@ namespace Tests
         public void SelectMany3()
         {
             var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.SelectMany(x => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();
@@ -121,7 +121,7 @@ namespace Tests
                 if (i < 2)
                     return Enumerable.Range(0, x).ToAsyncEnumerable();
                 else
-                    return AsyncEnumerable.Throw<int>(ex);
+                    return Throw<int>(ex);
             });
 
             var e = ys.GetAsyncEnumerator();
@@ -135,7 +135,7 @@ namespace Tests
         public void SelectMany7()
         {
             var ex = new Exception("Bang");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.SelectMany((x, i) => Enumerable.Range(0, x).ToAsyncEnumerable());
 
             var e = ys.GetAsyncEnumerator();

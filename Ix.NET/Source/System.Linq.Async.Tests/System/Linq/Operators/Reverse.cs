@@ -56,7 +56,7 @@ namespace Tests
         public void Reverse4()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = xs.Reverse();
 
             var e = ys.GetAsyncEnumerator();

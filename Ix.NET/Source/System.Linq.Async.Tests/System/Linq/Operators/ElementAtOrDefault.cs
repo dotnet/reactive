@@ -62,7 +62,7 @@ namespace Tests
         public void ElementAtOrDefault6()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).ElementAtOrDefault(15);
+            var res = Throw<int>(ex).ElementAtOrDefault(15);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
     }

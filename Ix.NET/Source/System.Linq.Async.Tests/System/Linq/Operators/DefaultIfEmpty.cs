@@ -89,7 +89,7 @@ namespace Tests
         public void DefaultIfEmpty7()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty();
+            var xs = Throw<int>(ex).DefaultIfEmpty();
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -99,7 +99,7 @@ namespace Tests
         public void DefaultIfEmpty8()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex).DefaultIfEmpty(24);
+            var xs = Throw<int>(ex).DefaultIfEmpty(24);
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);

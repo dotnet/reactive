@@ -43,7 +43,7 @@ namespace Tests
         public void Any3()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).Any(x => x % 2 == 0);
+            var res = Throw<int>(ex).Any(x => x % 2 == 0);
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
 

@@ -62,7 +62,7 @@ namespace Tests
         public void GroupJoin3()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = new[] { 3, 6, 4 }.ToAsyncEnumerable();
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
@@ -76,7 +76,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 0, 1, 2 }.ToAsyncEnumerable();
-            var ys = AsyncEnumerable.Throw<int>(ex);
+            var ys = Throw<int>(ex);
 
             var res = xs.GroupJoin(ys, x => x % 3, y => y % 3, (x, i) => x + " - " + i.Aggregate("", (s, j) => s + j).Result);
 

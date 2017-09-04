@@ -40,7 +40,7 @@ namespace Tests
         public void ToList3()
         {
             var ex = new Exception("Bang!");
-            var res = AsyncEnumerable.Throw<int>(ex).ToList();
+            var res = Throw<int>(ex).ToList();
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
         }
     }

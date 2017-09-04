@@ -55,7 +55,7 @@ namespace Tests
         public void IgnoreElements4()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex).IgnoreElements();
+            var xs = Throw<int>(ex).IgnoreElements();
 
             var e = xs.GetAsyncEnumerator();
             AssertThrows(() => e.MoveNextAsync().Wait(WaitTimeoutMs), (Exception ex_) => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);

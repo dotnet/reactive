@@ -79,7 +79,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = AsyncEnumerable.Throw<int>(ex);
+            var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys);
 
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -89,7 +89,7 @@ namespace Tests
         public void SequenceEqual7()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys);
 
@@ -144,7 +144,7 @@ namespace Tests
         {
             var ex = new Exception("Bang!");
             var xs = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
-            var ys = AsyncEnumerable.Throw<int>(ex);
+            var ys = Throw<int>(ex);
             var res = xs.SequenceEqual(ys, new Eq());
 
             AssertThrows<Exception>(() => res.Wait(WaitTimeoutMs), ex_ => ((AggregateException)ex_).Flatten().InnerExceptions.Single() == ex);
@@ -154,7 +154,7 @@ namespace Tests
         public void SequenceEqual14()
         {
             var ex = new Exception("Bang!");
-            var xs = AsyncEnumerable.Throw<int>(ex);
+            var xs = Throw<int>(ex);
             var ys = new[] { 1, 2, 3, 4 }.ToAsyncEnumerable();
             var res = xs.SequenceEqual(ys, new Eq());
 

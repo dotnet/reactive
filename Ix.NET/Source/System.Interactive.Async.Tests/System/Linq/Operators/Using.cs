@@ -126,7 +126,7 @@ namespace Tests
                     i++;
                     return new MyD(() => { disposed.TrySetResult(true); });
                 },
-                _ => AsyncEnumerable.Throw<int>(ex)
+                _ => Throw<int>(ex)
             );
 
             Assert.Equal(0, i);
