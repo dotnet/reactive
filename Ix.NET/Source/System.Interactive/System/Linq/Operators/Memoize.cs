@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace System.Linq
 {
@@ -237,87 +236,6 @@ namespace System.Linq
                         _buffer.Done(i + 1);
                 }
             }
-        }
-    }
-
-    internal sealed class MaxRefCountList<T> : IRefCountList<T>
-    {
-        private readonly IList<T> _list = new List<T>();
-
-        public void Clear() => _list.Clear();
-
-        public int Count => _list.Count;
-
-        public T this[int i] => _list[i];
-
-        public void Add(T item) => _list.Add(item);
-
-        public void Done(int index) { }
-    }
-
-    internal sealed class RefCountList<T> : IRefCountList<T>
-    {
-        private int _readerCount;
-        private readonly IDictionary<int, RefCount> _list;
-        private int _count;
-
-        public RefCountList(int readerCount)
-        {
-            _readerCount = readerCount;
-            _list = new Dictionary<int, RefCount>();
-        }
-
-        public int ReaderCount
-        {
-            get => _readerCount;
-            set => _readerCount = value;
-        }
-
-        public void Clear() => _list.Clear();
-
-        public int Count => _count;
-
-        public T this[int i]
-        {
-            get
-            {
-                Debug.Assert(i < _count);
-
-                if (!_list.TryGetValue(i, out var res))
-                    throw new InvalidOperationException("Element no longer available in the buffer.");
-
-                var val = res.Value;
-
-                if (--res.Count == 0)
-                {
-                    _list.Remove(i);
-                }
-
-                return val;
-            }
-        }
-
-        public void Add(T item)
-        {
-            _list[_count] = new RefCount { Value = item, Count = _readerCount };
-
-            _count++;
-        }
-
-        public void Done(int index)
-        {
-            for (var i = index; i < _count; i++)
-            {
-                var ignore = this[i];
-            }
-
-            _readerCount--;
-        }
-
-        private sealed class RefCount
-        {
-            public int Count;
-            public T Value;
         }
     }
 }
