@@ -12,7 +12,6 @@ namespace System.Linq
     {
         private readonly int threadId;
 
-        private CancellationTokenSource cancellationTokenSource;
         private bool currentIsInvalid = true;
 
         internal TSource current;
@@ -30,7 +29,6 @@ namespace System.Linq
                 : Clone();
 
             enumerator.state = AsyncIteratorState.Allocated;
-            enumerator.cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
@@ -47,16 +45,6 @@ namespace System.Linq
 
         public virtual Task DisposeAsync()
         {
-            if (cancellationTokenSource != null)
-            {
-                if (!cancellationTokenSource.IsCancellationRequested)
-                {
-                    cancellationTokenSource.Cancel();
-                }
-
-                cancellationTokenSource.Dispose();
-            }
-
             current = default(TSource);
             state = AsyncIteratorState.Disposed;
 
