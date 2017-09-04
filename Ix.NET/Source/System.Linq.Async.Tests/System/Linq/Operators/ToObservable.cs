@@ -136,7 +136,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToObservable_disposes_enumerator_on_completion()
+        public void ToObservable_DisposesEnumeratorOnCompletion()
         {
             var fail = false;
             var evt = new ManualResetEvent(false);
@@ -168,7 +168,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToObservable_disposes_enumerator_when_subscription_is_disposed()
+        public void ToObservable_DisposesEnumeratorWhenSubscriptionIsDisposed()
         {
             var fail = false;
             var evt = new ManualResetEvent(false);
@@ -183,7 +183,11 @@ namespace Tests
                         return true;
                     },
                     () => 1,
-                    () => { evt.Set(); return Task.FromResult(true); }));
+                    () =>
+                    {
+                        evt.Set();
+                        return Task.FromResult(true);
+                    }));
 
             subscription = ae
                 .ToObservable()
@@ -209,7 +213,7 @@ namespace Tests
         }
 
         [Fact]
-        public void ToObservable_does_not_call_MoveNext_again_when_subscription_is_disposed()
+        public void ToObservable_DesNotCallMoveNextAgainWhenSubscriptionIsDisposed()
         {
             var fail = false;
             var moveNextCount = 0;
@@ -227,7 +231,11 @@ namespace Tests
                         return true;
                     },
                     () => 1,
-                    () => { evt.Set(); return Task.FromResult(true); }));
+                    () =>
+                    {
+                        evt.Set();
+                        return Task.FromResult(true);
+                    }));
 
             subscription = ae
                 .ToObservable()
@@ -253,11 +261,11 @@ namespace Tests
             Assert.False(fail);
         }
 
-        class MyObserver<T> : IObserver<T>
+        private sealed class MyObserver<T> : IObserver<T>
         {
-            private Action<T> _onNext;
-            private Action<Exception> _onError;
-            private Action _onCompleted;
+            private readonly Action<T> _onNext;
+            private readonly Action<Exception> _onError;
+            private readonly Action _onCompleted;
 
             public MyObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
             {
@@ -266,20 +274,11 @@ namespace Tests
                 _onCompleted = onCompleted;
             }
 
-            public void OnCompleted()
-            {
-                _onCompleted();
-            }
+            public void OnCompleted() => _onCompleted();
 
-            public void OnError(Exception error)
-            {
-                _onError(error);
-            }
+            public void OnError(Exception error) => _onError(error);
 
-            public void OnNext(T value)
-            {
-                _onNext(value);
-            }
+            public void OnNext(T value) => _onNext(value);
         }
     }
 }
