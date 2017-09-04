@@ -7,17 +7,9 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableEx
     {
-        public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return source.Select(x => x);
-        }
-
-        private static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
+        public static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
         {
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
@@ -30,8 +22,8 @@ namespace System.Linq
             var moveNextThrows = Task.FromException<bool>(exception);
 #endif
 
-            return CreateEnumerable(
-                () => CreateEnumerator<TValue>(
+            return AsyncEnumerable.CreateEnumerable(
+                () => AsyncEnumerable.CreateEnumerator<TValue>(
                     () => moveNextThrows,
                     current: null,
                     dispose: null)

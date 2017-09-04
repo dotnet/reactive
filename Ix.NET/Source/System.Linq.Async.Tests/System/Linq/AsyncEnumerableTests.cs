@@ -14,7 +14,6 @@ namespace Tests
     public class AsyncEnumerableTests
     {
         protected static readonly IAsyncEnumerable<int> Return42 = new[] { 42 }.ToAsyncEnumerable();
-        protected static IAsyncEnumerable<T> Throw<T>(Exception exception) => AsyncEnumerable.Throw<T>(exception);
         protected static Func<Exception, bool> SingleInnerExceptionMatches(Exception ex) => e => ((AggregateException)e).Flatten().InnerExceptions.Single() == ex;
 
         protected const int WaitTimeoutMs = 5000;
@@ -80,5 +79,26 @@ namespace Tests
             e1Result.ShouldAllBeEquivalentTo(e2Result);
         }
 #pragma warning restore xUnit1013 // Public method should be marked as test
+
+        protected static IAsyncEnumerable<TValue> Throw<TValue>(Exception exception)
+        {
+            if (exception == null)
+                throw new ArgumentNullException(nameof(exception));
+
+#if NO_TASK_FROMEXCEPTION
+            var tcs = new TaskCompletionSource<bool>();
+            tcs.TrySetException(exception);
+            var moveNextThrows = tcs.Task;
+#else
+            var moveNextThrows = Task.FromException<bool>(exception);
+#endif
+
+            return AsyncEnumerable.CreateEnumerable(
+                () => AsyncEnumerable.CreateEnumerator<TValue>(
+                    () => moveNextThrows,
+                    current: null,
+                    dispose: null)
+            );
+        }
     }
 }
