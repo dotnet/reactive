@@ -58,71 +58,10 @@ namespace System.Linq
             return true;
         }
 
-        // If value is in set, remove it and return true; otherwise return false
-        public bool Remove(TElement value)
-        {
-#if DEBUG
-            _haveRemoved = true;
-#endif
-            var hashCode = InternalGetHashCode(value);
-            var bucket = hashCode%_buckets.Length;
-            var last = -1;
-            for (var i = _buckets[bucket] - 1; i >= 0; last = i, i = _slots[i]._next)
-            {
-                if (_slots[i]._hashCode == hashCode && _comparer.Equals(_slots[i]._value, value))
-                {
-                    if (last < 0)
-                    {
-                        _buckets[bucket] = _slots[i]._next + 1;
-                    }
-                    else
-                    {
-                        _slots[last]._next = _slots[i]._next;
-                    }
-
-                    _slots[i]._hashCode = -1;
-                    _slots[i]._value = default(TElement);
-                    _slots[i]._next = -1;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         internal int InternalGetHashCode(TElement value)
         {
             // Handle comparer implementations that throw when passed null
             return (value == null) ? 0 : _comparer.GetHashCode(value) & 0x7FFFFFFF;
-        }
-
-        internal TElement[] ToArray()
-        {
-#if DEBUG
-            Debug.Assert(!_haveRemoved, "Optimised ToArray cannot be called if Remove has been called.");
-#endif
-            var array = new TElement[Count];
-            for (var i = 0; i != array.Length; ++i)
-            {
-                array[i] = _slots[i]._value;
-            }
-
-            return array;
-        }
-
-        internal List<TElement> ToList()
-        {
-#if DEBUG
-            Debug.Assert(!_haveRemoved, "Optimised ToList cannot be called if Remove has been called.");
-#endif
-            var count = Count;
-            var list = new List<TElement>(count);
-            for (var i = 0; i != count; ++i)
-            {
-                list.Add(_slots[i]._value);
-            }
-
-            return list;
         }
 
         private void Resize()
