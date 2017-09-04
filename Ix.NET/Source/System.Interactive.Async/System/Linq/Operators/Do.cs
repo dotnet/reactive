@@ -17,7 +17,7 @@ namespace System.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return DoHelper(source, onNext, null, null);
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action onCompleted)
@@ -29,7 +29,7 @@ namespace System.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return DoHelper(source, onNext, null, onCompleted);
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: onCompleted);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
@@ -41,7 +41,7 @@ namespace System.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return DoHelper(source, onNext, onError, null);
+            return DoCore(source, onNext: onNext, onError: onError, onCompleted: null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
@@ -55,7 +55,7 @@ namespace System.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return DoHelper(source, onNext, onError, onCompleted);
+            return DoCore(source, onNext, onError, onCompleted);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext)
@@ -65,7 +65,7 @@ namespace System.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return DoHelper(source, onNext, null, null);
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Task> onCompleted)
@@ -77,7 +77,7 @@ namespace System.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return DoHelper(source, onNext, null, onCompleted);
+            return DoCore(source, onNext: onNext, onError: null, onCompleted: onCompleted);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError)
@@ -89,7 +89,7 @@ namespace System.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return DoHelper(source, onNext, onError, null);
+            return DoCore(source, onNext: onNext, onError: onError, onCompleted: null);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
@@ -103,7 +103,7 @@ namespace System.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return DoHelper(source, onNext, onError, onCompleted);
+            return DoCore(source, onNext, onError, onCompleted);
         }
 
         public static IAsyncEnumerable<TSource> Do<TSource>(this IAsyncEnumerable<TSource> source, IObserver<TSource> observer)
@@ -113,15 +113,15 @@ namespace System.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return DoHelper(source, new Action<TSource>(observer.OnNext), new Action<Exception>(observer.OnError), new Action(observer.OnCompleted));
+            return DoCore(source, new Action<TSource>(observer.OnNext), new Action<Exception>(observer.OnError), new Action(observer.OnCompleted));
         }
 
-        private static IAsyncEnumerable<TSource> DoHelper<TSource>(this IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
         {
             return new DoAsyncIterator<TSource>(source, onNext, onError, onCompleted);
         }
 
-        private static IAsyncEnumerable<TSource> DoHelper<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
+        private static IAsyncEnumerable<TSource> DoCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task> onNext, Func<Exception, Task> onError, Func<Task> onCompleted)
         {
             return new DoAsyncIteratorWithTask<TSource>(source, onNext, onError, onCompleted);
         }

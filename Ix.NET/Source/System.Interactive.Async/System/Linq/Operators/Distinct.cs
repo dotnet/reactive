@@ -18,7 +18,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.Distinct(keySelector, EqualityComparer<TKey>.Default);
+            return DistinctCore(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
@@ -30,7 +30,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
+            return DistinctCore(source, keySelector, comparer);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector)
@@ -40,7 +40,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.Distinct(keySelector, EqualityComparer<TKey>.Default);
+            return DistinctCore(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         public static IAsyncEnumerable<TSource> Distinct<TSource, TKey>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
@@ -52,6 +52,16 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
+            return DistinctCore(source, keySelector, comparer);
+        }
+
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            return new DistinctAsyncIterator<TSource, TKey>(source, keySelector, comparer);
+        }
+
+        private static IAsyncEnumerable<TSource> DistinctCore<TSource, TKey>(IAsyncEnumerable<TSource> source, Func<TSource, Task<TKey>> keySelector, IEqualityComparer<TKey> comparer)
+        {
             return new DistinctAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
         }
 

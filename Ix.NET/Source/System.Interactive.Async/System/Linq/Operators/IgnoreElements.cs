@@ -58,7 +58,6 @@ namespace System.Linq
                     case AsyncIteratorState.Iterating:
                         while (await enumerator.MoveNextAsync().ConfigureAwait(false))
                         {
-                            // Do nothing, we're ignoring these elements
                         }
 
                         break; // case

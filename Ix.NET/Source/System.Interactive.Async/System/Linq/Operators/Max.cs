@@ -17,7 +17,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.Max(comparer, CancellationToken.None);
+            return MaxCore(source, comparer, CancellationToken.None);
         }
 
         public static Task<TSource> Max<TSource>(this IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
@@ -27,10 +27,10 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Max_(source, comparer, cancellationToken);
+            return MaxCore(source, comparer, cancellationToken);
         }
 
-        private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 

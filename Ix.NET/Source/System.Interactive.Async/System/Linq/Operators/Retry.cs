@@ -29,15 +29,23 @@ namespace System.Linq
         private static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source)
         {
             while (true)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
 
         private static IEnumerable<TSource> Repeat<TSource>(this IEnumerable<TSource> source, int count)
         {
             for (var i = 0; i < count; i++)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

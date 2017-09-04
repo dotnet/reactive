@@ -17,7 +17,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return OnErrorResumeNext_(new[] { first, second });
+            return OnErrorResumeNextCore(new[] { first, second });
         }
 
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(params IAsyncEnumerable<TSource>[] sources)
@@ -25,7 +25,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return OnErrorResumeNext_(sources);
+            return OnErrorResumeNextCore(sources);
         }
 
         public static IAsyncEnumerable<TSource> OnErrorResumeNext<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
@@ -33,10 +33,10 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return OnErrorResumeNext_(sources);
+            return OnErrorResumeNextCore(sources);
         }
 
-        private static IAsyncEnumerable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
+        private static IAsyncEnumerable<TSource> OnErrorResumeNextCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             return new OnErrorResumeNextAsyncIterator<TSource>(sources);
         }

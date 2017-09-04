@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using static System.Linq.AsyncEnumerable;
 
 namespace System.Linq
 {
@@ -11,7 +10,7 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Never<TValue>()
         {
-            return CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
+            return AsyncEnumerable.CreateEnumerable(() => CreateEnumerator<TValue>(tcs => tcs.Task, current: null, dispose: null));
         }
     }
 }

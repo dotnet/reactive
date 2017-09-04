@@ -38,7 +38,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Catch_();
+            return CatchCore(sources);
         }
 
         public static IAsyncEnumerable<TSource> Catch<TSource>(params IAsyncEnumerable<TSource>[] sources)
@@ -46,7 +46,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Catch_();
+            return CatchCore(sources);
         }
 
         public static IAsyncEnumerable<TSource> Catch<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second)
@@ -56,10 +56,10 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return new[] { first, second }.Catch_();
+            return CatchCore(new[] { first, second });
         }
 
-        private static IAsyncEnumerable<TSource> Catch_<TSource>(this IEnumerable<IAsyncEnumerable<TSource>> sources)
+        private static IAsyncEnumerable<TSource> CatchCore<TSource>(IEnumerable<IAsyncEnumerable<TSource>> sources)
         {
             return new CatchAsyncIterator<TSource>(sources);
         }

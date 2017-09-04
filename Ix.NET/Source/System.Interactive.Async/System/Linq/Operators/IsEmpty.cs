@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.IsEmpty(CancellationToken.None);
+            return IsEmptyCore(source, CancellationToken.None);
         }
 
         public static Task<bool> IsEmpty<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
@@ -23,10 +23,10 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return IsEmpty_(source, cancellationToken);
+            return IsEmptyCore(source, cancellationToken);
         }
 
-        private static async Task<bool> IsEmpty_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static async Task<bool> IsEmptyCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             return !await source.Any(cancellationToken).ConfigureAwait(false);
         }

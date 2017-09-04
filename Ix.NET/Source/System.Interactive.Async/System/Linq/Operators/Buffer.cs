@@ -109,6 +109,7 @@ namespace System.Linq
 
                                     continue; // loop
                                 }
+
                                 stopped = true;
                                 await enumerator.DisposeAsync().ConfigureAwait(false);
                                 enumerator = null;
