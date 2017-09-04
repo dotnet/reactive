@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Enumerates the sequence and invokes the given action for each value in the sequence.
+        /// Enumerates the sequence and invokes the given action for each value in the sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -26,7 +26,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Enumerates the sequence and invokes the given action for each value in the sequence.
+        /// Enumerates the sequence and invokes the given action for each value in the sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>

@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates a sequence by mimicking a for loop.
+        /// Generates a sequence by mimicking a for loop.
         /// </summary>
         /// <typeparam name="TState">State type.</typeparam>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>

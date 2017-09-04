@@ -9,15 +9,15 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates a sequence of accumulated values by scanning the source sequence and applying an accumulator function.
+        /// Generates a sequence of accumulated values by scanning the source sequence and applying an accumulator function.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TAccumulate">Accumulation type.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="seed">Accumulator seed value.</param>
         /// <param name="accumulator">
-        ///     Accumulation function to apply to the current accumulation value and each element of the
-        ///     sequence.
+        /// Accumulation function to apply to the current accumulation value and each element of the
+        /// sequence.
         /// </param>
         /// <returns>Sequence with all intermediate accumulation values resulting from scanning the sequence.</returns>
         public static IEnumerable<TAccumulate> Scan<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
@@ -31,13 +31,13 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Generates a sequence of accumulated values by scanning the source sequence and applying an accumulator function.
+        /// Generates a sequence of accumulated values by scanning the source sequence and applying an accumulator function.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="accumulator">
-        ///     Accumulation function to apply to the current accumulation value and each element of the
-        ///     sequence.
+        /// Accumulation function to apply to the current accumulation value and each element of the
+        /// sequence.
         /// </param>
         /// <returns>Sequence with all intermediate accumulation values resulting from scanning the sequence.</returns>
         public static IEnumerable<TSource> Scan<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)

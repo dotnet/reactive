@@ -10,24 +10,24 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates a buffer with a shared view over the source sequence, causing each enumerator to fetch the next element
-        ///     from the source sequence.
+        /// Creates a buffer with a shared view over the source sequence, causing each enumerator to fetch the next element
+        /// from the source sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>Buffer enabling each enumerator to retrieve elements from the shared source sequence.</returns>
         /// <example>
-        ///     var rng = Enumerable.Range(0, 10).Share();
-        ///     var e1 = rng.GetEnumerator();    // Both e1 and e2 will consume elements from
-        ///     var e2 = rng.GetEnumerator();    // the source sequence.
-        ///     Assert.IsTrue(e1.MoveNext());
-        ///     Assert.AreEqual(0, e1.Current);
-        ///     Assert.IsTrue(e1.MoveNext());
-        ///     Assert.AreEqual(1, e1.Current);
-        ///     Assert.IsTrue(e2.MoveNext());    // e2 "steals" element 2
-        ///     Assert.AreEqual(2, e2.Current);
-        ///     Assert.IsTrue(e1.MoveNext());    // e1 can't see element 2
-        ///     Assert.AreEqual(3, e1.Current);
+        /// var rng = Enumerable.Range(0, 10).Share();
+        /// var e1 = rng.GetEnumerator();    // Both e1 and e2 will consume elements from
+        /// var e2 = rng.GetEnumerator();    // the source sequence.
+        /// Assert.IsTrue(e1.MoveNext());
+        /// Assert.AreEqual(0, e1.Current);
+        /// Assert.IsTrue(e1.MoveNext());
+        /// Assert.AreEqual(1, e1.Current);
+        /// Assert.IsTrue(e2.MoveNext());    // e2 "steals" element 2
+        /// Assert.AreEqual(2, e2.Current);
+        /// Assert.IsTrue(e1.MoveNext());    // e1 can't see element 2
+        /// Assert.AreEqual(3, e1.Current);
         /// </example>
         public static IBuffer<TSource> Share<TSource>(this IEnumerable<TSource> source)
         {
@@ -38,8 +38,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Shares the source sequence within a selector function where each enumerator can fetch the next element from the
-        ///     source sequence.
+        /// Shares the source sequence within a selector function where each enumerator can fetch the next element from the
+        /// source sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>

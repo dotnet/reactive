@@ -9,8 +9,8 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates a sequence that corresponds to the source sequence, concatenating it with the sequence resulting from
-        ///     calling an exception handler function in case of an error.
+        /// Creates a sequence that corresponds to the source sequence, concatenating it with the sequence resulting from
+        /// calling an exception handler function in case of an error.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TException">Exception type to catch.</typeparam>
@@ -29,7 +29,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence by concatenating source sequences until a source sequence completes successfully.
+        /// Creates a sequence by concatenating source sequences until a source sequence completes successfully.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>
@@ -43,7 +43,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence by concatenating source sequences until a source sequence completes successfully.
+        /// Creates a sequence by concatenating source sequences until a source sequence completes successfully.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>
@@ -57,7 +57,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence that returns the elements of the first sequence, switching to the second in case of an error.
+        /// Creates a sequence that returns the elements of the first sequence, switching to the second in case of an error.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="first">First sequence.</param>

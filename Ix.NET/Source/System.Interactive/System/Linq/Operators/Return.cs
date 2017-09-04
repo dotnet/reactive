@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns a sequence with a single element.
+        /// Returns a sequence with a single element.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="value">Single element of the resulting sequence.</param>

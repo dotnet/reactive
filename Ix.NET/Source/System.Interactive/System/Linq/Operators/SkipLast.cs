@@ -9,13 +9,13 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Bypasses a specified number of contiguous elements from the end of the sequence and returns the remaining elements.
+        /// Bypasses a specified number of contiguous elements from the end of the sequence and returns the remaining elements.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <param name="count">
-        ///     The number of elements to skip from the end of the sequence before returning the remaining
-        ///     elements.
+        /// The number of elements to skip from the end of the sequence before returning the remaining
+        /// elements.
         /// </param>
         /// <returns>Sequence bypassing the specified number of elements counting from the end of the source sequence.</returns>
         public static IEnumerable<TSource> SkipLast<TSource>(this IEnumerable<TSource> source, int count)

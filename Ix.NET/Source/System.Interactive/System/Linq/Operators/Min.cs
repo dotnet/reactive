@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns the minimum value in the enumerable sequence by using the specified comparer to compare values.
+        /// Returns the minimum value in the enumerable sequence by using the specified comparer to compare values.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>

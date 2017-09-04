@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates an enumerable sequence based on an enumerable factory function.
+        /// Creates an enumerable sequence based on an enumerable factory function.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="enumerableFactory">Enumerable factory function.</param>

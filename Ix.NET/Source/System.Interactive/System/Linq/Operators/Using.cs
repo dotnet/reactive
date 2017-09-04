@@ -9,8 +9,8 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates a sequence that's dependent on a resource object whose lifetime is determined by the sequence usage
-        ///     duration.
+        /// Generates a sequence that's dependent on a resource object whose lifetime is determined by the sequence usage
+        /// duration.
         /// </summary>
         /// <typeparam name="TSource">Source element type.</typeparam>
         /// <typeparam name="TResource">Resource type.</typeparam>

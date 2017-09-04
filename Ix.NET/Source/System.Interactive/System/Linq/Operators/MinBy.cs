@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns the elements with the minimum key value by using the default comparer to compare key values.
+        /// Returns the elements with the minimum key value by using the default comparer to compare key values.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TKey">Key type.</typeparam>
@@ -27,7 +27,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Returns the elements with the minimum key value by using the specified comparer to compare key values.
+        /// Returns the elements with the minimum key value by using the specified comparer to compare key values.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TKey">Key type.</typeparam>

@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates an enumerable sequence by repeating a source sequence as long as the given loop condition holds.
+        /// Generates an enumerable sequence by repeating a source sequence as long as the given loop condition holds.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="condition">Loop condition.</param>

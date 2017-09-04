@@ -10,27 +10,27 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates a buffer with a view over the source sequence, causing each enumerator to obtain access to the remainder of
-        ///     the sequence from the current index in the buffer.
+        /// Creates a buffer with a view over the source sequence, causing each enumerator to obtain access to the remainder of
+        /// the sequence from the current index in the buffer.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
         /// <returns>
-        ///     Buffer enabling each enumerator to retrieve elements from the shared source sequence, starting from the index
-        ///     at the point of obtaining the enumerator.
+        /// Buffer enabling each enumerator to retrieve elements from the shared source sequence, starting from the index
+        /// at the point of obtaining the enumerator.
         /// </returns>
         /// <example>
-        ///     var rng = Enumerable.Range(0, 10).Publish();
-        ///     var e1 = rng.GetEnumerator();    // e1 has a view on the source starting from element 0
-        ///     Assert.IsTrue(e1.MoveNext());
-        ///     Assert.AreEqual(0, e1.Current);
-        ///     Assert.IsTrue(e1.MoveNext());
-        ///     Assert.AreEqual(1, e1.Current);
-        ///     var e2 = rng.GetEnumerator();
-        ///     Assert.IsTrue(e2.MoveNext());    // e2 has a view on the source starting from element 2
-        ///     Assert.AreEqual(2, e2.Current);
-        ///     Assert.IsTrue(e1.MoveNext());    // e1 continues to enumerate over its view
-        ///     Assert.AreEqual(2, e1.Current);
+        /// var rng = Enumerable.Range(0, 10).Publish();
+        /// var e1 = rng.GetEnumerator();    // e1 has a view on the source starting from element 0
+        /// Assert.IsTrue(e1.MoveNext());
+        /// Assert.AreEqual(0, e1.Current);
+        /// Assert.IsTrue(e1.MoveNext());
+        /// Assert.AreEqual(1, e1.Current);
+        /// var e2 = rng.GetEnumerator();
+        /// Assert.IsTrue(e2.MoveNext());    // e2 has a view on the source starting from element 2
+        /// Assert.AreEqual(2, e2.Current);
+        /// Assert.IsTrue(e1.MoveNext());    // e1 continues to enumerate over its view
+        /// Assert.AreEqual(2, e1.Current);
         /// </example>
         public static IBuffer<TSource> Publish<TSource>(this IEnumerable<TSource> source)
         {
@@ -41,8 +41,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Publishes the source sequence within a selector function where each enumerator can obtain a view over a tail of the
-        ///     source sequence.
+        /// Publishes the source sequence within a selector function where each enumerator can obtain a view over a tail of the
+        /// source sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>

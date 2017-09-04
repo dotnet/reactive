@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Concatenates the input sequences.
+        /// Concatenates the input sequences.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>
@@ -23,7 +23,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Concatenates the input sequences.
+        /// Concatenates the input sequences.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>

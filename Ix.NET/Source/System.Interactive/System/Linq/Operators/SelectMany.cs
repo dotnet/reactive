@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Projects each element of a sequence to an given sequence and flattens the resulting sequences into one sequence.
+        /// Projects each element of a sequence to an given sequence and flattens the resulting sequences into one sequence.
         /// </summary>
         /// <typeparam name="TSource">First source sequence element type.</typeparam>
         /// <typeparam name="TOther">Second source sequence element type.</typeparam>

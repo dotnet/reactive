@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates a sequence of non-overlapping adjacent buffers over the source sequence.
+        /// Generates a sequence of non-overlapping adjacent buffers over the source sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -26,7 +26,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Generates a sequence of buffers over the source sequence, with specified length and possible overlap.
+        /// Generates a sequence of buffers over the source sequence, with specified length and possible overlap.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>

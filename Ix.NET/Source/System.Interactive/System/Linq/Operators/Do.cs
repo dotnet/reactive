@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Lazily invokes an action for each value in the sequence.
+        /// Lazily invokes an action for each value in the sequence.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -26,7 +26,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Lazily invokes an action for each value in the sequence, and executes an action for successful termination.
+        /// Lazily invokes an action for each value in the sequence, and executes an action for successful termination.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -46,7 +46,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Lazily invokes an action for each value in the sequence, and executes an action upon exceptional termination.
+        /// Lazily invokes an action for each value in the sequence, and executes an action upon exceptional termination.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -66,8 +66,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Lazily invokes an action for each value in the sequence, and executes an action upon successful or exceptional
-        ///     termination.
+        /// Lazily invokes an action for each value in the sequence, and executes an action upon successful or exceptional
+        /// termination.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -90,7 +90,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Lazily invokes observer methods for each value in the sequence, and upon successful or exceptional termination.
+        /// Lazily invokes observer methods for each value in the sequence, and upon successful or exceptional termination.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -107,7 +107,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Generates an enumerable sequence by repeating a source sequence as long as the given loop postcondition holds.
+        /// Generates an enumerable sequence by repeating a source sequence as long as the given loop postcondition holds.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="source">Source sequence to repeat while the condition evaluates true.</param>

@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns an enumerable sequence based on the evaluation result of the given condition.
+        /// Returns an enumerable sequence based on the evaluation result of the given condition.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="condition">Condition to evaluate.</param>
@@ -29,8 +29,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Returns an enumerable sequence if the evaluation result of the given condition is true, otherwise returns an empty
-        ///     sequence.
+        /// Returns an enumerable sequence if the evaluation result of the given condition is true, otherwise returns an empty
+        /// sequence.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="condition">Condition to evaluate.</param>

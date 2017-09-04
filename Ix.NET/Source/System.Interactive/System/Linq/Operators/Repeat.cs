@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Generates a sequence by repeating the given value infinitely.
+        /// Generates a sequence by repeating the given value infinitely.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="value">Value to repreat in the resulting sequence.</param>
@@ -21,7 +21,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Generates a sequence that contains one repeated value.
+        /// Generates a sequence that contains one repeated value.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="element">The value to be repeated.</param>
@@ -33,7 +33,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Repeats and concatenates the source sequence infinitely.
+        /// Repeats and concatenates the source sequence infinitely.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -47,7 +47,7 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Repeats and concatenates the source sequence the given number of times.
+        /// Repeats and concatenates the source sequence the given number of times.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>

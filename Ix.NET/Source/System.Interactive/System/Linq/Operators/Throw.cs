@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns a sequence that throws an exception upon enumeration.
+        /// Returns a sequence that throws an exception upon enumeration.
         /// </summary>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="exception">Exception to throw upon enumerating the resulting sequence.</param>

@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates a sequence that retries enumerating the source sequence as long as an error occurs.
+        /// Creates a sequence that retries enumerating the source sequence as long as an error occurs.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>
@@ -23,8 +23,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence that retries enumerating the source sequence as long as an error occurs, with the specified
-        ///     maximum number of retries.
+        /// Creates a sequence that retries enumerating the source sequence as long as an error occurs, with the specified
+        /// maximum number of retries.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="source">Source sequence.</param>

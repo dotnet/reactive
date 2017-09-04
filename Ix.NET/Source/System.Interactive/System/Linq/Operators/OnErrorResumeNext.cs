@@ -9,7 +9,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Creates a sequence that concatenates both given sequences, regardless of whether an error occurs.
+        /// Creates a sequence that concatenates both given sequences, regardless of whether an error occurs.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="first">First sequence.</param>
@@ -26,8 +26,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence that concatenates the given sequences, regardless of whether an error occurs in any of the
-        ///     sequences.
+        /// Creates a sequence that concatenates the given sequences, regardless of whether an error occurs in any of the
+        /// sequences.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>
@@ -41,8 +41,8 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Creates a sequence that concatenates the given sequences, regardless of whether an error occurs in any of the
-        ///     sequences.
+        /// Creates a sequence that concatenates the given sequences, regardless of whether an error occurs in any of the
+        /// sequences.
         /// </summary>
         /// <typeparam name="TSource">Source sequence element type.</typeparam>
         /// <param name="sources">Source sequences.</param>

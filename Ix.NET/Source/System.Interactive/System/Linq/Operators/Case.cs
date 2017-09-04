@@ -12,7 +12,7 @@ namespace System.Linq
     public static partial class EnumerableEx
     {
         /// <summary>
-        ///     Returns a sequence from a dictionary based on the result of evaluating a selector function.
+        /// Returns a sequence from a dictionary based on the result of evaluating a selector function.
         /// </summary>
         /// <typeparam name="TValue">Type of the selector value.</typeparam>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
@@ -30,16 +30,16 @@ namespace System.Linq
         }
 
         /// <summary>
-        ///     Returns a sequence from a dictionary based on the result of evaluating a selector function, also specifying a
-        ///     default sequence.
+        /// Returns a sequence from a dictionary based on the result of evaluating a selector function, also specifying a
+        /// default sequence.
         /// </summary>
         /// <typeparam name="TValue">Type of the selector value.</typeparam>
         /// <typeparam name="TResult">Result sequence element type.</typeparam>
         /// <param name="selector">Selector function used to pick a sequence from the given sources.</param>
         /// <param name="sources">Dictionary mapping selector values onto resulting sequences.</param>
         /// <param name="defaultSource">
-        ///     Default sequence to return in case there's no corresponding source for the computed
-        ///     selector value.
+        /// Default sequence to return in case there's no corresponding source for the computed
+        /// selector value.
         /// </param>
         /// <returns>The source sequence corresponding with the evaluated selector value; otherwise, the default source.</returns>
         public static IEnumerable<TResult> Case<TValue, TResult>(Func<TValue> selector, IDictionary<TValue, IEnumerable<TResult>> sources, IEnumerable<TResult> defaultSource)
