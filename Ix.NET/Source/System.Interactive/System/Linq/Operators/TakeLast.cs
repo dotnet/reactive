@@ -22,10 +22,10 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return source.TakeLast_(count);
+            return TakeLastCore(source, count);
         }
 
-        private static IEnumerable<TSource> TakeLast_<TSource>(this IEnumerable<TSource> source, int count)
+        private static IEnumerable<TSource> TakeLastCore<TSource>(IEnumerable<TSource> source, int count)
         {
             if (count == 0)
             {
@@ -37,12 +37,17 @@ namespace System.Linq
             foreach (var item in source)
             {
                 if (q.Count >= count)
+                {
                     q.Dequeue();
+                }
+
                 q.Enqueue(item);
             }
 
             while (q.Count > 0)
+            {
                 yield return q.Dequeue();
+            }
         }
     }
 }

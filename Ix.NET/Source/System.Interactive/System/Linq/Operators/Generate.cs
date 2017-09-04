@@ -27,13 +27,15 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Generate_(initialState, condition, iterate, resultSelector);
+            return GenerateCore(initialState, condition, iterate, resultSelector);
         }
 
-        private static IEnumerable<TResult> Generate_<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
+        private static IEnumerable<TResult> GenerateCore<TState, TResult>(TState initialState, Func<TState, bool> condition, Func<TState, TState> iterate, Func<TState, TResult> resultSelector)
         {
             for (var i = initialState; condition(i); i = iterate(i))
+            {
                 yield return resultSelector(i);
+            }
         }
     }
 }

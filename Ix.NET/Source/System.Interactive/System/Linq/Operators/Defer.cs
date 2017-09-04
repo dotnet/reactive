@@ -19,13 +19,15 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw new ArgumentNullException(nameof(enumerableFactory));
 
-            return Defer_(enumerableFactory);
+            return DeferCore(enumerableFactory);
         }
 
-        private static IEnumerable<TSource> Defer_<TSource>(Func<IEnumerable<TSource>> enumerableFactory)
+        private static IEnumerable<TSource> DeferCore<TSource>(Func<IEnumerable<TSource>> enumerableFactory)
         {
             foreach (var item in enumerableFactory())
+            {
                 yield return item;
+            }
         }
     }
 }

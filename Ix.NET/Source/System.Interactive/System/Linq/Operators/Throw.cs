@@ -19,10 +19,10 @@ namespace System.Linq
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            return Throw_<TResult>(exception);
+            return ThrowCore<TResult>(exception);
         }
 
-        private static IEnumerable<TResult> Throw_<TResult>(Exception exception)
+        private static IEnumerable<TResult> ThrowCore<TResult>(Exception exception)
         {
             throw exception;
 #pragma warning disable 0162

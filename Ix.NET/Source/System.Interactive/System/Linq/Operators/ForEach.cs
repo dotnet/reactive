@@ -22,7 +22,9 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(onNext));
 
             foreach (var item in source)
+            {
                 onNext(item);
+            }
         }
 
         /// <summary>
@@ -40,7 +42,9 @@ namespace System.Linq
 
             var i = 0;
             foreach (var item in source)
+            {
                 onNext(item, checked(i++));
+            }
         }
     }
 }

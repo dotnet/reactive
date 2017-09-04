@@ -22,7 +22,7 @@ namespace System.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return source.Buffer_(count, count);
+            return BufferCore(source, count, count);
         }
 
         /// <summary>
@@ -42,31 +42,38 @@ namespace System.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return source.Buffer_(count, skip);
+            return BufferCore(source, count, skip);
         }
 
-        private static IEnumerable<IList<TSource>> Buffer_<TSource>(this IEnumerable<TSource> source, int count, int skip)
+        private static IEnumerable<IList<TSource>> BufferCore<TSource>(IEnumerable<TSource> source, int count, int skip)
         {
             var buffers = new Queue<IList<TSource>>();
 
             var i = 0;
             foreach (var item in source)
             {
-                if (i%skip == 0)
+                if (i % skip == 0)
+                {
                     buffers.Enqueue(new List<TSource>(count));
+                }
 
                 foreach (var buffer in buffers)
+                {
                     buffer.Add(item);
+                }
 
-                if (buffers.Count > 0 && buffers.Peek()
-                                                .Count == count)
+                if (buffers.Count > 0 && buffers.Peek().Count == count)
+                {
                     yield return buffers.Dequeue();
+                }
 
                 i++;
             }
 
             while (buffers.Count > 0)
+            {
                 yield return buffers.Dequeue();
+            }
         }
     }
 }

@@ -15,21 +15,23 @@ namespace System.Linq
         /// <param name="source">Source sequence.</param>
         /// <returns>Enumerable sequence with the same behavior as the original, but hiding the source object identity.</returns>
         /// <remarks>
-        /// AsEnumerable doesn't hide the object identity, and simply acts as a cast to the IEnumerable&lt;TSource&gt;
-        /// interface.
+        /// <see cref="Enumerable.AsEnumerable{TSource}(IEnumerable{TSource})"/> doesn't hide the object identity, and simply acts as a cast
+        /// to the <see cref="IEnumerable{T}"/> interface type.
         /// </remarks>
         public static IEnumerable<TSource> Hide<TSource>(this IEnumerable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.Hide_();
+            return HideCore(source);
         }
 
-        private static IEnumerable<TSource> Hide_<TSource>(this IEnumerable<TSource> source)
+        private static IEnumerable<TSource> HideCore<TSource>(this IEnumerable<TSource> source)
         {
             foreach (var item in source)
+            {
                 yield return item;
+            }
         }
     }
 }

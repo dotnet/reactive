@@ -17,7 +17,9 @@ namespace System.Linq
         public static IEnumerable<TResult> Repeat<TResult>(TResult value)
         {
             while (true)
+            {
                 yield return value;
+            }
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Repeat_(source);
+            return RepeatCore(source);
         }
 
         /// <summary>
@@ -60,21 +62,29 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Repeat_(source, count);
+            return RepeatCore(source, count);
         }
 
-        private static IEnumerable<TSource> Repeat_<TSource>(IEnumerable<TSource> source)
+        private static IEnumerable<TSource> RepeatCore<TSource>(IEnumerable<TSource> source)
         {
             while (true)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
 
-        private static IEnumerable<TSource> Repeat_<TSource>(IEnumerable<TSource> source, int count)
+        private static IEnumerable<TSource> RepeatCore<TSource>(IEnumerable<TSource> source, int count)
         {
             for (var i = 0; i < count; i++)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

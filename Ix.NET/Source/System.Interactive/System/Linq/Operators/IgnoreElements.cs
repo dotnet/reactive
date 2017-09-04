@@ -19,13 +19,13 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.IgnoreElements_();
+            return IgnoreElementsCore(source);
         }
 
-        private static IEnumerable<TSource> IgnoreElements_<TSource>(this IEnumerable<TSource> source)
+        private static IEnumerable<TSource> IgnoreElementsCore<TSource>(IEnumerable<TSource> source)
         {
             foreach (var item in source)
-            ;
+                ;
 
             yield break;
         }

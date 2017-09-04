@@ -23,7 +23,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.Distinct_(keySelector, EqualityComparer<TKey>.Default);
+            return DistinctCore(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -44,18 +44,21 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.Distinct_(keySelector, comparer);
+            return DistinctCore(source, keySelector, comparer);
         }
 
-        private static IEnumerable<TSource> Distinct_<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        private static IEnumerable<TSource> DistinctCore<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             var set = new HashSet<TKey>(comparer);
 
             foreach (var item in source)
             {
                 var key = keySelector(item);
+
                 if (set.Add(key))
+                {
                     yield return item;
+                }
             }
         }
     }

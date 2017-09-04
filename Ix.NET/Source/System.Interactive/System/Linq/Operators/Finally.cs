@@ -22,15 +22,17 @@ namespace System.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return source.Finally_(finallyAction);
+            return FinallyCore(source, finallyAction);
         }
 
-        private static IEnumerable<TSource> Finally_<TSource>(this IEnumerable<TSource> source, Action finallyAction)
+        private static IEnumerable<TSource> FinallyCore<TSource>(IEnumerable<TSource> source, Action finallyAction)
         {
             try
             {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
             }
             finally
             {

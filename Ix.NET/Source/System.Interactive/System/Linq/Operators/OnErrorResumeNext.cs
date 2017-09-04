@@ -22,7 +22,7 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return OnErrorResumeNext_(new[] { first, second });
+            return OnErrorResumeNextCore(new[] { first, second });
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return OnErrorResumeNext_(sources);
+            return OnErrorResumeNextCore(sources);
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return OnErrorResumeNext_(sources);
+            return OnErrorResumeNextCore(sources);
         }
 
-        private static IEnumerable<TSource> OnErrorResumeNext_<TSource>(IEnumerable<IEnumerable<TSource>> sources)
+        private static IEnumerable<TSource> OnErrorResumeNextCore<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
             foreach (var source in sources)
             {
@@ -68,6 +68,7 @@ namespace System.Linq
                         {
                             if (!innerEnumerator.MoveNext())
                                 break;
+
                             value = innerEnumerator.Current;
                         }
                         catch

@@ -20,16 +20,20 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.StartWith_(values);
+            return StartWithCore(source, values);
         }
 
-        private static IEnumerable<TSource> StartWith_<TSource>(this IEnumerable<TSource> source, params TSource[] values)
+        private static IEnumerable<TSource> StartWithCore<TSource>(IEnumerable<TSource> source, params TSource[] values)
         {
             foreach (var x in values)
+            {
                 yield return x;
+            }
 
             foreach (var item in source)
+            {
                 yield return item;
+            }
         }
     }
 }

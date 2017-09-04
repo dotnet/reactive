@@ -22,14 +22,15 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return WhileCore(condition, source)
-                .Concat();
+            return WhileCore(condition, source).Concat();
         }
 
         private static IEnumerable<IEnumerable<TSource>> WhileCore<TSource>(Func<bool> condition, IEnumerable<TSource> source)
         {
             while (condition())
+            {
                 yield return source;
+            }
         }
     }
 }

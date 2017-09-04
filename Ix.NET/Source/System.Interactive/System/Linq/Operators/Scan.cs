@@ -27,7 +27,7 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return source.Scan_(seed, accumulator);
+            return ScanCore(source, seed, accumulator);
         }
 
         /// <summary>
@@ -47,21 +47,22 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return source.Scan_(accumulator);
+            return ScanCore(source, accumulator);
         }
 
-        private static IEnumerable<TAccumulate> Scan_<TSource, TAccumulate>(this IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
+        private static IEnumerable<TAccumulate> ScanCore<TSource, TAccumulate>(IEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
         {
             var acc = seed;
 
             foreach (var item in source)
             {
                 acc = accumulator(acc, item);
+
                 yield return acc;
             }
         }
 
-        private static IEnumerable<TSource> Scan_<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
+        private static IEnumerable<TSource> ScanCore<TSource>(IEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator)
         {
             var hasSeed = false;
             var acc = default(TSource);
@@ -76,6 +77,7 @@ namespace System.Linq
                 }
 
                 acc = accumulator(acc, item);
+
                 yield return acc;
             }
         }

@@ -25,7 +25,7 @@ namespace System.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return source.Catch_(handler);
+            return CatchCore(source, handler);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Catch_();
+            return CatchCore(sources);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Catch_();
+            return CatchCore(sources);
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace System.Linq
             if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
-            return new[] {first, second}.Catch_();
+            return CatchCore(new[] { first, second });
         }
 
-        private static IEnumerable<TSource> Catch_<TSource, TException>(this IEnumerable<TSource> source, Func<TException, IEnumerable<TSource>> handler)
+        private static IEnumerable<TSource> CatchCore<TSource, TException>(IEnumerable<TSource> source, Func<TException, IEnumerable<TSource>> handler)
             where TException : Exception
         {
             var err = default(IEnumerable<TSource>);
@@ -104,11 +104,13 @@ namespace System.Linq
             if (err != null)
             {
                 foreach (var item in err)
+                {
                     yield return item;
+                }
             }
         }
 
-        private static IEnumerable<TSource> Catch_<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
+        private static IEnumerable<TSource> CatchCore<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
             var error = default(Exception);
 

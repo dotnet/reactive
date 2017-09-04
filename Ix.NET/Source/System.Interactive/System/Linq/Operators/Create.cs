@@ -38,7 +38,9 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(create));
 
             foreach (var x in new Yielder<T>(create))
+            {
                 yield return x;
+            }
         }
 
         private sealed class AnonymousEnumerable<TResult> : IEnumerable<TResult>

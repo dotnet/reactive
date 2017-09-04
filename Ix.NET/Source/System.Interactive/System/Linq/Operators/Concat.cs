@@ -19,7 +19,7 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Concat_();
+            return ConcatCore(sources);
         }
 
         /// <summary>
@@ -33,14 +33,18 @@ namespace System.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return sources.Concat_();
+            return ConcatCore(sources);
         }
 
-        private static IEnumerable<TSource> Concat_<TSource>(this IEnumerable<IEnumerable<TSource>> sources)
+        private static IEnumerable<TSource> ConcatCore<TSource>(IEnumerable<IEnumerable<TSource>> sources)
         {
             foreach (var source in sources)
+            {
                 foreach (var item in source)
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

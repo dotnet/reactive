@@ -56,11 +56,10 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create(() => selector(source.Publish())
-                              .GetEnumerator());
+            return Create(() => selector(source.Publish()).GetEnumerator());
         }
 
-        private class PublishedBuffer<T> : IBuffer<T>
+        private sealed class PublishedBuffer<T> : IBuffer<T>
         {
             private RefCountList<T> _buffer;
             private bool _disposed;
@@ -86,7 +85,7 @@ namespace System.Linq
                     _buffer.ReaderCount++;
                 }
 
-                return GetEnumerator_(i);
+                return GetEnumeratorCore(i);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
@@ -114,7 +113,7 @@ namespace System.Linq
                 }
             }
 
-            private IEnumerator<T> GetEnumerator_(int i)
+            private IEnumerator<T> GetEnumeratorCore(int i)
             {
                 try
                 {
@@ -135,8 +134,11 @@ namespace System.Linq
                                     try
                                     {
                                         hasValue = _source.MoveNext();
+
                                         if (hasValue)
+                                        {
                                             current = _source.Current;
+                                        }
                                     }
                                     catch (Exception ex)
                                     {
@@ -150,9 +152,13 @@ namespace System.Linq
                                 if (_stopped)
                                 {
                                     if (_error != null)
+                                    {
                                         throw _error;
+                                    }
                                     else
+                                    {
                                         break;
+                                    }
                                 }
 
                                 if (hasValue)
@@ -167,9 +173,13 @@ namespace System.Linq
                         }
 
                         if (hasValue)
+                        {
                             yield return _buffer[i];
+                        }
                         else
+                        {
                             break;
+                        }
 
                         i++;
                     }
@@ -177,7 +187,9 @@ namespace System.Linq
                 finally
                 {
                     if (_buffer != null)
+                    {
                         _buffer.Done(i + 1);
+                    }
                 }
             }
         }

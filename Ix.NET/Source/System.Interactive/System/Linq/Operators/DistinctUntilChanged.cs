@@ -19,7 +19,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.DistinctUntilChanged_(x => x, EqualityComparer<TSource>.Default);
+            return DistinctUntilChangedCore(source, x => x, EqualityComparer<TSource>.Default);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.DistinctUntilChanged_(x => x, comparer);
+            return DistinctUntilChangedCore(source, x => x, comparer);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace System.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return source.DistinctUntilChanged_(keySelector, EqualityComparer<TKey>.Default);
+            return DistinctUntilChangedCore(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return source.DistinctUntilChanged_(keySelector, comparer);
+            return DistinctUntilChangedCore(source, keySelector, comparer);
         }
 
-        private static IEnumerable<TSource> DistinctUntilChanged_<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        private static IEnumerable<TSource> DistinctUntilChangedCore<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
         {
             var currentKey = default(TKey);
             var hasCurrentKey = false;
@@ -97,6 +97,7 @@ namespace System.Linq
                 {
                     hasCurrentKey = true;
                     currentKey = key;
+
                     yield return item;
                 }
             }

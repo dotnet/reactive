@@ -71,7 +71,7 @@ namespace System.Linq
                 if (_disposed)
                     throw new ObjectDisposedException("");
 
-                return GetEnumerator_();
+                return GetEnumeratorCore();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
@@ -96,7 +96,7 @@ namespace System.Linq
                 }
             }
 
-            private IEnumerator<T> GetEnumerator_()
+            private IEnumerator<T> GetEnumeratorCore()
             {
                 while (true)
                 {
@@ -109,14 +109,21 @@ namespace System.Linq
                     lock (_source)
                     {
                         hasValue = _source.MoveNext();
+
                         if (hasValue)
+                        {
                             current = _source.Current;
+                        }
                     }
 
                     if (hasValue)
+                    {
                         yield return current;
+                    }
                     else
+                    {
                         break;
+                    }
                 }
             }
         }

@@ -24,14 +24,18 @@ namespace System.Linq
             if (enumerableFactory == null)
                 throw new ArgumentNullException(nameof(enumerableFactory));
 
-            return Using_(resourceFactory, enumerableFactory);
+            return UsingCore(resourceFactory, enumerableFactory);
         }
 
-        private static IEnumerable<TSource> Using_<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
+        private static IEnumerable<TSource> UsingCore<TSource, TResource>(Func<TResource> resourceFactory, Func<TResource, IEnumerable<TSource>> enumerableFactory) where TResource : IDisposable
         {
             using (var res = resourceFactory())
+            {
                 foreach (var item in enumerableFactory(res))
+                {
                     yield return item;
+                }
+            }
         }
     }
 }

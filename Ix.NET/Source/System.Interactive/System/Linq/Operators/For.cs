@@ -27,8 +27,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return ForCore(source, resultSelector)
-                .Concat();
+            return ForCore(source, resultSelector).Concat();
         }
 
         private static IEnumerable<IEnumerable<TResult>> ForCore<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> resultSelector)

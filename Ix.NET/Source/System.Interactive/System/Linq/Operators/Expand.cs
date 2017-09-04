@@ -22,10 +22,10 @@ namespace System.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return source.Expand_(selector);
+            return ExpandCore(source, selector);
         }
 
-        private static IEnumerable<TSource> Expand_<TSource>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> selector)
+        private static IEnumerable<TSource> ExpandCore<TSource>(IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> selector)
         {
             var queue = new Queue<IEnumerable<TSource>>();
             queue.Enqueue(source);

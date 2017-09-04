@@ -25,18 +25,21 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return source.SkipLast_(count);
+            return SkipLastCore(source, count);
         }
 
-        private static IEnumerable<TSource> SkipLast_<TSource>(this IEnumerable<TSource> source, int count)
+        private static IEnumerable<TSource> SkipLastCore<TSource>(this IEnumerable<TSource> source, int count)
         {
             var q = new Queue<TSource>();
 
             foreach (var x in source)
             {
                 q.Enqueue(x);
+
                 if (q.Count > count)
+                {
                     yield return q.Dequeue();
+                }
             }
         }
     }
