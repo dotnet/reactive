@@ -25,9 +25,9 @@ namespace System.Linq
 
         public IAsyncEnumerator<TSource> GetAsyncEnumerator()
         {
-            var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId ?
-                this :
-                Clone();
+            var enumerator = state == AsyncIteratorState.New && threadId == Environment.CurrentManagedThreadId
+                ? this
+                : Clone();
 
             enumerator.state = AsyncIteratorState.Allocated;
             enumerator.cancellationTokenSource = new CancellationTokenSource();
@@ -135,6 +135,6 @@ namespace System.Linq
         New = 0,
         Allocated = 1,
         Iterating = 2,
-        Disposed = -1
+        Disposed = -1,
     }
 }
