@@ -13,8 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
     <ProjectReference Include="..\System.Linq.Async\System.Linq.Async.csproj" />
-    <ProjectReference Include="..\System.Linq.Async.Queryable\System.Linq.Async.Queryable.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="AsyncQueryableTests.Generated.tt">
-      <LastGenOutput>AsyncQueryableTests.Generated.cs</LastGenOutput>
+    <None Update="AsyncQueryableExTests.Generated.tt">
+      <LastGenOutput>AsyncQueryableExTests.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
@@ -39,10 +40,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="AsyncQueryableTests.Generated.cs">
+    <Compile Update="AsyncQueryableExTests.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>AsyncQueryableTests.Generated.tt</DependentUpon>
+      <DependentUpon>AsyncQueryableExTests.Generated.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
