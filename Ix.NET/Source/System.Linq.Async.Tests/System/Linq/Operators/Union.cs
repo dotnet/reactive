@@ -54,6 +54,25 @@ namespace Tests
             NoNext(e);
         }
 
+        [Fact]
+        public void Union3()
+        {
+            var xs = new[] { 1, 2, 3 }.ToAsyncEnumerable();
+            var ys = new[] { 3, 5, 1, 4 }.ToAsyncEnumerable();
+            var zs = new[] { 5, 7, 8, 1 }.ToAsyncEnumerable();
+            var res = xs.Union(ys).Union(zs);
+
+            var e = res.GetAsyncEnumerator();
+            HasNext(e, 1);
+            HasNext(e, 2);
+            HasNext(e, 3);
+            HasNext(e, 5);
+            HasNext(e, 4);
+            HasNext(e, 7);
+            HasNext(e, 8);
+            NoNext(e);
+        }
+
         private sealed class Eq : IEqualityComparer<int>
         {
             public bool Equals(int x, int y)
