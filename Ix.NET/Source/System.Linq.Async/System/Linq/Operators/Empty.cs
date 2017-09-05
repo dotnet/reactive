@@ -15,15 +15,25 @@ namespace System.Linq
             return new EmptyAsyncIterator<TValue>();
         }
 
-        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>, IAsyncIListProvider<TValue>
+        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>, IAsyncPartition<TValue>
         {
             public override AsyncIterator<TValue> Clone() => new EmptyAsyncIterator<TValue>();
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(0);
 
+            public IAsyncPartition<TValue> Skip(int count) => this;
+
+            public IAsyncPartition<TValue> Take(int count) => this;
+
             public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(Array.Empty<TValue>());
 
             public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
+
+            public Task<Maybe<TValue>> TryGetElementAt(int index) => Task.FromResult(new Maybe<TValue>());
+
+            public Task<Maybe<TValue>> TryGetFirst() => Task.FromResult(new Maybe<TValue>());
+
+            public Task<Maybe<TValue>> TryGetLast() => Task.FromResult(new Maybe<TValue>());
 
             protected override Task<bool> MoveNextCore() => TaskExt.False;
         }
