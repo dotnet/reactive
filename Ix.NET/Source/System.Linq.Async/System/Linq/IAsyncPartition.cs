@@ -30,18 +30,18 @@ namespace System.Linq
         /// </summary>
         /// <param name="index">The 0-based index to access.</param>
         /// <returns>The element if found, otherwise, the default value of <see cref="TElement"/>.</returns>
-        Task<Maybe<TElement>> TryGetElementAt(int index);
+        Task<Maybe<TElement>> TryGetElementAsync(int index);
 
         /// <summary>
         /// Gets the first item in this sequence.
         /// </summary>
         /// <returns>The element if found, otherwise, the default value of <see cref="TElement"/>.</returns>
-        Task<Maybe<TElement>> TryGetFirst();
+        Task<Maybe<TElement>> TryGetFirstAsync();
 
         /// <summary>
         /// Gets the last item in this sequence.
         /// </summary>
         /// <returns>The element if found, otherwise, the default value of <see cref="TElement"/>.</returns>
-        Task<Maybe<TElement>> TryGetLast();
+        Task<Maybe<TElement>> TryGetLastAsync();
     }
 }

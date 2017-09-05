@@ -93,7 +93,7 @@ namespace System.Linq
                 return Task.FromResult(res);
             }
 
-            public Task<Maybe<int>> TryGetElementAt(int index)
+            public Task<Maybe<int>> TryGetElementAsync(int index)
             {
                 if ((uint)index < (uint)(end - start))
                 {
@@ -103,9 +103,9 @@ namespace System.Linq
                 return Task.FromResult(new Maybe<int>());
             }
 
-            public Task<Maybe<int>> TryGetFirst() => Task.FromResult(new Maybe<int>(start));
+            public Task<Maybe<int>> TryGetFirstAsync() => Task.FromResult(new Maybe<int>(start));
 
-            public Task<Maybe<int>> TryGetLast() => Task.FromResult(new Maybe<int>(end - 1));
+            public Task<Maybe<int>> TryGetLastAsync() => Task.FromResult(new Maybe<int>(end - 1));
 
             protected override async Task<bool> MoveNextCore()
             {

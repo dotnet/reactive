@@ -28,11 +28,11 @@ namespace System.Linq
 
             public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
 
-            public Task<Maybe<TValue>> TryGetElementAt(int index) => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetElementAsync(int index) => Task.FromResult(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetFirst() => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetFirstAsync() => Task.FromResult(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetLast() => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetLastAsync() => Task.FromResult(new Maybe<TValue>());
 
             public Task<bool> MoveNextAsync() => TaskExt.False;
 
