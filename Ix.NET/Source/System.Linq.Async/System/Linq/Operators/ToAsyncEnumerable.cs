@@ -53,34 +53,69 @@ namespace System.Linq
                 });
         }
 
-        public static IEnumerable<TSource> ToEnumerable<TSource>(this IAsyncEnumerable<TSource> source)
+        public static IAsyncEnumerable<TSource> ToAsyncEnumerable<TSource>(this IObservable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return ToEnumerable_(source);
-        }
-
-        private static IEnumerable<TSource> ToEnumerable_<TSource>(IAsyncEnumerable<TSource> source)
-        {
-            var e = source.GetAsyncEnumerator();
-
-            try
-            {
-                while (true)
+            return CreateEnumerable(
+                () =>
                 {
-                    if (!e.MoveNextAsync().Result)
-                        break;
+                    var observer = new ToAsyncEnumerableObserver<TSource>();
 
-                    var c = e.Current;
+                    var subscription = source.Subscribe(observer);
 
-                    yield return c;
-                }
-            }
-            finally
-            {
-                e.DisposeAsync().Wait();
-            }
+                    return CreateEnumerator(
+                        tcs =>
+                        {
+                            var hasValue = false;
+                            var hasCompleted = false;
+                            var error = default(Exception);
+
+                            lock (observer.SyncRoot)
+                            {
+                                if (observer.Values.Count > 0)
+                                {
+                                    hasValue = true;
+                                    observer.Current = observer.Values.Dequeue();
+                                }
+                                else if (observer.HasCompleted)
+                                {
+                                    hasCompleted = true;
+                                }
+                                else if (observer.Error != null)
+                                {
+                                    error = observer.Error;
+                                }
+                                else
+                                {
+                                    observer.TaskCompletionSource = tcs;
+                                }
+                            }
+
+                            if (hasValue)
+                            {
+                                tcs.TrySetResult(true);
+                            }
+                            else if (hasCompleted)
+                            {
+                                tcs.TrySetResult(false);
+                            }
+                            else if (error != null)
+                            {
+                                tcs.TrySetException(error);
+                            }
+
+                            return tcs.Task;
+                        },
+                        () => observer.Current,
+                        () =>
+                        {
+                            subscription.Dispose();
+                            // Should we cancel in-flight operations somehow?
+                            return TaskExt.True;
+                        });
+                });
         }
 
         internal sealed class AsyncEnumerableAdapter<T> : AsyncIterator<T>, IIListProvider<T>
@@ -341,6 +376,84 @@ namespace System.Linq
             int ICollection<T>.Count => source.Count;
 
             bool ICollection<T>.IsReadOnly => source.IsReadOnly;
+        }
+
+        private sealed class ToAsyncEnumerableObserver<T> : IObserver<T>
+        {
+            public readonly Queue<T> Values;
+
+            public T Current;
+            public Exception Error;
+            public bool HasCompleted;
+            public TaskCompletionSource<bool> TaskCompletionSource;
+
+            public ToAsyncEnumerableObserver()
+            {
+                Values = new Queue<T>();
+            }
+
+            public object SyncRoot
+            {
+                get { return Values; }
+            }
+
+            public void OnCompleted()
+            {
+                var tcs = default(TaskCompletionSource<bool>);
+
+                lock (SyncRoot)
+                {
+                    HasCompleted = true;
+
+                    if (TaskCompletionSource != null)
+                    {
+                        tcs = TaskCompletionSource;
+                        TaskCompletionSource = null;
+                    }
+                }
+
+                tcs?.TrySetResult(false);
+            }
+
+            public void OnError(Exception error)
+            {
+                var tcs = default(TaskCompletionSource<bool>);
+
+                lock (SyncRoot)
+                {
+                    Error = error;
+
+                    if (TaskCompletionSource != null)
+                    {
+                        tcs = TaskCompletionSource;
+                        TaskCompletionSource = null;
+                    }
+                }
+
+                tcs?.TrySetException(error);
+            }
+
+            public void OnNext(T value)
+            {
+                var tcs = default(TaskCompletionSource<bool>);
+
+                lock (SyncRoot)
+                {
+                    if (TaskCompletionSource == null)
+                    {
+                        Values.Enqueue(value);
+                    }
+                    else
+                    {
+                        Current = value;
+
+                        tcs = TaskCompletionSource;
+                        TaskCompletionSource = null;
+                    }
+                }
+
+                tcs?.TrySetResult(true);
+            }
         }
     }
 }
