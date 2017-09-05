@@ -48,7 +48,8 @@ namespace Tests
         {
             SynchronizationContext.SetSynchronizationContext(null);
 
-            var xs = EnumerableEx.Create<int>(async yield => {
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
                 var i = 0;
                 while (i < 10)
                 {
@@ -71,7 +72,8 @@ namespace Tests
         {
             SynchronizationContext.SetSynchronizationContext(null);
 
-            var xs = EnumerableEx.Create<int>(async yield => {
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
                 var i = 0;
                 while (true)
                 {
@@ -98,13 +100,13 @@ namespace Tests
         [Fact]
         public void YielderNoReset()
         {
-            var xs = EnumerableEx.Create<int>(async yield => {
-               await yield.Break();
+            var xs = EnumerableEx.Create<int>(async yield =>
+            {
+                await yield.Break();
             });
 
             AssertThrows<NotSupportedException>(() => xs.GetEnumerator().Reset());
         }
-
 
         private static IEnumerator<int> MyEnumerator()
         {
