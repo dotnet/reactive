@@ -137,12 +137,13 @@ if($hasSignClientSecret) {
 }
 
 Write-Host "Running tests" -Foreground Green
-$testDirectory = Join-Path $scriptPath "System.Interactive.Tests"  
 
 # OpenCover isn't working currently. So run tests on CI and coverage with JetBrains 
 
 # Use xUnit CLI as it's significantly faster than vstest (dotnet test)
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
+
+$testDirectory = Join-Path $scriptPath "System.Interactive.Tests"  
 .\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover1"
 
 if ($LastExitCode -ne 0) { 
@@ -153,7 +154,29 @@ if ($LastExitCode -ne 0) {
     }
 }
 
+$testDirectory = Join-Path $scriptPath "System.Linq.Async.Tests"  
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover2"
+
+if ($LastExitCode -ne 0) { 
+    Write-Host "Error with tests" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+      exit $LastExitCode
+    }
+}
+
 $testDirectory = Join-Path $scriptPath "System.Interactive.Async.Tests"  
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover2"
+
+if ($LastExitCode -ne 0) { 
+    Write-Host "Error with tests" -Foreground Red
+    if($isAppVeyor) {
+      $host.SetShouldExit($LastExitCode)
+      exit $LastExitCode
+    }
+}
+
+$testDirectory = Join-Path $scriptPath "System.Interactive.Async.Providers.Tests"  
 .\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe cover /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration" /Filters="+:module=System.Interactive;+:module=System.Interactive.Providers;+:module=System.Linq.Async;+:module=System.Linq.Async.Queryable;+:module=System.Interactive.Async;+:module=System.Interactive.Async.Providers;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /output="$outputFileDotCover2"
 
 if ($LastExitCode -ne 0) { 
