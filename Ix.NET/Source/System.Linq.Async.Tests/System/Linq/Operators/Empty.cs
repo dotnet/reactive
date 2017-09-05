@@ -25,9 +25,5 @@ namespace Tests
             var e = xs.GetAsyncEnumerator();
             Assert.False(e.MoveNextAsync().Result);
         }
-
-        private void Nop(object o)
-        {
-        }
     }
 }
