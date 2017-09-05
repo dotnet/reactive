@@ -68,9 +68,6 @@ namespace System.Linq
 
         private static async Task<TSource> LastCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var last = default(TSource);
-            var hasLast = false;
-
             if (source is IList<TSource> list)
             {
                 var count = list.Count;
@@ -79,26 +76,42 @@ namespace System.Linq
                     return list[count - 1];
                 }
             }
-
-            var e = source.GetAsyncEnumerator();
-
-            try
+            else if (source is IAsyncPartition<TSource> p)
             {
-                while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                var first = await p.TryGetLast().ConfigureAwait(false);
+
+                if (first.HasValue)
                 {
-                    hasLast = true;
-                    last = e.Current;
+                    return first.Value;
                 }
             }
-            finally
+            else
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                var last = default(TSource);
+                var hasLast = false;
+
+                var e = source.GetAsyncEnumerator();
+
+                try
+                {
+                    while (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    {
+                        hasLast = true;
+                        last = e.Current;
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
+
+                if (hasLast)
+                {
+                    return last;
+                }
             }
 
-            if (!hasLast)
-                throw new InvalidOperationException(Strings.NO_ELEMENTS);
-
-            return last;
+            throw new InvalidOperationException(Strings.NO_ELEMENTS);
         }
     }
 }

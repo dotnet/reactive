@@ -68,23 +68,37 @@ namespace System.Linq
 
         private static async Task<TSource> FirstOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            if (source is IList<TSource> list && list.Count > 0)
+            if (source is IList<TSource> list)
             {
-                return list[0];
-            }
-
-            var e = source.GetAsyncEnumerator();
-
-            try
-            {
-                if (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                if (list.Count > 0)
                 {
-                    return e.Current;
+                    return list[0];
                 }
             }
-            finally
+            else if (source is IAsyncPartition<TSource> p)
             {
-                await e.DisposeAsync().ConfigureAwait(false);
+                var first = await p.TryGetFirst().ConfigureAwait(false);
+
+                if (first.HasValue)
+                {
+                    return first.Value;
+                }
+            }
+            else
+            {
+                var e = source.GetAsyncEnumerator();
+
+                try
+                {
+                    if (await e.MoveNextAsync(cancellationToken).ConfigureAwait(false))
+                    {
+                        return e.Current;
+                    }
+                }
+                finally
+                {
+                    await e.DisposeAsync().ConfigureAwait(false);
+                }
             }
 
             return default(TSource);

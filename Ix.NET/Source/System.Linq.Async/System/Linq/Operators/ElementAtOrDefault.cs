@@ -30,7 +30,23 @@ namespace System.Linq
 
         private static async Task<TSource> ElementAtOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
-            if (index >= 0)
+            if (source is IList<TSource> list)
+            {
+                if (index < list.Count)
+                {
+                    return list[index];
+                }
+            }
+            else if (source is IAsyncPartition<TSource> p)
+            {
+                var first = await p.TryGetElementAt(index).ConfigureAwait(false);
+
+                if (first.HasValue)
+                {
+                    return first.Value;
+                }
+            }
+            else
             {
                 var e = source.GetAsyncEnumerator();
 

@@ -32,10 +32,25 @@ namespace System.Linq
         {
             if (source is IList<TSource> list)
             {
-                return list[index];
+                if (index < list.Count)
+                {
+                    return list[index];
+                }
             }
+            else if (source is IAsyncPartition<TSource> p)
+            {
+                var first = await p.TryGetElementAt(index).ConfigureAwait(false);
 
-            if (index >= 0)
+                if (first.HasValue)
+                {
+                    return first.Value;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+            }
+            else
             {
                 var e = source.GetAsyncEnumerator();
 
