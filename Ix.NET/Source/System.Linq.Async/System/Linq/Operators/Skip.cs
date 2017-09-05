@@ -19,12 +19,16 @@ namespace System.Linq
             {
                 // Return source if not actually skipping, but only if it's a type from here, to avoid
                 // issues if collections are used as keys or otherwise must not be aliased.
-                if (source is AsyncIterator<TSource>)
+                if (source is AsyncIterator<TSource> || source is IAsyncPartition<TSource>)
                 {
                     return source;
                 }
 
                 count = 0;
+            }
+            else if (source is IAsyncPartition<TSource> partition)
+            {
+                return partition.Skip(count);
             }
 
             return new SkipAsyncIterator<TSource>(source, count);

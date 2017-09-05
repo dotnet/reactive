@@ -19,6 +19,10 @@ namespace System.Linq
             {
                 return Empty<TSource>();
             }
+            else if (source is IAsyncPartition<TSource> partition)
+            {
+                return partition.Take(count);
+            }
 
             return new TakeAsyncIterator<TSource>(source, count);
         }
