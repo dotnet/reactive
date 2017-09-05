@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -202,7 +203,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class SelectIListIterator<TSource, TResult> : AsyncIterator<TResult>
+        internal sealed class SelectIListIterator<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly Func<TSource, TResult> selector;
             private readonly IList<TSource> source;
@@ -233,9 +234,59 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return Task.FromResult(-1);
+                }
+
+                var count = 0;
+
+                foreach (var item in source)
+                {
+                    selector(item);
+
+                    checked
+                    {
+                        count++;
+                    }
+                }
+
+                return Task.FromResult(count);
+            }
+
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, TResult1> selector)
             {
                 return new SelectIListIterator<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
+            }
+
+            public Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var n = source.Count;
+
+                var res = new TResult[n];
+
+                for (var i = 0; i < n; i++)
+                {
+                    res[i] = selector(source[i]);
+                }
+
+                return Task.FromResult(res);
+            }
+
+            public Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var n = source.Count;
+
+                var res = new List<TResult>(n);
+
+                for (var i = 0; i < n; i++)
+                {
+                    res.Add(selector(source[i]));
+                }
+
+                return Task.FromResult(res);
             }
 
             protected override async Task<bool> MoveNextCore()
@@ -384,7 +435,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>
+        internal sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly Func<TSource, Task<TResult>> selector;
             private readonly IList<TSource> source;
@@ -415,9 +466,59 @@ namespace System.Linq
                 await base.DisposeAsync().ConfigureAwait(false);
             }
 
+            public async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
+            {
+                if (onlyIfCheap)
+                {
+                    return -1;
+                }
+
+                var count = 0;
+
+                foreach (var item in source)
+                {
+                    await selector(item).ConfigureAwait(false);
+
+                    checked
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
+
             public override IAsyncEnumerable<TResult1> Select<TResult1>(Func<TResult, Task<TResult1>> selector)
             {
                 return new SelectIListIteratorWithTask<TSource, TResult1>(source, CombineSelectors(this.selector, selector));
+            }
+
+            public async Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var n = source.Count;
+
+                var res = new TResult[n];
+
+                for (var i = 0; i < n; i++)
+                {
+                    res[i] = await selector(source[i]).ConfigureAwait(false);
+                }
+
+                return res;
+            }
+
+            public async Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var n = source.Count;
+
+                var res = new List<TResult>(n);
+
+                for (var i = 0; i < n; i++)
+                {
+                    res.Add(await selector(source[i]).ConfigureAwait(false));
+                }
+
+                return res;
             }
 
             protected override async Task<bool> MoveNextCore()
