@@ -29,7 +29,7 @@ namespace System.Linq
             return new DistinctAsyncIterator<TSource>(source, comparer);
         }
 
-        private sealed class DistinctAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private sealed class DistinctAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IEqualityComparer<TSource> comparer;
             private readonly IAsyncEnumerable<TSource> source;

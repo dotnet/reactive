@@ -219,7 +219,7 @@ namespace System.Linq
             return source.GroupBy(keySelector, elementSelector, comparer).Select(g => resultSelector(g.Key, g));
         }
 
-        internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IIListProvider<TResult>
+        internal sealed class GroupedResultAsyncEnumerable<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, TKey> keySelector;
@@ -308,7 +308,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IIListProvider<TResult>
+        internal sealed class GroupedResultAsyncEnumerableWithTask<TSource, TKey, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, Task<TKey>> keySelector;
@@ -397,7 +397,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IIListProvider<IAsyncGrouping<TKey, TElement>>
+        internal sealed class GroupedAsyncEnumerable<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, TKey> keySelector;
@@ -463,13 +463,13 @@ namespace System.Linq
             
             public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.Lookup<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -486,7 +486,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IIListProvider<IAsyncGrouping<TKey, TElement>>
+        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey, TElement> : AsyncIterator<IAsyncGrouping<TKey, TElement>>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, Task<TKey>> keySelector;
@@ -552,13 +552,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TElement>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TElement>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TElement>> l = await Internal.LookupWithTask<TKey, TElement>.CreateAsync(source, keySelector, elementSelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -575,7 +575,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerable<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IIListProvider<IAsyncGrouping<TKey, TSource>>
+        internal sealed class GroupedAsyncEnumerable<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, TKey> keySelector;
@@ -637,13 +637,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.Lookup<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 
@@ -660,7 +660,7 @@ namespace System.Linq
             }
         }
 
-        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IIListProvider<IAsyncGrouping<TKey, TSource>>
+        internal sealed class GroupedAsyncEnumerableWithTask<TSource, TKey> : AsyncIterator<IAsyncGrouping<TKey, TSource>>, IAsyncIListProvider<IAsyncGrouping<TKey, TSource>>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly Func<TSource, Task<TKey>> keySelector;
@@ -722,13 +722,13 @@ namespace System.Linq
 
             public async Task<IAsyncGrouping<TKey, TSource>[]> ToArrayAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToArrayAsync(cancellationToken).ConfigureAwait(false);
             }
 
             public async Task<List<IAsyncGrouping<TKey, TSource>>> ToListAsync(CancellationToken cancellationToken)
             {
-                IIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
+                IAsyncIListProvider<IAsyncGrouping<TKey, TSource>> l = await Internal.LookupWithTask<TKey, TSource>.CreateAsync(source, keySelector, comparer, cancellationToken).ConfigureAwait(false);
                 return await l.ToListAsync(cancellationToken).ConfigureAwait(false);
             }
 

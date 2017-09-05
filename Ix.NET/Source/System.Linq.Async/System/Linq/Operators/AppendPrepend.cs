@@ -37,7 +37,7 @@ namespace System.Linq
             return new AppendPrepend1AsyncIterator<TSource>(source, element, false);
         }
 
-        private abstract class AppendPrependAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private abstract class AppendPrependAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             protected readonly IAsyncEnumerable<TSource> source;
             protected IAsyncEnumerator<TSource> enumerator;
@@ -259,7 +259,7 @@ namespace System.Linq
 
             public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                if (source is IIListProvider<TSource> listProv)
+                if (source is IAsyncIListProvider<TSource> listProv)
                 {
                     var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + 1;
@@ -508,7 +508,7 @@ namespace System.Linq
 
             public override async Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken)
             {
-                if (source is IIListProvider<TSource> listProv)
+                if (source is IAsyncIListProvider<TSource> listProv)
                 {
                     var count = await listProv.GetCountAsync(onlyIfCheap, cancellationToken).ConfigureAwait(false);
                     return count == -1 ? -1 : count + (appended == null ? 0 : appended.Count) + (prepended == null ? 0 : prepended.Count);

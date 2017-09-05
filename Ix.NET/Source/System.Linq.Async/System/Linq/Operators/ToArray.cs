@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (source is IIListProvider<TSource> arrayProvider)
+            if (source is IAsyncIListProvider<TSource> arrayProvider)
                 return arrayProvider.ToArrayAsync(cancellationToken);
 
             return AsyncEnumerableHelpers.ToArray(source, cancellationToken);

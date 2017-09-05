@@ -214,7 +214,7 @@ namespace System.Linq
 
 namespace System.Linq.Internal
 {
-    internal class Lookup<TKey, TElement> : ILookup<TKey, TElement>, IIListProvider<IAsyncGrouping<TKey, TElement>>
+    internal class Lookup<TKey, TElement> : ILookup<TKey, TElement>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
     {
         private readonly IEqualityComparer<TKey> _comparer;
         private Grouping<TKey, TElement>[] _groupings;
@@ -479,7 +479,7 @@ namespace System.Linq.Internal
             return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator();
         }
 
-        Task<List<IAsyncGrouping<TKey, TElement>>> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
+        Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
@@ -496,7 +496,7 @@ namespace System.Linq.Internal
             return Task.FromResult(list);
         }
 
-        Task<IAsyncGrouping<TKey, TElement>[]> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
+        Task<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;
@@ -516,7 +516,7 @@ namespace System.Linq.Internal
         }
     }
 
-    internal class LookupWithTask<TKey, TElement> : ILookup<TKey, TElement>, IIListProvider<IAsyncGrouping<TKey, TElement>>
+    internal class LookupWithTask<TKey, TElement> : ILookup<TKey, TElement>, IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>
     {
         private readonly IEqualityComparer<TKey> _comparer;
         private Grouping<TKey, TElement>[] _groupings;
@@ -765,7 +765,7 @@ namespace System.Linq.Internal
             return Enumerable.Cast<IAsyncGrouping<TKey, TElement>>(this).ToAsyncEnumerable().GetAsyncEnumerator();
         }
 
-        Task<List<IAsyncGrouping<TKey, TElement>>> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
+        Task<List<IAsyncGrouping<TKey, TElement>>> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToListAsync(CancellationToken cancellationToken)
         {
             var list = new List<IAsyncGrouping<TKey, TElement>>(Count);
             var g = _lastGrouping;
@@ -782,7 +782,7 @@ namespace System.Linq.Internal
             return Task.FromResult(list);
         }
 
-        Task<IAsyncGrouping<TKey, TElement>[]> IIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
+        Task<IAsyncGrouping<TKey, TElement>[]> IAsyncIListProvider<IAsyncGrouping<TKey, TElement>>.ToArrayAsync(CancellationToken cancellationToken)
         {
             var array = new IAsyncGrouping<TKey, TElement>[Count];
             var index = 0;

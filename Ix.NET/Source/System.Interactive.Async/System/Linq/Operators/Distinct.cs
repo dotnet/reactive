@@ -65,7 +65,7 @@ namespace System.Linq
             return new DistinctAsyncIteratorWithTask<TSource, TKey>(source, keySelector, comparer);
         }
 
-        private sealed class DistinctAsyncIterator<TSource, TKey> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private sealed class DistinctAsyncIterator<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IEqualityComparer<TKey> comparer;
             private readonly Func<TSource, TKey> keySelector;
@@ -211,7 +211,7 @@ namespace System.Linq
             }
         }
 
-        private sealed class DistinctAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private sealed class DistinctAsyncIteratorWithTask<TSource, TKey> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IEqualityComparer<TKey> comparer;
             private readonly Func<TSource, Task<TKey>> keySelector;

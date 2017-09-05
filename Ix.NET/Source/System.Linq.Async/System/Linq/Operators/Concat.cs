@@ -62,7 +62,7 @@ namespace System.Linq
             }
         }
 
-        private abstract class ConcatAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private abstract class ConcatAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private int counter;
             private IAsyncEnumerator<TSource> enumerator;

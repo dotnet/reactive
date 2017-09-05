@@ -20,7 +20,7 @@ namespace System.Linq
             return new ReverseAsyncIterator<TSource>(source);
         }
 
-        private sealed class ReverseAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private sealed class ReverseAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IAsyncEnumerable<TSource> source;
 
@@ -62,7 +62,7 @@ namespace System.Linq
             {
                 if (onlyIfCheap)
                 {
-                    if (source is IIListProvider<TSource> listProv)
+                    if (source is IAsyncIListProvider<TSource> listProv)
                     {
                         return listProv.GetCountAsync(true, cancellationToken);
                     }

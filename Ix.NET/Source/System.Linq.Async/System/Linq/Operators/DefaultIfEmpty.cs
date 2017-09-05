@@ -28,7 +28,7 @@ namespace System.Linq
             return DefaultIfEmpty(source, default(TSource));
         }
 
-        private sealed class DefaultIfEmptyAsyncIterator<TSource> : AsyncIterator<TSource>, IIListProvider<TSource>
+        private sealed class DefaultIfEmptyAsyncIterator<TSource> : AsyncIterator<TSource>, IAsyncIListProvider<TSource>
         {
             private readonly IAsyncEnumerable<TSource> source;
             private readonly TSource defaultValue;
@@ -119,7 +119,7 @@ namespace System.Linq
                 }
                 else
                 {
-                    var listProv = source as IIListProvider<TSource>;
+                    var listProv = source as IAsyncIListProvider<TSource>;
                     count = listProv == null ? -1 : await listProv.GetCountAsync(onlyIfCheap: true, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
 

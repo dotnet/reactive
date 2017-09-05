@@ -20,7 +20,7 @@ namespace System.Linq
                 return Task.FromResult(collection.Count);
             }
 
-            if (source is IIListProvider<TSource> listProv)
+            if (source is IAsyncIListProvider<TSource> listProv)
             {
                 return listProv.GetCountAsync(false, cancellationToken);
             }

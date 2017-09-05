@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (source is IIListProvider<TSource> listProvider)
+            if (source is IAsyncIListProvider<TSource> listProvider)
                 return listProvider.ToListAsync(cancellationToken);
 
             return source.Aggregate(
