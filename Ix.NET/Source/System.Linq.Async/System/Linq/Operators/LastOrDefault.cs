@@ -10,63 +10,63 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Last(source, CancellationToken.None);
+            return LastOrDefault(source, CancellationToken.None);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Last_(source, cancellationToken);
+            return LastOrDefault_(source, cancellationToken);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (predicate == null)
-                throw new ArgumentNullException(nameof(predicate));
-
-            return Last(source, predicate, CancellationToken.None);
-        }
-
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Last(cancellationToken);
+            return LastOrDefault(source, predicate, CancellationToken.None);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Last(source, predicate, CancellationToken.None);
+            return source.Where(predicate).LastOrDefault(cancellationToken);
         }
 
-        public static Task<TSource> Last<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return source.Where(predicate).Last(cancellationToken);
+            return LastOrDefault(source, predicate, CancellationToken.None);
         }
 
-        private static async Task<TSource> Last_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return source.Where(predicate).LastOrDefault(cancellationToken);
+        }
+
+        private static async Task<TSource> LastOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var last = default(TSource);
             var hasLast = false;
@@ -95,10 +95,7 @@ namespace System.Linq
                 await e.DisposeAsync().ConfigureAwait(false);
             }
 
-            if (!hasLast)
-                throw new InvalidOperationException(Strings.NO_ELEMENTS);
-
-            return last;
+            return !hasLast ? default(TSource) : last;
         }
     }
 }
