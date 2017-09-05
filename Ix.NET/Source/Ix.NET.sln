@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Linq.Async.Queryable.Tests", "System.Linq.Async.Queryable.Tests\System.Linq.Async.Queryable.Tests.csproj", "{134E9066-6217-4AF0-B408-47D92AB595BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async.Providers.Tests", "System.Interactive.Async.Providers.Test\System.Interactive.Async.Providers.Tests.csproj", "{974056C0-91BD-4EB6-8431-E30A614FD1D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Interactive.Async.Providers.Tests", "System.Interactive.Async.Providers.Tests\System.Interactive.Async.Providers.Tests.csproj", "{974056C0-91BD-4EB6-8431-E30A614FD1D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
