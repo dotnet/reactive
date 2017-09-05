@@ -79,6 +79,16 @@ namespace Tests
         }
 
         [Fact]
+        public void Concat1()
+        {
+            AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.Concat<int>(default(IAsyncQueryable<IAsyncEnumerable<int>>)), ane => ane.ParamName == "sources");
+
+            var res = AsyncQueryableEx.Concat<int>(new IAsyncEnumerable<int>[] { default(IAsyncEnumerable<int>) }.ToAsyncEnumerable().AsAsyncQueryable());
+            var task = res.ForEachAsync(_ => { });
+            AssertEx.SucceedOrFailProper(() => task.Wait());
+        }
+
+        [Fact]
         public void Distinct1()
         {
             AssertEx.Throws<ArgumentNullException>(() => AsyncQueryableEx.Distinct<int, int>(default(IAsyncQueryable<int>), (int arg0) => default(int)), ane => ane.ParamName == "source");
