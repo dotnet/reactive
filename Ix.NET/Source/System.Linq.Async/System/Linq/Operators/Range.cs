@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -13,7 +15,51 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Enumerable.Range(start, count).ToAsyncEnumerable();
+            if (count == 0)
+                return Empty<int>();
+
+            return new RangeAsyncIterator(start, count);
+        }
+
+        private sealed class RangeAsyncIterator : AsyncIterator<int>
+        {
+            private readonly int start;
+            private readonly int end;
+
+            public RangeAsyncIterator(int start, int count)
+            {
+                Debug.Assert(count > 0);
+
+                this.start = start;
+                this.end = start + count;
+            }
+
+            public override AsyncIterator<int> Clone() => new RangeAsyncIterator(start, end - start);
+
+            protected override async Task<bool> MoveNextCore()
+            {
+                switch (state)
+                {
+                    case AsyncIteratorState.Allocated:
+                        current = start;
+
+                        state = AsyncIteratorState.Iterating;
+                        return true;
+
+                    case AsyncIteratorState.Iterating:
+                        current++;
+
+                        if (current != end)
+                        {
+                            return true;
+                        }
+
+                        break;
+                }
+
+                await DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
         }
     }
 }
