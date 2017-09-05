@@ -10,31 +10,26 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index)
+        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return ElementAt(source, index, CancellationToken.None);
+            return ElementAtOrDefault(source, index, CancellationToken.None);
         }
 
-        public static Task<TSource> ElementAt<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        public static Task<TSource> ElementAtOrDefault<TSource>(this IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return ElementAt_(source, index, cancellationToken);
+            return ElementAtOrDefault_(source, index, cancellationToken);
         }
 
-        private static async Task<TSource> ElementAt_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        private static async Task<TSource> ElementAtOrDefault_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
-            if (source is IList<TSource> list)
-            {
-                return list[index];
-            }
-
             if (index >= 0)
             {
                 var e = source.GetAsyncEnumerator();
@@ -57,7 +52,7 @@ namespace System.Linq
                 }
             }
 
-            throw new ArgumentOutOfRangeException(nameof(index));
+            return default(TSource);
         }
     }
 }
