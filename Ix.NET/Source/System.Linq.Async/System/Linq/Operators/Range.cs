@@ -26,7 +26,7 @@ namespace System.Linq
             return new RangeAsyncIterator(start, count);
         }
 
-        private sealed class RangeAsyncIterator : AsyncIterator<int>, IAsyncIListProvider<int>
+        private sealed class RangeAsyncIterator : AsyncIterator<int>, IAsyncPartition<int>
         {
             private readonly int start;
             private readonly int end;
@@ -42,6 +42,30 @@ namespace System.Linq
             public override AsyncIterator<int> Clone() => new RangeAsyncIterator(start, end - start);
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(end - start);
+
+            public IAsyncPartition<int> Skip(int count)
+            {
+                var n = end - start;
+
+                if (count >= n)
+                {
+                    return EmptyAsyncIterator<int>.Instance;
+                }
+
+                return new RangeAsyncIterator(start + count, n - count);
+            }
+
+            public IAsyncPartition<int> Take(int count)
+            {
+                var n = end - start;
+
+                if (count >= n)
+                {
+                    return this;
+                }
+
+                return new RangeAsyncIterator(start, count);
+            }
 
             public Task<int[]> ToArrayAsync(CancellationToken cancellationToken)
             {
@@ -68,6 +92,20 @@ namespace System.Linq
 
                 return Task.FromResult(res);
             }
+
+            public Task<Maybe<int>> TryGetElementAt(int index)
+            {
+                if ((uint)index < (uint)(end - start))
+                {
+                    return Task.FromResult(new Maybe<int>(start + index));
+                }
+
+                return Task.FromResult(new Maybe<int>());
+            }
+
+            public Task<Maybe<int>> TryGetFirst() => Task.FromResult(new Maybe<int>(start));
+
+            public Task<Maybe<int>> TryGetLast() => Task.FromResult(new Maybe<int>(end - 1));
 
             protected override async Task<bool> MoveNextCore()
             {
