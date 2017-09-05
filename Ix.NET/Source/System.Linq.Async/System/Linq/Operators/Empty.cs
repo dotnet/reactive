@@ -11,7 +11,14 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Empty<TValue>()
         {
-            return CreateEnumerable(() => CreateEnumerator<TValue>(ct => TaskExt.False, current: null, dispose: null));
+            return new EmptyAsyncIterator<TValue>();
+        }
+
+        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>
+        {
+            public override AsyncIterator<TValue> Clone() => new EmptyAsyncIterator<TValue>();
+
+            protected override Task<bool> MoveNextCore() => TaskExt.False;
         }
     }
 }
