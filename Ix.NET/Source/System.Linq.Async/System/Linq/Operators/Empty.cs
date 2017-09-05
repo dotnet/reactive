@@ -10,14 +10,13 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static IAsyncEnumerable<TValue> Empty<TValue>()
-        {
-            return new EmptyAsyncIterator<TValue>();
-        }
+        public static IAsyncEnumerable<TValue> Empty<TValue>() => EmptyAsyncIterator<TValue>.Instance;
 
-        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>, IAsyncPartition<TValue>
+        private sealed class EmptyAsyncIterator<TValue> : IAsyncPartition<TValue>, IAsyncEnumerator<TValue>
         {
-            public override AsyncIterator<TValue> Clone() => new EmptyAsyncIterator<TValue>();
+            public static readonly EmptyAsyncIterator<TValue> Instance = new EmptyAsyncIterator<TValue>();
+
+            public TValue Current => default(TValue);
 
             public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(0);
 
@@ -35,7 +34,11 @@ namespace System.Linq
 
             public Task<Maybe<TValue>> TryGetLast() => Task.FromResult(new Maybe<TValue>());
 
-            protected override Task<bool> MoveNextCore() => TaskExt.False;
+            public Task<bool> MoveNextAsync() => TaskExt.False;
+
+            public IAsyncEnumerator<TValue> GetAsyncEnumerator() => this;
+
+            public Task DisposeAsync() => TaskExt.CompletedTask;
         }
     }
 }
