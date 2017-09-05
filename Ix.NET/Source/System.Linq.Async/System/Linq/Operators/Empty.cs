@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -14,9 +15,15 @@ namespace System.Linq
             return new EmptyAsyncIterator<TValue>();
         }
 
-        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>
+        private sealed class EmptyAsyncIterator<TValue> : AsyncIterator<TValue>, IAsyncIListProvider<TValue>
         {
             public override AsyncIterator<TValue> Clone() => new EmptyAsyncIterator<TValue>();
+
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(0);
+
+            public Task<TValue[]> ToArrayAsync(CancellationToken cancellationToken) => Task.FromResult(Array.Empty<TValue>());
+
+            public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
 
             protected override Task<bool> MoveNextCore() => TaskExt.False;
         }
