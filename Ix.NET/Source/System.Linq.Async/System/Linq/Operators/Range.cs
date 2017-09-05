@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -21,7 +22,7 @@ namespace System.Linq
             return new RangeAsyncIterator(start, count);
         }
 
-        private sealed class RangeAsyncIterator : AsyncIterator<int>
+        private sealed class RangeAsyncIterator : AsyncIterator<int>, IAsyncIListProvider<int>
         {
             private readonly int start;
             private readonly int end;
@@ -35,6 +36,34 @@ namespace System.Linq
             }
 
             public override AsyncIterator<int> Clone() => new RangeAsyncIterator(start, end - start);
+
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(end - start);
+
+            public Task<int[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var res = new int[end - start];
+
+                var value = start;
+
+                for (var i = 0; i < res.Length; i++)
+                {
+                    res[i] = value++;
+                }
+
+                return Task.FromResult(res);
+            }
+
+            public Task<List<int>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var res = new List<int>(end - start);
+
+                for (var value = start; value < end; value++)
+                {
+                    res.Add(value);
+                }
+
+                return Task.FromResult(res);
+            }
 
             protected override async Task<bool> MoveNextCore()
             {
