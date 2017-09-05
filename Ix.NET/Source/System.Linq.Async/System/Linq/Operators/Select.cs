@@ -133,10 +133,10 @@ namespace System.Linq
                             return true;
                         }
 
-                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -194,10 +194,10 @@ namespace System.Linq
                             return true;
                         }
 
-                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -315,10 +315,10 @@ namespace System.Linq
                             return true;
                         }
 
-                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -376,10 +376,10 @@ namespace System.Linq
                             return true;
                         }
 
-                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
@@ -436,10 +436,10 @@ namespace System.Linq
                             return true;
                         }
 
-                        await DisposeAsync().ConfigureAwait(false);
                         break;
                 }
 
+                await DisposeAsync().ConfigureAwait(false);
                 return false;
             }
         }
