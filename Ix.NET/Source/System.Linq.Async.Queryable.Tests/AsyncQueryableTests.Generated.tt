@@ -132,7 +132,9 @@ foreach (var m in typeof(AsyncEnumerable).GetMethods()
                             return false;
                         })
                         .OrderBy(m => m.Name)
-                        .ThenBy(m => m.GetParameters().Length))
+                        .ThenBy(m => m.IsGenericMethod ? m.GetGenericArguments().Length : 0)
+                        .ThenBy(m => m.GetParameters().Length)
+                        .ThenBy(m => string.Join(", ", m.GetParameters().Select(p => p.Name))))
 {
     var genArgs = m.GetGenericArguments();
 
