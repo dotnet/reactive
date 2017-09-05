@@ -435,6 +435,11 @@ namespace System.Linq
             }
         }
 
+        // NB: LINQ to Objects implements IPartition<TResult> for this. However, it seems incorrect to do so in a trivial
+        //     manner where e.g. TryGetLast simply indexes into the list without running the selector for the first n - 1
+        //     elements in order to ensure side-effects. We should consider whether we want to follow this implementation
+        //     strategy or support IAsyncPartition<TResult> in a less efficient but more correct manner here.
+
         internal sealed class SelectIListIteratorWithTask<TSource, TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly Func<TSource, Task<TResult>> selector;
