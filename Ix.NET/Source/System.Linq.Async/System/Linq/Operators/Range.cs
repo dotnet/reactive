@@ -16,6 +16,10 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
+            var end = (long)start + count - 1L;
+            if (count < 0 || end > int.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(count));
+
             if (count == 0)
                 return Empty<int>();
 
