@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Tests
 {
-    public partial class Tests
+    public class Concat : Tests
     {
         [Fact]
         public void Concat_Arguments()
@@ -57,20 +57,6 @@ namespace Tests
             );
 
             Assert.True(Enumerable.SequenceEqual(res, new[] { 1, 2, 3, 4, 5 }));
-        }
-
-        [Fact]
-        public void SelectMany_Arguments()
-        {
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(null, new[] { 1 }));
-            AssertThrows<ArgumentNullException>(() => EnumerableEx.SelectMany<int, int>(new[] { 1 }, null));
-        }
-
-        [Fact]
-        public void SelectMany()
-        {
-            var res = new[] { 1, 2 }.SelectMany(new[] { 'a', 'b', 'c' }).ToList();
-            Assert.True(Enumerable.SequenceEqual(res, new[] { 'a', 'b', 'c', 'a', 'b', 'c' }));
         }
     }
 }
