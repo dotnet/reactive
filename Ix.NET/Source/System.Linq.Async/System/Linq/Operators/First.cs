@@ -68,8 +68,7 @@ namespace System.Linq
 
         private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
-            var list = source as IList<TSource>;
-            if (list?.Count > 0)
+            if (source is IList<TSource> list && list.Count > 0)
             {
                 return list[0];
             }
