@@ -10,7 +10,7 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        private static async Task<double> Average_(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
+        private static async Task<double> AverageCore(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -40,7 +40,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<double?> Average_(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
+        private static async Task<double?> AverageCore(IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -78,7 +78,7 @@ namespace System.Linq
             return null;
         }
 
-        private static async Task<double> Average_(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
+        private static async Task<double> AverageCore(IAsyncEnumerable<long> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -108,7 +108,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<double?> Average_(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
+        private static async Task<double?> AverageCore(IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -146,7 +146,7 @@ namespace System.Linq
             return null;
         }
 
-        private static async Task<double> Average_(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
+        private static async Task<double> AverageCore(IAsyncEnumerable<double> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -176,7 +176,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<double?> Average_(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
+        private static async Task<double?> AverageCore(IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -214,7 +214,7 @@ namespace System.Linq
             return null;
         }
 
-        private static async Task<float> Average_(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
+        private static async Task<float> AverageCore(IAsyncEnumerable<float> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -241,7 +241,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<float?> Average_(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
+        private static async Task<float?> AverageCore(IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -279,7 +279,7 @@ namespace System.Linq
             return null;
         }
 
-        private static async Task<decimal> Average_(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
+        private static async Task<decimal> AverageCore(IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -306,7 +306,7 @@ namespace System.Linq
             }
         }
 
-        private static async Task<decimal?> Average_(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
+        private static async Task<decimal?> AverageCore(IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 

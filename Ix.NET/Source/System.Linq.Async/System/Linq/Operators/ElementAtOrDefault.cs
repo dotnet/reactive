@@ -25,10 +25,10 @@ namespace System.Linq
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return ElementAtOrDefault_(source, index, cancellationToken);
+            return ElementAtOrDefaultCore(source, index, cancellationToken);
         }
 
-        private static async Task<TSource> ElementAtOrDefault_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        private static async Task<TSource> ElementAtOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (index >= 0)
             {

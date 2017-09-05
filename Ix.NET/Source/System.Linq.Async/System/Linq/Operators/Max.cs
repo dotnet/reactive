@@ -67,7 +67,7 @@ namespace System.Linq
             return source.Select(selector).Max(cancellationToken);
         }
 
-        private static async Task<TSource> Max_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static async Task<TSource> MaxCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 

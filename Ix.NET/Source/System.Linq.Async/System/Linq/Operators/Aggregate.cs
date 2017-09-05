@@ -27,7 +27,7 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return Aggregate_(source, accumulator, cancellationToken);
+            return AggregateCore(source, accumulator, cancellationToken);
         }
 
         public static Task<TSource> Aggregate<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator)
@@ -47,7 +47,7 @@ namespace System.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return Aggregate_(source, accumulator, cancellationToken);
+            return AggregateCore(source, accumulator, cancellationToken);
         }
 
         public static Task<TAccumulate> Aggregate<TSource, TAccumulate>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator)
@@ -111,7 +111,7 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Aggregate_(source, seed, accumulator, resultSelector, cancellationToken);
+            return AggregateCore(source, seed, accumulator, resultSelector, cancellationToken);
         }
 
         public static Task<TResult> Aggregate<TSource, TAccumulate, TResult>(this IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator, Func<TAccumulate, Task<TResult>> resultSelector)
@@ -135,10 +135,10 @@ namespace System.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return Aggregate_(source, seed, accumulator, resultSelector, cancellationToken);
+            return AggregateCore(source, seed, accumulator, resultSelector, cancellationToken);
         }
 
-        private static async Task<TResult> Aggregate_<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
+        private static async Task<TResult> AggregateCore<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator, Func<TAccumulate, TResult> resultSelector, CancellationToken cancellationToken)
         {
             var acc = seed;
 
@@ -159,7 +159,7 @@ namespace System.Linq
             return resultSelector(acc);
         }
 
-        private static async Task<TSource> Aggregate_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
+        private static async Task<TSource> AggregateCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, TSource> accumulator, CancellationToken cancellationToken)
         {
             var first = true;
             var acc = default(TSource);
@@ -185,7 +185,7 @@ namespace System.Linq
             return acc;
         }
 
-        private static async Task<TResult> Aggregate_<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator, Func<TAccumulate, Task<TResult>> resultSelector, CancellationToken cancellationToken)
+        private static async Task<TResult> AggregateCore<TSource, TAccumulate, TResult>(IAsyncEnumerable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> accumulator, Func<TAccumulate, Task<TResult>> resultSelector, CancellationToken cancellationToken)
         {
             var acc = seed;
 
@@ -206,7 +206,7 @@ namespace System.Linq
             return await resultSelector(acc).ConfigureAwait(false);
         }
 
-        private static async Task<TSource> Aggregate_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator, CancellationToken cancellationToken)
+        private static async Task<TSource> AggregateCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, TSource, Task<TSource>> accumulator, CancellationToken cancellationToken)
         {
             var first = true;
             var acc = default(TSource);

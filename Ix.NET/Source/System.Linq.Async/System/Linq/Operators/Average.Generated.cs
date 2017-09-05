@@ -15,7 +15,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double> Average(this IAsyncEnumerable<int> source, CancellationToken cancellationToken)
@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int> selector)
@@ -71,7 +71,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double> Average(this IAsyncEnumerable<long> source, CancellationToken cancellationToken)
@@ -79,7 +79,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long> selector)
@@ -127,7 +127,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<float> Average(this IAsyncEnumerable<float> source, CancellationToken cancellationToken)
@@ -135,7 +135,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<float> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float> selector)
@@ -183,7 +183,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double> Average(this IAsyncEnumerable<double> source, CancellationToken cancellationToken)
@@ -191,7 +191,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double> selector)
@@ -239,7 +239,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<decimal> Average(this IAsyncEnumerable<decimal> source, CancellationToken cancellationToken)
@@ -247,7 +247,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<decimal> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal> selector)
@@ -295,7 +295,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<int?> source, CancellationToken cancellationToken)
@@ -303,7 +303,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, int?> selector)
@@ -351,7 +351,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<long?> source, CancellationToken cancellationToken)
@@ -359,7 +359,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, long?> selector)
@@ -407,7 +407,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<float?> Average(this IAsyncEnumerable<float?> source, CancellationToken cancellationToken)
@@ -415,7 +415,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<float?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, float?> selector)
@@ -463,7 +463,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<double?> Average(this IAsyncEnumerable<double?> source, CancellationToken cancellationToken)
@@ -471,7 +471,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<double?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, double?> selector)
@@ -519,7 +519,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, CancellationToken.None);
+            return AverageCore(source, CancellationToken.None);
         }
 
         public static Task<decimal?> Average(this IAsyncEnumerable<decimal?> source, CancellationToken cancellationToken)
@@ -527,7 +527,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Average_(source, cancellationToken);
+            return AverageCore(source, cancellationToken);
         }
 
         public static Task<decimal?> Average<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, decimal?> selector)

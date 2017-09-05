@@ -25,10 +25,10 @@ namespace System.Linq
             if (index < 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return ElementAt_(source, index, cancellationToken);
+            return ElementAtCore(source, index, cancellationToken);
         }
 
-        private static async Task<TSource> ElementAt_<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
+        private static async Task<TSource> ElementAtCore<TSource>(IAsyncEnumerable<TSource> source, int index, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {

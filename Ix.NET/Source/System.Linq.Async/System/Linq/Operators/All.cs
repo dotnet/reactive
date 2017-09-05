@@ -37,7 +37,7 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return All_(source, predicate, cancellationToken);
+            return AllCore(source, predicate, cancellationToken);
         }
 
         public static Task<bool> All<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
@@ -47,10 +47,10 @@ namespace System.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return All_(source, predicate, cancellationToken);
+            return AllCore(source, predicate, cancellationToken);
         }
 
-        private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
+        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
@@ -70,7 +70,7 @@ namespace System.Linq
             return true;
         }
 
-        private static async Task<bool> All_<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
+        private static async Task<bool> AllCore<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, Task<bool>> predicate, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 

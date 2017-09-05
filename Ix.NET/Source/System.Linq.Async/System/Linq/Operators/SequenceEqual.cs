@@ -42,7 +42,7 @@ namespace System.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return SequenceEqual_(first, second, comparer, cancellationToken);
+            return SequenceEqualCore(first, second, comparer, cancellationToken);
         }
 
         public static Task<bool> SequenceEqual<TSource>(this IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ namespace System.Linq
             return first.SequenceEqual(second, EqualityComparer<TSource>.Default, cancellationToken);
         }
 
-        private static async Task<bool> SequenceEqual_<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static async Task<bool> SequenceEqualCore<TSource>(IAsyncEnumerable<TSource> first, IAsyncEnumerable<TSource> second, IEqualityComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             if (first is ICollection<TSource> firstCol && second is ICollection<TSource> secondCol && firstCol.Count != secondCol.Count)
             {

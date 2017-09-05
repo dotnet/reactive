@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return First_(source, cancellationToken);
+            return FirstCore(source, cancellationToken);
         }
 
         public static Task<TSource> First<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -66,7 +66,7 @@ namespace System.Linq
             return source.Where(predicate).First(cancellationToken);
         }
 
-        private static async Task<TSource> First_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static async Task<TSource> FirstCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var list = source as IList<TSource>;
             if (list?.Count > 0)

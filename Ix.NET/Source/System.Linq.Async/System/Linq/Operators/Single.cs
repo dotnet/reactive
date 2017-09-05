@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Single_(source, cancellationToken);
+            return SingleCore(source, cancellationToken);
         }
 
         public static Task<TSource> Single<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -66,7 +66,7 @@ namespace System.Linq
             return source.Where(predicate).Single(cancellationToken);
         }
 
-        private static async Task<TSource> Single_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static async Task<TSource> SingleCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             if (source is IList<TSource> list)
             {

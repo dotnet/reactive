@@ -23,7 +23,7 @@ namespace System.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return LastOrDefault_(source, cancellationToken);
+            return LastOrDefaultCore(source, cancellationToken);
         }
 
         public static Task<TSource> LastOrDefault<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -66,7 +66,7 @@ namespace System.Linq
             return source.Where(predicate).LastOrDefault(cancellationToken);
         }
 
-        private static async Task<TSource> LastOrDefault_<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
+        private static async Task<TSource> LastOrDefaultCore<TSource>(IAsyncEnumerable<TSource> source, CancellationToken cancellationToken)
         {
             var last = default(TSource);
             var hasLast = false;

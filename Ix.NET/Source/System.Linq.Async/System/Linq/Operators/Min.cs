@@ -67,7 +67,7 @@ namespace System.Linq
             return source.Select(selector).Min(cancellationToken);
         }
 
-        private static async Task<TSource> Min_<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
+        private static async Task<TSource> MinCore<TSource>(IAsyncEnumerable<TSource> source, IComparer<TSource> comparer, CancellationToken cancellationToken)
         {
             var e = source.GetAsyncEnumerator();
 
