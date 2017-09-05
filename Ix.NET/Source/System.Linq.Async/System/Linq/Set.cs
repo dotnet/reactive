@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -141,6 +142,23 @@ namespace System.Linq
 
             _buckets = newBuckets;
             _slots = newSlots;
+        }
+
+        public async Task UnionWithAsync(IAsyncEnumerable<TElement> other)
+        {
+            var enu = other.GetAsyncEnumerator();
+
+            try
+            {
+                while (await enu.MoveNextAsync().ConfigureAwait(false))
+                {
+                    Add(enu.Current);
+                }
+            }
+            finally
+            {
+                await enu.DisposeAsync().ConfigureAwait(false);
+            }
         }
 
         internal struct Slot

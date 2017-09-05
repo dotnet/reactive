@@ -121,19 +121,7 @@ namespace System.Linq
             {
                 var s = new Set<TSource>(comparer);
 
-                var enu = source.GetAsyncEnumerator();
-
-                try
-                {
-                    while (await enu.MoveNextAsync(cancellationToken).ConfigureAwait(false))
-                    {
-                        s.Add(enu.Current);
-                    }
-                }
-                finally
-                {
-                    await enu.DisposeAsync().ConfigureAwait(false);
-                }
+                await s.UnionWithAsync(source);
 
                 return s;
             }
