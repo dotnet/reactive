@@ -78,7 +78,7 @@ namespace System.Linq
             }
             else if (source is IAsyncPartition<TSource> p)
             {
-                var first = await p.TryGetLastAsync().ConfigureAwait(false);
+                var first = await p.TryGetLastAsync(cancellationToken).ConfigureAwait(false);
 
                 if (first.HasValue)
                 {

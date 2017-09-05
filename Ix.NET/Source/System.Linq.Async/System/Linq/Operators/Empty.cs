@@ -12,7 +12,7 @@ namespace System.Linq
     {
         public static IAsyncEnumerable<TValue> Empty<TValue>() => EmptyAsyncIterator<TValue>.Instance;
 
-        private sealed class EmptyAsyncIterator<TValue> : IAsyncPartition<TValue>, IAsyncEnumerator<TValue>
+        internal sealed class EmptyAsyncIterator<TValue> : IAsyncPartition<TValue>, IAsyncEnumerator<TValue>
         {
             public static readonly EmptyAsyncIterator<TValue> Instance = new EmptyAsyncIterator<TValue>();
 
@@ -28,11 +28,11 @@ namespace System.Linq
 
             public Task<List<TValue>> ToListAsync(CancellationToken cancellationToken) => Task.FromResult(new List<TValue>());
 
-            public Task<Maybe<TValue>> TryGetElementAsync(int index) => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetElementAsync(int index, CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetFirstAsync() => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetFirstAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
 
-            public Task<Maybe<TValue>> TryGetLastAsync() => Task.FromResult(new Maybe<TValue>());
+            public Task<Maybe<TValue>> TryGetLastAsync(CancellationToken cancellationToken) => Task.FromResult(new Maybe<TValue>());
 
             public Task<bool> MoveNextAsync() => TaskExt.False;
 
