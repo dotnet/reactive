@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Linq
@@ -17,7 +18,7 @@ namespace System.Linq
             return new RepeatAsyncIterator<TResult>(element, count);
         }
 
-        private sealed class RepeatAsyncIterator<TResult> : AsyncIterator<TResult>
+        private sealed class RepeatAsyncIterator<TResult> : AsyncIterator<TResult>, IAsyncIListProvider<TResult>
         {
             private readonly TResult element;
             private readonly int count;
@@ -30,6 +31,32 @@ namespace System.Linq
             }
 
             public override AsyncIterator<TResult> Clone() => new RepeatAsyncIterator<TResult>(element, count);
+
+            public Task<int> GetCountAsync(bool onlyIfCheap, CancellationToken cancellationToken) => Task.FromResult(count);
+
+            public Task<TResult[]> ToArrayAsync(CancellationToken cancellationToken)
+            {
+                var res = new TResult[count];
+
+                for (var i = 0; i < count; i++)
+                {
+                    res[i] = element;
+                }
+
+                return Task.FromResult(res);
+            }
+
+            public Task<List<TResult>> ToListAsync(CancellationToken cancellationToken)
+            {
+                var res = new List<TResult>(count);
+
+                for (var i = 0; i < count; i++)
+                {
+                    res.Add(element);
+                }
+
+                return Task.FromResult(res);
+            }
 
             protected override async Task<bool> MoveNextCore()
             {
