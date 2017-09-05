@@ -14,7 +14,7 @@ namespace System.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Enumerable.Repeat(element, count).ToAsyncEnumerable();
+            return new RepeatAsyncIterator<TResult>(element, count);
         }
 
         private sealed class RepeatAsyncIterator<TResult> : AsyncIterator<TResult>
