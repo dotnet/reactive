@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Threading.Tasks;
+
 namespace System.Reactive.Linq
 {
     partial class AsyncObservable
@@ -12,6 +14,26 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
 
             return Create<int>(observer => source.SubscribeAsync(AsyncObserver.Count<TSource>(observer)));
+        }
+
+        public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return Create<int>(observer => source.SubscribeAsync(AsyncObserver.Count(observer, predicate)));
+        }
+
+        public static IAsyncObservable<int> Count<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return Create<int>(observer => source.SubscribeAsync(AsyncObserver.Count(observer, predicate)));
         }
     }
 
@@ -47,6 +69,26 @@ namespace System.Reactive.Linq
                     await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );
+        }
+
+        public static IAsyncObserver<TSource> Count<TSource>(IAsyncObserver<int> observer, Func<TSource, bool> predicate)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return Where(Count<TSource>(observer), predicate);
+        }
+
+        public static IAsyncObserver<TSource> Count<TSource>(IAsyncObserver<int> observer, Func<TSource, Task<bool>> predicate)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return Where(Count<TSource>(observer), predicate);
         }
     }
 }
