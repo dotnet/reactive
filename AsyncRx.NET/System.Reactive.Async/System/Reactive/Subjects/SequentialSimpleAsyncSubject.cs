@@ -3,132 +3,33 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public class SequentialSimpleAsyncSubject<T> : IAsyncSubject<T>
+    public class SequentialSimpleAsyncSubject<T> : SimpleAsyncSubject<T>
     {
-        private readonly object _gate = new object();
-        private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
-        private bool _done;
-        private Exception _error;
-
-        public async Task OnCompletedAsync()
+        protected override async Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers)
         {
-            IAsyncObserver<T>[] observers;
-
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                _done = true;
-
-                observers = _observers.ToArray();
-            }
-
             foreach (var observer in observers)
             {
                 await observer.OnCompletedAsync().ConfigureAwait(false);
             }
         }
 
-        public async Task OnErrorAsync(Exception error)
+        protected override async Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error)
         {
-            if (error == null)
-                throw new ArgumentNullException(nameof(error));
-
-            IAsyncObserver<T>[] observers;
-
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                _error = error;
-
-                observers = _observers.ToArray();
-            }
-
             foreach (var observer in observers)
             {
                 await observer.OnErrorAsync(error).ConfigureAwait(false);
             }
         }
 
-        public async Task OnNextAsync(T value)
+        protected override async Task OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value)
         {
-            IAsyncObserver<T>[] observers;
-
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                observers = _observers.ToArray();
-            }
-
             foreach (var observer in observers)
             {
                 await observer.OnNextAsync(value).ConfigureAwait(false);
-            }
-        }
-
-        public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-
-            bool done;
-            Exception error;
-
-            lock (_gate)
-            {
-                done = _done;
-                error = _error;
-
-                if (!done && error == null)
-                {
-                    _observers.Add(observer);
-                }
-            }
-
-            if (done)
-            {
-                await observer.OnCompletedAsync().ConfigureAwait(false);
-
-                return AsyncDisposable.Nop;
-            }
-            else if (error != null)
-            {
-                await observer.OnErrorAsync(error).ConfigureAwait(false);
-
-                return AsyncDisposable.Nop;
-            }
-            else
-            {
-                return AsyncDisposable.Create(() =>
-                {
-                    lock (_gate)
-                    {
-                        var i = _observers.LastIndexOf(observer);
-
-                        if (i >= 0)
-                        {
-                            _observers.RemoveAt(i);
-                        }
-                    }
-
-                    return Task.CompletedTask;
-                });
             }
         }
     }

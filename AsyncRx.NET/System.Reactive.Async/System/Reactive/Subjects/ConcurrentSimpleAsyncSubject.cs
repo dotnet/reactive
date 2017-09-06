@@ -4,124 +4,16 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public class ConcurrentSimpleAsyncSubject<T> : IAsyncSubject<T>
+    public class ConcurrentSimpleAsyncSubject<T> : SimpleAsyncSubject<T>
     {
-        private readonly object _gate = new object();
-        private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
-        private bool _done;
-        private Exception _error;
+        protected override Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers) => Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync()));
 
-        public async Task OnCompletedAsync()
-        {
-            IAsyncObserver<T>[] observers;
+        protected override Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error) => Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error)));
 
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                _done = true;
-
-                observers = _observers.ToArray();
-            }
-
-            await Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync())).ConfigureAwait(false);
-        }
-
-        public async Task OnErrorAsync(Exception error)
-        {
-            if (error == null)
-                throw new ArgumentNullException(nameof(error));
-
-            IAsyncObserver<T>[] observers;
-
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                _error = error;
-
-                observers = _observers.ToArray();
-            }
-
-            await Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error))).ConfigureAwait(false);
-        }
-
-        public async Task OnNextAsync(T value)
-        {
-            IAsyncObserver<T>[] observers;
-
-            lock (_gate)
-            {
-                if (_done || _error != null)
-                {
-                    return;
-                }
-
-                observers = _observers.ToArray();
-            }
-
-            await Task.WhenAll(observers.Select(observer => observer.OnNextAsync(value))).ConfigureAwait(false);
-        }
-
-        public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-
-            bool done;
-            Exception error;
-
-            lock (_gate)
-            {
-                done = _done;
-                error = _error;
-
-                if (!done && error == null)
-                {
-                    _observers.Add(observer);
-                }
-            }
-
-            if (done)
-            {
-                await observer.OnCompletedAsync().ConfigureAwait(false);
-
-                return AsyncDisposable.Nop;
-            }
-            else if (error != null)
-            {
-                await observer.OnErrorAsync(error).ConfigureAwait(false);
-
-                return AsyncDisposable.Nop;
-            }
-            else
-            {
-                return AsyncDisposable.Create(() =>
-                {
-                    lock (_gate)
-                    {
-                        var i = _observers.LastIndexOf(observer);
-
-                        if (i >= 0)
-                        {
-                            _observers.RemoveAt(i);
-                        }
-                    }
-
-                    return Task.CompletedTask;
-                });
-            }
-        }
+        protected override Task OnNextAsyncCore(IEnumerable<IAsyncObserver<T>> observers, T value) => Task.WhenAll(observers.Select(observer => observer.OnNextAsync(value)));
     }
 }
