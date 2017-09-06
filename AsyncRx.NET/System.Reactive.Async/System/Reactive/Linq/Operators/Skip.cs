@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Concurrency;
+
 namespace System.Reactive.Linq
 {
     partial class AsyncObservable
@@ -19,6 +21,38 @@ namespace System.Reactive.Linq
             }
 
             return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, count)));
+        }
+
+        public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (duration < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(duration));
+
+            if (duration == TimeSpan.Zero)
+            {
+                return source;
+            }
+
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, duration)));
+        }
+
+        public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (duration < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(duration));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            if (duration == TimeSpan.Zero)
+            {
+                return source;
+            }
+
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, duration, scheduler)));
         }
     }
 
@@ -46,6 +80,28 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 observer.OnCompletedAsync
             );
+        }
+
+        public static IAsyncObserver<TSource> Skip<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (duration < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(duration));
+
+            throw new NotImplementedException();
+        }
+
+        public static IAsyncObserver<TSource> Skip<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (duration < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(duration));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            throw new NotImplementedException();
         }
     }
 }
