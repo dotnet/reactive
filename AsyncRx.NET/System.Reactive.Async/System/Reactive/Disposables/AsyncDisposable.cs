@@ -9,6 +9,8 @@ namespace System.Reactive.Disposables
 {
     public static class AsyncDisposable
     {
+        public static IAsyncDisposable Nop { get; } = new NopAsyncDisposable();
+
         public static IAsyncDisposable Create(Func<Task> dispose)
         {
             if (dispose == null)
@@ -27,6 +29,11 @@ namespace System.Reactive.Disposables
             }
 
             public Task DisposeAsync() => Interlocked.Exchange(ref _dispose, null)?.Invoke() ?? Task.CompletedTask;
+        }
+
+        private sealed class NopAsyncDisposable : IAsyncDisposable
+        {
+            public Task DisposeAsync() => Task.CompletedTask;
         }
     }
 }
