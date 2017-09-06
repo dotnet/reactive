@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> All<TSource>(this IAsyncObserver<bool> observer, Func<TSource, bool> predicate)
+        public static IAsyncObserver<TSource> All<TSource>(IAsyncObserver<bool> observer, Func<TSource, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             return All<TSource>(observer, x => Task.FromResult(predicate(x)));
         }
 
-        public static IAsyncObserver<TSource> All<TSource>(this IAsyncObserver<bool> observer, Func<TSource, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> All<TSource>(IAsyncObserver<bool> observer, Func<TSource, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
