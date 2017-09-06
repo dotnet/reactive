@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Where(Select<TSource, TResult>(observer, x => (TResult)(object)x), x => x is TResult);
+            return Where(Cast<TSource, TResult>(observer), x => x is TResult);
         }
     }
 }
