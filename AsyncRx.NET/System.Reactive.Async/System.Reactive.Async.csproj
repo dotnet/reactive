@@ -9,13 +9,17 @@
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
+    <None Update="System\Reactive\Linq\Operators\Sum.Generated.tt">
+      <LastGenOutput>Sum.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="System\Reactive\Linq\Operators\Min.Generated.tt">
       <LastGenOutput>Min - Copy.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="System\Reactive\Linq\Operators\Max.Generated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Max - Copy.Generated.cs</LastGenOutput>
+      <LastGenOutput>Max.Generated.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -29,15 +33,25 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Average.Generated.tt</DependentUpon>
     </Compile>
-    <Compile Update="System\Reactive\Linq\Operators\Max - Copy.Generated.cs">
+    <Compile Update="System\Reactive\Linq\Operators\Max - Copy - Copy.Generated.cs">
+      <DependentUpon>Sum.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Max.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Max.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Sum.Generated.cs">
       <DependentUpon>Max - Copy.Generated.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="System\Reactive\Linq\Operators\Max - Copy.Generated.cs">
+    <Compile Update="System\Reactive\Linq\Operators\Sum.Generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Max.Generated.tt</DependentUpon>
+      <DependentUpon>Sum.Generated.tt</DependentUpon>
     </Compile>
     <Compile Update="System\Reactive\Linq\Operators\Min - Copy.Generated.cs">
       <DependentUpon>Min - Copy.Generated.tt</DependentUpon>
