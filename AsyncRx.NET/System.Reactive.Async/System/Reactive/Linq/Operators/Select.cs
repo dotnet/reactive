@@ -8,60 +8,60 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<R> Select<T, R>(this IAsyncObservable<T> source, Func<T, R> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, TResult> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<R>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
         }
 
-        public static IAsyncObservable<R> Select<T, R>(this IAsyncObservable<T> source, Func<T, Task<R>> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<TResult>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<R>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
         }
 
-        public static IAsyncObservable<R> Select<T, R>(this IAsyncObservable<T> source, Func<T, int, R> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, TResult> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<R>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
         }
 
-        public static IAsyncObservable<R> Select<T, R>(this IAsyncObservable<T> source, Func<T, int, Task<R>> selector)
+        public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<R>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Select<T, R>(IAsyncObserver<R> observer, Func<T, R> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, TResult> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
-                    R res;
+                    TResult res;
 
                     try
                     {
@@ -80,17 +80,17 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Select<T, R>(IAsyncObserver<R> observer, Func<T, Task<R>> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, Task<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
-                    R res;
+                    TResult res;
 
                     try
                     {
@@ -109,7 +109,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Select<T, R>(IAsyncObserver<R> observer, Func<T, int, R> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, TResult> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -118,10 +118,10 @@ namespace System.Reactive.Linq
 
             int i = 0;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
-                    R res;
+                    TResult res;
 
                     try
                     {
@@ -140,7 +140,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Select<T, R>(IAsyncObserver<R> observer, Func<T, int, Task<R>> selector)
+        public static IAsyncObserver<TSource> Select<TSource, TResult>(IAsyncObserver<TResult> observer, Func<TSource, int, Task<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -149,10 +149,10 @@ namespace System.Reactive.Linq
 
             int i = 0;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
-                    R res;
+                    TResult res;
 
                     try
                     {

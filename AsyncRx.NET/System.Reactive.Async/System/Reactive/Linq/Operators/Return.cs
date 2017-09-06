@@ -8,9 +8,9 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Return<T>(T value)
+        public static IAsyncObservable<TSource> Return<TSource>(TSource value)
         {
-            return Create<T>(async observer =>
+            return Create<TSource>(async observer =>
             {
                 await observer.OnNextAsync(value).ConfigureAwait(false);
                 await observer.OnCompletedAsync().ConfigureAwait(false);

@@ -6,7 +6,7 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Take<T>(this IAsyncObservable<T> source, int count)
+        public static IAsyncObservable<TSource> Take<TSource>(this IAsyncObservable<TSource> source, int count)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -15,23 +15,23 @@ namespace System.Reactive.Linq
 
             if (count == 0)
             {
-                return Empty<T>();
+                return Empty<TSource>();
             }
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Take(observer, count)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Take(observer, count)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Take<T>(IAsyncObserver<T> observer, int count)
+        public static IAsyncObserver<TSource> Take<TSource>(IAsyncObserver<TSource> observer, int count)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     var remaining = --count;

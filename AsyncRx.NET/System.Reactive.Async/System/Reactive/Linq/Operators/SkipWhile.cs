@@ -8,50 +8,50 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, bool> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
-        public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
-        public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, int, bool> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, bool> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
-        public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, int, Task<bool>> predicate)
+        public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<bool>> predicate)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, bool> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -60,7 +60,7 @@ namespace System.Reactive.Linq
 
             bool open = false;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     if (!open)
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -95,7 +95,7 @@ namespace System.Reactive.Linq
 
             bool open = false;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     if (!open)
@@ -121,7 +121,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, int, bool> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, int, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -131,7 +131,7 @@ namespace System.Reactive.Linq
             bool open = false;
             int i = 0;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     if (!open)
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, int, Task<bool>> predicate)
+        public static IAsyncObserver<TSource> SkipWhile<TSource>(IAsyncObserver<TSource> observer, Func<TSource, int, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -167,7 +167,7 @@ namespace System.Reactive.Linq
             bool open = false;
             int i = 0;
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     if (!open)

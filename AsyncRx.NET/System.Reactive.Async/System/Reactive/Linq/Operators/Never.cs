@@ -9,9 +9,9 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Never<T>()
+        public static IAsyncObservable<TSource> Never<TSource>()
         {
-            return Create<T>(observer => Task.FromResult(AsyncDisposable.Nop));
+            return Create<TSource>(observer => Task.FromResult(AsyncDisposable.Nop));
         }
     }
 }

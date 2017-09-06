@@ -6,7 +6,7 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Skip<T>(this IAsyncObservable<T> source, int count)
+        public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, int count)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -18,20 +18,20 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, count)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, count)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Skip<T>(IAsyncObserver<T> observer, int count)
+        public static IAsyncObserver<TSource> Skip<TSource>(IAsyncObserver<TSource> observer, int count)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return Create<T>(
+            return Create<TSource>(
                 async x =>
                 {
                     if (count == 0)

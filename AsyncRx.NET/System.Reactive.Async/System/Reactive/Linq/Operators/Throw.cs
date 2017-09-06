@@ -8,12 +8,12 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<T> Throw<T>(Exception error)
+        public static IAsyncObservable<TSource> Throw<TSource>(Exception error)
         {
             if (error == null)
                 throw new ArgumentNullException(nameof(error));
 
-            return Create<T>(async observer =>
+            return Create<TSource>(async observer =>
             {
                 await observer.OnErrorAsync(error).ConfigureAwait(false);
                 return AsyncDisposable.Nop;
