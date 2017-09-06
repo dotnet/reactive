@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
             return new AnonymousAsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
         }
 
-        private sealed class AnonymousAsyncObserver<T> : IAsyncObserver<T>
+        private sealed class AnonymousAsyncObserver<T> : AsyncObserverBase<T>
         {
             private readonly Func<T, Task> _onNextAsync;
             private readonly Func<Exception, Task> _onErrorAsync;
@@ -33,20 +33,11 @@ namespace System.Reactive.Linq
                 _onCompletedAsync = onCompletedAsync;
             }
 
-            public Task OnCompletedAsync()
-            {
-                throw new NotImplementedException();
-            }
+            protected override Task OnCompletedAsyncCore() => _onCompletedAsync();
 
-            public Task OnErrorAsync(Exception error)
-            {
-                throw new NotImplementedException();
-            }
+            protected override Task OnErrorAsyncCore(Exception error) => _onErrorAsync(error);
 
-            public Task OnNextAsync(T value)
-            {
-                throw new NotImplementedException();
-            }
+            protected override Task OnNextAsyncCore(T value) => _onNextAsync(value);
         }
     }
 }
