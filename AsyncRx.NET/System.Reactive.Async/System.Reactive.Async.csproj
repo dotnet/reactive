@@ -4,4 +4,37 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Update="System\Reactive\Linq\Operators\Min.Generated.tt">
+      <LastGenOutput>Min.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Max.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Max - Copy.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Reactive\Linq\Operators\Max - Copy.Generated.cs">
+      <DependentUpon>Max - Copy.Generated.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Max - Copy.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Max.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Min.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Min.Generated.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
