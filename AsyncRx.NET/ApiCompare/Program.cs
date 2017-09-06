@@ -35,6 +35,7 @@ namespace ApiCompare
                 "DoWhile",  // Postponing imperative operators.
                 "Case",     // Postponing imperative operators.
                 "For",      // Postponing imperative operators.
+                "While",    // Postponing imperative operators.
             };
 
             var missing = observable.Except(exclude).Except(asyncObservable).OrderBy(m => m);
