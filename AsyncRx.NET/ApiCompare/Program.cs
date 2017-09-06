@@ -16,7 +16,17 @@ namespace ApiCompare
             var observable = typeof(Observable).GetMethods(BindingFlags.Public | BindingFlags.Static).Select(m => m.Name).Distinct();
             var asyncObservable = typeof(AsyncObservable).GetMethods(BindingFlags.Public | BindingFlags.Static).Select(m => m.Name).Distinct();
 
-            var missing = observable.Except(asyncObservable).OrderBy(m => m);
+            var exclude = new[]
+            {
+                "FirstAsync",            // Renamed to drop the Async suffix.
+                "FirstOrDefaultAsync",   // Renamed to drop the Async suffix.
+                "LastAsync",             // Renamed to drop the Async suffix.
+                "LastOrDefaultAsync",    // Renamed to drop the Async suffix.
+                "SingleAsync",           // Renamed to drop the Async suffix.
+                "SingleOrDefaultAsync",  // Renamed to drop the Async suffix.
+            };
+
+            var missing = observable.Except(exclude).Except(asyncObservable).OrderBy(m => m);
 
             foreach (var m in missing)
             {
