@@ -18,13 +18,13 @@ namespace System.Reactive.Linq
                 return Empty<T>();
             }
 
-            return Create<T>(observer => source.SubscribeAsync(observer.Take(count)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Take(observer, count)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Take<T>(this IAsyncObserver<T> observer, int count)
+        public static IAsyncObserver<T> Take<T>(IAsyncObserver<T> observer, int count)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

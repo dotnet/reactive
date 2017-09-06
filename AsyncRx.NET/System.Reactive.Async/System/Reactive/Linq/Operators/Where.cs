@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.Where(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<T> Where<T>(this IAsyncObservable<T> source, Func<T, Task<bool>> predicate)
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.Where(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<T> Where<T>(this IAsyncObservable<T> source, Func<T, int, bool> predicate)
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.Where(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Where(observer, predicate)));
         }
 
         public static IAsyncObservable<T> Where<T>(this IAsyncObservable<T> source, Func<T, int, Task<bool>> predicate)
@@ -45,13 +45,13 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.Where(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.Where(observer, predicate)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> Where<T>(this IAsyncObserver<T> observer, Func<T, bool> predicate)
+        public static IAsyncObserver<T> Where<T>(IAsyncObserver<T> observer, Func<T, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Where<T>(this IAsyncObserver<T> observer, Func<T, Task<bool>> predicate)
+        public static IAsyncObserver<T> Where<T>(IAsyncObserver<T> observer, Func<T, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -115,7 +115,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Where<T>(this IAsyncObserver<T> observer, Func<T, int, bool> predicate)
+        public static IAsyncObserver<T> Where<T>(IAsyncObserver<T> observer, Func<T, int, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -149,7 +149,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> Where<T>(this IAsyncObserver<T> observer, Func<T, int, Task<bool>> predicate)
+        public static IAsyncObserver<T> Where<T>(IAsyncObserver<T> observer, Func<T, int, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

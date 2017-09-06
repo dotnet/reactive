@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.SkipWhile(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, Task<bool>> predicate)
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.SkipWhile(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, int, bool> predicate)
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.SkipWhile(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<T> SkipWhile<T>(this IAsyncObservable<T> source, Func<T, int, Task<bool>> predicate)
@@ -45,13 +45,13 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<T>(observer => source.SubscribeAsync(observer.SkipWhile(predicate)));
+            return Create<T>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<T> SkipWhile<T>(this IAsyncObserver<T> observer, Func<T, bool> predicate)
+        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(this IAsyncObserver<T> observer, Func<T, Task<bool>> predicate)
+        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -121,7 +121,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(this IAsyncObserver<T> observer, Func<T, int, bool> predicate)
+        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, int, bool> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<T> SkipWhile<T>(this IAsyncObserver<T> observer, Func<T, int, Task<bool>> predicate)
+        public static IAsyncObserver<T> SkipWhile<T>(IAsyncObserver<T> observer, Func<T, int, Task<bool>> predicate)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
