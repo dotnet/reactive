@@ -56,7 +56,7 @@ namespace System.Reactive.Linq
 
             try
             {
-                return OnNextAsync(value);
+                return OnNextAsyncCore(value);
             }
             finally
             {
