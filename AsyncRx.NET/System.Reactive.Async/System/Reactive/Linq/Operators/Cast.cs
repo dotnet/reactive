@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> Cast<TSource, TResult>(this IAsyncObserver<TResult> observer)
+        public static IAsyncObserver<TSource> Cast<TSource, TResult>(IAsyncObserver<TResult> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

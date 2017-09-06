@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> DefaultIfEmpty<TSource>(this IAsyncObserver<TSource> observer)
+        public static IAsyncObserver<TSource> DefaultIfEmpty<TSource>(IAsyncObserver<TSource> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
             return DefaultIfEmpty(observer, default(TSource));
         }
 
-        public static IAsyncObserver<TSource> DefaultIfEmpty<TSource>(this IAsyncObserver<TSource> observer, TSource defaultValue)
+        public static IAsyncObserver<TSource> DefaultIfEmpty<TSource>(IAsyncObserver<TSource> observer, TSource defaultValue)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

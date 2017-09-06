@@ -29,7 +29,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> Contains<TSource>(this IAsyncObserver<bool> observer, TSource element)
+        public static IAsyncObserver<TSource> Contains<TSource>(IAsyncObserver<bool> observer, TSource element)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
             return Contains(observer, element, EqualityComparer<TSource>.Default);
         }
 
-        public static IAsyncObserver<TSource> Contains<TSource>(this IAsyncObserver<bool> observer, TSource element, IEqualityComparer<TSource> comparer)
+        public static IAsyncObserver<TSource> Contains<TSource>(IAsyncObserver<bool> observer, TSource element, IEqualityComparer<TSource> comparer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
