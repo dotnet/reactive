@@ -26,6 +26,15 @@ namespace ApiCompare
                 "LastOrDefaultAsync",    // Renamed to drop the Async suffix.
                 "SingleAsync",           // Renamed to drop the Async suffix.
                 "SingleOrDefaultAsync",  // Renamed to drop the Async suffix.
+
+                "And",   // Postponing patterns.
+                "Then",  // Postponing patterns.
+                "When",  // Postponing patterns.
+
+                "If",       // Postponing imperative operators.
+                "DoWhile",  // Postponing imperative operators.
+                "Case",     // Postponing imperative operators.
+                "For",      // Postponing imperative operators.
             };
 
             var missing = observable.Except(exclude).Except(asyncObservable).OrderBy(m => m);
