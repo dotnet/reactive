@@ -3,12 +3,13 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public class SimpleAsyncSubject<T> : IAsyncSubject<T>
+    public class ConcurrentSimpleAsyncSubject<T> : IAsyncSubject<T>
     {
         private readonly object _gate = new object();
         private readonly List<IAsyncObserver<T>> _observers = new List<IAsyncObserver<T>>();
@@ -31,10 +32,7 @@ namespace System.Reactive.Subjects
                 observers = _observers.ToArray();
             }
 
-            foreach (var observer in observers)
-            {
-                await observer.OnCompletedAsync().ConfigureAwait(false);
-            }
+            await Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync())).ConfigureAwait(false);
         }
 
         public async Task OnErrorAsync(Exception error)
@@ -56,10 +54,7 @@ namespace System.Reactive.Subjects
                 observers = _observers.ToArray();
             }
 
-            foreach (var observer in observers)
-            {
-                await observer.OnErrorAsync(error).ConfigureAwait(false);
-            }
+            await Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error))).ConfigureAwait(false);
         }
 
         public async Task OnNextAsync(T value)
@@ -76,10 +71,7 @@ namespace System.Reactive.Subjects
                 observers = _observers.ToArray();
             }
 
-            foreach (var observer in observers)
-            {
-                await observer.OnNextAsync(value).ConfigureAwait(false);
-            }
+            await Task.WhenAll(observers.Select(observer => observer.OnNextAsync(value))).ConfigureAwait(false);
         }
 
         public async Task<IAsyncDisposable> SubscribeAsync(IAsyncObserver<T> observer)
