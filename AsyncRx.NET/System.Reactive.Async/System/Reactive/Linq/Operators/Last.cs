@@ -8,6 +8,10 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source) => Last(source);
+        public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => Last(source, predicate);
+        public static IAsyncObservable<TSource> LastAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate) => Last(source, predicate);
+
         public static IAsyncObservable<TSource> Last<TSource>(this IAsyncObservable<TSource> source)
         {
             if (source == null)

@@ -18,14 +18,7 @@ namespace ApiCompare
 
             var exclude = new[]
             {
-                "AsObservable",          // Trivially renamed to AsAsyncObservable.
-
-                "FirstAsync",            // Renamed to drop the Async suffix.
-                "FirstOrDefaultAsync",   // Renamed to drop the Async suffix.
-                "LastAsync",             // Renamed to drop the Async suffix.
-                "LastOrDefaultAsync",    // Renamed to drop the Async suffix.
-                "SingleAsync",           // Renamed to drop the Async suffix.
-                "SingleOrDefaultAsync",  // Renamed to drop the Async suffix.
+                "AsObservable",  // Trivially renamed to AsAsyncObservable.
 
                 "And",   // Postponing patterns.
                 "Then",  // Postponing patterns.

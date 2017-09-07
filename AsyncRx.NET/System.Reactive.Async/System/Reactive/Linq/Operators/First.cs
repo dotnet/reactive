@@ -8,6 +8,10 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        public static IAsyncObservable<TSource> FirstAsync<TSource>(this IAsyncObservable<TSource> source) => First(source);
+        public static IAsyncObservable<TSource> FirstAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate) => First(source, predicate);
+        public static IAsyncObservable<TSource> FirstAsync<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate) => First(source, predicate);
+
         public static IAsyncObservable<TSource> First<TSource>(this IAsyncObservable<TSource> source)
         {
             if (source == null)
