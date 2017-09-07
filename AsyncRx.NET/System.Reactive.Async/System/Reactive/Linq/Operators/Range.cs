@@ -26,12 +26,12 @@ namespace System.Reactive.Linq
 
                 for (int i = start, end = start + count - 1; i <= end && !ct.IsCancellationRequested; i++)
                 {
-                    await observer.OnNextAsync(i);
+                    await observer.OnNextAsync(i).RendezVous(scheduler);
                 }
 
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync();
+                await observer.OnCompletedAsync().RendezVous(scheduler);
             }));
         }
     }

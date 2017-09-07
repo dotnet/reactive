@@ -22,11 +22,11 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnNextAsync(value);
+                await observer.OnNextAsync(value).RendezVous(scheduler);
 
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync();
+                await observer.OnCompletedAsync().RendezVous(scheduler);
             }));
         }
     }
