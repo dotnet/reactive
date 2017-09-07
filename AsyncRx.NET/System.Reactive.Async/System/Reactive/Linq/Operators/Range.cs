@@ -3,24 +3,45 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<int> Range(int start, int count) => Range(start, count, TaskPoolAsyncScheduler.Default);
+        public static IAsyncObservable<int> Range(int start, int count)
+        {
+            if (count < 0 || ((long)start) + count - 1 > int.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(count));
+
+            return Create<int>(observer => AsyncObserver.Range(observer, start, count));
+        }
 
         public static IAsyncObservable<int> Range(int start, int count, IAsyncScheduler scheduler)
         {
-            var max = ((long)start) + count - 1;
-
-            if (count < 0 || max > int.MaxValue)
+            if (count < 0 || ((long)start) + count - 1 > int.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(count));
-
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<int>(observer => scheduler.ScheduleAsync(async ct =>
+            return Create<int>(observer => AsyncObserver.Range(observer, start, count, scheduler));
+        }
+    }
+
+    partial class AsyncObserver
+    {
+        public static Task<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count) => Range(observer, start, count, TaskPoolAsyncScheduler.Default);
+
+        public static Task<IAsyncDisposable> Range(IAsyncObserver<int> observer, int start, int count, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (count < 0 || ((long)start) + count - 1 > int.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return scheduler.ScheduleAsync(async ct =>
             {
                 ct.ThrowIfCancellationRequested();
 
@@ -32,7 +53,7 @@ namespace System.Reactive.Linq
                 ct.ThrowIfCancellationRequested();
 
                 await observer.OnCompletedAsync().RendezVous(scheduler);
-            }));
+            });
         }
     }
 }

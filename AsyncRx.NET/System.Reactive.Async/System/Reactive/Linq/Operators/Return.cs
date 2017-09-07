@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -10,7 +11,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Return<TSource>(TSource value)
         {
-            return Return(value, ImmediateAsyncScheduler.Instance);
+            return Create<TSource>(observer => AsyncObserver.Return(observer, value));
         }
 
         public static IAsyncObservable<TSource> Return<TSource>(TSource value, IAsyncScheduler scheduler)
@@ -18,7 +19,22 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(observer => scheduler.ScheduleAsync(async ct =>
+            return Create<TSource>(observer => AsyncObserver.Return(observer, value, scheduler));
+        }
+    }
+
+    partial class AsyncObserver
+    {
+        public static Task<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value) => Return(observer, value, ImmediateAsyncScheduler.Instance);
+
+        public static Task<IAsyncDisposable> Return<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return scheduler.ScheduleAsync(async ct =>
             {
                 ct.ThrowIfCancellationRequested();
 
@@ -27,7 +43,7 @@ namespace System.Reactive.Linq
                 ct.ThrowIfCancellationRequested();
 
                 await observer.OnCompletedAsync().RendezVous(scheduler);
-            }));
+            });
         }
     }
 }
