@@ -3,15 +3,47 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<long> Interval(TimeSpan period) => Interval(period, TaskPoolAsyncScheduler.Default);
+        public static IAsyncObservable<long> Interval(TimeSpan period)
+        {
+            if (period < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(period));
+
+            return Create<long>(observer => AsyncObserver.Interval(observer, period));
+        }
 
         public static IAsyncObservable<long> Interval(TimeSpan period, IAsyncScheduler scheduler)
         {
+            if (period < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(period));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return Create<long>(observer => AsyncObserver.Interval(observer, period, scheduler));
+        }
+    }
+
+    partial class AsyncObserver
+    {
+        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (period < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(period));
+
+            throw new NotImplementedException();
+        }
+
+        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
             if (period < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(period));
             if (scheduler == null)
