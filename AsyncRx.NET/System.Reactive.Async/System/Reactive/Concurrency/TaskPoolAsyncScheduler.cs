@@ -30,7 +30,7 @@ namespace System.Reactive.Concurrency
             _factory = factory;
         }
 
-        protected override Task Delay(TimeSpan dueTime) => Task.Delay(dueTime);
+        protected override Task Delay(TimeSpan dueTime, CancellationToken token) => Task.Delay(dueTime, token);
 
         protected override Task ScheduleAsyncCore(Func<CancellationToken, Task> action, CancellationToken token)
         {

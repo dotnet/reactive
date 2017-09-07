@@ -28,7 +28,7 @@ namespace System.Reactive.Concurrency
 
             return ScheduleAsyncCore(async ct =>
             {
-                await Delay(dueTimeRelative); // NB: Honor SynchronizationContext to stay on scheduler.
+                await Delay(dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
 
                 await action(ct);
             });
@@ -43,7 +43,7 @@ namespace System.Reactive.Concurrency
             {
                 var dueTimeRelative = Normalize(dueTime - Now); // TODO: Support clock drift and clock changes.
 
-                await Delay(dueTimeRelative); // NB: Honor SynchronizationContext to stay on scheduler.
+                await Delay(dueTimeRelative, ct); // NB: Honor SynchronizationContext to stay on scheduler.
 
                 await action(ct);
             });
@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
 
         protected abstract Task ScheduleAsyncCore(Func<CancellationToken, Task> action, CancellationToken token);
 
-        protected abstract Task Delay(TimeSpan dueTime);
+        protected abstract Task Delay(TimeSpan dueTime, CancellationToken token);
 
         protected static TimeSpan Normalize(TimeSpan timeSpan) => timeSpan < TimeSpan.Zero ? TimeSpan.Zero : timeSpan;
 

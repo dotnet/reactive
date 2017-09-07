@@ -13,7 +13,7 @@ namespace System.Reactive.Concurrency
 
         private ImmediateAsyncScheduler() { }
 
-        protected override Task Delay(TimeSpan dueTime) => Task.Delay(dueTime);
+        protected override Task Delay(TimeSpan dueTime, CancellationToken token) => Task.Delay(dueTime);
 
         protected override Task ScheduleAsyncCore(Func<CancellationToken, Task> action, CancellationToken token) => action(token);
     }
