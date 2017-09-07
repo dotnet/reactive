@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, int count)
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, int count)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -19,13 +19,30 @@ namespace System.Reactive.Linq
 
             if (count == 0)
             {
-                return Empty<IList<TSource>>();
+                return Empty<TSource>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, count)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.TakeLast(observer, count)));
         }
 
-        public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, int count, IAsyncScheduler scheduler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            if (count == 0)
+            {
+                return Empty<TSource>();
+            }
+
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.TakeLast(observer, count, scheduler)));
+        }
+
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -34,13 +51,13 @@ namespace System.Reactive.Linq
 
             if (duration == TimeSpan.Zero)
             {
-                return Empty<IList<TSource>>();
+                return Empty<TSource>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, duration)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.TakeLast(observer, duration)));
         }
 
-        public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> TakeLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -51,16 +68,16 @@ namespace System.Reactive.Linq
 
             if (duration == TimeSpan.Zero)
             {
-                return Empty<IList<TSource>>();
+                return Empty<TSource>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, duration, scheduler)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.TakeLast(observer, duration, scheduler)));
         }
     }
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, int count)
+        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, int count)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -86,20 +103,29 @@ namespace System.Reactive.Linq
                 {
                     var n = queue.Count;
 
-                    var res = new List<TSource>(n);
-
                     while (queue.Count > 0)
                     {
-                        res.Add(queue.Dequeue());
+                        await observer.OnNextAsync(queue.Dequeue()).ConfigureAwait(false);
                     }
 
-                    await observer.OnNextAsync(res).ConfigureAwait(false);
                     await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );
         }
 
-        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration)
+        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, int count, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (count <= 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            throw new NotImplementedException();
+        }
+
+        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -109,7 +135,7 @@ namespace System.Reactive.Linq
             throw new NotImplementedException();
         }
 
-        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
