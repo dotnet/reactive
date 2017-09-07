@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
@@ -11,12 +10,7 @@ namespace System.Reactive.Linq
     {
         public static IAsyncObservable<TSource> Return<TSource>(TSource value)
         {
-            return Create<TSource>(async observer =>
-            {
-                await observer.OnNextAsync(value).ConfigureAwait(false);
-                await observer.OnCompletedAsync().ConfigureAwait(false);
-                return AsyncDisposable.Nop;
-            });
+            return Return(value, ImmediateAsyncScheduler.Instance);
         }
 
         public static IAsyncObservable<TSource> Return<TSource>(TSource value, IAsyncScheduler scheduler)
@@ -24,7 +18,14 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return Create<TSource>(observer => scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+                await observer.OnNextAsync(value).ConfigureAwait(false);
+
+                ct.ThrowIfCancellationRequested();
+                await observer.OnCompletedAsync().ConfigureAwait(false);
+            }));
         }
     }
 }

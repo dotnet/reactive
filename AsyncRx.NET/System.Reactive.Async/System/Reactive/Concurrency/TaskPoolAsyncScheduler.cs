@@ -38,7 +38,7 @@ namespace System.Reactive.Concurrency
 
             task.Unwrap().ContinueWith(t =>
             {
-                if (t.Exception != null)
+                if (!t.IsCanceled && t.Exception != null)
                 {
                     // TODO: Call event handler.
                 }

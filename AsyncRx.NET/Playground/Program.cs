@@ -14,11 +14,34 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            await ReturnAsync();
+            await SubjectAsync();
+        }
+
+        static async Task ReturnAsync()
+        {
+            await AsyncObservable.Return(42).SubscribeAsync(Print<int>());
+        }
+
+        static async Task SubjectAsync()
+        {
             var subject = new SequentialSimpleAsyncSubject<int>();
 
             var res = subject.Where(x => x % 2 == 0).Select(x => x + 1);
 
-            await res.SubscribeAsync(
+            await res.SubscribeAsync(Print<int>());
+
+            for (var i = 0; i < 10; i++)
+            {
+                await subject.OnNextAsync(i);
+            }
+
+            await subject.OnCompletedAsync();
+        }
+
+        static IAsyncObserver<T> Print<T>()
+        {
+            return AsyncObserver.Create<T>(
                 x =>
                 {
                     Console.WriteLine(x);
@@ -35,13 +58,6 @@ namespace Playground
                     return Task.CompletedTask;
                 }
             );
-
-            for (var i = 0; i < 10; i++)
-            {
-                await subject.OnNextAsync(i);
-            }
-
-            await subject.OnCompletedAsync();
         }
     }
 }
