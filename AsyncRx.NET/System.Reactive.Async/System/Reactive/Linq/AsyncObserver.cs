@@ -2,12 +2,29 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
     public static partial class AsyncObserver
     {
+        public static IAsyncObserver<T> Create<T>(Func<T, Task> onNextAsync)
+        {
+            if (onNextAsync == null)
+                throw new ArgumentNullException(nameof(onNextAsync));
+
+            return new AnonymousAsyncObserver<T>(
+                onNextAsync,
+                ex =>
+                {
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                    return Task.CompletedTask;
+                },
+                () => Task.CompletedTask
+            );
+        }
+
         public static IAsyncObserver<T> Create<T>(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
         {
             if (onNextAsync == null)
