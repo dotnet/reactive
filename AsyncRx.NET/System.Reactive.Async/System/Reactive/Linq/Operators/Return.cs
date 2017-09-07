@@ -21,9 +21,11 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => scheduler.ScheduleAsync(async ct =>
             {
                 ct.ThrowIfCancellationRequested();
+
                 await observer.OnNextAsync(value).ConfigureAwait(false);
 
                 ct.ThrowIfCancellationRequested();
+
                 await observer.OnCompletedAsync().ConfigureAwait(false);
             }));
         }

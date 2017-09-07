@@ -3,27 +3,24 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> Empty<TSource>()
-        {
-            return Create<TSource>(async observer =>
-            {
-                await observer.OnCompletedAsync().ConfigureAwait(false);
-                return AsyncDisposable.Nop;
-            });
-        }
+        public static IAsyncObservable<TSource> Empty<TSource>() => Empty<TSource>(ImmediateAsyncScheduler.Instance);
 
         public static IAsyncObservable<TSource> Empty<TSource>(IAsyncScheduler scheduler)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return Create<TSource>(observer => scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                await observer.OnCompletedAsync().ConfigureAwait(false);
+            }));
         }
     }
 }
