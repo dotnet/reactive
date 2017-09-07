@@ -125,31 +125,36 @@ namespace System.Reactive.Linq
 
         public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> TakeUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset endTime) => TakeUntil(observer, endTime, TaskPoolAsyncScheduler.Default);
 
-        public static async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> TakeUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset endTime, IAsyncScheduler scheduler)
+        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> TakeUntil<TSource>(IAsyncObserver<TSource> observer, DateTimeOffset endTime, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want TakeUntil on the observer?
-            // DESIGN: It seems that if an observer would be an IAsyncDisposable, this could get a bit easier ("inject" the inner disposable).
+            return CoreAsync();
 
-            var gate = new AsyncLock();
+            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            {
+                // REVIEW: May be easier to just use TakeUntil with a Timer parameter. Do we want TakeUntil on the observer?
+                // DESIGN: It seems that if an observer would be an IAsyncDisposable, this could get a bit easier ("inject" the inner disposable).
 
-            return
-                (
-                    Synchronize(observer, gate),
-                    await scheduler.ScheduleAsync(async ct =>
-                    {
-                        ct.ThrowIfCancellationRequested();
+                var gate = new AsyncLock();
 
-                        using (await gate.LockAsync().RendezVous(scheduler))
+                return
+                    (
+                        Synchronize(observer, gate),
+                        await scheduler.ScheduleAsync(async ct =>
                         {
-                            await observer.OnCompletedAsync().RendezVous(scheduler);
-                        }
-                    }, endTime)
-                );
+                            ct.ThrowIfCancellationRequested();
+
+                            using (await gate.LockAsync().RendezVous(scheduler))
+                            {
+                                await observer.OnCompletedAsync().RendezVous(scheduler);
+                            }
+                        }, endTime)
+                    );
+            }
         }
     }
 }
