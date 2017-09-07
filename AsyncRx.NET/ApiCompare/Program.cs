@@ -20,6 +20,8 @@ namespace ApiCompare
             {
                 "AsObservable",  // Trivially renamed to AsAsyncObservable.
 
+                "Subscribe",  // Trivially renamed to SubscribeAsync.
+
                 "And",   // Postponing patterns.
                 "Then",  // Postponing patterns.
                 "When",  // Postponing patterns.
@@ -37,6 +39,9 @@ namespace ApiCompare
                 "MostRecent",     // Postponing push-to-pull adapters.
                 "Next",           // Postponing push-to-pull adapters.
                 "ToEnumerable",   // Postponing push-to-pull adapters.
+
+                "ForEach",  // Deprecating blocking functionality.
+                "Wait",     // Deprecating blocking functionality.
             };
 
             var missing = observable.Except(exclude).Except(asyncObservable).OrderBy(m => m);
