@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Playground
 {
-    class Program
+    static class Program
     {
         static void Main()
         {
@@ -21,7 +21,7 @@ namespace Playground
 
         static async Task RangeAsync()
         {
-            await AsyncObservable.Range(0, 10).SubscribeAsync(Print<int>());
+            await AsyncObservable.Range(0, 10).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
         static async Task ReturnAsync()
