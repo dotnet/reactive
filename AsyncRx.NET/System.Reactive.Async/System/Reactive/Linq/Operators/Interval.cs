@@ -30,26 +30,8 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(period));
+        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period) => Timer(observer, period, period);
 
-            throw new NotImplementedException();
-        }
-
-        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period, IAsyncScheduler scheduler)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(period));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-
-            throw new NotImplementedException();
-        }
+        public static Task<IAsyncDisposable> Interval(IAsyncObserver<long> observer, TimeSpan period, IAsyncScheduler scheduler) => Timer(observer, period, period, scheduler);
     }
 }
