@@ -11,51 +11,75 @@ namespace System.Reactive.Disposables
 {
     public sealed class CompositeAsyncDisposable : IAsyncDisposable
     {
-        private readonly AsyncLock gate = new AsyncLock();
-        private readonly List<IAsyncDisposable> disposables = new List<IAsyncDisposable>();
-        private bool disposed;
+        private readonly AsyncLock _gate = new AsyncLock();
+        private readonly List<IAsyncDisposable> _disposables = new List<IAsyncDisposable>();
+        private bool _disposed;
 
         public async Task AddAsync(IAsyncDisposable disposable)
         {
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
 
-            using (await gate.LockAsync().ConfigureAwait(false))
+            var shouldDispose = false;
+
+            using (await _gate.LockAsync().ConfigureAwait(false))
             {
-                if (disposed)
+                if (_disposed)
                 {
-                    await disposable.DisposeAsync().ConfigureAwait(false);
+                    shouldDispose = true;
                 }
                 else
                 {
-                    disposables.Add(disposable);
+                    _disposables.Add(disposable);
                 }
             }
-        }
 
-        public async Task RemoveAsync(IAsyncDisposable disposable)
-        {
-            if (disposable == null)
-                throw new ArgumentNullException(nameof(disposable));
-
-            using (await gate.LockAsync().ConfigureAwait(false))
+            if (shouldDispose)
             {
-                if (!disposables.Remove(disposable))
-                    throw new InvalidOperationException("Disposable not found.");
-
                 await disposable.DisposeAsync().ConfigureAwait(false);
             }
         }
 
+        public async Task<bool> RemoveAsync(IAsyncDisposable disposable)
+        {
+            if (disposable == null)
+                throw new ArgumentNullException(nameof(disposable));
+
+            var shouldDispose = false;
+
+            using (await _gate.LockAsync().ConfigureAwait(false))
+            {
+                if (!_disposed && _disposables.Remove(disposable))
+                {
+                    shouldDispose = true;
+                }
+            }
+
+            if (shouldDispose)
+            {
+                await disposable.DisposeAsync().ConfigureAwait(false);
+            }
+
+            return shouldDispose;
+        }
+
         public async Task DisposeAsync()
         {
-            using (await gate.LockAsync().ConfigureAwait(false))
+            var disposables = default(IAsyncDisposable[]);
+
+            using (await _gate.LockAsync().ConfigureAwait(false))
             {
-                if (disposed)
-                    return;
+                if (!_disposed)
+                {
+                    _disposed = true;
 
-                disposed = true;
+                    disposables = _disposables.ToArray();
+                    _disposables.Clear();
+                }
+            }
 
+            if (disposables != null)
+            {
                 var tasks = disposables.Select(disposable => disposable.DisposeAsync());
 
                 await Task.WhenAll(tasks);
