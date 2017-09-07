@@ -187,15 +187,8 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
+        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan) => Buffer(observer, timeSpan, TaskPoolAsyncScheduler.Default);
 
-            throw new NotImplementedException();
-        }
 
         public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, IAsyncScheduler scheduler)
         {
@@ -209,17 +202,7 @@ namespace System.Reactive.Linq
             throw new NotImplementedException();
         }
 
-        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, TimeSpan timeShift)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
-            if (timeShift < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeShift));
-
-            throw new NotImplementedException();
-        }
+        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, TimeSpan timeShift) => Buffer(observer, timeSpan, timeShift, TaskPoolAsyncScheduler.Default);
 
         public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, TimeSpan timeShift, IAsyncScheduler scheduler)
         {
@@ -235,17 +218,7 @@ namespace System.Reactive.Linq
             throw new NotImplementedException();
         }
 
-        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, int count)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (timeSpan < TimeSpan.Zero)
-                throw new ArgumentNullException(nameof(timeSpan));
-            if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
-
-            throw new NotImplementedException();
-        }
+        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, int count) => Buffer(observer, timeSpan, count, TaskPoolAsyncScheduler.Default);
 
         public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, int count, IAsyncScheduler scheduler)
         {

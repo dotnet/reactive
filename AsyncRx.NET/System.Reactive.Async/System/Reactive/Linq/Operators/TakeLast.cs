@@ -125,15 +125,7 @@ namespace System.Reactive.Linq
             throw new NotImplementedException();
         }
 
-        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (duration < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(duration));
-
-            throw new NotImplementedException();
-        }
+        public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => TakeLast(observer, duration, TaskPoolAsyncScheduler.Default);
 
         public static IAsyncObserver<TSource> TakeLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler)
         {
