@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync().ConfigureAwait(false);
+                await observer.OnCompletedAsync();
             }));
         }
     }
