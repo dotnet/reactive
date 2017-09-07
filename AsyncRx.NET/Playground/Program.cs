@@ -14,8 +14,14 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            await RangeAsync();
             await ReturnAsync();
             await SubjectAsync();
+        }
+
+        static async Task RangeAsync()
+        {
+            await AsyncObservable.Range(0, 10).SubscribeAsync(Print<int>());
         }
 
         static async Task ReturnAsync()
