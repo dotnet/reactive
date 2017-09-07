@@ -10,6 +10,8 @@ namespace Playground
         static void Main()
         {
             MainAsync().GetAwaiter().GetResult();
+
+            Console.ReadLine();
         }
 
         static async Task MainAsync()
@@ -17,6 +19,7 @@ namespace Playground
             await RangeAsync();
             await ReturnAsync();
             await SubjectAsync();
+            await TimerAsync();
         }
 
         static async Task RangeAsync()
@@ -43,6 +46,11 @@ namespace Playground
             }
 
             await subject.OnCompletedAsync();
+        }
+
+        static async Task TimerAsync()
+        {
+            await AsyncObservable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)).Take(5).Select(_ => DateTimeOffset.Now).SubscribeAsync(Print<DateTimeOffset>()); // TODO: Use ForEachAsync.
         }
 
         static IAsyncObserver<T> Print<T>()

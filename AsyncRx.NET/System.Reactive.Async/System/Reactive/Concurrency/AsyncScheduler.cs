@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Concurrency
@@ -19,6 +20,33 @@ namespace System.Reactive.Concurrency
         public static ConfiguredTaskAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler)
         {
             return task.ConfigureAwait(true);
+        }
+
+        public static async Task Delay(this IAsyncScheduler scheduler, TimeSpan dueTime, CancellationToken token = default(CancellationToken))
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            var task = await scheduler.ScheduleAsync(ct =>
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    tcs.SetCanceled();
+                }
+                else
+                {
+                    tcs.SetResult(true);
+                }
+
+                return Task.CompletedTask;
+            }, dueTime);
+
+            using (token.Register(() => task.DisposeAsync()))
+            {
+                await tcs.Task;
+            }
         }
     }
 }

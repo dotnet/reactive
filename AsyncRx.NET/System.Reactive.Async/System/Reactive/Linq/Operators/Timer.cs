@@ -122,7 +122,21 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            var tick = 0L;
+
+            return scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                do
+                {
+                    await observer.OnNextAsync(tick++).RendezVous(scheduler);
+
+                    await scheduler.Delay(period, ct).RendezVous(scheduler);
+                } while (!ct.IsCancellationRequested);
+
+                ct.ThrowIfCancellationRequested();
+            }, dueTime);
         }
 
         public static Task<IAsyncDisposable> Timer(IAsyncObserver<long> observer, DateTimeOffset dueTime, TimeSpan period) => Timer(observer, dueTime, period, TaskPoolAsyncScheduler.Default);
@@ -134,7 +148,21 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            var tick = 0L;
+
+            return scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                do
+                {
+                    await observer.OnNextAsync(tick++).RendezVous(scheduler);
+
+                    await scheduler.Delay(period, ct).RendezVous(scheduler);
+                } while (!ct.IsCancellationRequested);
+
+                ct.ThrowIfCancellationRequested();
+            }, dueTime);
         }
     }
 }
