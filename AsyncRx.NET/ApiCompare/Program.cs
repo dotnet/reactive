@@ -36,6 +36,14 @@ namespace ApiCompare
                 "Case",     // Postponing imperative operators.
                 "For",      // Postponing imperative operators.
                 "While",    // Postponing imperative operators.
+
+                "Collect",        // Postponing push-to-pull adapters.
+                "Chunkify",       // Postponing push-to-pull adapters.
+                "GetEnumerator",  // Postponing push-to-pull adapters.
+                "Latest",         // Postponing push-to-pull adapters.
+                "MostRecent",     // Postponing push-to-pull adapters.
+                "Next",           // Postponing push-to-pull adapters.
+                "ToEnumerable",   // Postponing push-to-pull adapters.
             };
 
             var missing = observable.Except(exclude).Except(asyncObservable).OrderBy(m => m);
