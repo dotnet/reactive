@@ -5,9 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="System\Reactive\Linq\Operators\CombineLatest.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="System\Reactive\Linq\Operators\Average.Generated.tt">
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\CombineLatest.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
     </None>
     <None Update="System\Reactive\Linq\Operators\Sum.Generated.tt">
       <LastGenOutput>Sum.Generated.cs</LastGenOutput>
@@ -32,6 +44,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Average.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\CombineLatest.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
     </Compile>
     <Compile Update="System\Reactive\Linq\Operators\Max - Copy - Copy.Generated.cs">
       <DependentUpon>Sum.Generated.tt</DependentUpon>
