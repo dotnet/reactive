@@ -10,72 +10,77 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource element)
+        public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, params TSource[] values) => Prepend(source, values);
+        public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values) => Prepend(source, values);
+        public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values) => Prepend(source, scheduler, values);
+        public static IAsyncObservable<TSource> StartWith<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values) => Prepend(source, scheduler, values);
+
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource value)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, element).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, value).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource element, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, TSource value, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, element, scheduler).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, value, scheduler).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, params TSource[] elements)
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, params TSource[] values)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, elements).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
 
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] elements)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
-
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, scheduler, elements).ConfigureAwait(false)).ConfigureAwait(false));
-        }
-
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> elements)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
-
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, elements).ConfigureAwait(false)).ConfigureAwait(false));
-        }
-
-        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> elements)
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, scheduler, elements).ConfigureAwait(false)).ConfigureAwait(false));
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, scheduler, values).ConfigureAwait(false)).ConfigureAwait(false));
+        }
+
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IEnumerable<TSource> values)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
+
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, values).ConfigureAwait(false)).ConfigureAwait(false));
+        }
+
+        public static IAsyncObservable<TSource> Prepend<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
+
+            return Create<TSource>(async observer => await source.SubscribeAsync(await AsyncObserver.Prepend(observer, scheduler, values).ConfigureAwait(false)).ConfigureAwait(false));
         }
     }
 
     partial class AsyncObserver
     {
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, TSource element)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, TSource value)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -84,13 +89,13 @@ namespace System.Reactive.Linq
 
             async Task<IAsyncObserver<TSource>> Core()
             {
-                await observer.OnNextAsync(element);
+                await observer.OnNextAsync(value);
 
                 return observer;
             }
         }
 
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, TSource element, IAsyncScheduler scheduler)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, TSource value, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -100,66 +105,66 @@ namespace System.Reactive.Linq
             throw new NotImplementedException();
         }
 
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, params TSource[] elements)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, params TSource[] values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             return Core();
 
             async Task<IAsyncObserver<TSource>> Core()
             {
-                foreach (var element in elements)
+                foreach (var value in values)
                 {
-                    await observer.OnNextAsync(element);
+                    await observer.OnNextAsync(value);
                 }
 
                 return observer;
             }
         }
 
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncScheduler scheduler, params TSource[] elements)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncScheduler scheduler, params TSource[] values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             throw new NotImplementedException();
         }
 
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IEnumerable<TSource> elements)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IEnumerable<TSource> values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             return Core();
 
             async Task<IAsyncObserver<TSource>> Core()
             {
-                foreach (var element in elements)
+                foreach (var value in values)
                 {
-                    await observer.OnNextAsync(element);
+                    await observer.OnNextAsync(value);
                 }
 
                 return observer;
             }
         }
 
-        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncScheduler scheduler, IEnumerable<TSource> elements)
+        public static Task<IAsyncObserver<TSource>> Prepend<TSource>(IAsyncObserver<TSource> observer, IAsyncScheduler scheduler, IEnumerable<TSource> values)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-            if (elements == null)
-                throw new ArgumentNullException(nameof(elements));
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
 
             throw new NotImplementedException();
         }
