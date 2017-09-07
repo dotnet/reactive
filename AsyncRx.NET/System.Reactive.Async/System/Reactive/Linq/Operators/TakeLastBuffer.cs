@@ -40,21 +40,21 @@ namespace System.Reactive.Linq
             return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, duration)));
         }
 
-        public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObservable<IList<TSource>> TakeLastBuffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            if (clock == null)
+                throw new ArgumentNullException(nameof(clock));
 
             if (duration == TimeSpan.Zero)
             {
                 return Empty<IList<TSource>>();
             }
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, duration, scheduler)));
+            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.TakeLastBuffer(observer, duration, clock)));
         }
     }
 
@@ -101,14 +101,14 @@ namespace System.Reactive.Linq
 
         public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration) => TakeLastBuffer(observer, duration, TaskPoolAsyncScheduler.Default);
 
-        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration, IClock clock)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            if (clock == null)
+                throw new ArgumentNullException(nameof(clock));
 
             throw new NotImplementedException();
         }

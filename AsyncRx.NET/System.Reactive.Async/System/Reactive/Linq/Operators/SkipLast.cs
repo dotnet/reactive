@@ -41,21 +41,21 @@ namespace System.Reactive.Linq
             return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipLast(observer, duration)));
         }
 
-        public static IAsyncObservable<TSource> SkipLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> SkipLast<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration, IClock clock)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            if (clock == null)
+                throw new ArgumentNullException(nameof(clock));
 
             if (duration == TimeSpan.Zero)
             {
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipLast(observer, duration, scheduler)));
+            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipLast(observer, duration, clock)));
         }
     }
 
@@ -87,14 +87,14 @@ namespace System.Reactive.Linq
 
         public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => SkipLast(observer, duration, TaskPoolAsyncScheduler.Default);
 
-        public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IAsyncScheduler scheduler)
+        public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IClock clock)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (duration < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(duration));
-            if (scheduler == null)
-                throw new ArgumentNullException(nameof(scheduler));
+            if (clock == null)
+                throw new ArgumentNullException(nameof(clock));
 
             throw new NotImplementedException();
         }
