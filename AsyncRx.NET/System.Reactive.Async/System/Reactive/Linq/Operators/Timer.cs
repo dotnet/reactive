@@ -128,6 +128,8 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
+                // TODO: Compensate for drift by adding stopwatch functionality.
+
                 do
                 {
                     await observer.OnNextAsync(tick++).RendezVous(scheduler);
@@ -153,6 +155,8 @@ namespace System.Reactive.Linq
             return scheduler.ScheduleAsync(async ct =>
             {
                 ct.ThrowIfCancellationRequested();
+
+                // TODO: Compensate for drift by adding stopwatch functionality.
 
                 do
                 {
