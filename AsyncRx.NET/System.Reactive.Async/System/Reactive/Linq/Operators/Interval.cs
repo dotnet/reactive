@@ -8,13 +8,7 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<long> Interval(TimeSpan period)
-        {
-            if (period < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(period));
-
-            throw new NotImplementedException();
-        }
+        public static IAsyncObservable<long> Interval(TimeSpan period) => Interval(period, TaskPoolAsyncScheduler.Default);
 
         public static IAsyncObservable<long> Interval(TimeSpan period, IAsyncScheduler scheduler)
         {
