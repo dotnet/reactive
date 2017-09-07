@@ -19,6 +19,7 @@ namespace Playground
             await RangeAsync();
             await ReturnAsync();
             await SubjectAsync();
+            await TakeUntilAsync();
             await TimerAsync();
         }
 
@@ -46,6 +47,11 @@ namespace Playground
             }
 
             await subject.OnCompletedAsync();
+        }
+
+        static async Task TakeUntilAsync()
+        {
+            await AsyncObservable.Range(0, int.MaxValue).TakeUntil(DateTimeOffset.Now.AddSeconds(5)).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
         static async Task TimerAsync()
