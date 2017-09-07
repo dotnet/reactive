@@ -22,8 +22,11 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, untilObserver) = AsyncObserver.SkipUntil<TSource, TUntil>(observer);
 
-                var d1 = await source.SubscribeAsync(sourceObserver).ConfigureAwait(false);
-                var d2 = await until.SubscribeAsync(untilObserver).ConfigureAwait(false);
+                var sourceTask = source.SubscribeAsync(sourceObserver);
+                var untilTask = until.SubscribeAsync(untilObserver);
+
+                var d1 = await sourceTask.ConfigureAwait(false);
+                var d2 = await untilTask.ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(d1, d2);
             });
