@@ -15,7 +15,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return Create<long>(observer => scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                await observer.OnNextAsync(0L).RendezVous(scheduler);
+            }, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(DateTimeOffset dueTime) => Timer(dueTime, TaskPoolAsyncScheduler.Default);
@@ -25,7 +30,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return Create<long>(observer => scheduler.ScheduleAsync(async ct =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                await observer.OnNextAsync(0L).RendezVous(scheduler);
+            }, dueTime));
         }
 
         public static IAsyncObservable<long> Timer(TimeSpan dueTime, TimeSpan period) => Timer(dueTime, period, TaskPoolAsyncScheduler.Default);
