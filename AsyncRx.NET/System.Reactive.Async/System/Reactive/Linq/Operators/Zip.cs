@@ -12,6 +12,8 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        // TODO: Add Zip<T>(IAsyncObservable<T>, IAsyncEnumerable<T>) overload when we have reference to IAsyncEnumerable<T>.
+
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(IEnumerable<IAsyncObservable<TSource>> sources) => Zip(sources.ToArray());
 
         public static IAsyncObservable<IList<TSource>> Zip<TSource>(params IAsyncObservable<TSource>[] sources)
