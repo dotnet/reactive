@@ -1,0 +1,75 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Reactive.Subjects;
+
+namespace System.Reactive.Linq
+{
+    // REVIEW: Consider if these are worth retaining in the async space.
+
+    partial class AsyncObservable
+    {
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<TResult>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, TResult>";
+#>
+        public static <#=ret#> FromAsyncPattern<<#=genArgs#>>(<#=begin#> begin, <#=end#> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return (<#=pars#>) =>
+            {
+                var subject = new SequentialAsyncAsyncSubject<TResult>();
+
+                try
+                {
+                    begin(<#=pars + (i > 0 ? ", " : "")#>async iar =>
+                    {
+                        TResult result;
+
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception ex)
+                        {
+                            await subject.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+
+                        await subject.OnNextAsync(result).ConfigureAwait(false);
+                        await subject.OnCompletedAsync().ConfigureAwait(false);
+                    }, null);
+                }
+                catch (Exception ex)
+                {
+                    return Throw<TResult>(ex);
+                }
+
+                return subject.AsAsyncObservable();
+            };
+        }
+
+<#
+}
+#>
+    }
+}
