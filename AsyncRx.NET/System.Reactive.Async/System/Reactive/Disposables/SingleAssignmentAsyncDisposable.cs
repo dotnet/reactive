@@ -11,14 +11,14 @@ namespace System.Reactive.Disposables
     {
         private static readonly IAsyncDisposable Disposed = AsyncDisposable.Create(() => Task.CompletedTask);
 
-        private IAsyncDisposable disposable;
+        private IAsyncDisposable _disposable;
 
         public async Task AssignAsync(IAsyncDisposable disposable)
         {
             if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
 
-            var old = Interlocked.CompareExchange(ref this.disposable, disposable, null);
+            var old = Interlocked.CompareExchange(ref _disposable, disposable, null);
 
             if (old == null)
                 return;
@@ -31,7 +31,7 @@ namespace System.Reactive.Disposables
 
         public Task DisposeAsync()
         {
-            return Interlocked.Exchange(ref disposable, Disposed)?.DisposeAsync() ?? Task.CompletedTask;
+            return Interlocked.Exchange(ref _disposable, Disposed)?.DisposeAsync() ?? Task.CompletedTask;
         }
     }
 }
