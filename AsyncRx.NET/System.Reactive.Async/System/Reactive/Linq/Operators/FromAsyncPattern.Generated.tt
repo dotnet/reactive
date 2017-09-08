@@ -71,5 +71,39 @@ for (var i = 0; i <= 14; i++)
 <#
 }
 #>
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<Unit>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, Unit>";
+
+    if (genArgs != "")
+    {
+        genArgs = "<" + genArgs + ">";
+    }
+#>
+        public static <#=ret#> FromAsyncPattern<#=genArgs#>(<#=begin#> begin, <#=end#> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
+        }
+
+<#
+}
+#>
     }
 }
