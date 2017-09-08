@@ -43,7 +43,7 @@ for (var j = 1; j <= i; j++)
             {
                 var d = new CompositeAsyncDisposable();
 
-                var <#=obs#> = observer.Zip(selector);
+                var <#=obs#> = AsyncObserver.Zip(observer, selector);
 
 <#
 for (var j = 1; j <= i; j++)
@@ -78,7 +78,7 @@ for (var j = 1; j <= i; j++)
             {
                 var d = new CompositeAsyncDisposable();
 
-                var <#=obs#> = observer.Zip(selector);
+                var <#=obs#> = AsyncObserver.Zip(observer, selector);
 
 <#
 for (var j = 1; j <= i; j++)

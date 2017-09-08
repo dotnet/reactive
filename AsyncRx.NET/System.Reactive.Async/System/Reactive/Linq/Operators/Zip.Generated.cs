@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2) = observer.Zip(selector);
+                var (observer1, observer2) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2) = observer.Zip(selector);
+                var (observer1, observer2) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -74,7 +74,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3) = observer.Zip(selector);
+                var (observer1, observer2, observer3) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -101,7 +101,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3) = observer.Zip(selector);
+                var (observer1, observer2, observer3) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -130,7 +130,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -192,7 +192,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -225,7 +225,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -260,7 +260,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -296,7 +296,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -334,7 +334,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -373,7 +373,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -414,7 +414,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -456,7 +456,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -500,7 +500,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -545,7 +545,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -592,7 +592,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -640,7 +640,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -690,7 +690,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -741,7 +741,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -794,7 +794,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -848,7 +848,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -904,7 +904,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -961,7 +961,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -1020,7 +1020,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -1080,7 +1080,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -1142,7 +1142,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
@@ -1205,7 +1205,7 @@ namespace System.Reactive.Linq
             {
                 var d = new CompositeAsyncDisposable();
 
-                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = observer.Zip(selector);
+                var (observer1, observer2, observer3, observer4, observer5, observer6, observer7, observer8, observer9, observer10, observer11, observer12, observer13, observer14, observer15) = AsyncObserver.Zip(observer, selector);
 
                 var sub1 = source1.SubscribeAsync(observer1).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
                 var sub2 = source2.SubscribeAsync(observer2).ContinueWith(disposable => d.AddAsync(disposable.Result)).Unwrap();
