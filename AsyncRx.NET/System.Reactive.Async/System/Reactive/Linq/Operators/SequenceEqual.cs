@@ -10,6 +10,8 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        // TODO: Add SequenceEqual<T>(IAsyncObservable<T>, IAsyncEnumerable<T>).
+
         public static IAsyncObservable<bool> SequenceEqual<TSource>(this IAsyncObservable<TSource> first, IAsyncObservable<TSource> second)
         {
             if (first == null)
