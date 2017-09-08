@@ -316,7 +316,122 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return CoreAsync();
+
+            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            {
+                var gate = new AsyncLock();
+
+                var queue = new Queue<List<TSource>>();
+
+                queue.Enqueue(new List<TSource>());
+
+                var sink = Create<TSource>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            foreach (var buffer in queue)
+                            {
+                                buffer.Add(x);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            while (queue.Count > 0)
+                            {
+                                var buffer = queue.Dequeue();
+
+                                if (buffer.Count > 0)
+                                {
+                                    await observer.OnNextAsync(buffer).ConfigureAwait(false);
+                                }
+                            }
+
+                            await observer.OnCompletedAsync().ConfigureAwait(false);
+                        }
+                    }
+                );
+
+                var nextOpen = timeShift;
+                var nextClose = timeSpan;
+                var totalTime = TimeSpan.Zero;
+
+                var isOpen = false;
+                var isClose = false;
+
+                TimeSpan GetNextDue()
+                {
+                    if (nextOpen == nextClose)
+                    {
+                        isOpen = isClose = true;
+                    }
+                    else if (nextClose < nextOpen)
+                    {
+                        isClose = true;
+                        isOpen = false;
+                    }
+                    else
+                    {
+                        isOpen = true;
+                        isClose = false;
+                    }
+
+                    var newTotalTime = isClose ? nextClose : nextOpen;
+                    var due = newTotalTime - totalTime;
+                    totalTime = newTotalTime;
+
+                    if (isOpen)
+                    {
+                        nextOpen += timeShift;
+                    }
+
+                    if (isClose)
+                    {
+                        nextClose += timeShift;
+                    }
+
+                    return due;
+                }
+
+                var timer = await scheduler.ScheduleAsync(async ct =>
+                {
+                    while (!ct.IsCancellationRequested)
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (isClose)
+                            {
+                                var buffer = queue.Dequeue();
+
+                                if (buffer.Count > 0)
+                                {
+                                    await observer.OnNextAsync(buffer).RendezVous(scheduler);
+                                }
+                            }
+
+                            if (isOpen)
+                            {
+                                queue.Enqueue(new List<TSource>());
+                            }
+                        }
+
+                        await scheduler.Delay(GetNextDue(), ct).RendezVous(scheduler);
+                    }
+                }, GetNextDue());
+
+                return (sink, timer);
+            };
         }
 
         public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, int count) => Buffer(observer, timeSpan, count, TaskPoolAsyncScheduler.Default);
@@ -332,7 +447,16 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            throw new NotImplementedException();
+            return CoreAsync();
+
+            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
+            {
+                var gate = new AsyncLock();
+
+                var queue = new Queue<List<TSource>>();
+
+                throw new NotImplementedException();
+            };
         }
     }
 }

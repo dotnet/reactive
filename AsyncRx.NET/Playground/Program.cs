@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -16,7 +18,8 @@ namespace Playground
 
         static async Task MainAsync()
         {
-            await BufferAsync();
+            await BufferTimeHoppingAsync();
+            await BufferTimeSlidingAsync();
             await MergeAsync();
             await RangeAsync();
             await ReturnAsync();
@@ -25,9 +28,25 @@ namespace Playground
             await TimerAsync();
         }
 
-        static async Task BufferAsync()
+        static async Task BufferTimeHoppingAsync()
         {
-            await AsyncObservable.Interval(TimeSpan.FromMilliseconds(300)).Buffer(TimeSpan.FromSeconds(1)).Select(xs => string.Join(", ", xs)).SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+            await
+                AsyncObservable
+                    .Interval(TimeSpan.FromMilliseconds(300))
+                    .Buffer(TimeSpan.FromSeconds(1))
+                    .Select(xs => string.Join(", ", xs))
+                    .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task BufferTimeSlidingAsync()
+        {
+            await
+                AsyncObservable
+                    .Interval(TimeSpan.FromMilliseconds(100))
+                    .Timestamp(TaskPoolAsyncScheduler.Default)
+                    .Buffer(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(300))
+                    .Select(xs => $"[{xs.First().Timestamp}, {xs.Last().Timestamp}] = {(xs.Last().Timestamp - xs.First().Timestamp).TotalMilliseconds}")
+                    .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
         static async Task MergeAsync()
