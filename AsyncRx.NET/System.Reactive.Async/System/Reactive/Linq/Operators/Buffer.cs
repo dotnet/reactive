@@ -453,9 +453,73 @@ namespace System.Reactive.Linq
             {
                 var gate = new AsyncLock();
 
-                var queue = new Queue<List<TSource>>();
+                var timer = new SerialAsyncDisposable();
 
-                throw new NotImplementedException();
+                var buffer = new List<TSource>();
+                var n = 0;
+                var id = 0;
+
+                async Task CreateTimerAsync(int timerId)
+                {
+                    var d = await scheduler.ScheduleAsync(async ct =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            if (timerId == id)
+                            {
+                                await FlushAsync().ConfigureAwait(false);
+                            }
+                        }
+                    }, timeSpan);
+
+                    await timer.AssignAsync(d).ConfigureAwait(false);
+                }
+
+                async Task FlushAsync()
+                {
+                    n = 0;
+                    ++id;
+
+                    var res = buffer;
+                    buffer = new List<TSource>();
+                    await observer.OnNextAsync(buffer).ConfigureAwait(false);
+
+                    await CreateTimerAsync(id).ConfigureAwait(false);
+                }
+
+                var sink = Create<TSource>(
+                    async x =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            buffer.Add(x);
+
+                            if (++n == count)
+                            {
+                                await FlushAsync().ConfigureAwait(false);
+                            }
+                        }
+                    },
+                    async ex =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        }
+                    },
+                    async () =>
+                    {
+                        using (await gate.LockAsync().ConfigureAwait(false))
+                        {
+                            await observer.OnNextAsync(buffer).ConfigureAwait(false); // NB: We don't check for non-empty in sync Rx either.
+                            await observer.OnCompletedAsync().ConfigureAwait(false);
+                        }
+                    }
+                );
+
+                await CreateTimerAsync(0).ConfigureAwait(false);
+
+                return (sink, timer);
             };
         }
     }
