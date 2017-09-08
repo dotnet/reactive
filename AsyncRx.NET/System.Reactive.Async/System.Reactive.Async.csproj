@@ -5,16 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="System\Reactive\Linq\Operators\CombineLatest.Generated.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CombineLatest.Generated.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="System\Reactive\Linq\Operators\Average.Generated.tt">
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\Zip.Generated.tt">
+      <LastGenOutput>Zip.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="System\Reactive\Linq\Operators\CombineLatest.Generated.tt">
@@ -79,6 +75,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Min.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\Zip.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Zip.Generated.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
