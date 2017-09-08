@@ -16,12 +16,18 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            await BufferAsync();
             await MergeAsync();
             await RangeAsync();
             await ReturnAsync();
             await SubjectAsync();
             await TakeUntilAsync();
             await TimerAsync();
+        }
+
+        static async Task BufferAsync()
+        {
+            await AsyncObservable.Interval(TimeSpan.FromMilliseconds(300)).Buffer(TimeSpan.FromSeconds(1)).Select(xs => string.Join(", ", xs)).SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
         static async Task MergeAsync()
