@@ -61,6 +61,8 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
+            // REVIEW: Use a lifted observer operator.
+
             return Create<TResult>(async observer =>
             {
                 var observable = default(IAsyncObservable<TResult>);
