@@ -22,6 +22,7 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            await AwaitAsync();
             await BufferTimeHoppingAsync();
             await BufferTimeSlidingAsync();
             await ConcatAsync();
@@ -32,6 +33,11 @@ namespace Playground
             await SubjectAsync();
             await TakeUntilAsync();
             await TimerAsync();
+        }
+
+        static async Task AwaitAsync()
+        {
+            Console.WriteLine(await AsyncObservable.Range(0, 10));
         }
 
         static async Task BufferTimeHoppingAsync()
