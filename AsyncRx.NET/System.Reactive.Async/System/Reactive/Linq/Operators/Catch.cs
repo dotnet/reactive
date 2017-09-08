@@ -65,7 +65,7 @@ namespace System.Reactive.Linq
             });
         }
 
-        public static IAsyncObservable<TSource> Catch<TSource>(params IAsyncObservable<TSource>[] sources) => Catch<TSource>((IEnumerable<IAsyncObservable<TSource>>)sources);
+        public static IAsyncObservable<TSource> Catch<TSource>(params IAsyncObservable<TSource>[] sources) => Catch((IEnumerable<IAsyncObservable<TSource>>)sources);
 
         public static IAsyncObservable<TSource> Catch<TSource>(this IEnumerable<IAsyncObservable<TSource>> sources)
         {
@@ -78,7 +78,7 @@ namespace System.Reactive.Linq
 
                 if (!enumerator.MoveNext())
                 {
-                    return AsyncDisposable.Nop;
+                    return AsyncDisposable.Nop; // REVIEW: Is Never behavior right here?
                 }
 
                 var source = enumerator.Current;
@@ -203,7 +203,7 @@ namespace System.Reactive.Linq
 
                     if (handler == null)
                     {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false); // REVIEW: Is Throw behavior right here?
                         return;
                     }
 
