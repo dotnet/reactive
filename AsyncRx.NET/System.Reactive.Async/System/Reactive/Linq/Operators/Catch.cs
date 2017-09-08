@@ -24,7 +24,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.Catch(observer, handler);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -59,7 +59,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.Catch(observer, second);
 
-                var subscription = await first.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await first.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq
 
                 var (sink, inner) = AsyncObserver.Catch(observer, enumerator);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq
                             return;
                         }
 
-                        var handlerSubscription = await handlerObservable.SubscribeAsync(observer).ConfigureAwait(false);
+                        var handlerSubscription = await handlerObservable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                         await subscription.AssignAsync(handlerSubscription).ConfigureAwait(false);
                     }
@@ -161,7 +161,7 @@ namespace System.Reactive.Linq
                 observer.OnNextAsync,
                 async ex =>
                 {
-                    var secondSubscription = await second.SubscribeAsync(observer).ConfigureAwait(false);
+                    var secondSubscription = await second.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                     await subscription.AssignAsync(secondSubscription).ConfigureAwait(false);
                 },
@@ -207,7 +207,7 @@ namespace System.Reactive.Linq
                         return;
                     }
 
-                    var handlerSubscription = await handler.SubscribeAsync(sink).ConfigureAwait(false);
+                    var handlerSubscription = await handler.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                     await innerSubscription.AssignAsync(handlerSubscription).ConfigureAwait(false);
                 },

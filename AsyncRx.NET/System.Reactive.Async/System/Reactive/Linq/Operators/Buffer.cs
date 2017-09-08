@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentNullException(nameof(count));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.Buffer(observer, count)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, count)));
         }
 
         public static IAsyncObservable<IList<TSource>> Buffer<TSource>(this IAsyncObservable<TSource> source, int count, int skip)
@@ -31,7 +31,7 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentNullException(nameof(skip));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.Buffer(observer, count, skip)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.Buffer(observer, count, skip)));
         }
 
         public static IAsyncObservable<IList<TSource>> Buffer<TSource>(this IAsyncObservable<TSource> source, TimeSpan timeSpan)
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan, scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan, timeShift).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan, timeShift, scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -123,7 +123,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan, count).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, timer) = await AsyncObserver.Buffer(observer, timeSpan, count, scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });

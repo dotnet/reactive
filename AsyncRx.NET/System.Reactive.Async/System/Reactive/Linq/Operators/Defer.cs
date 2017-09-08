@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
                     return AsyncDisposable.Nop;
                 }
 
-                return await source.SubscribeAsync(observer).ConfigureAwait(false);
+                return await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
             });
         }
     }

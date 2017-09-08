@@ -23,8 +23,8 @@ namespace System.Reactive.Linq
             {
                 var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer);
 
-                var firstTask = first.SubscribeAsync(firstObserver);
-                var secondTask = second.SubscribeAsync(secondObserver);
+                var firstTask = first.SubscribeSafeAsync(firstObserver);
+                var secondTask = second.SubscribeSafeAsync(secondObserver);
 
                 var d1 = await firstTask.ConfigureAwait(false);
                 var d2 = await secondTask.ConfigureAwait(false);
@@ -46,8 +46,8 @@ namespace System.Reactive.Linq
             {
                 var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer, comparer);
 
-                var firstTask = first.SubscribeAsync(firstObserver);
-                var secondTask = second.SubscribeAsync(secondObserver);
+                var firstTask = first.SubscribeSafeAsync(firstObserver);
+                var secondTask = second.SubscribeSafeAsync(secondObserver);
 
                 var d1 = await firstTask.ConfigureAwait(false);
                 var d2 = await secondTask.ConfigureAwait(false);

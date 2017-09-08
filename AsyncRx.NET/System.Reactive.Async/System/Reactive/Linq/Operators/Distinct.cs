@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Distinct(observer)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer)));
         }
 
         public static IAsyncObservable<TSource> Distinct<TSource>(IAsyncObservable<TSource> source, IEqualityComparer<TSource> comparer)
@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Distinct(observer, comparer)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Distinct(observer, comparer)));
         }
     }
 

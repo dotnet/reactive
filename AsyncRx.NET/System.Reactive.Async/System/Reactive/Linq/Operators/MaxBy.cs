@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.MaxBy(observer, keySelector)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.MaxBy(observer, keySelector, comparer)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector, comparer)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector)
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.MaxBy(observer, keySelector)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector)));
         }
 
         public static IAsyncObservable<IList<TSource>> MaxBy<TSource, TKey>(IAsyncObservable<TSource> source, Func<TSource, Task<TKey>> keySelector, IComparer<TKey> comparer)
@@ -50,7 +50,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Create<IList<TSource>>(observer => source.SubscribeAsync(AsyncObserver.MaxBy(observer, keySelector, comparer)));
+            return Create<IList<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.MaxBy(observer, keySelector, comparer)));
         }
     }
 

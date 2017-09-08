@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
                     }
                 }
 
-                var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {
@@ -91,7 +91,7 @@ namespace System.Reactive.Linq
                     }
                 }
 
-                var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {
@@ -142,7 +142,7 @@ namespace System.Reactive.Linq
                     }
                 }
 
-                var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {
@@ -197,7 +197,7 @@ namespace System.Reactive.Linq
                     }
                 }
 
-                var subscription = await observable.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await observable.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {

@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Scan(observer, func)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
         public static IAsyncObservable<TSource> Scan<TSource>(this IAsyncObservable<TSource> source, Func<TSource, TSource, Task<TSource>> func)
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Scan(observer, func)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, func)));
         }
 
         public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, TResult> func)
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Scan(observer, seed, func)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, seed, func)));
         }
 
         public static IAsyncObservable<TResult> Scan<TSource, TResult>(this IAsyncObservable<TSource> source, TResult seed, Func<TResult, TSource, Task<TResult>> func)
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Scan(observer, seed, func)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Scan(observer, seed, func)));
         }
     }
 

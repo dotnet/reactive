@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, Task<TResult>> selector)
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, TResult> selector)
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
 
         public static IAsyncObservable<TResult> Select<TSource, TResult>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<TResult>> selector)
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<TResult>(observer => source.SubscribeAsync(AsyncObserver.Select(observer, selector)));
+            return Create<TResult>(observer => source.SubscribeSafeAsync(AsyncObserver.Select(observer, selector)));
         }
     }
 

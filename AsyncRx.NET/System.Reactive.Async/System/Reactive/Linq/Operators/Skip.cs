@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
                 return source;
             }
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.Skip(observer, count)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Skip(observer, count)));
         }
 
         public static IAsyncObservable<TSource> Skip<TSource>(this IAsyncObservable<TSource> source, TimeSpan duration)
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration);
 
-                var subscription = await source.SubscribeAsync(sourceObserver).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration);
 
-                var subscription = await source.SubscribeAsync(sourceObserver).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });

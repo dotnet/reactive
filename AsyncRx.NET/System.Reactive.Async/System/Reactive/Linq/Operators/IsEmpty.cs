@@ -11,7 +11,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<bool>(observer => source.SubscribeAsync(AsyncObserver.IsEmpty<TSource>(observer)));
+            return Create<bool>(observer => source.SubscribeSafeAsync(AsyncObserver.IsEmpty<TSource>(observer)));
         }
     }
 

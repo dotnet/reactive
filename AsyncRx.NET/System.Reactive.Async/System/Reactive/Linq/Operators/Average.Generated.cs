@@ -13,7 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt32(observer)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt32(observer)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32> selector)
@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt32(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Int32>> selector)
@@ -33,7 +33,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt32(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average(this IAsyncObservable<Int32?> source)
@@ -41,7 +41,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt32(observer)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt32(observer)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int32?> selector)
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Int32?>> selector)
@@ -61,7 +61,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt32(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Average(this IAsyncObservable<Int64> source)
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt64(observer)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt64(observer)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64> selector)
@@ -79,7 +79,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt64(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Int64>> selector)
@@ -89,7 +89,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageInt64(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average(this IAsyncObservable<Int64?> source)
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt64(observer)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt64(observer)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Int64?> selector)
@@ -107,7 +107,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Int64?>> selector)
@@ -117,7 +117,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableInt64(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Average(this IAsyncObservable<Single> source)
@@ -125,7 +125,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Single>(observer => source.SubscribeAsync(AsyncObserver.AverageSingle(observer)));
+            return Create<Single>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageSingle(observer)));
         }
 
         public static IAsyncObservable<Single> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single> selector)
@@ -135,7 +135,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Single>(observer => source.SubscribeAsync(AsyncObserver.AverageSingle(observer, selector)));
+            return Create<Single>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Single>> selector)
@@ -145,7 +145,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Single>(observer => source.SubscribeAsync(AsyncObserver.AverageSingle(observer, selector)));
+            return Create<Single>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Average(this IAsyncObservable<Single?> source)
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Single?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableSingle(observer)));
+            return Create<Single?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableSingle(observer)));
         }
 
         public static IAsyncObservable<Single?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Single?> selector)
@@ -163,7 +163,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Single?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
+            return Create<Single?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Single?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Single?>> selector)
@@ -173,7 +173,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Single?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
+            return Create<Single?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableSingle(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Average(this IAsyncObservable<Double> source)
@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageDouble(observer)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDouble(observer)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double> selector)
@@ -191,7 +191,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageDouble(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Double>> selector)
@@ -201,7 +201,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double>(observer => source.SubscribeAsync(AsyncObserver.AverageDouble(observer, selector)));
+            return Create<Double>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average(this IAsyncObservable<Double?> source)
@@ -209,7 +209,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDouble(observer)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDouble(observer)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Double?> selector)
@@ -219,7 +219,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Double?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Double?>> selector)
@@ -229,7 +229,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Double?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
+            return Create<Double?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDouble(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Average(this IAsyncObservable<Decimal> source)
@@ -237,7 +237,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Decimal>(observer => source.SubscribeAsync(AsyncObserver.AverageDecimal(observer)));
+            return Create<Decimal>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal> selector)
@@ -247,7 +247,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Decimal>(observer => source.SubscribeAsync(AsyncObserver.AverageDecimal(observer, selector)));
+            return Create<Decimal>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Decimal>> selector)
@@ -257,7 +257,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Decimal>(observer => source.SubscribeAsync(AsyncObserver.AverageDecimal(observer, selector)));
+            return Create<Decimal>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Average(this IAsyncObservable<Decimal?> source)
@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<Decimal?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDecimal(observer)));
+            return Create<Decimal?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDecimal(observer)));
         }
 
         public static IAsyncObservable<Decimal?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Decimal?> selector)
@@ -275,7 +275,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Decimal?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));
+            return Create<Decimal?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));
         }
 
         public static IAsyncObservable<Decimal?> Average<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<Decimal?>> selector)
@@ -285,7 +285,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return Create<Decimal?>(observer => source.SubscribeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));
+            return Create<Decimal?>(observer => source.SubscribeSafeAsync(AsyncObserver.AverageNullableDecimal(observer, selector)));
         }
 
     }

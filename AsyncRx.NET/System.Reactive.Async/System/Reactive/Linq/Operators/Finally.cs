@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var subscription = await source.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var subscription = await source.SubscribeAsync(observer).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(observer).ConfigureAwait(false);
 
                 return AsyncDisposable.Create(async () =>
                 {

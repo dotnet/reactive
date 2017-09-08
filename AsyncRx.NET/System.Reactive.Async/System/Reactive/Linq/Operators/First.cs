@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.First(observer)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.First(observer)));
         }
 
         public static IAsyncObservable<TSource> First<TSource>(this IAsyncObservable<TSource> source, Func<TSource, bool> predicate)
@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.First(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.First(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> First<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.First(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.First(observer, predicate)));
         }
     }
 

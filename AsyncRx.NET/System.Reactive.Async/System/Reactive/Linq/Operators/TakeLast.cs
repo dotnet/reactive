@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = AsyncObserver.TakeLast(observer, count);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = AsyncObserver.TakeLast(observer, count, scheduler);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = AsyncObserver.TakeLast(observer, duration);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
@@ -97,7 +97,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = AsyncObserver.TakeLast(observer, duration, clock);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
@@ -123,7 +123,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = AsyncObserver.TakeLast(observer, duration, clock, scheduler);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });

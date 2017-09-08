@@ -22,8 +22,8 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, untilObserver) = AsyncObserver.TakeUntil<TSource, TUntil>(observer);
 
-                var sourceTask = source.SubscribeAsync(sourceObserver);
-                var untilTask = until.SubscribeAsync(untilObserver);
+                var sourceTask = source.SubscribeSafeAsync(sourceObserver);
+                var untilTask = until.SubscribeSafeAsync(untilObserver);
 
                 var d1 = await sourceTask.ConfigureAwait(false);
                 var d2 = await untilTask.ConfigureAwait(false);
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime);
 
-                var subscription = await source.SubscribeAsync(sourceObserver).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
             {
                 var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime, scheduler);
 
-                var subscription = await source.SubscribeAsync(sourceObserver).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, timer);
             });

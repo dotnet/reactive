@@ -15,7 +15,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<bool>> predicate)
@@ -25,7 +25,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, bool> predicate)
@@ -35,7 +35,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
 
         public static IAsyncObservable<TSource> SkipWhile<TSource>(this IAsyncObservable<TSource> source, Func<TSource, int, Task<bool>> predicate)
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return Create<TSource>(observer => source.SubscribeAsync(AsyncObserver.SkipWhile(observer, predicate)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.SkipWhile(observer, predicate)));
         }
     }
 
