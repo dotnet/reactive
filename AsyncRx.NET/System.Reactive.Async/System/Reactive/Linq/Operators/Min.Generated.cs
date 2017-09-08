@@ -292,7 +292,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> MinInt32<TSource>(this IAsyncObserver<Int32> observer, Func<TSource, Int32> selector)
+        public static IAsyncObserver<TSource> MinInt32<TSource>(IAsyncObserver<Int32> observer, Func<TSource, Int32> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -302,7 +302,7 @@ namespace System.Reactive.Linq
             return Select(MinInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinInt32<TSource>(this IAsyncObserver<Int32> observer, Func<TSource, Task<Int32>> selector)
+        public static IAsyncObserver<TSource> MinInt32<TSource>(IAsyncObserver<Int32> observer, Func<TSource, Task<Int32>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -312,7 +312,7 @@ namespace System.Reactive.Linq
             return Select(MinInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableInt32<TSource>(this IAsyncObserver<Int32?> observer, Func<TSource, Int32?> selector)
+        public static IAsyncObserver<TSource> MinNullableInt32<TSource>(IAsyncObserver<Int32?> observer, Func<TSource, Int32?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -322,7 +322,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableInt32<TSource>(this IAsyncObserver<Int32?> observer, Func<TSource, Task<Int32?>> selector)
+        public static IAsyncObserver<TSource> MinNullableInt32<TSource>(IAsyncObserver<Int32?> observer, Func<TSource, Task<Int32?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -332,7 +332,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinInt64<TSource>(this IAsyncObserver<Int64> observer, Func<TSource, Int64> selector)
+        public static IAsyncObserver<TSource> MinInt64<TSource>(IAsyncObserver<Int64> observer, Func<TSource, Int64> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -342,7 +342,7 @@ namespace System.Reactive.Linq
             return Select(MinInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinInt64<TSource>(this IAsyncObserver<Int64> observer, Func<TSource, Task<Int64>> selector)
+        public static IAsyncObserver<TSource> MinInt64<TSource>(IAsyncObserver<Int64> observer, Func<TSource, Task<Int64>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -352,7 +352,7 @@ namespace System.Reactive.Linq
             return Select(MinInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableInt64<TSource>(this IAsyncObserver<Int64?> observer, Func<TSource, Int64?> selector)
+        public static IAsyncObserver<TSource> MinNullableInt64<TSource>(IAsyncObserver<Int64?> observer, Func<TSource, Int64?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableInt64<TSource>(this IAsyncObserver<Int64?> observer, Func<TSource, Task<Int64?>> selector)
+        public static IAsyncObserver<TSource> MinNullableInt64<TSource>(IAsyncObserver<Int64?> observer, Func<TSource, Task<Int64?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -372,7 +372,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinSingle<TSource>(this IAsyncObserver<Single> observer, Func<TSource, Single> selector)
+        public static IAsyncObserver<TSource> MinSingle<TSource>(IAsyncObserver<Single> observer, Func<TSource, Single> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -382,7 +382,7 @@ namespace System.Reactive.Linq
             return Select(MinSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinSingle<TSource>(this IAsyncObserver<Single> observer, Func<TSource, Task<Single>> selector)
+        public static IAsyncObserver<TSource> MinSingle<TSource>(IAsyncObserver<Single> observer, Func<TSource, Task<Single>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -392,7 +392,7 @@ namespace System.Reactive.Linq
             return Select(MinSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableSingle<TSource>(this IAsyncObserver<Single?> observer, Func<TSource, Single?> selector)
+        public static IAsyncObserver<TSource> MinNullableSingle<TSource>(IAsyncObserver<Single?> observer, Func<TSource, Single?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -402,7 +402,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableSingle<TSource>(this IAsyncObserver<Single?> observer, Func<TSource, Task<Single?>> selector)
+        public static IAsyncObserver<TSource> MinNullableSingle<TSource>(IAsyncObserver<Single?> observer, Func<TSource, Task<Single?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -412,7 +412,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinDouble<TSource>(this IAsyncObserver<Double> observer, Func<TSource, Double> selector)
+        public static IAsyncObserver<TSource> MinDouble<TSource>(IAsyncObserver<Double> observer, Func<TSource, Double> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -422,7 +422,7 @@ namespace System.Reactive.Linq
             return Select(MinDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinDouble<TSource>(this IAsyncObserver<Double> observer, Func<TSource, Task<Double>> selector)
+        public static IAsyncObserver<TSource> MinDouble<TSource>(IAsyncObserver<Double> observer, Func<TSource, Task<Double>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq
             return Select(MinDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableDouble<TSource>(this IAsyncObserver<Double?> observer, Func<TSource, Double?> selector)
+        public static IAsyncObserver<TSource> MinNullableDouble<TSource>(IAsyncObserver<Double?> observer, Func<TSource, Double?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -442,7 +442,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableDouble<TSource>(this IAsyncObserver<Double?> observer, Func<TSource, Task<Double?>> selector)
+        public static IAsyncObserver<TSource> MinNullableDouble<TSource>(IAsyncObserver<Double?> observer, Func<TSource, Task<Double?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -452,7 +452,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinDecimal<TSource>(this IAsyncObserver<Decimal> observer, Func<TSource, Decimal> selector)
+        public static IAsyncObserver<TSource> MinDecimal<TSource>(IAsyncObserver<Decimal> observer, Func<TSource, Decimal> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -462,7 +462,7 @@ namespace System.Reactive.Linq
             return Select(MinDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinDecimal<TSource>(this IAsyncObserver<Decimal> observer, Func<TSource, Task<Decimal>> selector)
+        public static IAsyncObserver<TSource> MinDecimal<TSource>(IAsyncObserver<Decimal> observer, Func<TSource, Task<Decimal>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -472,7 +472,7 @@ namespace System.Reactive.Linq
             return Select(MinDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableDecimal<TSource>(this IAsyncObserver<Decimal?> observer, Func<TSource, Decimal?> selector)
+        public static IAsyncObserver<TSource> MinNullableDecimal<TSource>(IAsyncObserver<Decimal?> observer, Func<TSource, Decimal?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -482,7 +482,7 @@ namespace System.Reactive.Linq
             return Select(MinNullableDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> MinNullableDecimal<TSource>(this IAsyncObserver<Decimal?> observer, Func<TSource, Task<Decimal?>> selector)
+        public static IAsyncObserver<TSource> MinNullableDecimal<TSource>(IAsyncObserver<Decimal?> observer, Func<TSource, Task<Decimal?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

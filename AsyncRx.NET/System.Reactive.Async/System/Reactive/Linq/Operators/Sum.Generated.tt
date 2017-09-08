@@ -72,7 +72,7 @@ foreach (var t in types)
         var methodName = n ? "Nullable" + t.Name : t.Name;
 
 #>
-        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(this IAsyncObserver<<#=typeName#>> observer, Func<TSource, <#=typeName#>> selector)
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=typeName#>> observer, Func<TSource, <#=typeName#>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -82,7 +82,7 @@ foreach (var t in types)
             return Select(<#=name#><#=methodName#>(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(this IAsyncObserver<<#=typeName#>> observer, Func<TSource, Task<<#=typeName#>>> selector)
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=typeName#>> observer, Func<TSource, Task<<#=typeName#>>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

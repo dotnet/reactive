@@ -92,7 +92,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<int> MinInt32(this IAsyncObserver<int> observer)
+        public static IAsyncObserver<int> MinInt32(IAsyncObserver<int> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<long> MinInt64(this IAsyncObserver<long> observer)
+        public static IAsyncObserver<long> MinInt64(IAsyncObserver<long> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -176,7 +176,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<float> MinSingle(this IAsyncObserver<float> observer)
+        public static IAsyncObserver<float> MinSingle(IAsyncObserver<float> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -218,7 +218,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<double> MinDouble(this IAsyncObserver<double> observer)
+        public static IAsyncObserver<double> MinDouble(IAsyncObserver<double> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -260,7 +260,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<decimal> MinDecimal(this IAsyncObserver<decimal> observer)
+        public static IAsyncObserver<decimal> MinDecimal(IAsyncObserver<decimal> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -302,7 +302,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<int?> MinNullableInt32(this IAsyncObserver<int?> observer)
+        public static IAsyncObserver<int?> MinNullableInt32(IAsyncObserver<int?> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -328,7 +328,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<long?> MinNullableInt64(this IAsyncObserver<long?> observer)
+        public static IAsyncObserver<long?> MinNullableInt64(IAsyncObserver<long?> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -354,7 +354,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<float?> MinNullableSingle(this IAsyncObserver<float?> observer)
+        public static IAsyncObserver<float?> MinNullableSingle(IAsyncObserver<float?> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -380,7 +380,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<double?> MinNullableDouble(this IAsyncObserver<double?> observer)
+        public static IAsyncObserver<double?> MinNullableDouble(IAsyncObserver<double?> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -406,7 +406,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<decimal?> MinNullableDecimal(this IAsyncObserver<decimal?> observer)
+        public static IAsyncObserver<decimal?> MinNullableDecimal(IAsyncObserver<decimal?> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

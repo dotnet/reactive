@@ -292,7 +292,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> SumInt32<TSource>(this IAsyncObserver<Int32> observer, Func<TSource, Int32> selector)
+        public static IAsyncObserver<TSource> SumInt32<TSource>(IAsyncObserver<Int32> observer, Func<TSource, Int32> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -302,7 +302,7 @@ namespace System.Reactive.Linq
             return Select(SumInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumInt32<TSource>(this IAsyncObserver<Int32> observer, Func<TSource, Task<Int32>> selector)
+        public static IAsyncObserver<TSource> SumInt32<TSource>(IAsyncObserver<Int32> observer, Func<TSource, Task<Int32>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -312,7 +312,7 @@ namespace System.Reactive.Linq
             return Select(SumInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableInt32<TSource>(this IAsyncObserver<Int32?> observer, Func<TSource, Int32?> selector)
+        public static IAsyncObserver<TSource> SumNullableInt32<TSource>(IAsyncObserver<Int32?> observer, Func<TSource, Int32?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -322,7 +322,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableInt32<TSource>(this IAsyncObserver<Int32?> observer, Func<TSource, Task<Int32?>> selector)
+        public static IAsyncObserver<TSource> SumNullableInt32<TSource>(IAsyncObserver<Int32?> observer, Func<TSource, Task<Int32?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -332,7 +332,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableInt32(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumInt64<TSource>(this IAsyncObserver<Int64> observer, Func<TSource, Int64> selector)
+        public static IAsyncObserver<TSource> SumInt64<TSource>(IAsyncObserver<Int64> observer, Func<TSource, Int64> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -342,7 +342,7 @@ namespace System.Reactive.Linq
             return Select(SumInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumInt64<TSource>(this IAsyncObserver<Int64> observer, Func<TSource, Task<Int64>> selector)
+        public static IAsyncObserver<TSource> SumInt64<TSource>(IAsyncObserver<Int64> observer, Func<TSource, Task<Int64>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -352,7 +352,7 @@ namespace System.Reactive.Linq
             return Select(SumInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableInt64<TSource>(this IAsyncObserver<Int64?> observer, Func<TSource, Int64?> selector)
+        public static IAsyncObserver<TSource> SumNullableInt64<TSource>(IAsyncObserver<Int64?> observer, Func<TSource, Int64?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableInt64<TSource>(this IAsyncObserver<Int64?> observer, Func<TSource, Task<Int64?>> selector)
+        public static IAsyncObserver<TSource> SumNullableInt64<TSource>(IAsyncObserver<Int64?> observer, Func<TSource, Task<Int64?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -372,7 +372,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableInt64(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumSingle<TSource>(this IAsyncObserver<Single> observer, Func<TSource, Single> selector)
+        public static IAsyncObserver<TSource> SumSingle<TSource>(IAsyncObserver<Single> observer, Func<TSource, Single> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -382,7 +382,7 @@ namespace System.Reactive.Linq
             return Select(SumSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumSingle<TSource>(this IAsyncObserver<Single> observer, Func<TSource, Task<Single>> selector)
+        public static IAsyncObserver<TSource> SumSingle<TSource>(IAsyncObserver<Single> observer, Func<TSource, Task<Single>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -392,7 +392,7 @@ namespace System.Reactive.Linq
             return Select(SumSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableSingle<TSource>(this IAsyncObserver<Single?> observer, Func<TSource, Single?> selector)
+        public static IAsyncObserver<TSource> SumNullableSingle<TSource>(IAsyncObserver<Single?> observer, Func<TSource, Single?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -402,7 +402,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableSingle<TSource>(this IAsyncObserver<Single?> observer, Func<TSource, Task<Single?>> selector)
+        public static IAsyncObserver<TSource> SumNullableSingle<TSource>(IAsyncObserver<Single?> observer, Func<TSource, Task<Single?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -412,7 +412,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableSingle(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumDouble<TSource>(this IAsyncObserver<Double> observer, Func<TSource, Double> selector)
+        public static IAsyncObserver<TSource> SumDouble<TSource>(IAsyncObserver<Double> observer, Func<TSource, Double> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -422,7 +422,7 @@ namespace System.Reactive.Linq
             return Select(SumDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumDouble<TSource>(this IAsyncObserver<Double> observer, Func<TSource, Task<Double>> selector)
+        public static IAsyncObserver<TSource> SumDouble<TSource>(IAsyncObserver<Double> observer, Func<TSource, Task<Double>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -432,7 +432,7 @@ namespace System.Reactive.Linq
             return Select(SumDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableDouble<TSource>(this IAsyncObserver<Double?> observer, Func<TSource, Double?> selector)
+        public static IAsyncObserver<TSource> SumNullableDouble<TSource>(IAsyncObserver<Double?> observer, Func<TSource, Double?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -442,7 +442,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableDouble<TSource>(this IAsyncObserver<Double?> observer, Func<TSource, Task<Double?>> selector)
+        public static IAsyncObserver<TSource> SumNullableDouble<TSource>(IAsyncObserver<Double?> observer, Func<TSource, Task<Double?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -452,7 +452,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableDouble(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumDecimal<TSource>(this IAsyncObserver<Decimal> observer, Func<TSource, Decimal> selector)
+        public static IAsyncObserver<TSource> SumDecimal<TSource>(IAsyncObserver<Decimal> observer, Func<TSource, Decimal> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -462,7 +462,7 @@ namespace System.Reactive.Linq
             return Select(SumDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumDecimal<TSource>(this IAsyncObserver<Decimal> observer, Func<TSource, Task<Decimal>> selector)
+        public static IAsyncObserver<TSource> SumDecimal<TSource>(IAsyncObserver<Decimal> observer, Func<TSource, Task<Decimal>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -472,7 +472,7 @@ namespace System.Reactive.Linq
             return Select(SumDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableDecimal<TSource>(this IAsyncObserver<Decimal?> observer, Func<TSource, Decimal?> selector)
+        public static IAsyncObserver<TSource> SumNullableDecimal<TSource>(IAsyncObserver<Decimal?> observer, Func<TSource, Decimal?> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -482,7 +482,7 @@ namespace System.Reactive.Linq
             return Select(SumNullableDecimal(observer), selector);
         }
 
-        public static IAsyncObserver<TSource> SumNullableDecimal<TSource>(this IAsyncObserver<Decimal?> observer, Func<TSource, Task<Decimal?>> selector)
+        public static IAsyncObserver<TSource> SumNullableDecimal<TSource>(IAsyncObserver<Decimal?> observer, Func<TSource, Task<Decimal?>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));

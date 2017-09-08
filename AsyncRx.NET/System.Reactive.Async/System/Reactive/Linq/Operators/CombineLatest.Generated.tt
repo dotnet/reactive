@@ -108,7 +108,7 @@ for (var i = 2; i <= 15; i++)
     var genPars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
 #>
-        public static <#=res#> CombineLatest<<#=genPars#>>(this IAsyncObserver<TResult> observer, Func<<#=genArgs#>, TResult> selector)
+        public static <#=res#> CombineLatest<<#=genPars#>>(IAsyncObserver<TResult> observer, Func<<#=genArgs#>, TResult> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -118,7 +118,7 @@ for (var i = 2; i <= 15; i++)
             return CombineLatest<<#=genPars#>>(observer, (<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>) => Task.FromResult(selector(<#=string.Join(", ", Enumerable.Range(1, i).Select(j => "x" + j))#>)));
         }
 
-        public static <#=res#> CombineLatest<<#=genPars#>>(this IAsyncObserver<TResult> observer, Func<<#=genArgs#>, Task<TResult>> selector)
+        public static <#=res#> CombineLatest<<#=genPars#>>(IAsyncObserver<TResult> observer, Func<<#=genArgs#>, Task<TResult>> selector)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
