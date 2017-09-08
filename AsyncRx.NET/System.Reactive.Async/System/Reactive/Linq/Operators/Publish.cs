@@ -11,6 +11,14 @@ namespace System.Reactive.Linq
 
     partial class AsyncObservable
     {
+        public static IConnectableAsyncObservable<TSource> Publish<TSource>(this IAsyncObservable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Multicast(source, new SequentialSimpleAsyncSubject<TSource>());
+        }
+
         public static IAsyncObservable<TResult> Publish<TSource, TResult>(this IAsyncObservable<TSource> source, Func<IAsyncObservable<TSource>, IAsyncObservable<TResult>> selector)
         {
             if (source == null)
