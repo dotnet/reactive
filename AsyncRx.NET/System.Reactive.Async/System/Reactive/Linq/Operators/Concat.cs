@@ -90,39 +90,38 @@ namespace System.Reactive.Linq
 
             var innerSubscription = new SerialAsyncDisposable();
 
-            IAsyncObserver<TSource> sink = null;
-
-            sink = Create<TSource>(
-                observer.OnNextAsync,
-                observer.OnErrorAsync,
-                async () =>
-                {
-                    var next = default(IAsyncObservable<TSource>);
-
-                    try
+            IAsyncObserver<TSource> GetSink() =>
+                Create<TSource>(
+                    observer.OnNextAsync,
+                    observer.OnErrorAsync,
+                    async () =>
                     {
-                        if (handlers.MoveNext())
+                        var next = default(IAsyncObservable<TSource>);
+
+                        try
                         {
-                            next = handlers.Current;
+                            if (handlers.MoveNext())
+                            {
+                                next = handlers.Current;
+                            }
                         }
-                    }
-                    catch (Exception err)
-                    {
-                        await observer.OnErrorAsync(err).ConfigureAwait(false);
-                        return;
-                    }
+                        catch (Exception err)
+                        {
+                            await observer.OnErrorAsync(err).ConfigureAwait(false);
+                            return;
+                        }
 
-                    if (next == null)
-                    {
-                        await observer.OnCompletedAsync().ConfigureAwait(false); // REVIEW: Is Empty behavior right here?
-                        return;
+                        if (next == null)
+                        {
+                            await observer.OnCompletedAsync().ConfigureAwait(false); // REVIEW: Is Empty behavior right here?
+                            return;
+                        }
+
+                        var nextSubscription = await next.SubscribeSafeAsync(GetSink()).ConfigureAwait(false);
+
+                        await innerSubscription.AssignAsync(nextSubscription).ConfigureAwait(false);
                     }
-
-                    var nextSubscription = await next.SubscribeSafeAsync(sink).ConfigureAwait(false);
-
-                    await innerSubscription.AssignAsync(nextSubscription).ConfigureAwait(false);
-                }
-            );
+                );
 
             var disposeEnumerator = AsyncDisposable.Create(() =>
             {
@@ -132,7 +131,7 @@ namespace System.Reactive.Linq
 
             var subscription = StableCompositeAsyncDisposable.Create(innerSubscription, disposeEnumerator);
 
-            return (sink, subscription);
+            return (GetSink(), subscription);
         }
     }
 }

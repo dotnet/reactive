@@ -24,6 +24,7 @@ namespace Playground
         {
             await BufferTimeHoppingAsync();
             await BufferTimeSlidingAsync();
+            await ConcatAsync();
             await MergeAsync();
             await RangeAsync();
             await ReturnAsync();
@@ -52,6 +53,18 @@ namespace Playground
                     .Buffer(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(300))
                     .Select(xs => $"[{xs.First().Timestamp}, {xs.Last().Timestamp}] = {(xs.Last().Timestamp - xs.First().Timestamp).TotalMilliseconds}")
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task ConcatAsync()
+        {
+            await
+                AsyncObservable.Concat(
+                    AsyncObservable.Range(0, 5),
+                    AsyncObservable.Range(5, 5),
+                    AsyncObservable.Range(10, 5),
+                    AsyncObservable.Range(15, 5)
+                )
+                .SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
         static async Task MergeAsync()
