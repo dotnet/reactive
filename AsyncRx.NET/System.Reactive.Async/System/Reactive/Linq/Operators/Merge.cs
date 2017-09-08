@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
                                 count++;
                             }
 
-                            var inner = await xs.SubscribeAsync(
+                            var innerObserver = Create<TSource>(
                                 async x =>
                                 {
                                     using (await gate.LockAsync().ConfigureAwait(false))
@@ -80,7 +80,9 @@ namespace System.Reactive.Linq
                                 },
                                 OnErrorAsync,
                                 OnCompletedAsync
-                            ).ConfigureAwait(false);
+                            );
+
+                            var inner = await xs.SubscribeAsync(innerObserver).ConfigureAwait(false);
 
                             await disposable.AddAsync(inner).ConfigureAwait(false);
                         },
