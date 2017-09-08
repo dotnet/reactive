@@ -23,6 +23,7 @@ namespace Playground
             await MergeAsync();
             await RangeAsync();
             await ReturnAsync();
+            await SelectManyAsync();
             await SubjectAsync();
             await TakeUntilAsync();
             await TimerAsync();
@@ -73,6 +74,15 @@ namespace Playground
         static async Task ReturnAsync()
         {
             await AsyncObservable.Return(42).SubscribeAsync(Print<int>());
+        }
+
+        static async Task SelectManyAsync()
+        {
+            var res = from i in AsyncObservable.Range(0, 10)
+                      from j in AsyncObservable.Range(i * 10, 10)
+                      select i + " -> " + j;
+
+            await res.SubscribeAsync(Print<string>());
         }
 
         static async Task SubjectAsync()
