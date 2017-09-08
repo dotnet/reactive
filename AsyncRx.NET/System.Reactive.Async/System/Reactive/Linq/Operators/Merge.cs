@@ -70,6 +70,10 @@ namespace System.Reactive.Linq
                                 count++;
                             }
 
+                            var inner = new SingleAssignmentAsyncDisposable();
+
+                            await disposable.AddAsync(inner).ConfigureAwait(false);
+
                             var innerObserver = Create<TSource>(
                                 async x =>
                                 {
@@ -79,12 +83,17 @@ namespace System.Reactive.Linq
                                     }
                                 },
                                 OnErrorAsync,
-                                OnCompletedAsync
+                                async () =>
+                                {
+                                    await OnCompletedAsync().ConfigureAwait(false);
+
+                                    await disposable.RemoveAsync(inner).ConfigureAwait(false);
+                                }
                             );
 
-                            var inner = await xs.SubscribeSafeAsync(innerObserver).ConfigureAwait(false);
+                            var innerSubscription = await xs.SubscribeSafeAsync(innerObserver).ConfigureAwait(false);
 
-                            await disposable.AddAsync(inner).ConfigureAwait(false);
+                            await inner.AssignAsync(innerSubscription).ConfigureAwait(false);
                         },
                         OnErrorAsync,
                         OnCompletedAsync
