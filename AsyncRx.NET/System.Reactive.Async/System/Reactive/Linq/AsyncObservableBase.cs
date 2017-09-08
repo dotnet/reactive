@@ -93,10 +93,18 @@ namespace System.Reactive.Linq
 
                 try
                 {
-                    if (task != null)
-                    {
-                        await task.ConfigureAwait(false);
-                    }
+                    //
+                    // BUGBUG: This causes grief when an outgoing On*Async call reenters the DisposeAsync method and
+                    //         results in the task returned from the On*Async call to be awaited to serialize the
+                    //         call to subscription.DisposeAsync after it's done. We need to either detect reentrancy
+                    //         and queue up the call to DisposeAsync or follow an when we trigger the disposal without
+                    //         awaiting outstanding work (thus allowing for concurrency).
+                    //
+                    // if (task != null)
+                    // {
+                    //     await task.ConfigureAwait(false);
+                    // }
+                    //
                 }
                 finally
                 {
