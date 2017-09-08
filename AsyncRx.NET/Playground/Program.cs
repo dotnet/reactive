@@ -16,11 +16,28 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            await MergeAsync();
             await RangeAsync();
             await ReturnAsync();
             await SubjectAsync();
             await TakeUntilAsync();
             await TimerAsync();
+        }
+
+        static async Task MergeAsync()
+        {
+            var subject = new SequentialSimpleAsyncSubject<IAsyncObservable<int>>();
+
+            var res = subject.Merge();
+
+            await res.SubscribeAsync(Print<int>());
+
+            for (var i = 1; i <= 10; i++)
+            {
+                await subject.OnNextAsync(AsyncObservable.Range(0, i));
+            }
+
+            await subject.OnCompletedAsync();
         }
 
         static async Task RangeAsync()
