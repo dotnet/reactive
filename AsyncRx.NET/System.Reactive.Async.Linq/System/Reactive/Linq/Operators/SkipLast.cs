@@ -85,7 +85,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => SkipLast(observer, duration, TaskPoolAsyncScheduler.Default);
+        public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration) => SkipLast(observer, duration, Clock.Default);
 
         public static IAsyncObserver<TSource> SkipLast<TSource>(IAsyncObserver<TSource> observer, TimeSpan duration, IClock clock)
         {

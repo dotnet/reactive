@@ -99,7 +99,7 @@ namespace System.Reactive.Linq
             );
         }
 
-        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration) => TakeLastBuffer(observer, duration, TaskPoolAsyncScheduler.Default);
+        public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration) => TakeLastBuffer(observer, duration, Clock.Default);
 
         public static IAsyncObserver<TSource> TakeLastBuffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan duration, IClock clock)
         {
