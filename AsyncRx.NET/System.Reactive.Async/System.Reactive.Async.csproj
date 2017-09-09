@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Shared\System.Reactive.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="System\Reactive\Linq\Operators\Average.Generated.tt">
       <LastGenOutput>Average.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
