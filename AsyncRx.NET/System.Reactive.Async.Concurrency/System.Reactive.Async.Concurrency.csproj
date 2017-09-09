@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
+    <ProjectReference Include="..\System.Reactive.Shared\System.Reactive.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

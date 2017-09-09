@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Async.Concurrency\System.Reactive.Async.Concurrency.csproj" />
     <ProjectReference Include="..\System.Reactive.Async.Disposables\System.Reactive.Async.Disposables.csproj" />
     <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
     <ProjectReference Include="..\System.Reactive.Async.Subjects\System.Reactive.Async.Subjects.csproj" />
