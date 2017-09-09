@@ -67,9 +67,9 @@ namespace Playground
         {
             await
                 AsyncObservable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
-                    .Timestamp(TaskPoolAsyncScheduler.Default)
+                    .Timestamp()
                     .Delay(TimeSpan.FromMilliseconds(2500))
-                    .Timestamp(TaskPoolAsyncScheduler.Default)
+                    .Timestamp()
                     .Select(x => new TimeInterval<long>(x.Value.Value, x.Timestamp - x.Value.Timestamp).ToString())
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }

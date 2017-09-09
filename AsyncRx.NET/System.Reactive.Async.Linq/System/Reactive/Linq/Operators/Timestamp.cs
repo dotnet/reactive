@@ -8,6 +8,14 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        public static IAsyncObservable<Timestamped<TSource>> Timestamp<TSource>(this IAsyncObservable<TSource> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Create<Timestamped<TSource>>(observer => source.SubscribeSafeAsync(AsyncObserver.Timestamp(observer)));
+        }
+
         public static IAsyncObservable<Timestamped<TSource>> Timestamp<TSource>(this IAsyncObservable<TSource> source, IClock clock)
         {
             if (source == null)
@@ -21,6 +29,14 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
+        public static IAsyncObserver<TSource> Timestamp<TSource>(IAsyncObserver<Timestamped<TSource>> observer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            return Timestamp(observer, Clock.Default);
+        }
+
         public static IAsyncObserver<TSource> Timestamp<TSource>(IAsyncObserver<Timestamped<TSource>> observer, IClock clock)
         {
             if (observer == null)
