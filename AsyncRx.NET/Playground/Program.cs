@@ -4,6 +4,7 @@
 
 using System;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -22,17 +23,18 @@ namespace Playground
 
         static async Task MainAsync()
         {
-            await AwaitAsync();
-            await BufferTimeHoppingAsync();
-            await BufferTimeSlidingAsync();
-            await ConcatAsync();
-            await MergeAsync();
-            await RangeAsync();
-            await ReturnAsync();
-            await SelectManyAsync();
-            await SubjectAsync();
-            await TakeUntilAsync();
-            await TimerAsync();
+            //await AwaitAsync();
+            //await BufferTimeHoppingAsync();
+            //await BufferTimeSlidingAsync();
+            //await ConcatAsync();
+            await DelayAsync();
+            //await MergeAsync();
+            //await RangeAsync();
+            //await ReturnAsync();
+            //await SelectManyAsync();
+            //await SubjectAsync();
+            //await TakeUntilAsync();
+            //await TimerAsync();
         }
 
         static async Task AwaitAsync()
@@ -58,6 +60,17 @@ namespace Playground
                     .Timestamp(TaskPoolAsyncScheduler.Default)
                     .Buffer(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(300))
                     .Select(xs => $"[{xs.First().Timestamp}, {xs.Last().Timestamp}] = {(xs.Last().Timestamp - xs.First().Timestamp).TotalMilliseconds}")
+                    .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task DelayAsync()
+        {
+            await
+                AsyncObservable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
+                    .Timestamp(TaskPoolAsyncScheduler.Default)
+                    .Delay(TimeSpan.FromMilliseconds(2500))
+                    .Timestamp(TaskPoolAsyncScheduler.Default)
+                    .Select(x => new TimeInterval<long>(x.Value.Value, x.Timestamp - x.Value.Timestamp).ToString())
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
