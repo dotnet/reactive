@@ -33,7 +33,7 @@ namespace System.Reactive.Concurrency
             {
                 if (ct.IsCancellationRequested)
                 {
-                    tcs.SetCanceled();
+                    tcs.TrySetCanceled(ct);
                 }
                 else
                 {
@@ -63,7 +63,7 @@ namespace System.Reactive.Concurrency
                 }
                 catch (OperationCanceledException ex) when (ex.CancellationToken == ct)
                 {
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(ct);
                 }
                 catch (Exception ex)
                 {
@@ -83,7 +83,7 @@ namespace System.Reactive.Concurrency
                 }
                 finally
                 {
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(token);
                 }
             }))
             {
@@ -107,7 +107,7 @@ namespace System.Reactive.Concurrency
                 }
                 catch (OperationCanceledException ex) when (ex.CancellationToken == ct)
                 {
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(ct);
                 }
                 catch (Exception ex)
                 {
@@ -127,7 +127,7 @@ namespace System.Reactive.Concurrency
                 }
                 finally
                 {
-                    tcs.TrySetCanceled();
+                    tcs.TrySetCanceled(token);
                 }
             }))
             {
