@@ -49,6 +49,33 @@ namespace System.Reactive.Concurrency
             }
         }
 
+        public static async Task Delay(this IAsyncScheduler scheduler, DateTimeOffset dueTime, CancellationToken token = default(CancellationToken))
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            var task = await scheduler.ScheduleAsync(ct =>
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    tcs.TrySetCanceled(ct);
+                }
+                else
+                {
+                    tcs.SetResult(true);
+                }
+
+                return Task.CompletedTask;
+            }, dueTime);
+
+            using (token.Register(() => task.DisposeAsync()))
+            {
+                await tcs.Task;
+            }
+        }
+
         public static async Task ExecuteAsync(this IAsyncScheduler scheduler, Func<CancellationToken, Task> action, CancellationToken token = default(CancellationToken))
         {
             var tcs = new TaskCompletionSource<object>();
