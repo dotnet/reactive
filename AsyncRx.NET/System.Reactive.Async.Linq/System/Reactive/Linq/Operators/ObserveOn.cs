@@ -10,26 +10,9 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Add overloads with DateTimeeOffset and with duration selector.
-
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> Delay<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime)
-        {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            return Create<TSource>(async observer =>
-            {
-                var (sink, drain) = await AsyncObserver.Delay(observer, dueTime).ConfigureAwait(false);
-
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
-
-                return StableCompositeAsyncDisposable.Create(subscription, drain);
-            });
-        }
-
-        public static IAsyncObservable<TSource> Delay<TSource>(this IAsyncObservable<TSource> source, TimeSpan dueTime, IAsyncScheduler scheduler)
+        public static IAsyncObservable<TSource> ObserveOn<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,7 +21,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sink, drain) = await AsyncObserver.Delay(observer, dueTime, scheduler).ConfigureAwait(false);
+                var (sink, drain) = await AsyncObserver.ObserveOn(observer, scheduler).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
 
@@ -49,30 +32,19 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Delay<TSource>(this IAsyncObserver<TSource> observer, TimeSpan dueTime)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-
-            return Delay(observer, dueTime, TaskPoolAsyncScheduler.Default);
-        }
-
-        public static async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Delay<TSource>(this IAsyncObserver<TSource> observer, TimeSpan dueTime, IAsyncScheduler scheduler)
+        public static async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> ObserveOn<TSource>(this IAsyncObserver<TSource> observer, IAsyncScheduler scheduler)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            // TODO: Use stopwatch functionality.
-
-            var start = scheduler.Now;
-
             var semaphore = new SemaphoreSlim(0);
 
             var gate = new AsyncLock();
 
-            var queue = new Queue<TimeInterval<TSource>>();
+            var queue = new Queue<TSource>();
+            var error = default(Exception);
             var isDone = false;
 
             var drain = await scheduler.ScheduleAsync(async ct =>
@@ -85,18 +57,22 @@ namespace System.Reactive.Linq
                     {
                         var next = queue.Dequeue();
 
-                        var nextDueTime = start + next.Interval + dueTime;
-                        var delay = nextDueTime - scheduler.Now;
-
-                        await scheduler.Delay(delay, ct).RendezVous(scheduler);
-
-                        await observer.OnNextAsync(next.Value).RendezVous(scheduler);
+                        await observer.OnNextAsync(next).RendezVous(scheduler);
                     }
 
-                    if (queue.Count == 0 && isDone)
+                    if (queue.Count == 0)
                     {
-                        await observer.OnCompletedAsync().RendezVous(scheduler);
-                        break;
+                        if (isDone)
+                        {
+                            await observer.OnCompletedAsync().RendezVous(scheduler);
+                            break;
+                        }
+
+                        if (error != null)
+                        {
+                            await observer.OnErrorAsync(error).RendezVous(scheduler);
+                            break;
+                        }
                     }
                 }
             }).ConfigureAwait(false);
@@ -104,12 +80,9 @@ namespace System.Reactive.Linq
             var sink = Create<TSource>(
                 async x =>
                 {
-                    var time = scheduler.Now;
-                    var delay = time - start;
-
                     using (await gate.LockAsync().ConfigureAwait(false))
                     {
-                        queue.Enqueue(new TimeInterval<TSource>(x, delay));
+                        queue.Enqueue(x);
                     }
 
                     semaphore.Release(1);
@@ -118,8 +91,10 @@ namespace System.Reactive.Linq
                 {
                     using (await gate.LockAsync().ConfigureAwait(false))
                     {
-                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        error = ex;
                     }
+
+                    semaphore.Release(1);
                 },
                 async () =>
                 {
