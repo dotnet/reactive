@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -76,7 +76,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -93,7 +93,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -110,7 +110,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, selector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -129,7 +129,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });
@@ -148,7 +148,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = AsyncObserver.SelectMany(observer, collectionSelector, resultSelector);
 
-                var subscription = await source.SubscribeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             });

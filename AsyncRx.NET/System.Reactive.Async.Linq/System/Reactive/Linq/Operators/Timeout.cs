@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
 
                 var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
 
                 var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, scheduler).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
@@ -64,7 +64,7 @@ namespace System.Reactive.Linq
 
                 var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, other).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
@@ -87,7 +87,7 @@ namespace System.Reactive.Linq
 
                 var (sink, disposable) = await AsyncObserver.Timeout(observer, sourceSubscription, dueTime, other, scheduler).ConfigureAwait(false);
 
-                var sourceSubscriptionInner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var sourceSubscriptionInner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 await sourceSubscription.AssignAsync(sourceSubscriptionInner).ConfigureAwait(false);
 
@@ -192,7 +192,7 @@ namespace System.Reactive.Linq
 
                         if (hasWon)
                         {
-                            var otherSubscription = await other.SubscribeAsync(observer).RendezVous(scheduler);
+                            var otherSubscription = await other.SubscribeSafeAsync(observer).RendezVous(scheduler);
 
                             await subscription.AssignAsync(otherSubscription).RendezVous(scheduler);
                         }

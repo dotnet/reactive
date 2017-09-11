@@ -23,7 +23,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = await AsyncObserver.Delay(observer, dueTime).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, drain) = await AsyncObserver.Delay(observer, dueTime, scheduler).ConfigureAwait(false);
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, drain);
             });
