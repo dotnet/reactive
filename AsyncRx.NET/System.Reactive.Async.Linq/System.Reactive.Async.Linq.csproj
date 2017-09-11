@@ -44,6 +44,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\ToAsync.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ToAsync.Generated.tt</DependentUpon>
+    </Compile>
     <Compile Update="System\Reactive\Linq\Operators\Zip.Generated.cs">
       <DependentUpon>Zip.Generated.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -58,6 +63,10 @@
     </None>
     <None Update="System\Reactive\Linq\Operators\CombineLatest.Generated.tt">
       <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\ToAsync.Generated.tt">
+      <LastGenOutput>ToAsync.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
     <None Update="System\Reactive\Linq\Operators\FromAsyncPattern.Generated.tt">
