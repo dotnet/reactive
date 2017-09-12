@@ -10,6 +10,7 @@
 <#@ output extension=".cs" #>
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -27,6 +28,13 @@ for (var i = 0; i <= 16; i++)
     var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
 
     var type = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" })) + ">";
+
+    var invokeArgs = pars;
+
+    if (i > 0)
+    {
+        invokeArgs = ", " + invokeArgs;
+    }
 #>
         public static <#=ret#> ToAsync<<#=genArgs#>>(<#=type#> function)
         {
@@ -47,24 +55,7 @@ for (var i = 0; i <= 16; i++)
             {
                 var subject = new SequentialAsyncAsyncSubject<TResult>();
 
-                // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
-
-                scheduler.ScheduleAsync(async ct =>
-                {
-                    TResult res;
-                    try
-                    {
-                        res = function(<#=pars#>);
-                    }
-                    catch (Exception ex)
-                    {
-                        await subject.OnErrorAsync(ex).RendezVous(scheduler);
-                        return;
-                    }
-
-                    await subject.OnNextAsync(res).RendezVous(scheduler);
-                    await subject.OnCompletedAsync().RendezVous(scheduler);
-                });
+                AsyncObserver.ToAsync(subject, function<#=invokeArgs#>); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
@@ -89,6 +80,13 @@ for (var i = 0; i <= 16; i++)
         genArgs = "<" + genArgs + ">";
         type += genArgs;
     }
+
+    var invokeArgs = pars;
+
+    if (i > 0)
+    {
+        invokeArgs = ", " + invokeArgs;
+    }
 #>
         public static <#=ret#> ToAsync<#=genArgs#>(<#=type#> action)
         {
@@ -109,26 +107,137 @@ for (var i = 0; i <= 16; i++)
             {
                 var subject = new SequentialAsyncAsyncSubject<Unit>();
 
-                // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
-
-                scheduler.ScheduleAsync(async ct =>
-                {
-                    try
-                    {
-                        action(<#=pars#>);
-                    }
-                    catch (Exception ex)
-                    {
-                        await subject.OnErrorAsync(ex).RendezVous(scheduler);
-                        return;
-                    }
-
-                    await subject.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                    await subject.OnCompletedAsync().RendezVous(scheduler);
-                });
+                AsyncObserver.ToAsync(subject, action<#=invokeArgs#>); // NB: We don't do anything with the result of scheduling the action; it can't be cancelled.
 
                 return subject.AsAsyncObservable();
             };
+        }
+
+<#
+}
+#>
+    }
+
+    partial class AsyncObserver
+    {
+<#
+for (var i = 0; i <= 16; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<TResult>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var type = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" })) + ">";
+
+    var invokePars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j + " arg" + j));
+    var invokeArgs = pars;
+    if (i > 0)
+    {
+        invokePars = ", " + invokePars;
+        invokeArgs += ", ";
+    }
+#>
+        public static Task<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (function == null)
+                throw new ArgumentNullException(nameof(function));
+
+            return ToAsync(observer, function, <#=invokeArgs#>TaskPoolAsyncScheduler.Default);
+        }
+
+        public static Task<IAsyncDisposable> ToAsync<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=type#> function<#=invokePars#>, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (function == null)
+                throw new ArgumentNullException(nameof(function));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return scheduler.ScheduleAsync(async ct =>
+            {
+                TResult res;
+                try
+                {
+                    res = function(<#=pars#>);
+                }
+                catch (Exception ex)
+                {
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    return;
+                }
+
+                await observer.OnNextAsync(res).RendezVous(scheduler);
+                await observer.OnCompletedAsync().RendezVous(scheduler);
+            });
+        }
+
+<#
+}
+#>
+<#
+for (var i = 0; i <= 16; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<Unit>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var type = "Action";
+
+    if (genArgs != "")
+    {
+        genArgs = "<" + genArgs + ">";
+        type += genArgs;
+    }
+
+    var invokePars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j + " arg" + j));
+    var invokeArgs = pars;
+    if (i > 0)
+    {
+        invokePars = ", " + invokePars;
+        invokeArgs += ", ";
+    }
+#>
+        public static Task<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return ToAsync(observer, action, <#=invokeArgs#>TaskPoolAsyncScheduler.Default);
+        }
+
+        public static Task<IAsyncDisposable> ToAsync<#=genArgs#>(IAsyncObserver<Unit> observer, <#=type#> action<#=invokePars#>, IAsyncScheduler scheduler)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return scheduler.ScheduleAsync(async ct =>
+            {
+                try
+                {
+                    action(<#=pars#>);
+                }
+                catch (Exception ex)
+                {
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    return;
+                }
+
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
+                await observer.OnCompletedAsync().RendezVous(scheduler);
+            });
         }
 
 <#
