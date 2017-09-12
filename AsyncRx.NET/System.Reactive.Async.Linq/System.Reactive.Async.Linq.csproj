@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="System\Reactive\Linq\Operators\FromEvent.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FromEvent.Generated.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\System.Reactive.Async.Concurrency\System.Reactive.Async.Concurrency.csproj" />
     <ProjectReference Include="..\System.Reactive.Async.Disposables\System.Reactive.Async.Disposables.csproj" />
     <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
@@ -28,6 +36,11 @@
       <DependentUpon>FromAsyncPattern.Generated.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="System\Reactive\Linq\Operators\FromEvent.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FromEvent.Generated.tt</DependentUpon>
     </Compile>
     <Compile Update="System\Reactive\Linq\Operators\Max.Generated.cs">
       <DependentUpon>Max.Generated.tt</DependentUpon>
@@ -64,6 +77,10 @@
     <None Update="System\Reactive\Linq\Operators\CombineLatest.Generated.tt">
       <LastGenOutput>CombineLatest.Generated.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="System\Reactive\Linq\Operators\FromEvent.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FromEvent.Generated.cs</LastGenOutput>
     </None>
     <None Update="System\Reactive\Linq\Operators\ToAsync.Generated.tt">
       <LastGenOutput>ToAsync.Generated.cs</LastGenOutput>

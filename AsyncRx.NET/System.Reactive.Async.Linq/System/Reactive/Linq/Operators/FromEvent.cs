@@ -105,7 +105,7 @@ namespace System.Reactive.Linq
 
         private static IAsyncObservable<TEventArgs> FromEventCore<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IAsyncScheduler scheduler)
         {
-            return 
+            return
                 SynchronizeEvents(
                     Create<TEventArgs>(observer =>
                     {
