@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Add overloads with tuples.
-
     partial class AsyncObservable
     {
         public static IAsyncObservable<(T1, T2)> Zip<T1, T2>(this IAsyncObservable<T1> source1, IAsyncObservable<T2> source2)

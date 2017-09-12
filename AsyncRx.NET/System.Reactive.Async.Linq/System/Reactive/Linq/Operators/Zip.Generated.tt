@@ -15,8 +15,6 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Add overloads with tuples.
-
     partial class AsyncObservable
     {
 <#
