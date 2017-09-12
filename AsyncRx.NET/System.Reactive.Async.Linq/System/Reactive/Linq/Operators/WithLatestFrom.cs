@@ -10,6 +10,24 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
+        public static IAsyncObservable<(TFirst first, TSecond second)> WithLatestFrom<TFirst, TSecond>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second)
+        {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
+            return Create<(TFirst first, TSecond second)>(async observer =>
+            {
+                var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
+
+                var firstSubscription = await first.SubscribeSafeAsync(firstObserver);
+                var secondSubscription = await second.SubscribeSafeAsync(secondObserver);
+
+                return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
+            });
+        }
+
         public static IAsyncObservable<TResult> WithLatestFrom<TFirst, TSecond, TResult>(this IAsyncObservable<TFirst> first, IAsyncObservable<TSecond> second, Func<TFirst, TSecond, TResult> resultSelector)
         {
             if (first == null)
@@ -105,6 +123,61 @@ namespace System.Reactive.Linq
                                     }
 
                                     await observer.OnNextAsync(res).ConfigureAwait(false);
+                                }
+                            }
+                        },
+                        OnErrorAsync,
+                        async () =>
+                        {
+                            using (await gate.LockAsync().ConfigureAwait(false))
+                            {
+                                await observer.OnCompletedAsync().ConfigureAwait(false);
+                            }
+                        }
+                    ),
+                    Create<TSecond>(
+                        async y =>
+                        {
+                            using (await gate.LockAsync().ConfigureAwait(false))
+                            {
+                                hasLatest = true;
+                                latest = y;
+                            }
+                        },
+                        OnErrorAsync,
+                        () => Task.CompletedTask
+                    )
+                );
+        }
+
+        public static (IAsyncObserver<TFirst>, IAsyncObserver<TSecond>) WithLatestFrom<TFirst, TSecond>(IAsyncObserver<(TFirst first, TSecond second)> observer)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+
+            var gate = new AsyncLock();
+
+            async Task OnErrorAsync(Exception ex)
+            {
+                using (await gate.LockAsync().ConfigureAwait(false))
+                {
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                }
+            }
+
+            var hasLatest = false;
+            var latest = default(TSecond);
+
+            return
+                (
+                    Create<TFirst>(
+                        async x =>
+                        {
+                            using (await gate.LockAsync().ConfigureAwait(false))
+                            {
+                                if (hasLatest)
+                                {
+                                    await observer.OnNextAsync((first: x, second: latest)).ConfigureAwait(false);
                                 }
                             }
                         },
