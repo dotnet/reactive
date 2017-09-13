@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Reactive.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 
 namespace System
@@ -20,7 +20,7 @@ namespace System
             if (onCompletedAsync == null)
                 throw new ArgumentNullException(nameof(onCompletedAsync));
 
-            return source.SubscribeAsync(AsyncObserver.Create(onNextAsync, onErrorAsync, onCompletedAsync));
+            return source.SubscribeAsync(new AsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync));
         }
     }
 }

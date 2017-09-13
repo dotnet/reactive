@@ -5,7 +5,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace System.Reactive.Linq
+namespace System.Reactive
 {
     public abstract class AsyncObserverBase<T> : IAsyncObserver<T>
     {

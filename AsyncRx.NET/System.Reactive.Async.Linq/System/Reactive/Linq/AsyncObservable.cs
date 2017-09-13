@@ -14,7 +14,7 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return new AnonymousAsyncObservable<T>(subscribeAsync);
+            return new AsyncObservable<T>(subscribeAsync);
         }
 
         public static Task<IAsyncDisposable> SubscribeSafeAsync<T>(this IAsyncObservable<T> source, IAsyncObserver<T> observer)
@@ -39,18 +39,6 @@ namespace System.Reactive.Linq
                     return AsyncDisposable.Nop;
                 }
             }
-        }
-
-        private sealed class AnonymousAsyncObservable<T> : AsyncObservableBase<T>
-        {
-            private readonly Func<IAsyncObserver<T>, Task<IAsyncDisposable>> _subscribeAsync;
-
-            public AnonymousAsyncObservable(Func<IAsyncObserver<T>, Task<IAsyncDisposable>> subscribeAsync)
-            {
-                _subscribeAsync = subscribeAsync;
-            }
-
-            protected override Task<IAsyncDisposable> SubscribeAsyncCore(IAsyncObserver<T> observer) => _subscribeAsync(observer);
         }
     }
 }

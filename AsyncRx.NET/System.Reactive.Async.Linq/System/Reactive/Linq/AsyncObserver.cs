@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
@@ -14,13 +13,9 @@ namespace System.Reactive.Linq
             if (onNextAsync == null)
                 throw new ArgumentNullException(nameof(onNextAsync));
 
-            return new AnonymousAsyncObserver<T>(
+            return new AsyncObserver<T>(
                 onNextAsync,
-                ex =>
-                {
-                    ExceptionDispatchInfo.Capture(ex).Throw();
-                    return Task.CompletedTask;
-                },
+                ex => Task.FromException(ex),
                 () => Task.CompletedTask
             );
         }
@@ -34,27 +29,7 @@ namespace System.Reactive.Linq
             if (onCompletedAsync == null)
                 throw new ArgumentNullException(nameof(onCompletedAsync));
 
-            return new AnonymousAsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
-        }
-
-        private sealed class AnonymousAsyncObserver<T> : AsyncObserverBase<T>
-        {
-            private readonly Func<T, Task> _onNextAsync;
-            private readonly Func<Exception, Task> _onErrorAsync;
-            private readonly Func<Task> _onCompletedAsync;
-
-            public AnonymousAsyncObserver(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
-            {
-                _onNextAsync = onNextAsync;
-                _onErrorAsync = onErrorAsync;
-                _onCompletedAsync = onCompletedAsync;
-            }
-
-            protected override Task OnCompletedAsyncCore() => _onCompletedAsync();
-
-            protected override Task OnErrorAsyncCore(Exception error) => _onErrorAsync(error);
-
-            protected override Task OnNextAsyncCore(T value) => _onNextAsync(value);
+            return new AsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
         }
     }
 }
