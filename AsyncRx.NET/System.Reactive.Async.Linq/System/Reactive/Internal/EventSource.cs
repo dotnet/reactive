@@ -11,9 +11,9 @@ namespace System.Reactive
     {
         private readonly IAsyncObservable<T> _source;
         private readonly Dictionary<Delegate, Stack<IDisposable>> _subscriptions;
-        private readonly Func<Action<T>, /*object,*/ T, Task> _invokeHandler;
+        private readonly Action<Action<T>, /*object,*/ T> _invokeHandler;
 
-        public EventSource(IAsyncObservable<T> source, Func<Action<T>, /*object,*/ T, Task> invokeHandler)
+        public EventSource(IAsyncObservable<T> source, Action<Action<T>, /*object,*/ T> invokeHandler)
         {
             _source = source;
             _invokeHandler = invokeHandler;
@@ -43,7 +43,7 @@ namespace System.Reactive
                 // [OK] Use of unsafe SubscribeAsync: non-pretentious wrapper of an observable in an event; exceptions can occur during +=.
                 //
                 var d = _source.SubscribeAsync(
-                    x => _invokeHandler(value, /*this,*/ x),
+                    x => { _invokeHandler(value, /*this,*/ x); return Task.CompletedTask; },
                     ex => { remove(); return Task.FromException(ex); },
                     () => { remove(); return Task.CompletedTask; }
                 );

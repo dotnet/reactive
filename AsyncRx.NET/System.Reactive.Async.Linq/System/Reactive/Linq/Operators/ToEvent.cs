@@ -13,11 +13,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return new EventSource<Unit>(source, (onNext, _) =>
-            {
-                onNext(Unit.Default);
-                return Task.CompletedTask;
-            });
+            return new EventSource<Unit>(source, (onNext, _) => onNext(Unit.Default));
         }
 
         public static IEventSource<TSource> ToEvent<TSource>(this IAsyncObservable<TSource> source)
@@ -25,11 +21,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return new EventSource<TSource>(source, (onNext, x) =>
-            {
-                onNext(x);
-                return Task.CompletedTask;
-            });
+            return new EventSource<TSource>(source, (onNext, x) => onNext(x));
         }
     }
 }
