@@ -9,6 +9,8 @@ using System.Reactive.Subjects;
 
 namespace System.Threading.Tasks
 {
+    // TODO: Add ToTask.
+
     public static class TaskAsyncObservableExtensions
     {
         public static IAsyncObservable<Unit> ToAsyncObservable(this Task task)
