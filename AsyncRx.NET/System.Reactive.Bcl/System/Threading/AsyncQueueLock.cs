@@ -15,7 +15,7 @@ namespace System.Threading
         private bool _isAcquired;
         private bool _hasFaulted;
 
-        public async Task Wait(Func<Task> action)
+        public async Task WaitAsync(Func<Task> action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));

@@ -638,6 +638,7 @@ namespace System.Reactive.Linq
                 var closeSubscription = new SerialAsyncDisposable();
 
                 var gate = new AsyncLock();
+                var queueLock = new AsyncQueueLock();
 
                 var buffer = new List<TSource>();
 
@@ -672,7 +673,7 @@ namespace System.Reactive.Linq
                             await observer.OnNextAsync(oldBuffer).ConfigureAwait(false);
                         }
 
-                        await CreateBufferCloseAsync().ConfigureAwait(false); // TODO: Use a traditional "async lock" to get queue behavior.
+                        await queueLock.WaitAsync(CreateBufferCloseAsync).ConfigureAwait(false);
                     }
 
                     var closingObserver =
@@ -720,7 +721,7 @@ namespace System.Reactive.Linq
                         }
                     );
 
-                await CreateBufferCloseAsync().ConfigureAwait(false);
+                await queueLock.WaitAsync(CreateBufferCloseAsync).ConfigureAwait(false);
 
                 return (sink, closeSubscription);
             }
