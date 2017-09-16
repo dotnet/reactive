@@ -23,18 +23,44 @@ namespace Playground
 
         static async Task MainAsync()
         {
+            //await AggregateAsync();
+            //await AllAsync();
+            //await AnyAsync();
+            //await AppendAsync();
             //await AwaitAsync();
             //await BufferTimeHoppingAsync();
             //await BufferTimeSlidingAsync();
+            //await CombineLatestAsync();
             //await ConcatAsync();
-            await DelayAsync();
+            //await DelayAsync();
             //await MergeAsync();
+            //await PrependAsync();
             //await RangeAsync();
             //await ReturnAsync();
             //await SelectManyAsync();
             //await SubjectAsync();
             //await TakeUntilAsync();
             //await TimerAsync();
+        }
+
+        static async Task AggregateAsync()
+        {
+            await AsyncObservable.Range(0, 10).Aggregate(0, (sum, x) => sum + x).SubscribeAsync(Print<int>());
+        }
+
+        static async Task AllAsync()
+        {
+            await AsyncObservable.Range(0, 10).All(x => x < 10).SubscribeAsync(Print<bool>());
+        }
+
+        static async Task AnyAsync()
+        {
+            await AsyncObservable.Range(0, 10).Any(x => x == 5).SubscribeAsync(Print<bool>());
+        }
+
+        static async Task AppendAsync()
+        {
+            await AsyncObservable.Range(0, 10).Append(42).SubscribeAsync(Print<int>());
         }
 
         static async Task AwaitAsync()
@@ -61,6 +87,17 @@ namespace Playground
                     .Buffer(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(300))
                     .Select(xs => $"[{xs.First().Timestamp}, {xs.Last().Timestamp}] = {(xs.Last().Timestamp - xs.First().Timestamp).TotalMilliseconds}")
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task CombineLatestAsync()
+        {
+            await
+                AsyncObservable.CombineLatest(
+                    AsyncObservable.Interval(TimeSpan.FromMilliseconds(250)).Take(10).Timestamp(),
+                    AsyncObservable.Interval(TimeSpan.FromMilliseconds(333)).Take(10).Timestamp(),
+                    (x, y) => x.ToString() + ", " + y.ToString()
+                )
+                .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
         static async Task ConcatAsync()
@@ -100,6 +137,11 @@ namespace Playground
             }
 
             await subject.OnCompletedAsync();
+        }
+
+        static async Task PrependAsync()
+        {
+            await AsyncObservable.Range(0, 10).Prepend(42).SubscribeAsync(Print<int>());
         }
 
         static async Task RangeAsync()
