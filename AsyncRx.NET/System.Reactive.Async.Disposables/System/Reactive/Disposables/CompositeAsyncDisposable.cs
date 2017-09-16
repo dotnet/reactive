@@ -12,8 +12,29 @@ namespace System.Reactive.Disposables
     public sealed class CompositeAsyncDisposable : IAsyncDisposable
     {
         private readonly AsyncLock _gate = new AsyncLock();
-        private readonly List<IAsyncDisposable> _disposables = new List<IAsyncDisposable>();
+        private readonly List<IAsyncDisposable> _disposables;
         private bool _disposed;
+
+        public CompositeAsyncDisposable()
+        {
+            _disposables = new List<IAsyncDisposable>();
+        }
+
+        public CompositeAsyncDisposable(params IAsyncDisposable[] disposables)
+        {
+            if (disposables == null)
+                throw new ArgumentNullException(nameof(disposables));
+
+            _disposables = new List<IAsyncDisposable>(disposables);
+        }
+
+        public CompositeAsyncDisposable(IEnumerable<IAsyncDisposable> disposables)
+        {
+            if (disposables == null)
+                throw new ArgumentNullException(nameof(disposables));
+
+            _disposables = new List<IAsyncDisposable>(disposables);
+        }
 
         public async Task AddAsync(IAsyncDisposable disposable)
         {
