@@ -33,6 +33,8 @@ namespace Playground
             //await CombineLatestAsync();
             //await ConcatAsync();
             //await DelayAsync();
+            //await GroupByAsync();
+            //await GroupBySelectManyAsync();
             //await MergeAsync();
             //await PrependAsync();
             //await RangeAsync();
@@ -121,6 +123,30 @@ namespace Playground
                     .Timestamp()
                     .Select(x => new TimeInterval<long>(x.Value.Value, x.Timestamp - x.Value.Timestamp).ToString())
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task GroupByAsync()
+        {
+            await
+                AsyncObservable.Interval(TimeSpan.FromMilliseconds(250))
+                    .Timestamp()
+                    .Take(20)
+                    .GroupBy(t => t.Timestamp.Millisecond / 100)
+                    .SubscribeAsync(async g =>
+                    {
+                        await g.Select(x => g.Key + " - " + x).SubscribeAsync(Print<string>());
+                    });
+        }
+
+        static async Task GroupBySelectManyAsync()
+        {
+            await
+                AsyncObservable.Interval(TimeSpan.FromMilliseconds(250))
+                    .Timestamp()
+                    .Take(20)
+                    .GroupBy(t => t.Timestamp.Millisecond / 100)
+                    .SelectMany(g => g, (g, x) => g.Key + " - " + x)
+                    .SubscribeAsync(Print<string>());
         }
 
         static async Task MergeAsync()
