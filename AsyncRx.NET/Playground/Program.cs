@@ -63,17 +63,6 @@ namespace Playground
                     .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
-        static async Task DelayAsync()
-        {
-            await
-                AsyncObservable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
-                    .Timestamp()
-                    .Delay(TimeSpan.FromMilliseconds(2500))
-                    .Timestamp()
-                    .Select(x => new TimeInterval<long>(x.Value.Value, x.Timestamp - x.Value.Timestamp).ToString())
-                    .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
-        }
-
         static async Task ConcatAsync()
         {
             await
@@ -84,6 +73,17 @@ namespace Playground
                     AsyncObservable.Range(15, 5)
                 )
                 .SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task DelayAsync()
+        {
+            await
+                AsyncObservable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
+                    .Timestamp()
+                    .Delay(TimeSpan.FromMilliseconds(2500))
+                    .Timestamp()
+                    .Select(x => new TimeInterval<long>(x.Value.Value, x.Timestamp - x.Value.Timestamp).ToString())
+                    .SubscribeAsync(Print<string>()); // TODO: Use ForEachAsync.
         }
 
         static async Task MergeAsync()
