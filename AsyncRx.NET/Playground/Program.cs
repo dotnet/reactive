@@ -180,12 +180,12 @@ namespace Playground
         {
             var sub = new SequentialReplayAsyncSubject<int>(5);
 
-            var d1 = await sub.SubscribeAsync(async x => Console.WriteLine("1> " + x));
+            var d1 = await sub.SubscribeAsync(x => Console.WriteLine("1> " + x));
 
             await sub.OnNextAsync(40);
             await sub.OnNextAsync(41);
 
-            var d2 = await sub.SubscribeAsync(async x => Console.WriteLine("2> " + x));
+            var d2 = await sub.SubscribeAsync(x => Console.WriteLine("2> " + x));
 
             await sub.OnNextAsync(42);
 
@@ -193,7 +193,7 @@ namespace Playground
 
             await sub.OnNextAsync(43);
 
-            var d3 = await sub.SubscribeAsync(async x => Console.WriteLine("3> " + x));
+            var d3 = await sub.SubscribeAsync(x => Console.WriteLine("3> " + x));
 
             await sub.OnNextAsync(44);
             await sub.OnNextAsync(45);
