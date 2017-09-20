@@ -38,6 +38,7 @@ namespace Playground
             //await MergeAsync();
             //await PrependAsync();
             //await RangeAsync();
+            //await ReplaySubjectAsync();
             //await ReturnAsync();
             //await SelectManyAsync();
             //await SubjectAsync();
@@ -173,6 +174,37 @@ namespace Playground
         static async Task RangeAsync()
         {
             await AsyncObservable.Range(0, 10).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task ReplaySubjectAsync()
+        {
+            var sub = new SequentialReplayAsyncSubject<int>(5);
+
+            var d1 = await sub.SubscribeAsync(async x => Console.WriteLine("1> " + x));
+
+            await sub.OnNextAsync(40);
+            await sub.OnNextAsync(41);
+
+            var d2 = await sub.SubscribeAsync(async x => Console.WriteLine("2> " + x));
+
+            await sub.OnNextAsync(42);
+
+            await d1.DisposeAsync();
+
+            await sub.OnNextAsync(43);
+
+            var d3 = await sub.SubscribeAsync(async x => Console.WriteLine("3> " + x));
+
+            await sub.OnNextAsync(44);
+            await sub.OnNextAsync(45);
+
+            await d3.DisposeAsync();
+
+            await sub.OnNextAsync(46);
+
+            await d2.DisposeAsync();
+
+            await sub.OnNextAsync(47);
         }
 
         static async Task ReturnAsync()
