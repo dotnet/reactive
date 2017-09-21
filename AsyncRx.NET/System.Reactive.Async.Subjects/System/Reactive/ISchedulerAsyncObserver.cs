@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive
 {
-    internal interface IScheduledAsyncObserver<T> : IAsyncObserver<T> // TODO: implement IAsyncDisposable
+    internal interface IScheduledAsyncObserver<T> : IAsyncObserver<T>, IAsyncDisposable
     {
         Task EnsureActive();
 

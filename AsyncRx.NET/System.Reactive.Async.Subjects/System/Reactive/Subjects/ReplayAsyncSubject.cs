@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,16 @@ namespace System.Reactive.Subjects
             : base(false, bufferSize)
         {
         }
+
+        public SequentialReplayAsyncSubject(IAsyncScheduler scheduler)
+            : base(false, scheduler)
+        {
+        }
+
+        public SequentialReplayAsyncSubject(int bufferSize, IAsyncScheduler scheduler)
+            : base(false, bufferSize, scheduler)
+        {
+        }
     }
 
     public sealed class ConcurrentReplayAsyncSubject<T> : ReplayAsyncSubject<T>
@@ -32,6 +43,16 @@ namespace System.Reactive.Subjects
 
         public ConcurrentReplayAsyncSubject(int bufferSize)
             : base(true, bufferSize)
+        {
+        }
+
+        public ConcurrentReplayAsyncSubject(IAsyncScheduler scheduler)
+            : base(true, scheduler)
+        {
+        }
+
+        public ConcurrentReplayAsyncSubject(int bufferSize, IAsyncScheduler scheduler)
+            : base(true, bufferSize, scheduler)
         {
         }
     }
@@ -52,17 +73,47 @@ namespace System.Reactive.Subjects
 
             if (bufferSize == 1)
             {
-                _impl = new ReplayOne(concurrent);
+                _impl = new ReplayOne(concurrent, CreateImmediateObserver);
             }
             else if (bufferSize == int.MaxValue)
             {
-                _impl = new ReplayAll(concurrent);
+                _impl = new ReplayAll(concurrent, CreateImmediateObserver);
             }
             else
             {
-                _impl = new ReplayMany(concurrent, bufferSize);
+                _impl = new ReplayMany(concurrent, CreateImmediateObserver, bufferSize);
             }
         }
+
+        public ReplayAsyncSubject(bool concurrent, IAsyncScheduler scheduler)
+            : this(concurrent, int.MaxValue, scheduler)
+        {
+        }
+
+        public ReplayAsyncSubject(bool concurrent, int bufferSize, IAsyncScheduler scheduler)
+        {
+            if (bufferSize < 0)
+                throw new ArgumentNullException(nameof(bufferSize));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            if (bufferSize == 1)
+            {
+                _impl = new ReplayOne(concurrent, o => CreateScheduledObserver(o, scheduler));
+            }
+            else if (bufferSize == int.MaxValue)
+            {
+                _impl = new ReplayAll(concurrent, o => CreateScheduledObserver(o, scheduler));
+            }
+            else
+            {
+                _impl = new ReplayMany(concurrent, o => CreateScheduledObserver(o, scheduler), bufferSize);
+            }
+        }
+
+        private static IScheduledAsyncObserver<T> CreateImmediateObserver(IAsyncObserver<T> observer) => new FastImmediateAsyncObserver<T>(observer);
+
+        private static IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer, IAsyncScheduler scheduler) => new ScheduledAsyncObserver<T>(observer, scheduler);
 
         public Task OnCompletedAsync() => _impl.OnCompletedAsync();
 
@@ -271,12 +322,15 @@ namespace System.Reactive.Subjects
 
         private abstract class ReplayBufferBase : ReplayBase
         {
-            public ReplayBufferBase(bool concurrent)
+            private readonly Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> _createObserver;
+
+            public ReplayBufferBase(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
                 : base(concurrent)
             {
+                _createObserver = createObserver;
             }
 
-            protected override IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer) => new FastImmediateAsyncObserver<T>(observer);
+            protected override IScheduledAsyncObserver<T> CreateScheduledObserver(IAsyncObserver<T> observer) => _createObserver(observer);
         }
 
         private sealed class ReplayOne : ReplayBufferBase
@@ -284,8 +338,8 @@ namespace System.Reactive.Subjects
             private bool _hasValue;
             private T _value;
 
-            public ReplayOne(bool concurrent)
-                : base(concurrent)
+            public ReplayOne(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
+                : base(concurrent, createObserver)
             {
             }
 
@@ -315,8 +369,8 @@ namespace System.Reactive.Subjects
         {
             protected readonly Queue<T> _values = new Queue<T>();
 
-            public ReplayManyBase(bool concurrent)
-                : base(concurrent)
+            public ReplayManyBase(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
+                : base(concurrent, createObserver)
             {
             }
 
@@ -344,8 +398,8 @@ namespace System.Reactive.Subjects
         {
             private readonly int _bufferSize;
 
-            public ReplayMany(bool concurrent, int bufferSize)
-                : base(concurrent)
+            public ReplayMany(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver, int bufferSize)
+                : base(concurrent, createObserver)
             {
                 _bufferSize = bufferSize;
             }
@@ -363,8 +417,8 @@ namespace System.Reactive.Subjects
 
         private sealed class ReplayAll : ReplayManyBase
         {
-            public ReplayAll(bool concurrent)
-                : base(concurrent)
+            public ReplayAll(bool concurrent, Func<IAsyncObserver<T>, IScheduledAsyncObserver<T>> createObserver)
+                : base(concurrent, createObserver)
             {
             }
 
