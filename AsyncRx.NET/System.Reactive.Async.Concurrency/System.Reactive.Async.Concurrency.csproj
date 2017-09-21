@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
+    <ProjectReference Include="..\System.Reactive.Bcl\System.Reactive.Bcl.csproj" />
     <ProjectReference Include="..\System.Reactive.Shared\System.Reactive.Shared.csproj" />
   </ItemGroup>
 
