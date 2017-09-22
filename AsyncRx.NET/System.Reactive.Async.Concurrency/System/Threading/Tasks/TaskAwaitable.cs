@@ -15,6 +15,9 @@ namespace System.Threading.Tasks
 
         public TaskAwaitable(Task task, IAsyncScheduler scheduler, CancellationToken token)
         {
+            if (task == null)
+                throw new ArgumentNullException(nameof(task));
+
             _task = task.ConfigureAwait(false).GetAwaiter();
             _scheduler = scheduler;
             _token = token;
@@ -47,14 +50,26 @@ namespace System.Threading.Tasks
             {
                 _task.OnCompleted(() =>
                 {
-                    var t = _scheduler.ExecuteAsync(ct =>
+                    void Invoke()
                     {
                         cancel?.Dispose();
 
                         Interlocked.Exchange(ref continuation, null)?.Invoke();
+                    }
 
-                        return Task.CompletedTask;
-                    }, _token);
+                    if (_scheduler != null)
+                    {
+                        var t = _scheduler.ExecuteAsync(ct =>
+                        {
+                            Invoke();
+
+                            return Task.CompletedTask;
+                        }, _token);
+                    }
+                    else
+                    {
+                        Invoke();
+                    }
                 });
             }
             catch
@@ -73,6 +88,9 @@ namespace System.Threading.Tasks
 
         public TaskAwaitable(Task<T> task, IAsyncScheduler scheduler, CancellationToken token)
         {
+            if (task == null)
+                throw new ArgumentNullException(nameof(task));
+
             _task = task.ConfigureAwait(false).GetAwaiter();
             _scheduler = scheduler;
             _token = token;
@@ -105,14 +123,26 @@ namespace System.Threading.Tasks
             {
                 _task.OnCompleted(() =>
                 {
-                    var t = _scheduler.ExecuteAsync(ct =>
+                    void Invoke()
                     {
                         cancel?.Dispose();
 
                         Interlocked.Exchange(ref continuation, null)?.Invoke();
+                    }
 
-                        return Task.CompletedTask;
-                    }, _token);
+                    if (_scheduler != null)
+                    {
+                        var t = _scheduler.ExecuteAsync(ct =>
+                        {
+                            Invoke();
+
+                            return Task.CompletedTask;
+                        }, _token);
+                    }
+                    else
+                    {
+                        Invoke();
+                    }
                 });
             }
             catch
