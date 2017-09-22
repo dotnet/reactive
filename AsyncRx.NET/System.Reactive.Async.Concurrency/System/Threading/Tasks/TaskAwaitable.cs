@@ -13,12 +13,12 @@ namespace System.Threading.Tasks
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
-        public TaskAwaitable(Task task, IAsyncScheduler scheduler, CancellationToken token)
+        public TaskAwaitable(Task task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            _task = task.ConfigureAwait(false).GetAwaiter();
+            _task = task.ConfigureAwait(continueOnCapturedContext).GetAwaiter();
             _scheduler = scheduler;
             _token = token;
         }
@@ -86,12 +86,12 @@ namespace System.Threading.Tasks
         private readonly IAsyncScheduler _scheduler;
         private readonly CancellationToken _token;
 
-        public TaskAwaitable(Task<T> task, IAsyncScheduler scheduler, CancellationToken token)
+        public TaskAwaitable(Task<T> task, bool continueOnCapturedContext, IAsyncScheduler scheduler, CancellationToken token)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            _task = task.ConfigureAwait(false).GetAwaiter();
+            _task = task.ConfigureAwait(continueOnCapturedContext).GetAwaiter();
             _scheduler = scheduler;
             _token = token;
         }

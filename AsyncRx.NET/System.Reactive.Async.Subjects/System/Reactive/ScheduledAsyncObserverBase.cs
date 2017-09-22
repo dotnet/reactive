@@ -3,13 +3,12 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive
 {
-    internal abstract class ScheduledAsyncObserverBase<T> : IScheduledAsyncObserver<T>
+    internal abstract class ScheduledAsyncObserverBase<T> : AsyncObserverBase<T>, IScheduledAsyncObserver<T>
     {
         private readonly IAsyncObserver<T> _observer;
 
@@ -115,7 +114,7 @@ namespace System.Reactive
             }
         }
 
-        public async Task OnCompletedAsync()
+        protected override async Task OnCompletedAsyncCore()
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -126,7 +125,7 @@ namespace System.Reactive
             }
         }
 
-        public async Task OnErrorAsync(Exception error)
+        protected override async Task OnErrorAsyncCore(Exception error)
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -138,7 +137,7 @@ namespace System.Reactive
             }
         }
 
-        public async Task OnNextAsync(T value)
+        protected override async Task OnNextAsyncCore(T value)
         {
             using (await _lock.LockAsync().ConfigureAwait(false))
             {
@@ -149,9 +148,9 @@ namespace System.Reactive
             }
         }
 
-        protected abstract ConfiguredTaskAwaitable RendezVous(Task task);
+        protected abstract IAwaitable RendezVous(Task task);
 
-        protected abstract ConfiguredTaskAwaitable<R> RendezVous<R>(Task<R> task);
+        protected abstract IAwaitable<R> RendezVous<R>(Task<R> task);
 
         public abstract Task DisposeAsync();
     }

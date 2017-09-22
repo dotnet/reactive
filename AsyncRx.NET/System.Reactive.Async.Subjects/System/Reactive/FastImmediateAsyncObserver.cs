@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
-using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive
@@ -19,9 +19,9 @@ namespace System.Reactive
 
         public override Task DisposeAsync() => _disposable.DisposeAsync();
 
-        protected override ConfiguredTaskAwaitable RendezVous(Task task) => task.ConfigureAwait(false);
+        protected override IAwaitable RendezVous(Task task) => new TaskAwaitable(task, false, null, CancellationToken.None);
 
-        protected override ConfiguredTaskAwaitable<R> RendezVous<R>(Task<R> task) => task.ConfigureAwait(false);
+        protected override IAwaitable<R> RendezVous<R>(Task<R> task) => new TaskAwaitable<R>(task, false, null, CancellationToken.None);
 
         protected override Task ScheduleAsync() => RunAsync(_disposable.Token);
     }

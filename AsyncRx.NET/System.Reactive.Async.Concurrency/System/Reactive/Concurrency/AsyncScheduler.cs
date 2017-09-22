@@ -37,7 +37,7 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new TaskAwaitable(task, scheduler, token);
+            return new TaskAwaitable(task, false, scheduler, token);
         }
 
         public static IAwaitable<T> RendezVous<T>(this Task<T> task, IAsyncScheduler scheduler) => RendezVous(task, scheduler, CancellationToken.None);
@@ -49,7 +49,7 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new TaskAwaitable<T>(task, scheduler, token);
+            return new TaskAwaitable<T>(task, false, scheduler, token);
         }
 
         public static async Task Delay(this IAsyncScheduler scheduler, TimeSpan dueTime, CancellationToken token = default(CancellationToken))

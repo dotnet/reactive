@@ -4,7 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Reactive
@@ -24,11 +24,9 @@ namespace System.Reactive
 
         public override Task DisposeAsync() => _disposable.DisposeAsync();
 
-        // TODO: Implement proper RendezVous semantics.
+        protected override IAwaitable RendezVous(Task task) => new TaskAwaitable(task, false, _scheduler, CancellationToken.None);
 
-        protected override ConfiguredTaskAwaitable RendezVous(Task task) => task.ConfigureAwait(false);
-
-        protected override ConfiguredTaskAwaitable<R> RendezVous<R>(Task<R> task) => task.ConfigureAwait(false);
+        protected override IAwaitable<R> RendezVous<R>(Task<R> task) => new TaskAwaitable<R>(task, false, _scheduler, CancellationToken.None);
 
         protected override async Task ScheduleAsync()
         {
