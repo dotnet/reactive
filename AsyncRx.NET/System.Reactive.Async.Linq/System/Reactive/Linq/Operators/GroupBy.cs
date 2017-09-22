@@ -263,9 +263,9 @@ namespace System.Reactive.Linq
         public static (IAsyncObserver<TSource>, IAsyncDisposable) GroupBy<TSource, TKey>(IAsyncObserver<IGroupedAsyncObservable<TKey, TSource>> observer, IAsyncDisposable subscription, Func<TSource, TKey> keySelector, int capacity)
         {
             if (observer == null)
-                if (subscription == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (subscription == null)
                     throw new ArgumentNullException(nameof(subscription));
-            throw new ArgumentNullException(nameof(observer));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
             if (capacity < 0)
