@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public sealed class SequentialSimpleAsyncSubject<T> : SimpleAsyncSubject<T>
+    public sealed class SequentialBehaviorAsyncSubject<T> : BehaviorAsyncSubject<T>
     {
+        public SequentialBehaviorAsyncSubject(T value)
+            : base(value)
+        {
+        }
+
         protected override async Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers)
         {
             foreach (var observer in observers)

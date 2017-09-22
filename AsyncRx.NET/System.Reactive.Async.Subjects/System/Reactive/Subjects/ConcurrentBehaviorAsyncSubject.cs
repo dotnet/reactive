@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public sealed class ConcurrentAsyncAsyncSubject<T> : AsyncAsyncSubject<T>
+    public sealed class ConcurrentBehaviorAsyncSubject<T> : BehaviorAsyncSubject<T>
     {
+        public ConcurrentBehaviorAsyncSubject(T value)
+            : base(value)
+        {
+        }
+
         protected override Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers) => Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync()));
 
         protected override Task OnErrorAsyncCore(IEnumerable<IAsyncObserver<T>> observers, Exception error) => Task.WhenAll(observers.Select(observer => observer.OnErrorAsync(error)));

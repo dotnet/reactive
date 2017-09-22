@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public class SequentialAsyncAsyncSubject<T> : AsyncAsyncSubject<T>
+    public sealed class SequentialAsyncAsyncSubject<T> : AsyncAsyncSubject<T>
     {
         protected override async Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers)
         {

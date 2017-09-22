@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Subjects
 {
-    public class ConcurrentSimpleAsyncSubject<T> : SimpleAsyncSubject<T>
+    public sealed class ConcurrentSimpleAsyncSubject<T> : SimpleAsyncSubject<T>
     {
         protected override Task OnCompletedAsyncCore(IEnumerable<IAsyncObserver<T>> observers) => Task.WhenAll(observers.Select(observer => observer.OnCompletedAsync()));
 
