@@ -894,12 +894,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -931,12 +931,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -968,12 +968,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1005,12 +1005,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1042,12 +1042,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1079,12 +1079,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1116,12 +1116,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1153,12 +1153,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1190,12 +1190,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1227,12 +1227,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1264,12 +1264,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1301,12 +1301,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1338,12 +1338,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1375,12 +1375,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1412,12 +1412,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1449,12 +1449,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1486,12 +1486,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(res).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(res).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1522,12 +1522,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1558,12 +1558,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1594,12 +1594,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1630,12 +1630,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1666,12 +1666,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1702,12 +1702,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1738,12 +1738,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1774,12 +1774,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1810,12 +1810,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1846,12 +1846,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1882,12 +1882,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1918,12 +1918,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1954,12 +1954,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -1990,12 +1990,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -2026,12 +2026,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -2062,12 +2062,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 
@@ -2098,12 +2098,12 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                    await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                     return;
                 }
 
-                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
 

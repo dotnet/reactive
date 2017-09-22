@@ -51,26 +51,26 @@ namespace System.Reactive.Linq
             {
                 while (!ct.IsCancellationRequested)
                 {
-                    await semaphore.WaitAsync(ct).RendezVous(scheduler);
+                    await semaphore.WaitAsync(ct).RendezVous(scheduler, ct);
 
                     if (queue.Count > 0)
                     {
                         var next = queue.Dequeue();
 
-                        await observer.OnNextAsync(next).RendezVous(scheduler);
+                        await observer.OnNextAsync(next).RendezVous(scheduler, ct);
                     }
 
                     if (queue.Count == 0)
                     {
                         if (isDone)
                         {
-                            await observer.OnCompletedAsync().RendezVous(scheduler);
+                            await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             break;
                         }
 
                         if (error != null)
                         {
-                            await observer.OnErrorAsync(error).RendezVous(scheduler);
+                            await observer.OnErrorAsync(error).RendezVous(scheduler, ct);
                             break;
                         }
                     }

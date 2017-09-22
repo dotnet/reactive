@@ -156,7 +156,7 @@ namespace System.Reactive.Linq
                         {
                             ct.ThrowIfCancellationRequested();
 
-                            using (await gate.LockAsync().RendezVous(scheduler))
+                            using (await gate.LockAsync().RendezVous(scheduler, ct))
                             {
                                 open = true;
                             }

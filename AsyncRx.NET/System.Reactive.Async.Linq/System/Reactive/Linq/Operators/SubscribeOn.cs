@@ -27,17 +27,17 @@ namespace System.Reactive.Linq
 
                 var scheduled = await scheduler.ScheduleAsync(async ct =>
                 {
-                    var subscription = await source.SubscribeSafeAsync(observer).RendezVous(scheduler);
+                    var subscription = await source.SubscribeSafeAsync(observer).RendezVous(scheduler, ct);
 
                     var scheduledDispose = AsyncDisposable.Create(async () =>
                     {
                         await scheduler.ScheduleAsync(async _ =>
                         {
-                            await subscription.DisposeAsync().RendezVous(scheduler);
+                            await subscription.DisposeAsync().RendezVous(scheduler, ct);
                         }).ConfigureAwait(false);
                     });
 
-                    await d.AssignAsync(scheduledDispose).RendezVous(scheduler);
+                    await d.AssignAsync(scheduledDispose).RendezVous(scheduler, ct);
                 }).ConfigureAwait(false);
 
                 await m.AssignAsync(scheduled).ConfigureAwait(false);

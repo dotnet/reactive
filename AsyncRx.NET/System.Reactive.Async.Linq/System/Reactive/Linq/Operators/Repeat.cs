@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             {
                 while (!ct.IsCancellationRequested)
                 {
-                    await observer.OnNextAsync(value).RendezVous(scheduler);
+                    await observer.OnNextAsync(value).RendezVous(scheduler, ct);
                 }
             });
         }
@@ -113,14 +113,14 @@ namespace System.Reactive.Linq
 
                 while (!ct.IsCancellationRequested && i < repeatCount)
                 {
-                    await observer.OnNextAsync(value).RendezVous(scheduler);
+                    await observer.OnNextAsync(value).RendezVous(scheduler, ct);
 
                     i++;
                 }
 
                 if (i == repeatCount)
                 {
-                    await observer.OnCompletedAsync().RendezVous(scheduler);
+                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                 }
             });
         }

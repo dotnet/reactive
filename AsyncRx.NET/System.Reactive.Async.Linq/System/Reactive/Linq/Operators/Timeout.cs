@@ -192,9 +192,9 @@ namespace System.Reactive.Linq
 
                         if (hasWon)
                         {
-                            var otherSubscription = await other.SubscribeSafeAsync(observer).RendezVous(scheduler);
+                            var otherSubscription = await other.SubscribeSafeAsync(observer).RendezVous(scheduler, ct);
 
-                            await subscription.AssignAsync(otherSubscription).RendezVous(scheduler);
+                            await subscription.AssignAsync(otherSubscription).RendezVous(scheduler, ct);
                         }
                     }, dueTime).ConfigureAwait(false);
 

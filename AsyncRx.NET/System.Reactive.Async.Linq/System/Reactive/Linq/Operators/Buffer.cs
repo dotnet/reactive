@@ -332,7 +332,7 @@ namespace System.Reactive.Linq
                             }
                         }
 
-                        await scheduler.Delay(timeSpan, ct).RendezVous(scheduler);
+                        await scheduler.Delay(timeSpan, ct).RendezVous(scheduler, ct);
                     }
                 }, timeSpan);
 
@@ -453,7 +453,7 @@ namespace System.Reactive.Linq
 
                                 if (buffer.Count > 0)
                                 {
-                                    await observer.OnNextAsync(buffer).RendezVous(scheduler);
+                                    await observer.OnNextAsync(buffer).RendezVous(scheduler, ct);
                                 }
                             }
 
@@ -463,7 +463,7 @@ namespace System.Reactive.Linq
                             }
                         }
 
-                        await scheduler.Delay(GetNextDue(), ct).RendezVous(scheduler);
+                        await scheduler.Delay(GetNextDue(), ct).RendezVous(scheduler, ct);
                     }
                 }, GetNextDue());
 

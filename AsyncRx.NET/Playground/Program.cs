@@ -173,7 +173,7 @@ namespace Playground
 
         static async Task RangeAsync()
         {
-            await AsyncObservable.Range(0, 10).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
+            await AsyncObservable.Range(0, 10).SubscribeAsync(PrintAsync<int>()); // TODO: Use ForEachAsync.
         }
 
         static async Task ReplaySubjectAsync()
@@ -264,6 +264,27 @@ namespace Playground
                 {
                     Console.WriteLine("Completed");
                     return Task.CompletedTask;
+                }
+            );
+        }
+
+        static IAsyncObserver<T> PrintAsync<T>()
+        {
+            return AsyncObserver.Create<T>(
+                async x =>
+                {
+                    await Task.Yield();
+                    Console.WriteLine(x);
+                },
+                async ex =>
+                {
+                    await Task.Yield();
+                    Console.WriteLine("Error: " + ex);
+                },
+                async () =>
+                {
+                    await Task.Yield();
+                    Console.WriteLine("Completed");
                 }
             );
         }

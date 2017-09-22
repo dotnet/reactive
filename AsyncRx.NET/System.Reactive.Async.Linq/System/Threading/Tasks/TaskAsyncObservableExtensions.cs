@@ -72,14 +72,14 @@ namespace System.Threading.Tasks
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
-                            await observer.OnNextAsync(Unit.Default).RendezVous(scheduler);
-                            await observer.OnCompletedAsync().RendezVous(scheduler);
+                            await observer.OnNextAsync(Unit.Default).RendezVous(scheduler, ct);
+                            await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             break;
                         case TaskStatus.Faulted:
-                            await observer.OnErrorAsync(task.Exception.InnerException).RendezVous(scheduler);
+                            await observer.OnErrorAsync(task.Exception.InnerException).RendezVous(scheduler, ct);
                             break;
                         case TaskStatus.Canceled:
-                            await observer.OnErrorAsync(new TaskCanceledException(task)).RendezVous(scheduler);
+                            await observer.OnErrorAsync(new TaskCanceledException(task)).RendezVous(scheduler, ct);
                             break;
                     }
                 });
@@ -134,14 +134,14 @@ namespace System.Threading.Tasks
                     switch (task.Status)
                     {
                         case TaskStatus.RanToCompletion:
-                            await observer.OnNextAsync(task.Result).RendezVous(scheduler);
-                            await observer.OnCompletedAsync().RendezVous(scheduler);
+                            await observer.OnNextAsync(task.Result).RendezVous(scheduler, ct);
+                            await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             break;
                         case TaskStatus.Faulted:
-                            await observer.OnErrorAsync(task.Exception.InnerException).RendezVous(scheduler);
+                            await observer.OnErrorAsync(task.Exception.InnerException).RendezVous(scheduler, ct);
                             break;
                         case TaskStatus.Canceled:
-                            await observer.OnErrorAsync(new TaskCanceledException(task)).RendezVous(scheduler);
+                            await observer.OnErrorAsync(new TaskCanceledException(task)).RendezVous(scheduler, ct);
                             break;
                     }
                 });

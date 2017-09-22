@@ -259,25 +259,25 @@ namespace System.Reactive.Linq
                         }
                         else
                         {
-                            state = await iterate(state).RendezVous(scheduler);
+                            state = await iterate(state).RendezVous(scheduler, ct);
                         }
 
-                        hasResult = await condition(state).RendezVous(scheduler);
+                        hasResult = await condition(state).RendezVous(scheduler, ct);
 
                         if (hasResult)
                         {
-                            result = await resultSelector(state).RendezVous(scheduler);
+                            result = await resultSelector(state).RendezVous(scheduler, ct);
                         }
                     }
                     catch (Exception ex)
                     {
-                        await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                        await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                         return;
                     }
 
                     if (hasResult)
                     {
-                        await observer.OnNextAsync(result).RendezVous(scheduler);
+                        await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
@@ -287,7 +287,7 @@ namespace System.Reactive.Linq
 
                 if (!ct.IsCancellationRequested)
                 {
-                    await observer.OnCompletedAsync().RendezVous(scheduler);
+                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                 }
             });
         }
@@ -376,38 +376,38 @@ namespace System.Reactive.Linq
                         }
                         else
                         {
-                            state = await iterate(state).RendezVous(scheduler);
+                            state = await iterate(state).RendezVous(scheduler, ct);
                         }
 
-                        hasResult = await condition(state).RendezVous(scheduler);
+                        hasResult = await condition(state).RendezVous(scheduler, ct);
 
                         if (hasResult)
                         {
-                            result = await resultSelector(state).RendezVous(scheduler);
-                            nextDue = await timeSelector(state).RendezVous(scheduler);
+                            result = await resultSelector(state).RendezVous(scheduler, ct);
+                            nextDue = await timeSelector(state).RendezVous(scheduler, ct);
                         }
                     }
                     catch (Exception ex)
                     {
-                        await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                        await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                         return;
                     }
 
                     if (hasResult)
                     {
-                        await observer.OnNextAsync(result).RendezVous(scheduler);
+                        await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
 
-                    await scheduler.Delay(nextDue).RendezVous(scheduler);
+                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)
                 {
-                    await observer.OnCompletedAsync().RendezVous(scheduler);
+                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                 }
             });
         }
@@ -496,38 +496,38 @@ namespace System.Reactive.Linq
                         }
                         else
                         {
-                            state = await iterate(state).RendezVous(scheduler);
+                            state = await iterate(state).RendezVous(scheduler, ct);
                         }
 
-                        hasResult = await condition(state).RendezVous(scheduler);
+                        hasResult = await condition(state).RendezVous(scheduler, ct);
 
                         if (hasResult)
                         {
-                            result = await resultSelector(state).RendezVous(scheduler);
-                            nextDue = await timeSelector(state).RendezVous(scheduler);
+                            result = await resultSelector(state).RendezVous(scheduler, ct);
+                            nextDue = await timeSelector(state).RendezVous(scheduler, ct);
                         }
                     }
                     catch (Exception ex)
                     {
-                        await observer.OnErrorAsync(ex).RendezVous(scheduler);
+                        await observer.OnErrorAsync(ex).RendezVous(scheduler, ct);
                         return;
                     }
 
                     if (hasResult)
                     {
-                        await observer.OnNextAsync(result).RendezVous(scheduler);
+                        await observer.OnNextAsync(result).RendezVous(scheduler, ct);
                     }
                     else
                     {
                         break;
                     }
 
-                    await scheduler.Delay(nextDue).RendezVous(scheduler);
+                    await scheduler.Delay(nextDue).RendezVous(scheduler, ct);
                 }
 
                 if (!ct.IsCancellationRequested)
                 {
-                    await observer.OnCompletedAsync().RendezVous(scheduler);
+                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                 }
             });
         }

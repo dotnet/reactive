@@ -170,12 +170,12 @@ namespace System.Reactive.Linq
                             {
                                 while (!ct.IsCancellationRequested && queue.Count > 0)
                                 {
-                                    await observer.OnNextAsync(queue.Dequeue()).RendezVous(scheduler);
+                                    await observer.OnNextAsync(queue.Dequeue()).RendezVous(scheduler, ct);
                                 }
 
                                 ct.ThrowIfCancellationRequested();
 
-                                await observer.OnCompletedAsync().RendezVous(scheduler);
+                                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             }).ConfigureAwait(false);
 
                             await sad.AssignAsync(drain).ConfigureAwait(false);
@@ -234,12 +234,12 @@ namespace System.Reactive.Linq
                             {
                                 while (!ct.IsCancellationRequested && queue.Count > 0)
                                 {
-                                    await observer.OnNextAsync(queue.Dequeue().Value).RendezVous(scheduler);
+                                    await observer.OnNextAsync(queue.Dequeue().Value).RendezVous(scheduler, ct);
                                 }
 
                                 ct.ThrowIfCancellationRequested();
 
-                                await observer.OnCompletedAsync().RendezVous(scheduler);
+                                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             }).ConfigureAwait(false);
 
                             await sad.AssignAsync(drain).ConfigureAwait(false);

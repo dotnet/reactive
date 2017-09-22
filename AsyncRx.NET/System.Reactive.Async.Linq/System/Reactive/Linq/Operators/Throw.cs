@@ -43,7 +43,7 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnErrorAsync(error).RendezVous(scheduler);
+                await observer.OnErrorAsync(error).RendezVous(scheduler, ct);
             });
         }
     }

@@ -38,7 +38,7 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
         }
     }

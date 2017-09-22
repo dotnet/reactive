@@ -85,11 +85,11 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnNextAsync(0L).RendezVous(scheduler);
+                await observer.OnNextAsync(0L).RendezVous(scheduler, ct);
 
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             }, dueTime);
 
         }
@@ -105,11 +105,11 @@ namespace System.Reactive.Linq
             {
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnNextAsync(0L).RendezVous(scheduler);
+                await observer.OnNextAsync(0L).RendezVous(scheduler, ct);
 
                 ct.ThrowIfCancellationRequested();
 
-                await observer.OnCompletedAsync().RendezVous(scheduler);
+                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             }, dueTime);
         }
 
@@ -132,9 +132,9 @@ namespace System.Reactive.Linq
 
                 do
                 {
-                    await observer.OnNextAsync(tick++).RendezVous(scheduler);
+                    await observer.OnNextAsync(tick++).RendezVous(scheduler, ct);
 
-                    await scheduler.Delay(period, ct).RendezVous(scheduler);
+                    await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
 
                 ct.ThrowIfCancellationRequested();
@@ -160,9 +160,9 @@ namespace System.Reactive.Linq
 
                 do
                 {
-                    await observer.OnNextAsync(tick++).RendezVous(scheduler);
+                    await observer.OnNextAsync(tick++).RendezVous(scheduler, ct);
 
-                    await scheduler.Delay(period, ct).RendezVous(scheduler);
+                    await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
 
                 ct.ThrowIfCancellationRequested();

@@ -79,7 +79,7 @@ namespace System.Reactive.Linq
             {
                 while (!ct.IsCancellationRequested)
                 {
-                    await semaphore.WaitAsync(ct).RendezVous(scheduler);
+                    await semaphore.WaitAsync(ct).RendezVous(scheduler, ct);
 
                     if (queue.Count > 0)
                     {
@@ -88,14 +88,14 @@ namespace System.Reactive.Linq
                         var nextDueTime = start + next.Interval + dueTime;
                         var delay = nextDueTime - scheduler.Now;
 
-                        await scheduler.Delay(delay, ct).RendezVous(scheduler);
+                        await scheduler.Delay(delay, ct).RendezVous(scheduler, ct);
 
-                        await observer.OnNextAsync(next.Value).RendezVous(scheduler);
+                        await observer.OnNextAsync(next.Value).RendezVous(scheduler, ct);
                     }
 
                     if (queue.Count == 0 && isDone)
                     {
-                        await observer.OnCompletedAsync().RendezVous(scheduler);
+                        await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                         break;
                     }
                 }

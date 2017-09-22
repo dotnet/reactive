@@ -130,9 +130,9 @@ namespace System.Reactive.Linq
                         {
                             ct.ThrowIfCancellationRequested();
 
-                            using (await gate.LockAsync().RendezVous(scheduler))
+                            using (await gate.LockAsync().RendezVous(scheduler, ct))
                             {
-                                await observer.OnCompletedAsync().RendezVous(scheduler);
+                                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             }
                         }, duration)
                     );
