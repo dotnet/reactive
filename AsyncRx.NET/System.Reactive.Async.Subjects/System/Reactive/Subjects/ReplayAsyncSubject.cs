@@ -32,6 +32,26 @@ namespace System.Reactive.Subjects
             : base(false, bufferSize, scheduler)
         {
         }
+
+        public SequentialReplayAsyncSubject(TimeSpan window)
+            : base(false, window)
+        {
+        }
+
+        public SequentialReplayAsyncSubject(TimeSpan window, IAsyncScheduler scheduler)
+            : base(false, window, scheduler)
+        {
+        }
+
+        public SequentialReplayAsyncSubject(int bufferSize, TimeSpan window)
+            : base(false, bufferSize, window)
+        {
+        }
+
+        public SequentialReplayAsyncSubject(int bufferSize, TimeSpan window, IAsyncScheduler scheduler)
+            : base(false, bufferSize, window, scheduler)
+        {
+        }
     }
 
     public sealed class ConcurrentReplayAsyncSubject<T> : ReplayAsyncSubject<T>
@@ -55,6 +75,26 @@ namespace System.Reactive.Subjects
             : base(true, bufferSize, scheduler)
         {
         }
+
+        public ConcurrentReplayAsyncSubject(TimeSpan window)
+            : base(false, window)
+        {
+        }
+
+        public ConcurrentReplayAsyncSubject(TimeSpan window, IAsyncScheduler scheduler)
+            : base(false, window, scheduler)
+        {
+        }
+
+        public ConcurrentReplayAsyncSubject(int bufferSize, TimeSpan window)
+            : base(false, bufferSize, window)
+        {
+        }
+
+        public ConcurrentReplayAsyncSubject(int bufferSize, TimeSpan window, IAsyncScheduler scheduler)
+            : base(false, bufferSize, window, scheduler)
+        {
+        }
     }
 
     public abstract class ReplayAsyncSubject<T> : IAsyncSubject<T>
@@ -69,7 +109,7 @@ namespace System.Reactive.Subjects
         public ReplayAsyncSubject(bool concurrent, int bufferSize)
         {
             if (bufferSize < 0)
-                throw new ArgumentNullException(nameof(bufferSize));
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
             if (bufferSize == 1)
             {
@@ -93,7 +133,7 @@ namespace System.Reactive.Subjects
         public ReplayAsyncSubject(bool concurrent, int bufferSize, IAsyncScheduler scheduler)
         {
             if (bufferSize < 0)
-                throw new ArgumentNullException(nameof(bufferSize));
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
@@ -109,6 +149,46 @@ namespace System.Reactive.Subjects
             {
                 _impl = new ReplayMany(concurrent, o => CreateScheduledObserver(o, scheduler), bufferSize);
             }
+        }
+
+        public ReplayAsyncSubject(bool concurrent, TimeSpan window)
+        {
+            if (window < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(window));
+
+            throw new NotImplementedException();
+        }
+
+        public ReplayAsyncSubject(bool concurrent, TimeSpan window, IAsyncScheduler scheduler)
+        {
+            if (window < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(window));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            throw new NotImplementedException();
+        }
+
+        public ReplayAsyncSubject(bool concurrent, int bufferSize, TimeSpan window)
+        {
+            if (window < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(window));
+            if (bufferSize < 0)
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
+
+            throw new NotImplementedException();
+        }
+
+        public ReplayAsyncSubject(bool concurrent, int bufferSize, TimeSpan window, IAsyncScheduler scheduler)
+        {
+            if (window < TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(window));
+            if (bufferSize < 0)
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            throw new NotImplementedException();
         }
 
         private static IScheduledAsyncObserver<T> CreateImmediateObserver(IAsyncObserver<T> observer) => new FastImmediateAsyncObserver<T>(observer);
