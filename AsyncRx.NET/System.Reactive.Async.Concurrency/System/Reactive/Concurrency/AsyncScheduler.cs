@@ -224,9 +224,9 @@ namespace System.Reactive.Concurrency
                 }
             }
 
-            public async void OnCompleted(Action continuation)
+            public void OnCompleted(Action continuation)
             {
-                await _scheduler.ExecuteAsync(ct =>
+                var t = _scheduler.ExecuteAsync(ct =>
                 {
                     try
                     {
@@ -248,13 +248,13 @@ namespace System.Reactive.Concurrency
 
         private sealed class TaskAwaitable : IAwaitable, IAwaiter
         {
-            private readonly TaskAwaiter _task;
+            private readonly ConfiguredTaskAwaitable.ConfiguredTaskAwaiter _task;
             private readonly IAsyncScheduler _scheduler;
             private readonly CancellationToken _token;
 
             public TaskAwaitable(Task task, IAsyncScheduler scheduler, CancellationToken token)
             {
-                _task = task.GetAwaiter();
+                _task = task.ConfigureAwait(false).GetAwaiter();
                 _scheduler = scheduler;
                 _token = token;
             }
@@ -306,13 +306,13 @@ namespace System.Reactive.Concurrency
 
         private sealed class TaskAwaitable<T> : IAwaitable<T>, IAwaiter<T>
         {
-            private readonly TaskAwaiter<T> _task;
+            private readonly ConfiguredTaskAwaitable<T>.ConfiguredTaskAwaiter _task;
             private readonly IAsyncScheduler _scheduler;
             private readonly CancellationToken _token;
 
             public TaskAwaitable(Task<T> task, IAsyncScheduler scheduler, CancellationToken token)
             {
-                _task = task.GetAwaiter();
+                _task = task.ConfigureAwait(false).GetAwaiter();
                 _scheduler = scheduler;
                 _token = token;
             }
