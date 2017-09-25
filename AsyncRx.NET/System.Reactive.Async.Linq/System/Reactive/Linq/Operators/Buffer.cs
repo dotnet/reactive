@@ -648,6 +648,8 @@ namespace System.Reactive.Linq
                             buffer.Clear();
                             await observer.OnErrorAsync(ex).ConfigureAwait(false);
                         }
+
+                        return;
                     }
 
                     var closingSubscription = new SingleAssignmentAsyncDisposable();
