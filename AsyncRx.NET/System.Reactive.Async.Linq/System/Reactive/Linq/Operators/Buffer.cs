@@ -190,15 +190,7 @@ namespace System.Reactive.Linq
 
     partial class AsyncObserver
     {
-        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, int count)
-        {
-            if (observer == null)
-                throw new ArgumentNullException(nameof(observer));
-            if (count <= 0)
-                throw new ArgumentNullException(nameof(count));
-
-            return Buffer(observer, count, count);
-        }
+        public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, int count) => Buffer(observer, count, count);
 
         public static IAsyncObserver<TSource> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, int count, int skip)
         {
@@ -270,7 +262,6 @@ namespace System.Reactive.Linq
         }
 
         public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan) => Buffer(observer, timeSpan, TaskPoolAsyncScheduler.Default);
-
 
         public static Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Buffer<TSource>(IAsyncObserver<IList<TSource>> observer, TimeSpan timeSpan, IAsyncScheduler scheduler)
         {
