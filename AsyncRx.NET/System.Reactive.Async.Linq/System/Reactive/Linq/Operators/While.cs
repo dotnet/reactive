@@ -41,6 +41,7 @@ namespace System.Reactive.Linq
                     catch (Exception ex)
                     {
                         await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
                     }
 
                     if (b)
@@ -93,6 +94,7 @@ namespace System.Reactive.Linq
                     catch (Exception ex)
                     {
                         await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
                     }
 
                     if (b)
