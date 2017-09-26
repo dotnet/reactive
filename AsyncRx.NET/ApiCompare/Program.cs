@@ -19,6 +19,7 @@ namespace ApiCompare
             var exclude = new[]
             {
                 "AsObservable",  // Trivially renamed to AsAsyncObservable.
+                "ToObservable",  // Trivially renamed to ToAsyncObservable.
 
                 "Subscribe",  // Trivially renamed to SubscribeAsync.
 
