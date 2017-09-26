@@ -62,5 +62,57 @@ namespace System.Reactive.Linq
                 return subscription;
             });
         }
+
+        public static IAsyncObservable<TSource> While<TSource>(Func<Task<bool>> condition, IAsyncObservable<TSource> source)
+        {
+            if (condition == null)
+                throw new ArgumentNullException(nameof(condition));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Create<TSource>(async observer =>
+            {
+                var subscription = new SerialAsyncDisposable();
+
+                var o = default(IAsyncObserver<TSource>);
+
+                o = AsyncObserver.CreateUnsafe<TSource>(
+                        observer.OnNextAsync,
+                        observer.OnErrorAsync,
+                        MoveNext
+                    );
+
+                async Task MoveNext()
+                {
+                    var b = default(bool);
+
+                    try
+                    {
+                        b = await condition().ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                    }
+
+                    if (b)
+                    {
+                        var sad = new SingleAssignmentAsyncDisposable();
+                        await subscription.AssignAsync(sad).ConfigureAwait(false);
+
+                        var d = await source.SubscribeSafeAsync(o).ConfigureAwait(false);
+                        await sad.AssignAsync(d).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+
+                await MoveNext().ConfigureAwait(false);
+
+                return subscription;
+            });
+        }
     }
 }
