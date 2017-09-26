@@ -48,7 +48,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, params TSource[] values)
@@ -83,7 +83,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Create<TSource>(async observer => await source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
+            return Create<TSource>(observer => source.SubscribeSafeAsync(AsyncObserver.Append(observer, values)));
         }
 
         public static IAsyncObservable<TSource> Append<TSource>(this IAsyncObservable<TSource> source, IAsyncScheduler scheduler, IEnumerable<TSource> values)
@@ -124,8 +124,8 @@ namespace System.Reactive.Linq
                 observer.OnErrorAsync,
                 async () =>
                 {
-                    await observer.OnNextAsync(value);
-                    await observer.OnCompletedAsync();
+                    await observer.OnNextAsync(value).ConfigureAwait(false);
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );
         }
@@ -150,8 +150,8 @@ namespace System.Reactive.Linq
                             {
                                 if (!ct.IsCancellationRequested)
                                 {
-                                    await observer.OnNextAsync(value);
-                                    await observer.OnCompletedAsync();
+                                    await observer.OnNextAsync(value).RendezVous(scheduler, ct);
+                                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                                 }
                             }).ConfigureAwait(false);
 
@@ -176,10 +176,10 @@ namespace System.Reactive.Linq
                 {
                     foreach (var value in values)
                     {
-                        await observer.OnNextAsync(value);
+                        await observer.OnNextAsync(value).ConfigureAwait(false);
                     }
 
-                    await observer.OnCompletedAsync();
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );
         }
@@ -210,10 +210,10 @@ namespace System.Reactive.Linq
                 {
                     foreach (var value in values)
                     {
-                        await observer.OnNextAsync(value);
+                        await observer.OnNextAsync(value).ConfigureAwait(false);
                     }
 
-                    await observer.OnCompletedAsync();
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
                 }
             );
         }
