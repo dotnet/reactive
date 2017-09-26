@@ -11,7 +11,6 @@ namespace System.Reactive
 {
     internal sealed class ScheduledAsyncObserver<T> : ScheduledAsyncObserverBase<T>
     {
-        private readonly IAsyncObserver<T> _observer;
         private readonly IAsyncScheduler _scheduler;
 
         private readonly SerialAsyncDisposable _disposable = new SerialAsyncDisposable();
