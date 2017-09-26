@@ -9,11 +9,11 @@ namespace System.Reactive.Linq
 {
     partial class AsyncObservable
     {
-        public static IAsyncObservable<TSource> If<TSource>(Func<bool> condition, IAsyncObservable<TSource> thenSource) => If(condition, thenSource, Empty<TSource>());
+        public static IAsyncObservable<TResult> If<TResult>(Func<bool> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
 
-        public static IAsyncObservable<TSource> If<TSource>(Func<bool> condition, IAsyncObservable<TSource> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TSource>(scheduler));
+        public static IAsyncObservable<TResult> If<TResult>(Func<bool> condition, IAsyncObservable<TResult> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TResult>(scheduler));
 
-        public static IAsyncObservable<TSource> If<TSource>(Func<bool> condition, IAsyncObservable<TSource> thenSource, IAsyncObservable<TSource> elseSource)
+        public static IAsyncObservable<TResult> If<TResult>(Func<bool> condition, IAsyncObservable<TResult> thenSource, IAsyncObservable<TResult> elseSource)
         {
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create<TSource>(observer =>
+            return Create<TResult>(observer =>
             {
                 var b = default(bool);
 
@@ -32,18 +32,18 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    return Throw<TSource>(ex).SubscribeAsync(observer);
+                    return Throw<TResult>(ex).SubscribeAsync(observer);
                 }
 
                 return (b ? thenSource : elseSource).SubscribeSafeAsync(observer);
             });
         }
 
-        public static IAsyncObservable<TSource> If<TSource>(Func<Task<bool>> condition, IAsyncObservable<TSource> thenSource) => If(condition, thenSource, Empty<TSource>());
+        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource) => If(condition, thenSource, Empty<TResult>());
 
-        public static IAsyncObservable<TSource> If<TSource>(Func<Task<bool>> condition, IAsyncObservable<TSource> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TSource>(scheduler));
+        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncScheduler scheduler) => If(condition, thenSource, Empty<TResult>(scheduler));
 
-        public static IAsyncObservable<TSource> If<TSource>(Func<Task<bool>> condition, IAsyncObservable<TSource> thenSource, IAsyncObservable<TSource> elseSource)
+        public static IAsyncObservable<TResult> If<TResult>(Func<Task<bool>> condition, IAsyncObservable<TResult> thenSource, IAsyncObservable<TResult> elseSource)
         {
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return Create<TSource>(async observer =>
+            return Create<TResult>(async observer =>
             {
                 var b = default(bool);
 
@@ -62,7 +62,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    return await Throw<TSource>(ex).SubscribeAsync(observer).ConfigureAwait(false);
+                    return await Throw<TResult>(ex).SubscribeAsync(observer).ConfigureAwait(false);
                 }
 
                 return await (b ? thenSource : elseSource).SubscribeSafeAsync(observer).ConfigureAwait(false);
