@@ -44,6 +44,7 @@ namespace Playground
             //await SubjectAsync();
             //await TakeUntilAsync();
             //await TimerAsync();
+            //await WhileAsync();
         }
 
         static async Task AggregateAsync()
@@ -245,6 +246,13 @@ namespace Playground
         static async Task TimerAsync()
         {
             await AsyncObservable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2)).Take(5).Select(_ => DateTimeOffset.Now).SubscribeAsync(Print<DateTimeOffset>()); // TODO: Use ForEachAsync.
+        }
+
+        static async Task WhileAsync()
+        {
+            var i = 0;
+
+            await AsyncObservable.While(() => ++i < 5, AsyncObservable.Range(0, 5)).SubscribeAsync(Print<int>()); // TODO: Use ForEachAsync.
         }
 
         static IAsyncObserver<T> Print<T>()
