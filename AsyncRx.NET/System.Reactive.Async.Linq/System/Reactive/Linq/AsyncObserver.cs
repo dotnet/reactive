@@ -31,5 +31,17 @@ namespace System.Reactive.Linq
 
             return new AsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
         }
+
+        internal static IAsyncObserver<T> CreateUnsafe<T>(Func<T, Task> onNextAsync, Func<Exception, Task> onErrorAsync, Func<Task> onCompletedAsync)
+        {
+            if (onNextAsync == null)
+                throw new ArgumentNullException(nameof(onNextAsync));
+            if (onErrorAsync == null)
+                throw new ArgumentNullException(nameof(onErrorAsync));
+            if (onCompletedAsync == null)
+                throw new ArgumentNullException(nameof(onCompletedAsync));
+
+            return new UnsafeAsyncObserver<T>(onNextAsync, onErrorAsync, onCompletedAsync);
+        }
     }
 }
