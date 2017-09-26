@@ -23,10 +23,6 @@ namespace ApiCompare
 
                 "Subscribe",  // Trivially renamed to SubscribeAsync.
 
-                "And",   // Postponing patterns.
-                "Then",  // Postponing patterns.
-                "When",  // Postponing patterns.
-
                 "If",       // Postponing imperative operators.
                 "DoWhile",  // Postponing imperative operators.
                 "Case",     // Postponing imperative operators.
