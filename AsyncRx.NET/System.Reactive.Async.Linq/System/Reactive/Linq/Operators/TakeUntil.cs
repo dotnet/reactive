@@ -148,11 +148,12 @@ namespace System.Reactive.Linq
                         Synchronize(observer, gate),
                         await scheduler.ScheduleAsync(async ct =>
                         {
-                            ct.ThrowIfCancellationRequested();
-
-                            using (await gate.LockAsync().RendezVous(scheduler, ct))
+                            if (!ct.IsCancellationRequested)
                             {
-                                await observer.OnCompletedAsync().RendezVous(scheduler, ct);
+                                using (await gate.LockAsync().RendezVous(scheduler, ct))
+                                {
+                                    await observer.OnCompletedAsync().RendezVous(scheduler, ct);
+                                }
                             }
                         }, endTime).ConfigureAwait(false)
                     );
