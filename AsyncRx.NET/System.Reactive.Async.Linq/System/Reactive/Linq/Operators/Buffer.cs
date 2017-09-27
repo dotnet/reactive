@@ -624,6 +624,8 @@ namespace System.Reactive.Linq
             if (bufferClosingSelector == null)
                 throw new ArgumentNullException(nameof(bufferClosingSelector));
 
+            return CoreAsync();
+
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 var closeSubscription = new SerialAsyncDisposable();
@@ -718,8 +720,6 @@ namespace System.Reactive.Linq
 
                 return (sink, closeSubscription);
             }
-
-            return CoreAsync();
         }
     }
 }
