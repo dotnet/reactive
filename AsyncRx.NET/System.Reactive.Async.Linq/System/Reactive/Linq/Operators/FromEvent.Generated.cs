@@ -66,7 +66,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2>(async (arg1, arg2) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2));
+                            await observer.OnNextAsync((arg1, arg2)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -140,7 +140,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3>(async (arg1, arg2, arg3) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3));
+                            await observer.OnNextAsync((arg1, arg2, arg3)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -214,7 +214,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4>(async (arg1, arg2, arg3, arg4) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -288,7 +288,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5>(async (arg1, arg2, arg3, arg4, arg5) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -362,7 +362,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6>(async (arg1, arg2, arg3, arg4, arg5, arg6) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -436,7 +436,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -510,7 +510,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -584,7 +584,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -658,7 +658,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -732,7 +732,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -806,7 +806,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -880,7 +880,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -954,7 +954,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -1028,7 +1028,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
@@ -1102,7 +1102,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16));
+                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16)).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);
