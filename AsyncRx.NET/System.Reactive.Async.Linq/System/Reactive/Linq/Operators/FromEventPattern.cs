@@ -181,7 +181,7 @@ namespace System.Reactive.Linq
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {
-                        observer.OnNextAsync(resultSelector(o, e));
+                        observer.OnNextAsync(resultSelector(o, e)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                     });
 
                     var d = Delegate.CreateDelegate(delegateType, onNext, typeof(Action<TSender, TEventArgs>).GetMethod("Invoke"));
@@ -220,7 +220,7 @@ namespace System.Reactive.Linq
                 {
                     var onNext = new Action<TSender, TEventArgs>((o, e) =>
                     {
-                        observer.OnNextAsync(resultSelector(o, e));
+                        observer.OnNextAsync(resultSelector(o, e)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                     });
 
                     var d = Delegate.CreateDelegate(delegateType, onNext, typeof(Action<TSender, TEventArgs>).GetMethod("Invoke"));

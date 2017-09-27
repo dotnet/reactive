@@ -64,9 +64,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2)>(observer =>
                     {
-                        var handler = new Action<T1, T2>(async (arg1, arg2) =>
+                        var handler = new Action<T1, T2>((arg1, arg2) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -138,9 +138,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3>(async (arg1, arg2, arg3) =>
+                        var handler = new Action<T1, T2, T3>((arg1, arg2, arg3) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -212,9 +212,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4>(async (arg1, arg2, arg3, arg4) =>
+                        var handler = new Action<T1, T2, T3, T4>((arg1, arg2, arg3, arg4) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -286,9 +286,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5>(async (arg1, arg2, arg3, arg4, arg5) =>
+                        var handler = new Action<T1, T2, T3, T4, T5>((arg1, arg2, arg3, arg4, arg5) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -360,9 +360,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6>(async (arg1, arg2, arg3, arg4, arg5, arg6) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6>((arg1, arg2, arg3, arg4, arg5, arg6) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -434,9 +434,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7>((arg1, arg2, arg3, arg4, arg5, arg6, arg7) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -508,9 +508,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -582,9 +582,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -656,9 +656,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -730,9 +730,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -804,9 +804,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -878,9 +878,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -952,9 +952,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -1026,9 +1026,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
@@ -1100,9 +1100,9 @@ namespace System.Reactive.Linq
                 SynchronizeEvents(
                     Create<(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)>(observer =>
                     {
-                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(async (arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16) =>
+                        var handler = new Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16) =>
                         {
-                            await observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16)).ConfigureAwait(false);
+                            observer.OnNextAsync((arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
                         });
 
                         var converted = conversion(handler);
