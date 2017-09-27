@@ -26,6 +26,8 @@ namespace System.Reactive.Linq
                 var firstTask = first.SubscribeSafeAsync(firstObserver);
                 var secondTask = second.SubscribeSafeAsync(secondObserver);
 
+                // REVIEW: Consider concurrent subscriptions.
+
                 var d1 = await firstTask.ConfigureAwait(false);
                 var d2 = await secondTask.ConfigureAwait(false);
 
@@ -44,10 +46,12 @@ namespace System.Reactive.Linq
 
             return Create<bool>(async observer =>
             {
-                var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual<TSource>(observer, comparer);
+                var (firstObserver, secondObserver) = AsyncObserver.SequenceEqual(observer, comparer);
 
                 var firstTask = first.SubscribeSafeAsync(firstObserver);
                 var secondTask = second.SubscribeSafeAsync(secondObserver);
+
+                // REVIEW: Consider concurrent subscriptions.
 
                 var d1 = await firstTask.ConfigureAwait(false);
                 var d2 = await secondTask.ConfigureAwait(false);
