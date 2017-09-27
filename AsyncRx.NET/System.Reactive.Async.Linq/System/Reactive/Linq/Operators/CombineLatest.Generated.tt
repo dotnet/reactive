@@ -25,7 +25,7 @@ for (var i = 2; i <= 15; i++)
     var obs = "(" + string.Join(", ", Enumerable.Range(1, i).Select(j => "observer" + j)) + ")";
     var tuple = "(" + genArgs + ")";
 #>
-        public static IAsyncObservable<<#=tuple#>> CombineLatest<<#=genPars#>>(this <#=args#>)
+        public static IAsyncObservable<<#=tuple#>> CombineLatest<<#=genArgs#>>(this <#=args#>)
         {
 <#
 for (var j = 1; j <= i; j++)
