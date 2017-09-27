@@ -83,11 +83,13 @@ namespace System.Reactive.Linq
 
             return scheduler.ScheduleAsync(async ct =>
             {
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 await observer.OnNextAsync(0L).RendezVous(scheduler, ct);
 
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             }, dueTime);
@@ -103,11 +105,13 @@ namespace System.Reactive.Linq
 
             return scheduler.ScheduleAsync(async ct =>
             {
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 await observer.OnNextAsync(0L).RendezVous(scheduler, ct);
 
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             }, dueTime);
@@ -126,7 +130,8 @@ namespace System.Reactive.Linq
 
             return scheduler.ScheduleAsync(async ct =>
             {
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 // TODO: Compensate for drift by adding stopwatch functionality.
 
@@ -136,8 +141,6 @@ namespace System.Reactive.Linq
 
                     await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
-
-                ct.ThrowIfCancellationRequested();
             }, dueTime);
         }
 
@@ -154,7 +157,8 @@ namespace System.Reactive.Linq
 
             return scheduler.ScheduleAsync(async ct =>
             {
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 // TODO: Compensate for drift by adding stopwatch functionality.
 
@@ -164,8 +168,6 @@ namespace System.Reactive.Linq
 
                     await scheduler.Delay(period, ct).RendezVous(scheduler, ct);
                 } while (!ct.IsCancellationRequested);
-
-                ct.ThrowIfCancellationRequested();
             }, dueTime);
         }
     }
