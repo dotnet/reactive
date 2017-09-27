@@ -82,7 +82,44 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Aggregate(observer, (a, x) => Task.FromResult(func(a, x)));
+            var hasValue = false;
+            var value = default(TSource);
+
+            return Create<TSource>(
+                async x =>
+                {
+                    if (hasValue)
+                    {
+                        try
+                        {
+                            value = func(value, x);
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        value = x;
+                        hasValue = true;
+                    }
+                },
+                observer.OnErrorAsync,
+                async () =>
+                {
+                    if (!hasValue)
+                    {
+                        await observer.OnErrorAsync(new InvalidOperationException("The sequence is empty.")).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await observer.OnNextAsync(value).ConfigureAwait(false);
+                        await observer.OnCompletedAsync().ConfigureAwait(false);
+                    }
+                }
+            );
         }
 
         public static IAsyncObserver<TSource> Aggregate<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, Task<TSource>> func)
@@ -139,7 +176,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Aggregate<TSource, TResult, TResult>(observer, seed, (a, x) => Task.FromResult(func(a, x)), (a) => Task.FromResult(a));
+            return Aggregate(observer, seed, func, a => a);
         }
 
         public static IAsyncObserver<TSource> Aggregate<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, Task<TResult>> func)
@@ -149,7 +186,7 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Aggregate<TSource, TResult, TResult>(observer, seed, (a, x) => func(a, x), (a) => Task.FromResult(a));
+            return Aggregate<TSource, TResult, TResult>(observer, seed, (a, x) => func(a, x), a => Task.FromResult(a));
         }
 
         public static IAsyncObserver<TSource> Aggregate<TSource, TAccumulate, TResult>(IAsyncObserver<TResult> observer, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> func, Func<TAccumulate, TResult> resultSelector)
@@ -161,7 +198,40 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Aggregate<TSource, TAccumulate, TResult>(observer, seed, (a, x) => Task.FromResult(func(a, x)), (a) => Task.FromResult(resultSelector(a)));
+            var value = seed;
+
+            return Create<TSource>(
+                async x =>
+                {
+                    try
+                    {
+                        value = func(value, x);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+                },
+                observer.OnErrorAsync,
+                async () =>
+                {
+                    var res = default(TResult);
+
+                    try
+                    {
+                        res = resultSelector(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    await observer.OnNextAsync(res).ConfigureAwait(false);
+                    await observer.OnCompletedAsync().ConfigureAwait(false);
+                }
+            );
         }
 
         public static IAsyncObserver<TSource> Aggregate<TSource, TAccumulate, TResult>(IAsyncObserver<TResult> observer, TAccumulate seed, Func<TAccumulate, TSource, Task<TAccumulate>> func, Func<TAccumulate, Task<TResult>> resultSelector)
