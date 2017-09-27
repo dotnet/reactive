@@ -683,7 +683,7 @@ namespace System.Reactive.Linq
                             CloseBufferAsync
                         );
 
-                    var closingSubscriptionInner = await closing.SubscribeAsync(closingObserver).ConfigureAwait(false);
+                    var closingSubscriptionInner = await closing.SubscribeSafeAsync(closingObserver).ConfigureAwait(false);
                     await closingSubscription.AssignAsync(closingSubscriptionInner).ConfigureAwait(false);
                 }
 

@@ -136,7 +136,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = Concat(observer, Repeat(source).GetEnumerator());
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             }
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, inner) = Concat(observer, Enumerable.Repeat(source, repeatCount).GetEnumerator());
 
-                var subscription = await source.SubscribeAsync(sink).ConfigureAwait(false);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, inner);
             }

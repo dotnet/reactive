@@ -259,7 +259,7 @@ namespace System.Reactive.Linq
 
             var (sink, subscription) = await createObserver(observer, d).ConfigureAwait(false);
 
-            var inner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+            var inner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
             await d.AssignAsync(inner).ConfigureAwait(false);
 
             return subscription;

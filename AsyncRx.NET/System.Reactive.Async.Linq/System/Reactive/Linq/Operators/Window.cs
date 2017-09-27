@@ -162,7 +162,7 @@ namespace System.Reactive.Linq
 
             var (sink, subscription) = createObserver(observer, d);
 
-            var inner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+            var inner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
             await d.AssignAsync(inner).ConfigureAwait(false);
 
             return subscription;
@@ -174,7 +174,7 @@ namespace System.Reactive.Linq
 
             var (sink, subscription) = await createObserverAsync(observer, d).ConfigureAwait(false);
 
-            var inner = await source.SubscribeAsync(sink).ConfigureAwait(false);
+            var inner = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
             await d.AssignAsync(inner).ConfigureAwait(false);
 
             return subscription;
@@ -768,7 +768,7 @@ namespace System.Reactive.Linq
                         CloseWindowAsync
                     );
 
-                var closingSubscriptionInner = await closing.SubscribeAsync(closingObserver).ConfigureAwait(false);
+                var closingSubscriptionInner = await closing.SubscribeSafeAsync(closingObserver).ConfigureAwait(false);
                 await closingSubscription.AssignAsync(closingSubscriptionInner).ConfigureAwait(false);
             }
 
