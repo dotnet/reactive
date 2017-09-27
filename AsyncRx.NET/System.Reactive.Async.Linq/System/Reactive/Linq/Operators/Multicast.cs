@@ -27,7 +27,7 @@ namespace System.Reactive.Linq
             if (subjectFactory == null)
                 throw new ArgumentNullException(nameof(subjectFactory));
 
-            return Multicast<TSource, TSource, TSource>(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(subjectFactory()), x => Task.FromResult(x));
+            return Multicast(source, () => Task.FromResult<IAsyncSubject<TSource, TSource>>(subjectFactory()), x => Task.FromResult(x));
         }
 
         public static IAsyncObservable<TSource> Multicast<TSource>(this IAsyncObservable<TSource> source, Func<Task<IAsyncSubject<TSource>>> subjectFactory)
