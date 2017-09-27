@@ -58,7 +58,35 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Scan(observer, (a, x) => Task.FromResult(func(a, x)));
+            var hasValue = false;
+            var value = default(TSource);
+
+            return Create<TSource>(
+                async x =>
+                {
+                    if (hasValue)
+                    {
+                        try
+                        {
+                            value = func(value, x);
+                        }
+                        catch (Exception ex)
+                        {
+                            await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        value = x;
+                        hasValue = true;
+                    }
+
+                    await observer.OnNextAsync(value).ConfigureAwait(false);
+                },
+                observer.OnErrorAsync,
+                observer.OnCompletedAsync
+            );
         }
 
         public static IAsyncObserver<TSource> Scan<TSource>(IAsyncObserver<TSource> observer, Func<TSource, TSource, Task<TSource>> func)
@@ -106,7 +134,26 @@ namespace System.Reactive.Linq
             if (func == null)
                 throw new ArgumentNullException(nameof(func));
 
-            return Scan<TSource, TResult>(observer, seed, (a, x) => Task.FromResult(func(a, x)));
+            var value = seed;
+
+            return Create<TSource>(
+                async x =>
+                {
+                    try
+                    {
+                        value = func(value, x);
+                    }
+                    catch (Exception ex)
+                    {
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                        return;
+                    }
+
+                    await observer.OnNextAsync(value).ConfigureAwait(false);
+                },
+                observer.OnErrorAsync,
+                observer.OnCompletedAsync
+            );
         }
 
         public static IAsyncObserver<TSource> Scan<TSource, TResult>(IAsyncObserver<TResult> observer, TResult seed, Func<TResult, TSource, Task<TResult>> func)
