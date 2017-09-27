@@ -7,23 +7,48 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Joins
 {
-    internal sealed class AsyncPlan<TSource1, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TResult> : AsyncPlanBase<TSource1, TResult>
     {
-        public AsyncPattern<TSource1> Expression { get; }
-
-        public Func<TSource1, TResult> Selector { get; }
+        private readonly Func<TSource1, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1> expression, Func<TSource1, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1) => Task.FromResult(_selector(arg1));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TResult> : AsyncPlanBase<TSource1, TResult>
+    {
+        private readonly Func<TSource1, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1> expression, Func<TSource1, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1) => _selector(arg1);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1>);
 
@@ -35,7 +60,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1);
+                        res = await EvalAsync(arg1).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -58,24 +83,49 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TResult> : AsyncPlanBase<TSource1, TSource2, TResult>
     {
-        public AsyncPattern<TSource1, TSource2> Expression { get; }
-
-        public Func<TSource1, TSource2, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2> expression, Func<TSource1, TSource2, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => Task.FromResult(_selector(arg1, arg2));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TResult> : AsyncPlanBase<TSource1, TSource2, TResult>
+    {
+        private readonly Func<TSource1, TSource2, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2> expression, Func<TSource1, TSource2, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2) => _selector(arg1, arg2);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2>);
 
@@ -88,7 +138,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2);
+                        res = await EvalAsync(arg1, arg2).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -113,25 +163,50 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3> expression, Func<TSource1, TSource2, TSource3, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => Task.FromResult(_selector(arg1, arg2, arg3));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3> expression, Func<TSource1, TSource2, TSource3, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3) => _selector(arg1, arg2, arg3);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3>);
 
@@ -145,7 +220,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3);
+                        res = await EvalAsync(arg1, arg2, arg3).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -172,26 +247,51 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4> expression, Func<TSource1, TSource2, TSource3, TSource4, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => Task.FromResult(_selector(arg1, arg2, arg3, arg4));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4> expression, Func<TSource1, TSource2, TSource3, TSource4, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4) => _selector(arg1, arg2, arg3, arg4);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4>);
 
@@ -206,7 +306,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -235,27 +335,52 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5) => _selector(arg1, arg2, arg3, arg4, arg5);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5>);
 
@@ -271,7 +396,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -302,28 +427,53 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6) => _selector(arg1, arg2, arg3, arg4, arg5, arg6);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6>);
 
@@ -340,7 +490,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -373,29 +523,54 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7>);
 
@@ -413,7 +588,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -448,30 +623,55 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8>);
 
@@ -490,7 +690,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -527,31 +727,56 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9>);
 
@@ -571,7 +796,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -610,32 +835,57 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10>);
 
@@ -656,7 +906,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -697,33 +947,58 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11>);
 
@@ -745,7 +1020,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -788,34 +1063,59 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
-            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, this.Expression.Source12, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
+            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, _expression.Source12, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12>);
 
@@ -838,7 +1138,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -883,35 +1183,60 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
-            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, this.Expression.Source12, onError);
-            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, this.Expression.Source13, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
+            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, _expression.Source12, onError);
+            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, _expression.Source13, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13>);
 
@@ -935,7 +1260,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -982,36 +1307,61 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
-            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, this.Expression.Source12, onError);
-            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, this.Expression.Source13, onError);
-            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, this.Expression.Source14, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
+            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, _expression.Source12, onError);
+            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, _expression.Source13, onError);
+            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, _expression.Source14, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14>);
 
@@ -1036,7 +1386,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -1085,37 +1435,62 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
-            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, this.Expression.Source12, onError);
-            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, this.Expression.Source13, onError);
-            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, this.Expression.Source14, onError);
-            var joinObserver15 = AsyncPlan<TResult>.CreateObserver<TSource15>(externalSubscriptions, this.Expression.Source15, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
+            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, _expression.Source12, onError);
+            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, _expression.Source13, onError);
+            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, _expression.Source14, onError);
+            var joinObserver15 = AsyncPlan<TResult>.CreateObserver<TSource15>(externalSubscriptions, _expression.Source15, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15>);
 
@@ -1141,7 +1516,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -1192,38 +1567,63 @@ namespace System.Reactive.Joins
         }
     }
 
-    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>
     {
-        public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> Expression { get; }
-
-        public Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> Selector { get; }
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => Task.FromResult(_selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16));
+    }
+
+    internal sealed class AsyncPlanWithTask<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult>
+    {
+        private readonly Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> expression, Func<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16) => _selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+    }
+
+    internal abstract class AsyncPlanBase<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(TSource1 arg1, TSource2 arg2, TSource3 arg3, TSource4 arg4, TSource5 arg5, TSource6 arg6, TSource7 arg7, TSource8 arg8, TSource9 arg9, TSource10 arg10, TSource11 arg11, TSource12 arg12, TSource13 arg13, TSource14 arg14, TSource15 arg15, TSource16 arg16); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
             var onError = new Func<Exception, Task>(observer.OnErrorAsync);
 
-            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, this.Expression.Source1, onError);
-            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, this.Expression.Source2, onError);
-            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, this.Expression.Source3, onError);
-            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, this.Expression.Source4, onError);
-            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, this.Expression.Source5, onError);
-            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, this.Expression.Source6, onError);
-            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, this.Expression.Source7, onError);
-            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, this.Expression.Source8, onError);
-            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, this.Expression.Source9, onError);
-            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, this.Expression.Source10, onError);
-            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, this.Expression.Source11, onError);
-            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, this.Expression.Source12, onError);
-            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, this.Expression.Source13, onError);
-            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, this.Expression.Source14, onError);
-            var joinObserver15 = AsyncPlan<TResult>.CreateObserver<TSource15>(externalSubscriptions, this.Expression.Source15, onError);
-            var joinObserver16 = AsyncPlan<TResult>.CreateObserver<TSource16>(externalSubscriptions, this.Expression.Source16, onError);
+            var joinObserver1 = AsyncPlan<TResult>.CreateObserver<TSource1>(externalSubscriptions, _expression.Source1, onError);
+            var joinObserver2 = AsyncPlan<TResult>.CreateObserver<TSource2>(externalSubscriptions, _expression.Source2, onError);
+            var joinObserver3 = AsyncPlan<TResult>.CreateObserver<TSource3>(externalSubscriptions, _expression.Source3, onError);
+            var joinObserver4 = AsyncPlan<TResult>.CreateObserver<TSource4>(externalSubscriptions, _expression.Source4, onError);
+            var joinObserver5 = AsyncPlan<TResult>.CreateObserver<TSource5>(externalSubscriptions, _expression.Source5, onError);
+            var joinObserver6 = AsyncPlan<TResult>.CreateObserver<TSource6>(externalSubscriptions, _expression.Source6, onError);
+            var joinObserver7 = AsyncPlan<TResult>.CreateObserver<TSource7>(externalSubscriptions, _expression.Source7, onError);
+            var joinObserver8 = AsyncPlan<TResult>.CreateObserver<TSource8>(externalSubscriptions, _expression.Source8, onError);
+            var joinObserver9 = AsyncPlan<TResult>.CreateObserver<TSource9>(externalSubscriptions, _expression.Source9, onError);
+            var joinObserver10 = AsyncPlan<TResult>.CreateObserver<TSource10>(externalSubscriptions, _expression.Source10, onError);
+            var joinObserver11 = AsyncPlan<TResult>.CreateObserver<TSource11>(externalSubscriptions, _expression.Source11, onError);
+            var joinObserver12 = AsyncPlan<TResult>.CreateObserver<TSource12>(externalSubscriptions, _expression.Source12, onError);
+            var joinObserver13 = AsyncPlan<TResult>.CreateObserver<TSource13>(externalSubscriptions, _expression.Source13, onError);
+            var joinObserver14 = AsyncPlan<TResult>.CreateObserver<TSource14>(externalSubscriptions, _expression.Source14, onError);
+            var joinObserver15 = AsyncPlan<TResult>.CreateObserver<TSource15>(externalSubscriptions, _expression.Source15, onError);
+            var joinObserver16 = AsyncPlan<TResult>.CreateObserver<TSource16>(externalSubscriptions, _expression.Source16, onError);
 
             var activePlan = default(ActiveAsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16>);
 
@@ -1250,7 +1650,7 @@ namespace System.Reactive.Joins
 
                     try
                     {
-                        res = Selector(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+                        res = await EvalAsync(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {

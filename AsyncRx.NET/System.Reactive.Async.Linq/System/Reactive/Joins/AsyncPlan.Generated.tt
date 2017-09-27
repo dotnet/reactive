@@ -19,18 +19,44 @@ for (var i = 1; i <= 16; i++)
     var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "TSource" + j));
     var args = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<TSource" + j + "> source" + j));
     var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+    var evalPars = string.Join(", ", Enumerable.Range(1, i).Select(j => "TSource" + j + " arg" + j));
 #>
-    internal sealed class AsyncPlan<<#=genArgs#>, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<<#=genArgs#>, TResult> : AsyncPlanBase<<#=genArgs#>, TResult>
     {
-        public AsyncPattern<<#=genArgs#>> Expression { get; }
-
-        public Func<<#=genArgs#>, TResult> Selector { get; }
+        private readonly Func<<#=genArgs#>, TResult> _selector;
 
         internal AsyncPlan(AsyncPattern<<#=genArgs#>> expression, Func<<#=genArgs#>, TResult> selector)
+            : base(expression)
         {
-            Expression = expression;
-            Selector = selector;
+            _selector = selector;
         }
+
+        protected override Task<TResult> EvalAsync(<#=evalPars#>) => Task.FromResult(_selector(<#=pars#>));
+    }
+
+    internal sealed class AsyncPlanWithTask<<#=genArgs#>, TResult> : AsyncPlanBase<<#=genArgs#>, TResult>
+    {
+        private readonly Func<<#=genArgs#>, Task<TResult>> _selector;
+
+        internal AsyncPlanWithTask(AsyncPattern<<#=genArgs#>> expression, Func<<#=genArgs#>, Task<TResult>> selector)
+            : base(expression)
+        {
+            _selector = selector;
+        }
+
+        protected override Task<TResult> EvalAsync(<#=evalPars#>) => _selector(<#=pars#>);
+    }
+
+    internal abstract class AsyncPlanBase<<#=genArgs#>, TResult> : AsyncPlan<TResult>
+    {
+        private readonly AsyncPattern<<#=genArgs#>> _expression;
+
+        internal AsyncPlanBase(AsyncPattern<<#=genArgs#>> expression)
+        {
+            _expression = expression;
+        }
+
+        protected abstract Task<TResult> EvalAsync(<#=evalPars#>); // REVIEW: Consider the use of ValueTask<TResult>.
 
         internal override ActiveAsyncPlan Activate(Dictionary<object, IAsyncJoinObserver> externalSubscriptions, IAsyncObserver<TResult> observer, Func<ActiveAsyncPlan, Task> deactivate)
         {
@@ -40,7 +66,7 @@ for (var i = 1; i <= 16; i++)
 for (var j = 1; j <= i; j++)
 {
 #>
-            var joinObserver<#=j#> = AsyncPlan<TResult>.CreateObserver<TSource<#=j#>>(externalSubscriptions, this.Expression.Source<#=j#>, onError);
+            var joinObserver<#=j#> = AsyncPlan<TResult>.CreateObserver<TSource<#=j#>>(externalSubscriptions, _expression.Source<#=j#>, onError);
 <#
 }
 #>
@@ -62,7 +88,7 @@ for (var j = 1; j <= i; j++)
 
                     try
                     {
-                        res = Selector(<#=pars#>);
+                        res = await EvalAsync(<#=pars#>).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {

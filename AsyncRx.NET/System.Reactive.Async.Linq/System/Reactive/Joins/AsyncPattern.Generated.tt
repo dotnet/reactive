@@ -8,6 +8,8 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+using System.Threading.Tasks;
+
 namespace System.Reactive.Joins
 {
 <#
@@ -45,6 +47,14 @@ for (var j = 1; j <= i; j++)
                 throw new ArgumentNullException(nameof(selector));
 
             return new AsyncPlan<<#=genArgs#>, TResult>(this, selector);
+        }
+
+        public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, Task<TResult>> selector)
+        {
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return new AsyncPlanWithTask<<#=genArgs#>, TResult>(this, selector);
         }
     }
 
