@@ -143,6 +143,8 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
+            return CoreAsync();
+
             async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 var gate = new AsyncLock();
@@ -231,8 +233,6 @@ namespace System.Reactive.Linq
 
                 return (sink, d);
             }
-
-            return CoreAsync();
         }
     }
 }
