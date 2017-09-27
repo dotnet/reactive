@@ -23,12 +23,6 @@ namespace ApiCompare
 
                 "Subscribe",  // Trivially renamed to SubscribeAsync.
 
-                "If",       // Postponing imperative operators.
-                "DoWhile",  // Postponing imperative operators.
-                "Case",     // Postponing imperative operators.
-                "For",      // Postponing imperative operators.
-                "While",    // Postponing imperative operators.
-
                 "Collect",        // Postponing push-to-pull adapters.
                 "Chunkify",       // Postponing push-to-pull adapters.
                 "GetEnumerator",  // Postponing push-to-pull adapters.
