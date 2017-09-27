@@ -22,7 +22,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Create< Notification<TSource>>(
+            return Create<Notification<TSource>>(
                 n => n.AcceptAsync(observer),
                 observer.OnErrorAsync,
                 observer.OnCompletedAsync
