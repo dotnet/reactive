@@ -43,14 +43,16 @@ namespace System.Reactive.Linq
 
             return scheduler.ScheduleAsync(async ct =>
             {
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 for (int i = start, end = start + count - 1; i <= end && !ct.IsCancellationRequested; i++)
                 {
                     await observer.OnNextAsync(i).RendezVous(scheduler, ct);
                 }
 
-                ct.ThrowIfCancellationRequested();
+                if (ct.IsCancellationRequested)
+                    return;
 
                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
             });
