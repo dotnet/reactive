@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
-    // TODO: Add overloads with DateTimeeOffset and with duration selector.
+    // TODO: Add overloads with DateTimeOffset and with duration selector.
 
     partial class AsyncObservable
     {
