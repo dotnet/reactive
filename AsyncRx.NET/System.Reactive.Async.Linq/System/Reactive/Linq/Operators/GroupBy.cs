@@ -265,7 +265,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
             if (subscription == null)
-                    throw new ArgumentNullException(nameof(subscription));
+                throw new ArgumentNullException(nameof(subscription));
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
             if (capacity < 0)
