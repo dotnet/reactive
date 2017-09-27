@@ -537,12 +537,12 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return Core();
+            return CoreAsync();
 
             // REVIEW: Concurrent execution of a duration callback and an event could lead to an OnNext call being queued in an AsyncLockObserver
             //         after a duration callback makes an OnCompleted call. This seems to be the case in sync Rx as well.
 
-            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> Core()
+            async Task<(IAsyncObserver<TSource>, IAsyncDisposable)> CoreAsync()
             {
                 var d = new CompositeAsyncDisposable();
 

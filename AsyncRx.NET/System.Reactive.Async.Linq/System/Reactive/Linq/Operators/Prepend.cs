@@ -88,9 +88,9 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncObserver<TSource>> Core()
+            async Task<IAsyncObserver<TSource>> CoreAsync()
             {
                 await observer.OnNextAsync(value).ConfigureAwait(false);
 
@@ -107,9 +107,9 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncDisposable> Core()
+            async Task<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
@@ -138,9 +138,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncObserver<TSource>> Core()
+            async Task<IAsyncObserver<TSource>> CoreAsync()
             {
                 foreach (var value in values)
                 {
@@ -162,9 +162,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncDisposable> Core()
+            async Task<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
@@ -196,9 +196,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncObserver<TSource>> Core()
+            async Task<IAsyncObserver<TSource>> CoreAsync()
             {
                 foreach (var value in values)
                 {
@@ -220,9 +220,9 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return Core();
+            return CoreAsync();
 
-            async Task<IAsyncDisposable> Core()
+            async Task<IAsyncDisposable> CoreAsync()
             {
                 var subscription = new SingleAssignmentAsyncDisposable();
 
