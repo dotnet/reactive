@@ -21,8 +21,10 @@ namespace System.Reactive.Linq
             {
                 var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer);
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver);
+                // REVIEW: Consider concurrent subscriptions.
+
+                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
             });
@@ -41,8 +43,10 @@ namespace System.Reactive.Linq
             {
                 var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, resultSelector);
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver);
+                // REVIEW: Consider concurrent subscriptions.
+
+                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
             });
@@ -61,8 +65,10 @@ namespace System.Reactive.Linq
             {
                 var (firstObserver, secondObserver) = AsyncObserver.WithLatestFrom(observer, resultSelector);
 
-                var firstSubscription = await first.SubscribeSafeAsync(firstObserver);
-                var secondSubscription = await second.SubscribeSafeAsync(secondObserver);
+                // REVIEW: Consider concurrent subscriptions.
+
+                var firstSubscription = await first.SubscribeSafeAsync(firstObserver).ConfigureAwait(false);
+                var secondSubscription = await second.SubscribeSafeAsync(secondObserver).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(firstSubscription, secondSubscription);
             });

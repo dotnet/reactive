@@ -111,7 +111,7 @@ namespace System.Reactive.Linq
                     {
                         var handler = new Action<TEventArgs>(async e =>
                         {
-                            await observer.OnNextAsync(e);
+                            await observer.OnNextAsync(e).ConfigureAwait(false);
                         });
 
                         var converted = conversion(handler);

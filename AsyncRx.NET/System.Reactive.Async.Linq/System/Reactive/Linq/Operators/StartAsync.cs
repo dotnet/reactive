@@ -58,7 +58,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer);
+                var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(cancel, subscription);
             });
@@ -111,7 +111,7 @@ namespace System.Reactive.Linq
 
             return Create<Unit>(async observer =>
             {
-                var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer);
+                var subscription = await task.ToAsyncObservable(scheduler).SubscribeAsync(observer).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(cancel, subscription);
             });

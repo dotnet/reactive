@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration);
+                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration);
+                var (sourceObserver, timer) = await AsyncObserver.Take(observer, duration).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
                             {
                                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             }
-                        }, duration)
+                        }, duration).ConfigureAwait(false)
                     );
             }
         }

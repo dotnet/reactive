@@ -25,6 +25,8 @@ namespace System.Reactive.Linq
                 var sourceTask = source.SubscribeSafeAsync(sourceObserver);
                 var untilTask = until.SubscribeSafeAsync(untilObserver);
 
+                // REVIEW: Consider concurrent subscriptions.
+
                 var d1 = await sourceTask.ConfigureAwait(false);
                 var d2 = await untilTask.ConfigureAwait(false);
 
@@ -41,7 +43,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime);
+                var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -60,7 +62,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime, scheduler);
+                var (sourceObserver, timer) = await AsyncObserver.TakeUntil(observer, endTime, scheduler).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -152,7 +154,7 @@ namespace System.Reactive.Linq
                             {
                                 await observer.OnCompletedAsync().RendezVous(scheduler, ct);
                             }
-                        }, endTime)
+                        }, endTime).ConfigureAwait(false)
                     );
             }
         }

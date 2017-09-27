@@ -299,7 +299,7 @@ namespace System.Reactive.Linq
 
                         await scheduler.Delay(timeSpan, ct).RendezVous(scheduler, ct);
                     }
-                }, timeSpan);
+                }, timeSpan).ConfigureAwait(false);
 
                 await d.AddAsync(timer).ConfigureAwait(false);
 
@@ -435,7 +435,7 @@ namespace System.Reactive.Linq
 
                         await scheduler.Delay(GetNextDue(), ct).RendezVous(scheduler, ct);
                     }
-                }, GetNextDue());
+                }, GetNextDue()).ConfigureAwait(false);
 
                 await inner.AssignAsync(task).ConfigureAwait(false);
             }
@@ -538,7 +538,7 @@ namespace System.Reactive.Linq
                     }
 
                     await CreateTimer(newWindow).RendezVous(scheduler, ct);
-                }, timeSpan);
+                }, timeSpan).ConfigureAwait(false);
 
                 await inner.AssignAsync(task).ConfigureAwait(false);
             }
@@ -558,7 +558,7 @@ namespace System.Reactive.Linq
                 await d.AddAsync(subscription).ConfigureAwait(false);
                 await d.AddAsync(timer).ConfigureAwait(false);
 
-                var w = await CreateWindowAsync();
+                var w = await CreateWindowAsync().ConfigureAwait(false);
                 await CreateTimer(w).ConfigureAwait(false);
 
                 return

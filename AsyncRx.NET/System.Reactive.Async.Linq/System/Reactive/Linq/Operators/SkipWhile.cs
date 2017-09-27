@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
                     {
                         try
                         {
-                            open = !await predicate(x);
+                            open = !await predicate(x).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {
@@ -174,7 +174,7 @@ namespace System.Reactive.Linq
                     {
                         try
                         {
-                            open = !await predicate(x, checked(i++));
+                            open = !await predicate(x, checked(i++)).ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {

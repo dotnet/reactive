@@ -42,7 +42,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration);
+                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq
 
             return Create<TSource>(async observer =>
             {
-                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration);
+                var (sourceObserver, timer) = await AsyncObserver.Skip(observer, duration).ConfigureAwait(false);
 
                 var subscription = await source.SubscribeSafeAsync(sourceObserver).ConfigureAwait(false);
 
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq
                             {
                                 open = true;
                             }
-                        }, duration)
+                        }, duration).ConfigureAwait(false)
                     );
             }
         }

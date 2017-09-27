@@ -30,7 +30,7 @@ namespace System.Reactive.Linq
             {
                 try
                 {
-                    return await source.SubscribeAsync(observer);
+                    return await source.SubscribeAsync(observer).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

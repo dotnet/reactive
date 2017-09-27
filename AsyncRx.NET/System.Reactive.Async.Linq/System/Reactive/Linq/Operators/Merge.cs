@@ -21,7 +21,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, cancel) = AsyncObserver.Merge(observer);
 
-                var subscription = await source.SubscribeSafeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, cancel);
             });
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq
             {
                 using (await gate.LockAsync().ConfigureAwait(false))
                 {
-                    await observer.OnErrorAsync(ex);
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
                 }
             };
 

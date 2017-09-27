@@ -98,7 +98,7 @@ namespace System.Reactive.Linq
                         }
                         catch (Exception ex)
                         {
-                            await OnErrorAsync(ex);
+                            await OnErrorAsync(ex).ConfigureAwait(false);
                             return;
                         }
 
@@ -141,7 +141,7 @@ namespace System.Reactive.Linq
                                     }
                                     catch (Exception ex)
                                     {
-                                        await OnErrorAsync(ex);
+                                        await OnErrorAsync(ex).ConfigureAwait(false);
                                         return;
                                     }
 
@@ -229,7 +229,7 @@ namespace System.Reactive.Linq
                                     }
                                     catch (Exception ex)
                                     {
-                                        await OnErrorAsync(ex);
+                                        await OnErrorAsync(ex).ConfigureAwait(false);
                                         return;
                                     }
 

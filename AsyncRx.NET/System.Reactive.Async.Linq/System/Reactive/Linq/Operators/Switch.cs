@@ -18,7 +18,7 @@ namespace System.Reactive.Linq
             {
                 var (sink, cancel) = AsyncObserver.Switch(observer);
 
-                var subscription = await source.SubscribeSafeAsync(sink);
+                var subscription = await source.SubscribeSafeAsync(sink).ConfigureAwait(false);
 
                 return StableCompositeAsyncDisposable.Create(subscription, cancel);
             });

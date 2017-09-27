@@ -26,7 +26,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex);
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
                     return AsyncDisposable.Nop;
                 }
 
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
                 {
                     using (resource)
                     {
-                        await observer.OnErrorAsync(ex);
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                         return AsyncDisposable.Nop;
                     }
                 }
@@ -73,7 +73,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex);
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
                     return AsyncDisposable.Nop;
                 }
 
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq
                 {
                     using (resource)
                     {
-                        await observer.OnErrorAsync(ex);
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                         return AsyncDisposable.Nop;
                     }
                 }
@@ -120,7 +120,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex);
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
                     return AsyncDisposable.Nop;
                 }
 
@@ -133,7 +133,7 @@ namespace System.Reactive.Linq
                 {
                     try
                     {
-                        await observer.OnErrorAsync(ex);
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                         return AsyncDisposable.Nop;
                     }
                     finally
@@ -175,7 +175,7 @@ namespace System.Reactive.Linq
                 }
                 catch (Exception ex)
                 {
-                    await observer.OnErrorAsync(ex);
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
                     return AsyncDisposable.Nop;
                 }
 
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq
                 {
                     try
                     {
-                        await observer.OnErrorAsync(ex);
+                        await observer.OnErrorAsync(ex).ConfigureAwait(false);
                         return AsyncDisposable.Nop;
                     }
                     finally

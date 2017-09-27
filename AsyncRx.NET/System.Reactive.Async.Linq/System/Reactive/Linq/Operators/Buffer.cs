@@ -325,7 +325,7 @@ namespace System.Reactive.Linq
 
                         await scheduler.Delay(timeSpan, ct).RendezVous(scheduler, ct);
                     }
-                }, timeSpan);
+                }, timeSpan).ConfigureAwait(false);
 
                 return (sink, timer);
             };
@@ -456,7 +456,7 @@ namespace System.Reactive.Linq
 
                         await scheduler.Delay(GetNextDue(), ct).RendezVous(scheduler, ct);
                     }
-                }, GetNextDue());
+                }, GetNextDue()).ConfigureAwait(false);
 
                 return (sink, timer);
             };
@@ -498,7 +498,7 @@ namespace System.Reactive.Linq
                                 await FlushAsync().ConfigureAwait(false);
                             }
                         }
-                    }, timeSpan);
+                    }, timeSpan).ConfigureAwait(false);
 
                     await timer.AssignAsync(d).ConfigureAwait(false);
                 }
