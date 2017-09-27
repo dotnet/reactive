@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace System.Reactive
 {
-    internal sealed class AsyncLockObserver<T> : AsyncObserverBase<T>
+    internal sealed class AsyncQueueLockAsyncObserver<T> : AsyncObserverBase<T>
     {
         private readonly AsyncQueueLock _gate = new AsyncQueueLock();
         private readonly IAsyncObserver<T> _observer;
 
-        public AsyncLockObserver(IAsyncObserver<T> observer)
+        public AsyncQueueLockAsyncObserver(IAsyncObserver<T> observer)
         {
             _observer = observer;
         }

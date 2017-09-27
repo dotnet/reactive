@@ -619,7 +619,7 @@ namespace System.Reactive.Linq
                                         if (nullGroup == null)
                                         {
                                             var subject = new SequentialSimpleAsyncSubject<TElement>();
-                                            nullGroup = AsyncSubject.Create(new AsyncLockObserver<TElement>(subject), subject);
+                                            nullGroup = AsyncSubject.Create(new AsyncQueueLockAsyncObserver<TElement>(subject), subject);
                                             shouldEmit = true;
                                         }
                                     }
@@ -633,7 +633,7 @@ namespace System.Reactive.Linq
                                         if (!groups.TryGetValue(key, out group))
                                         {
                                             var subject = new SequentialSimpleAsyncSubject<TElement>();
-                                            group = AsyncSubject.Create(new AsyncLockObserver<TElement>(subject), subject);
+                                            group = AsyncSubject.Create(new AsyncQueueLockAsyncObserver<TElement>(subject), subject);
 
                                             if (groups.TryAdd(key, group))
                                             {
