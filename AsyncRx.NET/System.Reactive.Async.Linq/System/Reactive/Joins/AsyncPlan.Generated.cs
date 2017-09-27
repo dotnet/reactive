@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Reactive.Joins
 {
-    public class AsyncPlan<TSource1, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1> Expression { get; }
 
@@ -58,7 +58,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2> Expression { get; }
 
@@ -113,7 +113,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3> Expression { get; }
 
@@ -172,7 +172,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4> Expression { get; }
 
@@ -235,7 +235,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5> Expression { get; }
 
@@ -302,7 +302,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6> Expression { get; }
 
@@ -373,7 +373,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7> Expression { get; }
 
@@ -448,7 +448,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8> Expression { get; }
 
@@ -527,7 +527,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9> Expression { get; }
 
@@ -610,7 +610,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10> Expression { get; }
 
@@ -697,7 +697,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11> Expression { get; }
 
@@ -788,7 +788,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12> Expression { get; }
 
@@ -883,7 +883,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13> Expression { get; }
 
@@ -982,7 +982,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14> Expression { get; }
 
@@ -1085,7 +1085,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15> Expression { get; }
 
@@ -1192,7 +1192,7 @@ namespace System.Reactive.Joins
         }
     }
 
-    public class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<TSource1, TSource2, TSource3, TSource4, TSource5, TSource6, TSource7, TSource8, TSource9, TSource10, TSource11, TSource12, TSource13, TSource14, TSource15, TSource16> Expression { get; }
 

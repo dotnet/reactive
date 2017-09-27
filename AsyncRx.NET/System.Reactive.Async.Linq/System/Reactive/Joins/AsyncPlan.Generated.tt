@@ -20,7 +20,7 @@ for (var i = 1; i <= 16; i++)
     var args = string.Join(", ", Enumerable.Range(1, i).Select(j => "IObservable<TSource" + j + "> source" + j));
     var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
 #>
-    public class AsyncPlan<<#=genArgs#>, TResult> : AsyncPlan<TResult>
+    internal sealed class AsyncPlan<<#=genArgs#>, TResult> : AsyncPlan<TResult>
     {
         public AsyncPattern<<#=genArgs#>> Expression { get; }
 
