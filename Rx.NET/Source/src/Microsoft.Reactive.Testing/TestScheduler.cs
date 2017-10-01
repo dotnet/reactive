@@ -63,6 +63,64 @@ namespace Microsoft.Reactive.Testing
         }
 
         /// <summary>
+        /// Schedules the given sequence. Uses the specified virtual times to invoke the factory function, subscribe to the resulting sequence, and dispose the subscription.
+        /// </summary>
+        /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
+        /// <param name="create">Factory method to create an observable sequence.</param>
+        /// <param name="created">Virtual time at which to invoke the factory to create an observable sequence.</param>
+        /// <param name="subscribed">Virtual time at which to subscribe to the created observable sequence.</param>
+        /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
+        /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
+        public ITestableObserver<T> Schedule<T>(Func<IObservable<T>> create, long created, long subscribed, long disposed)
+        {
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
+
+            var source = default(IObservable<T>);
+            var subscription = default(IDisposable);
+            var observer = CreateObserver<T>();
+
+            ScheduleAbsolute(default(object), created, (scheduler, state) => { source = create(); return Disposable.Empty; });
+            ScheduleAbsolute(default(object), subscribed, (scheduler, state) => { subscription = source.Subscribe(observer); return Disposable.Empty; });
+            ScheduleAbsolute(default(object), disposed, (scheduler, state) => { subscription.Dispose(); return Disposable.Empty; });
+
+            return observer;
+        }
+
+        /// <summary>
+        /// Schedules the given sequence. Uses the specified virtual time to dispose the subscription to the sequence obtained through the factory function.
+        /// Default virtual times are used for <see cref="ReactiveTest.Created">factory invocation</see> and <see cref="ReactiveTest.Subscribed">sequence subscription</see>.
+        /// </summary>
+        /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
+        /// <param name="create">Factory method to create an observable sequence.</param>
+        /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
+        /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
+        public ITestableObserver<T> Schedule<T>(Func<IObservable<T>> create, long disposed)
+        {
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
+
+            return Schedule(create, ReactiveTest.Created, ReactiveTest.Subscribed, disposed);
+        }
+
+        /// <summary>
+        /// Schedules the given sequence. Uses default virtual times to <see cref="ReactiveTest.Created">invoke the factory function</see>, to <see cref="ReactiveTest.Subscribed">subscribe to the resulting sequence</see>, and to <see cref="ReactiveTest.Disposed">dispose the subscription</see>.
+        /// </summary>
+        /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
+        /// <param name="create">Factory method to create an observable sequence.</param>
+        /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
+        public ITestableObserver<T> Schedule<T>(Func<IObservable<T>> create)
+        {
+            if (create == null)
+                throw new ArgumentNullException(nameof(create));
+
+            return Schedule(create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
+        }
+
+        /// <summary>
         /// Starts the test scheduler and uses the specified virtual times to invoke the factory function, subscribe to the resulting sequence, and dispose the subscription.
         /// </summary>
         /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
@@ -77,16 +135,8 @@ namespace Microsoft.Reactive.Testing
             if (create == null)
                 throw new ArgumentNullException(nameof(create));
 
-            var source = default(IObservable<T>);
-            var subscription = default(IDisposable);
-            var observer = CreateObserver<T>();
-
-            ScheduleAbsolute(default(object), created, (scheduler, state) => { source = create(); return Disposable.Empty; });
-            ScheduleAbsolute(default(object), subscribed, (scheduler, state) => { subscription = source.Subscribe(observer); return Disposable.Empty; });
-            ScheduleAbsolute(default(object), disposed, (scheduler, state) => { subscription.Dispose(); return Disposable.Empty; });
-
+            var observer = Schedule(create, created, subscribed, disposed);
             Start();
-
             return observer;
         }
 

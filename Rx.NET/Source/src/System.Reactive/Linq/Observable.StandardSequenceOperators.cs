@@ -709,6 +709,27 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + Partition +
+
+        /// <summary>
+        /// Partitions an observable sequence into a pair of sequences based on the specified predicate. A subscription will be opened on the source sequence once both partitions have at least one subscription. The source subscription will be closed once all partition subscriptions have been closed.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">The observable sequence that contains the elements to be partitioned.</param>
+        /// <returns>A pair of observable sequences. The first sequence contains the elements from the input sequence for which the predicate returned true. The second sequence contains the elements for which the predicate returned false.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
+        public static Tuple<IObservable<TSource>, IObservable<TSource>> Partition<TSource>(this IObservable<TSource> source, Func<TSource, bool> predicate)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+
+            return s_impl.Partition(source, predicate);
+        }
+
+        #endregion
+
         #region + Select +
 
         /// <summary>
