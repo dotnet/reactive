@@ -11,7 +11,7 @@ $artifacts = Join-Path $rootPath "artifacts"
 
 $signClientSettings = Join-Path (Join-Path (Get-Item $scriptPath).Parent.Parent.FullName "scripts") "SignClientSettings.json"
 $hasSignClientSecret = !([string]::IsNullOrEmpty($env:SignClientSecret))
-$signClientAppPath = Join-Path (Join-Path (Join-Path .\Packages "SignClient") "Tools") "SignClient.dll"
+$signClientAppPath = ".\packages\SignClient\tools\netcoreapp2.0\SignClient.dll"
 
 #remove any old coverage file
 md -Force $outputLocation | Out-Null
@@ -24,14 +24,14 @@ Remove-Item $outputPath -Force -Recurse
 md -Force $outputLocation | Out-Null
 
 if (!(Test-Path .\nuget.exe)) {
-    wget "https://dist.nuget.org/win-x86-commandline/v4.3.0/nuget.exe" -outfile .\nuget.exe
+    wget "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" -outfile .\nuget.exe
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.7.0 -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.9.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.37-beta -pre -outputdirectory packages
-.\nuget.exe install -excludeversion xunit.runner.console -pre -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.41 -outputdirectory packages
+.\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
 #.\nuget.exe install -excludeversion coveralls.io -outputdirectory packages
 .\nuget.exe install -excludeversion coveralls.io.dotcover -outputdirectory packages
@@ -102,7 +102,7 @@ if($hasSignClientSecret) {
   foreach ($nupkg in $nupgks) {
     Write-Host "Submitting $nupkg for signing"
 
-    dotnet $signClientAppPath 'sign' -c $signClientSettings -i $nupkg -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
+    dotnet $signClientAppPath 'sign' -c $signClientSettings -i $nupkg -r $env:SignClientUser -s $env:SignClientSecret -n 'Ix.NET' -d 'Interactive Extensions for .NET' -u 'http://reactivex.io/' 
 
     if ($LastExitCode -ne 0) { 
         Write-Host "Error signing $nupkg" -Foreground Red
