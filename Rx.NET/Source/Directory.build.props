@@ -20,20 +20,20 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.6" PrivateAssets="All" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
     <!-- Disabled until https://github.com/ctaggart/SourceLink/issues/230 is fixed  -->
-    <!--<PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.2" PrivateAssets="All" />-->
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" />
   </ItemGroup>
     
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>2.0.37-beta</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>2.0.41</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.37-beta" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4337 -->
