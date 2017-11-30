@@ -5,6 +5,7 @@
     <AssemblyTitle>Interactive Extensions - Async Library</AssemblyTitle>
     <TargetFrameworks>net45;net46;netstandard1.0;netstandard1.3</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable;Asynchronous</PackageTags>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
