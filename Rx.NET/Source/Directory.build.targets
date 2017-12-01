@@ -1,9 +1,4 @@
 <Project>
-  <!-- This has to be set in targets as the default props will overwrite -->
-  <PropertyGroup>
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-  
   <!-- This props all need to be set in targets as they depend on the values set earlier -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION</DefineConstants>
