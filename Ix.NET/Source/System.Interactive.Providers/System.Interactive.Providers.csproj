@@ -5,7 +5,6 @@
     <AssemblyTitle>Interactive Extensions - Providers Library</AssemblyTitle>
     <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
     <PackageTags>Ix;Interactive;Extensions;Enumerable</PackageTags>
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
