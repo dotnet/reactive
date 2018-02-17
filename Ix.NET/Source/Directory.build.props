@@ -32,8 +32,8 @@
 
   <!-- https://github.com/NuGet/Home/issues/4337 -->
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
-    <Import Project="$(UserProfile)\.nuget\packages\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets"
-            Condition="Exists('$(UserProfile)\.nuget\packages\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets')" />
+    <Import Project="$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets"
+            Condition="Exists('$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets')" />
   </ImportGroup>
   <Target Name="FixUpVersion"
       BeforeTargets="_GenerateRestoreProjectSpec"
