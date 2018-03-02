@@ -1,0 +1,64 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Threading.Tasks;
+
+namespace System.Reactive.Joins
+{
+<#
+for (var i = 1; i <= 16; i++)
+{
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "TSource" + j));
+    var args = string.Join(", ", Enumerable.Range(1, i).Select(j => "IAsyncObservable<TSource" + j + "> source" + j));
+#>
+    public class AsyncPattern<<#=genArgs#>> : AsyncPattern
+    {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+        internal IAsyncObservable<TSource<#=j#>> Source<#=j#> { get; }
+<#
+}
+#>
+
+        internal AsyncPattern(<#=args#>)
+        {
+<#
+for (var j = 1; j <= i; j++)
+{
+#>
+            Source<#=j#> = source<#=j#>;
+<#
+}
+#>
+        }
+
+        public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, TResult> selector)
+        {
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return new AsyncPlan<<#=genArgs#>, TResult>(this, selector);
+        }
+
+        public AsyncPlan<TResult> Then<TResult>(Func<<#=genArgs#>, Task<TResult>> selector)
+        {
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return new AsyncPlanWithTask<<#=genArgs#>, TResult>(this, selector);
+        }
+    }
+
+<#
+}
+#>
+}

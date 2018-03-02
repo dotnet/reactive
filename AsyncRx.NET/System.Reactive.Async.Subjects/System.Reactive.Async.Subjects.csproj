@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.Reactive.Async.Concurrency\System.Reactive.Async.Concurrency.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Core\System.Reactive.Async.Core.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Disposables\System.Reactive.Async.Disposables.csproj" />
+    <ProjectReference Include="..\System.Reactive.Async.Interfaces\System.Reactive.Async.Interfaces.csproj" />
+    <ProjectReference Include="..\System.Reactive.Bcl\System.Reactive.Bcl.csproj" />
+  </ItemGroup>
+
+</Project>
