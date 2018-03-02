@@ -369,9 +369,9 @@ namespace System.Reactive.Concurrency
         /// <param name="sender">Currently not used.</param>
         internal void SystemClockChanged(object sender, SystemClockChangedEventArgs args)
         {
-            lock (_gate)
+            lock (s_gate)
             {
-                lock (s_gate)
+                lock (_gate)
                 {
                     //
                     // Best-effort cancellation of short term work. A check for presence in the hash set
