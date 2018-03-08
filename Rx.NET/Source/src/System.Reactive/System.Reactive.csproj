@@ -12,6 +12,7 @@
     <EmbeddedResource Remove="Platforms\**\*.*" />
     <!-- Workaround so the files appear in VS -->
     <None Include="Platforms\**\*.*" />
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
     <ProjectReference Include="..\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj" />
     <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
     <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
