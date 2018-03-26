@@ -42,8 +42,11 @@ Write-Host "Building $packageSemVer" -Foreground Green
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
+Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
+msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
+
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /restore /t:build /m /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /t:build /m /p:Configuration=$configuration 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
