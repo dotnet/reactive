@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFrameworks>net46;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">2.0.0</RuntimeFrameworkVersion>
   </PropertyGroup>
   
   <ItemGroup>
