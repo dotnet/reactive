@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net45;net46;uap10.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
@@ -51,7 +51,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsBase" />
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
   
@@ -60,17 +59,7 @@
     <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
     <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="CombineLatest.Generated.tt" />
     <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
-    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />
-    <Compile Update="Strings_Core.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Core.resx" />
-    <Compile Update="Strings_Linq.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Linq.resx" />
-    <Compile Update="Strings_PlatformServices.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_PlatformServices.resx" />
-    <Compile Update="Strings_Providers.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_Providers.resx" />
-    <EmbeddedResource Update="Strings_Core.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Core.Designer.cs" />
-    <EmbeddedResource Update="Strings_Linq.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Linq.Designer.cs" />
-    <EmbeddedResource Update="Strings_PlatformServices.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_PlatformServices.Designer.cs" />
-    <EmbeddedResource Update="Strings_Providers.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_Providers.Designer.cs" />    
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />   
   </ItemGroup>
-
-  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   
 </Project>

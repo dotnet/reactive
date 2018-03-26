@@ -27,7 +27,7 @@ if (!(Test-Path .\nuget.exe)) {
 # get tools
 .\nuget.exe install -excludeversion SignClient -Version 0.9.0 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.41 -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.1.23 -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
@@ -42,14 +42,8 @@ Write-Host "Building $packageSemVer" -Foreground Green
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
-Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
-
-# Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
-msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
-
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /t:build /m /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /restore /t:build /m /p:Configuration=$configuration 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
@@ -67,7 +61,6 @@ msbuild "$scriptPath\src\System.Reactive.Observable.Aliases\System.Reactive.Obse
 
 msbuild "$scriptPath\facades\System.Reactive.Core\System.Reactive.Core.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 msbuild "$scriptPath\facades\System.Reactive.Experimental\System.Reactive.Experimental.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
 msbuild "$scriptPath\facades\System.Reactive.Linq\System.Reactive.Linq.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
 msbuild "$scriptPath\facades\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
 msbuild "$scriptPath\facades\System.Reactive.Providers\System.Reactive.Providers.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 

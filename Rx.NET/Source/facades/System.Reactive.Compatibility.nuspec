@@ -17,7 +17,6 @@
         <dependencies>
           <group targetFramework="netstandard1.3">
             <dependency id="System.Reactive.Core" version="$version$" />
-            <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Linq" version="$version$" />
             <dependency id="System.Reactive.PlatformServices" version="$version$" />
             <dependency id="System.Reactive.Providers" version="$version$" />
@@ -25,7 +24,6 @@
           <group targetFramework="net45">
             <dependency id="System.Reactive.Core" version="$version$" />
             <dependency id="System.Reactive.Experimental" version="$version$" />
-            <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Linq" version="$version$" />
             <dependency id="System.Reactive.PlatformServices" version="$version$" />
             <dependency id="System.Reactive.Providers" version="$version$" />
@@ -35,7 +33,6 @@
           </group>
           <group targetFramework="uap10.0">
             <dependency id="System.Reactive.Core" version="$version$" />
-            <dependency id="System.Reactive.Interfaces" version="$version$" />
             <dependency id="System.Reactive.Linq" version="$version$" />
             <dependency id="System.Reactive.PlatformServices" version="$version$" />
             <dependency id="System.Reactive.Providers" version="$version$" />

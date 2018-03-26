@@ -12,7 +12,4 @@
   <ItemGroup>    
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>  
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 </Project>
