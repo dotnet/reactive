@@ -101,7 +101,7 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
 #.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --filter `"SkipCI!=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
-dotnet test $testDirectory --no-build -c "Release" --filter "SkipCI!=true"
+dotnet test $testDirectory --no-build --no-restore -c "Release" --filter "SkipCI!=true"
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
