@@ -397,6 +397,8 @@
       <Project>{01706a0f-8a63-4fd6-af45-0bc0bed3c0d9}</Project>
       <Name>System.Reactive</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
       <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>
       <Name>Microsoft.Reactive.Testing</Name>
