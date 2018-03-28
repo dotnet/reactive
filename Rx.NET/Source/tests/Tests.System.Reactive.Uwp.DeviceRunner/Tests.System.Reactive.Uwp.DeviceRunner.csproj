@@ -90,9 +90,9 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="xunit.runner.devices" Version="2.2.0-rc1" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.8" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.devices" Version="2.3.3" />
   </ItemGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
@@ -398,6 +398,7 @@
       <Name>System.Reactive</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Name>Microsoft.Reactive.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
       <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>
