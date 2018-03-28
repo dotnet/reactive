@@ -2,7 +2,7 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
 
-$isAppVeyor = Test-Path -Path env:\APPVEYOR
+$isAppVeyor = ((Test-Path -Path env:\APPVEYOR) -Or (Test-Path -Path env:\TF_BUILD))
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
 $xUnitConsolePath = ".\packages\xunit.runner.console\tools\net452\xunit.console.exe"
@@ -100,8 +100,8 @@ $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 # OpenCover isn't working currently. So run tests on CI and coverage with JetBrains 
 
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-#.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --filter `"SkipCI!=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
-dotnet test $testDirectory --no-build --no-restore -c "Release" --filter "SkipCI!=true"
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --no-restore --filter `"SkipCI!=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
+#dotnet test $testDirectory --no-build --no-restore -c "Release" --filter "SkipCI!=true"
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
@@ -112,7 +112,7 @@ if ($LastExitCode -ne 0) {
 }
 
 # Either display or publish the results
-if ($env:CI -eq 'True')
+if ($isAppVeyor -eq 'True')
 {
   .\packages\coveralls.io.dotcover\tools\coveralls.net.exe -f -p DotCover "$outputFile"
 }
