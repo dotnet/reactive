@@ -1,0 +1,25 @@
+queue:
+  name: Hosted VS2017
+  
+steps:
+- task: BatchScript@1
+  inputs:
+    filename: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
+    arguments: -no_logo
+    modifyEnvironment: true
+  displayName: Setup Environment Variables
+    
+- task: PowerShell@1
+  inputs:
+    scriptName: 'Rx.NET/Source/build-new.ps1'
+    workingFolder: 'Rx.NET/Source'
+  env:
+    VSTS_ACCESS_TOKEN: $(System.AccessToken)
+  displayName: Build
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: artifacts
+    publishLocation: Container
+  condition: always()
