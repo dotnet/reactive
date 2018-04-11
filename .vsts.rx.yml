@@ -15,11 +15,13 @@ steps:
     workingFolder: 'Rx.NET/Source'
   env:
     VSTS_ACCESS_TOKEN: $(System.AccessToken)
+    SignClientUser: $(SignClientUser)
+    SignClientSecret: $(SignClientSecret)
   displayName: Build
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: 'Rx.NET/Source/artifacts'
     ArtifactName: artifacts
     publishLocation: Container
   condition: always()

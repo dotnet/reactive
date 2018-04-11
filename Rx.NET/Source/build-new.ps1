@@ -25,7 +25,7 @@ if (!(Test-Path .\nuget.exe)) {
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.9.0 -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.9.1 -outputdirectory packages
 .\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -version 2017.3.5 -outputdirectory packages
 .\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.1.23 -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
