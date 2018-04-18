@@ -613,19 +613,19 @@ using System.Reactive.Subjects;
 
                         WriteLine("if (provider == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"provider\");");
+                        WriteLine("throw new ArgumentNullException(nameof(provider));");
                         Outdent();
 
                         WriteLine("if (" + fParam + " == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"" + fParam + "\");");
+                        WriteLine("throw new ArgumentNullException(nameof(" + fParam + "));");
                         Outdent();
 
                         if (withScheduler)
                         {
                             WriteLine("if (scheduler == null)");
                             Indent();
-                            WriteLine("throw new ArgumentNullException(\"scheduler\");");
+                            WriteLine("throw new ArgumentNullException(nameof(scheduler));");
                             Outdent();
                         }
 
@@ -753,17 +753,17 @@ using System.Reactive.Subjects;
 
                     WriteLine("if (provider == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"provider\");");
+                    WriteLine("throw new ArgumentNullException(nameof(provider));");
                     Outdent();
 
                     WriteLine("if (begin == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"begin\");");
+                    WriteLine("throw new ArgumentNullException(nameof(begin));");
                     Outdent();
 
                     WriteLine("if (end == null)");
                     Indent();
-                    WriteLine("throw new ArgumentNullException(\"end\");");
+                    WriteLine("throw new ArgumentNullException(nameof(end));");
                     Outdent();
 
                     WriteLine("");
