@@ -155,9 +155,6 @@ namespace HomoIconize
             WriteLine(
 @"#pragma warning disable 1591
 ");
-            WriteLine(
-@"#if !NO_EXPRESSIONS
-");
 
             WriteLine(
 @"using System;
@@ -168,14 +165,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Reactive;
 using System.Reactive.Subjects;
-#if !NO_TPL
-using System.Threading.Tasks;
-#endif
-#if !NO_REMOTING
-using System.Runtime.Remoting.Lifetime;
-#endif
 ");
             WriteLine(
 @"namespace System.Reactive.Linq
@@ -509,9 +501,6 @@ using System.Runtime.Remoting.Lifetime;
 
             WriteLine(
 @"}
-");
-            WriteLine(
-@"#endif
 ");
             WriteLine(
 @"#pragma warning restore 1591
