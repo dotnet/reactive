@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -147,7 +148,7 @@ namespace HomoIconize
         {
             WriteLine(
 @"/*
- * WARNING: Auto-generated file (" + DateTime.Now + @")
+ * WARNING: Auto-generated file (" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + @")
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 ");
