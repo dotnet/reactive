@@ -97,7 +97,7 @@ namespace HomoIconize
 
             var asm = Assembly.LoadFrom(input);
             var t = asm.GetType(sourceTypeName);
-            _qbs = typeof(IQbservable<>); //asm.GetType("System.Reactive.Linq.IQbservable`1");
+            _qbs = typeof(IQbservable<>); 
 
             Console.WriteLine("Checking {0}...", output);
             var attr = File.GetAttributes(output);
@@ -205,8 +205,6 @@ using System.Reactive.Subjects;
                             where ptgtd.Name.StartsWith("Func")
                             where ptgtd.GetGenericArguments().Count() > 5
                             select pi;
-
-                //var isLargeArity = funky.Any();
 
                 var hasTask = p.Any(pa => ContainsTask(pa.ParameterType));
 
@@ -330,17 +328,6 @@ using System.Reactive.Subjects;
                     WriteLine("#if !NO_TPL", true);
                     poundIf = true;
                 }
-                //if (name == "Remotable")
-                //{
-                //    WriteLine("#if DESKTOPCLR", true);
-                //    poundIf = true;
-                //    if (nulls.Contains("lease"))
-                //        nulls.Remove("lease");
-                //}
-                //if (isLargeArity)
-                //{
-                //    WriteLine("#if !NO_LARGEARITY", true);
-                //}
 
                 var isFep = m.Name == "FromEventPattern";
                 var isGenFep = isFep && m.GetGenericArguments().Any(a => a.Name == "TEventArgs");
@@ -498,8 +485,6 @@ using System.Reactive.Subjects;
                     WriteLine("#endif", true);
                 if (isExp)
                     WriteLine("#endif", true);
-                //if (isLargeArity)
-                //    WriteLine("#endif", true);
                 WriteLine("");
             }
 
@@ -565,9 +550,6 @@ using System.Reactive.Subjects;
             {
                 for (int i = 0; i <= 16; i++)
                 {
-                    //if (i == 5)
-                    //    WriteLine("#if !NO_LARGEARITY", true);
-
                     foreach (var withScheduler in new[] { false, true })
                     {
                         var genArgs = default(string[]);
@@ -577,11 +559,6 @@ using System.Reactive.Subjects;
                             genArgs = new string[0];
                             lamPars = new string[0];
                         }
-                        //else if (i == 1)
-                        //{
-                        //    genArgs = new[] { "TSource" };
-                        //    lamPars = new[] { "t" };
-                        //}
                         else
                         {
                             genArgs = Enumerable.Range(1, i).Select(j => "TArg" + j).ToArray();
@@ -695,9 +672,6 @@ using System.Reactive.Subjects;
                         WriteLine("}");
                         WriteLine("");
                     }
-
-                    //if (i == 16)
-                    //    WriteLine("#endif", true);
                 }
             }
 
@@ -707,9 +681,6 @@ using System.Reactive.Subjects;
             {
                 for (int i = 0; i < 15; i++)
                 {
-                    //if (i == 3)
-                    //    WriteLine("#if !NO_LARGEARITY", true);
-
                     var genArgs = default(string[]);
                     var lamPars = default(string[]);
                     if (i == 0)
@@ -835,9 +806,6 @@ using System.Reactive.Subjects;
 
                     WriteLine("}");
                     WriteLine("");
-
-                    //if (i == 14)
-                    //    WriteLine("#endif", true);
                 }
             }
         }
