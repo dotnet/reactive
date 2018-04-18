@@ -181,7 +181,7 @@ using System.Reactive.Subjects;
 
             Indent();
 
-            var except = new[] { "ToAsync", "FromAsyncPattern", "And", "Then", "GetEnumerator", "get_Provider", "Wait", "ForEach", "ForEachAsync", "GetAwaiter", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "Subscribe", "AsQbservable", "AsObservable", "ToEvent", "ToEventPattern" };
+            var except = new[] { "ToAsync", "FromAsyncPattern", "And", "Then", "GetEnumerator", "get_Provider", "Wait", "ForEach", "ForEachAsync", "GetAwaiter", "RunAsync", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single", "SingleOrDefault", "Subscribe", "AsQbservable", "AsObservable", "ToEvent", "ToEventPattern" };
 
             foreach (var m in t.GetMethods(BindingFlags.Public | BindingFlags.Static).OrderBy(m => m.Name).ThenBy(m => !m.IsGenericMethod ? "" : string.Join(",", m.GetGenericArguments().Select(p => p.Name))).ThenBy(m => string.Join(",", m.GetParameters().Select(p => p.Name + ":" + p.ParameterType.FullName))).Where(m => !except.Contains(m.Name)))
             {
@@ -369,9 +369,25 @@ using System.Reactive.Subjects;
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
                         if (hasProvider)
-                            WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                            WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
-                        foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
+                        var rest = xmlDoc
+                            .Elements()
+                            .Where(e => e.Name != "summary")
+                            .Select(e =>
+                            {
+                                var att = e.Attribute("cref");
+                                if (att != null)
+                                {
+                                    e = new XElement(e);
+                                    e.Attribute("cref").SetValue(SimplyfyDocType(att.Value as string));
+                                }
+                                return e;
+
+                            })
+                            .SelectMany(e => e.ToString().Split('\n'));
+
+                        foreach (var docLine in rest)
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
                         if (requiresQueryProvider)
@@ -440,7 +456,7 @@ using System.Reactive.Subjects;
                     {
                         WriteLine("if (" + n + " == null)");
                         Indent();
-                        WriteLine("throw new ArgumentNullException(\"" + n + "\");");
+                        WriteLine("throw new ArgumentNullException(nameof(" + n + "));");
                         Outdent();
                     }
                     WriteLine("");
@@ -506,6 +522,22 @@ using System.Reactive.Subjects;
 @"#pragma warning restore 1591
 ");
 
+        }
+
+        private static IEnumerable<XElement> SimplyfyCrefAttributte(this IEnumerable<XElement> elements)
+        {
+            return elements;
+        }
+
+        private static string SimplyfyDocType(string v)
+        {
+            v = v.Replace("T:System.", "");
+            switch (v)
+            {
+                case "Double": return "double";
+                case "Decimal": return "decimal";
+            }
+            return v;
         }
 
         static bool ContainsTask(Type t)
