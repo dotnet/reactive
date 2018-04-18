@@ -19,31 +19,29 @@ namespace HomoIconize
 
             var uri = new Uri(Assembly.GetEntryAssembly().CodeBase);
 
-            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\Source");
+            var root = Path.Combine(Path.GetDirectoryName(uri.LocalPath), @"..\..\..\..\Source\src");
             if (!Directory.Exists(root))
             {
                 Console.WriteLine("Error:  Could not find directory \"" + root + "\"");
                 return;
             }
 
-            Process(root, 
-                "System.Reactive.Linq", 
-                "System.Reactive.Providers", 
-                @"Reactive\Linq\Qbservable.Generated.cs", 
-                "System.Reactive.Linq.Observable", "Qbservable", true);
+            Process(root,
+                "System.Reactive", 
+                @"System.Reactive\Linq\Qbservable.Generated.cs", 
+                "System.Reactive.Linq.Observable", "Qbservable",
+                includeAsync: true);
             Console.WriteLine();
 
             Process(root, 
-                "System.Reactive.Experimental", 
-                "System.Reactive.Experimental", 
-                @"Reactive\Linq\QbservableEx.Generated.cs", 
+                "System.Reactive", 
+                @"System.Reactive\Linq\QbservableEx.Generated.cs", 
                 "System.Reactive.Linq.ObservableEx", "QbservableEx");            
             Console.WriteLine();
 
             Process(root, 
-                "System.Reactive.Observable.Aliases", 
-                "System.Reactive.Observable.Aliases", 
-                "Qbservable.Aliases.Generated.cs",
+                "System.Reactive.Observable.Aliases",
+                @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs",
                 "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
                 includeAsync: false, createAliases: true);
             Console.WriteLine();
@@ -52,7 +50,7 @@ namespace HomoIconize
             Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false)
+        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false)
         {
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
@@ -61,28 +59,21 @@ namespace HomoIconize
                 return;
             }
 
-            var qbRoot = Path.Combine(root, targetAssembly);
-            if (!Directory.Exists(qbRoot))
-            {
-                Console.WriteLine("Error:  Could not find directory \"" + qbRoot + "\"");
-                return;
-            }
-
-            var dll = Path.Combine(rxRoot, @"..\bin\debug40\" + sourceAssembly + ".dll");
+            var dll = Path.Combine(rxRoot, @"bin\debug\net45\" + sourceAssembly + ".dll");
             if (!File.Exists(dll))
             {
                 Console.WriteLine("Error:  Could not find file \"" + dll + "\"");
                 return;
             }
 
-            var xml = Path.Combine(rxRoot, @"..\bin\debug40\" + sourceAssembly + ".xml");
+            var xml = Path.Combine(rxRoot, @"bin\debug\net45\" + sourceAssembly + ".xml");
             if (!File.Exists(xml))
             {
                 Console.WriteLine("Error:  Could not find file \"" + xml + "\"");
                 return;
             }
 
-            var qbsgen = Path.Combine(qbRoot, targetFile);
+            var qbsgen = Path.Combine(root, targetFile);
             if (!File.Exists(qbsgen))
             {
                 Console.WriteLine("Error:  Could not find file \"" + qbsgen + "\"");
