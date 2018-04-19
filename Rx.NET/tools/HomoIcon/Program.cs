@@ -352,6 +352,8 @@ using System.Reactive.Subjects;
 
                     if (xmlDoc != null)
                     {
+                        SimplyfyCrefAttributte(xmlDoc);
+
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
@@ -361,17 +363,6 @@ using System.Reactive.Subjects;
                         var rest = xmlDoc
                             .Elements()
                             .Where(e => e.Name != "summary")
-                            .Select(e =>
-                            {
-                                var att = e.Attribute("cref");
-                                if (att != null)
-                                {
-                                    e = new XElement(e);
-                                    e.Attribute("cref").SetValue(SimplyfyDocType(att.Value as string));
-                                }
-                                return e;
-
-                            })
                             .SelectMany(e => e.ToString().Split('\n'));
 
                         foreach (var docLine in rest)
@@ -509,18 +500,31 @@ using System.Reactive.Subjects;
 
         }
 
-        private static IEnumerable<XElement> SimplyfyCrefAttributte(this IEnumerable<XElement> elements)
+        private static void SimplyfyCrefAttributte(XElement parent)
         {
-            return elements;
+            foreach (var element in parent.Descendants())
+            {
+                var att = element.Attribute("cref");
+                if (att != null)
+                {
+                    element.Attribute("cref").SetValue(SimplyfyDocType(att.Value as string));
+                }
+            }
         }
 
         private static string SimplyfyDocType(string v)
         {
-            v = v.Replace("T:System.", "");
+            v = v.Replace("T:System.", "")
+                 .Replace("F:System.", "");
             switch (v)
             {
                 case "Double": return "double";
                 case "Decimal": return "decimal";
+                case "Int32": return "int";
+                case "Inte16": return "short";
+                case "Int64": return "long";
+                case "Float": return "float";
+                case "IObservable`1": return "IObservable{T}";
             }
             return v;
         }
