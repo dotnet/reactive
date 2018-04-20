@@ -472,9 +472,9 @@ using System.Reactive.Subjects;
             }
         }
 
-        private static string SimplyfyDocType(string v)
+        private static string SimplyfyDocType(string cref)
         {
-            v = v.Replace("T:System.", "")
+            var v = cref.Replace("T:System.", "")
                  .Replace("F:System.", "");
             switch (v)
             {
@@ -486,6 +486,9 @@ using System.Reactive.Subjects;
                 case "Float": return "float";
                 case "IObservable`1": return "IObservable{T}";
             }
+
+            if (v.Contains(".") || v.Contains("`"))
+                return cref;
             return v;
         }
 
