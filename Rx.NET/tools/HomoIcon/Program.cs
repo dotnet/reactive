@@ -594,10 +594,12 @@ using System.Reactive.Subjects;
 
                         if (xmlDoc != null)
                         {
+                            SimplyfyCrefAttributte(xmlDoc);
+
                             foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                                 WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
-                            WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                            WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
                             foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
                                 WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
@@ -730,10 +732,11 @@ using System.Reactive.Subjects;
 
                     if (xmlDoc != null)
                     {
+                        SimplyfyCrefAttributte(xmlDoc);
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
-                        WriteLine("/// <param name=\"provider\">Query provider used to construct the IQbservable&lt;T&gt; data source.</param>");
+                        WriteLine("/// <param name=\"provider\">Query provider used to construct the <see cref=\"IQbservable{T}\"/> data source.</param>");
 
                         foreach (var docLine in xmlDoc.Elements().Where(e => e.Name != "summary").SelectMany(e => e.ToString().Split('\n')))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
