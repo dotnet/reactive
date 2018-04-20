@@ -322,26 +322,8 @@ using System.Reactive.Subjects;
                     poundIf = true;
                 }
 
-                var isFep = m.Name == "FromEventPattern";
-                var isGenFep = isFep && m.GetGenericArguments().Any(a => a.Name == "TEventArgs");
-                var isNonGenFep = isFep && !isGenFep;
-
-                for (var r = 0; r < (isNonGenFep ? 2 : 1); r++)
                 {
                     var retStr = ret.ToString2();
-
-                    if (isNonGenFep)
-                    {
-                        if (r == 0)
-                        {
-                            WriteLine("#if !NO_EVENTARGS_CONSTRAINT", true);
-                        }
-                        else if (r == 1)
-                        {
-                            WriteLine("#else", true);
-                            retStr = retStr.Replace("EventPattern<EventArgs>", "EventPattern<object>");
-                        }
-                    }
 
                     if (xmlDoc != null)
                     {
@@ -372,28 +354,18 @@ using System.Reactive.Subjects;
                         WriteLine("[Obsolete(\"" + obsolete.Message + "\")]");
 
                     WriteLine("public static " + retStr + " " + name + g + "(" + string.Join(", ", pars) + ")");
-                    if (isGenFep)
-                    {
-                        WriteLine("#if !NO_EVENTARGS_CONSTRAINT", true);
-                        Indent();
-                        WriteLine("where TEventArgs : EventArgs");
-                        Outdent();
-                        WriteLine("#endif", true);
-                    }
-                    else
-                    {
-                        var genCons = (from a in m.GetGenericArguments()
-                                       from c in a.GetGenericParameterConstraints()
-                                       select new { a, c })
-                                      .ToList();
 
-                        if (genCons.Count > 0)
-                        {
-                            Indent();
-                            foreach (var gc in genCons)
-                                WriteLine("where " + gc.a.Name + " : " + gc.c.Name);
-                            Outdent();
-                        }
+                    var genCons = (from a in m.GetGenericArguments()
+                                   from c in a.GetGenericParameterConstraints()
+                                   select new { a, c })
+                                  .ToList();
+
+                    if (genCons.Count > 0)
+                    {
+                        Indent();
+                        foreach (var gc in genCons)
+                            WriteLine("where " + gc.a.Name + " : " + gc.c.Name);
+                        Outdent();
                     }
 
                     if (createAliases)
@@ -402,13 +374,13 @@ using System.Reactive.Subjects;
 
                         switch (name)
                         {
-                            case "Map": 
+                            case "Map":
                                 underlying = "Select";
                                 break;
                             case "FlatMap":
                                 underlying = "SelectMany";
                                 break;
-                            case "Filter": 
+                            case "Filter":
                                 underlying = "Where";
                                 break;
                         }
@@ -418,6 +390,7 @@ using System.Reactive.Subjects;
                         WriteLine("return Qbservable." + underlying + g + "(" + string.Join(", ", parNames) + ");");
                         Outdent();
                         WriteLine("}");
+                        WriteLine("");
                         continue;
                     }
 
@@ -433,10 +406,6 @@ using System.Reactive.Subjects;
                     WriteLine("");
 
                     var gArg = ret.GetGenericArguments().Single().ToString2();
-                    if (isNonGenFep && r == 1)
-                    {
-                        gArg = gArg.Replace("EventPattern<EventArgs>", "EventPattern<object>");
-                    }
 
                     WriteLine("return " + factory + ".CreateQuery<" + gArg + ">(");
                     Indent();
@@ -461,8 +430,6 @@ using System.Reactive.Subjects;
                     Outdent();
                     WriteLine("}");
 
-                    if (isNonGenFep && r == 1)
-                        WriteLine("#endif", true);
                 }
 
                 if (poundIf)
