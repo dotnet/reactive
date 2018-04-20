@@ -206,8 +206,6 @@ using System.Reactive.Subjects;
                             where ptgtd.GetGenericArguments().Count() > 5
                             select pi;
 
-                var hasTask = p.Any(pa => ContainsTask(pa.ParameterType));
-
                 var ret = m.ReturnType;
                 if (ret.IsGenericType)
                 {
@@ -321,11 +319,6 @@ using System.Reactive.Subjects;
                 if (name == "ObserveOnDispatcher" || name == "SubscribeOnDispatcher")
                 {
                     WriteLine("#if !MONO", true);
-                    poundIf = true;
-                }
-                if (isCreateAsync || hasTask)
-                {
-                    WriteLine("#if !NO_TPL", true);
                     poundIf = true;
                 }
 
