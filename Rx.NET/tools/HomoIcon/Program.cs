@@ -816,7 +816,12 @@ using System.Reactive.Subjects;
         static void WriteLine(string s, bool noIndent = false)
         {
             foreach (var t in s.Split('\n'))
-                Out.WriteLine((noIndent ? "" : new string(' ', _indent * 4)) + t.TrimEnd('\r'));
+            {
+                var indentspace = noIndent || string.IsNullOrWhiteSpace(t)
+                    ? "" 
+                    : new string(' ', _indent * 4);
+                Out.WriteLine(indentspace + t.TrimEnd('\r'));
+            }
         }
 
         static void Indent()
