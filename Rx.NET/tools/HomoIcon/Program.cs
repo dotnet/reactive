@@ -482,11 +482,11 @@ using System.Reactive.Subjects;
             switch (v)
             {
                 case "Double": return "double";
-                case "Decimal": return "decimal";
+                // case "Decimal": return "decimal";
                 case "Int32": return "int";
                 case "Inte16": return "short";
                 case "Int64": return "long";
-                case "Float": return "float";
+                // case "Single": return "float";
                 case "IObservable`1": return "IObservable{T}";
             }
 
