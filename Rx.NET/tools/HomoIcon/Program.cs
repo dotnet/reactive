@@ -159,8 +159,13 @@ namespace HomoIconize
             WriteLine(
 @"using System;
 using System.Reactive.Concurrency;
-using System.Collections.Generic;
-using System.Reactive.Joins;
+using System.Collections.Generic;");
+
+            if (exludeFromCodeCoverage)
+                WriteLine("using System.Diagnostics.CodeAnalysis;");
+
+            WriteLine(
+@"using System.Reactive.Joins;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
