@@ -31,7 +31,7 @@ namespace HomoIconize
                 "System.Reactive", 
                 @"System.Reactive\Linq\Qbservable.Generated.cs", 
                 "System.Reactive.Linq.Observable", "Qbservable",
-                includeAsync: true);
+                includeAsync: true, exludeFromCodeCoverage:true);
             Console.WriteLine();
 
             Process(root, 
@@ -44,14 +44,14 @@ namespace HomoIconize
                 "System.Reactive.Observable.Aliases",
                 @"System.Reactive.Observable.Aliases\Qbservable.Aliases.Generated.cs",
                 "System.Reactive.Observable.Aliases.QueryLanguage", "QbservableAliases",
-                includeAsync: false, createAliases: true);
+                includeAsync: false, createAliases: true, exludeFromCodeCoverage: true);
             Console.WriteLine();
 
             Console.WriteLine("Processing complete, press enter to continue.");
             Console.ReadLine();
         }
 
-        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false)
+        static void Process(string root, string sourceAssembly, string targetFile, string sourceTypeName, string targetTypeName, bool includeAsync = false, bool createAliases = false, bool exludeFromCodeCoverage = false)
         {
             var rxRoot = Path.Combine(root, sourceAssembly);
             if (!Directory.Exists(rxRoot))
@@ -81,7 +81,7 @@ namespace HomoIconize
                 return;
             }
 
-            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases);
+            Generate(dll, xml, qbsgen, sourceTypeName, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
         }
 
         // Prototype interface to break dependencies. Only used for ToString2 ultimately.
@@ -89,7 +89,7 @@ namespace HomoIconize
         {
         }
 
-        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases)
+        static void Generate(string input, string xml, string output, string sourceTypeName, string targetTypeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
         {
             var docs = XDocument.Load(xml).Root.Element("members").Elements("member").ToDictionary(m => m.Attribute("name").Value, m => m);
 
@@ -137,14 +137,14 @@ namespace HomoIconize
             {
                 using (Out = new StreamWriter(fs))
                 {
-                    Generate(t, docs, targetTypeName, includeAsync, createAliases);
+                    Generate(t, docs, targetTypeName, includeAsync, createAliases, exludeFromCodeCoverage);
                 }
             }
         }
 
         static Type _qbs;
 
-        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases)
+        static void Generate(Type t, IDictionary<string, XElement> docs, string typeName, bool includeAsync, bool createAliases, bool exludeFromCodeCoverage)
         {
             WriteLine(
 @"/*
@@ -174,6 +174,9 @@ using System.Reactive.Subjects;
 {");
 
             Indent();
+
+            if (exludeFromCodeCoverage)
+                WriteLine("[ExcludeFromCodeCoverage]");
 
             WriteLine(
 @"public static partial class " + typeName + @"
