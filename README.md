@@ -9,8 +9,7 @@ MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shi
 
 ### Join the conversation
 
-Catch us in the #rx and #ix channels over in the [.NET Slack](http://tattoocoder.com/aspnet-slack-sign-up/).
-[![.NET Slack Status](https://aspnetcoreslack.herokuapp.com/badge.svg?2)](http://tattoocoder.com/aspnet-slack-sign-up/)
+Catch us in the #rxnet channels over in at http://reactiveui.net/slack
 
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
