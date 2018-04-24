@@ -111,10 +111,8 @@ Looking for something to work on? The list of [up for grabs issues](https://gith
 
 This project has adopted a code of conduct adapted from the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community. This code of conduct has been [adopted by many other projects](http://contributor-covenant.org/adopters/). For more information see the [Code of conduct](http://www.dotnetfoundation.org/code-of-conduct).
 
-### .NET Foundation
-
-This project is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects) along with other
-projects like [the class libraries for .NET Core](https://github.com/dotnet/corefx/).
+<h2 align="center">.NET Foundation</h2>
+ReactiveUI is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects). Other projects that are associated with the foundation include the Microsoft .NET Compiler Platform ("Roslyn") as well as the Microsoft ASP.NET family of projects, Microsoft .NET Core & Xamarin Forms.
 
 <h2 align="center">Core Team</h2>
 
