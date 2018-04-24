@@ -9,7 +9,7 @@ MyGet<br>([gallery](https://dotnet.myget.org/gallery/rx)) | ![#](https://img.shi
 
 ### Join the conversation
 
-Catch us in the #rxnet channels over in at http://reactiveui.net/slack
+Catch us in the #rxnet channel over at http://reactiveui.net/slack
 
 ### Get nightly builds
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
