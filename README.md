@@ -113,7 +113,7 @@ This project has adopted a code of conduct adapted from the [Contributor Covenan
 
 <h2 align="center">.NET Foundation</h2>
 
-System.Reactive is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects). Other projects that are associated with the foundation include the Microsoft .NET Compiler Platform ("Roslyn") as well as the Microsoft ASP.NET family of projects, Microsoft .NET Core & Xamarin Forms.
+System.Reactive is part of the [.NET Foundation](https://www.dotnetfoundation.org/). Other projects that are associated with the foundation include the Microsoft .NET Compiler Platform ("Roslyn") as well as the Microsoft ASP.NET family of projects, Microsoft .NET Core & Xamarin Forms.
 
 <h2 align="center">Core Team</h2>
 
