@@ -116,6 +116,27 @@ This project has adopted a code of conduct adapted from the [Contributor Covenan
 This project is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects) along with other
 projects like [the class libraries for .NET Core](https://github.com/dotnet/corefx/).
 
+<h2 align="center">Core Team</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/ghuntley.png?s=150">
+        <br>
+        <a href="https://github.com/ghuntley">Geoffrey Huntley</a>
+        <p>Sydney, Australia</p>
+      </td>
+      <td align="center" valign="top">
+        <img width="150" height="150" src="https://github.com/onovotny.png?s=150">
+        <br>
+        <a href="https://github.com/onovotny">Oren Novotny</a>
+        <p>New York, USA</p>
+      </td>
+     </tr>
+  </tbody>
+</table>
+
 
 <h2 align="center">Sponsorship</h2>
 
