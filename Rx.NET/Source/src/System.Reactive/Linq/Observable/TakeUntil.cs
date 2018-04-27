@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -75,13 +75,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_open)
                     {
-                        _parent._observer.OnNext(value);
+                        _parent.ForwardOnNext(value);
                     }
                     else
                     {
                         lock (_parent)
                         {
-                            _parent._observer.OnNext(value);
+                            _parent.ForwardOnNext(value);
                         }
                     }
                 }
@@ -90,8 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -99,8 +98,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent)
                     {
-                        _parent._observer.OnCompleted();
-                        _parent.Dispose();
+                        _parent.ForwardOnCompleted();
                     }
                 }
             }
@@ -127,8 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent)
                     {
-                        _parent._observer.OnCompleted();
-                        _parent.Dispose();
+                        _parent.ForwardOnCompleted();
                     }
                 }
 
@@ -136,8 +133,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -187,7 +183,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly object _gate = new object();
 
@@ -207,34 +203,31 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 lock (_gate)
                 {
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

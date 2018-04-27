@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -39,8 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                     return Disposable.Empty;
                 }
 
@@ -107,8 +106,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     state.enumerator.Dispose();
 
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    ForwardOnError(ex);
                     return;
                 }
 
@@ -116,12 +114,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     state.enumerator.Dispose();
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                     return;
                 }
 
-                base._observer.OnNext(current);
+                ForwardOnNext(current);
                 recurse(state);
             }
 
@@ -146,17 +143,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (ex != null)
                     {
-                        base._observer.OnError(ex);
+                        ForwardOnError(ex);
                         break;
                     }
 
                     if (!hasNext)
                     {
-                        base._observer.OnCompleted();
+                        ForwardOnCompleted();
                         break;
                     }
 
-                    base._observer.OnNext(current);
+                    ForwardOnNext(current);
                 }
 
                 enumerator.Dispose();

@@ -27,7 +27,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -54,20 +54,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(_subscription, _loop);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _queue.Enqueue(value);
                     if (_queue.Count > _parent._count)
                         _queue.Dequeue();
                 }
 
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _subscription.Dispose();
 
@@ -82,13 +76,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_queue.Count > 0)
                     {
-                        base._observer.OnNext(_queue.Dequeue());
+                        ForwardOnNext(_queue.Dequeue());
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
 
@@ -100,11 +93,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (n == 0)
                         {
-                            base._observer.OnCompleted();
+                            ForwardOnCompleted();
                             break;
                         }
                         else
-                            base._observer.OnNext(_queue.Dequeue());
+                            ForwardOnNext(_queue.Dequeue());
 
                         n--;
                     }
@@ -133,7 +126,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -162,20 +155,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     return StableCompositeDisposable.Create(_subscription, _loop);
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var now = _watch.Elapsed;
                     _queue.Enqueue(new System.Reactive.TimeInterval<TSource>(value, now));
                     Trim(now);
                 }
 
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     _subscription.Dispose();
 
@@ -193,13 +180,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_queue.Count > 0)
                     {
-                        base._observer.OnNext(_queue.Dequeue().Value);
+                        ForwardOnNext(_queue.Dequeue().Value);
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
 
@@ -211,11 +197,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (n == 0)
                         {
-                            base._observer.OnCompleted();
+                            ForwardOnCompleted();
                             break;
                         }
                         else
-                            base._observer.OnNext(_queue.Dequeue().Value);
+                            ForwardOnNext(_queue.Dequeue().Value);
 
                         n--;
                     }

@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
@@ -68,8 +68,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnCompleted();
-                        _parent.Dispose();
+                        _parent.ForwardOnCompleted();
                     }
                 }
 
@@ -77,8 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -104,8 +102,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             lock (_parent._gate)
                             {
-                                _parent._observer.OnError(ex);
-                                _parent.Dispose();
+                                _parent.ForwardOnError(ex);
                             }
 
                             return;
@@ -113,7 +110,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(res);
+                            _parent.ForwardOnNext(res);
                         }
                     }
                 }
@@ -139,8 +136,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 

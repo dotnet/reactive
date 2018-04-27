@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private TSource _value;
                 private bool _seenValue;
@@ -31,31 +31,23 @@ namespace System.Reactive.Linq.ObservableImpl
                     _seenValue = false;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     _value = value;
                     _seenValue = true;
                 }
 
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (!_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
+                        ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                     }
                     else
                     {
-                        base._observer.OnNext(_value);
-                        base._observer.OnCompleted();
+                        ForwardOnNext(_value);
+                        ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
             }
         }
@@ -75,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
                 private TSource _value;
@@ -90,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _seenValue = false;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var b = false;
 
@@ -100,8 +92,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
@@ -112,25 +103,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     if (!_seenValue)
                     {
-                        base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
+                        ForwardOnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
                     }
                     else
                     {
-                        base._observer.OnNext(_value);
-                        base._observer.OnCompleted();
+                        ForwardOnNext(_value);
+                        ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
             }
         }

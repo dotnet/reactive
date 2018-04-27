@@ -23,16 +23,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            internal abstract class _ : Sink<TSource>, IObserver<TSource>
+            internal abstract class _ : IdentitySink<TSource>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
                 }
-
-                public abstract void OnCompleted();
-                public abstract void OnError(Exception error);
-                public abstract void OnNext(TSource value);
 
                 public abstract IDisposable Run(TParent parent);
             }
@@ -124,8 +120,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (shouldRun)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
@@ -234,20 +229,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (hasValue)
                         {
-                            base._observer.OnNext(value);
+                            ForwardOnNext(value);
                             shouldYield = true;
                         }
                         else
                         {
                             if (hasCompleted)
                             {
-                                base._observer.OnCompleted();
-                                base.Dispose();
+                                ForwardOnCompleted();
                             }
                             else if (hasFailed)
                             {
-                                base._observer.OnError(error);
-                                base.Dispose();
+                                ForwardOnError(error);
                             }
                             else if (shouldRecurse)
                             {
@@ -435,19 +428,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (hasValue)
                         {
-                            base._observer.OnNext(value);
+                            ForwardOnNext(value);
                         }
                         else
                         {
                             if (hasCompleted)
                             {
-                                base._observer.OnCompleted();
-                                base.Dispose();
+                                ForwardOnCompleted();
                             }
                             else if (hasFailed)
                             {
-                                base._observer.OnError(error);
-                                base.Dispose();
+                                ForwardOnError(error);
                             }
 
                             return;
@@ -611,7 +602,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _source = source;
             }
 
-            internal abstract class _ : Sink<TSource>, IObserver<TSource>
+            internal abstract class _ : IdentitySink<TSource>
             {
                 private readonly CompositeDisposable _delays = new CompositeDisposable();
                 private object _gate = new object();
@@ -638,7 +629,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected abstract IDisposable RunCore(TParent parent);
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var delay = default(IObservable<TDelay>);
                     try
@@ -649,8 +640,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_gate)
                         {
-                            base._observer.OnError(error);
-                            base.Dispose();
+                            ForwardOnError(error);
                         }
 
                         return;
@@ -661,16 +651,15 @@ namespace System.Reactive.Linq.ObservableImpl
                     d.Disposable = delay.SubscribeSafe(new DelayObserver(this, value, d));
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     lock (_gate)
                     {
@@ -685,8 +674,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (_atEnd && _delays.Count == 0)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
 
@@ -707,7 +695,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                             _parent._delays.Remove(_self);
                             _parent.CheckDone();
@@ -718,8 +706,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
 
@@ -727,7 +714,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         lock (_parent._gate)
                         {
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                             _parent._delays.Remove(_self);
                             _parent.CheckDone();
@@ -814,8 +801,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     public void OnError(Exception error)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
 
                     public void OnCompleted()

@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<IObservable<TSource>>
+        internal sealed class _ : Sink<IObservable<TSource>, TSource> 
         {
             private readonly object _gate = new object();
 
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(_subscription, _innerSubscription);
             }
 
-            public void OnNext(IObservable<TSource> value)
+            public override void OnNext(IObservable<TSource> value)
             {
                 var id = default(ulong);
                 lock (_gate)
@@ -62,15 +62,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 d.Disposable = value.SubscribeSafe(new InnerObserver(this, id, d));
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 lock (_gate)
-                    base._observer.OnError(error);
-
-                base.Dispose();
+                    ForwardOnError(error);
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 lock (_gate)
                 {
@@ -79,8 +77,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _isStopped = true;
                     if (!_hasLatest)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -104,7 +101,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_parent._latest == _id)
                         {
-                            _parent._observer.OnNext(value);
+                            _parent.ForwardOnNext(value);
                         }
                     }
                 }
@@ -117,8 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                         if (_parent._latest == _id)
                         {
-                            _parent._observer.OnError(error);
-                            _parent.Dispose();
+                            _parent.ForwardOnError(error);
                         }
                     }
                 }
@@ -135,8 +131,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                             if (_parent._isStopped)
                             {
-                                _parent._observer.OnCompleted();
-                                _parent.Dispose();
+                                _parent.ForwardOnCompleted();
                             }
                         }
                     }

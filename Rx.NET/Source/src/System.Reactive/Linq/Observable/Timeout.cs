@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly TimeSpan _dueTime;
                 private readonly IObservable<TSource> _other;
@@ -86,7 +86,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return Disposable.Empty;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var onNextWins = false;
 
@@ -101,12 +101,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onNextWins)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                         CreateTimer();
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     var onErrorWins = false;
 
@@ -121,12 +121,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onErrorWins)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     var onCompletedWins = false;
 
@@ -141,8 +140,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onCompletedWins)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -167,7 +165,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObservable<TSource> _other;
 
@@ -211,16 +209,16 @@ namespace System.Reactive.Linq.ObservableImpl
                         _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     lock (_gate)
                     {
                         if (!_switched)
-                            base._observer.OnNext(value);
+                            ForwardOnNext(value);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnError(Exception error)
                 {
                     var onErrorWins = false;
 
@@ -232,12 +230,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onErrorWins)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
                 }
 
-                public void OnCompleted()
+                public override void OnCompleted()
                 {
                     var onCompletedWins = false;
 
@@ -249,8 +246,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (onCompletedWins)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -276,7 +272,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, IObservable<TTimeout>> _timeoutSelector;
             private readonly IObservable<TSource> _other;
@@ -311,11 +307,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(_subscription, _timer);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnNext(value);
+                    ForwardOnNext(value);
 
                     var timeout = default(IObservable<TTimeout>);
                     try
@@ -324,8 +320,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception error)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                         return;
                     }
 
@@ -333,21 +328,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 if (ObserverWins())
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
 
@@ -385,8 +378,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (TimerWins())
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 

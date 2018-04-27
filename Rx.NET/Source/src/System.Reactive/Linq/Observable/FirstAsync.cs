@@ -19,30 +19,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 public _(IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
                 {
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
-                    base._observer.OnNext(value);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(value);
+                    ForwardOnCompleted();
                 }
 
-                public void OnError(Exception error)
+                public override void OnCompleted()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
-                    base.Dispose();
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_ELEMENTS));
                 }
             }
         }
@@ -62,7 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Func<TSource, bool> _predicate;
 
@@ -72,7 +64,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _predicate = predicate;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     var b = false;
 
@@ -82,29 +74,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                         return;
                     }
 
                     if (b)
                     {
-                        base._observer.OnNext(value);
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnNext(value);
+                        ForwardOnCompleted();
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnCompleted()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
-                    base.Dispose();
+                    ForwardOnError(new InvalidOperationException(Strings_Linq.NO_MATCHING_ELEMENTS));
                 }
             }
         }

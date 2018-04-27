@@ -33,17 +33,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 : base(observer, cancel)
             {
             }
-
-            public override void OnNext(TResult value)
-            {
-                base._observer.OnNext(value);
-            }
-
-            public override void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>> 
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;
@@ -40,7 +40,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _lookup = new Lookup<TKey, TElement>(parent._comparer);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 try
                 {
@@ -48,22 +48,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    ForwardOnError(ex);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_lookup);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_lookup);
+                ForwardOnCompleted();
             }
         }
     }
