@@ -15,14 +15,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta5-build3745" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />    
     <PackageReference Include="xunit" Version="2.4.0-beta.2.build3981" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.2.build3981" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.4.0-beta.2.build3981" />
