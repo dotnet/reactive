@@ -1,8 +1,0 @@
-﻿<ProjectConfiguration>
-  <Settings>
-    <HiddenComponentWarnings>
-      <Value>AllowPartiallyTrustedCallers</Value>
-    </HiddenComponentWarnings>
-    <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
-  </Settings>
-</ProjectConfiguration>
