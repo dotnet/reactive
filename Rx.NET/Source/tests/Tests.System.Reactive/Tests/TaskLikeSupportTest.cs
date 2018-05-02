@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Tests.System.Reactive.Tests
+namespace ReactiveTests.Tests
 {
     public class TaskLikeSupportTest
     {
