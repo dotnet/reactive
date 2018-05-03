@@ -581,6 +581,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source, int retryCount);
+        IObservable<TSource> RetryWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler);
         IObservable<TAccumulate> Scan<TSource, TAccumulate>(IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator);
         IObservable<TSource> Scan<TSource>(IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator);
         IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count);

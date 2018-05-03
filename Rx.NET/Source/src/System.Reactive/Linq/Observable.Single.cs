@@ -415,6 +415,31 @@ namespace System.Reactive.Linq
             return s_impl.Retry<TSource>(source, retryCount);
         }
 
+        /// <summary>
+        /// Retries (resubscribes to) the source observable after a failure and when the observable
+        /// returned by a handler produces an arbitrary item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TSignal">The arbitrary element type signaled by the handler observable.</typeparam>
+        /// <param name="source">Observable sequence to repeat until it successfully terminates.</param>
+        /// <param name="handler">The function that is called for each observer and takes an observable sequence of
+        /// errors. It should return an observable of arbitrary items that should signal that arbitrary item in
+        /// response to receiving the failure Exception from the source observable. If this observable signals
+        /// a terminal event, the sequence is terminated with that signal instead.</param>
+        /// <returns>An observable sequence producing the elements of the given sequence repeatedly until it terminates successfully.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        public static IObservable<TSource> RetryWhen<TSource, TSignal>(this IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            return s_impl.RetryWhen(source, handler);
+        }
+
+
         #endregion
 
         #region + Scan +
