@@ -84,6 +84,22 @@ namespace ReactiveTests.Tests
 
 
         [Fact]
+        public void RetryWhen_Observable_Handler_Throws()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var res = scheduler.Start(() =>
+                Observable.Return(1).RetryWhen<int, int>(v => { throw ex; })
+            );
+
+            res.Messages.AssertEqual(
+                OnError<int>(200, ex)
+            );
+        }
+
+        [Fact]
         public void RetryWhen_Observable_Handler_Errors()
         {
             var scheduler = new TestScheduler();

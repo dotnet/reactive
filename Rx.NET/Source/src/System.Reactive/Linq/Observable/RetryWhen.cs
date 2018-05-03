@@ -33,6 +33,10 @@ namespace System.Reactive.Linq.ObservableImpl
             try
             {
                 redo = handler(errorSignals);
+                if (redo == null)
+                {
+                    throw new NullReferenceException("The handler returned a null IObservable");
+                }
             }
             catch (Exception ex)
             {
