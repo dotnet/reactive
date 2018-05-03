@@ -10,7 +10,7 @@
   },
   "cloudBuild": {
     "buildNumber": {
-      "enabled": true
+      "enabled": false
     }
   }
 }
