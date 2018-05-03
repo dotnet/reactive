@@ -25,4 +25,4 @@ steps:
     PathtoPublish: 'Rx.NET/Source/artifacts'
     ArtifactName: artifacts
     publishLocation: Container
-  condition: always()
+  condition: eq(variables['system.pullrequest.isfork'], false)
