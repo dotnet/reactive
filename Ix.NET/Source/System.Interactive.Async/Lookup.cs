@@ -267,11 +267,13 @@ namespace System.Linq.Internal
                 }
 
                 var index = hashCode%_groupings.Length;
-                var g = new Grouping<TKey, TElement>();
-                g._key = key;
-                g._hashCode = hashCode;
-                g._elements = new TElement[1];
-                g._hashNext = _groupings[index];
+                var g = new Grouping<TKey, TElement>
+                {
+                    _key = key,
+                    _hashCode = hashCode,
+                    _elements = new TElement[1],
+                    _hashNext = _groupings[index]
+                };
                 _groupings[index] = g;
                 if (_lastGrouping == null)
                 {

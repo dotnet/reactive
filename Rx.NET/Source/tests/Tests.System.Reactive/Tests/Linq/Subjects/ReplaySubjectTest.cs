@@ -1497,13 +1497,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers()
         {
-            HasObservers(new ReplaySubject<int>());
-            HasObservers(new ReplaySubject<int>(1));
-            HasObservers(new ReplaySubject<int>(3));
-            HasObservers(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObserversImpl(new ReplaySubject<int>());
+            HasObserversImpl(new ReplaySubject<int>(1));
+            HasObserversImpl(new ReplaySubject<int>(3));
+            HasObserversImpl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers(ReplaySubject<int> s)
+        private static void HasObserversImpl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
 
@@ -1529,13 +1529,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers_Dispose1()
         {
-            HasObservers_Dispose1(new ReplaySubject<int>());
-            HasObservers_Dispose1(new ReplaySubject<int>(1));
-            HasObservers_Dispose1(new ReplaySubject<int>(3));
-            HasObservers_Dispose1(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObservers_Dispose1Impl(new ReplaySubject<int>());
+            HasObservers_Dispose1Impl(new ReplaySubject<int>(1));
+            HasObservers_Dispose1Impl(new ReplaySubject<int>(3));
+            HasObservers_Dispose1Impl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers_Dispose1(ReplaySubject<int> s)
+        private static void HasObservers_Dispose1Impl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
             Assert.False(s.IsDisposed);
@@ -1556,13 +1556,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers_Dispose2()
         {
-            HasObservers_Dispose2(new ReplaySubject<int>());
-            HasObservers_Dispose2(new ReplaySubject<int>(1));
-            HasObservers_Dispose2(new ReplaySubject<int>(3));
-            HasObservers_Dispose2(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObservers_Dispose2Impl(new ReplaySubject<int>());
+            HasObservers_Dispose2Impl(new ReplaySubject<int>(1));
+            HasObservers_Dispose2Impl(new ReplaySubject<int>(3));
+            HasObservers_Dispose2Impl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers_Dispose2(ReplaySubject<int> s)
+        private static void HasObservers_Dispose2Impl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
             Assert.False(s.IsDisposed);
@@ -1583,13 +1583,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers_Dispose3()
         {
-            HasObservers_Dispose3(new ReplaySubject<int>());
-            HasObservers_Dispose3(new ReplaySubject<int>(1));
-            HasObservers_Dispose3(new ReplaySubject<int>(3));
-            HasObservers_Dispose3(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObservers_Dispose3Impl(new ReplaySubject<int>());
+            HasObservers_Dispose3Impl(new ReplaySubject<int>(1));
+            HasObservers_Dispose3Impl(new ReplaySubject<int>(3));
+            HasObservers_Dispose3Impl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers_Dispose3(ReplaySubject<int> s)
+        private static void HasObservers_Dispose3Impl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
             Assert.False(s.IsDisposed);
@@ -1602,13 +1602,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers_OnCompleted()
         {
-            HasObservers_OnCompleted(new ReplaySubject<int>());
-            HasObservers_OnCompleted(new ReplaySubject<int>(1));
-            HasObservers_OnCompleted(new ReplaySubject<int>(3));
-            HasObservers_OnCompleted(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObservers_OnCompletedImpl(new ReplaySubject<int>());
+            HasObservers_OnCompletedImpl(new ReplaySubject<int>(1));
+            HasObservers_OnCompletedImpl(new ReplaySubject<int>(3));
+            HasObservers_OnCompletedImpl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers_OnCompleted(ReplaySubject<int> s)
+        private static void HasObservers_OnCompletedImpl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
 
@@ -1625,13 +1625,13 @@ namespace ReactiveTests.Tests
         [Fact]
         public void HasObservers_OnError()
         {
-            HasObservers_OnError(new ReplaySubject<int>());
-            HasObservers_OnError(new ReplaySubject<int>(1));
-            HasObservers_OnError(new ReplaySubject<int>(3));
-            HasObservers_OnError(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
+            HasObservers_OnErrorImpl(new ReplaySubject<int>());
+            HasObservers_OnErrorImpl(new ReplaySubject<int>(1));
+            HasObservers_OnErrorImpl(new ReplaySubject<int>(3));
+            HasObservers_OnErrorImpl(new ReplaySubject<int>(TimeSpan.FromSeconds(1)));
         }
 
-        private static void HasObservers_OnError(ReplaySubject<int> s)
+        private static void HasObservers_OnErrorImpl(ReplaySubject<int> s)
         {
             Assert.False(s.HasObservers);
 

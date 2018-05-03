@@ -23,15 +23,14 @@ namespace System.Reactive.Joins
             Dictionary<object, IJoinObserver> externalSubscriptions, IObservable<TSource> observable, Action<Exception> onError)
         {
             var observer = default(JoinObserver<TSource>);
-            var nonGeneric = default(IJoinObserver);
-            if (!externalSubscriptions.TryGetValue(observable, out nonGeneric))
+            if (!externalSubscriptions.TryGetValue(observable, out var nonGeneric))
             {
                 observer = new JoinObserver<TSource>(observable, onError);
                 externalSubscriptions.Add(observable, observer);
             }
             else
             {
-                observer = (JoinObserver<TSource>) nonGeneric;
+                observer = (JoinObserver<TSource>)nonGeneric;
             }
             return observer;
         }

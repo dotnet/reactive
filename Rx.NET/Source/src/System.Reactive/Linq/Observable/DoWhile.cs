@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class DoWhile<TSource> : Producer<TSource>, IConcatenatable<TSource>
+    internal sealed class DoWhile<TSource> : Producer<TSource, DoWhile<TSource>._>, IConcatenatable<TSource>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<bool> _condition;
@@ -17,12 +17,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(GetSources());
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+
+        protected override IDisposable Run(_ sink) => sink.Run(GetSources());
 
         public IEnumerable<IObservable<TSource>> GetSources()
         {
@@ -31,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 yield return _source;
         }
 
-        private sealed class _ : ConcatSink<TSource>
+        internal sealed class _ : ConcatSink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

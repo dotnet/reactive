@@ -6,43 +6,37 @@
     <MinClientVersion>2.12</MinClientVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <Authors>.NET Foundation and Contributors</Authors>
-    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
     <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
     <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>    
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <NoWarn>$(NoWarn);1701;1702;CS1591</NoWarn>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
-    <IncludeSymbols>false</IncludeSymbols>
     <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-    
-    <GetVersion Condition=" '$(NCrunch)' != '' ">false</GetVersion>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" /> 
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <NerdbankGitVersioningVersion>2.0.41</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0011" PrivateAssets="All" /> 
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" PrivateAssets="all" />
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(NCrunch)' == '' and '$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.1.0" PrivateAssets="All" /> 
-  </ItemGroup>
-  
-    <!-- Workaround -->
-  <Target Name="GetPackagingOutputs" />
-   <PropertyGroup>
-    <GitVersionTaskVersion>4.0.0-beta0011</GitVersionTaskVersion>
-  </PropertyGroup>
 
   <!-- https://github.com/NuGet/Home/issues/4337 -->
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
-    <Import Project="$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets"
-            Condition="Exists('$(UserProfile)\.nuget\packages\GitVersionTask\$(GitVersionTaskVersion)\buildMultiTargeting\GitVersionTask.targets')" />
+    <Import Project="$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets"
+            Condition="Exists('$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets')" />
   </ImportGroup>
-  <Target Name="FixupVersion"
+  <Target Name="FixUpVersion"
       BeforeTargets="_GenerateRestoreProjectSpec"
-      DependsOnTargets="GetVersion"
-      Condition=" '$(GitVersion_Task_targets_Imported)' == 'True' " />
+      DependsOnTargets="GetBuildVersion"
+      Condition=" '$(NerdbankGitVersioningTasksPath)' != '' " />
 </Project>

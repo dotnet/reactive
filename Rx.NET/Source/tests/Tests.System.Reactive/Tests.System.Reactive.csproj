@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net46;netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>net46;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
-  </PropertyGroup> 
+  </PropertyGroup>
   
   <ItemGroup>
     <Content Include="xunit.runner.json">
@@ -15,14 +15,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit" Version="2.3.0-beta1-build3561" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta1-build1279" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />    
+    <PackageReference Include="xunit" Version="2.4.0-beta.2.build3981" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.2.build3981" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.4.0-beta.2.build3981" />
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
     <ProjectReference Include="..\..\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>

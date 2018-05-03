@@ -6,7 +6,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Select<TSource, TResult>
     {
-        internal sealed class Selector : Producer<TResult>
+        internal sealed class Selector : Producer<TResult, Selector._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<TSource, TResult> _selector;
@@ -17,14 +17,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_selector, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_selector, observer, cancel);
 
-            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+            internal sealed class _ : Sink<TResult>, IObserver<TSource>
             {
                 private readonly Func<TSource, TResult> _selector;
 
@@ -65,7 +62,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal sealed class SelectorIndexed : Producer<TResult>
+        internal sealed class SelectorIndexed : Producer<TResult, SelectorIndexed._>
         {
             private readonly IObservable<TSource> _source;
             private readonly Func<TSource, int, TResult> _selector;
@@ -76,14 +73,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-            {
-                var sink = new _(_selector, observer, cancel);
-                setSink(sink);
-                return _source.SubscribeSafe(sink);
-            }
+            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_selector, observer, cancel);
 
-            private sealed class _ : Sink<TResult>, IObserver<TSource>
+            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+            internal sealed class _ : Sink<TResult>, IObserver<TSource>
             {
                 private readonly Func<TSource, int, TResult> _selector;
                 private int _index;

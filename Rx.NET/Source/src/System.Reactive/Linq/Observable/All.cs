@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class All<TSource> : Producer<bool>
+    internal sealed class All<TSource> : Producer<bool, All<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, bool> _predicate;
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _predicate = predicate;
         }
 
-        protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_predicate, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_predicate, observer, cancel);
 
-        private sealed class _ : Sink<bool>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<bool>, IObserver<TSource>
         {
             private readonly Func<TSource, bool> _predicate;
 

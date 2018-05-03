@@ -190,7 +190,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal abstract class EventProducer<TDelegate, TArgs> : Producer<TArgs>
+    internal abstract class EventProducer<TDelegate, TArgs> : BasicProducer<TArgs>
     {
         private readonly IScheduler _scheduler;
         private readonly object _gate;
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         private Session _session;
 
-        protected override IDisposable Run(IObserver<TArgs> observer, IDisposable cancel, Action<IDisposable> setSink)
+        protected override IDisposable Run(IObserver<TArgs> observer)
         {
             var connection = default(IDisposable);
 

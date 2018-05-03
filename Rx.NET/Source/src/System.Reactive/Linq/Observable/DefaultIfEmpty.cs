@@ -4,7 +4,7 @@
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class DefaultIfEmpty<TSource> : Producer<TSource>
+    internal sealed class DefaultIfEmpty<TSource> : Producer<TSource, DefaultIfEmpty<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly TSource _defaultValue;
@@ -15,14 +15,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _defaultValue = defaultValue;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_defaultValue, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_defaultValue, observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly TSource _defaultValue;
             private bool _found;

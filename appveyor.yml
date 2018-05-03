@@ -4,7 +4,9 @@ environment:
   COVERALLS_REPO_TOKEN:
     secure: DOSlU041NY0WKjv9njrNqj14CLEzrF4ogZsbvqIXnNLd492oNlQf4dD5yr7TSK/S
   SignClientSecret:
-    secure: oR9TMOkkvP/prmXyMT+p6mQhjyw3JDLbuywezBABvXzkvNsdNZgi2yPaHhgaofrb
+    secure: FHkjtWF9Y3ZjXI9muiLfpnpUZPNz2NWGWJlLRRaMs5E=
+  SignClientUser:
+    secure: 8dxp/8LR7WGOUvOz7gdmd3PlqRM4yH4Tmq52eNTuqMn1UfX9v2LbQDmk7VG/mTUX
 
 init:
   - git config --global core.autocrlf input

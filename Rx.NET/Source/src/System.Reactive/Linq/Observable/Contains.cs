@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Contains<TSource> : Producer<bool>
+    internal sealed class Contains<TSource> : Producer<bool, Contains<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly TSource _value;
@@ -19,14 +19,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override IDisposable Run(IObserver<bool> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        private sealed class _ : Sink<bool>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<bool>, IObserver<TSource>
         {
             private readonly TSource _value;
             private readonly IEqualityComparer<TSource> _comparer;

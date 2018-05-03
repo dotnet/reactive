@@ -1,0 +1,216 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Reactive.Subjects;
+
+namespace System.Reactive.Linq
+{
+    // REVIEW: Consider if these are worth retaining in the async space.
+
+    partial class AsyncObservable
+    {
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<TResult>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, TResult>";
+
+    var invokeArgs = pars;
+
+    if (i > 0)
+    {
+        invokeArgs = ", " + invokeArgs;
+    }
+#>
+        public static <#=ret#> FromAsyncPattern<<#=genArgs#>>(<#=begin#> begin, <#=end#> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return (<#=pars#>) =>
+            {
+                var subject = new SequentialAsyncAsyncSubject<TResult>();
+
+                try
+                {
+                    AsyncObserver.FromAsyncPattern(subject, begin, end<#=invokeArgs#>);
+                }
+                catch (Exception ex)
+                {
+                    return Throw<TResult>(ex);
+                }
+
+                return subject.AsAsyncObservable();
+            };
+        }
+
+<#
+}
+#>
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<Unit>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, Unit>";
+
+    if (genArgs != "")
+    {
+        genArgs = "<" + genArgs + ">";
+    }
+
+    var invokeArgs = pars;
+
+    if (i > 0)
+    {
+        invokeArgs = ", " + invokeArgs;
+    }
+#>
+        public static <#=ret#> FromAsyncPattern<#=genArgs#>(<#=begin#> begin, <#=end#> end)
+        {
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return (<#=pars#>) =>
+            {
+                var subject = new SequentialAsyncAsyncSubject<Unit>();
+
+                try
+                {
+                    AsyncObserver.FromAsyncPattern(subject, begin, end<#=invokeArgs#>);
+                }
+                catch (Exception ex)
+                {
+                    return Throw<Unit>(ex);
+                }
+
+                return subject.AsAsyncObservable();
+            };
+        }
+
+<#
+}
+#>
+    }
+
+    partial class AsyncObserver
+    {
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<TResult>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "TResult" }));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, TResult>";
+
+    var invokePars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j + " arg" + j));
+
+    if (i > 0)
+    {
+        invokePars = ", " + invokePars;
+    }
+#>
+        public static IAsyncResult FromAsyncPattern<<#=genArgs#>>(IAsyncObserver<TResult> observer, <#=begin#> begin, <#=end#> end<#=invokePars#>)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return begin(<#=pars + (i > 0 ? ", " : "")#>async iar =>
+            {
+                TResult result;
+
+                try
+                {
+                    result = end(iar);
+                }
+                catch (Exception ex)
+                {
+                    await observer.OnErrorAsync(ex).ConfigureAwait(false);
+                    return;
+                }
+
+                await observer.OnNextAsync(result).ConfigureAwait(false);
+                await observer.OnCompletedAsync().ConfigureAwait(false);
+            }, null);
+        }
+
+<#
+}
+#>
+<#
+for (var i = 0; i <= 14; i++)
+{
+    var args = Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "IAsyncObservable<Unit>" });
+    var ret = "Func<" + string.Join(", ", args) + ">";
+
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+
+    var begin = "Func<" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j).Concat(new[] { "AsyncCallback, object, IAsyncResult" })) + ">";
+    var end = "Func<IAsyncResult, Unit>";
+
+    if (genArgs != "")
+    {
+        genArgs = "<" + genArgs + ">";
+    }
+
+    var invokePars = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j + " arg" + j));
+    var invokeArgs = pars;
+
+    if (i > 0)
+    {
+        invokePars = ", " + invokePars;
+        invokeArgs = ", " + invokeArgs;
+    }
+#>
+        public static IAsyncResult FromAsyncPattern<#=genArgs#>(IAsyncObserver<Unit> observer, <#=begin#> begin, <#=end#> end<#=invokePars#>)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (begin == null)
+                throw new ArgumentNullException(nameof(begin));
+            if (end == null)
+                throw new ArgumentNullException(nameof(end));
+
+            return FromAsyncPattern(observer, begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            }<#=invokeArgs#>);
+        }
+
+<#
+}
+#>
+    }
+}

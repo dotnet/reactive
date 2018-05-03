@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class ToLookup<TSource, TKey, TElement> : Producer<ILookup<TKey, TElement>>
+    internal sealed class ToLookup<TSource, TKey, TElement> : Producer<ILookup<TKey, TElement>, ToLookup<TSource, TKey, TElement>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly Func<TSource, TKey> _keySelector;
@@ -22,14 +22,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override IDisposable Run(IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override _ CreateSink(IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        private sealed class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+
+        internal sealed class _ : Sink<ILookup<TKey, TElement>>, IObserver<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private readonly Func<TSource, TElement> _elementSelector;

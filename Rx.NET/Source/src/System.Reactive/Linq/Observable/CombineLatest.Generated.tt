@@ -26,7 +26,7 @@ for (var i = 3; i <= 16; i++)
     var vs = string.Join(", ", Enumerable.Range(1, i).Select(j => "_observer" + j + ".Value"));
     var ss = string.Join(", ", Enumerable.Range(1, i).Select(j => "_source" + j));
 #>
-    internal sealed class CombineLatest<<#=ts#>, TResult> : Producer<TResult>
+    internal sealed class CombineLatest<<#=ts#>, TResult> : Producer<TResult, CombineLatest<<#=ts#>, TResult>._>
     {
 <#
 for (var j = 1; j <= i; j++)
@@ -51,14 +51,11 @@ for (var j = 1; j <= i; j++)
             _resultSelector = resultSelector;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_resultSelector, observer, cancel);
-            setSink(sink);
-            return sink.Run(<#=ss#>);
-        }
+        protected override _ CreateSink2(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
-        private sealed class _ : CombineLatestSink<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(<#=ss#>);
+
+        internal sealed class _ : CombineLatestSink<TResult>
         {
             private readonly Func<<#=ts#>, TResult> _resultSelector;
 

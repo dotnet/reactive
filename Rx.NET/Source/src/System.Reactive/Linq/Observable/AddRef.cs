@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal class AddRef<TSource> : Producer<TSource>
+    internal class AddRef<TSource> : Producer<TSource, AddRef<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly RefCountDisposable _refCount;
@@ -17,16 +17,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _refCount = refCount;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var d = StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel);
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel));
 
-            var sink = new _(observer, d);
-            setSink(sink);
-            return _source.SubscribeSafe(sink);
-        }
+        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)

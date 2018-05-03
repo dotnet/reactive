@@ -10,7 +10,7 @@ namespace System.Reactive.Linq.ObservableImpl
 {
     internal static class Timer
     {
-        internal abstract class Single : Producer<long>
+        internal abstract class Single : Producer<long, Single._>
         {
             private readonly IScheduler _scheduler;
 
@@ -29,12 +29,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-                {
-                    var sink = new _(observer, cancel);
-                    setSink(sink);
-                    return sink.Run(this, _dueTime);
-                }
+                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+
+                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class Absolute : Single
@@ -47,15 +44,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-                {
-                    var sink = new _(observer, cancel);
-                    setSink(sink);
-                    return sink.Run(this, _dueTime);
-                }
+                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+
+                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            private sealed class _ : Sink<long>
+            internal sealed class _ : Sink<long>
             {
                 public _(IObserver<long> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -81,7 +75,7 @@ namespace System.Reactive.Linq.ObservableImpl
             }
         }
 
-        internal abstract class Periodic : Producer<long>
+        internal abstract class Periodic : Producer<long, Periodic._>
         {
             private readonly TimeSpan _period;
             private readonly IScheduler _scheduler;
@@ -102,12 +96,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-                {
-                    var sink = new _(_period, observer, cancel);
-                    setSink(sink);
-                    return sink.Run(this, _dueTime);
-                }
+                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_period, observer, cancel);
+
+                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class Absolute : Periodic
@@ -120,15 +111,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override IDisposable Run(IObserver<long> observer, IDisposable cancel, Action<IDisposable> setSink)
-                {
-                    var sink = new _(_period, observer, cancel);
-                    setSink(sink);
-                    return sink.Run(this, _dueTime);
-                }
+                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_period, observer, cancel);
+
+                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            private sealed class _ : Sink<long>
+            internal sealed class _ : Sink<long>
             {
                 private readonly TimeSpan _period;
 

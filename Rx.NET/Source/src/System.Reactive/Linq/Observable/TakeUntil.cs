@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class TakeUntil<TSource, TOther> : Producer<TSource>
+    internal sealed class TakeUntil<TSource, TOther> : Producer<TSource, TakeUntil<TSource, TOther>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly IObservable<TOther> _other;
@@ -18,14 +18,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -156,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 
-    internal sealed class TakeUntil<TSource> : Producer<TSource>
+    internal sealed class TakeUntil<TSource> : Producer<TSource, TakeUntil<TSource>._>
     {
         private readonly IObservable<TSource> _source;
         private readonly DateTimeOffset _endTime;
@@ -186,14 +183,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new TakeUntil<TSource>(_source, endTime, _scheduler);
         }
 
-        protected override IDisposable Run(IObserver<TSource> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TSource>, IObserver<TSource>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TSource>, IObserver<TSource>
         {
             private readonly object _gate = new object();
 

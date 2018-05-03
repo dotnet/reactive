@@ -53,8 +53,7 @@ namespace System.Linq
 
             return Defer(() =>
                          {
-                             IEnumerable<TResult> result;
-                             if (!sources.TryGetValue(selector(), out result))
+                             if (!sources.TryGetValue(selector(), out var result))
                                  result = defaultSource;
                              return result;
                          });

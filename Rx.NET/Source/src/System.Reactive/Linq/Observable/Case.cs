@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Case<TValue, TResult> : Producer<TResult>, IEvaluatableObservable<TResult>
+    internal sealed class Case<TValue, TResult> : Producer<TResult, Case<TValue, TResult>._>, IEvaluatableObservable<TResult>
     {
         private readonly Func<TValue> _selector;
         private readonly IDictionary<TValue, IObservable<TResult>> _sources;
@@ -22,21 +22,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval()
         {
-            var res = default(IObservable<TResult>);
-            if (_sources.TryGetValue(_selector(), out res))
+            if (_sources.TryGetValue(_selector(), out var res))
                 return res;
 
             return _defaultSource;
         }
 
-        protected override IDisposable Run(IObserver<TResult> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(observer, cancel);
-            setSink(sink);
-            return sink.Run(this);
-        }
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
 
-        private sealed class _ : Sink<TResult>, IObserver<TResult>
+        protected override IDisposable Run(_ sink) => sink.Run(this);
+
+        internal sealed class _ : Sink<TResult>, IObserver<TResult>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)

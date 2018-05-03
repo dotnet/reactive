@@ -1046,8 +1046,7 @@ namespace ReactiveTests.Tests
 
             public object GetService(Type serviceType)
             {
-                var res = default(object);
-                if (_services.TryGetValue(serviceType, out res))
+                if (_services.TryGetValue(serviceType, out var res))
                     return res;
 
                 return null;

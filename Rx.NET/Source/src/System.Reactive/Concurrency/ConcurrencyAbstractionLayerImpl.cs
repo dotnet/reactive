@@ -147,7 +147,7 @@ namespace System.Reactive.Concurrency
                     // Rooting of the timer happens through the this.Tick delegate's target object,
                     // which is the current instance and has a field to store the Timer instance.
                     //
-                    _timer = new System.Threading.Timer(this.Tick, state, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
+                    _timer = new System.Threading.Timer(Tick, state, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
                 }
             }
 
@@ -192,7 +192,7 @@ namespace System.Reactive.Concurrency
                 // Rooting of the timer happens through the this.Tick delegate's target object,
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(this.Tick, null, period, period);
+                _timer = new System.Threading.Timer(Tick, null, period, period);
             }
 
             private void Tick(object state) => _action();

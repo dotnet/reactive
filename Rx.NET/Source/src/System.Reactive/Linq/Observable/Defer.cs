@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Defer<TValue> : Producer<TValue>, IEvaluatableObservable<TValue>
+    internal sealed class Defer<TValue> : Producer<TValue, Defer<TValue>._>, IEvaluatableObservable<TValue>
     {
         private readonly Func<IObservable<TValue>> _observableFactory;
 
@@ -15,16 +15,13 @@ namespace System.Reactive.Linq.ObservableImpl
             _observableFactory = observableFactory;
         }
 
-        protected override IDisposable Run(IObserver<TValue> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(_observableFactory, observer, cancel);
-            setSink(sink);
-            return sink.Run();
-        }
+        protected override _ CreateSink(IObserver<TValue> observer, IDisposable cancel) => new _(_observableFactory, observer, cancel);
+
+        protected override IDisposable Run(_ sink) =>sink.Run();
 
         public IObservable<TValue> Eval() => _observableFactory();
 
-        private sealed class _ : Sink<TValue>, IObserver<TValue>
+        internal sealed class _ : Sink<TValue>, IObserver<TValue>
         {
             private readonly Func<IObservable<TValue>> _observableFactory;
 

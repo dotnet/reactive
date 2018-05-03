@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class Range : Producer<int>
+    internal sealed class Range : Producer<int, Range._>
     {
         private readonly int _start;
         private readonly int _count;
@@ -20,14 +20,11 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override IDisposable Run(IObserver<int> observer, IDisposable cancel, Action<IDisposable> setSink)
-        {
-            var sink = new _(this, observer, cancel);
-            setSink(sink);
-            return sink.Run(_scheduler);
-        }
+        protected override _ CreateSink(IObserver<int> observer, IDisposable cancel) => new _(this, observer, cancel);
 
-        private sealed class _ : Sink<int>
+        protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
+
+        internal sealed class _ : Sink<int>
         {
             private readonly int _start;
             private readonly int _count;
