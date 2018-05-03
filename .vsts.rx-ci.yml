@@ -7,7 +7,7 @@ queue: Hosted VS2017
 variables: 
   BuildConfiguration: Release
   BuildPlatform: Any CPU
-    
+
 steps:
 - task: BatchScript@1
   inputs:
@@ -15,7 +15,14 @@ steps:
     arguments: -no_logo
     modifyEnvironment: true
   displayName: Setup Environment Variables
-    
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: Rx.NET/Source/build/serversion.csproj
+    arguments: -c $(BuildConfiguration)   
+  displayName: Set Version
+
 - task: PowerShell@1
   inputs:
     scriptName: 'Rx.NET/Source/build-new.ps1'
