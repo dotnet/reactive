@@ -7,7 +7,7 @@ queue: Hosted VS2017
 variables: 
   BuildConfiguration: Release
   BuildPlatform: Any CPU
-    
+
 steps:
 - task: BatchScript@1
   inputs:
