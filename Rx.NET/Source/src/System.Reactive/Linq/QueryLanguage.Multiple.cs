@@ -230,7 +230,7 @@ namespace System.Reactive.Linq
 
         private IObservable<TSource> Concat_<TSource>(IObservable<IObservable<TSource>> sources)
         {
-            return Merge(sources, 1);
+            return new ConcatMany<TSource>(sources);
         }
 
         #endregion
