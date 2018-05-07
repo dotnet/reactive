@@ -62,6 +62,7 @@ namespace System.Reactive.Linq.InternalObservable
                     downstream.OnNext(value);
                     if (r == 0)
                     {
+                        upstream.Dispose();
                         downstream.OnCompleted();
                     }
                 }
