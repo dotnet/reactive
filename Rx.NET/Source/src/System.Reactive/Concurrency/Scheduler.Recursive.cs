@@ -41,18 +41,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState>>> { First = state, Second = action }, InvokeRec1);
+            return scheduler.Schedule((state, action), (s, p) => InvokeRec1(s, p));
         }
 
-        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState>>> pair)
+        private static IDisposable InvokeRec1<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState>> action) tuple)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
 
             Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, state2 =>
+            recursiveAction = state1 => tuple.action(state1, state2 =>
             {
                 var isAdded = false;
                 var isDone = false;
@@ -84,7 +82,7 @@ namespace System.Reactive.Concurrency
                 }
             });
 
-            recursiveAction(state);
+            recursiveAction(tuple.state);
 
             return group;
         }
@@ -124,18 +122,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, TimeSpan>>> { First = state, Second = action }, dueTime, InvokeRec2);
+            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec2(s, p));
         }
 
-        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, TimeSpan>>> pair)
+        private static IDisposable InvokeRec2<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, TimeSpan>> action) tuple)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
 
             Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, (state2, dueTime1) =>
+            recursiveAction = state1 => tuple.action(state1, (state2, dueTime1) =>
             {
                 var isAdded = false;
                 var isDone = false;
@@ -167,7 +163,7 @@ namespace System.Reactive.Concurrency
                 }
             });
 
-            recursiveAction(state);
+            recursiveAction(tuple.state);
 
             return group;
         }
@@ -207,18 +203,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(new Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> { First = state, Second = action }, dueTime, InvokeRec3);
+            return scheduler.Schedule((state, action), dueTime, (s, p) => InvokeRec3(s, p));
         }
 
-        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, Pair<TState, Action<TState, Action<TState, DateTimeOffset>>> pair)
+        private static IDisposable InvokeRec3<TState>(IScheduler scheduler, (TState state, Action<TState, Action<TState, DateTimeOffset>> action) tuple)
         {
             var group = new CompositeDisposable(1);
             var gate = new object();
-            var state = pair.First;
-            var action = pair.Second;
 
             Action<TState> recursiveAction = null;
-            recursiveAction = state1 => action(state1, (state2, dueTime1) =>
+            recursiveAction = state1 => tuple.action(state1, (state2, dueTime1) =>
             {
                 var isAdded = false;
                 var isDone = false;
@@ -250,18 +244,9 @@ namespace System.Reactive.Concurrency
                 }
             });
 
-            recursiveAction(state);
+            recursiveAction(tuple.state);
 
             return group;
-        }
-
-#if !NO_SERIALIZABLE
-        [Serializable]
-#endif
-        private struct Pair<T1, T2>
-        {
-            public T1 First;
-            public T2 Second;
         }
     }
 }

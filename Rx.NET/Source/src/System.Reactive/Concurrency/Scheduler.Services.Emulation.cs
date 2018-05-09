@@ -60,7 +60,7 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return SchedulePeriodic_(scheduler, state, period, state_ => { action(state_); return state_; });
+            return SchedulePeriodic_(scheduler, (state, action), period, t => { t.action(t.state); return t; });
         }
 
         /// <summary>
