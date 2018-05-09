@@ -45,7 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnError(Exception error)
             {
                 _lastException = error;
-                _recurse();
+                Recurse();
             }
 
             public override void OnCompleted()
