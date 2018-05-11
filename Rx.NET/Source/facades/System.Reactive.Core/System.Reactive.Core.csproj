@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
     <TargetFrameworks>net45;net46;netstandard1.3;uap10.0;netcoreapp1.0</TargetFrameworks>
@@ -7,7 +7,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
-
-  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 
 </Project>

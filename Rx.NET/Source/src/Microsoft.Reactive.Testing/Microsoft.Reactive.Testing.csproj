@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Properties\*.xml" />
-    <PackageReference Include="xunit.assert.source" Version="2.2.0" PrivateAssets="All" /> 
+    <PackageReference Include="xunit.assert.source" Version="2.3.1" PrivateAssets="All" /> 
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>
 </Project>

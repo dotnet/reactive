@@ -11,8 +11,8 @@
     <AssemblyName>Tests.System.Reactive.Uwp.DeviceRunner</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -90,9 +90,9 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.0" />
-    <PackageReference Include="xunit" Version="2.2.0" />
-    <PackageReference Include="xunit.runner.devices" Version="2.2.0-rc1" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.8" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.devices" Version="2.3.3" />
   </ItemGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
@@ -396,6 +396,9 @@
     <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj">
       <Project>{01706a0f-8a63-4fd6-af45-0bc0bed3c0d9}</Project>
       <Name>System.Reactive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj">
+      <Name>Microsoft.Reactive.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj">
       <Project>{73078FB5-6038-4674-B4C4-32FD81B88055}</Project>

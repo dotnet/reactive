@@ -2,7 +2,7 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 $configuration = "Release"
 
-$isAppVeyor = Test-Path -Path env:\APPVEYOR
+$isAppVeyor = ((Test-Path -Path env:\APPVEYOR) -Or (Test-Path -Path env:\TF_BUILD))
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
 $xUnitConsolePath = ".\packages\xunit.runner.console\tools\net452\xunit.console.exe"
@@ -25,9 +25,9 @@ if (!(Test-Path .\nuget.exe)) {
 }
 
 # get tools
-.\nuget.exe install -excludeversion SignClient -Version 0.9.0 -outputdirectory packages
-.\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -pre -outputdirectory packages
-.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.0.41 -outputdirectory packages
+.\nuget.exe install -excludeversion SignClient -Version 0.9.1 -outputdirectory packages
+.\nuget.exe install -excludeversion JetBrains.dotCover.CommandLineTools -version 2017.3.5 -outputdirectory packages
+.\nuget.exe install -excludeversion Nerdbank.GitVersioning -Version 2.1.23 -outputdirectory packages
 .\nuget.exe install -excludeversion xunit.runner.console -outputdirectory packages
 #.\nuget.exe install -excludeversion OpenCover -Version 4.6.519 -outputdirectory packages
 .\nuget.exe install -excludeversion ReportGenerator -outputdirectory packages
@@ -42,14 +42,8 @@ Write-Host "Building $packageSemVer" -Foreground Green
 
 New-Item -ItemType Directory -Force -Path $artifacts
 
-Write-Host "Restoring packages for $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
-
-# Force a restore again to get proper version numbers https://github.com/NuGet/Home/issues/4337
-msbuild "$scriptPath\System.Reactive.sln" /m /t:restore /p:Configuration=$configuration
-
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /t:build /m /p:Configuration=$configuration 
+msbuild "$scriptPath\System.Reactive.sln" /restore /t:build /m /p:Configuration=$configuration /bl:.\artifacts\build.binlog /p:CreatePackage=true /p:NoPackageAnalysis=true 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
         if($isAppVeyor) {
@@ -59,21 +53,7 @@ if ($LastExitCode -ne 0) {
 }
 
 
-Write-Host "Building Packages" -Foreground Green
-msbuild "$scriptPath\src\System.Reactive\System.Reactive.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\src\Microsoft.Reactive.Testing\Microsoft.Reactive.Testing.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\src\System.Reactive.Observable.Aliases\System.Reactive.Observable.Aliases.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-
-msbuild "$scriptPath\facades\System.Reactive.Core\System.Reactive.Core.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\facades\System.Reactive.Experimental\System.Reactive.Experimental.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.Interfaces\System.Reactive.Interfaces.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.Linq\System.Reactive.Linq.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.PlatformServices\System.Reactive.PlatformServices.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\facades\System.Reactive.Providers\System.Reactive.Providers.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.Runtime.Remoting\System.Reactive.Runtime.Remoting.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true 
-msbuild "$scriptPath\facades\System.Reactive.Windows.Forms\System.Reactive.Windows.Forms.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\facades\System.Reactive.Windows.Threading\System.Reactive.Windows.Threading.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
-msbuild "$scriptPath\facades\System.Reactive.WindowsRuntime\System.Reactive.WindowsRuntime.csproj" /t:pack /p:Configuration=$configuration /p:PackageOutputPath=$artifacts /p:NoPackageAnalysis=true
+Write-Host "Building Compat Package" -Foreground Green
 
 .\nuget.exe pack "$scriptPath\facades\System.Reactive.Compatibility.nuspec" -Version $packageSemVer -MinClientVersion 2.12 -nopackageanalysis -outputdirectory "$artifacts" 
 
@@ -100,15 +80,14 @@ if($hasSignClientSecret) {
   Write-Host "Client Secret not found, not signing packages"
 }
 
-
 Write-Host "Running tests" -Foreground Green
 $testDirectory = Join-Path $scriptPath "tests\Tests.System.Reactive"
 
 # OpenCover isn't working currently. So run tests on CI and coverage with JetBrains 
 
-# Use xUnit CLI as it's significantly faster than vstest (dotnet test)
 $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
-.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="xunit -c $configuration --no-build -notrait `"SkipCI=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
+.\packages\JetBrains.dotCover.CommandLineTools\tools\dotCover.exe analyse /targetexecutable="$dotnet" /targetworkingdir="$testDirectory" /targetarguments="test -c $configuration --no-build --no-restore --filter `"SkipCI!=true`"" /Filters="+:module=System.Reactive;+:module=Microsoft.Reactive.Testing;+:module=System.Reactive.Observable.Aliases;-:type=Xunit*" /DisableDefaultFilters /ReturnTargetExitCode /AttributeFilters="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" /Output="$outputFile" /ReportType=DetailedXML /HideAutoProperties
+#dotnet test $testDirectory --no-build --no-restore -c "Release" --filter "SkipCI!=true"
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
@@ -119,7 +98,7 @@ if ($LastExitCode -ne 0) {
 }
 
 # Either display or publish the results
-if ($env:CI -eq 'True')
+if ($isAppVeyor -eq 'True')
 {
   .\packages\coveralls.io.dotcover\tools\coveralls.net.exe -f -p DotCover "$outputFile"
 }
