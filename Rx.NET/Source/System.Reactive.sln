@@ -18,8 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build-new.ps1 = build-new.ps1
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
+		global.json = global.json
 		Rx.ruleset = Rx.ruleset
 		Test.ruleset = Test.ruleset
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D324579D-CBE6-4867-8980-D7842C7C45A2}"
@@ -324,5 +326,8 @@ Global
 		{15585B53-9F85-4439-9D80-D827F1AD91E6} = {A0F39260-B8F8-4FCB-9679-0ED917A22BDF}
 		{4DCC120A-FD19-409B-A0E6-A049C4D0B663} = {A0F39260-B8F8-4FCB-9679-0ED917A22BDF}
 		{E9BB350B-D4EF-42E1-B4E2-14058AC6809B} = {A0F39260-B8F8-4FCB-9679-0ED917A22BDF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A71771B3-8AA0-43A5-988A-9C86D422B7CD}
 	EndGlobalSection
 EndGlobal
