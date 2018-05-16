@@ -11,6 +11,7 @@ namespace System.Reactive.Concurrency
     /// </summary>
     public sealed class AsyncLock : IDisposable
     {
+        private object guard = new object();
         private Queue<Action> queue;
         private bool isAcquired = false;
         private bool hasFaulted = false;
@@ -28,7 +29,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             // allow one thread to update the state
-            lock (this)
+            lock (guard)
             {
                 // if a previous action crashed, ignore any future actions
                 if (hasFaulted)
@@ -67,7 +68,7 @@ namespace System.Reactive.Concurrency
                 catch
                 {
                     // the execution failed, terminate this AsyncLock
-                    lock (this)
+                    lock (guard)
                     {
                         // throw away the queue
                         queue = null;
@@ -78,7 +79,7 @@ namespace System.Reactive.Concurrency
                 }
 
                 // execution succeeded, let's see if more work has to be done
-                lock (this)
+                lock (guard)
                 {
                     var q = queue;
                     // either there is no queue yet or we run out of work
@@ -101,7 +102,7 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public void Dispose()
         {
-            lock (this)
+            lock (guard)
             {
                 queue = null;
                 hasFaulted = true;
