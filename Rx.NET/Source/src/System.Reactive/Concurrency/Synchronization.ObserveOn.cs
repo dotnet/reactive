@@ -26,6 +26,26 @@ namespace System.Reactive.Concurrency
             protected override IDisposable Run(ObserveOnObserver<TSource> sink) => _source.SubscribeSafe(sink);
         }
 
+        /// <summary>
+        /// The new ObserveOn operator run with an IScheduler in a lock-free manner.
+        /// </summary>
+        internal sealed class SchedulerNew : Producer<TSource, ObserveOnObserverNew<TSource>>
+        {
+            private readonly IObservable<TSource> _source;
+            private readonly IScheduler _scheduler;
+
+            public SchedulerNew(IObservable<TSource> source, IScheduler scheduler)
+            {
+                _source = source;
+                _scheduler = scheduler;
+            }
+
+            protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer, IDisposable cancel) => new ObserveOnObserverNew<TSource>(_scheduler, observer, cancel);
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
+            protected override IDisposable Run(ObserveOnObserverNew<TSource> sink) => _source.SubscribeSafe(sink);
+        }
+
         internal sealed class Context : Producer<TSource, Context._>
         {
             private readonly IObservable<TSource> _source;
