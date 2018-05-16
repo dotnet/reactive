@@ -1,6 +1,6 @@
 trigger:
 - master
-- develop
+- rel/*
 
 queue: Hosted VS2017
 
