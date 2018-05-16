@@ -51,6 +51,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46'">
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
     <Compile Include="Platforms\Desktop\**\*.cs" />
   </ItemGroup>
   
