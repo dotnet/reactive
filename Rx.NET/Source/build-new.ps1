@@ -107,6 +107,16 @@ if ($LastExitCode -ne 0) {
 	}  
 }
 
+.\packages\xunit.runner.console\tools\net452\xunit.console.exe tests\LeakTests.System.Reactive\bin\$configuration\net46\LeakTests.System.Reactive.dll
+
+if ($LastExitCode -ne 0) { 
+	Write-Host "Error with Leak tests" -Foreground Red
+	if($isCloudBuild) {
+	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
+	}  
+}
+
 # Either display or publish the results
 if ($isCloudBuild -eq 'True')
 {
