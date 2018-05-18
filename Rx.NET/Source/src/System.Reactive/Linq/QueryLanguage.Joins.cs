@@ -37,48 +37,50 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> When<TResult>(IEnumerable<Plan<TResult>> plans)
         {
-            return new AnonymousObservable<TResult>(observer =>
-            {
-                var externalSubscriptions = new Dictionary<object, IJoinObserver>();
-                var gate = new object();
-                var activePlans = new List<ActivePlan>();
-                var outObserver = Observer.Create<TResult>(observer.OnNext,
-                    exception =>
-                    {
-                        foreach (var po in externalSubscriptions.Values)
+            return AnonymousObservable<TResult>.CreateStateful(
+                (observer, closureTuple) =>
+                {
+                    var externalSubscriptions = new Dictionary<object, IJoinObserver>();
+                    var gate = new object();
+                    var activePlans = new List<ActivePlan>();
+                    var outObserver = Observer.Create<TResult>(observer.OnNext,
+                        exception =>
                         {
-                            po.Dispose();
-                        }
-                        observer.OnError(exception);
-                    },
-                    observer.OnCompleted);
-                try
-                {
-                    foreach (var plan in plans)
-                        activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
-                                                      activePlan =>
-                                                      {
-                                                          activePlans.Remove(activePlan);
-                                                          if (activePlans.Count == 0)
-                                                              outObserver.OnCompleted();
-                                                      }));
-                }
-                catch (Exception e)
-                {
-                    //
-                    // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
-                    //
-                    return Throw<TResult>(e).Subscribe/*Unsafe*/(observer);
-                }
+                            foreach (var po in externalSubscriptions.Values)
+                            {
+                                po.Dispose();
+                            }
+                            observer.OnError(exception);
+                        },
+                        observer.OnCompleted);
+                    try
+                    {
+                        foreach (var plan in closureTuple.plans)
+                            activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
+                                                          activePlan =>
+                                                          {
+                                                              activePlans.Remove(activePlan);
+                                                              if (activePlans.Count == 0)
+                                                                  outObserver.OnCompleted();
+                                                          }));
+                    }
+                    catch (Exception e)
+                    {
+                        //
+                        // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+                        //
+                        return closureTuple.queryLanguage.Throw<TResult>(e).Subscribe/*Unsafe*/(observer);
+                    }
 
-                var group = new CompositeDisposable(externalSubscriptions.Values.Count);
-                foreach (var joinObserver in externalSubscriptions.Values)
-                {
-                    joinObserver.Subscribe(gate);
-                    group.Add(joinObserver);
-                }
-                return group;
-            });
+                    var group = new CompositeDisposable(externalSubscriptions.Values.Count);
+                    foreach (var joinObserver in externalSubscriptions.Values)
+                    {
+                        joinObserver.Subscribe(gate);
+                        group.Add(joinObserver);
+                    }
+                    return group;
+                },
+                (queryLanguage: this, plans));
         }
 
         #endregion

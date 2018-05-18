@@ -25,11 +25,13 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, Action> subscribe)
         {
-            return new AnonymousObservable<TSource>(o =>
-            {
-                var a = subscribe(o);
-                return a != null ? Disposable.Create(a) : Disposable.Empty;
-            });
+            return AnonymousObservable<TSource>.CreateStateful(
+                (o, closureSubscribe) =>
+                {
+                    var a = closureSubscribe(o);
+                    return a != null ? Disposable.Create(a) : Disposable.Empty;
+                },
+                subscribe);
         }
 
         #endregion
@@ -38,16 +40,18 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
-            {
-                var cancellable = new CancellationDisposable();
+            return AnonymousObservable<TResult>.CreateStateful(
+                (observer, closureSubscribeAsync) =>
+                {
+                    var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
-                var subscription = taskObservable.Subscribe(taskCompletionObserver);
+                    var taskObservable = closureSubscribeAsync(observer, cancellable.Token).ToObservable();
+                    var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
+                    var subscription = taskObservable.Subscribe(taskCompletionObserver);
 
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                    return StableCompositeDisposable.Create(cancellable, subscription);
+                },
+                subscribeAsync);
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task> subscribeAsync)
@@ -57,22 +61,24 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
-            {
-                var subscription = new SingleAssignmentDisposable();
-                var cancellable = new CancellationDisposable();
+            return AnonymousObservable<TResult>.CreateStateful(
+                (observer, closureSubscribeAsync) =>
+                {
+                    var subscription = new SingleAssignmentDisposable();
+                    var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<IDisposable>(d => subscription.Disposable = d ?? Disposable.Empty, observer.OnError, Stubs.Nop);
+                    var taskObservable = closureSubscribeAsync(observer, cancellable.Token).ToObservable();
+                    var taskCompletionObserver = new AnonymousObserver<IDisposable>(d => subscription.Disposable = d ?? Disposable.Empty, observer.OnError, Stubs.Nop);
 
-                //
-                // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
-                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
-                //
-                taskObservable.Subscribe(taskCompletionObserver);
+                    //
+                    // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
+                    // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                    //
+                    taskObservable.Subscribe(taskCompletionObserver);
 
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                    return StableCompositeDisposable.Create(cancellable, subscription);
+                },
+                subscribeAsync);
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<IDisposable>> subscribeAsync)
@@ -82,22 +88,24 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
-            {
-                var subscription = new SingleAssignmentDisposable();
-                var cancellable = new CancellationDisposable();
+            return AnonymousObservable<TResult>.CreateStateful(
+                (observer, closureSubscribeAsync) =>
+                {
+                    var subscription = new SingleAssignmentDisposable();
+                    var cancellable = new CancellationDisposable();
 
-                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<Action>(a => subscription.Disposable = a != null ? Disposable.Create(a) : Disposable.Empty, observer.OnError, Stubs.Nop);
+                    var taskObservable = closureSubscribeAsync(observer, cancellable.Token).ToObservable();
+                    var taskCompletionObserver = new AnonymousObserver<Action>(a => subscription.Disposable = a != null ? Disposable.Create(a) : Disposable.Empty, observer.OnError, Stubs.Nop);
 
-                //
-                // We don't cancel the subscription below *ever* and want to make sure the returned resource eventually gets disposed.
-                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
-                //
-                taskObservable.Subscribe(taskCompletionObserver);
+                    //
+                    // We don't cancel the subscription below *ever* and want to make sure the returned resource eventually gets disposed.
+                    // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                    //
+                    taskObservable.Subscribe(taskCompletionObserver);
 
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                    return StableCompositeDisposable.Create(cancellable, subscription);
+                },
+                subscribeAsync);
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<Action>> subscribeAsync)
