@@ -82,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnError(Exception error)
             {
-                if (Interlocked.CompareExchange(ref error, error, null) == null)
+                if (Interlocked.CompareExchange(ref this.error, error, null) == null)
                 {
                     Volatile.Write(ref done, true);
                     Drain();
@@ -104,7 +104,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (innerObserver.Finish())
                 {
-                    if (Interlocked.CompareExchange(ref error, error, null) == null)
+                    if (Interlocked.CompareExchange(ref this.error, error, null) == null)
                     {
                         Volatile.Write(ref done, true);
                         Volatile.Write(ref active, 0);
