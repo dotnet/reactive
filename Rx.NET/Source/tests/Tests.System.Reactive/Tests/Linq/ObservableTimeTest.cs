@@ -3233,6 +3233,47 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
+        public void Sample_Sampler_completes_first()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(150, 1),
+                OnNext(220, 2),
+                OnNext(240, 3),
+                OnNext(290, 4),
+                OnCompleted<int>(600)
+            );
+
+            var ys = scheduler.CreateHotObservable(
+                OnNext(150, ""),
+                OnNext(210, "bar"),
+                OnNext(250, "foo"),
+                OnNext(260, "qux"),
+                OnNext(320, "baz"),
+                OnCompleted<string>(500)
+            );
+
+            var res = scheduler.Start(() =>
+                xs.Sample(ys)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(250, 3),
+                OnNext(320, 4),
+                OnCompleted<int>(600 /* on sampling boundaries only */)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 600)
+            );
+
+            ys.Subscriptions.AssertEqual(
+                Subscribe(200, 500)
+            );
+        }
+
+        [Fact]
         public void Sample_Sampler_SourceThrows()
         {
             var ex = new Exception();
