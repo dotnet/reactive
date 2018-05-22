@@ -32,10 +32,12 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
             private IDisposable _sourceSubscription;
+            private IDisposable _samplerSubscription;
 
             private bool _hasValue;
             private TSource _value;
-            private bool _atEnd;
+            private bool _sourceAtEnd;
+            private bool _samplerAtEnd;
 
             public IDisposable Run(Sample<TSource, TSample> parent)
             {
@@ -43,9 +45,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sourceSubscription = sourceSubscription;
                 sourceSubscription.Disposable = parent._source.SubscribeSafe(this);
 
-                var samplerSubscription = parent._sampler.SubscribeSafe(new SampleObserver(this));
+                var samplerSubscription = new SingleAssignmentDisposable();
+                _samplerSubscription = samplerSubscription;
+                samplerSubscription.Disposable = parent._sampler.SubscribeSafe(new SampleObserver(this));
 
-                return StableCompositeDisposable.Create(_sourceSubscription, samplerSubscription);
+                return StableCompositeDisposable.Create(_sourceSubscription, _samplerSubscription);
             }
 
             public void OnNext(TSource value)
@@ -70,8 +74,15 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 lock (_gate)
                 {
-                    _atEnd = true;
-                    _sourceSubscription.Dispose();
+                    _sourceAtEnd = true;
+
+                    if (_samplerAtEnd)
+                    {
+                        base._observer.OnCompleted();
+                        base.Dispose();
+                    }
+                    else
+                        _sourceSubscription.Dispose();
                 }
             }
 
@@ -94,7 +105,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             _parent._observer.OnNext(_parent._value);
                         }
 
-                        if (_parent._atEnd)
+                        if (_parent._sourceAtEnd)
                         {
                             _parent._observer.OnCompleted();
                             _parent.Dispose();
@@ -116,17 +127,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
+                        _parent._samplerAtEnd = true;
+
                         if (_parent._hasValue)
                         {
                             _parent._hasValue = false;
                             _parent._observer.OnNext(_parent._value);
                         }
 
-                        if (_parent._atEnd)
+                        if (_parent._sourceAtEnd)
                         {
                             _parent._observer.OnCompleted();
                             _parent.Dispose();
                         }
+                        else
+                            _parent._samplerSubscription.Dispose();
                     }
                 }
             }
