@@ -1,5 +1,6 @@
-Reactive Extensions
+﻿Reactive Extensions
 ======================
+[![Coverage Status](https://coveralls.io/repos/github/dotnet/reactive/badge.svg?branch=master)](https://coveralls.io/github/dotnet/reactive?branch=master)
 
 Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
