@@ -20,8 +20,8 @@ Due to the [overwhelming](https://github.com/Reactive-Extensions/Rx.NET/issues/2
 #### Supported Platforms
 Rx 4.0 supports the following platforms
 
-- .NET Framework 4.5+
-- .NET Standard 1.3+ (including .NET Core, Xamarin and others)
+- .NET Framework 4.6+
+- .NET Standard 2.0+ (including .NET Core, Xamarin and others)
 - UWP
 
 Notably, Windows 8, Windows Phone 8 and legacy PCL libraries are no longer supported. 
