@@ -31,6 +31,7 @@ steps:
     VSTS_ACCESS_TOKEN: $(System.AccessToken)
     SignClientUser: $(SignClientUser)
     SignClientSecret: $(SignClientSecret)
+    COVERALLS_REPO_TOKEN: $(COVERALLS_REPO_TOKEN)
   displayName: Build
 
 - task: PublishBuildArtifacts@1
