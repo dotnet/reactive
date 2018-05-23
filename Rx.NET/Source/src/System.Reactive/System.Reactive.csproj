@@ -26,16 +26,16 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">      
     <PackageReference Include="System.ComponentModel" Version="4.0.1" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
-    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />    
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <Compile Include="Platforms\UWP\**\*.cs" />
   </ItemGroup>
   
   <!-- Windows includes for Desktop and UWP -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' or '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'uap10.0'  or '$(TargetFramework)' == 'uap10.0.16299'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) ">
     <Compile Include="Platforms\Windows\**\*.cs" />
-    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />
-    <Compile Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="true" AutoGen="true" DependentUpon="Strings_WindowsThreading.resx" />
-    <EmbeddedResource Update="Platforms\Windows\Strings_WindowsThreading.resx" Generator="ResXFileCodeGenerator" CustomToolNamespace="System.Reactive" LastGenOutput="Strings_WindowsThreading.Designer.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />    
   </ItemGroup>
   
   <!-- Desktop -->
