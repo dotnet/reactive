@@ -1,0 +1,11 @@
+--2018-05-23 21:26:22--  https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+Resolving dist.nuget.org... 152.199.19.160
+Connecting to dist.nuget.org|152.199.19.160|:443... connected.
+ERROR: cannot verify dist.nuget.org's certificate, issued by `/C=US/ST=Washington/L=Redmond/O=Microsoft Corporation/OU=Microsoft IT/CN=Microsoft IT TLS CA 2':
+  Self-signed certificate encountered.
+ERROR: certificate common name `*.vo.msecnd.net' doesn't match requested host name `dist.nuget.org'.
+To connect to dist.nuget.org insecurely, use `--no-check-certificate'.
+Unable to establish SSL connection.
+--2018-05-23 21:26:22--  http://.%5Cnuget.exe/
+Resolving .\nuget.exe... failed: Unknown host.
+wget: unable to resolve host address `.\nuget.exe'
