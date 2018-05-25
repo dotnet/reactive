@@ -10399,6 +10399,22 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void TakeUntil_Immediate()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = Observable.Return(1);
+            var ys = Observable.Return("bar");
+
+            var res = scheduler.Start(() =>
+                xs.TakeUntil(ys)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<int>(200)
+            );
+        }
         #endregion
 
         #region + Window +
