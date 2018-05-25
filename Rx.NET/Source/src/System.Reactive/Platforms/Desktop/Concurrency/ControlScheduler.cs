@@ -52,7 +52,10 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            if (_control.IsDisposed) return Disposable.Empty;
+            if (_control.IsDisposed)
+            {
+                return Disposable.Empty;
+            }
 
             var d = new SingleAssignmentDisposable();
 
