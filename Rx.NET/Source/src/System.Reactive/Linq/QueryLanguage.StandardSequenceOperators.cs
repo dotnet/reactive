@@ -195,6 +195,15 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + Partition +
+
+        public virtual Tuple<IObservable<TSource>, IObservable<TSource>> Partition<TSource>(IObservable<TSource> source, Func<TSource, bool> predicate)
+        {
+            return new Partition<TSource>(source, predicate).AsTuple();
+        }
+
+        #endregion
+
         #region + Select +
 
         public virtual IObservable<TResult> Select<TSource, TResult>(IObservable<TSource> source, Func<TSource, TResult> selector)

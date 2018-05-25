@@ -10403,6 +10403,169 @@ namespace ReactiveTests.Tests
 
         #endregion
 
+        #region + Partition +
+
+        [Fact]
+        public void Partition_ArgumentChecking()
+        {
+            ReactiveAssert.Throws<ArgumentNullException>(() => Observable.Partition<int>(default(IObservable<int>), DummyFunc<int, bool>.Instance));
+            ReactiveAssert.Throws<ArgumentNullException>(() =>
+            {
+                var t = Observable.Partition<int>(DummyObservable<int>.Instance, (Func<int, bool>)null);
+                t.Item1.Subscribe(null);
+                t.Item2.Subscribe(null);
+            });
+        }
+
+        [Fact]
+        public void Partition_Complete()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnCompleted<int>(250)
+            );
+
+            var invoked = 0;
+
+            var t = xs.Partition(x =>
+            {
+                ++invoked;
+                return x % 2 == 0;
+            });
+            var resEvens = scheduler.Schedule(() => t.Item1);
+            var resOdds = scheduler.Start(() => t.Item2);
+
+            resEvens.Messages.AssertEqual(
+                OnNext(220, 2),
+                OnNext(240, 4),
+                OnCompleted<int>(250)
+            );
+            resOdds.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(230, 3),
+                OnCompleted<int>(250)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 250)
+            );
+
+            Assert.Equal(4, invoked);
+        }
+
+        [Fact]
+        public void Partition_Error()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnError<int>(250, ex)
+            );
+
+            var t = xs.Partition(x => x % 2 == 0);
+            var resEvens = scheduler.Schedule(() => t.Item1);
+            var resOdds = scheduler.Start(() => t.Item2);
+
+            resEvens.Messages.AssertEqual(
+                OnNext(220, 2),
+                OnNext(240, 4),
+                OnError<int>(250, ex)
+            );
+            resOdds.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(230, 3),
+                OnError<int>(250, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 250)
+            );
+        }
+
+        [Fact]
+        public void Partition_Throw()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnCompleted<int>(250)
+            );
+
+            var t = xs.Partition(x =>
+            {
+                if (x == 3)
+                    throw ex;
+                return x % 2 == 0;
+            });
+            var resEvens = scheduler.Schedule(() => t.Item1);
+            var resOdds = scheduler.Start(() => t.Item2);
+
+            resEvens.Messages.AssertEqual(
+                OnNext(220, 2),
+                OnError<int>(230, ex)
+            );
+            resOdds.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnError<int>(230, ex)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 230)
+            );
+        }
+
+        [Fact]
+        public void Partition_Dispose()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = scheduler.CreateHotObservable(
+                OnNext(210, 1),
+                OnNext(220, 2),
+                OnNext(230, 3),
+                OnNext(240, 4),
+                OnNext(250, 5),
+                OnNext(260, 6),
+                OnCompleted<int>(270)
+            );
+
+            var t = xs.Partition(x => x % 2 == 0);
+            var resEvens = scheduler.Schedule(() => t.Item1, 225);
+            var resOdds = scheduler.Start(() => t.Item2, 255);
+
+            resEvens.Messages.AssertEqual(
+                OnNext(220, 2)
+            );
+            resOdds.Messages.AssertEqual(
+                OnNext(210, 1),
+                OnNext(230, 3),
+                OnNext(250, 5)
+            );
+
+            xs.Subscriptions.AssertEqual(
+                Subscribe(200, 255)
+            );
+        }
+
+        #endregion
+
         #region + Select +
 
         [Fact]
