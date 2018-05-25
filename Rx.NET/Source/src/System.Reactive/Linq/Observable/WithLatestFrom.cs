@@ -49,8 +49,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 var fstO = new FirstObserver(this);
                 var sndO = new SecondObserver(this, sndSubscription);
 
-                var fstSubscription = first.SubscribeSafe(fstO);
                 sndSubscription.Disposable = second.SubscribeSafe(sndO);
+                var fstSubscription = first.SubscribeSafe(fstO);
 
                 return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
             }
