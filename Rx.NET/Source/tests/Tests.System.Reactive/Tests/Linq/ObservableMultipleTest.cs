@@ -9662,6 +9662,24 @@ namespace ReactiveTests.Tests
             Assert.True(disposed, "disposed");
         }
 
+        [Fact]
+        public void SkipUntil_Immediate()
+        {
+            var scheduler = new TestScheduler();
+
+            var xs = Observable.Return(1);
+            var ys = Observable.Return("bar");
+
+            var res = scheduler.Start(() =>
+                xs.SkipUntil(ys)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(200, 1),
+                OnCompleted<int>(200)
+            );
+        }
+
         #endregion
 
         #region + Switch +

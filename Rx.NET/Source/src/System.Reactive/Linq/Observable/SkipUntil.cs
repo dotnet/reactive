@@ -34,9 +34,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 var sourceObserver = new SourceObserver(this);
                 var otherObserver = new OtherObserver(this, sourceObserver);
 
-                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
                 var otherSubscription = parent._other.SubscribeSafe(otherObserver);
-
+                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
+                
                 sourceObserver.Disposable = sourceSubscription;
                 otherObserver.Disposable = otherSubscription;
 
