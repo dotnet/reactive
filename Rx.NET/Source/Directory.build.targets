@@ -4,6 +4,8 @@
     <DefineConstants>$(DefineConstants);HAS_WINRT;PREFER_ASYNC;HAS_TPL46;DESKTOPCLR</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
     <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;HAS_WINRT;PREFER_ASYNC;HAS_TPL46;NO_REMOTING;NO_SERIALIZABLE;CRIPPLED_REFLECTION;NO_THREAD;WINDOWS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
