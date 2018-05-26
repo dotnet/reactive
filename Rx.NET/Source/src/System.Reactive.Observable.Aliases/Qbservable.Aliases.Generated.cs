@@ -1,22 +1,22 @@
 /*
- * WARNING: Auto-generated file (5/1/2015 21:21:20)
+ * WARNING: Auto-generated file (05/27/2018 00:55:50)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
 #pragma warning disable 1591
 
 using System;
+using System.Reactive.Concurrency;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Joins;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Joins;
-using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Reactive;
+using System.Reactive.Subjects;
 
 namespace System.Reactive.Linq
 {
@@ -102,7 +102,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
@@ -121,14 +121,14 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
         /// <summary>
-        /// Projects each element of the source observable sequence to the other observable sequence and merges the resulting observable sequences into one observable sequence.
+        /// Projects each element of the source observable sequence to the other observable sequence and merges the resulting observable sequences into one observable sequence. 
         /// Synonym for the method 'SelectMany'
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -220,7 +220,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TResult>>> selector)
@@ -237,7 +237,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TResult>>> selector)
@@ -254,7 +254,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TResult>>> selector)
@@ -271,7 +271,7 @@ namespace System.Reactive.Linq
         /// <param name="source">An observable sequence of elements to project.</param>
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of the tasks executed for each element of the input sequence.</returns>
-        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports composition of observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TResult>>> selector)
@@ -290,7 +290,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> selector)
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
@@ -307,7 +307,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="M:System.Reactive.Linq.Observable.ToObservable``1(System.Collections.Generic.IEnumerable{``0})" /> conversion.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
         {
             return Qbservable.SelectMany<TSource, TResult>(source, selector);
@@ -326,7 +326,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
@@ -345,7 +345,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
@@ -364,7 +364,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, TTaskResult, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
@@ -383,7 +383,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of obtaining a task for each element of the input sequence and then mapping the task's result and its corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="taskSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable{TSource}(Task{TSource})" />.</remarks>
+        /// <remarks>This overload supports using LINQ query comprehension syntax in C# and Visual Basic to compose observable sequences and tasks, without requiring manual conversion of the tasks to observable sequences using <see cref="M:System.Reactive.Threading.Tasks.TaskObservableExtensions.ToObservable``1(System.Threading.Tasks.Task{``0})" />.</remarks>
         public static IQbservable<TResult> FlatMap<TSource, TTaskResult, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, CancellationToken, Task<TTaskResult>>> taskSelector, Expression<Func<TSource, int, TTaskResult, TResult>> resultSelector)
         {
             return Qbservable.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
