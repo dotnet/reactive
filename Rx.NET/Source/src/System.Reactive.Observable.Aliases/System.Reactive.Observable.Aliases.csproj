@@ -9,9 +9,6 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
   </ItemGroup>  
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|AnyCPU'">
-    <DocumentationFile>bin\Debug\net46\System.Reactive.Observable.Aliases.xml</DocumentationFile>
-  </PropertyGroup>  
   <ItemGroup>    
     <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
   </ItemGroup>  
