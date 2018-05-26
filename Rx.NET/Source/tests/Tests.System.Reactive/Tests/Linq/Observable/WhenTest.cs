@@ -125,7 +125,7 @@ namespace ReactiveTests.Tests
             var scheduler = new TestScheduler();
 
             var xs = Observable.Never<int>();
-            var ys = Observable.Never<int>();
+            var ys = Observable.Never<int>().AsObservable();
 
             var res = scheduler.Start(() =>
                 Observable.When(
