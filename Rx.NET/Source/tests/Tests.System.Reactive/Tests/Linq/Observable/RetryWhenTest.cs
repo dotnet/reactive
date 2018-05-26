@@ -14,7 +14,7 @@ using ReactiveTests.Dummies;
 
 namespace ReactiveTests.Tests
 {
-    public class ObservableRetryWhenTest : ReactiveTest
+    public class RetryWhenTest : ReactiveTest
     {
         [Fact]
         public void RetryWhen_Observable_ArgumentChecking()

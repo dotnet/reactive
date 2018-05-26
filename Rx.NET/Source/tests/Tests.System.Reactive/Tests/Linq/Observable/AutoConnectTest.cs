@@ -16,7 +16,7 @@ using System.Reactive.Subjects;
 
 namespace ReactiveTests.Tests
 {
-    public class ObservableAutoConnectTest : ReactiveTest
+    public class AutoConnectTest : ReactiveTest
     {
         [Fact]
         public void AutoConnect_Basic()
