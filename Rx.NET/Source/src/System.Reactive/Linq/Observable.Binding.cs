@@ -4,6 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive.Linq
 {
@@ -29,7 +30,7 @@ namespace System.Reactive.Linq
             if (subject == null)
                 throw new ArgumentNullException(nameof(subject));
 
-            return s_impl.Multicast<TSource, TResult>(source, subject);
+            return new ConnectableObservable<TSource, TResult>(source, subject);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Multicast<TSource, TIntermediate, TResult>(source, subjectSelector, selector);
+            return new Multicast<TSource, TIntermediate, TResult>(source, subjectSelector, selector);
         }
 
         #endregion
@@ -76,7 +77,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Publish<TSource>(source);
+            return source.Multicast(new Subject<TSource>());
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Publish<TSource, TResult>(source, selector);
+            return source.Multicast(() => new Subject<TSource>(), selector);
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Publish<TSource>(source, initialValue);
+            return source.Multicast(new BehaviorSubject<TSource>(initialValue));
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Publish<TSource, TResult>(source, selector, initialValue);
+            return source.Multicast(() => new BehaviorSubject<TSource>(initialValue), selector);
         }
 
         #endregion
@@ -160,7 +161,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.PublishLast<TSource>(source);
+            return source.Multicast(new AsyncSubject<TSource>());
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.PublishLast<TSource, TResult>(source, selector);
+            return source.Multicast(() => new AsyncSubject<TSource>(), selector);
         }
 
         #endregion
@@ -200,7 +201,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.RefCount<TSource>(source);
+            return new RefCount<TSource>(source);
         }
 
         #endregion
@@ -222,7 +223,14 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.AutoConnect(source, minObservers, onConnect);
+            if (minObservers <= 0)
+            {
+                var d = source.Connect();
+                onConnect?.Invoke(d);
+                return source;
+            }
+
+            return new AutoConnect<TSource>(source, minObservers, onConnect);
         }
 
         #endregion
@@ -244,7 +252,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Replay<TSource>(source);
+            return source.Multicast(new ReplaySubject<TSource>());
         }
 
         /// <summary>
@@ -265,7 +273,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource>(source, scheduler);
+            return source.Multicast(new ReplaySubject<TSource>(scheduler));
         }
 
         /// <summary>
@@ -286,7 +294,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Replay<TSource, TResult>(source, selector);
+            return source.Multicast(() => new ReplaySubject<TSource>(), selector);
         }
 
         /// <summary>
@@ -310,7 +318,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, scheduler);
+            return source.Multicast(() => new ReplaySubject<TSource>(scheduler), selector);
         }
 
         /// <summary>
@@ -332,7 +340,7 @@ namespace System.Reactive.Linq
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
 
-            return s_impl.Replay<TSource>(source, window);
+            return source.Multicast(new ReplaySubject<TSource>(window));
         }
 
         /// <summary>
@@ -357,7 +365,7 @@ namespace System.Reactive.Linq
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, window);
+            return source.Multicast(() => new ReplaySubject<TSource>(window), selector);
         }
 
         /// <summary>
@@ -382,7 +390,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource>(source, window, scheduler);
+            return source.Multicast(new ReplaySubject<TSource>(window, scheduler));
         }
 
         /// <summary>
@@ -410,7 +418,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, window, scheduler);
+            return source.Multicast(() => new ReplaySubject<TSource>(window, scheduler), selector);
         }
 
         /// <summary>
@@ -435,7 +443,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource>(source, bufferSize, scheduler);
+            return source.Multicast(new ReplaySubject<TSource>(bufferSize, scheduler));
         }
 
         /// <summary>
@@ -463,7 +471,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, scheduler);
+            return source.Multicast(() => new ReplaySubject<TSource>(bufferSize, scheduler), selector);
         }
 
         /// <summary>
@@ -485,7 +493,7 @@ namespace System.Reactive.Linq
             if (bufferSize < 0)
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
-            return s_impl.Replay<TSource>(source, bufferSize);
+            return source.Multicast(new ReplaySubject<TSource>(bufferSize));
         }
 
         /// <summary>
@@ -510,7 +518,7 @@ namespace System.Reactive.Linq
             if (bufferSize < 0)
                 throw new ArgumentOutOfRangeException(nameof(bufferSize));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize);
+            return source.Multicast(() => new ReplaySubject<TSource>(bufferSize), selector);
         }
 
         /// <summary>
@@ -536,7 +544,7 @@ namespace System.Reactive.Linq
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
 
-            return s_impl.Replay<TSource>(source, bufferSize, window);
+            return source.Multicast(new ReplaySubject<TSource>(bufferSize, window));
         }
 
         /// <summary>
@@ -565,7 +573,7 @@ namespace System.Reactive.Linq
             if (window < TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(window));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window);
+            return source.Multicast(() => new ReplaySubject<TSource>(bufferSize, window), selector);
         }
 
         /// <summary>
@@ -594,7 +602,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource>(source, bufferSize, window, scheduler);
+            return source.Multicast(new ReplaySubject<TSource>(bufferSize, window, scheduler));
         }
 
         /// <summary>
@@ -626,7 +634,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Replay<TSource, TResult>(source, selector, bufferSize, window, scheduler);
+            return source.Multicast(() => new ReplaySubject<TSource>(bufferSize, window, scheduler), selector);
         }
 
         #endregion

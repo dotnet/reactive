@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive.Linq
 {
@@ -26,7 +27,7 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return s_impl.Subscribe<TSource>(source, observer);
+            return Subscribe_<TSource>(source, observer, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -47,7 +48,15 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Subscribe<TSource>(source, observer, scheduler);
+            return Subscribe_<TSource>(source, observer, scheduler);
+        }
+
+        private static IDisposable Subscribe_<TSource>(IEnumerable<TSource> source, IObserver<TSource> observer, IScheduler scheduler)
+        {
+            //
+            // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+            //
+            return new ToObservable<TSource>(source, scheduler).Subscribe/*Unsafe*/(observer);
         }
 
         #endregion
@@ -66,7 +75,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.ToEnumerable<TSource>(source);
+            return new AnonymousEnumerable<TSource>(() => source.GetEnumerator());
         }
 
         #endregion
@@ -84,7 +93,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.ToEvent(source);
+            return new EventSource<Unit>(source, (h, _) => h(Unit.Default));
         }
 
         /// <summary>
@@ -99,7 +108,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.ToEvent<TSource>(source);
+            return new EventSource<TSource>(source, (h, value) => h(value));
         }
 
         #endregion
@@ -118,7 +127,10 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.ToEventPattern<TEventArgs>(source);
+            return new EventPatternSource<TEventArgs>(
+                source,
+                (h, evt) => h(evt.Sender, evt.EventArgs)
+            );
         }
 
         #endregion
@@ -137,7 +149,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.ToObservable<TSource>(source);
+            return new ToObservable<TSource>(source, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -155,7 +167,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToObservable<TSource>(source, scheduler);
+            return new ToObservable<TSource>(source, scheduler);
         }
 
         #endregion

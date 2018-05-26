@@ -4,6 +4,8 @@
 
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq.ObservableImpl;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +31,7 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            return ForEachAsync_(source, onNext, CancellationToken.None);
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            return ForEachAsync_(source, onNext, cancellationToken);
         }
 
         /// <summary>
@@ -69,7 +71,8 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return s_impl.ForEachAsync<TSource>(source, onNext);
+            var i = 0;
+            return ForEachAsync_(source, x => onNext(x, checked(i++)), CancellationToken.None);
         }
 
         /// <summary>
@@ -90,7 +93,97 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return s_impl.ForEachAsync<TSource>(source, onNext, cancellationToken);
+            var i = 0;
+            return ForEachAsync_(source, x => onNext(x, checked(i++)), cancellationToken);
+        }
+
+        private static Task ForEachAsync_<TSource>(IObservable<TSource> source, Action<TSource> onNext, CancellationToken cancellationToken)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            var subscription = new SingleAssignmentDisposable();
+
+            var ctr = default(CancellationTokenRegistration);
+
+            if (cancellationToken.CanBeCanceled)
+            {
+                ctr = cancellationToken.Register(() =>
+                {
+#if HAS_TPL46
+                    tcs.TrySetCanceled(cancellationToken);
+#else
+                    tcs.TrySetCanceled();
+#endif
+                    subscription.Dispose();
+                });
+            }
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                // Making sure we always complete, even if disposing throws.
+                var dispose = new Action<Action>(action =>
+                {
+                    try
+                    {
+                        ctr.Dispose(); // no null-check needed (struct)
+                        subscription.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.TrySetException(ex);
+                        return;
+                    }
+
+                    action();
+                });
+
+                var taskCompletionObserver = new AnonymousObserver<TSource>(
+                    x =>
+                    {
+                        if (!subscription.IsDisposed)
+                        {
+                            try
+                            {
+                                onNext(x);
+                            }
+                            catch (Exception exception)
+                            {
+                                dispose(() => tcs.TrySetException(exception));
+                            }
+                        }
+                    },
+                    exception =>
+                    {
+                        dispose(() => tcs.TrySetException(exception));
+                    },
+                    () =>
+                    {
+                        dispose(() => tcs.TrySetResult(null));
+                    }
+                );
+
+                //
+                // Subtle race condition: if the source completes before we reach the line below, the SingleAssigmentDisposable
+                // will already have been disposed. Upon assignment, the disposable resource being set will be disposed on the
+                // spot, which may throw an exception. (See TFS 487142)
+                //
+                try
+                {
+                    //
+                    // [OK] Use of unsafe Subscribe: we're catching the exception here to set the TaskCompletionSource.
+                    //
+                    // Notice we could use a safe subscription to route errors through OnError, but we still need the
+                    // exception handling logic here for the reason explained above. We cannot afford to throw here
+                    // and as a result never set the TaskCompletionSource, so we tunnel everything through here.
+                    //
+                    subscription.Disposable = source.Subscribe/*Unsafe*/(taskCompletionObserver);
+                }
+                catch (Exception ex)
+                {
+                    tcs.TrySetException(ex);
+                }
+            }
+
+            return tcs.Task;
         }
 
         #endregion
@@ -116,7 +209,7 @@ namespace System.Reactive.Linq
             if (defaultSource == null)
                 throw new ArgumentNullException(nameof(defaultSource));
 
-            return s_impl.Case<TValue, TResult>(selector, sources, defaultSource);
+            return new Case<TValue, TResult>(selector, sources, defaultSource);
         }
 
         /// <summary>
@@ -138,7 +231,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Case<TValue, TResult>(selector, sources, scheduler);
+            return Case(selector, sources, Empty<TResult>(scheduler));
         }
 
         /// <summary>
@@ -157,7 +250,7 @@ namespace System.Reactive.Linq
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
 
-            return s_impl.Case<TValue, TResult>(selector, sources);
+            return Case(selector, sources, Empty<TResult>());
         }
 
         #endregion
@@ -179,7 +272,7 @@ namespace System.Reactive.Linq
             if (condition == null)
                 throw new ArgumentNullException(nameof(condition));
 
-            return s_impl.DoWhile<TSource>(source, condition);
+            return new DoWhile<TSource>(source, condition);
         }
 
         #endregion
@@ -202,7 +295,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.For<TSource, TResult>(source, resultSelector);
+            return new For<TSource, TResult>(source, resultSelector);
         }
 
         #endregion
@@ -227,7 +320,7 @@ namespace System.Reactive.Linq
             if (elseSource == null)
                 throw new ArgumentNullException(nameof(elseSource));
 
-            return s_impl.If<TResult>(condition, thenSource, elseSource);
+            return new If<TResult>(condition, thenSource, elseSource);
         }
 
         /// <summary>
@@ -245,7 +338,7 @@ namespace System.Reactive.Linq
             if (thenSource == null)
                 throw new ArgumentNullException(nameof(thenSource));
 
-            return s_impl.If<TResult>(condition, thenSource);
+            return If(condition, thenSource, Empty<TResult>());
         }
 
         /// <summary>
@@ -266,7 +359,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.If<TResult>(condition, thenSource, scheduler);
+            return If(condition, thenSource, Empty<TResult>(scheduler));
         }
 
         #endregion
@@ -288,7 +381,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.While<TSource>(condition, source);
+            return new While<TSource>(condition, source);
         }
 
         #endregion

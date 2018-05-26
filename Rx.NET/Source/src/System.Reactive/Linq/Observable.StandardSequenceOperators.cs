@@ -7,6 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Threading.Tasks; // needed for doc comments
 using System.Threading;
 using System.Threading.Tasks;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive.Linq
 {
@@ -26,7 +27,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Cast<TResult>(source);
+            return new Cast<object, TResult>(source);
         }
 
         #endregion
@@ -45,7 +46,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.DefaultIfEmpty<TSource>(source);
+            return new DefaultIfEmpty<TSource>(source, default(TSource));
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.DefaultIfEmpty<TSource>(source, defaultValue);
+            return new DefaultIfEmpty<TSource>(source, defaultValue);
         }
 
         #endregion
@@ -81,7 +82,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Distinct<TSource>(source);
+            return new Distinct<TSource, TSource>(source, x => x, EqualityComparer<TSource>.Default);
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.Distinct<TSource>(source, comparer);
+            return new Distinct<TSource, TSource>(source, x => x, comparer);
         }
 
         /// <summary>
@@ -120,7 +121,7 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return s_impl.Distinct<TSource, TKey>(source, keySelector);
+            return new Distinct<TSource, TKey>(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.Distinct<TSource, TKey>(source, keySelector, comparer);
+            return new Distinct<TSource, TKey>(source, keySelector, comparer);
         }
 
         #endregion
@@ -166,7 +167,7 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return s_impl.GroupBy<TSource, TKey>(source, keySelector);
+            return GroupBy_<TSource, TKey, TSource>(source, keySelector, v => v, null, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupBy<TSource, TKey>(source, keySelector, comparer);
+            return GroupBy_<TSource, TKey, TSource>(source, keySelector, x => x, null, comparer);
         }
 
         /// <summary>
@@ -211,7 +212,7 @@ namespace System.Reactive.Linq
             if (elementSelector == null)
                 throw new ArgumentNullException(nameof(elementSelector));
 
-            return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector);
+            return GroupBy_<TSource, TKey, TElement>(source, keySelector, elementSelector, null, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -237,7 +238,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, comparer);
+            return GroupBy_<TSource, TKey, TElement>(source, keySelector, elementSelector, null, comparer);
         }
 
         /// <summary>
@@ -260,7 +261,7 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return s_impl.GroupBy<TSource, TKey>(source, keySelector, capacity);
+            return GroupBy_<TSource, TKey, TSource>(source, keySelector, v => v, capacity, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -286,7 +287,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupBy<TSource, TKey>(source, keySelector, capacity, comparer);
+            return GroupBy_<TSource, TKey, TSource>(source, keySelector, x => x, capacity, comparer);
         }
 
         /// <summary>
@@ -313,7 +314,7 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity);
+            return GroupBy_<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -343,7 +344,12 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity, comparer);
+            return GroupBy_<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity, comparer);
+        }
+
+        private static IObservable<IGroupedObservable<TKey, TElement>> GroupBy_<TSource, TKey, TElement>(IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, int? capacity, IEqualityComparer<TKey> comparer)
+        {
+            return new GroupBy<TSource, TKey, TElement>(source, keySelector, elementSelector, capacity, comparer);
         }
 
         #endregion
@@ -382,7 +388,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, comparer);
+            return GroupByUntil_<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, null, comparer);
         }
 
         /// <summary>
@@ -400,7 +406,7 @@ namespace System.Reactive.Linq
         /// <param name="durationSelector">A function to signal the expiration of a group.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="durationSelector"/> is null.</exception>
         public static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil<TSource, TKey, TElement, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector)
@@ -414,7 +420,7 @@ namespace System.Reactive.Linq
             if (durationSelector == null)
                 throw new ArgumentNullException(nameof(durationSelector));
 
-            return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector);
+            return GroupByUntil_<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, null, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -431,7 +437,7 @@ namespace System.Reactive.Linq
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="durationSelector"/> or <paramref name="comparer"/> is null.</exception>
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector, IEqualityComparer<TKey> comparer)
@@ -445,7 +451,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, comparer);
+            return GroupByUntil_<TSource, TKey, TSource, TDuration>(source, keySelector, x => x, durationSelector, null, comparer);
         }
 
         /// <summary>
@@ -461,7 +467,7 @@ namespace System.Reactive.Linq
         /// <param name="durationSelector">A function to signal the expiration of a group.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="durationSelector"/> is null.</exception>
         public static IObservable<IGroupedObservable<TKey, TSource>> GroupByUntil<TSource, TKey, TDuration>(this IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<IGroupedObservable<TKey, TSource>, IObservable<TDuration>> durationSelector)
@@ -473,7 +479,7 @@ namespace System.Reactive.Linq
             if (durationSelector == null)
                 throw new ArgumentNullException(nameof(durationSelector));
 
-            return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector);
+            return GroupByUntil_<TSource, TKey, TSource, TDuration>(source, keySelector, x => x, durationSelector, null, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -512,7 +518,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity, comparer);
+            return GroupByUntil_<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity, comparer);
         }
 
         /// <summary>
@@ -531,7 +537,7 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="elementSelector"/> or <paramref name="durationSelector"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is less than 0.</exception>
@@ -548,7 +554,7 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return s_impl.GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity);
+            return GroupByUntil_<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -566,7 +572,7 @@ namespace System.Reactive.Linq
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="durationSelector"/> or <paramref name="comparer"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is less than 0.</exception>
@@ -583,7 +589,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, capacity, comparer);
+            return GroupByUntil_<TSource, TKey, TSource, TDuration>(source, keySelector, x => x, durationSelector, capacity, comparer);
         }
 
         /// <summary>
@@ -600,7 +606,7 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="keySelector"/> or <paramref name="durationSelector"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is less than 0.</exception>
@@ -615,7 +621,12 @@ namespace System.Reactive.Linq
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            return s_impl.GroupByUntil<TSource, TKey, TDuration>(source, keySelector, durationSelector, capacity);
+            return GroupByUntil_<TSource, TKey, TSource, TDuration>(source, keySelector, x => x, durationSelector, capacity, EqualityComparer<TKey>.Default);
+        }
+
+        private static IObservable<IGroupedObservable<TKey, TElement>> GroupByUntil_<TSource, TKey, TElement, TDuration>(IObservable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, Func<IGroupedObservable<TKey, TElement>, IObservable<TDuration>> durationSelector, int? capacity, IEqualityComparer<TKey> comparer)
+        {
+            return new GroupByUntil<TSource, TKey, TElement, TDuration>(source, keySelector, elementSelector, durationSelector, capacity, comparer);
         }
 
         #endregion
@@ -650,7 +661,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
+            return new GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
         }
 
         #endregion
@@ -685,7 +696,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
+            return new Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult>(left, right, leftDurationSelector, rightDurationSelector, resultSelector);
         }
 
         #endregion
@@ -704,7 +715,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.OfType<TResult>(source);
+            return new OfType<object, TResult>(source);
         }
 
         #endregion
@@ -727,7 +738,9 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Select<TSource, TResult>(source, selector);
+            // CONSIDER: Add fusion for Select/Select pairs.
+
+            return new Select<TSource, TResult>.Selector(source, selector);
         }
 
         /// <summary>
@@ -746,7 +759,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Select<TSource, TResult>(source, selector);
+            return new Select<TSource, TResult>.SelectorIndexed(source, selector);
         }
 
         #endregion
@@ -769,7 +782,7 @@ namespace System.Reactive.Linq
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
-            return s_impl.SelectMany<TSource, TOther>(source, other);
+            return SelectMany_<TSource, TOther>(source, _ => other);
         }
 
         /// <summary>
@@ -788,7 +801,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return SelectMany_<TSource, TResult>(source, selector);
         }
 
         /// <summary>
@@ -807,7 +820,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return SelectMany_<TSource, TResult>(source, selector);
         }
 
         /// <summary>
@@ -827,7 +840,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelector(source, (x, token) => selector(x));
         }
 
         /// <summary>
@@ -847,7 +860,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, (x, i, token) => selector(x, i));
         }
 
         /// <summary>
@@ -867,7 +880,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelector(source, selector);
         }
 
         /// <summary>
@@ -887,7 +900,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.TaskSelectorIndexed(source, selector);
         }
 
         /// <summary>
@@ -910,7 +923,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -933,7 +946,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -957,7 +970,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, (x, token) => taskSelector(x), resultSelector);
         }
 
         /// <summary>
@@ -981,7 +994,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, (x, i, token) => taskSelector(x, i), resultSelector);
         }
 
         /// <summary>
@@ -1005,7 +1018,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelector(source, taskSelector, resultSelector);
         }
 
         /// <summary>
@@ -1029,7 +1042,27 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TTaskResult, TResult>(source, taskSelector, resultSelector);
+            return new SelectMany<TSource, TTaskResult, TResult>.TaskSelectorIndexed(source, taskSelector, resultSelector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TResult>> selector)
+        {
+            return new SelectMany<TSource, TResult>.ObservableSelector(source, selector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TResult>> selector)
+        {
+            return new SelectMany<TSource, TResult>.ObservableSelectorIndexed(source, selector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IObservable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelector(source, collectionSelector, resultSelector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IObservable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        {
+            return new SelectMany<TSource, TCollection, TResult>.ObservableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -1054,7 +1087,7 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectors(source, onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -1079,7 +1112,7 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return s_impl.SelectMany<TSource, TResult>(source, onNext, onError, onCompleted);
+            return new SelectMany<TSource, TResult>.ObservableSelectorsIndexed(source, onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -1091,7 +1124,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
             if (source == null)
@@ -1099,7 +1132,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelector(source, selector);
         }
 
         /// <summary>
@@ -1111,7 +1144,7 @@ namespace System.Reactive.Linq
         /// <param name="selector">A transform function to apply to each element; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
         public static IObservable<TResult> SelectMany<TSource, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
         {
             if (source == null)
@@ -1119,7 +1152,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.SelectMany<TSource, TResult>(source, selector);
+            return new SelectMany<TSource, TResult>.EnumerableSelectorIndexed(source, selector);
         }
 
         /// <summary>
@@ -1133,7 +1166,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
         {
             if (source == null)
@@ -1143,7 +1176,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
         }
 
         /// <summary>
@@ -1157,7 +1190,7 @@ namespace System.Reactive.Linq
         /// <param name="resultSelector">A transform function to apply to each element of the intermediate sequence; the second parameter of the function represents the index of the source element and the fourth parameter represents the index of the intermediate element.</param>
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="collectionSelector"/> or <paramref name="resultSelector"/> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})"/> conversion.</remarks>
         public static IObservable<TResult> SelectMany<TSource, TCollection, TResult>(this IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
         {
             if (source == null)
@@ -1167,7 +1200,17 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.SelectMany<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+            return SelectMany_<TSource, TCollection, TResult>(source, collectionSelector, resultSelector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, IEnumerable<TCollection>> collectionSelector, Func<TSource, TCollection, TResult> resultSelector)
+        {
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelector(source, collectionSelector, resultSelector);
+        }
+
+        private static IObservable<TResult> SelectMany_<TSource, TCollection, TResult>(IObservable<TSource> source, Func<TSource, int, IEnumerable<TCollection>> collectionSelector, Func<TSource, int, TCollection, int, TResult> resultSelector)
+        {
+            return new SelectMany<TSource, TCollection, TResult>.EnumerableSelectorIndexed(source, collectionSelector, resultSelector);
         }
 
         #endregion
@@ -1190,7 +1233,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.Skip<TSource>(source, count);
+            return new Skip<TSource>.Count(source, count);
         }
 
         #endregion
@@ -1212,7 +1255,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.Predicate(source, predicate);
         }
 
         /// <summary>
@@ -1231,7 +1274,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.SkipWhile<TSource>(source, predicate);
+            return new SkipWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
@@ -1254,7 +1297,10 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.Take<TSource>(source, count);
+            if (count == 0)
+                return Empty<TSource>();
+
+            return Take_(source, count);
         }
 
         /// <summary>
@@ -1276,7 +1322,18 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Take<TSource>(source, count, scheduler);
+            if (count == 0)
+                return Empty<TSource>(scheduler);
+
+            return Take_(source, count);
+        }
+
+        private static IObservable<TSource> Take_<TSource>(IObservable<TSource> source, int count)
+        {
+            if (source is Take<TSource>.Count take)
+                return take.Combine(count);
+
+            return new Take<TSource>.Count(source, count);
         }
 
         #endregion
@@ -1298,7 +1355,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.Predicate(source, predicate);
         }
 
         /// <summary>
@@ -1317,7 +1374,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.TakeWhile<TSource>(source, predicate);
+            return new TakeWhile<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion
@@ -1339,7 +1396,10 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.Where<TSource>(source, predicate);
+            if (source is Where<TSource>.Predicate where)
+                return where.Combine(predicate);
+
+            return new Where<TSource>.Predicate(source, predicate);
         }
 
         /// <summary>
@@ -1347,7 +1407,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence whose elements to filter.</param>
-        /// <param name="predicate">A function to test each source element for a conditio; the second parameter of the function represents the index of the source element.</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence that contains elements from the input sequence that satisfy the condition.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null.</exception>
         public static IObservable<TSource> Where<TSource>(this IObservable<TSource> source, Func<TSource, int, bool> predicate)
@@ -1357,7 +1417,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.Where<TSource>(source, predicate);
+            return new Where<TSource>.PredicateIndexed(source, predicate);
         }
 
         #endregion

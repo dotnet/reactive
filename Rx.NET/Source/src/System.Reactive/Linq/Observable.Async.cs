@@ -5,7 +5,9 @@
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Reactive.Subjects;
+using System.Reactive.Disposables;
+using System.Reactive.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -34,7 +36,38 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TResult>(begin, end);
+            return () =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(iar =>
+                    {
+                        // Note: Even if the callback completes synchronously, outgoing On* calls
+                        //       cannot throw in user code since there can't be any subscribers
+                        //       to the AsyncSubject yet. Therefore, there is no need to protect
+                        //       against exceptions that'd be caught below and sent (incorrectly)
+                        //       into the Observable.Throw sequence being constructed.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -57,7 +90,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TResult>(begin, end);
+            return x =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -81,7 +141,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TResult>(begin, end);
+            return (x, y) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -106,7 +193,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TResult>(begin, end);
+            return (x, y, z) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -132,7 +246,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TResult>(begin, end);
+            return (x, y, z, a) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -159,7 +300,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(begin, end);
+            return (x, y, z, a, b) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -187,7 +355,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(begin, end);
+            return (x, y, z, a, b, c) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -216,7 +411,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(begin, end);
+            return (x, y, z, a, b, c, d) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -246,7 +468,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -277,7 +526,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -309,7 +585,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f, g) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, g, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -342,7 +645,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f, g, h) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, g, h, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -376,7 +706,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f, g, h, i) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, g, h, i, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -411,7 +768,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f, g, h, i, j) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, g, h, i, j, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -447,7 +831,34 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(begin, end);
+            return (x, y, z, a, b, c, d, e, f, g, h, i, j, k) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                try
+                {
+                    begin(x, y, z, a, b, c, d, e, f, g, h, i, j, k, iar =>
+                    {
+                        // See remark on FromAsyncPattern<TResult>.
+                        TResult result;
+                        try
+                        {
+                            result = end(iar);
+                        }
+                        catch (Exception exception)
+                        {
+                            subject.OnError(exception);
+                            return;
+                        }
+                        subject.OnNext(result);
+                        subject.OnCompleted();
+                    }, null);
+                }
+                catch (Exception exception)
+                {
+                    return Observable.Throw<TResult>(exception, SchedulerDefaults.AsyncConversions);
+                }
+                return subject.AsObservable();
+            };
         }
 
         #endregion
@@ -472,7 +883,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -494,7 +909,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -517,7 +936,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -541,7 +964,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -566,7 +993,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -592,7 +1023,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -619,7 +1054,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -647,7 +1086,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -676,7 +1119,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -706,7 +1153,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -737,7 +1188,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -769,7 +1224,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -802,7 +1261,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -836,7 +1299,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         /// <summary>
@@ -871,7 +1338,11 @@ namespace System.Reactive.Linq
             if (end == null)
                 throw new ArgumentNullException(nameof(end));
 
-            return s_impl.FromAsyncPattern<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(begin, end);
+            return FromAsyncPattern(begin, iar =>
+            {
+                end(iar);
+                return Unit.Default;
+            });
         }
 
         #endregion
@@ -900,7 +1371,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.Start<TResult>(function);
+            return ToAsync(function)();
         }
 
         /// <summary>
@@ -924,7 +1395,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Start<TResult>(function, scheduler);
+            return ToAsync(function, scheduler)();
         }
 
         /// <summary>
@@ -945,7 +1416,7 @@ namespace System.Reactive.Linq
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
 
-            return s_impl.StartAsync<TResult>(functionAsync);
+            return StartAsyncImpl(functionAsync, null);
         }
 
         /// <summary>
@@ -969,7 +1440,29 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.StartAsync<TResult>(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, scheduler);
+        }
+
+        private static IObservable<TSource> StartAsyncImpl<TSource>(Func<Task<TSource>> functionAsync, IScheduler scheduler)
+        {
+            var task = default(Task<TSource>);
+            try
+            {
+                task = functionAsync();
+            }
+            catch (Exception exception)
+            {
+                return Throw<TSource>(exception);
+            }
+
+            if (scheduler != null)
+            {
+                return task.ToObservable(scheduler);
+            }
+            else
+            {
+                return task.ToObservable();
+            }
         }
 
         /// <summary>
@@ -998,7 +1491,7 @@ namespace System.Reactive.Linq
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
 
-            return s_impl.StartAsync<TResult>(functionAsync);
+            return StartAsyncImpl(functionAsync, null);
         }
 
         /// <summary>
@@ -1030,7 +1523,42 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.StartAsync<TResult>(functionAsync, scheduler);
+            return StartAsyncImpl(functionAsync, scheduler);
+        }
+
+        private static IObservable<TSource> StartAsyncImpl<TSource>(Func<CancellationToken, Task<TSource>> functionAsync, IScheduler scheduler)
+        {
+            var cancellable = new CancellationDisposable();
+
+            var task = default(Task<TSource>);
+            try
+            {
+                task = functionAsync(cancellable.Token);
+            }
+            catch (Exception exception)
+            {
+                return Throw<TSource>(exception);
+            }
+
+            var result = default(IObservable<TSource>);
+
+            if (scheduler != null)
+            {
+                result = task.ToObservable(scheduler);
+            }
+            else
+            {
+                result = task.ToObservable();
+            }
+
+            return new AnonymousObservable<TSource>(observer =>
+            {
+                //
+                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
+                //
+                var subscription = result.Subscribe/*Unsafe*/(observer);
+                return StableCompositeDisposable.Create(cancellable, subscription);
+            });
         }
 
         #endregion
@@ -1054,7 +1582,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.Start(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions)();
         }
 
         /// <summary>
@@ -1077,7 +1605,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Start(action, scheduler);
+            return ToAsync(action, scheduler)();
         }
 
         /// <summary>
@@ -1097,7 +1625,7 @@ namespace System.Reactive.Linq
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
 
-            return s_impl.StartAsync(actionAsync);
+            return StartAsyncImpl(actionAsync, null);
         }
 
         /// <summary>
@@ -1120,9 +1648,30 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.StartAsync(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, scheduler);
         }
 
+        private static IObservable<Unit> StartAsyncImpl(Func<Task> actionAsync, IScheduler scheduler)
+        {
+            var task = default(Task);
+            try
+            {
+                task = actionAsync();
+            }
+            catch (Exception exception)
+            {
+                return Throw<Unit>(exception);
+            }
+
+            if (scheduler != null)
+            {
+                return task.ToObservable(scheduler);
+            }
+            else
+            {
+                return task.ToObservable();
+            }
+        }
         /// <summary>
         /// Invokes the asynchronous action, surfacing the result through an observable sequence.
         /// The CancellationToken is shared by all subscriptions on the resulting observable sequence. See the remarks section for more information.
@@ -1148,7 +1697,7 @@ namespace System.Reactive.Linq
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
 
-            return s_impl.StartAsync(actionAsync);
+            return StartAsyncImpl(actionAsync, null);
         }
 
         /// <summary>
@@ -1179,7 +1728,42 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.StartAsync(actionAsync, scheduler);
+            return StartAsyncImpl(actionAsync, scheduler);
+        }
+
+        private static IObservable<Unit> StartAsyncImpl(Func<CancellationToken, Task> actionAsync, IScheduler scheduler)
+        {
+            var cancellable = new CancellationDisposable();
+
+            var task = default(Task);
+            try
+            {
+                task = actionAsync(cancellable.Token);
+            }
+            catch (Exception exception)
+            {
+                return Throw<Unit>(exception);
+            }
+
+            var result = default(IObservable<Unit>);
+
+            if (scheduler != null)
+            {
+                result = task.ToObservable(scheduler);
+            }
+            else
+            {
+                result = task.ToObservable();
+            }
+
+            return new AnonymousObservable<Unit>(observer =>
+            {
+                //
+                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
+                //
+                var subscription = result.Subscribe/*Unsafe*/(observer);
+                return StableCompositeDisposable.Create(cancellable, subscription);
+            });
         }
 
         #endregion
@@ -1203,7 +1787,7 @@ namespace System.Reactive.Linq
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
 
-            return s_impl.FromAsync<TResult>(functionAsync);
+            return Defer(() => StartAsync(functionAsync));
         }
 
         /// <summary>
@@ -1221,7 +1805,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromAsync<TResult>(functionAsync, scheduler);
+            return Defer(() => StartAsync(functionAsync, scheduler));
         }
 
         /// <summary>
@@ -1238,7 +1822,7 @@ namespace System.Reactive.Linq
             if (functionAsync == null)
                 throw new ArgumentNullException(nameof(functionAsync));
 
-            return s_impl.FromAsync<TResult>(functionAsync);
+            return Defer(() => StartAsync(functionAsync));
         }
 
         /// <summary>
@@ -1258,7 +1842,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromAsync<TResult>(functionAsync, scheduler);
+            return Defer(() => StartAsync(functionAsync, scheduler));
         }
 
         #endregion
@@ -1276,7 +1860,7 @@ namespace System.Reactive.Linq
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
 
-            return s_impl.FromAsync(actionAsync);
+            return Defer(() => StartAsync(actionAsync));
         }
 
         /// <summary>
@@ -1293,7 +1877,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromAsync(actionAsync, scheduler);
+            return Defer(() => StartAsync(actionAsync, scheduler));
         }
 
         /// <summary>
@@ -1309,7 +1893,7 @@ namespace System.Reactive.Linq
             if (actionAsync == null)
                 throw new ArgumentNullException(nameof(actionAsync));
 
-            return s_impl.FromAsync(actionAsync);
+            return Defer(() => StartAsync(actionAsync));
         }
 
         /// <summary>
@@ -1328,7 +1912,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromAsync(actionAsync, scheduler);
+            return Defer(() => StartAsync(actionAsync, scheduler));
         }
 
         #endregion
@@ -1353,7 +1937,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1371,7 +1955,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TResult>(function, scheduler);
+            return () =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function();
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1387,7 +1990,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1406,7 +2009,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TResult>(function, scheduler);
+            return (first) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1423,7 +2045,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1443,7 +2065,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TResult>(function, scheduler);
+            return (first, second) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1461,7 +2102,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1482,7 +2123,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TResult>(function, scheduler);
+            return (first, second, third) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1501,7 +2161,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1523,7 +2183,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TResult>(function, scheduler);
+            return (first, second, third, fourth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1543,7 +2222,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1566,7 +2245,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1587,7 +2285,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1611,7 +2309,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1633,7 +2350,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1658,7 +2375,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1681,7 +2417,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1707,7 +2443,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1731,7 +2486,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1758,7 +2513,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1783,7 +2557,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1811,7 +2585,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1837,7 +2630,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1866,7 +2659,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1893,7 +2705,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1923,7 +2735,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -1951,7 +2782,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -1982,7 +2813,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2011,7 +2861,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2043,7 +2893,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2073,7 +2942,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2106,7 +2975,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2137,7 +3025,7 @@ namespace System.Reactive.Linq
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(function);
+            return ToAsync(function, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2171,7 +3059,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16, TResult>(function, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
+            {
+                var subject = new AsyncSubject<TResult>();
+                scheduler.Schedule(() =>
+                {
+                    var result = default(TResult);
+                    try
+                    {
+                        result = function(first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(result);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         #endregion
@@ -2189,7 +3096,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2206,7 +3113,26 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync(action, scheduler);
+            return () =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2221,7 +3147,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2239,7 +3165,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1>(action, scheduler);
+            return (first) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2255,7 +3199,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2274,7 +3218,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2>(action, scheduler);
+            return (first, second) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2291,7 +3253,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2311,7 +3273,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3>(action, scheduler);
+            return (first, second, third) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2329,7 +3309,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2350,7 +3330,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4>(action, scheduler);
+            return (first, second, third, fourth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2369,7 +3367,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2391,7 +3389,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5>(action, scheduler);
+            return (first, second, third, fourth, fifth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2411,7 +3427,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2434,7 +3450,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2455,7 +3489,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2479,7 +3513,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2501,7 +3553,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2526,7 +3578,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2549,7 +3619,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2575,7 +3645,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2599,7 +3687,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2626,7 +3714,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2651,7 +3757,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2679,7 +3785,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2705,7 +3829,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2734,7 +3858,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2761,7 +3903,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2791,7 +3933,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2819,7 +3979,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2850,7 +4010,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2879,7 +4057,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2911,7 +4089,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         /// <summary>
@@ -2941,7 +4137,7 @@ namespace System.Reactive.Linq
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(action);
+            return ToAsync(action, SchedulerDefaults.AsyncConversions);
         }
 
         /// <summary>
@@ -2974,7 +4170,25 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.ToAsync<TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9, TArg10, TArg11, TArg12, TArg13, TArg14, TArg15, TArg16>(action, scheduler);
+            return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
+            {
+                var subject = new AsyncSubject<Unit>();
+                scheduler.Schedule(() =>
+                {
+                    try
+                    {
+                        action(first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth);
+                    }
+                    catch (Exception exception)
+                    {
+                        subject.OnError(exception);
+                        return;
+                    }
+                    subject.OnNext(Unit.Default);
+                    subject.OnCompleted();
+                });
+                return subject.AsObservable();
+            };
         }
 
         #endregion

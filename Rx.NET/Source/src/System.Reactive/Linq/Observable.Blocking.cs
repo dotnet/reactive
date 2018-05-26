@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Reactive.Linq.ObservableImpl;
+using System.Threading;
 
 namespace System.Reactive.Linq
 {
@@ -22,7 +24,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Chunkify<TSource>(source);
+            return source.Collect<TSource, IList<TSource>>(() => new List<TSource>(), (lst, x) => { lst.Add(x); return lst; }, _ => new List<TSource>());
         }
 
         #endregion
@@ -48,7 +50,7 @@ namespace System.Reactive.Linq
             if (merge == null)
                 throw new ArgumentNullException(nameof(merge));
 
-            return s_impl.Collect<TSource, TResult>(source, newCollector, merge);
+            return Collect_<TSource, TResult>(source, newCollector, merge, _ => newCollector());
         }
 
         /// <summary>
@@ -73,7 +75,12 @@ namespace System.Reactive.Linq
             if (getNewCollector == null)
                 throw new ArgumentNullException(nameof(getNewCollector));
 
-            return s_impl.Collect<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
+            return Collect_<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
+        }
+
+        private static IEnumerable<TResult> Collect_<TSource, TResult>(IObservable<TSource> source, Func<TResult> getInitialCollector, Func<TResult, TSource, TResult> merge, Func<TResult, TResult> getNewCollector)
+        {
+            return new Collect<TSource, TResult>(source, getInitialCollector, merge, getNewCollector);
         }
 
         #endregion
@@ -97,7 +104,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.First<TSource>(source);
+            return FirstOrDefaultInternal(source, true);
         }
 
         /// <summary>
@@ -120,7 +127,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.First<TSource>(source, predicate);
+            return First(Where(source, predicate));
         }
 
         #endregion
@@ -143,7 +150,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.FirstOrDefault<TSource>(source);
+            return FirstOrDefaultInternal(source, false);
         }
 
         /// <summary>
@@ -165,7 +172,83 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.FirstOrDefault<TSource>(source, predicate);
+            return FirstOrDefault(Where(source, predicate));
+        }
+
+        private static TSource FirstOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
+        {
+            var value = default(TSource);
+            var seenValue = false;
+            var ex = default(Exception);
+
+            using (var evt = new WaitAndSetOnce())
+            {
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        if (!seenValue)
+                        {
+                            value = v;
+                        }
+                        seenValue = true;
+                        evt.Set();
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
+            }
+
+            ex.ThrowIfNotNull();
+
+            if (throwOnEmpty && !seenValue)
+                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+
+            return value;
+        }
+
+        class WaitAndSetOnce : IDisposable
+        {
+            private readonly ManualResetEvent _evt;
+            private int _hasSet;
+
+            public WaitAndSetOnce()
+            {
+                _evt = new ManualResetEvent(false);
+            }
+
+            public void Set()
+            {
+                if (Interlocked.Exchange(ref _hasSet, 1) == 0)
+                {
+                    _evt.Set();
+                }
+            }
+
+            public void WaitOne()
+            {
+                _evt.WaitOne();
+            }
+
+            public void Dispose()
+            {
+#if HAS_MREEXPLICITDISPOSABLE
+                ((IDisposable)_evt).Dispose();
+#else
+                _evt.Dispose();
+#endif
+            }
         }
 
         #endregion
@@ -190,7 +273,17 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            s_impl.ForEach<TSource>(source, onNext);
+            using (var evt = new WaitAndSetOnce())
+            {
+                var sink = new ForEach<TSource>.Observer(onNext, () => evt.Set());
+
+                using (source.SubscribeSafe(sink))
+                {
+                    evt.WaitOne();
+                }
+
+                sink.Error.ThrowIfNotNull();
+            }
         }
 
         /// <summary>
@@ -211,7 +304,17 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            s_impl.ForEach<TSource>(source, onNext);
+            using (var evt = new WaitAndSetOnce())
+            {
+                var sink = new ForEach<TSource>.ObserverIndexed(onNext, () => evt.Set());
+
+                using (source.SubscribeSafe(sink))
+                {
+                    evt.WaitOne();
+                }
+
+                sink.Error.ThrowIfNotNull();
+            }
         }
 
         #endregion
@@ -230,7 +333,8 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.GetEnumerator<TSource>(source);
+            var e = new GetEnumerator<TSource>();
+            return e.Run(source);
         }
 
         #endregion
@@ -254,7 +358,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Last<TSource>(source);
+            return LastOrDefaultInternal(source, true);
         }
 
         /// <summary>
@@ -277,7 +381,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.Last<TSource>(source, predicate);
+            return Last(Where(source, predicate));
         }
 
         #endregion
@@ -300,7 +404,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.LastOrDefault<TSource>(source);
+            return LastOrDefaultInternal(source, false);
         }
 
         /// <summary>
@@ -322,7 +426,46 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.LastOrDefault<TSource>(source, predicate);
+            return LastOrDefault(Where(source, predicate));
+        }
+
+        private static TSource LastOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
+        {
+            var value = default(TSource);
+            var seenValue = false;
+            var ex = default(Exception);
+
+            using (var evt = new WaitAndSetOnce())
+            {
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        seenValue = true;
+                        value = v;
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
+            }
+
+            ex.ThrowIfNotNull();
+
+            if (throwOnEmpty && !seenValue)
+                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+
+            return value;
         }
 
         #endregion
@@ -341,7 +484,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Latest<TSource>(source);
+            return new Latest<TSource>(source);
         }
 
         #endregion
@@ -362,7 +505,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.MostRecent<TSource>(source, initialValue);
+            return new MostRecent<TSource>(source, initialValue);
         }
 
         #endregion
@@ -382,7 +525,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Next<TSource>(source);
+            return new Next<TSource>(source);
         }
 
         #endregion
@@ -406,7 +549,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Single<TSource>(source);
+            return SingleOrDefaultInternal(source, true);
         }
 
         /// <summary>
@@ -429,7 +572,7 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.Single<TSource>(source, predicate);
+            return Single(Where(source, predicate));
         }
 
         #endregion
@@ -453,7 +596,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.SingleOrDefault<TSource>(source);
+            return SingleOrDefaultInternal(source, false);
         }
 
         /// <summary>
@@ -476,7 +619,52 @@ namespace System.Reactive.Linq
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
 
-            return s_impl.SingleOrDefault<TSource>(source, predicate);
+            return SingleOrDefault(Where(source, predicate));
+        }
+
+        private static TSource SingleOrDefaultInternal<TSource>(IObservable<TSource> source, bool throwOnEmpty)
+        {
+            var value = default(TSource);
+            var seenValue = false;
+            var ex = default(Exception);
+
+            using (var evt = new WaitAndSetOnce())
+            {
+                //
+                // [OK] Use of unsafe Subscribe: fine to throw to our caller, behavior indistinguishable from going through the sink.
+                //
+                using (source.Subscribe/*Unsafe*/(new AnonymousObserver<TSource>(
+                    v =>
+                    {
+                        if (seenValue)
+                        {
+                            ex = new InvalidOperationException(Strings_Linq.MORE_THAN_ONE_ELEMENT);
+                            evt.Set();
+                        }
+
+                        value = v;
+                        seenValue = true;
+                    },
+                    e =>
+                    {
+                        ex = e;
+                        evt.Set();
+                    },
+                    () =>
+                    {
+                        evt.Set();
+                    })))
+                {
+                    evt.WaitOne();
+                }
+            }
+
+            ex.ThrowIfNotNull();
+
+            if (throwOnEmpty && !seenValue)
+                throw new InvalidOperationException(Strings_Linq.NO_ELEMENTS);
+
+            return value;
         }
 
         #endregion
@@ -497,7 +685,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Wait<TSource>(source);
+            return LastOrDefaultInternal(source, true);
         }
 
         #endregion

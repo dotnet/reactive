@@ -28,7 +28,7 @@ namespace System.Reactive.Linq
             if (right == null)
                 throw new ArgumentNullException(nameof(right));
 
-            return s_impl.And<TLeft, TRight>(left, right);
+            return new Pattern<TLeft, TRight>(left, right);
         }
 
         #endregion
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
 
-            return s_impl.Then<TSource, TResult>(source, selector);
+            return new Pattern<TSource>(source).Then(selector);
         }
 
         #endregion
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
             if (plans == null)
                 throw new ArgumentNullException(nameof(plans));
 
-            return s_impl.When<TResult>(plans);
+            return When((IEnumerable<Plan<TResult>>)plans);
         }
 
         /// <summary>
@@ -85,7 +85,48 @@ namespace System.Reactive.Linq
             if (plans == null)
                 throw new ArgumentNullException(nameof(plans));
 
-            return s_impl.When<TResult>(plans);
+            return new AnonymousObservable<TResult>(observer =>
+            {
+                var externalSubscriptions = new Dictionary<object, IJoinObserver>();
+                var gate = new object();
+                var activePlans = new List<ActivePlan>();
+                var outObserver = Observer.Create<TResult>(observer.OnNext,
+                    exception =>
+                    {
+                        foreach (var po in externalSubscriptions.Values)
+                        {
+                            po.Dispose();
+                        }
+                        observer.OnError(exception);
+                    },
+                    observer.OnCompleted);
+                try
+                {
+                    foreach (var plan in plans)
+                        activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
+                                                      activePlan =>
+                                                      {
+                                                          activePlans.Remove(activePlan);
+                                                          if (activePlans.Count == 0)
+                                                              outObserver.OnCompleted();
+                                                      }));
+                }
+                catch (Exception e)
+                {
+                    //
+                    // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
+                    //
+                    return Throw<TResult>(e).Subscribe/*Unsafe*/(observer);
+                }
+
+                var group = new CompositeDisposable(externalSubscriptions.Values.Count);
+                foreach (var joinObserver in externalSubscriptions.Values)
+                {
+                    joinObserver.Subscribe(gate);
+                    group.Add(joinObserver);
+                }
+                return group;
+            });
         }
 
         #endregion

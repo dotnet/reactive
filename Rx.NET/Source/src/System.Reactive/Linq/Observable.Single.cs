@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq.ObservableImpl;
 
 namespace System.Reactive.Linq
 {
@@ -23,7 +25,10 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.AsObservable<TSource>(source);
+            if (source is AsObservable<TSource> asObservable)
+                return asObservable;
+
+            return new AsObservable<TSource>(source);
         }
 
         #endregion
@@ -46,7 +51,7 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.Buffer<TSource>(source, count);
+            return Buffer_<TSource>(source, count, count);
         }
 
         /// <summary>
@@ -68,7 +73,12 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return s_impl.Buffer<TSource>(source, count, skip);
+            return Buffer_<TSource>(source, count, skip);
+        }
+
+        private static IObservable<IList<TSource>> Buffer_<TSource>(IObservable<TSource> source, int count, int skip)
+        {
+            return new Buffer<TSource>.Count(source, count, skip);
         }
 
         #endregion
@@ -87,7 +97,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Dematerialize<TSource>(source);
+            return new Dematerialize<TSource>(source);
         }
 
         #endregion
@@ -106,7 +116,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.DistinctUntilChanged<TSource>(source);
+            return DistinctUntilChanged_(source, x => x, EqualityComparer<TSource>.Default);
         }
 
         /// <summary>
@@ -124,7 +134,7 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.DistinctUntilChanged<TSource>(source, comparer);
+            return DistinctUntilChanged_(source, x => x, comparer);
         }
 
         /// <summary>
@@ -143,7 +153,7 @@ namespace System.Reactive.Linq
             if (keySelector == null)
                 throw new ArgumentNullException(nameof(keySelector));
 
-            return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector);
+            return DistinctUntilChanged_(source, keySelector, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -165,7 +175,12 @@ namespace System.Reactive.Linq
             if (comparer == null)
                 throw new ArgumentNullException(nameof(comparer));
 
-            return s_impl.DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
+            return DistinctUntilChanged_(source, keySelector, comparer);
+        }
+
+        private static IObservable<TSource> DistinctUntilChanged_<TSource, TKey>(IObservable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            return new DistinctUntilChanged<TSource, TKey>(source, keySelector, comparer);
         }
 
         #endregion
@@ -188,7 +203,7 @@ namespace System.Reactive.Linq
             if (onNext == null)
                 throw new ArgumentNullException(nameof(onNext));
 
-            return s_impl.Do<TSource>(source, onNext);
+            return new Do<TSource>.OnNext(source, onNext);
         }
 
         /// <summary>
@@ -210,7 +225,7 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return s_impl.Do<TSource>(source, onNext, onCompleted);
+            return Do_<TSource>(source, onNext, Stubs<Exception>.Ignore, onCompleted);
         }
 
         /// <summary>
@@ -232,7 +247,7 @@ namespace System.Reactive.Linq
             if (onError == null)
                 throw new ArgumentNullException(nameof(onError));
 
-            return s_impl.Do<TSource>(source, onNext, onError);
+            return Do_<TSource>(source, onNext, onError, Stubs.Nop);
         }
 
         /// <summary>
@@ -257,7 +272,7 @@ namespace System.Reactive.Linq
             if (onCompleted == null)
                 throw new ArgumentNullException(nameof(onCompleted));
 
-            return s_impl.Do<TSource>(source, onNext, onError, onCompleted);
+            return Do_(source, onNext, onError, onCompleted);
         }
 
         /// <summary>
@@ -276,7 +291,12 @@ namespace System.Reactive.Linq
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
 
-            return s_impl.Do<TSource>(source, observer);
+            return new Do<TSource>.Observer(source, observer);
+        }
+
+        private static IObservable<TSource> Do_<TSource>(IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+        {
+            return new Do<TSource>.Actions(source, onNext, onError, onCompleted);
         }
 
         #endregion
@@ -298,7 +318,7 @@ namespace System.Reactive.Linq
             if (finallyAction == null)
                 throw new ArgumentNullException(nameof(finallyAction));
 
-            return s_impl.Finally<TSource>(source, finallyAction);
+            return new Finally<TSource>(source, finallyAction);
         }
 
         #endregion
@@ -317,7 +337,10 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.IgnoreElements<TSource>(source);
+            if (source is IgnoreElements<TSource> ignoreElements)
+                return ignoreElements;
+
+            return new IgnoreElements<TSource>(source);
         }
 
         #endregion
@@ -336,7 +359,13 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Materialize<TSource>(source);
+            //
+            // NOTE: Peephole optimization of xs.Dematerialize().Materialize() should not be performed. It's possible for xs to
+            //       contain multiple terminal notifications, which won't survive a Dematerialize().Materialize() chain. In case
+            //       a reduction to xs.AsObservable() would be performed, those notification elements would survive.
+            //
+
+            return new Materialize<TSource>(source);
         }
 
         #endregion
@@ -355,7 +384,13 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Repeat<TSource>(source);
+            return RepeatInfinite(source).Concat();
+        }
+
+        private static IEnumerable<T> RepeatInfinite<T>(T value)
+        {
+            while (true)
+                yield return value;
         }
 
         /// <summary>
@@ -374,7 +409,7 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
-            return s_impl.Repeat<TSource>(source, repeatCount);
+            return Enumerable.Repeat(source, repeatCount).Concat();
         }
 
         #endregion
@@ -393,7 +428,7 @@ namespace System.Reactive.Linq
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            return s_impl.Retry<TSource>(source);
+            return RepeatInfinite(source).Catch();
         }
 
         /// <summary>
@@ -412,7 +447,7 @@ namespace System.Reactive.Linq
             if (retryCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(retryCount));
 
-            return s_impl.Retry<TSource>(source, retryCount);
+            return Enumerable.Repeat(source, retryCount).Catch();
         }
 
         /// <summary>
@@ -436,9 +471,8 @@ namespace System.Reactive.Linq
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
-            return s_impl.RetryWhen(source, handler);
+            return new RetryWhen<TSource, TSignal>(source, handler);
         }
-
 
         #endregion
 
@@ -462,7 +496,7 @@ namespace System.Reactive.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return s_impl.Scan<TSource, TAccumulate>(source, seed, accumulator);
+            return new Scan<TSource, TAccumulate>(source, seed, accumulator);
         }
 
         /// <summary>
@@ -481,7 +515,7 @@ namespace System.Reactive.Linq
             if (accumulator == null)
                 throw new ArgumentNullException(nameof(accumulator));
 
-            return s_impl.Scan<TSource>(source, accumulator);
+            return new Scan<TSource>(source, accumulator);
         }
 
         #endregion
@@ -508,7 +542,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.SkipLast<TSource>(source, count);
+            return new SkipLast<TSource>.Count(source, count);
         }
 
         #endregion
@@ -530,7 +564,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return s_impl.StartWith<TSource>(source, values);
+            return StartWith_<TSource>(source, SchedulerDefaults.ConstantTimeOperations, values);
         }
 
         /// <summary>
@@ -548,7 +582,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return s_impl.StartWith<TSource>(source, values);
+            return StartWith(source, SchedulerDefaults.ConstantTimeOperations, values);
         }
 
         /// <summary>
@@ -569,7 +603,7 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return s_impl.StartWith<TSource>(source, scheduler, values);
+            return StartWith_(source, scheduler, values);
         }
 
         /// <summary>
@@ -595,7 +629,25 @@ namespace System.Reactive.Linq
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
 
-            return s_impl.StartWith<TSource>(source, scheduler, values);
+            //
+            // NOTE: For some reason, someone introduced this signature in the Observable class, which is inconsistent with the Rx pattern
+            //       of putting the IScheduler last. It also wasn't wired up through IQueryLanguage. When introducing this method in the
+            //       IQueryLanguage interface, we went for consistency with the public API, hence the odd position of the IScheduler.
+            //
+
+            var valueArray = values as TSource[];
+            if (valueArray == null)
+            {
+                var valueList = new List<TSource>(values);
+                valueArray = valueList.ToArray();
+            }
+
+            return StartWith_<TSource>(source, scheduler, valueArray);
+        }
+
+        private static IObservable<TSource> StartWith_<TSource>(IObservable<TSource> source, IScheduler scheduler, params TSource[] values)
+        {
+            return values.ToObservable(scheduler).Concat(source);
         }
 
         #endregion
@@ -622,7 +674,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.TakeLast<TSource>(source, count);
+            return TakeLast_(source, count, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -648,7 +700,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.TakeLast<TSource>(source, count, scheduler);
+            return TakeLast_(source, count, scheduler);
+        }
+
+        private static IObservable<TSource> TakeLast_<TSource>(IObservable<TSource> source, int count, IScheduler scheduler)
+        {
+            return new TakeLast<TSource>.Count(source, count, scheduler);
         }
 
         #endregion
@@ -675,7 +732,7 @@ namespace System.Reactive.Linq
             if (count < 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.TakeLastBuffer<TSource>(source, count);
+            return new TakeLastBuffer<TSource>.Count(source, count);
         }
 
         #endregion
@@ -698,7 +755,7 @@ namespace System.Reactive.Linq
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.Window<TSource>(source, count);
+            return new Window<TSource>.Count(source, count, count);
         }
 
         /// <summary>
@@ -720,7 +777,7 @@ namespace System.Reactive.Linq
             if (skip <= 0)
                 throw new ArgumentOutOfRangeException(nameof(skip));
 
-            return s_impl.Window<TSource>(source, count, skip);
+            return new Window<TSource>.Count(source, count, skip);
         }
 
         #endregion
