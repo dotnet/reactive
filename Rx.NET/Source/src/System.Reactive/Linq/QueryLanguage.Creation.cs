@@ -162,7 +162,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Never<TResult>()
         {
-            return new Never<TResult>();
+            return ObservableImpl.Never<TResult>.Default;
         }
 
         #endregion
