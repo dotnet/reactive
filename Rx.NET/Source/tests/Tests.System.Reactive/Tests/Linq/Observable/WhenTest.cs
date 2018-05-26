@@ -223,5 +223,15 @@ namespace ReactiveTests.Tests
             yield break;
         }
 
+        [Fact]
+        public void SameSource()
+        {
+            var source = Observable.Range(1, 5);
+
+            var list = Observable.When(source.And(source).Then((a, b) => a + b))
+                .ToList().First();
+
+            Assert.Equal(new List<int>() { 2, 4, 6, 8, 10 }, list);
+        }
     }
 }
