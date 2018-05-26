@@ -335,7 +335,7 @@ using System.Reactive.Subjects;
 
                     if (xmlDoc != null)
                     {
-                        SimplyfyCrefAttributte(xmlDoc);
+                        SimplifyCrefAttribute(xmlDoc);
 
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
@@ -468,7 +468,7 @@ using System.Reactive.Subjects;
 
         }
 
-        private static void SimplyfyCrefAttributte(XElement parent)
+        private static void SimplifyCrefAttribute(XElement parent)
         {
             foreach (var element in parent.Descendants())
             {
@@ -572,7 +572,7 @@ using System.Reactive.Subjects;
 
                         if (xmlDoc != null)
                         {
-                            SimplyfyCrefAttributte(xmlDoc);
+                            SimplifyCrefAttribute(xmlDoc);
 
                             foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                                 WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
@@ -710,7 +710,7 @@ using System.Reactive.Subjects;
 
                     if (xmlDoc != null)
                     {
-                        SimplyfyCrefAttributte(xmlDoc);
+                        SimplifyCrefAttribute(xmlDoc);
                         foreach (var docLine in xmlDoc.Element("summary").ToString().Split('\n'))
                             WriteLine("/// " + docLine.TrimStart().TrimEnd('\r'));
 
