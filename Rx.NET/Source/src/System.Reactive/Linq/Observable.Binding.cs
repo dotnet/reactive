@@ -205,6 +205,28 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + AutoConnect +
+
+        /// <summary>
+        /// Automatically connect the upstream IConnectableObservable at most once when the
+        /// specified number of IObservers have subscribed to this IObservable.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The number of observers required to subscribe before the connection to source happens, non-positive value will trigger an immediate subscription.</param>
+        /// <param name="onConnect">If not null, the connection's IDisposable is provided to it.</param>
+        /// <returns>An observable sequence that connects to the source at most once when the given number of observers have subscribed to it.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IObservable<TSource> AutoConnect<TSource>(this IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable> onConnect = null)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return s_impl.AutoConnect(source, minObservers, onConnect);
+        }
+
+        #endregion
+
         #region + Replay +
 
         /// <summary>

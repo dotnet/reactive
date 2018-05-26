@@ -10627,7 +10627,40 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
+        /// <summary>
+        /// Automatically connect the upstream IConnectableObservable at most once when the
+        /// specified number of IObservers have subscribed to this IObservable.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The number of observers required to subscribe before the connection to source happens, non-positive value will trigger an immediate subscription.</param>
+        /// <param name="onConnect">If not null, the connection's IDisposable is provided to it.</param>
+        /// <returns>An observable sequence that connects to the source at most once when the given number of observers have subscribed to it.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IQbservable<TSource> AutoConnect<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, Action<IDisposable> onConnect)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.AutoConnect<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(int), default(Action<IDisposable>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(minObservers, typeof(int)),
+                    Expression.Constant(onConnect, typeof(Action<IDisposable>))
+                )
+            );
+        }
+
         /// <summary>
         /// Generates an observable sequence that repeats the given element infinitely.
         /// </summary>
