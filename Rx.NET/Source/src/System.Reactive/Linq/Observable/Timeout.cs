@@ -4,6 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -34,9 +35,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IObservable<TSource> _other;
                 private readonly IScheduler _scheduler;
 
-                private readonly object _gate = new object();
-                private SerialDisposable _subscription = new SerialDisposable();
-                private SerialDisposable _timer = new SerialDisposable();
+                long index;
+
+                IDisposable mainDisposable;
+                IDisposable otherDisposable;
+                IDisposable timerDisposable;
 
                 public _(Relative parent, IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -46,102 +49,101 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent._scheduler;
                 }
 
-                private ulong _id;
-                private bool _switched;
-
                 public IDisposable Run(IObservable<TSource> source)
                 {
-                    var original = new SingleAssignmentDisposable();
 
-                    _subscription.Disposable = original;
+                    CreateTimer(0L);
 
-                    _id = 0UL;
-                    _switched = false;
-
-                    CreateTimer();
-
-                    original.Disposable = source.SubscribeSafe(this);
-
-                    return StableCompositeDisposable.Create(_subscription, _timer);
-                }
-
-                private void CreateTimer()
-                {
-                    _timer.Disposable = _scheduler.Schedule(_id, _dueTime, Timeout);
-                }
-
-                private IDisposable Timeout(IScheduler _, ulong myid)
-                {
-                    var timerWins = false;
-
-                    lock (_gate)
+                    var d = source.SubscribeSafe(this);
+                    if (Interlocked.CompareExchange(ref mainDisposable, d, null) != null)
                     {
-                        _switched = (_id == myid);
-                        timerWins = _switched;
+                        d.Dispose();
                     }
 
-                    if (timerWins)
-                        _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
+                    return this;
+                }
 
+                protected override void Dispose(bool disposing)
+                {
+                    base.ClearObserver();
+                    Interlocked.Exchange(ref mainDisposable, BooleanDisposable.True)?.Dispose();
+                    Interlocked.Exchange(ref otherDisposable, BooleanDisposable.True)?.Dispose();
+                    Interlocked.Exchange(ref timerDisposable, BooleanDisposable.True)?.Dispose();
+                }
+
+                private void CreateTimer(long idx)
+                {
+                    var c = Volatile.Read(ref timerDisposable);
+                    if (c != BooleanDisposable.True)
+                    {
+                        c?.Dispose();
+
+                        var d = _scheduler.Schedule(new TimeoutState { idx = idx, self = this }, _dueTime, Timeout);
+
+                        if (Interlocked.CompareExchange(ref timerDisposable, d, c) != c)
+                        {
+                            d.Dispose();
+                        }
+                    }
+                }
+
+                private static IDisposable Timeout(IScheduler _, TimeoutState state)
+                {
+                    state.self.Timeout(state.idx);
                     return Disposable.Empty;
+                }
+
+                private void Timeout(long idx)
+                {
+                    if (Volatile.Read(ref index) == idx && Interlocked.CompareExchange(ref index, long.MaxValue, idx) == idx)
+                    {
+                        Interlocked.Exchange(ref mainDisposable, BooleanDisposable.True)?.Dispose();
+
+                        var d = _other.Subscribe(GetForwarder());
+                        if (Interlocked.CompareExchange(ref otherDisposable, d, null) != null)
+                        {
+                            d.Dispose();
+                        }
+                    }
                 }
 
                 public override void OnNext(TSource value)
                 {
-                    var onNextWins = false;
-
-                    lock (_gate)
+                    var idx = Volatile.Read(ref index);
+                    if (idx != long.MaxValue && Interlocked.CompareExchange(ref index, idx + 1, idx) == idx)
                     {
-                        onNextWins = !_switched;
-                        if (onNextWins)
-                        {
-                            _id = unchecked(_id + 1);
-                        }
-                    }
+                        Volatile.Read(ref timerDisposable)?.Dispose();
 
-                    if (onNextWins)
-                    {
                         ForwardOnNext(value);
-                        CreateTimer();
+
+                        CreateTimer(idx + 1);
                     }
                 }
 
                 public override void OnError(Exception error)
                 {
-                    var onErrorWins = false;
-
-                    lock (_gate)
+                    if (Interlocked.Exchange(ref index, long.MaxValue) != long.MaxValue)
                     {
-                        onErrorWins = !_switched;
-                        if (onErrorWins)
-                        {
-                            _id = unchecked(_id + 1);
-                        }
-                    }
+                        Volatile.Read(ref timerDisposable)?.Dispose();
 
-                    if (onErrorWins)
-                    {
                         ForwardOnError(error);
                     }
                 }
 
                 public override void OnCompleted()
                 {
-                    var onCompletedWins = false;
-
-                    lock (_gate)
+                    if (Interlocked.Exchange(ref index, long.MaxValue) != long.MaxValue)
                     {
-                        onCompletedWins = !_switched;
-                        if (onCompletedWins)
-                        {
-                            _id = unchecked(_id + 1);
-                        }
-                    }
+                        Volatile.Read(ref timerDisposable)?.Dispose();
 
-                    if (onCompletedWins)
-                    {
                         ForwardOnCompleted();
                     }
+                }
+
+                struct TimeoutState
+                {
+                    public long idx;
+                    public _ self;
                 }
             }
         }
