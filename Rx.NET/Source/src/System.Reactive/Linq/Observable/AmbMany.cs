@@ -1,0 +1,229 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Text;
+using System.Threading;
+
+namespace System.Reactive.Linq.ObservableImpl
+{
+    internal sealed class AmbManyArray<T> : BasicProducer<T>
+    {
+        readonly IObservable<T>[] sources;
+
+        public AmbManyArray(IObservable<T>[] sources)
+        {
+            this.sources = sources;
+        }
+
+        protected override IDisposable Run(IObserver<T> observer)
+        {
+            var sources = this.sources;
+            return AmbCoordinator<T>.Create(observer, sources, sources.Length);
+        }
+    }
+
+    internal sealed class AmbManyEnumerable<T> : BasicProducer<T>
+    {
+        readonly IEnumerable<IObservable<T>> sources;
+
+        public AmbManyEnumerable(IEnumerable<IObservable<T>> sources)
+        {
+            this.sources = sources;
+        }
+
+        protected override IDisposable Run(IObserver<T> observer)
+        {
+            var sourcesEnumerable = this.sources;
+            var n = 0;
+            var sources = new IObservable<T>[8];
+
+            try
+            {
+                foreach (var source in sourcesEnumerable)
+                {
+                    if (n == sources.Length)
+                    {
+                        var b = new IObservable<T>[n + (n >> 2)];
+                        Array.Copy(sources, 0, b, 0, n);
+                        sources = b;
+                    }
+                    sources[n++] = source;
+                }
+            }
+            catch (Exception ex)
+            {
+                observer.OnError(ex);
+                return Disposable.Empty;
+            }
+
+            return AmbCoordinator<T>.Create(observer, sources, n);
+        }
+    }
+
+    internal sealed class AmbCoordinator<T> : IDisposable
+    {
+        readonly IObserver<T> downstream;
+
+        readonly InnerObserver[] observers;
+
+        int winner;
+
+        internal AmbCoordinator(IObserver<T> downstream, int n)
+        {
+            this.downstream = downstream;
+            var o = new InnerObserver[n];
+            for (int i = 0; i < n; i++)
+            {
+                o[i] = new InnerObserver(this, i);
+            }
+            observers = o;
+            Volatile.Write(ref winner, -1);
+        }
+
+        internal static IDisposable Create(IObserver<T> observer, IObservable<T>[] sources, int n)
+        {
+            if (n == 0)
+            {
+                observer.OnCompleted();
+                return Disposable.Empty;
+            }
+
+            if (n == 1)
+            {
+                return sources[0].Subscribe(observer);
+            }
+
+            var parent = new AmbCoordinator<T>(observer, n);
+
+            parent.Subscribe(sources, n);
+
+            return parent;
+        }
+
+        internal void Subscribe(IObservable<T>[] sources, int n)
+        {
+            var o = observers;
+
+            for (var i = 0; i < n; i++)
+            {
+                var inner = Volatile.Read(ref o[i]);
+                if (inner == null)
+                {
+                    break;
+                }
+                inner.OnSubscribe(sources[i].Subscribe(inner));
+            }
+        }
+
+        public void Dispose()
+        {
+            var o = observers;
+            var n = o.Length;
+
+            for (var i = 0; i < n; i++)
+            {
+                Interlocked.Exchange(ref o[i], null)?.Dispose();
+            }
+        }
+
+        bool TryWin(int index)
+        {
+            if (Volatile.Read(ref winner) == -1 && Interlocked.CompareExchange(ref winner, index, -1) == -1)
+            {
+                var o = observers;
+                var n = o.Length;
+
+                for (var i = 0; i < n; i++)
+                {
+                    if (index != i)
+                    {
+                        Interlocked.Exchange(ref o[i], null)?.Dispose();
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        internal sealed class InnerObserver : IObserver<T>, IDisposable
+        {
+            readonly IObserver<T> downstream;
+
+            readonly AmbCoordinator<T> parent;
+
+            readonly int index;
+
+            IDisposable upstream;
+
+            bool won;
+
+            public InnerObserver(AmbCoordinator<T> parent, int index)
+            {
+                this.downstream = parent.downstream;
+                this.parent = parent;
+                this.index = index;
+            }
+
+            public void Dispose()
+            {
+                Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
+            }
+
+            public void OnCompleted()
+            {
+                if (won)
+                {
+                    downstream.OnCompleted();
+                }
+                else
+                if (parent.TryWin(index))
+                {
+                    won = true;
+                    downstream.OnCompleted();
+                }
+                Dispose();
+            }
+
+            public void OnError(Exception error)
+            {
+                if (won)
+                {
+                    downstream.OnError(error);
+                }
+                else
+                if (parent.TryWin(index))
+                {
+                    won = true;
+                    downstream.OnError(error);
+                }
+                Dispose();
+            }
+
+            public void OnNext(T value)
+            {
+                if (won)
+                {
+                    downstream.OnNext(value);
+                }
+                else
+                if (parent.TryWin(index))
+                {
+                    won = true;
+                    downstream.OnNext(value);
+                } else
+                {
+                    Dispose();
+                }
+            }
+
+            internal void OnSubscribe(IDisposable d)
+            {
+                if (Interlocked.CompareExchange(ref upstream, d, null) != null)
+                {
+                    d?.Dispose();
+                }
+            }
+        }
+
+    }
+}

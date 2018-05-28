@@ -18,27 +18,17 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Amb<TSource>(IObservable<TSource> first, IObservable<TSource> second)
         {
-            return Amb_(first, second);
+            return new Amb<TSource>(first, second);
         }
 
         public virtual IObservable<TSource> Amb<TSource>(params IObservable<TSource>[] sources)
         {
-            return Amb_(sources);
+            return new AmbManyArray<TSource>(sources);
         }
 
         public virtual IObservable<TSource> Amb<TSource>(IEnumerable<IObservable<TSource>> sources)
         {
-            return Amb_(sources);
-        }
-
-        private static IObservable<TSource> Amb_<TSource>(IEnumerable<IObservable<TSource>> sources)
-        {
-            return sources.Aggregate(Observable.Never<TSource>(), (previous, current) => previous.Amb(current));
-        }
-
-        private static IObservable<TSource> Amb_<TSource>(IObservable<TSource> leftSource, IObservable<TSource> rightSource)
-        {
-            return new Amb<TSource>(leftSource, rightSource);
+            return new AmbManyEnumerable<TSource>(sources);
         }
 
         #endregion
