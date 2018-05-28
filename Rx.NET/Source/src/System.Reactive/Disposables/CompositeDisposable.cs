@@ -315,7 +315,7 @@ namespace System.Reactive.Disposables
                 if (arrayIndex + _count > array.Length)
                 {
                     // there is not enough space beyond arrayIndex 
-                    // to accomodate all _count disposables in this composite
+                    // to accommodate all _count disposables in this composite
                     throw new ArgumentOutOfRangeException(nameof(arrayIndex));
                 }
                 var i = arrayIndex;

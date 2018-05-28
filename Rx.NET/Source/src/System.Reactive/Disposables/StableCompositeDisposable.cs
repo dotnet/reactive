@@ -15,8 +15,8 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Creates a new group containing two disposable resources that are disposed together.
         /// </summary>
-        /// <param name="disposable1">The first disposable resoruce to add to the group.</param>
-        /// <param name="disposable2">The second disposable resoruce to add to the group.</param>
+        /// <param name="disposable1">The first disposable resource to add to the group.</param>
+        /// <param name="disposable2">The second disposable resource to add to the group.</param>
         /// <returns>Group of disposable resources that are disposed together.</returns>
         public static ICancelable Create(IDisposable disposable1, IDisposable disposable2)
         {
