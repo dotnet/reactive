@@ -4,7 +4,7 @@ using System.Reactive;
 
 namespace ReactiveTests.Tests
 {
-#if !SIGNED
+#if SIGNED
     
     public class ImmutableListTest
     {

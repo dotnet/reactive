@@ -156,6 +156,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
+    <DefineConstants Condition="$(SignAssembly) == 'true'">$(DefineConstants);SIGNED</DefineConstants>
     <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
