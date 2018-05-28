@@ -509,7 +509,7 @@ namespace System.Reactive
         /// <summary>
         /// Executes a drain step by checking the disposed state,
         /// checking for the terminated state and for an
-        /// empty queue, issuing the approrpiate signals to the
+        /// empty queue, issuing the appropriate signals to the
         /// given downstream.
         /// </summary>
         /// <param name="q">The queue to use.</param>

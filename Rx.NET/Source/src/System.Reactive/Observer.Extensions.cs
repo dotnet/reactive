@@ -259,12 +259,12 @@ namespace System.Reactive
         }
 
         /// <summary>
-        /// Schedules the invocation of observer methods on the given synchonization context.
+        /// Schedules the invocation of observer methods on the given synchronization context.
         /// </summary>
         /// <typeparam name="T">The type of the elements received by the source observer.</typeparam>
         /// <param name="observer">The observer to schedule messages for.</param>
-        /// <param name="context">Synchonization context to schedule observer messages on.</param>
-        /// <returns>Observer whose messages are scheduled on the given synchonization context.</returns>
+        /// <param name="context">Synchronization context to schedule observer messages on.</param>
+        /// <returns>Observer whose messages are scheduled on the given synchronization context.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="observer"/> or <paramref name="context"/> is null.</exception>
         public static IObserver<T> NotifyOn<T>(this IObserver<T> observer, SynchronizationContext context)
         {
