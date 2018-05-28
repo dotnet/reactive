@@ -29,12 +29,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(Invoke);
+                return scheduler.Schedule(this, Invoke);
             }
 
-            private void Invoke()
+            private static IDisposable Invoke(IScheduler s, _ target)
             {
-                ForwardOnCompleted();
+                target.OnCompleted();
+                return Disposable.Empty;
             }
         }
     }
