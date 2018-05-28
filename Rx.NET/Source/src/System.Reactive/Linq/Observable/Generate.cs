@@ -30,7 +30,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -87,14 +87,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         catch (Exception exception)
                         {
-                            base._observer.OnError(exception);
-                            base.Dispose();
+                            ForwardOnError(exception);
                             return;
                         }
 
                         if (hasResult)
                         {
-                            base._observer.OnNext(result);
+                            ForwardOnNext(result);
                         }
                         else
                         {
@@ -104,10 +103,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (!cancel.IsDisposed)
                     {
-                        base._observer.OnCompleted();
+                        ForwardOnCompleted();
                     }
-
-                    base.Dispose();
                 }
 
                 private void LoopRec(Action recurse)
@@ -134,20 +131,18 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        ForwardOnError(exception);
                         return;
                     }
 
                     if (hasResult)
                     {
-                        base._observer.OnNext(result);
+                        ForwardOnNext(result);
                         recurse();
                     }
                     else
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                     }
                 }
             }
@@ -176,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -207,7 +202,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_hasResult)
                     {
-                        base._observer.OnNext(_result);
+                        ForwardOnNext(_result);
                     }
 
                     try
@@ -231,15 +226,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        ForwardOnError(exception);
                         return Disposable.Empty;
                     }
 
                     if (!_hasResult)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                         return Disposable.Empty;
                     }
 
@@ -271,7 +264,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run();
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 // CONSIDER: This sink has a parent reference that can be considered for removal.
 
@@ -302,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (_hasResult)
                     {
-                        base._observer.OnNext(_result);
+                        ForwardOnNext(_result);
                     }
 
                     try
@@ -326,15 +319,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        base._observer.OnError(exception);
-                        base.Dispose();
+                        ForwardOnError(exception);
                         return Disposable.Empty;
                     }
 
                     if (!_hasResult)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                         return Disposable.Empty;
                     }
 

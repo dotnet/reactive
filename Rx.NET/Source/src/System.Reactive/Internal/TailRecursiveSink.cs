@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace System.Reactive
 {
-    internal abstract class TailRecursiveSink<TSource> : Sink<TSource>, IObserver<TSource>
+    internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
         public TailRecursiveSink(IObserver<TSource> observer, IDisposable cancel)
             : base(observer, cancel)
@@ -92,8 +92,7 @@ namespace System.Reactive
                         catch (Exception ex)
                         {
                             currentEnumerator.Dispose();
-                            _observer.OnError(ex);
-                            base.Dispose();
+                            ForwardOnError(ex);
                             Volatile.Write(ref _isDisposed, true);
                             continue;
                         }
@@ -195,28 +194,21 @@ namespace System.Reactive
             }
             catch (Exception exception)
             {
-                _observer.OnError(exception);
-                base.Dispose();
+                ForwardOnError(exception);
 
                 result = null;
                 return false;
             }
         }
 
-        public abstract void OnCompleted();
-        public abstract void OnError(Exception error);
-        public abstract void OnNext(TSource value);
-
         protected virtual void Done()
         {
-            _observer.OnCompleted();
-            base.Dispose();
+            ForwardOnCompleted();
         }
 
         protected virtual bool Fail(Exception error)
         {
-            _observer.OnError(error);
-            base.Dispose();
+            ForwardOnError(error);
 
             return false;
         }

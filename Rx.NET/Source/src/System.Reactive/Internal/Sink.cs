@@ -6,55 +6,95 @@ using System.Threading;
 
 namespace System.Reactive
 {
-    /// <summary>
-    /// Base class for implementation of query operators, providing a lightweight sink that can be disposed to mute the outgoing observer.
-    /// </summary>
-    /// <typeparam name="TSource">Type of the resulting sequence's elements.</typeparam>
-    /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
-    internal abstract class Sink<TSource> : IDisposable
+    internal abstract class Sink<TTarget> : IDisposable
     {
-        protected internal volatile IObserver<TSource> _observer;
         private IDisposable _cancel;
+        private volatile IObserver<TTarget> _observer;
 
-        public Sink(IObserver<TSource> observer, IDisposable cancel)
+        protected Sink(IObserver<TTarget> observer, IDisposable cancel)
         {
             _observer = observer;
             _cancel = cancel;
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            _observer = NopObserver<TSource>.Instance;
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _observer = NopObserver<TTarget>.Instance;
 
             Interlocked.Exchange(ref _cancel, null)?.Dispose();
         }
 
-        public IObserver<TSource> GetForwarder() => new _(this);
-
-        private sealed class _ : IObserver<TSource>
+        protected void ForwardOnNext(TTarget value)
         {
-            private readonly Sink<TSource> _forward;
+            _observer.OnNext(value);
+        }
 
-            public _(Sink<TSource> forward)
+        protected void ForwardOnCompleted()
+        {
+            _observer.OnCompleted();
+            Dispose();
+        }
+
+        protected void ForwardOnError(Exception error)
+        {
+            _observer.OnError(error);
+            Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Base class for implementation of query operators, providing a lightweight sink that can be disposed to mute the outgoing observer.
+    /// </summary>
+    /// <typeparam name="TTarget">Type of the resulting sequence's elements.</typeparam>
+    /// <typeparam name="TSource"></typeparam>
+    /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
+    internal abstract class Sink<TSource, TTarget> : Sink<TTarget>, IObserver<TSource>
+    {
+        protected Sink(IObserver<TTarget> observer, IDisposable cancel) : base(observer, cancel)
+        {
+        }
+
+        public abstract void OnNext(TSource value);
+
+        public virtual void OnError(Exception error)
+        {
+            ForwardOnError(error);
+        }
+
+        public virtual void OnCompleted()
+        {
+            ForwardOnCompleted();
+        }
+
+        public IObserver<TTarget> GetForwarder() => new _(this);
+
+        private sealed class _ : IObserver<TTarget>
+        {
+            private readonly Sink<TSource, TTarget> _forward;
+
+            public _(Sink<TSource, TTarget> forward)
             {
                 _forward = forward;
             }
 
-            public void OnNext(TSource value)
+            public void OnNext(TTarget value)
             {
-                _forward._observer.OnNext(value);
+                _forward.ForwardOnNext(value);
             }
 
             public void OnError(Exception error)
             {
-                _forward._observer.OnError(error);
-                _forward.Dispose();
+                _forward.ForwardOnError(error);
             }
 
             public void OnCompleted()
             {
-                _forward._observer.OnCompleted();
-                _forward.Dispose();
+                _forward.ForwardOnCompleted();
             }
         }
     }

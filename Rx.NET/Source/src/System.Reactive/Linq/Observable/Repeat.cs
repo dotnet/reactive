@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private void LoopRecInf(Action recurse)
                 {
-                    base._observer.OnNext(_value);
+                    ForwardOnNext(_value);
                     recurse();
                 }
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var value = _value;
                     while (!cancel.IsDisposed)
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
 
                     base.Dispose();
                 }
@@ -81,7 +81,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TResult>
+            internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
@@ -108,14 +108,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (n > 0)
                     {
-                        base._observer.OnNext(_value);
+                        ForwardOnNext(_value);
                         n--;
                     }
 
                     if (n == 0)
                     {
-                        base._observer.OnCompleted();
-                        base.Dispose();
+                        ForwardOnCompleted();
                         return;
                     }
 
@@ -127,14 +126,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     var value = _value;
                     while (n > 0 && !cancel.IsDisposed)
                     {
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                         n--;
                     }
 
                     if (!cancel.IsDisposed)
-                        base._observer.OnCompleted();
-
-                    base.Dispose();
+                        ForwardOnCompleted();
                 }
             }
         }

@@ -34,11 +34,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 return null;
             }
 
-            public override void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
-            }
-
             public override void OnError(Exception error)
             {
                 Recurse();

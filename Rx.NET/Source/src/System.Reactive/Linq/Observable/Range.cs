@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : Sink<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private readonly int _start;
             private readonly int _count;
@@ -53,27 +53,24 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 while (!cancel.IsDisposed && i < _count)
                 {
-                    base._observer.OnNext(_start + i);
+                    ForwardOnNext(_start + i);
                     i++;
                 }
 
                 if (!cancel.IsDisposed)
-                    base._observer.OnCompleted();
-
-                base.Dispose();
+                    ForwardOnCompleted();
             }
 
             private void LoopRec(int i, Action<int> recurse)
             {
                 if (i < _count)
                 {
-                    base._observer.OnNext(_start + i);
+                    ForwardOnNext(_start + i);
                     recurse(i + 1);
                 }
                 else
                 {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
                 }
             }
         }

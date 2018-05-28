@@ -83,7 +83,7 @@ namespace System.Reactive
         protected abstract IDisposable Run(IObserver<TSource> observer);
     }
 
-    internal abstract class Producer<TSource, TSink> : IProducer<TSource>
+    internal abstract class Producer<TTarget, TSink> : IProducer<TTarget>
         where TSink : IDisposable
     {
         /// <summary>
@@ -91,7 +91,7 @@ namespace System.Reactive
         /// </summary>
         /// <param name="observer">Observer to send notifications on. The implementation of a producer must ensure the correct message grammar on the observer.</param>
         /// <returns>IDisposable to cancel the subscription. This causes the underlying sink to be notified of unsubscription, causing it to prevent further messages from being sent to the observer.</returns>
-        public IDisposable Subscribe(IObserver<TSource> observer)
+        public IDisposable Subscribe(IObserver<TTarget> observer)
         {
             if (observer == null)
                 throw new ArgumentNullException(nameof(observer));
@@ -99,7 +99,7 @@ namespace System.Reactive
             return SubscribeRaw(observer, enableSafeguard: true);
         }
 
-        public IDisposable SubscribeRaw(IObserver<TSource> observer, bool enableSafeguard)
+        public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
             var subscription = new SubscriptionDisposable();
 
@@ -109,7 +109,7 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
-                observer = SafeObserver<TSource>.Create(observer, subscription);
+                observer = SafeObserver<TTarget>.Create(observer, subscription);
             }
 
             var sink = CreateSink(observer, subscription.Inner);
@@ -148,7 +148,7 @@ namespace System.Reactive
         /// <param name="sink">The sink object.</param>
         protected abstract IDisposable Run(TSink sink);
 
-        protected abstract TSink CreateSink(IObserver<TSource> observer, IDisposable cancel);
+        protected abstract TSink CreateSink(IObserver<TTarget> observer, IDisposable cancel);
     }
 
     internal sealed class SubscriptionDisposable : ICancelable
