@@ -664,5 +664,37 @@ namespace ReactiveTests.Tests
                 }
             }
         }
+
+        [Fact]
+        public void Amb_Many_Enumerable_Many_Sources_NoStackOverflow()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var sources = new List<IObservable<int>>();
+                for (var j = 0; j < i; j++)
+                {
+                    if (j == i - 1)
+                    {
+                        sources.Add(Observable.Return(j));
+                    }
+                    else
+                    {
+                        sources.Add(Observable.Never<int>());
+                    }
+                }
+
+                var result = sources.Amb().ToList().First();
+
+                if (i == 0)
+                {
+                    Assert.Equal(0, result.Count);
+                }
+                else
+                {
+                    Assert.Equal(1, result.Count);
+                    Assert.Equal(i - 1, result[0]);
+                }
+            }
+        }
     }
 }
