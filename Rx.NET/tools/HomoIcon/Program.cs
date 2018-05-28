@@ -60,14 +60,14 @@ namespace HomoIconize
                 return;
             }
 
-            var dll = Path.Combine(rxRoot, @"bin\debug\net46\" + sourceAssembly + ".dll");
+            var dll = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".dll");
             if (!File.Exists(dll))
             {
                 Console.WriteLine("Error:  Could not find file \"" + dll + "\"");
                 return;
             }
 
-            var xml = Path.Combine(rxRoot, @"bin\debug\net46\" + sourceAssembly + ".xml");
+            var xml = Path.Combine(rxRoot, @"bin\debug\netstandard2.0\" + sourceAssembly + ".xml");
             if (!File.Exists(xml))
             {
                 Console.WriteLine("Error:  Could not find file \"" + xml + "\"");
