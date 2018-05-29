@@ -573,7 +573,7 @@ namespace System.Reactive
 
             protected override IDisposable SubscribeCore(IObserver<T> observer)
             {
-                return scheduler.Schedule(new State { parent = parent, observer = observer },  (scheduler, state) =>
+                return scheduler.Schedule((parent, observer), (scheduler, state) =>
                 {
                     var parent = state.parent;
                     var o = state.observer;
@@ -586,12 +586,6 @@ namespace System.Reactive
                     }
                     return Disposable.Empty;
                 });
-            }
-
-            struct State
-            {
-                public Notification<T> parent;
-                public IObserver<T> observer;
             }
         }
     }
