@@ -22,7 +22,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(IObserver<T> observer)
         {
-            var sources = this.sources;
             return AmbCoordinator<T>.Create(observer, sources);
         }
     }
