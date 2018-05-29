@@ -119,18 +119,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 _forward = true;
             }
 
-            void OtherError(Exception ex)
-            {
-                if (Interlocked.CompareExchange(ref error, ex, null) == null)
-                {
-                    if (Interlocked.Increment(ref halfSerializer) == 1)
-                    {
-                        error = TerminalException;
-                        ForwardOnError(ex);
-                    }
-                }
-            }
-
             sealed class OtherObserver : IObserver<TOther>, IDisposable
             {
                 readonly _ parent;
@@ -162,7 +150,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    parent.OtherError(error);
+                    parent.OnError(error);
                 }
 
                 public void OnNext(TOther value)
