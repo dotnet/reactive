@@ -4,6 +4,7 @@
 
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -24,128 +25,126 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
+            readonly OtherObserver other;
+
+            IDisposable mainDisposable;
+
+            int halfSerializer;
+
+            Exception error;
+
+            static readonly Exception TerminalException = new Exception("No further exceptions");
+
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
+                other = new OtherObserver(this);
             }
 
             public IDisposable Run(TakeUntil<TSource, TOther> parent)
             {
-                var sourceObserver = new SourceObserver(this);
-                var otherObserver = new OtherObserver(this, sourceObserver);
+                other.OnSubscribe(parent._other.Subscribe(other));
 
-                // COMPAT - Order of Subscribe calls per v1.0.10621
-                var otherSubscription = parent._other.SubscribeSafe(otherObserver);
-                otherObserver.Disposable = otherSubscription;
+                Disposable.TrySetSingle(ref mainDisposable, parent._source.Subscribe(this));
 
-                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
-
-                return StableCompositeDisposable.Create(
-                    otherSubscription,
-                    sourceSubscription
-                );
+                return this;
             }
 
-            /*
-             * We tried a more fine-grained synchronization scheme to make TakeUntil more efficient, but
-             * this requires several CAS instructions, which quickly add up to being non-beneficial.
-             * 
-             * Notice an approach where the "other" channel performs an Interlocked.Exchange operation on
-             * the _parent._observer field to substitute it with a NopObserver<TSource> doesn't work,
-             * because the "other" channel still needs to send an OnCompleted message, which could happen
-             * concurrently with another message when the "source" channel has already read from the
-             * _parent._observer field between making the On* call.
-             * 
-             * Fixing this issue requires an ownership transfer mechanism for channels to get exclusive
-             * access to the outgoing observer while dispatching a message. Doing this more fine-grained
-             * than using locks turns out to be tricky and doesn't reduce cost.
-             */
-            private sealed class SourceObserver : IObserver<TSource>
+            protected override void Dispose(bool disposing)
             {
-                private readonly _ _parent;
-                public volatile bool _open;
-
-                public SourceObserver(_ parent)
+                base.Dispose(disposing);
+                if (!Disposable.GetIsDisposed(ref mainDisposable))
                 {
-                    _parent = parent;
-                    _open = false;
+                    Disposable.TryDispose(ref mainDisposable);
                 }
+                other.Dispose();
+            }
 
-                public void OnNext(TSource value)
+            public override void OnNext(TSource value)
+            {
+                if (Interlocked.CompareExchange(ref halfSerializer, 1, 0) == 0)
                 {
-                    if (_open)
+                    ForwardOnNext(value);
+                    if (Interlocked.Decrement(ref halfSerializer) != 0)
                     {
-                        _parent.ForwardOnNext(value);
-                    }
-                    else
-                    {
-                        lock (_parent)
+                        var ex = error;
+                        if (ex != TerminalException)
                         {
-                            _parent.ForwardOnNext(value);
+                            error = TerminalException;
+                            ForwardOnError(ex);
+                        }
+                        else
+                        {
+                            ForwardOnCompleted();
                         }
                     }
                 }
+            }
 
-                public void OnError(Exception error)
+            public override void OnError(Exception ex)
+            {
+                if (Interlocked.CompareExchange(ref error, ex, null) == null)
                 {
-                    lock (_parent)
+                    if (Interlocked.Increment(ref halfSerializer) == 1)
                     {
-                        _parent.ForwardOnError(error);
+                        error = TerminalException;
+                        ForwardOnError(ex);
                     }
+                }
+            }
+
+            public override void OnCompleted()
+            {
+                if (Interlocked.CompareExchange(ref error, TerminalException, null) == null)
+                {
+                    if (Interlocked.Increment(ref halfSerializer) == 1)
+                    {
+                        ForwardOnCompleted();
+                    }
+                }
+            }
+
+            sealed class OtherObserver : IObserver<TOther>, IDisposable
+            {
+                readonly _ parent;
+
+                IDisposable upstream;
+
+                public OtherObserver(_ parent)
+                {
+                    this.parent = parent;
+                }
+
+                public void Dispose()
+                {
+                    if (!Disposable.GetIsDisposed(ref upstream))
+                    {
+                        Disposable.TryDispose(ref upstream);
+                    }
+                }
+
+                public void OnSubscribe(IDisposable d)
+                {
+                    Disposable.TrySetSingle(ref upstream, d);
                 }
 
                 public void OnCompleted()
                 {
-                    lock (_parent)
-                    {
-                        _parent.ForwardOnCompleted();
-                    }
-                }
-            }
-
-            private sealed class OtherObserver : IObserver<TOther>
-            {
-                private readonly _ _parent;
-                private readonly SourceObserver _sourceObserver;
-                private readonly SingleAssignmentDisposable _subscription;
-
-                public OtherObserver(_ parent, SourceObserver sourceObserver)
-                {
-                    _parent = parent;
-                    _sourceObserver = sourceObserver;
-                    _subscription = new SingleAssignmentDisposable();
+                    // Completion doesn't mean termination in Rx.NET for this operator
+                    Dispose();
                 }
 
-                public IDisposable Disposable
+                public void OnError(Exception error)
                 {
-                    set { _subscription.Disposable = value; }
+                    parent.OnError(error);
                 }
 
                 public void OnNext(TOther value)
                 {
-                    lock (_parent)
-                    {
-                        _parent.ForwardOnCompleted();
-                    }
-                }
-
-                public void OnError(Exception error)
-                {
-                    lock (_parent)
-                    {
-                        _parent.ForwardOnError(error);
-                    }
-                }
-
-                public void OnCompleted()
-                {
-                    lock (_parent)
-                    {
-                        _sourceObserver._open = true;
-                        _subscription.Dispose();
-                    }
+                    parent.OnCompleted();
                 }
             }
+
         }
     }
 
