@@ -23,7 +23,7 @@ namespace System.Reactive.Linq.ObservableImpl
         protected override IDisposable Run(IObserver<T> observer)
         {
             var sources = this.sources;
-            return AmbCoordinator<T>.Create(observer, sources, sources.Length);
+            return AmbCoordinator<T>.Create(observer, sources);
         }
     }
 
@@ -51,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            return AmbCoordinator<T>.Create(observer, sources, sources.Length);
+            return AmbCoordinator<T>.Create(observer, sources);
         }
     }
 
@@ -75,8 +75,9 @@ namespace System.Reactive.Linq.ObservableImpl
             Volatile.Write(ref winner, -1);
         }
 
-        internal static IDisposable Create(IObserver<T> observer, IObservable<T>[] sources, int n)
+        internal static IDisposable Create(IObserver<T> observer, IObservable<T>[] sources)
         {
+            var n = sources.Length;
             if (n == 0)
             {
                 observer.OnCompleted();
