@@ -23,16 +23,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get
-            {
-                // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
-                // to the outside world (see the Disposable property getter), so no-one can ever assign
-                // this value to us manually.
-                return Volatile.Read(ref _current) == BooleanDisposable.True;
-            }
-        }
+        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _current);
 
         /// <summary>
         /// Gets or sets the underlying disposable.
@@ -40,36 +31,8 @@ namespace System.Reactive.Disposables
         /// <remarks>If the SerialDisposable has already been disposed, assignment to this property causes immediate disposal of the given disposable object. Assigning this property disposes the previous disposable object.</remarks>
         public IDisposable Disposable
         {
-            get
-            {
-                var a = Volatile.Read(ref _current);
-                // Don't leak the DISPOSED sentinel
-                if (a == BooleanDisposable.True)
-                {
-                    a = null;
-                }
-                return a;
-            }
-
-            set
-            {
-                var copy = Volatile.Read(ref _current);
-                for (;;)
-                {
-                    if (copy == BooleanDisposable.True)
-                    {
-                        value?.Dispose();
-                        return;
-                    }
-                    var current = Interlocked.CompareExchange(ref _current, value, copy);
-                    if (current == copy)
-                    {
-                        copy?.Dispose();
-                        return;
-                    }
-                    copy = current;
-                }
-            }
+            get => Disposables.Disposable.GetValue(ref _current);
+            set => Disposables.Disposable.TrySetSerial(ref _current, value);
         }
 
         /// <summary>
@@ -77,8 +40,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var old = Interlocked.Exchange(ref _current, BooleanDisposable.True);
-            old?.Dispose();
+            Disposables.Disposable.TryDispose(ref _current);
         }
     }
 }

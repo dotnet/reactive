@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Empty<TResult>()
         {
-            return new Empty<TResult>(SchedulerDefaults.ConstantTimeOperations);
+            return EmptyDirect<TResult>.Instance;
         }
 
         public virtual IObservable<TResult> Empty<TResult>(IScheduler scheduler)
