@@ -323,6 +323,7 @@ namespace System.Reactive.Linq
         IObservable<TResult> Replay<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window);
         IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source, int bufferSize, TimeSpan window, IScheduler scheduler);
         IObservable<TResult> Replay<TSource, TResult>(IObservable<TSource> source, Func<IObservable<TSource>, IObservable<TResult>> selector, int bufferSize, TimeSpan window, IScheduler scheduler);
+        IObservable<TSource> AutoConnect<TSource>(IConnectableObservable<TSource> source, int minObservers, Action<IDisposable> onConnect);
 
         #endregion
 
@@ -581,6 +582,7 @@ namespace System.Reactive.Linq
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source, int retryCount);
+        IObservable<TSource> RetryWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler);
         IObservable<TAccumulate> Scan<TSource, TAccumulate>(IObservable<TSource> source, TAccumulate seed, Func<TAccumulate, TSource, TAccumulate> accumulator);
         IObservable<TSource> Scan<TSource>(IObservable<TSource> source, Func<TSource, TSource, TSource> accumulator);
         IObservable<TSource> SkipLast<TSource>(IObservable<TSource> source, int count);

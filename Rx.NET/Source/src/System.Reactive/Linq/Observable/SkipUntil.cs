@@ -22,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -34,9 +34,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 var sourceObserver = new SourceObserver(this);
                 var otherObserver = new OtherObserver(this, sourceObserver);
 
-                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
                 var otherSubscription = parent._other.SubscribeSafe(otherObserver);
-
+                var sourceSubscription = parent._source.SubscribeSafe(sourceObserver);
+                
                 sourceObserver.Disposable = sourceSubscription;
                 otherObserver.Disposable = otherSubscription;
 
@@ -49,13 +49,12 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class SourceObserver : IObserver<TSource>
             {
                 private readonly _ _parent;
-                public volatile IObserver<TSource> _observer;
+                public volatile bool _forward;
                 private readonly SingleAssignmentDisposable _subscription;
 
                 public SourceObserver(_ parent)
                 {
                     _parent = parent;
-                    _observer = NopObserver<TSource>.Instance;
                     _subscription = new SingleAssignmentDisposable();
                 }
 
@@ -66,18 +65,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TSource value)
                 {
-                    _observer.OnNext(value);
+                    if (_forward)
+                        _parent.ForwardOnNext(value);
                 }
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    _parent.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
                 {
-                    _observer.OnCompleted();
+                    if (_forward)
+                        _parent.ForwardOnCompleted();
+
                     _subscription.Dispose(); // We can't cancel the other stream yet, it may be on its way to dispatch an OnError message and we don't want to have a race.
                 }
             }
@@ -102,14 +103,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnNext(TOther value)
                 {
-                    _sourceObserver._observer = _parent._observer;
+                    _sourceObserver._forward = true;
                     _subscription.Dispose();
                 }
 
                 public void OnError(Exception error)
                 {
-                    _parent._observer.OnError(error);
-                    _parent.Dispose();
+                    _parent.ForwardOnError(error);
                 }
 
                 public void OnCompleted()
@@ -154,7 +154,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private volatile bool _open;
 
@@ -175,22 +175,10 @@ namespace System.Reactive.Linq.ObservableImpl
                 _open = true;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (_open)
-                    base._observer.OnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
+                    ForwardOnNext(value);
             }
         }
     }

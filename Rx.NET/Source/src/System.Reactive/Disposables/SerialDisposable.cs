@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Threading;
+
 namespace System.Reactive.Disposables
 {
     /// <summary>
@@ -9,12 +11,10 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SerialDisposable : ICancelable
     {
-        private readonly object _gate = new object();
         private IDisposable _current;
-        private bool _disposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SerialDisposable"/> class.
+        /// Initializes a new instance of the <see cref="T:System.Reactive.Disposables.SerialDisposable"/> class.
         /// </summary>
         public SerialDisposable()
         {
@@ -27,10 +27,10 @@ namespace System.Reactive.Disposables
         {
             get
             {
-                lock (_gate)
-                {
-                    return _disposed;
-                }
+                // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
+                // to the outside world (see the Disposable property getter), so no-one can ever assign
+                // this value to us manually.
+                return Volatile.Read(ref _current) == BooleanDisposable.True;
             }
         }
 
@@ -42,28 +42,32 @@ namespace System.Reactive.Disposables
         {
             get
             {
-                return _current;
+                var a = Volatile.Read(ref _current);
+                // Don't leak the DISPOSED sentinel
+                if (a == BooleanDisposable.True)
+                {
+                    a = null;
+                }
+                return a;
             }
 
             set
             {
-                var shouldDispose = false;
-                var old = default(IDisposable);
-                lock (_gate)
+                var copy = Volatile.Read(ref _current);
+                for (;;)
                 {
-                    shouldDispose = _disposed;
-                    if (!shouldDispose)
+                    if (copy == BooleanDisposable.True)
                     {
-                        old = _current;
-                        _current = value;
+                        value?.Dispose();
+                        return;
                     }
-                }
-
-                old?.Dispose();
-
-                if (shouldDispose)
-                {
-                    value?.Dispose();
+                    var current = Interlocked.CompareExchange(ref _current, value, copy);
+                    if (current == copy)
+                    {
+                        copy?.Dispose();
+                        return;
+                    }
+                    copy = current;
                 }
             }
         }
@@ -73,18 +77,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            var old = default(IDisposable);
-
-            lock (_gate)
-            {
-                if (!_disposed)
-                {
-                    _disposed = true;
-                    old = _current;
-                    _current = null;
-                }
-            }
-
+            var old = Interlocked.Exchange(ref _current, BooleanDisposable.True);
             old?.Dispose();
         }
     }

@@ -1,5 +1,6 @@
-Reactive Extensions
+﻿Reactive Extensions
 ======================
+[![Coverage Status](https://coveralls.io/repos/github/dotnet/reactive/badge.svg?branch=master)](https://coveralls.io/github/dotnet/reactive?branch=master)
 
 Channel  | Rx | Ix |
 -------- | :------------: | :-------------: |
@@ -20,8 +21,8 @@ Due to the [overwhelming](https://github.com/dotnet/reactive/issues/299) [pain](
 #### Supported Platforms
 Rx 4.0 supports the following platforms
 
-- .NET Framework 4.5+
-- .NET Standard 1.3+ (including .NET Core, Xamarin and others)
+- .NET Framework 4.6+
+- .NET Standard 2.0+ (including .NET Core, Xamarin and others)
 - UWP
 
 Notably, Windows 8, Windows Phone 8 and legacy PCL libraries are no longer supported. 
@@ -73,7 +74,7 @@ Flavors of Rx
 ---------------
 
 * __Rx.NET__: *(this repository)* The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators.
-* [RxJS 4](https://github.com/Reactive-Extensions/RxJS) / [RxJS 5 beta](https://github.com/ReactiveX/rxjs): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
+* [RxJS](https://github.com/ReactiveX/rxjs): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
 * [RxJava](https://github.com/ReactiveX/RxJava): Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
 * [RxScala](https://github.com/ReactiveX/RxScala): Reactive Extensions for Scala – a library for composing asynchronous and event-based programs using observable sequences
 * [RxCpp](https://github.com/Reactive-Extensions/RxCpp): The Reactive Extensions for Native (RxCpp) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in both C and C++.

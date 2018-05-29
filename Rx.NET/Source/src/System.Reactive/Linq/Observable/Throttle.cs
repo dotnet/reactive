@@ -24,7 +24,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_source);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly TimeSpan _dueTime;
             private readonly IScheduler _scheduler;
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var currentid = default(ulong);
                 lock (_gate)
@@ -75,38 +75,36 @@ namespace System.Reactive.Linq.ObservableImpl
                 lock (_gate)
                 {
                     if (_hasValue && _id == currentid)
-                        base._observer.OnNext(_value);
+                        ForwardOnNext(_value);
                     _hasValue = false;
                 }
 
                 return Disposable.Empty;
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 _cancelable.Dispose();
 
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
                 }
             }
-
-            public void OnCompleted()
+            
+            public override void OnCompleted()
             {
                 _cancelable.Dispose();
 
                 lock (_gate)
                 {
                     if (_hasValue)
-                        base._observer.OnNext(_value);
+                        ForwardOnNext(_value);
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -130,7 +128,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, IObservable<TThrottle>> _throttleSelector;
 
@@ -159,7 +157,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return StableCompositeDisposable.Create(subscription, _cancelable);
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var throttle = default(IObservable<TThrottle>);
                 try
@@ -170,8 +168,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_gate)
                     {
-                        base._observer.OnError(error);
-                        base.Dispose();
+                        ForwardOnError(error);
                     }
 
                     return;
@@ -191,31 +188,29 @@ namespace System.Reactive.Linq.ObservableImpl
                 d.Disposable = throttle.SubscribeSafe(new ThrottleObserver(this, value, currentid, d));
             }
 
-            public void OnError(Exception error)
+            public override void OnError(Exception error)
             {
                 _cancelable.Dispose();
 
                 lock (_gate)
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
+                    ForwardOnError(error);
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
                 }
             }
 
-            public void OnCompleted()
+            public override void OnCompleted()
             {
                 _cancelable.Dispose();
 
                 lock (_gate)
                 {
                     if (_hasValue)
-                        base._observer.OnNext(_value);
+                        ForwardOnNext(_value);
 
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnCompleted();
 
                     _hasValue = false;
                     _id = unchecked(_id + 1);
@@ -242,7 +237,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
                         _self.Dispose();
@@ -253,8 +248,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -263,7 +257,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     lock (_parent._gate)
                     {
                         if (_parent._hasValue && _parent._id == _currentid)
-                            _parent._observer.OnNext(_value);
+                            _parent.ForwardOnNext(_value);
 
                         _parent._hasValue = false;
                         _self.Dispose();

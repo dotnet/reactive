@@ -3,13 +3,15 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive
 {
     internal sealed class AutoDetachObserver<T> : ObserverBase<T>
     {
         private readonly IObserver<T> _observer;
-        private readonly SingleAssignmentDisposable _disposable = new SingleAssignmentDisposable();
+
+        private IDisposable disposable;
 
         public AutoDetachObserver(IObserver<T> observer)
         {
@@ -18,7 +20,17 @@ namespace System.Reactive
 
         public IDisposable Disposable
         {
-            set { _disposable.Disposable = value; }
+            set
+            {
+                if (Interlocked.CompareExchange(ref disposable, value, null) != null)
+                {
+                    value?.Dispose();
+                    if (Volatile.Read(ref disposable) != BooleanDisposable.True)
+                    {
+                        throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
+                    }
+                }
+            }
         }
 
         protected override void OnNextCore(T value)
@@ -99,7 +111,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                _disposable.Dispose();
+                Interlocked.Exchange(ref disposable, BooleanDisposable.True)?.Dispose();
             }
         }
     }

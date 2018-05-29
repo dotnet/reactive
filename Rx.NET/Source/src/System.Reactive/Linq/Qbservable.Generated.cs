@@ -1,4 +1,4 @@
-/*
+﻿/*
  * WARNING: Auto-generated file (5/1/2015 21:21:20)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
@@ -7307,7 +7307,7 @@ namespace System.Reactive.Linq
         /// <param name="durationSelector">A function to signal the expiration of a group.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> is null.</exception>
@@ -7349,7 +7349,7 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> is null.</exception>
@@ -7395,7 +7395,7 @@ namespace System.Reactive.Linq
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
@@ -7443,7 +7443,7 @@ namespace System.Reactive.Linq
         /// <param name="comparer">An equality comparer to compare keys with.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="durationSelector" /> or <paramref name="comparer" /> is null.</exception>
@@ -7489,7 +7489,7 @@ namespace System.Reactive.Linq
         /// <param name="durationSelector">A function to signal the expiration of a group.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> is null.</exception>
@@ -7536,7 +7536,7 @@ namespace System.Reactive.Linq
         /// <param name="capacity">The initial number of elements that the underlying dictionary can contain.</param>
         /// <returns>
         /// A sequence of observable groups, each of which corresponds to a unique key value, containing all elements that share that same key value.
-        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encoutered.
+        /// If a group's lifetime expires, a new group with the same key value can be created once an element with such a key value is encountered.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="keySelector" /> or <paramref name="elementSelector" /> or <paramref name="durationSelector" /> is null.</exception>
@@ -8861,7 +8861,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the maximum of.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
@@ -8893,7 +8893,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the maximum of.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the maximum element in the source sequence.</returns>
@@ -9603,7 +9603,7 @@ namespace System.Reactive.Linq
         /// Returns the minimum element in an observable sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <returns>An observable sequence containing a single element with the minimum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> is null.</exception>
@@ -9630,7 +9630,7 @@ namespace System.Reactive.Linq
         /// Returns the minimum element in an observable sequence according to the specified comparer.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the minimum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
@@ -9972,7 +9972,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the minimum of.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
         /// <exception cref="ArgumentNullException">
@@ -10004,7 +10004,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TResult">The type of the objects derived from the elements in the source sequence to determine the minimum of.</typeparam>
-        /// <param name="source">An observable sequence to determine the mimimum element of.</param>
+        /// <param name="source">An observable sequence to determine the minimum element of.</param>
         /// <param name="selector">A transform function to apply to each element.</param>
         /// <param name="comparer">Comparer used to compare elements.</param>
         /// <returns>An observable sequence containing a single element with the value that corresponds to the minimum element in the source sequence.</returns>
@@ -10627,7 +10627,40 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
+        /// <summary>
+        /// Automatically connect the upstream IConnectableObservable at most once when the
+        /// specified number of IObservers have subscribed to this IObservable.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <param name="source">Connectable observable sequence.</param>
+        /// <param name="minObservers">The number of observers required to subscribe before the connection to source happens, non-positive value will trigger an immediate subscription.</param>
+        /// <param name="onConnect">If not null, the connection's IDisposable is provided to it.</param>
+        /// <returns>An observable sequence that connects to the source at most once when the given number of observers have subscribed to it.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        public static IQbservable<TSource> AutoConnect<TSource>(this IQbservableProvider provider, IConnectableObservable<TSource> source, int minObservers, Action<IDisposable> onConnect)
+        {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.AutoConnect<TSource>(default(IQbservableProvider), default(IConnectableObservable<TSource>), default(int), default(Action<IDisposable>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource)),
+#endif
+                    Expression.Constant(provider, typeof(IQbservableProvider)),
+                    Expression.Constant(source, typeof(IConnectableObservable<TSource>)),
+                    Expression.Constant(minObservers, typeof(int)),
+                    Expression.Constant(onConnect, typeof(Action<IDisposable>))
+                )
+            );
+        }
+
         /// <summary>
         /// Generates an observable sequence that repeats the given element infinitely.
         /// </summary>
@@ -11175,7 +11208,42 @@ namespace System.Reactive.Linq
                 )
             );
         }
-        
+
+        /// <summary>
+        /// Retries (resubscribes to) the source observable after a failure and when the observable
+        /// returned by a handler produces an arbitrary item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
+        /// <typeparam name="TSignal">The arbitrary element type signaled by the handler observable.</typeparam>
+        /// <param name="source">Observable sequence to repeat until it successfully terminates.</param>
+        /// <param name="handler">The function that is called for each observer and takes an observable sequence of
+        /// errors. It should return an observable of arbitrary items that should signal that arbitrary item in
+        /// response to receiving the failure Exception from the source observable. If this observable signals
+        /// a terminal event, the sequence is terminated with that signal instead.</param>
+        /// <returns>An observable sequence producing the elements of the given sequence repeatedly until it terminates successfully.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        public static IObservable<TSource> RetryWhen<TSource, TSignal>(this IQbservable<TSource> source, Expression<Func<IObservable<Exception>, IObservable<TSignal>>> handler)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    null,
+#if CRIPPLED_REFLECTION
+                    InfoOf(() => Qbservable.RetryWhen<TSource, TSignal>(default(IQbservable<TSource>), default(Expression<Func<IObservable<Exception>, IObservable<TSignal>>>))),
+#else
+                    ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(TSource), typeof(TSignal)),
+#endif
+                    source.Expression,
+                    handler
+                )
+            );
+        }
+
         /// <summary>
         /// Returns an observable sequence that contains a single element.
         /// </summary>
@@ -11309,7 +11377,7 @@ namespace System.Reactive.Linq
         }
         
         /// <summary>
-        /// Samples the source observable sequence using a samper observable sequence producing sampling ticks.
+        /// Samples the source observable sequence using a sampler observable sequence producing sampling ticks.
         /// Upon each sampling tick, the latest element (if any) in the source sequence during the last sampling interval is sent to the resulting sequence.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
@@ -11479,7 +11547,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, TCollection, TResult>> resultSelector)
         {
             if (source == null)
@@ -11516,7 +11584,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function collectionSelector on each element of the input sequence and then mapping each of those sequence elements and their corresponding source element to a result element.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="collectionSelector" /> or <paramref name="resultSelector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TCollection, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TCollection>>> collectionSelector, Expression<Func<TSource, int, TCollection, int, TResult>> resultSelector)
         {
             if (source == null)
@@ -11732,7 +11800,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, IEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -11764,7 +11832,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose elements are the result of invoking the one-to-many transform function on each element of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="selector" /> is null.</exception>
-        /// <remarks>The projected sequences are enumerated synchonously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
+        /// <remarks>The projected sequences are enumerated synchronously within the OnNext call of the source sequence. In order to do a concurrent, non-blocking merge, change the selector to return an observable sequence obtained using the <see cref="Observable.ToObservable{TSource}(IEnumerable{TSource})" /> conversion.</remarks>
         public static IQbservable<TResult> SelectMany<TSource, TResult>(this IQbservable<TSource> source, Expression<Func<TSource, int, IEnumerable<TResult>>> selector)
         {
             if (source == null)
@@ -16430,7 +16498,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">An observable sequence whose elements to filter.</param>
-        /// <param name="predicate">A function to test each source element for a conditio; the second parameter of the function represents the index of the source element.</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element.</param>
         /// <returns>An observable sequence that contains elements from the input sequence that satisfy the condition.</returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source" /> or <paramref name="predicate" /> is null.</exception>

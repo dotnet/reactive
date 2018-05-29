@@ -17,7 +17,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="control">Windows Forms control whose associated message loop is used to to perform subscription and unsubscription actions on.</param>
+        /// <param name="control">Windows Forms control whose associated message loop is used to perform subscription and unsubscription actions on.</param>
         /// <returns>The source sequence whose subscriptions and unsubscriptions happen on the Windows Forms message loop associated with the specified control.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="control"/> is null.</exception>
         /// <remarks>
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <param name="source">Source sequence.</param>
-        /// <param name="control">Windows Forms control whose associated message loop is used to to notify observers on.</param>
+        /// <param name="control">Windows Forms control whose associated message loop is used to notify observers on.</param>
         /// <returns>The source sequence whose observations happen on the Windows Forms message loop associated with the specified control.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="control"/> is null.</exception>
         public static IObservable<TSource> ObserveOn<TSource>(this IObservable<TSource> source, Control control)

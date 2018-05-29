@@ -21,7 +21,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly TResult _value;
 
@@ -38,9 +38,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private void Invoke()
             {
-                base._observer.OnNext(_value);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_value);
+                ForwardOnCompleted();
             }
         }
     }

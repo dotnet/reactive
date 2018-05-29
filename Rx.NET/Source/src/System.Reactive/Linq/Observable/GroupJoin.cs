@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly object _gate = new object();
             private readonly CompositeDisposable _group = new CompositeDisposable();
@@ -141,7 +141,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnNext(result);
+                        _parent.ForwardOnNext(result);
 
                         foreach (var rightValue in _parent._rightMap)
                         {
@@ -193,8 +193,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             o.Value.OnError(error);
                         }
 
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -202,8 +201,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnCompleted();
-                        _parent.Dispose();
+                        _parent.ForwardOnCompleted();
                     }
 
                     _self.Dispose();
@@ -308,8 +306,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             o.Value.OnError(error);
                         }
 
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 

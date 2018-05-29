@@ -115,7 +115,7 @@ namespace System.Reactive.Concurrency
             // stopwatch facility, or go with a stopwatch based on "scheduler.Now", which has
             // the drawback of potentially going back in time:
             //
-            //   - Using the CAL's stopwatch facility causes us to abondon the scheduler's
+            //   - Using the CAL's stopwatch facility causes us to abandon the scheduler's
             //     potentially virtualized notion of time, always going for the local system
             //     time instead.
             //
@@ -129,7 +129,7 @@ namespace System.Reactive.Concurrency
             // non-monotonic points somehow), so we pick the latter option as the lesser of
             // two evils (also because it should occur rarely).
             //
-            // Users of the stopwatch retrieved by this method could detect non-sensical data
+            // Users of the stopwatch retrieved by this method could detect nonsensical data
             // revealing a jump back in time, or implement custom fallback logic like the one
             // shown below.
             //
@@ -439,7 +439,7 @@ namespace System.Reactive.Concurrency
                 //
                 // The host is telling us we're about to be suspended. At this point, time
                 // computations will still be in a valid range (next <= _period), but after
-                // we're woken up again, Tick would start to go on a crucade to catch up.
+                // we're woken up again, Tick would start to go on a crusade to catch up.
                 //
                 // This has caused problems in the past, where the flood of events caused
                 // batteries to drain etc (see design rationale discussion higher up).

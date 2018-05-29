@@ -134,7 +134,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Empty<TResult>()
         {
-            return new Empty<TResult>(SchedulerDefaults.ConstantTimeOperations);
+            return EmptyDirect<TResult>.Instance;
         }
 
         public virtual IObservable<TResult> Empty<TResult>(IScheduler scheduler)
@@ -162,7 +162,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Never<TResult>()
         {
-            return new Never<TResult>();
+            return ObservableImpl.Never<TResult>.Default;
         }
 
         #endregion

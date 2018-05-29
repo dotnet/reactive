@@ -78,7 +78,7 @@ namespace System.Reactive.Windows.Foundation
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous action to an observable sequence reporting its progress.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>
         /// <param name="source">Asynchronous action to convert.</param>
@@ -175,12 +175,12 @@ namespace System.Reactive.Windows.Foundation
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence reporting its progress but ignoring its result value.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result, which gets ignored by this conversion.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>
         /// <param name="source">Asynchronous action to convert.</param>
-        /// <returns>An observable sequence that produces progress values from the asynchronous operatin and notifies observers about the operations's completion.</returns>
+        /// <returns>An observable sequence that produces progress values from the asynchronous operation and notifies observers about the operations's completion.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is null.</exception>
         public static IObservable<TProgress> ToObservableProgress<TResult, TProgress>(this IAsyncOperationWithProgress<TResult, TProgress> source)
         {
@@ -197,7 +197,7 @@ namespace System.Reactive.Windows.Foundation
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence by retrieving the operation's results whenever progress is reported and when the operation completes.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects, which are used internally in the conversion but aren't exposed.</typeparam>
@@ -215,7 +215,7 @@ namespace System.Reactive.Windows.Foundation
 
         /// <summary>
         /// Converts a Windows Runtime asynchronous operation to an observable sequence by retrieving the operation's results whenever progress is reported and when the operation completes. The operation's progress is reported through the supplied progress object.
-        /// Each observer subscribed to the resulting observable sequence will be notified about the action's succesful or exceptional completion.
+        /// Each observer subscribed to the resulting observable sequence will be notified about the action's successful or exceptional completion.
         /// </summary>
         /// <typeparam name="TResult">The type of the asynchronous operation's result.</typeparam>
         /// <typeparam name="TProgress">The type of the reported progress objects.</typeparam>

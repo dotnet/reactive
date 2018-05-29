@@ -14,7 +14,10 @@ namespace System.Reactive.Joins
 
         protected void AddJoinObserver(IJoinObserver joinObserver)
         {
-            joinObservers.Add(joinObserver, joinObserver);
+            if (!joinObservers.ContainsKey(joinObserver))
+            {
+                joinObservers.Add(joinObserver, joinObserver);
+            }
         }
 
         protected void Dequeue()

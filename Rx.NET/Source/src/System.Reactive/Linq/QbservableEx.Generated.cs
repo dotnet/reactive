@@ -1,4 +1,4 @@
-/*
+﻿/*
  * WARNING: Auto-generated file (5/1/2015 21:21:20)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq
         
 #if !STABLE
         /// <summary>
-        /// Runs two observable sequences in parallel and combines their last elemenets.
+        /// Runs two observable sequences in parallel and combines their last elements.
         /// </summary>
         /// <typeparam name="TSource1">The type of the elements in the first source sequence.</typeparam>
         /// <typeparam name="TSource2">The type of the elements in the second source sequence.</typeparam>

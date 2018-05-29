@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<bool>, IObserver<TSource>
+        internal sealed class _ : Sink<TSource, bool> 
         {
             private readonly Func<TSource, bool> _predicate;
 
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _predicate = predicate;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 var res = false;
                 try
@@ -38,30 +38,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception ex)
                 {
-                    base._observer.OnError(ex);
-                    base.Dispose();
+                    ForwardOnError(ex);
                     return;
                 }
 
                 if (!res)
                 {
-                    base._observer.OnNext(false);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(false);
+                    ForwardOnCompleted();
                 }
             }
-
-            public void OnError(Exception error)
+            
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(true);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(true);
+                ForwardOnCompleted();
             }
         }
     }

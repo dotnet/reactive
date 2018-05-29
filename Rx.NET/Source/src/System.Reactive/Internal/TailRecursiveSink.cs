@@ -5,173 +5,185 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
+using System.Threading;
 
 namespace System.Reactive
 {
-    internal abstract class TailRecursiveSink<TSource> : Sink<TSource>, IObserver<TSource>
+    internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
         public TailRecursiveSink(IObserver<TSource> observer, IDisposable cancel)
             : base(observer, cancel)
         {
         }
 
-        private bool _isDisposed;
-        private SerialDisposable _subscription;
-        private AsyncLock _gate;
-        private Stack<IEnumerator<IObservable<TSource>>> _stack;
-        private Stack<int?> _length;
-        protected Action _recurse;
+        bool _isDisposed;
+
+        int trampoline;
+
+        IDisposable currentSubscription;
+
+        Stack<IEnumerator<IObservable<TSource>>> stack;
 
         public IDisposable Run(IEnumerable<IObservable<TSource>> sources)
         {
-            _isDisposed = false;
-            _subscription = new SerialDisposable();
-            _gate = new AsyncLock();
-            _stack = new Stack<IEnumerator<IObservable<TSource>>>();
-            _length = new Stack<int?>();
-
-            if (!TryGetEnumerator(sources, out var e))
+            if (!TryGetEnumerator(sources, out var current))
                 return Disposable.Empty;
 
-            _stack.Push(e);
-            _length.Push(Helpers.GetLength(sources));
+            stack = new Stack<IEnumerator<IObservable<TSource>>>();
+            stack.Push(current);
 
-            var cancelable = SchedulerDefaults.TailRecursion.Schedule(self =>
-            {
-                _recurse = self;
-                _gate.Wait(MoveNext);
-            });
+            Drain();
 
-            return StableCompositeDisposable.Create(_subscription, cancelable, Disposable.Create(() => _gate.Wait(Dispose)));
+            return new RecursiveSinkDisposable(this);
         }
 
-        protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);
-
-        private void MoveNext()
+        sealed class RecursiveSinkDisposable : IDisposable
         {
-            var hasNext = false;
-            var next = default(IObservable<TSource>);
+            readonly TailRecursiveSink<TSource> parent;
 
-            do
+            public RecursiveSinkDisposable(TailRecursiveSink<TSource> parent)
             {
-                if (_stack.Count == 0)
-                    break;
+                this.parent = parent;
+            }
 
-                if (_isDisposed)
-                    return;
-
-                var e = _stack.Peek();
-                var l = _length.Peek();
-
-                var current = default(IObservable<TSource>);
-                try
-                {
-                    hasNext = e.MoveNext();
-                    if (hasNext)
-                    {
-                        current = e.Current;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    e.Dispose();
-
-                    //
-                    // Failure to enumerate the sequence cannot be handled, even by
-                    // operators like Catch, because it'd lead to another attempt at
-                    // enumerating to find the next observable sequence. Therefore,
-                    // we feed those errors directly to the observer.
-                    //
-                    _observer.OnError(ex);
-                    base.Dispose();
-                    return;
-                }
-
-                if (!hasNext)
-                {
-                    e.Dispose();
-
-                    _stack.Pop();
-                    _length.Pop();
-                }
-                else
-                {
-                    var r = l - 1;
-                    _length.Pop();
-                    _length.Push(r);
-
-                    try
-                    {
-                        next = Helpers.Unpack(current);
-                    }
-                    catch (Exception exception)
-                    {
-                        //
-                        // Errors from unpacking may produce side-effects that normally
-                        // would occur during a SubscribeSafe operation. Those would feed
-                        // back into the observer and be subject to the operator's error
-                        // handling behavior. For example, Catch would allow to handle
-                        // the error using a handler function.
-                        //
-                        if (!Fail(exception))
-                        {
-                            e.Dispose();
-                        }
-
-                        return;
-                    }
-
-                    //
-                    // Tail recursive case; drop the current frame.
-                    //
-                    if (r == 0)
-                    {
-                        e.Dispose();
-
-                        _stack.Pop();
-                        _length.Pop();
-                    }
-
-                    //
-                    // Flattening of nested sequences. Prevents stack overflow in observers.
-                    //
-                    var nextSeq = Extract(next);
-                    if (nextSeq != null)
-                    {
-                        if (!TryGetEnumerator(nextSeq, out var nextEnumerator))
-                            return;
-
-                        _stack.Push(nextEnumerator);
-                        _length.Push(Helpers.GetLength(nextSeq));
-
-                        hasNext = false;
-                    }
-                }
-            } while (!hasNext);
-
-            if (!hasNext)
+            public void Dispose()
             {
-                Done();
+                parent.DisposeAll();
+            }
+        }
+
+        void Drain()
+        {
+            if (Interlocked.Increment(ref trampoline) != 1)
+            {
                 return;
             }
 
-            var d = new SingleAssignmentDisposable();
-            _subscription.Disposable = d;
-            d.Disposable = next.SubscribeSafe(this);
-        }
-
-        private new void Dispose()
-        {
-            while (_stack.Count > 0)
+            for (; ; )
             {
-                var e = _stack.Pop();
-                _length.Pop();
+                if (Volatile.Read(ref _isDisposed))
+                {
+                    while (stack.Count != 0)
+                    {
+                        var enumerator = stack.Pop();
+                        enumerator.Dispose();
+                    }
+                    if (Volatile.Read(ref currentSubscription) != BooleanDisposable.True)
+                    {
+                        Interlocked.Exchange(ref currentSubscription, BooleanDisposable.True)?.Dispose();
+                    }
+                }
+                else
+                {
+                    if (stack.Count != 0)
+                    {
+                        var currentEnumerator = stack.Peek();
 
-                e.Dispose();
+                        var currentObservable = default(IObservable<TSource>);
+                        var next = default(IObservable<TSource>);
+
+                        try
+                        {
+                            if (currentEnumerator.MoveNext())
+                            {
+                                currentObservable = currentEnumerator.Current;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            currentEnumerator.Dispose();
+                            ForwardOnError(ex);
+                            Volatile.Write(ref _isDisposed, true);
+                            continue;
+                        }
+
+                        try
+                        {
+                            next = Helpers.Unpack(currentObservable);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            next = null;
+                            if (!Fail(ex))
+                            {
+                                Volatile.Write(ref _isDisposed, true);
+                            }
+                            continue;
+                        }
+
+                        if (next != null)
+                        {
+                            var nextSeq = Extract(next);
+                            if (nextSeq != null)
+                            {
+                                if (TryGetEnumerator(nextSeq, out var nextEnumerator))
+                                {
+                                    stack.Push(nextEnumerator);
+                                    continue;
+                                }
+                                else
+                                {
+                                    Volatile.Write(ref _isDisposed, true);
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                var sad = new SingleAssignmentDisposable();
+                                if (Interlocked.CompareExchange(ref currentSubscription, sad, null) == null)
+                                {
+                                    sad.Disposable = next.SubscribeSafe(this);
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            stack.Pop();
+                            currentEnumerator.Dispose();
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Volatile.Write(ref _isDisposed, true);
+                        Done();
+                    }
+                }
+
+                if (Interlocked.Decrement(ref trampoline) == 0)
+                {
+                    break;
+                }
             }
-
-            _isDisposed = true;
         }
+
+        void DisposeAll()
+        {
+            Volatile.Write(ref _isDisposed, true);
+            // the disposing of currentSubscription is deferred to drain due to some ObservableExTest.Iterate_Complete()
+            // Interlocked.Exchange(ref currentSubscription, BooleanDisposable.True)?.Dispose();
+            Drain();
+        }
+
+        protected void Recurse()
+        {
+            var d = Volatile.Read(ref currentSubscription);
+            if (d != BooleanDisposable.True)
+            {
+                d?.Dispose();
+                if (Interlocked.CompareExchange(ref currentSubscription, null, d) == d)
+                {
+                    Drain();
+                }
+            }
+        }
+
+        protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);
 
         private bool TryGetEnumerator(IEnumerable<IObservable<TSource>> sources, out IEnumerator<IObservable<TSource>> result)
         {
@@ -182,34 +194,21 @@ namespace System.Reactive
             }
             catch (Exception exception)
             {
-                //
-                // Failure to enumerate the sequence cannot be handled, even by
-                // operators like Catch, because it'd lead to another attempt at
-                // enumerating to find the next observable sequence. Therefore,
-                // we feed those errors directly to the observer.
-                //
-                _observer.OnError(exception);
-                base.Dispose();
+                ForwardOnError(exception);
 
                 result = null;
                 return false;
             }
         }
 
-        public abstract void OnCompleted();
-        public abstract void OnError(Exception error);
-        public abstract void OnNext(TSource value);
-
         protected virtual void Done()
         {
-            _observer.OnCompleted();
-            base.Dispose();
+            ForwardOnCompleted();
         }
 
         protected virtual bool Fail(Exception error)
         {
-            _observer.OnError(error);
-            base.Dispose();
+            ForwardOnError(error);
 
             return false;
         }

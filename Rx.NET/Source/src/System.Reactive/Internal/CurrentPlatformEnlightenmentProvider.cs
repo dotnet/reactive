@@ -20,7 +20,7 @@ namespace System.Reactive.PlatformServices
     public class CurrentPlatformEnlightenmentProvider : IPlatformEnlightenmentProvider
     {
         /// <summary>
-        /// (Infastructure) Tries to gets the specified service.
+        /// (Infrastructure) Tries to gets the specified service.
         /// </summary>
         /// <typeparam name="T">Service type.</typeparam>
         /// <param name="args">Optional set of arguments.</param>

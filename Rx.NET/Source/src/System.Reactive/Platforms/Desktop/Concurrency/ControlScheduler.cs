@@ -52,11 +52,16 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
+            if (_control.IsDisposed)
+            {
+                return Disposable.Empty;
+            }
+
             var d = new SingleAssignmentDisposable();
 
             _control.BeginInvoke(new Action(() =>
             {
-                if (!d.IsDisposed)
+                if (!_control.IsDisposed && !d.IsDisposed)
                     d.Disposable = action(this, state);
             }));
 
@@ -94,7 +99,10 @@ namespace System.Reactive.Concurrency
                     {
                         try
                         {
-                            d.Disposable = action(scheduler1, state1);
+                            if (!_control.IsDisposed && !d.IsDisposed)
+                            {
+                                d.Disposable = action(scheduler1, state1);
+                            }
                         }
                         finally
                         {
@@ -156,7 +164,10 @@ namespace System.Reactive.Concurrency
 
                 timer.Tick += (s, e) =>
                 {
-                    state1 = action(state1);
+                    if (!_control.IsDisposed)
+                    {
+                        state1 = action(state1);
+                    }
                 };
 
                 timer.Interval = (int)period.TotalMilliseconds;
