@@ -97,6 +97,16 @@ if ($LastExitCode -ne 0) {
 	}  
 }
 
+.\packages\xunit.runner.console\tools\net452\xunit.console.exe tests\Tests.System.Reactive.ApiApprovals\bin\$configuration\net46\Tests.System.Reactive.ApiApprovals.dll
+
+if ($LastExitCode -ne 0) { 
+	Write-Host "Error with API approval tests" -Foreground Red
+	if($isCloudBuild) {
+	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
+	}  
+}
+
 # Either display or publish the results
 if ($isCloudBuild -eq 'True')
 {
