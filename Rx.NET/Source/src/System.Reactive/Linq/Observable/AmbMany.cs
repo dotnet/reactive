@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Text;
 using System.Threading;
+using System.Linq;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -38,21 +39,11 @@ namespace System.Reactive.Linq.ObservableImpl
         protected override IDisposable Run(IObserver<T> observer)
         {
             var sourcesEnumerable = this.sources;
-            var n = 0;
-            var sources = new IObservable<T>[8];
+            var sources = default(IObservable<T>[]);
 
             try
             {
-                foreach (var source in sourcesEnumerable)
-                {
-                    if (n == sources.Length)
-                    {
-                        var b = new IObservable<T>[n + (n >> 2)];
-                        Array.Copy(sources, 0, b, 0, n);
-                        sources = b;
-                    }
-                    sources[n++] = source;
-                }
+                sources = sourcesEnumerable.ToArray();
             }
             catch (Exception ex)
             {
@@ -60,7 +51,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            return AmbCoordinator<T>.Create(observer, sources, n);
+            return AmbCoordinator<T>.Create(observer, sources, sources.Length);
         }
     }
 
