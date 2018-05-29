@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Reactive.Linq.ObservableImpl;
+using System.Reactive.Disposables;
+using System.Reactive.Threading.Tasks;
 
 namespace System.Reactive.Linq
 {
@@ -30,7 +33,7 @@ namespace System.Reactive.Linq
             if (subscribe == null)
                 throw new ArgumentNullException(nameof(subscribe));
 
-            return s_impl.Create<TResult>(subscribe);
+            return new AnonymousObservable<TResult>(subscribe);
         }
 
         /// <summary>
@@ -50,7 +53,11 @@ namespace System.Reactive.Linq
             if (subscribe == null)
                 throw new ArgumentNullException(nameof(subscribe));
 
-            return s_impl.Create<TResult>(subscribe);
+            return new AnonymousObservable<TResult>(o =>
+            {
+                var a = subscribe(o);
+                return a != null ? Disposable.Create(a) : Disposable.Empty;
+            });
         }
 
         #endregion
@@ -72,7 +79,16 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return new AnonymousObservable<TResult>(observer =>
+            {
+                var cancellable = new CancellationDisposable();
+
+                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
+                var subscription = taskObservable.Subscribe(taskCompletionObserver);
+
+                return StableCompositeDisposable.Create(cancellable, subscription);
+            });
         }
 
         /// <summary>
@@ -88,7 +104,7 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return Create<TResult>((observer, token) => subscribeAsync(observer));
         }
 
         /// <summary>
@@ -106,7 +122,22 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return new AnonymousObservable<TResult>(observer =>
+            {
+                var subscription = new SingleAssignmentDisposable();
+                var cancellable = new CancellationDisposable();
+
+                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskCompletionObserver = new AnonymousObserver<IDisposable>(d => subscription.Disposable = d ?? Disposable.Empty, observer.OnError, Stubs.Nop);
+
+                //
+                // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
+                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                //
+                taskObservable.Subscribe(taskCompletionObserver);
+
+                return StableCompositeDisposable.Create(cancellable, subscription);
+            });
         }
 
         /// <summary>
@@ -122,7 +153,7 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return Create<TResult>((observer, token) => subscribeAsync(observer));
         }
 
         /// <summary>
@@ -140,7 +171,22 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return new AnonymousObservable<TResult>(observer =>
+            {
+                var subscription = new SingleAssignmentDisposable();
+                var cancellable = new CancellationDisposable();
+
+                var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
+                var taskCompletionObserver = new AnonymousObserver<Action>(a => subscription.Disposable = a != null ? Disposable.Create(a) : Disposable.Empty, observer.OnError, Stubs.Nop);
+
+                //
+                // We don't cancel the subscription below *ever* and want to make sure the returned resource eventually gets disposed.
+                // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
+                //
+                taskObservable.Subscribe(taskCompletionObserver);
+
+                return StableCompositeDisposable.Create(cancellable, subscription);
+            });
         }
 
         /// <summary>
@@ -156,7 +202,7 @@ namespace System.Reactive.Linq
             if (subscribeAsync == null)
                 throw new ArgumentNullException(nameof(subscribeAsync));
 
-            return s_impl.Create<TResult>(subscribeAsync);
+            return Create<TResult>((observer, token) => subscribeAsync(observer));
         }
 
         #endregion
@@ -175,7 +221,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return s_impl.Defer<TResult>(observableFactory);
+            return new Defer<TResult>(observableFactory);
         }
 
         #endregion
@@ -195,7 +241,7 @@ namespace System.Reactive.Linq
             if (observableFactoryAsync == null)
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return Defer(() => StartAsync(observableFactoryAsync).Merge());
         }
 
         /// <summary>
@@ -213,7 +259,7 @@ namespace System.Reactive.Linq
             if (observableFactoryAsync == null)
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
 
-            return s_impl.Defer<TResult>(observableFactoryAsync);
+            return Defer(() => StartAsync(observableFactoryAsync).Merge());
         }
 
         #endregion
@@ -227,7 +273,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence with no elements.</returns>
         public static IObservable<TResult> Empty<TResult>()
         {
-            return s_impl.Empty<TResult>();
+            return new Empty<TResult>(SchedulerDefaults.ConstantTimeOperations);
         }
 
         /// <summary>
@@ -238,7 +284,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence with no elements.</returns>
         public static IObservable<TResult> Empty<TResult>(TResult witness)
         {
-            return s_impl.Empty<TResult>(); // Pure inference - no specialized target method.
+            return Empty<TResult>(); // Pure inference - no specialized target method.
         }
 
         /// <summary>
@@ -253,7 +299,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Empty<TResult>(scheduler);
+            return new Empty<TResult>(scheduler);
         }
 
         /// <summary>
@@ -269,7 +315,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Empty<TResult>(scheduler); // Pure inference - no specialized target method.
+            return Empty<TResult>(scheduler); // Pure inference - no specialized target method.
         }
 
         #endregion
@@ -296,7 +342,7 @@ namespace System.Reactive.Linq
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector);
+            return new Generate<TState, TResult>.NoTime(initialState, condition, iterate, resultSelector, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -322,7 +368,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Generate<TState, TResult>(initialState, condition, iterate, resultSelector, scheduler);
+            return new Generate<TState, TResult>.NoTime(initialState, condition, iterate, resultSelector, scheduler);
         }
 
         #endregion
@@ -336,7 +382,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IObservable<TResult> Never<TResult>()
         {
-            return s_impl.Never<TResult>();
+            return ObservableImpl.Never<TResult>.Default;
         }
 
         /// <summary>
@@ -347,7 +393,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence whose observers will never get called.</returns>
         public static IObservable<TResult> Never<TResult>(TResult witness)
         {
-            return s_impl.Never<TResult>(); // Pure inference - no specialized target method.
+            return ObservableImpl.Never<TResult>.Default; // Pure inference - no specialized target method.
         }
 
         #endregion
@@ -367,7 +413,7 @@ namespace System.Reactive.Linq
             if (count < 0 || max > int.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            return s_impl.Range(start, count);
+            return Range_(start, count, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -388,7 +434,12 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Range(start, count, scheduler);
+            return Range_(start, count, scheduler);
+        }
+
+        private static IObservable<int> Range_(int start, int count, IScheduler scheduler)
+        {
+            return new Range(start, count, scheduler);
         }
 
         #endregion
@@ -403,7 +454,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence that repeats the given element infinitely.</returns>
         public static IObservable<TResult> Repeat<TResult>(TResult value)
         {
-            return s_impl.Repeat<TResult>(value);
+            return new Repeat<TResult>.Forever(value, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -419,7 +470,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Repeat<TResult>(value, scheduler);
+            return new Repeat<TResult>.Forever(value, scheduler);
         }
 
         /// <summary>
@@ -435,7 +486,7 @@ namespace System.Reactive.Linq
             if (repeatCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(repeatCount));
 
-            return s_impl.Repeat<TResult>(value, repeatCount);
+            return new Repeat<TResult>.Count(value, repeatCount, SchedulerDefaults.Iteration);
         }
 
         /// <summary>
@@ -455,7 +506,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Repeat<TResult>(value, repeatCount, scheduler);
+            return new Repeat<TResult>.Count(value, repeatCount, scheduler);
         }
 
         #endregion
@@ -470,7 +521,7 @@ namespace System.Reactive.Linq
         /// <returns>An observable sequence containing the single specified element.</returns>
         public static IObservable<TResult> Return<TResult>(TResult value)
         {
-            return s_impl.Return<TResult>(value);
+            return new Return<TResult>(value, SchedulerDefaults.ConstantTimeOperations);
         }
 
         /// <summary>
@@ -486,7 +537,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Return<TResult>(value, scheduler);
+            return new Return<TResult>(value, scheduler);
         }
 
         #endregion
@@ -505,7 +556,7 @@ namespace System.Reactive.Linq
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            return s_impl.Throw<TResult>(exception);
+            return new Throw<TResult>(exception, SchedulerDefaults.ConstantTimeOperations);
         }
 
         /// <summary>
@@ -521,7 +572,7 @@ namespace System.Reactive.Linq
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            return s_impl.Throw<TResult>(exception); // Pure inference - no specialized target method.
+            return Throw<TResult>(exception); // Pure inference - no specialized target method.
         }
 
         /// <summary>
@@ -539,7 +590,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Throw<TResult>(exception, scheduler);
+            return new Throw<TResult>(exception, scheduler);
         }
 
         /// <summary>
@@ -558,7 +609,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.Throw<TResult>(exception, scheduler); // Pure inference - no specialized target method.
+            return Throw<TResult>(exception, scheduler); // Pure inference - no specialized target method.
         }
 
         #endregion
@@ -581,7 +632,7 @@ namespace System.Reactive.Linq
             if (observableFactory == null)
                 throw new ArgumentNullException(nameof(observableFactory));
 
-            return s_impl.Using<TResult, TResource>(resourceFactory, observableFactory);
+            return new Using<TResult, TResource>(resourceFactory, observableFactory);
         }
 
         #endregion
@@ -607,7 +658,13 @@ namespace System.Reactive.Linq
             if (observableFactoryAsync == null)
                 throw new ArgumentNullException(nameof(observableFactoryAsync));
 
-            return s_impl.Using<TResult, TResource>(resourceFactoryAsync, observableFactoryAsync);
+            return Observable.FromAsync<TResource>(resourceFactoryAsync)
+                .SelectMany(resource =>
+                    Observable.Using<TResult, TResource>(
+                        () => resource,
+                        resource_ => Observable.FromAsync<IObservable<TResult>>(ct => observableFactoryAsync(resource_, ct)).Merge()
+                    )
+                );
         }
 
         #endregion

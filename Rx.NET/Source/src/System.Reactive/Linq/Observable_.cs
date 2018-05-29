@@ -9,6 +9,5 @@ namespace System.Reactive.Linq
     /// </summary>
     public static partial class Observable
     {
-        private static IQueryLanguage s_impl = QueryServices.GetQueryImpl<IQueryLanguage>(new QueryLanguage());
     }
 }

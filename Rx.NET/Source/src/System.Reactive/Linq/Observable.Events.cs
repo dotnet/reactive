@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Linq.ObservableImpl;
 using System.Threading;
 
 namespace System.Reactive.Linq
@@ -51,7 +52,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEventPattern(addHandler, removeHandler);
+            return FromEventPattern_(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern(addHandler, removeHandler, scheduler);
+            return FromEventPattern_(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -134,7 +135,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(addHandler, removeHandler);
+            return FromEventPattern_<TDelegate, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEventPattern_<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         /// <summary>
@@ -218,7 +219,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(conversion, addHandler, removeHandler);
+            return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -261,7 +262,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return FromEventPattern_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
         }
 
         /// <summary>
@@ -303,7 +304,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEventPattern<TDelegate, TSender, TEventArgs>(addHandler, removeHandler);
+            return FromEventPattern_<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -344,7 +345,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEventPattern_<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -387,7 +388,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEventPattern<TEventArgs>(addHandler, removeHandler);
+            return FromEventPattern_<TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -425,10 +426,8 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEventPattern_<TEventArgs>(addHandler, removeHandler, scheduler);
         }
-
-        #endregion
 
         #endregion
 
@@ -474,7 +473,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern(target, eventName);
+            return FromEventPattern_(target, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -514,7 +513,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
             
-            return s_impl.FromEventPattern(target, eventName, scheduler);
+            return FromEventPattern_(target, eventName, scheduler);
         }
 
         /// <summary>
@@ -556,7 +555,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern<TEventArgs>(target, eventName);
+            return FromEventPattern_<TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -597,7 +596,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TEventArgs>(target, eventName, scheduler);
+            return FromEventPattern_<TEventArgs>(target, eventName, scheduler);
         }
 
         /// <summary>
@@ -640,7 +639,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern<TSender, TEventArgs>(target, eventName);
+            return FromEventPattern_<TSender, TEventArgs>(target, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -682,7 +681,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TSender, TEventArgs>(target, eventName, scheduler);
+            return FromEventPattern_<TSender, TEventArgs>(target, eventName, scheduler);
         }
 
         #endregion
@@ -727,7 +726,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern(type, eventName);
+            return FromEventPattern_(type, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -767,7 +766,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern(type, eventName, scheduler);
+            return FromEventPattern_(type, eventName, scheduler);
         }
 
         /// <summary>
@@ -809,7 +808,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern<TEventArgs>(type, eventName);
+            return FromEventPattern_<TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -850,7 +849,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TEventArgs>(type, eventName, scheduler);
+            return FromEventPattern_<TEventArgs>(type, eventName, scheduler);
         }
 
         /// <summary>
@@ -893,7 +892,7 @@ namespace System.Reactive.Linq
             if (eventName == null)
                 throw new ArgumentNullException(nameof(eventName));
 
-            return s_impl.FromEventPattern<TSender, TEventArgs>(type, eventName);
+            return FromEventPattern_<TSender, TEventArgs>(type, eventName, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -935,7 +934,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEventPattern<TSender, TEventArgs>(type, eventName, scheduler);
+            return FromEventPattern_<TSender, TEventArgs>(type, eventName, scheduler);
         }
 
         #endregion
@@ -988,7 +987,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler);
+            return FromEvent_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -1030,7 +1029,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+            return FromEvent_<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
         }
 
         /// <summary>
@@ -1070,7 +1069,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler);
+            return FromEvent_<TDelegate, TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -1109,7 +1108,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEvent_<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -1152,7 +1151,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEvent<TEventArgs>(addHandler, removeHandler);
+            return FromEvent_<TEventArgs>(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -1190,7 +1189,7 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEvent<TEventArgs>(addHandler, removeHandler, scheduler);
+            return FromEvent_<TEventArgs>(addHandler, removeHandler, scheduler);
         }
 
         #endregion
@@ -1232,7 +1231,7 @@ namespace System.Reactive.Linq
             if (removeHandler == null)
                 throw new ArgumentNullException(nameof(removeHandler));
 
-            return s_impl.FromEvent(addHandler, removeHandler);
+            return FromEvent_(addHandler, removeHandler, GetSchedulerForCurrentContext());
         }
 
         /// <summary>
@@ -1269,11 +1268,113 @@ namespace System.Reactive.Linq
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return s_impl.FromEvent(addHandler, removeHandler, scheduler);
+            return FromEvent_(addHandler, removeHandler, scheduler);
         }
 
         #endregion
 
         #endregion
+
+        #endregion
+
+        private static IObservable<EventPattern<object>> FromEventPattern_(object target, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<object, object, EventPattern<object>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
+        }
+
+        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(object target, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
+        }
+
+        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(object target, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(target.GetType(), target, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
+        }
+
+        private static IObservable<EventPattern<object>> FromEventPattern_(Type type, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<object, object, EventPattern<object>>(type, null, eventName, (sender, args) => new EventPattern<object>(sender, args), scheduler);
+        }
+
+        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Type type, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<object, TEventArgs, EventPattern<TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TEventArgs>(sender, args), scheduler);
+        }
+
+        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TSender, TEventArgs>(Type type, string eventName, IScheduler scheduler)
+        {
+            return FromEventPattern_<TSender, TEventArgs, EventPattern<TSender, TEventArgs>>(type, null, eventName, (sender, args) => new EventPattern<TSender, TEventArgs>(sender, args), scheduler);
+        }
+
+        private static IObservable<TResult> FromEventPattern_<TSender, TEventArgs, TResult>(Type targetType, object target, string eventName, Func<TSender, TEventArgs, TResult> getResult, IScheduler scheduler)
+        {
+            ReflectionUtils.GetEventMethods<TSender, TEventArgs>(targetType, target, eventName, out var addMethod, out var removeMethod, out var delegateType, out var isWinRT);
+
+#if HAS_WINRT
+            if (isWinRT)
+            {
+                return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, true, scheduler);
+            }
+#endif
+
+            return new FromEventPattern.Handler<TSender, TEventArgs, TResult>(target, delegateType, addMethod, removeMethod, getResult, false, scheduler);
+        }
+
+        private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Func<Action<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        {
+            return new FromEvent<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<TEventArgs> FromEvent_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        {
+            return new FromEvent<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<TEventArgs> FromEvent_<TEventArgs>(Action<Action<TEventArgs>> addHandler, Action<Action<TEventArgs>> removeHandler, IScheduler scheduler)
+        {
+            return new FromEvent<Action<TEventArgs>, TEventArgs>(h => h, addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<Unit> FromEvent_(Action<Action> addHandler, Action<Action> removeHandler, IScheduler scheduler)
+        {
+            return new FromEvent<Action, Unit>(h => new Action(() => h(new Unit())), addHandler, removeHandler, scheduler);
+        }
+
+
+        private static IObservable<EventPattern<TSender, TEventArgs>> FromEventPattern_<TDelegate, TSender, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        {
+            return new FromEventPattern.Impl<TDelegate, TSender, TEventArgs>(addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        {
+            return new FromEventPattern.Impl<TDelegate, TEventArgs>(addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TDelegate, TEventArgs>(Func<EventHandler<TEventArgs>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IScheduler scheduler)
+        {
+            return new FromEventPattern.Impl<TDelegate, TEventArgs>(conversion, addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<EventPattern<object>> FromEventPattern_(Action<EventHandler> addHandler, Action<EventHandler> removeHandler, IScheduler scheduler)
+        {
+            return new FromEventPattern.Impl<EventHandler, object>(e => new EventHandler(e), addHandler, removeHandler, scheduler);
+        }
+
+        private static IObservable<EventPattern<TEventArgs>> FromEventPattern_<TEventArgs>(Action<EventHandler<TEventArgs>> addHandler, Action<EventHandler<TEventArgs>> removeHandler, IScheduler scheduler)
+        {
+            return new FromEventPattern.Impl<EventHandler<TEventArgs>, TEventArgs>(handler => handler, addHandler, removeHandler, scheduler);
+        }
+
+        private static IScheduler GetSchedulerForCurrentContext()
+        {
+            var context = SynchronizationContext.Current;
+
+            if (context != null)
+                return new SynchronizationContextScheduler(context, false);
+            else
+                return SchedulerDefaults.ConstantTimeOperations;
+        }
     }
 }
