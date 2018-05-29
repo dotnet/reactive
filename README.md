@@ -98,13 +98,13 @@ Contributing
 ### Source code
 
 * Clone the sources: `git clone https://github.com/dotnet/reactive.git`
-* [Building, testing and debugging the sources](https://github.com/Reactive-Extensions/Rx.NET/wiki/Building%20Testing%20and%20Debugging)
+* [Building, testing and debugging the sources](https://github.com/dotnet/reactive/wiki/Building%20Testing%20and%20Debugging)
 
 ### Contribute!
 
 Some of the best ways to contribute are to try things out, file bugs, and join in design conversations.
 
-* [How to Contribute](https://github.com/Reactive-Extensions/Rx.NET/wiki/Contributing-Code)
+* [How to Contribute](https://github.com/dotnet/reactive/wiki/Contributing-Code)
 * [Pull requests](https://github.com/dotnet/reactive/pulls): [Open](https://github.com/dotnet/reactive/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/dotnet/reactive/pulls?q=is%3Apr+is%3Aclosed)
 
 Looking for something to work on? The list of [up for grabs issues](https://github.com/dotnet/reactive/issues?q=is%3Aopen+is%3Aissue+label%3A%22Up+for+Grabs%22) is a great place to start.
