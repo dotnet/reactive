@@ -376,5 +376,325 @@ namespace ReactiveTests.Tests
             );
         }
 
+        [Fact]
+        public void Amb_Many_Array_OnNext()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 2),
+                OnError<int>(210, ex)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var res = scheduler.Start(() =>
+                Observable.Amb(o1, o2, o3)
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(350, 1),
+                OnNext(420, 3),
+                OnCompleted<int>(450)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 450)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+        [Fact]
+        public void Amb_Many_Array_OnError()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnError<int>(150, ex)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var res = scheduler.Start(() =>
+                Observable.Amb(o1, o2, o3)
+            );
+
+            res.Messages.AssertEqual(
+                OnError<int>(350, ex)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+        [Fact]
+        public void Amb_Many_Array_OnCompleted()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnNext(150, 2),
+                OnError<int>(210, ex)
+            );
+
+
+            var res = scheduler.Start(() =>
+                Observable.Amb(o1, o2, o3)
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<int>(350)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+
+        [Fact]
+        public void Amb_Many_Enumerable_OnNext()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 2),
+                OnError<int>(210, ex)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var res = scheduler.Start(() =>
+                new[] { o1, o2, o3 }.Amb()
+            );
+
+            res.Messages.AssertEqual(
+                OnNext(350, 1),
+                OnNext(420, 3),
+                OnCompleted<int>(450)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 450)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+        [Fact]
+        public void Amb_Many_Enumerable_OnError()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnError<int>(150, ex)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var res = scheduler.Start(() =>
+                new[] { o1, o2, o3 }.Amb()
+            );
+
+            res.Messages.AssertEqual(
+                OnError<int>(350, ex)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+        [Fact]
+        public void Amb_Many_Enumerable_OnCompleted()
+        {
+            var scheduler = new TestScheduler();
+
+            var ex = new Exception();
+
+            var o1 = scheduler.CreateColdObservable(
+                OnCompleted<int>(150)
+            );
+
+            var o2 = scheduler.CreateColdObservable(
+                OnNext(150, 1),
+                OnNext(220, 3),
+                OnCompleted<int>(250)
+            );
+
+            var o3 = scheduler.CreateColdObservable(
+                OnNext(150, 2),
+                OnError<int>(210, ex)
+            );
+
+
+            var res = scheduler.Start(() =>
+                new[] { o1, o2, o3 }.Amb()
+            );
+
+            res.Messages.AssertEqual(
+                OnCompleted<int>(350)
+            );
+
+            o1.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o2.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+
+            o3.Subscriptions.AssertEqual(
+                Subscribe(200, 350)
+            );
+        }
+
+
+        [Fact]
+        public void Amb_Many_Enumerable_Many_Sources()
+        {
+            for (int i = 0; i < 32; i++)
+            {
+                var sources = new List<IObservable<int>>();
+                for (var j = 0; j < i; j++)
+                {
+                    sources.Add(Observable.Return(j));
+                }
+
+                var result = sources.Amb().ToList().First();
+
+                if (i == 0)
+                {
+                    Assert.Equal(0, result.Count);
+                }
+                else
+                {
+                    Assert.Equal(1, result.Count);
+                    Assert.Equal(0, result[0]);
+                }
+            }
+        }
+
+        [Fact]
+        public void Amb_Many_Enumerable_Many_Sources_NoStackOverflow()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var sources = new List<IObservable<int>>();
+                for (var j = 0; j < i; j++)
+                {
+                    if (j == i - 1)
+                    {
+                        sources.Add(Observable.Return(j));
+                    }
+                    else
+                    {
+                        sources.Add(Observable.Never<int>());
+                    }
+                }
+
+                var result = sources.Amb().ToList().First();
+
+                if (i == 0)
+                {
+                    Assert.Equal(0, result.Count);
+                }
+                else
+                {
+                    Assert.Equal(1, result.Count);
+                    Assert.Equal(i - 1, result[0]);
+                }
+            }
+        }
     }
 }
