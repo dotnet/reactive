@@ -90,18 +90,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
             var parent = new AmbCoordinator<T>(observer, n);
 
-            parent.Subscribe(sources, n);
+            parent.Subscribe(sources);
 
             return parent;
         }
 
-        internal void Subscribe(IObservable<T>[] sources, int n)
+        internal void Subscribe(IObservable<T>[] sources)
         {
-            var o = observers;
-
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i < observers.Length; i++)
             {
-                var inner = Volatile.Read(ref o[i]);
+                var inner = Volatile.Read(ref observers[i]);
                 if (inner == null)
                 {
                     break;
@@ -112,12 +110,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public void Dispose()
         {
-            var o = observers;
-            var n = o.Length;
-
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i < observers.Length; i++)
             {
-                Interlocked.Exchange(ref o[i], null)?.Dispose();
+                Interlocked.Exchange(ref observers[i], null)?.Dispose();
             }
         }
 
@@ -125,14 +120,11 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             if (Volatile.Read(ref winner) == -1 && Interlocked.CompareExchange(ref winner, index, -1) == -1)
             {
-                var o = observers;
-                var n = o.Length;
-
-                for (var i = 0; i < n; i++)
+                for (var i = 0; i < observers.Length; i++)
                 {
                     if (index != i)
                     {
-                        Interlocked.Exchange(ref o[i], null)?.Dispose();
+                        Interlocked.Exchange(ref observers[i], null)?.Dispose();
                     }
                 }
                 return true;
