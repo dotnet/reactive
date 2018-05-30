@@ -57,22 +57,20 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SingleAssignmentDisposable();
-
             if (!_alwaysPost && _context == SynchronizationContext.Current)
             {
-                d.Disposable = action(this, state);
+                return action(this, state);
             }
-            else
+
+            var d = new SingleAssignmentDisposable();
+
+            _context.PostWithStartComplete(() =>
             {
-                _context.PostWithStartComplete(() =>
+                if (!d.IsDisposed)
                 {
-                    if (!d.IsDisposed)
-                    {
-                        d.Disposable = action(this, state);
-                    }
-                });
-            }
+                    d.Disposable = action(this, state);
+                }
+            });
 
             return d;
         }
@@ -97,7 +95,7 @@ namespace System.Reactive.Concurrency
                 return Schedule(state, action);
             }
 
-            return DefaultScheduler.Instance.Schedule(state, dt, (_, state1) => Schedule(state1, action));
+            return DefaultScheduler.Instance.Schedule((scheduler: this, action, state), dt, (_, tuple) => tuple.scheduler.Schedule(tuple.state, tuple.action));
         }
     }
 }
