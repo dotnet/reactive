@@ -22,7 +22,14 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, Invoke);
+            // Surprisingly, passing the method group of Invoke will create a fresh
+            // delegate each an every time, although it's static, while an anonymous
+            // lambda without the need of a closure will be cached.
+            // Once Roslyn supports caching delegates for method groups,
+            // the anonymous lambda can be replaced by the method group again. Until then,
+            // to avoid the repetition of code, the call to Invoke is left intact.
+            // Watch https://github.com/dotnet/roslyn/issues/5835
+            return scheduler.Schedule(action, (s, a) => Invoke(s, a));
         }
 
         /// <summary>
@@ -64,7 +71,8 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, dueTime, Invoke);
+            // See note above.
+            return scheduler.Schedule(action, dueTime, (s, a) => Invoke(s, a));
         }
 
         /// <summary>
@@ -82,7 +90,8 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, dueTime, Invoke);
+            // See note above.
+            return scheduler.Schedule(action, dueTime, (s, a) => Invoke(s, a));
         }
 
         /// <summary>
