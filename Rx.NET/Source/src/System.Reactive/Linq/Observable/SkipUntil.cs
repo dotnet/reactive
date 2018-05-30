@@ -25,45 +25,45 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            readonly OtherObserver other;
-
-            IDisposable mainDisposable;
-
+            IDisposable _mainDisposable;
+            IDisposable _otherDisposable;
             volatile bool _forward;
-
-            int halfSerializer;
-
-            Exception error;
-
-            static readonly Exception TerminalException = new Exception("No further exceptions");
+            int _halfSerializer;
+            Exception _error;
 
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                this.other = new OtherObserver(this);
             }
 
             public IDisposable Run(SkipUntil<TSource, TOther> parent)
             {
-                other.OnSubscribe(parent._other.Subscribe(other));
+                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
 
-                Disposable.TrySetSingle(ref mainDisposable, parent._source.Subscribe(this));
+                Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
             }
 
             protected override void Dispose(bool disposing)
             {
+                if (disposing)
+                {
+                    DisposeMain();
+                    if (!Disposable.GetIsDisposed(ref _otherDisposable))
+                    {
+                        Disposable.TryDispose(ref _otherDisposable);
+                    }
+                }
+
                 base.Dispose(disposing);
-                DisposeMain();
-                other.Dispose();
             }
 
             void DisposeMain()
             {
-                if (!Disposable.GetIsDisposed(ref mainDisposable))
+                if (!Disposable.GetIsDisposed(ref _mainDisposable))
                 {
-                    Disposable.TryDispose(ref mainDisposable);
+                    Disposable.TryDispose(ref _mainDisposable);
                 }
             }
 
@@ -71,13 +71,13 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (_forward)
                 {
-                    if (Interlocked.CompareExchange(ref halfSerializer, 1, 0) == 0)
+                    if (Interlocked.CompareExchange(ref _halfSerializer, 1, 0) == 0)
                     {
                         ForwardOnNext(value);
-                        if (Interlocked.Decrement(ref halfSerializer) != 0)
+                        if (Interlocked.Decrement(ref _halfSerializer) != 0)
                         {
-                            var ex = error;
-                            error = TerminalException;
+                            var ex = _error;
+                            _error = SkipUntilTerminalException.Instance;
                             ForwardOnError(ex);
                         }
                     }
@@ -86,11 +86,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception ex)
             {
-                if (Interlocked.CompareExchange(ref error, ex, null) == null)
+                if (Interlocked.CompareExchange(ref _error, ex, null) == null)
                 {
-                    if (Interlocked.Increment(ref halfSerializer) == 1)
+                    if (Interlocked.Increment(ref _halfSerializer) == 1)
                     {
-                        error = TerminalException;
+                        _error = SkipUntilTerminalException.Instance;
                         ForwardOnError(ex);
                     }
                 }
@@ -100,9 +100,9 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (_forward)
                 {
-                    if (Interlocked.CompareExchange(ref error, TerminalException, null) == null)
+                    if (Interlocked.CompareExchange(ref _error, SkipUntilTerminalException.Instance, null) == null)
                     {
-                        if (Interlocked.Increment(ref halfSerializer) == 1)
+                        if (Interlocked.Increment(ref _halfSerializer) == 1)
                         {
                             ForwardOnCompleted();
                         }
@@ -121,25 +121,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
             sealed class OtherObserver : IObserver<TOther>, IDisposable
             {
-                readonly _ parent;
-
-                IDisposable upstream;
+                readonly _ _parent;
 
                 public OtherObserver(_ parent)
                 {
-                    this.parent = parent;
-                }
-
-                public void OnSubscribe(IDisposable d)
-                {
-                    Disposable.TrySetSingle(ref upstream, d);
+                    _parent = parent;
                 }
 
                 public void Dispose()
                 {
-                    if (!Disposable.GetIsDisposed(ref upstream))
+                    if (!Disposable.GetIsDisposed(ref _parent._otherDisposable))
                     {
-                        Disposable.TryDispose(ref upstream);
+                        Disposable.TryDispose(ref _parent._otherDisposable);
                     }
                 }
 
@@ -150,16 +143,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    parent.OnError(error);
+                    _parent.OnError(error);
                 }
 
                 public void OnNext(TOther value)
                 {
-                    parent.OtherComplete();
+                    _parent.OtherComplete();
                     Dispose();
                 }
             }
         }
+    }
+
+    internal static class SkipUntilTerminalException
+    {
+        internal static readonly Exception Instance = new Exception("No further exceptions");
     }
 
     internal sealed class SkipUntil<TSource> : Producer<TSource, SkipUntil<TSource>._>
