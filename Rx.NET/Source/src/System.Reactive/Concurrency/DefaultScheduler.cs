@@ -12,6 +12,43 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="Scheduler.Default">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class DefaultScheduler : LocalScheduler, ISchedulerPeriodic
     {
+        private sealed class UserWorkItem<TState> : IDisposable
+        {
+            private IDisposable _cancelRunDisposable;
+            private IDisposable _cancelQueueDisposable;
+
+            private readonly TState _state;
+            private readonly IScheduler _scheduler;
+            private readonly Func<IScheduler, TState, IDisposable> _action;
+
+            public UserWorkItem(IScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
+            {
+                _state = state;
+                _action = action;
+                _scheduler = scheduler;
+            }
+
+            public void Run()
+            {
+                if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
+                {
+                    Disposable.TrySetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
+                }
+            }
+
+            public IDisposable CancelQueueDisposable
+            {
+                get => Disposable.GetValue(ref _cancelQueueDisposable);
+                set => Disposable.TrySetSingle(ref _cancelQueueDisposable, value);
+            }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _cancelQueueDisposable);
+                Disposable.TryDispose(ref _cancelRunDisposable);
+            }
+        }
+
         private static readonly Lazy<DefaultScheduler> s_instance = new Lazy<DefaultScheduler>(() => new DefaultScheduler());
         private static IConcurrencyAbstractionLayer s_cal = ConcurrencyAbstractionLayer.Current;
 
@@ -37,20 +74,13 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SingleAssignmentDisposable();
+            var workItem = new UserWorkItem<TState>(this, state, action);
 
-            var cancel = s_cal.QueueUserWorkItem(_ =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, null);
+            workItem.CancelQueueDisposable = s_cal.QueueUserWorkItem(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                workItem);
 
-            return StableCompositeDisposable.Create(
-                d,
-                cancel
-            );
+            return workItem;
         }
 
         /// <summary>
@@ -71,20 +101,14 @@ namespace System.Reactive.Concurrency
             if (dt.Ticks == 0)
                 return Schedule(state, action);
 
-            var d = new SingleAssignmentDisposable();
+            var workItem = new UserWorkItem<TState>(this, state, action);
 
-            var cancel = s_cal.StartTimer(_ =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, null, dt);
+            workItem.CancelQueueDisposable = s_cal.StartTimer(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(),
+                workItem,
+                dt);
 
-            return StableCompositeDisposable.Create(
-                d,
-                cancel
-            );
+            return workItem;
         }
 
         /// <summary>

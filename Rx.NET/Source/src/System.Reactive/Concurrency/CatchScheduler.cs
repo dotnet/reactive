@@ -76,16 +76,18 @@ namespace System.Reactive.Concurrency
 
             public IDisposable ScheduleLongRunning<TState>(TState state, Action<TState, ICancelable> action)
             {
-                return _scheduler.ScheduleLongRunning(state, (state_, cancel) =>
-                {
-                    try
+                return _scheduler.ScheduleLongRunning(
+                    (scheduler: this, action, state), 
+                    (tuple, cancel) =>
                     {
-                        action(state_, cancel);
-                    }
-                    catch (TException exception) when (_handler(exception))
-                    {
-                    }
-                });
+                        try
+                        {
+                            tuple.action(tuple.state, cancel);
+                        }
+                        catch (TException exception) when (tuple.scheduler._handler(exception))
+                        {
+                        }
+                    });
             }
         }
 

@@ -47,7 +47,7 @@ namespace System.Reactive.Disposables
 
                 if (current == BooleanDisposable.True)
                 {
-                    return DefaultDisposable.Instance; // Don't leak the sentinel value.
+                    return Disposables.Disposable.Empty; // Don't leak the sentinel value.
                 }
 
                 return current;
