@@ -26,11 +26,9 @@ namespace System.Reactive.Linq.ObservableImpl
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly OtherObserver _other;
-
             private IDisposable _mainDisposable;
-
+            private IDisposable _otherDisposable;
             private int _halfSerializer;
-
             private Exception _error;
 
             public _(IObserver<TSource> observer, IDisposable cancel)
@@ -41,8 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(TakeUntil<TSource, TOther> parent)
             {
-                _other.OnSubscribe(parent._other.Subscribe(_other));
-
+                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(_other));
                 Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
@@ -50,12 +47,16 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override void Dispose(bool disposing)
             {
-                base.Dispose(disposing);
-                if (!Disposable.GetIsDisposed(ref _mainDisposable))
+                if (disposing)
                 {
-                    Disposable.TryDispose(ref _mainDisposable);
+                    if (!Disposable.GetIsDisposed(ref _mainDisposable))
+                    {
+                        Disposable.TryDispose(ref _mainDisposable);
+                        Disposable.TryDispose(ref _otherDisposable);
+                    }
                 }
-                _other.Dispose();
+
+                base.Dispose(disposing);
             }
 
             public override void OnNext(TSource value)
@@ -102,34 +103,19 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            sealed class OtherObserver : IObserver<TOther>, IDisposable
+            sealed class OtherObserver : IObserver<TOther>
             {
                 readonly _ _parent;
-
-                IDisposable _upstream;
 
                 public OtherObserver(_ parent)
                 {
                     _parent = parent;
                 }
 
-                public void Dispose()
-                {
-                    if (!Disposable.GetIsDisposed(ref _upstream))
-                    {
-                        Disposable.TryDispose(ref _upstream);
-                    }
-                }
-
-                public void OnSubscribe(IDisposable d)
-                {
-                    Disposable.TrySetSingle(ref _upstream, d);
-                }
-
                 public void OnCompleted()
                 {
                     // Completion doesn't mean termination in Rx.NET for this operator
-                    Dispose();
+                    Disposable.TryDispose(ref _parent._otherDisposable);
                 }
 
                 public void OnError(Exception error)
