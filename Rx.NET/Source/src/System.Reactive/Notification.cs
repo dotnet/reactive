@@ -555,15 +555,19 @@ namespace System.Reactive
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new AnonymousObservable<T>(observer => scheduler.Schedule(() =>
-            {
-                Accept(observer);
+            return AnonymousObservable<T>.CreateStateful(
+                (observer, closureTuple1) => closureTuple1.scheduler.Schedule(
+                    closureTuple2 =>
+                    {
+                        closureTuple2.@this.Accept(closureTuple2.observer);
 
-                if (Kind == NotificationKind.OnNext)
-                {
-                    observer.OnCompleted();
-                }
-            }));
+                        if (closureTuple2.@this.Kind == NotificationKind.OnNext)
+                        {
+                            closureTuple2.observer.OnCompleted();
+                        }
+                    },
+                    (closureTuple1.@this, closureTuple1.scheduler, observer)),
+                (@this: this, scheduler));
         }
     }
 

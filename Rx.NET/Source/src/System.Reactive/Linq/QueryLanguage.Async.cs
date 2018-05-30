@@ -725,14 +725,16 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                //
-                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
-                //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            return AnonymousObservable<TSource>.CreateStateful(
+                (observer, closureTuple) =>
+                {
+                    //
+                    // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
+                    //
+                    var subscription = closureTuple.result.Subscribe/*Unsafe*/(observer);
+                    return StableCompositeDisposable.Create(closureTuple.cancellable, subscription);
+                },
+                (result, cancellable));
         }
 
         #endregion
@@ -816,14 +818,16 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<Unit>(observer =>
-            {
-                //
-                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
-                //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            return AnonymousObservable<Unit>.CreateStateful(
+                (observer, closureTuple) =>
+                {
+                    //
+                    // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
+                    //
+                    var subscription = closureTuple.result.Subscribe/*Unsafe*/(observer);
+                    return StableCompositeDisposable.Create(closureTuple.cancellable, subscription);
+                },
+                (cancellable, result));
         }
 
         #endregion

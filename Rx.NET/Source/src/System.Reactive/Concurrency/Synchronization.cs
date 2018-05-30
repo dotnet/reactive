@@ -35,19 +35,24 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                var m = new SingleAssignmentDisposable();
-                var d = new SerialDisposable();
-                d.Disposable = m;
-
-                m.Disposable = scheduler.Schedule(() =>
+            return AnonymousObservable<TSource>.CreateStateful(
+                (observer, closureTuple1) =>
                 {
-                    d.Disposable = new ScheduledDisposable(scheduler, source.SubscribeSafe(observer));
-                });
+                    var m = new SingleAssignmentDisposable();
+                    var d = new SerialDisposable();
 
-                return d;
-            });
+                    d.Disposable = m;
+
+                    m.Disposable = closureTuple1.scheduler.Schedule(
+                        closureTuple2 =>
+                        {
+                            closureTuple2.d.Disposable = new ScheduledDisposable(closureTuple2.scheduler, closureTuple2.source.SubscribeSafe(closureTuple2.observer));
+                        },
+                        (closureTuple1.scheduler, closureTuple1.source, observer, d));
+
+                    return d;
+                },
+                (source, scheduler));
         }
 
         /// <summary>
@@ -69,18 +74,20 @@ namespace System.Reactive.Concurrency
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            return new AnonymousObservable<TSource>(observer =>
-            {
-                var subscription = new SingleAssignmentDisposable();
-                context.PostWithStartComplete(() =>
+            return AnonymousObservable<TSource>.CreateStateful(
+                (observer, closureTuple) =>
                 {
-                    if (!subscription.IsDisposed)
+                    var subscription = new SingleAssignmentDisposable();
+                    closureTuple.context.PostWithStartComplete(() =>
                     {
-                        subscription.Disposable = new ContextDisposable(context, source.SubscribeSafe(observer));
-                    }
-                });
-                return subscription;
-            });
+                        if (!subscription.IsDisposed)
+                        {
+                            subscription.Disposable = new ContextDisposable(closureTuple.context, closureTuple.source.SubscribeSafe(observer));
+                        }
+                    });
+                    return subscription;
+                },
+                (source, context));
         }
 
         #endregion
