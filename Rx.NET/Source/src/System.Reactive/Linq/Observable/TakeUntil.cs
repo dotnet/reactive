@@ -25,27 +25,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            readonly OtherObserver other;
+            private readonly OtherObserver _other;
 
-            IDisposable mainDisposable;
+            private IDisposable _mainDisposable;
 
-            int halfSerializer;
+            private int _halfSerializer;
 
-            Exception error;
+            private Exception _error;
 
             static readonly Exception TerminalException = new Exception("No further exceptions");
 
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                other = new OtherObserver(this);
+                _other = new OtherObserver(this);
             }
 
             public IDisposable Run(TakeUntil<TSource, TOther> parent)
             {
-                other.OnSubscribe(parent._other.Subscribe(other));
+                _other.OnSubscribe(parent._other.Subscribe(_other));
 
-                Disposable.TrySetSingle(ref mainDisposable, parent._source.Subscribe(this));
+                Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
             }
@@ -53,24 +53,24 @@ namespace System.Reactive.Linq.ObservableImpl
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
-                if (!Disposable.GetIsDisposed(ref mainDisposable))
+                if (!Disposable.GetIsDisposed(ref _mainDisposable))
                 {
-                    Disposable.TryDispose(ref mainDisposable);
+                    Disposable.TryDispose(ref _mainDisposable);
                 }
-                other.Dispose();
+                _other.Dispose();
             }
 
             public override void OnNext(TSource value)
             {
-                if (Interlocked.CompareExchange(ref halfSerializer, 1, 0) == 0)
+                if (Interlocked.CompareExchange(ref _halfSerializer, 1, 0) == 0)
                 {
                     ForwardOnNext(value);
-                    if (Interlocked.Decrement(ref halfSerializer) != 0)
+                    if (Interlocked.Decrement(ref _halfSerializer) != 0)
                     {
-                        var ex = error;
+                        var ex = _error;
                         if (ex != TerminalException)
                         {
-                            error = TerminalException;
+                            _error = TerminalException;
                             ForwardOnError(ex);
                         }
                         else
@@ -83,11 +83,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnError(Exception ex)
             {
-                if (Interlocked.CompareExchange(ref error, ex, null) == null)
+                if (Interlocked.CompareExchange(ref _error, ex, null) == null)
                 {
-                    if (Interlocked.Increment(ref halfSerializer) == 1)
+                    if (Interlocked.Increment(ref _halfSerializer) == 1)
                     {
-                        error = TerminalException;
+                        _error = TerminalException;
                         ForwardOnError(ex);
                     }
                 }
@@ -95,9 +95,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                if (Interlocked.CompareExchange(ref error, TerminalException, null) == null)
+                if (Interlocked.CompareExchange(ref _error, TerminalException, null) == null)
                 {
-                    if (Interlocked.Increment(ref halfSerializer) == 1)
+                    if (Interlocked.Increment(ref _halfSerializer) == 1)
                     {
                         ForwardOnCompleted();
                     }
@@ -106,26 +106,26 @@ namespace System.Reactive.Linq.ObservableImpl
 
             sealed class OtherObserver : IObserver<TOther>, IDisposable
             {
-                readonly _ parent;
+                readonly _ _parent;
 
-                IDisposable upstream;
+                IDisposable _upstream;
 
                 public OtherObserver(_ parent)
                 {
-                    this.parent = parent;
+                    _parent = parent;
                 }
 
                 public void Dispose()
                 {
-                    if (!Disposable.GetIsDisposed(ref upstream))
+                    if (!Disposable.GetIsDisposed(ref _upstream))
                     {
-                        Disposable.TryDispose(ref upstream);
+                        Disposable.TryDispose(ref _upstream);
                     }
                 }
 
                 public void OnSubscribe(IDisposable d)
                 {
-                    Disposable.TrySetSingle(ref upstream, d);
+                    Disposable.TrySetSingle(ref _upstream, d);
                 }
 
                 public void OnCompleted()
@@ -136,12 +136,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    parent.OnError(error);
+                    _parent.OnError(error);
                 }
 
                 public void OnNext(TOther value)
                 {
-                    parent.OnCompleted();
+                    _parent.OnCompleted();
                 }
             }
 
