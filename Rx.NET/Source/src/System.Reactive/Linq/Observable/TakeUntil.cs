@@ -33,8 +33,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private Exception _error;
 
-            static readonly Exception TerminalException = new Exception("No further exceptions");
-
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
@@ -68,9 +66,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     if (Interlocked.Decrement(ref _halfSerializer) != 0)
                     {
                         var ex = _error;
-                        if (ex != TerminalException)
+                        if (ex != TakeUntilTerminalException.Instance)
                         {
-                            _error = TerminalException;
+                            _error = TakeUntilTerminalException.Instance;
                             ForwardOnError(ex);
                         }
                         else
@@ -87,7 +85,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     if (Interlocked.Increment(ref _halfSerializer) == 1)
                     {
-                        _error = TerminalException;
+                        _error = TakeUntilTerminalException.Instance;
                         ForwardOnError(ex);
                     }
                 }
@@ -95,7 +93,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnCompleted()
             {
-                if (Interlocked.CompareExchange(ref _error, TerminalException, null) == null)
+                if (Interlocked.CompareExchange(ref _error, TakeUntilTerminalException.Instance, null) == null)
                 {
                     if (Interlocked.Increment(ref _halfSerializer) == 1)
                     {
@@ -146,6 +144,11 @@ namespace System.Reactive.Linq.ObservableImpl
             }
 
         }
+    }
+
+    internal static class TakeUntilTerminalException
+    {
+        internal static readonly Exception Instance = new Exception("No further exceptions");
     }
 
     internal sealed class TakeUntil<TSource> : Producer<TSource, TakeUntil<TSource>._>
