@@ -12,9 +12,32 @@ namespace System.Reactive.Disposables
     public static class Disposable
     {
         /// <summary>
+        /// Represents a disposable that does nothing on disposal.
+        /// </summary>
+        private sealed class EmptyDisposable : IDisposable
+        {
+            /// <summary>
+            /// Singleton default disposable.
+            /// </summary>
+            public static readonly EmptyDisposable Instance = new EmptyDisposable();
+
+            private EmptyDisposable()
+            {
+            }
+
+            /// <summary>
+            /// Does nothing.
+            /// </summary>
+            public void Dispose()
+            {
+                // no op
+            }
+        }
+
+        /// <summary>
         /// Gets the disposable that does nothing when disposed.
         /// </summary>
-        public static IDisposable Empty => DefaultDisposable.Instance;
+        public static IDisposable Empty => EmptyDisposable.Instance;
 
         /// <summary>
         /// Creates a disposable object that invokes the specified action when disposed.
@@ -50,7 +73,7 @@ namespace System.Reactive.Disposables
             var current = Volatile.Read(ref fieldRef);
 
             return current == BooleanDisposable.True
-                ? DefaultDisposable.Instance
+                ? EmptyDisposable.Instance
                 : current;
         }
 
