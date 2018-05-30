@@ -25,7 +25,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            private readonly OtherObserver _other;
             private IDisposable _mainDisposable;
             private IDisposable _otherDisposable;
             private int _halfSerializer;
@@ -34,12 +33,11 @@ namespace System.Reactive.Linq.ObservableImpl
             public _(IObserver<TSource> observer, IDisposable cancel)
                 : base(observer, cancel)
             {
-                _other = new OtherObserver(this);
             }
 
             public IDisposable Run(TakeUntil<TSource, TOther> parent)
             {
-                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(_other));
+                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
                 Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
