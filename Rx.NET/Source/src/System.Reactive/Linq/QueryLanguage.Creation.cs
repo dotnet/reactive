@@ -163,7 +163,7 @@ namespace System.Reactive.Linq
 
                 public void Dispose()
                 {
-                    Interlocked.Exchange(ref disposable, BooleanDisposable.True)?.Dispose();
+                    Disposable.TryDispose(ref disposable);
                 }
 
                 public void OnCompleted()

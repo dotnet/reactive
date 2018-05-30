@@ -103,7 +103,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
+                    Disposable.TryDispose(ref upstream);
                 }
 
                 public void OnCompleted()
