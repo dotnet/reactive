@@ -35,7 +35,22 @@ namespace System.Reactive.Concurrency
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new AnonymousObservable<TSource>(observer =>
+            return new SubscribeOnObservable<TSource>(source, scheduler);
+        }
+
+        sealed class SubscribeOnObservable<TSource> : ObservableBase<TSource>
+        {
+            readonly IObservable<TSource> source;
+
+            readonly IScheduler scheduler;
+
+            public SubscribeOnObservable(IObservable<TSource> source, IScheduler scheduler)
+            {
+                this.source = source;
+                this.scheduler = scheduler;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
                 var m = new SingleAssignmentDisposable();
                 var d = new SerialDisposable();
@@ -47,7 +62,7 @@ namespace System.Reactive.Concurrency
                 });
 
                 return d;
-            });
+            }
         }
 
         /// <summary>
@@ -69,7 +84,22 @@ namespace System.Reactive.Concurrency
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            return new AnonymousObservable<TSource>(observer =>
+            return new SubscribeOnCtxObservable<TSource>(source, context);
+        }
+
+        sealed class SubscribeOnCtxObservable<TSource> : ObservableBase<TSource>
+        {
+            readonly IObservable<TSource> source;
+
+            readonly SynchronizationContext context;
+
+            public SubscribeOnCtxObservable(IObservable<TSource> source, SynchronizationContext context)
+            {
+                this.source = source;
+                this.context = context;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
                 var subscription = new SingleAssignmentDisposable();
                 context.PostWithStartComplete(() =>
@@ -80,7 +110,7 @@ namespace System.Reactive.Concurrency
                     }
                 });
                 return subscription;
-            });
+            }
         }
 
         #endregion
