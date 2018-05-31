@@ -34,7 +34,7 @@ namespace System.Reactive.Concurrency
             {
                 if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
                 {
-                    Disposable.TrySetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
+                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
                 }
             }
 
