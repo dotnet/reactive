@@ -180,17 +180,18 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(TakeUntil<TSource> parent)
             {
-                var t = parent._scheduler.Schedule(parent._endTime, Tick);
+                var t = parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick());
                 var d = parent._source.SubscribeSafe(this);
                 return StableCompositeDisposable.Create(t, d);
             }
 
-            private void Tick()
+            private IDisposable Tick()
             {
                 lock (_gate)
                 {
                     ForwardOnCompleted();
                 }
+                return Disposable.Empty;
             }
 
             public override void OnNext(TSource value)

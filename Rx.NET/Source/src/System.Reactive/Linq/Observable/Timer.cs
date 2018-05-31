@@ -58,18 +58,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public IDisposable Run(Single parent, DateTimeOffset dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    return parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke());
                 }
 
                 public IDisposable Run(Single parent, TimeSpan dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    return parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke());
                 }
 
-                private void Invoke()
+                private IDisposable Invoke()
                 {
                     ForwardOnNext(0);
                     ForwardOnCompleted();
+                    return Disposable.Empty;
                 }
             }
         }

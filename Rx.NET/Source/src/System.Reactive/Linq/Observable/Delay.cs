@@ -414,7 +414,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (shouldWait)
                         {
                             var timer = new ManualResetEventSlim();
-                            _scheduler.Schedule(waitTime, () => { timer.Set(); });
+                            _scheduler.Schedule(timer, waitTime, (_, state) => { state.Set(); return Disposable.Empty; });
 
                             try
                             {
@@ -473,7 +473,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _ready = false;
 
-                    _cancelable.Disposable = parent._scheduler.Schedule(parent._dueTime, Start);
+                    _cancelable.Disposable = parent._scheduler.Schedule(this, parent._dueTime, (_, state) => { state.Start(); return Disposable.Empty; });
                 }
 
                 private void Start()
@@ -521,7 +521,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 protected override void RunCore(Absolute parent)
                 {
-                    _cancelable.Disposable = parent._scheduler.Schedule(parent._dueTime, Start);
+                    _cancelable.Disposable = parent._scheduler.Schedule(this, parent._dueTime, (_, state) => { state.Start(); return Disposable.Empty; });
                 }
 
                 private void Start()

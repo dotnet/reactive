@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -33,13 +34,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(Invoke);
+                return scheduler.Schedule(this, (_, self) => self.Invoke());
             }
 
-            private void Invoke()
+            private IDisposable Invoke()
             {
                 ForwardOnNext(_value);
                 ForwardOnCompleted();
+                return Disposable.Empty;
             }
         }
     }

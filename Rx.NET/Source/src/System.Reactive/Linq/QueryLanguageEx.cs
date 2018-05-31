@@ -472,10 +472,12 @@ namespace System.Reactive.Linq
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 var g = new CompositeDisposable();
-                g.Add(CurrentThreadScheduler.Instance.Schedule(() =>
+                g.Add(CurrentThreadScheduler.Instance.Schedule((observer, g, self: this),
+                (_, state) =>
                 {
-                    observer.OnNext(head);
-                    g.Add(tail.Merge().Subscribe(observer));
+                    state.observer.OnNext(state.self.head);
+                    state.g.Add(state.self.tail.Merge().Subscribe(state.observer));
+                    return Disposable.Empty;
                 }));
                 return g;
             }

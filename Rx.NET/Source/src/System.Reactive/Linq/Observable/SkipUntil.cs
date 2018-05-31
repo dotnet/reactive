@@ -165,14 +165,15 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(SkipUntil<TSource> parent)
             {
-                var t = parent._scheduler.Schedule(parent._startTime, Tick);
+                var t = parent._scheduler.Schedule(this, parent._startTime, (_, state) => state.Tick());
                 var d = parent._source.SubscribeSafe(this);
                 return StableCompositeDisposable.Create(t, d);
             }
 
-            private void Tick()
+            private IDisposable Tick()
             {
                 _open = true;
+                return Disposable.Empty;
             }
 
             public override void OnNext(TSource value)

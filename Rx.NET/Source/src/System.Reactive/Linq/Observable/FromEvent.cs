@@ -284,12 +284,19 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (--_count == 0)
                             {
-                                _parent._scheduler.Schedule(_removeHandler.Dispose);
+                                _parent._scheduler.Schedule(_removeHandler, (_, self) => RemoveHandlerDispose(self));
                                 _parent._session = null;
                             }
                         }
                     });
                 }
+
+            }
+
+            static IDisposable RemoveHandlerDispose(SingleAssignmentDisposable d)
+            {
+                d.Dispose();
+                return Disposable.Empty;
             }
 
             private void Initialize()
