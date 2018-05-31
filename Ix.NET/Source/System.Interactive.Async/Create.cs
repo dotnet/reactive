@@ -97,16 +97,8 @@ namespace System.Linq
 
             public override void Dispose()
             {
-                var dispose = Volatile.Read(ref this.dispose);
-                if (dispose != null)
-                {
-                    dispose = Interlocked.Exchange(ref this.dispose, null);
-                    if (dispose != null)
-                    {
-                        dispose();
-                        base.Dispose();
-                    }
-                }
+                Interlocked.Exchange(ref this.dispose, null)?.Invoke();
+                base.Dispose();
             }
 
             protected override async Task<bool> MoveNextCore(CancellationToken cancellationToken)
