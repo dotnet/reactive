@@ -103,7 +103,7 @@ namespace System.Reactive.Concurrency
                 queue.Enqueue(si);
             }
 
-            return Disposable.Create(si.Cancel);
+            return si;
         }
 
         private static class Trampoline

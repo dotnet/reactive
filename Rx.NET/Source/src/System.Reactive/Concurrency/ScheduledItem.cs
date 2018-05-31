@@ -11,10 +11,10 @@ namespace System.Reactive.Concurrency
     /// Abstract base class for scheduled work items.
     /// </summary>
     /// <typeparam name="TAbsolute">Absolute time representation type.</typeparam>
-    public abstract class ScheduledItem<TAbsolute> : IScheduledItem<TAbsolute>, IComparable<ScheduledItem<TAbsolute>>
+    public abstract class ScheduledItem<TAbsolute> : IScheduledItem<TAbsolute>, IComparable<ScheduledItem<TAbsolute>>, IDisposable
         where TAbsolute : IComparable<TAbsolute>
     {
-        private readonly SingleAssignmentDisposable _disposable = new SingleAssignmentDisposable();
+        private IDisposable _disposable;
         private readonly IComparer<TAbsolute> _comparer;
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace System.Reactive.Concurrency
         /// </summary>
         public void Invoke()
         {
-            if (!_disposable.IsDisposed)
+            if (!Disposable.GetIsDisposed(ref _disposable))
             {
-                _disposable.Disposable = InvokeCore();
+                Disposable.SetSingle(ref _disposable, InvokeCore());
             }
         }
 
@@ -149,12 +149,17 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Cancels the work item by disposing the resource returned by <see cref="InvokeCore"/> as soon as possible.
         /// </summary>
-        public void Cancel() => _disposable.Dispose();
+        public void Cancel() => Dispose();
 
         /// <summary>
         /// Gets whether the work item has received a cancellation request.
         /// </summary>
-        public bool IsCanceled => _disposable.IsDisposed;
+        public bool IsCanceled => Disposable.GetIsDisposed(ref _disposable);
+
+        public void Dispose()
+        {
+            Disposable.TryDispose(ref _disposable);
+        }
     }
 
     /// <summary>
