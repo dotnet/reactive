@@ -37,8 +37,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(TakeUntil<TSource, TOther> parent)
             {
-                Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-                Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
+                Disposable.SetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
+                Disposable.SetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
             }

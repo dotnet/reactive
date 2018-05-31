@@ -33,7 +33,7 @@ namespace System.Reactive.Disposables
         public IDisposable Disposable
         {
             get => Disposables.Disposable.GetValueOrDefault(ref _current);
-            set => Disposables.Disposable.TrySetSingle(ref _current, value);
+            set => Disposables.Disposable.SetSingle(ref _current, value);
         }
 
         /// <summary>
