@@ -68,10 +68,8 @@ namespace System.Reactive
                         var enumerator = stack.Pop();
                         enumerator.Dispose();
                     }
-                    if (Volatile.Read(ref currentSubscription) != BooleanDisposable.True)
-                    {
-                        Interlocked.Exchange(ref currentSubscription, BooleanDisposable.True)?.Dispose();
-                    }
+
+                    Disposable.TryDispose(ref currentSubscription);
                 }
                 else
                 {
@@ -131,7 +129,8 @@ namespace System.Reactive
                             else
                             {
                                 var sad = new SingleAssignmentDisposable();
-                                if (Interlocked.CompareExchange(ref currentSubscription, sad, null) == null)
+
+                                if (Disposable.TrySetSingle(ref currentSubscription, sad) == TrySetSingleResult.Success)
                                 {
                                     sad.Disposable = next.SubscribeSafe(this);
                                 }
@@ -172,15 +171,8 @@ namespace System.Reactive
 
         protected void Recurse()
         {
-            var d = Volatile.Read(ref currentSubscription);
-            if (d != BooleanDisposable.True)
-            {
-                d?.Dispose();
-                if (Interlocked.CompareExchange(ref currentSubscription, null, d) == d)
-                {
-                    Drain();
-                }
-            }
+            if (Disposable.TrySetSerial(ref currentSubscription, null))
+                Drain();
         }
 
         protected abstract IEnumerable<IObservable<TSource>> Extract(IObservable<TSource> source);

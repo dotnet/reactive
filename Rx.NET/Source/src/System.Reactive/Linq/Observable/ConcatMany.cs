@@ -66,12 +66,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
             void DisposeMain()
             {
-                Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
+                Disposable.TryDispose(ref upstream);
             }
 
             bool IsDisposed()
             {
-                return Volatile.Read(ref upstream) == BooleanDisposable.True;
+                return Disposable.GetIsDisposed(ref upstream);
             }
 
             public void OnCompleted()

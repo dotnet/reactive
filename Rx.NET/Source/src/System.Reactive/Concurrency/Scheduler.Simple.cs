@@ -22,7 +22,38 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, Invoke);
+            // Surprisingly, passing the method group of Invoke will create a fresh
+            // delegate each an every time, although it's static, while an anonymous
+            // lambda without the need of a closure will be cached.
+            // Once Roslyn supports caching delegates for method groups,
+            // the anonymous lambda can be replaced by the method group again. Until then,
+            // to avoid the repetition of code, the call to Invoke is left intact.
+            // Watch https://github.com/dotnet/roslyn/issues/5835
+            return scheduler.Schedule(action, (s, a) => Invoke(s, a));
+        }
+
+        /// <summary>
+        /// Schedules an action to be executed.
+        /// </summary>
+        /// <param name="scheduler">Scheduler to execute the action on.</param>
+        /// <param name="action">Action to execute.</param>
+        /// <param name="state">A state object to be passed to <paramref name="action"/>.</param>
+        /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
+        internal static IDisposable Schedule<TState>(this IScheduler scheduler, Action<TState> action, TState state)
+        {
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            return scheduler.Schedule(
+                (action, state), 
+                (_, tuple) =>
+                {
+                    tuple.action(tuple.state);
+                    return Disposable.Empty;
+                });
         }
 
         /// <summary>
@@ -40,7 +71,8 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, dueTime, Invoke);
+            // See note above.
+            return scheduler.Schedule(action, dueTime, (s, a) => Invoke(s, a));
         }
 
         /// <summary>
@@ -58,7 +90,8 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            return scheduler.Schedule(action, dueTime, Invoke);
+            // See note above.
+            return scheduler.Schedule(action, dueTime, (s, a) => Invoke(s, a));
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class ScheduledDisposable : ICancelable
     {
-        private volatile IDisposable _disposable;
+        private IDisposable _disposable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduledDisposable"/> class that uses an <see cref="IScheduler"/> on which to dispose the disposable.
@@ -28,7 +28,7 @@ namespace System.Reactive.Disposables
                 throw new ArgumentNullException(nameof(disposable));
 
             Scheduler = scheduler;
-            _disposable = disposable;
+            Disposables.Disposable.SetSingle(ref _disposable, disposable);
         }
 
         /// <summary>
@@ -39,39 +39,16 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets the underlying disposable. After disposal, the result is undefined.
         /// </summary>
-        public IDisposable Disposable
-        {
-            get
-            {
-                var current = _disposable;
-
-                if (current == BooleanDisposable.True)
-                {
-                    return DefaultDisposable.Instance; // Don't leak the sentinel value.
-                }
-
-                return current;
-            }
-        }
+        public IDisposable Disposable => Disposables.Disposable.GetValueOrDefault(ref _disposable);
 
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => _disposable == BooleanDisposable.True;
+        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _disposable);
 
         /// <summary>
         /// Disposes the wrapped disposable on the provided scheduler.
         /// </summary>
-        public void Dispose() => Scheduler.Schedule(DisposeInner);
-
-        private void DisposeInner()
-        {
-            var disposable = Interlocked.Exchange(ref _disposable, BooleanDisposable.True);
-
-            if (disposable != BooleanDisposable.True)
-            {
-                disposable.Dispose();
-            }
-        }
+        public void Dispose() => Scheduler.Schedule(scheduler => Disposables.Disposable.TryDispose(ref scheduler._disposable), this);
     }
 }
