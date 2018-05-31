@@ -401,8 +401,8 @@ namespace System.Reactive
         public void Dispose()
         {
             Volatile.Write(ref disposed, true);
-            Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
-            Interlocked.Exchange(ref task, BooleanDisposable.True)?.Dispose();
+            Disposable.TryDispose(ref upstream);
+            Disposable.TryDispose(ref task);
             Clear();
         }
 
@@ -443,14 +443,10 @@ namespace System.Reactive
         {
             if (Interlocked.Increment(ref wip) == 1)
             {
-                var oldTask = Volatile.Read(ref task);
-
                 var newTask = new SingleAssignmentDisposable();
 
-                if (oldTask != BooleanDisposable.True
-                    && Interlocked.CompareExchange(ref task, newTask, oldTask) == oldTask)
+                if (Disposable.TrySetMultiple(ref task, newTask))
                 {
-
                     var longRunning = this.longRunning;
                     if (longRunning != null)
                     {

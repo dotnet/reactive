@@ -210,5 +210,16 @@ namespace System.Reactive.Disposables
             old?.Dispose();
             return true;
         }
+
+        internal static bool TryRelease<TState>(ref IDisposable fieldRef, TState state, Action<IDisposable, TState> disposeAction)
+        {
+            var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
+
+            if (old == BooleanDisposable.True)
+                return false;
+
+            disposeAction(old, state);
+            return true;
+        }
     }
 }
