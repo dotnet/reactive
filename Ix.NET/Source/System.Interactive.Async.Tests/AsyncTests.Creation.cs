@@ -452,6 +452,27 @@ namespace Tests
             await SequenceIdentity(xs);
         }
 
+        [Fact]
+        public async Task CreateEnumerator_DisposeOnce()
+        {
+            var count = 0;
+            var dispose = 0;
+
+            var en = AsyncEnumerable.CreateEnumerable(() =>
+                AsyncEnumerable.CreateEnumerator(async ct =>
+                {
+                    return ++count < 3;
+                }
+                , () => 1,
+                () => dispose++
+            ));
+
+            Assert.Equal(1, await en.Last());
+
+            Assert.Equal(3, count);
+            Assert.Equal(1, dispose);
+        }
+
         class MyD : IDisposable
         {
             private readonly Action _dispose;
