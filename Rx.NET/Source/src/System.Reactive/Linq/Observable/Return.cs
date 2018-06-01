@@ -34,14 +34,13 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(this, (_, self) => self.Invoke());
+                return scheduler.ScheduleAction(this, @this => @this.Invoke());
             }
 
-            private IDisposable Invoke()
+            private void Invoke()
             {
                 ForwardOnNext(_value);
                 ForwardOnCompleted();
-                return Disposable.Empty;
             }
         }
     }

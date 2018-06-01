@@ -34,14 +34,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(this, (_, self) => Invoke(self));
+                return scheduler.ScheduleAction(this, @this => @this.ForwardOnError(@this._exception));
             }
 
-            private static IDisposable Invoke(_ self)
-            {
-                self.ForwardOnError(self._exception);
-                return Disposable.Empty;
-            }
         }
     }
 }

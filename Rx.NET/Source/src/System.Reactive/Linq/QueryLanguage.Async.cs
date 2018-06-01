@@ -904,7 +904,7 @@ namespace System.Reactive.Linq
             return () =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((function, subject), (_, state) =>
+                scheduler.ScheduleAction((function, subject), state =>
                 {
                     var result = default(TResult);
                     try
@@ -914,11 +914,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -934,7 +933,7 @@ namespace System.Reactive.Linq
             return (first) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((function, subject, first), (_, state) =>
+                scheduler.ScheduleAction((function, subject, first), state =>
                 {
                     var result = default(TResult);
                     try
@@ -944,11 +943,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -964,7 +962,7 @@ namespace System.Reactive.Linq
             return (first, second) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second), state =>
                 {
                     var result = default(TResult);
                     try
@@ -974,11 +972,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -994,7 +991,7 @@ namespace System.Reactive.Linq
             return (first, second, third) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1004,11 +1001,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1024,7 +1020,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1034,11 +1030,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1054,7 +1049,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1064,11 +1059,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1084,7 +1078,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1094,11 +1088,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1114,7 +1107,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1124,11 +1117,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1144,7 +1136,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1154,11 +1146,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1174,7 +1165,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1184,11 +1175,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1204,7 +1194,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1214,11 +1204,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1234,7 +1223,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1244,11 +1233,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1264,7 +1252,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1274,11 +1262,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1294,7 +1281,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1304,11 +1291,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1324,7 +1310,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1334,11 +1320,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1354,7 +1339,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1364,11 +1349,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1384,7 +1368,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                scheduler.Schedule((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, function, first, second, third, fourth, fifth, sixth, seventh, eight, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), state =>
                 {
                     var result = default(TResult);
                     try
@@ -1394,11 +1378,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(result);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1418,7 +1401,7 @@ namespace System.Reactive.Linq
             return () =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action), (_, state) =>
+                scheduler.ScheduleAction((subject, action), state =>
                 {
                     try
                     {
@@ -1427,11 +1410,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
 
                 return subject.AsObservable();
@@ -1448,7 +1430,7 @@ namespace System.Reactive.Linq
             return (first) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first), state =>
                 {
                     try
                     {
@@ -1457,11 +1439,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1477,7 +1458,7 @@ namespace System.Reactive.Linq
             return (first, second) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second), state =>
                 {
                     try
                     {
@@ -1486,11 +1467,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1506,7 +1486,7 @@ namespace System.Reactive.Linq
             return (first, second, third) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third), state =>
                 {
                     try
                     {
@@ -1515,11 +1495,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1535,7 +1514,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth), state =>
                 {
                     try
                     {
@@ -1544,11 +1523,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1564,7 +1542,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth), state =>
                 {
                     try
                     {
@@ -1573,11 +1551,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1593,7 +1570,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth), state =>
                 {
                     try
                     {
@@ -1602,11 +1579,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1622,7 +1598,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh), state =>
                 {
                     try
                     {
@@ -1631,11 +1607,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1651,7 +1626,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth), state =>
                 {
                     try
                     {
@@ -1660,11 +1635,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1680,7 +1654,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth), state =>
                 {
                     try
                     {
@@ -1689,11 +1663,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1709,7 +1682,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth), state =>
                 {
                     try
                     {
@@ -1718,11 +1691,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1738,7 +1710,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh), state =>
                 {
                     try
                     {
@@ -1747,11 +1719,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1767,7 +1738,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth), state =>
                 {
                     try
                     {
@@ -1776,11 +1747,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1796,7 +1766,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth), state =>
                 {
                     try
                     {
@@ -1805,11 +1775,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1825,7 +1794,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth), state =>
                 {
                     try
                     {
@@ -1834,11 +1803,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1854,7 +1822,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth), state =>
                 {
                     try
                     {
@@ -1863,11 +1831,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };
@@ -1883,7 +1850,7 @@ namespace System.Reactive.Linq
             return (first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth) =>
             {
                 var subject = new AsyncSubject<Unit>();
-                scheduler.Schedule((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), (_, state) =>
+                scheduler.ScheduleAction((subject, action, first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth, thirteenth, fourteenth, fifteenth, sixteenth), state =>
                 {
                     try
                     {
@@ -1892,11 +1859,10 @@ namespace System.Reactive.Linq
                     catch (Exception exception)
                     {
                         state.subject.OnError(exception);
-                        return Disposable.Empty;
+                        return;
                     }
                     state.subject.OnNext(Unit.Default);
                     state.subject.OnCompleted();
-                    return Disposable.Empty;
                 });
                 return subject.AsObservable();
             };

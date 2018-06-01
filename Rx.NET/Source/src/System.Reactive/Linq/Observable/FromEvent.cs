@@ -284,7 +284,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (--_count == 0)
                             {
-                                _parent._scheduler.Schedule(_removeHandler, (_, handler) => { handler.Dispose(); return Disposable.Empty; });
+                                _parent._scheduler.ScheduleAction(_removeHandler, handler => handler.Dispose());
                                 _parent._session = null;
                             }
                         }
