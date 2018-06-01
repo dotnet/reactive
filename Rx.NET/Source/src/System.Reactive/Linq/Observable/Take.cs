@@ -112,17 +112,18 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _gate = new object();
 
-                    var t = parent._scheduler.Schedule(parent._duration, Tick);
+                    var t = parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick());
                     var d = parent._source.SubscribeSafe(this);
                     return StableCompositeDisposable.Create(t, d);
                 }
 
-                private void Tick()
+                private IDisposable Tick()
                 {
                     lock (_gate)
                     {
                         ForwardOnCompleted();
                     }
+                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)

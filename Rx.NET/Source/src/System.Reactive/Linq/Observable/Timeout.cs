@@ -173,14 +173,14 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     _switched = false;
 
-                    var timer = parent._scheduler.Schedule(parent._dueTime, Timeout);
+                    var timer = parent._scheduler.Schedule(this, parent._dueTime, (_, state) => state.Timeout());
 
                     original.Disposable = parent._source.SubscribeSafe(this);
 
                     return StableCompositeDisposable.Create(_subscription, timer);
                 }
 
-                private void Timeout()
+                private IDisposable Timeout()
                 {
                     var timerWins = false;
 
@@ -192,6 +192,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     if (timerWins)
                         _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
+
+                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)
