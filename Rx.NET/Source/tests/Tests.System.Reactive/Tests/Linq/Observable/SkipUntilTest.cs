@@ -418,6 +418,31 @@ namespace ReactiveTests.Tests
                 OnCompleted<int>(200)
             );
         }
+
+        [Fact] // Asserts behaviour considered buggy. A fix is desirable but breaking.
+        public void SkipUntil_Empty_Empty()
+        {
+            var scheduler = new TestScheduler();
+
+            var l = scheduler.CreateHotObservable(
+                OnCompleted(250, 1)
+            );
+
+            var r = scheduler.CreateHotObservable(
+                OnCompleted(250, 1)
+            );
+
+            var res = scheduler.Start(() =>
+                l.SkipUntil(r)
+            );
+
+            res.Messages.AssertEqual(
+                );
+
+            //Desired behaviour:
+            //res.Messages.AssertEqual(
+            //    OnCompleted(250, 1));
+        }
         #endregion
 
         #region + Timed +

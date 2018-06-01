@@ -51,8 +51,9 @@ namespace System.Reactive
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { subscription = subscription, observer = observer };
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.ScheduleAction(
+                    (@this: this, subscription, observer),
+                    tuple => tuple.subscription.Disposable = tuple.@this.Run(tuple.observer));
             }
             else
             {
@@ -60,18 +61,6 @@ namespace System.Reactive
             }
 
             return subscription;
-        }
-
-        private struct State
-        {
-            public SingleAssignmentDisposable subscription;
-            public IObserver<TSource> observer;
-        }
-
-        private IDisposable Run(IScheduler _, State x)
-        {
-            x.subscription.Disposable = Run(x.observer);
-            return Disposable.Empty;
         }
 
         /// <summary>
@@ -118,9 +107,9 @@ namespace System.Reactive
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { sink = sink, inner = subscription.Inner };
-
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.ScheduleAction(
+                    (@this: this, sink, inner: subscription.Inner),
+                    tuple => tuple.inner.Disposable = tuple.@this.Run(tuple.sink));
             }
             else
             {
@@ -128,18 +117,6 @@ namespace System.Reactive
             }
 
             return subscription;
-        }
-
-        private struct State
-        {
-            public TSink sink;
-            public SingleAssignmentDisposable inner;
-        }
-
-        private IDisposable Run(IScheduler _, State x)
-        {
-            x.inner.Disposable = Run(x.sink);
-            return Disposable.Empty;
         }
 
         /// <summary>
