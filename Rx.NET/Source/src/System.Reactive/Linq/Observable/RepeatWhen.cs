@@ -12,13 +12,13 @@ using System.Threading;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
-    internal sealed class RetryWhen<T, U> : IObservable<T>
+    internal sealed class RepeatWhen<T, U> : IObservable<T>
     {
         readonly IObservable<T> source;
 
-        readonly Func<IObservable<Exception>, IObservable<U>> handler;
+        readonly Func<IObservable<object>, IObservable<U>> handler;
 
-        internal RetryWhen(IObservable<T> source, Func<IObservable<Exception>, IObservable<U>> handler)
+        internal RepeatWhen(IObservable<T> source, Func<IObservable<object>, IObservable<U>> handler)
         {
             this.source = source;
             this.handler = handler;
@@ -31,12 +31,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 throw new ArgumentNullException(nameof(observer));
             }
 
-            var errorSignals = new Subject<Exception>();
+            var completeSignals = new Subject<object>();
             var redo = default(IObservable<U>);
 
             try
             {
-                redo = handler(errorSignals);
+                redo = handler(completeSignals);
                 if (redo == null)
                 {
                     throw new NullReferenceException("The handler returned a null IObservable");
@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 return Disposable.Empty;
             }
 
-            var parent = new MainObserver(observer, source, new RedoSerializedObserver<Exception>(errorSignals));
+            var parent = new MainObserver(observer, source, new RedoSerializedObserver<object>(completeSignals));
 
             var d = redo.SubscribeSafe(parent.handlerObserver);
             parent.handlerObserver.OnSubscribe(d);
@@ -100,15 +100,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void OnCompleted()
             {
-                if (Interlocked.Increment(ref halfSerializer) == 1)
-                {
-                    downstream.OnCompleted();
-                    Dispose();
-                }
-            }
 
-            public void OnError(Exception error)
-            {
                 for (; ; )
                 {
                     var d = Volatile.Read(ref upstream);
@@ -118,10 +110,20 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     if (Interlocked.CompareExchange(ref upstream, null, d) == d)
                     {
-                        errorSignal.OnNext(error);
+                        errorSignal.OnNext(null);
                         d.Dispose();
                         break;
                     }
+                }
+
+            }
+
+            public void OnError(Exception error)
+            {
+                if (Interlocked.Increment(ref halfSerializer) == 1)
+                {
+                    downstream.OnError(error);
+                    Dispose();
                 }
             }
 
@@ -204,7 +206,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void Dispose()
                 {
-                    Disposable.TryDispose(ref upstream);
+                    Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
                 }
 
                 public void OnCompleted()
@@ -225,98 +227,6 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
         }
-    }
 
-    internal sealed class RedoSerializedObserver<X> : IObserver<X>
-    {
-        readonly IObserver<X> downstream;
-
-        int wip;
-
-        Exception terminalException;
-
-        static readonly Exception DONE = new Exception();
-
-        static readonly Exception SIGNALED = new Exception();
-
-        readonly ConcurrentQueue<X> queue;
-
-        internal RedoSerializedObserver(IObserver<X> downstream)
-        {
-            this.downstream = downstream;
-            this.queue = new ConcurrentQueue<X>();
-        }
-
-        public void OnCompleted()
-        {
-            if (Interlocked.CompareExchange(ref terminalException, DONE, null) == null)
-            {
-                Drain();
-            }
-        }
-
-        public void OnError(Exception error)
-        {
-            if (Interlocked.CompareExchange(ref terminalException, error, null) == null)
-            {
-                Drain();
-            }
-        }
-
-        public void OnNext(X value)
-        {
-            queue.Enqueue(value);
-            Drain();
-        }
-
-        void Clear()
-        {
-            while (queue.TryDequeue(out var _)) ;
-        }
-
-        void Drain()
-        {
-            if (Interlocked.Increment(ref wip) != 1)
-            {
-                return;
-            }
-
-            int missed = 1;
-
-            for (; ; )
-            {
-                var ex = Volatile.Read(ref terminalException);
-                if (ex != null)
-                {
-                    if (ex != SIGNALED)
-                    {
-                        Interlocked.Exchange(ref terminalException, SIGNALED);
-                        if (ex != DONE)
-                        {
-                            downstream.OnError(ex);
-                        }
-                        else
-                        {
-                            downstream.OnCompleted();
-                        }
-                    }
-                    Clear();
-                }
-                else
-                {
-                    while (queue.TryDequeue(out var item))
-                    {
-                        downstream.OnNext(item);
-                    }
-                }
-
-
-                missed = Interlocked.Add(ref wip, -missed);
-                if (missed == 0)
-                {
-                    break;
-                }
-            }
-        }
     }
 }

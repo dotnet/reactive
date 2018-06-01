@@ -580,6 +580,7 @@ namespace System.Reactive.Linq
         IObservable<Notification<TSource>> Materialize<TSource>(IObservable<TSource> source);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount);
+        IObservable<TSource> RepeatWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<object>, IObservable<TSignal>> handler);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source, int retryCount);
         IObservable<TSource> RetryWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler);

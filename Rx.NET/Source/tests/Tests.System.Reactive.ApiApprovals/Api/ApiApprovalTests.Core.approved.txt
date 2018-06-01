@@ -1252,6 +1252,7 @@ namespace System.Reactive.Linq
         public static System.IObservable<TResult> Repeat<TResult>(TResult value, int repeatCount, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> Repeat<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> Repeat<TSource>(this System.IObservable<TSource> source, int repeatCount) { }
+        public static System.IObservable<TSource> RepeatWhen<TSource, TSignal>(this System.IObservable<TSource> source, System.Func<System.IObservable<object>, System.IObservable<TSignal>> handler) { }
         public static System.Reactive.Subjects.IConnectableObservable<TSource> Replay<TSource>(this System.IObservable<TSource> source) { }
         public static System.Reactive.Subjects.IConnectableObservable<TSource> Replay<TSource>(this System.IObservable<TSource> source, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TResult> Replay<TSource, TResult>(this System.IObservable<TSource> source, System.Func<System.IObservable<TSource>, System.IObservable<TResult>> selector) { }
@@ -1968,6 +1969,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<TResult> Repeat<TResult>(this System.Reactive.Linq.IQbservableProvider provider, TResult value, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.Reactive.Linq.IQbservable<TSource> Repeat<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> Repeat<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, int repeatCount) { }
+        public static System.Reactive.Linq.IQbservable<TSource> RepeatWhen<TSource, TSignal>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<object>, System.IObservable<TSignal>>> handler) { }
         public static System.Reactive.Linq.IQbservable<TResult> Replay<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, System.IObservable<TResult>>> selector) { }
         public static System.Reactive.Linq.IQbservable<TResult> Replay<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, System.IObservable<TResult>>> selector, int bufferSize) { }
         public static System.Reactive.Linq.IQbservable<TResult> Replay<TSource, TResult>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<System.IObservable<TSource>, System.IObservable<TResult>>> selector, int bufferSize, System.Reactive.Concurrency.IScheduler scheduler) { }

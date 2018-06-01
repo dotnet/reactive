@@ -172,6 +172,11 @@ namespace System.Reactive.Linq
             return Enumerable.Repeat(source, repeatCount).Concat();
         }
 
+        public virtual IObservable<TSource> RepeatWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<object>, IObservable<TSignal>> handler)
+        {
+            return new RepeatWhen<TSource, TSignal>(source, handler);
+        }
+
         #endregion
 
         #region - Retry -
