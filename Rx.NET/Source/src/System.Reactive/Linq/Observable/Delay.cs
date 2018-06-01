@@ -414,7 +414,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         if (shouldWait)
                         {
                             var timer = new ManualResetEventSlim();
-                            _scheduler.Schedule(timer, waitTime, (_, state) => { state.Set(); return Disposable.Empty; });
+                            _scheduler.Schedule(timer, waitTime, (_, slimTimer) => { slimTimer.Set(); return Disposable.Empty; });
 
                             try
                             {

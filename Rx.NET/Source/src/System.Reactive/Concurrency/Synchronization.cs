@@ -56,10 +56,10 @@ namespace System.Reactive.Concurrency
                 var d = new SerialDisposable();
                 d.Disposable = m;
 
-                m.Disposable = scheduler.Schedule((scheduler, source, observer, d),
-                (_, state) =>
+                m.Disposable = scheduler.Schedule((source, observer, d),
+                (scheduler, state) =>
                 {
-                    state.d.Disposable = new ScheduledDisposable(state.scheduler, state.source.SubscribeSafe(state.observer));
+                    state.d.Disposable = new ScheduledDisposable(scheduler, state.source.SubscribeSafe(state.observer));
                     return Disposable.Empty;
                 });
 
