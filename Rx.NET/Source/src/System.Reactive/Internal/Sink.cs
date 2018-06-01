@@ -24,14 +24,9 @@ namespace System.Reactive
 
         protected virtual void Dispose(bool disposing)
         {
-            ClearObserver();
+            _observer = NopObserver<TTarget>.Instance;
 
             Interlocked.Exchange(ref _cancel, null)?.Dispose();
-        }
-
-        protected void ClearObserver()
-        {
-            _observer = NopObserver<TTarget>.Instance;
         }
 
         protected void ForwardOnNext(TTarget value)

@@ -67,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         Disposable.TryDispose(ref _otherDisposable);
                         Disposable.TryDispose(ref _timerDisposable);
                     }
-                    base.ClearObserver();
+                    base.Dispose(disposing);
                 }
 
                 private void CreateTimer(long idx)
