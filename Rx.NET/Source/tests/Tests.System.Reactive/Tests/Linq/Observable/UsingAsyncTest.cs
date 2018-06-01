@@ -33,17 +33,17 @@ namespace ReactiveTests.Tests
         [Fact]
         public void UsingAsync_Simple()
         {
-            var done = false;
+            var done = new CountdownEvent(1);
 
             var xs = Observable.Using<int, IDisposable>(
-                ct => Task.Factory.StartNew<IDisposable>(() => Disposable.Create(() => done = true)),
+                ct => Task.Factory.StartNew<IDisposable>(() => Disposable.Create(() => done.Signal())),
                 (_, ct) => Task.Factory.StartNew<IObservable<int>>(() => Observable.Return(42))
             );
 
             var res = xs.ToEnumerable().ToList();
 
-            Assert.True(new[] { 42 }.SequenceEqual(res));
-            Assert.True(done);
+            Assert.Equal(new List<int> { 42 }, res);
+            Assert.True(done.Wait(5000), "done.Wait(5000)");
         }
 
         [Fact]

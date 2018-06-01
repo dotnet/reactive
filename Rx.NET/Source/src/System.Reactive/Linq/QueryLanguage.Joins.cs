@@ -37,38 +37,44 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> When<TResult>(IEnumerable<Plan<TResult>> plans)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new WhenObservable<TResult>(plans);
+        }
+
+        sealed class WhenObservable<TResult> : ObservableBase<TResult>
+        {
+            readonly IEnumerable<Plan<TResult>> plans;
+
+            public WhenObservable(IEnumerable<Plan<TResult>> plans)
+            {
+                this.plans = plans;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var externalSubscriptions = new Dictionary<object, IJoinObserver>();
                 var gate = new object();
                 var activePlans = new List<ActivePlan>();
-                var outObserver = Observer.Create<TResult>(observer.OnNext,
-                    exception =>
-                    {
-                        foreach (var po in externalSubscriptions.Values)
-                        {
-                            po.Dispose();
-                        }
-                        observer.OnError(exception);
-                    },
-                    observer.OnCompleted);
+                var outObserver = new OutObserver(observer, externalSubscriptions);
                 try
                 {
+                    Action<ActivePlan> onDeactivate = activePlan =>
+                    {
+                        activePlans.Remove(activePlan);
+                        if (activePlans.Count == 0)
+                            outObserver.OnCompleted();
+                    };
+
                     foreach (var plan in plans)
                         activePlans.Add(plan.Activate(externalSubscriptions, outObserver,
-                                                      activePlan =>
-                                                      {
-                                                          activePlans.Remove(activePlan);
-                                                          if (activePlans.Count == 0)
-                                                              outObserver.OnCompleted();
-                                                      }));
+                                                      onDeactivate));
                 }
                 catch (Exception e)
                 {
                     //
                     // [OK] Use of unsafe Subscribe: we're calling into a known producer implementation.
                     //
-                    return Throw<TResult>(e).Subscribe/*Unsafe*/(observer);
+                    observer.OnError(e);
+                    return Disposable.Empty;
                 }
 
                 var group = new CompositeDisposable(externalSubscriptions.Values.Count);
@@ -78,7 +84,39 @@ namespace System.Reactive.Linq
                     group.Add(joinObserver);
                 }
                 return group;
-            });
+            }
+
+            sealed class OutObserver : IObserver<TResult>
+            {
+                readonly IObserver<TResult> observer;
+
+                readonly Dictionary<object, IJoinObserver> externalSubscriptions;
+
+                public OutObserver(IObserver<TResult> observer, Dictionary<object, IJoinObserver> externalSubscriptions)
+                {
+                    this.observer = observer;
+                    this.externalSubscriptions = externalSubscriptions;
+                }
+
+                public void OnCompleted()
+                {
+                    observer.OnCompleted();
+                }
+
+                public void OnError(Exception exception)
+                {
+                    foreach (var po in externalSubscriptions.Values)
+                    {
+                        po.Dispose();
+                    }
+                    observer.OnError(exception);
+                }
+
+                public void OnNext(TResult value)
+                {
+                    observer.OnNext(value);
+                }
+            }
         }
 
         #endregion

@@ -6,15 +6,45 @@ using System.Threading;
 
 namespace System.Reactive.Disposables
 {
+    internal enum TrySetSingleResult
+    {
+        Success,
+        AlreadyAssigned,
+        Disposed
+    }
+
     /// <summary>
     /// Provides a set of static methods for creating <see cref="IDisposable"/> objects.
     /// </summary>
     public static class Disposable
     {
         /// <summary>
+        /// Represents a disposable that does nothing on disposal.
+        /// </summary>
+        private sealed class EmptyDisposable : IDisposable
+        {
+            /// <summary>
+            /// Singleton default disposable.
+            /// </summary>
+            public static readonly EmptyDisposable Instance = new EmptyDisposable();
+
+            private EmptyDisposable()
+            {
+            }
+
+            /// <summary>
+            /// Does nothing.
+            /// </summary>
+            public void Dispose()
+            {
+                // no op
+            }
+        }
+
+        /// <summary>
         /// Gets the disposable that does nothing when disposed.
         /// </summary>
-        public static IDisposable Empty => DefaultDisposable.Instance;
+        public static IDisposable Empty => EmptyDisposable.Instance;
 
         /// <summary>
         /// Creates a disposable object that invokes the specified action when disposed.
@@ -31,7 +61,8 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
+        /// Gets the value stored in <paramref name="fieldRef" /> or a null if
+        /// <paramref name="fieldRef" /> was already disposed.
         /// </summary>
         internal static IDisposable GetValue(ref IDisposable fieldRef)
         {
@@ -43,30 +74,58 @@ namespace System.Reactive.Disposables
         }
 
         /// <summary>
-        /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
+        /// Gets the value stored in <paramref name="fieldRef" /> or a no-op-Disposable if
+        /// <paramref name="fieldRef" /> was already disposed.
         /// </summary>
         internal static IDisposable GetValueOrDefault(ref IDisposable fieldRef)
         {
             var current = Volatile.Read(ref fieldRef);
 
             return current == BooleanDisposable.True
-                ? DefaultDisposable.Instance
+                ? EmptyDisposable.Instance
                 : current;
         }
 
-        internal static bool TrySetSingle(ref IDisposable fieldRef, IDisposable value)
+        /// <summary>
+        /// Assigns <paramref name="value" /> to <paramref name="fieldRef" />.
+        /// </summary>
+        /// <returns>true if <paramref name="fieldRef" /> was assigned to <paramref name="value" /> and has not
+        /// been assigned before.</returns>
+        /// <returns>false if <paramref name="fieldRef" /> has been already disposed.</returns>
+        /// <exception cref="InvalidOperationException"><paramref name="fieldRef" /> has already been assigned a value.</exception>
+        internal static bool SetSingle(ref IDisposable fieldRef, IDisposable value)
+        {
+            var result = TrySetSingle(ref fieldRef, value);
+
+            if (result == TrySetSingleResult.AlreadyAssigned)
+                throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
+
+            return result == TrySetSingleResult.Success;
+        }
+
+        /// <summary>
+        /// Tries to assign <paramref name="value" /> to <paramref name="fieldRef" />.
+        /// </summary>
+        /// <returns>A <see cref="TrySetSingleResult"/> value indicating the outcome of the operation.</returns>
+        internal static TrySetSingleResult TrySetSingle(ref IDisposable fieldRef, IDisposable value)
         {
             var old = Interlocked.CompareExchange(ref fieldRef, value, null);
             if (old == null)
-                return true;
+                return TrySetSingleResult.Success;
 
             if (old != BooleanDisposable.True)
-                throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
+                return TrySetSingleResult.AlreadyAssigned;
 
             value?.Dispose();
-            return false;
+            return TrySetSingleResult.Disposed;
         }
 
+        /// <summary>
+        /// Tries to assign <paramref name="value" /> to <paramref name="fieldRef" />. If <paramref name="fieldRef" />
+        /// is not disposed and is assigned a different value, it will not be disposed.
+        /// </summary>
+        /// <returns>true if <paramref name="value" /> was successfully assigned to <paramref name="fieldRef" />.</returns>
+        /// <returns>false <paramref name="fieldRef" /> has been disposed.</returns>
         internal static bool TrySetMultiple(ref IDisposable fieldRef, IDisposable value)
         {
             // Let's read the current value atomically (also prevents reordering).
@@ -95,6 +154,12 @@ namespace System.Reactive.Disposables
             }
         }
 
+        /// <summary>
+        /// Tries to assign <paramref name="value" /> to <paramref name="fieldRef" />. If <paramref name="fieldRef" />
+        /// is not disposed and is assigned a different value, it will be disposed.
+        /// </summary>
+        /// <returns>true if <paramref name="value" /> was successfully assigned to <paramref name="fieldRef" />.</returns>
+        /// <returns>false <paramref name="fieldRef" /> has been disposed.</returns>
         internal static bool TrySetSerial(ref IDisposable fieldRef, IDisposable value)
         {
             var copy = Volatile.Read(ref fieldRef);
@@ -117,6 +182,11 @@ namespace System.Reactive.Disposables
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether <paramref name="fieldRef" /> has been disposed.
+        /// </summary>
+        /// <returns>true if <paramref name="fieldRef" /> has been disposed.</returns>
+        /// <returns>false if <paramref name="fieldRef" /> has not been disposed.</returns>
         internal static bool GetIsDisposed(ref IDisposable fieldRef)
         {
             // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
@@ -125,6 +195,11 @@ namespace System.Reactive.Disposables
             return Volatile.Read(ref fieldRef) == BooleanDisposable.True;
         }
 
+        /// <summary>
+        /// Tries to dispose <paramref name="fieldRef" />. 
+        /// </summary>
+        /// <returns>true if <paramref name="fieldRef" /> was not disposed previously and was successfully disposed.</returns>
+        /// <returns>false if <paramref name="fieldRef" /> was disposed previously.</returns>
         internal static bool TryDispose(ref IDisposable fieldRef)
         {
             var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
@@ -133,6 +208,17 @@ namespace System.Reactive.Disposables
                 return false;
 
             old?.Dispose();
+            return true;
+        }
+
+        internal static bool TryRelease<TState>(ref IDisposable fieldRef, TState state, Action<IDisposable, TState> disposeAction)
+        {
+            var old = Interlocked.Exchange(ref fieldRef, BooleanDisposable.True);
+
+            if (old == BooleanDisposable.True)
+                return false;
+
+            disposeAction(old, state);
             return true;
         }
     }

@@ -725,14 +725,29 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<TSource>(observer =>
+            return new StartAsyncObservable<TSource>(cancellable, result);
+        }
+
+        sealed class StartAsyncObservable<TSource> : ObservableBase<TSource>
+        {
+            readonly CancellationDisposable cancellable;
+
+            readonly IObservable<TSource> result;
+
+            public StartAsyncObservable(CancellationDisposable cancellable, IObservable<TSource> result)
+            {
+                this.cancellable = cancellable;
+                this.result = result;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
             {
                 //
                 // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
                 //
                 var subscription = result.Subscribe/*Unsafe*/(observer);
                 return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            }
         }
 
         #endregion
@@ -816,14 +831,7 @@ namespace System.Reactive.Linq
                 result = task.ToObservable();
             }
 
-            return new AnonymousObservable<Unit>(observer =>
-            {
-                //
-                // [OK] Use of unsafe Subscribe: result is an AsyncSubject<TSource>.
-                //
-                var subscription = result.Subscribe/*Unsafe*/(observer);
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            return new StartAsyncObservable<Unit>(cancellable, result);
         }
 
         #endregion
