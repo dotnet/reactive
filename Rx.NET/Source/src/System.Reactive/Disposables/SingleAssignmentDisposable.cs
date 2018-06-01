@@ -12,7 +12,7 @@ namespace System.Reactive.Disposables
     /// </summary>
     public sealed class SingleAssignmentDisposable : ICancelable
     {
-        private volatile IDisposable _current;
+        private IDisposable _current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleAssignmentDisposable"/> class.
@@ -24,16 +24,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed
-        {
-            get
-            {
-                // We use a sentinel value to indicate we've been disposed. This sentinel never leaks
-                // to the outside world (see the Disposable property getter), so no-one can ever assign
-                // this value to us manually.
-                return _current == BooleanDisposable.True;
-            }
-        }
+        public bool IsDisposed => Disposables.Disposable.GetIsDisposed(ref _current);
 
         /// <summary>
         /// Gets or sets the underlying disposable. After disposal, the result of getting this property is undefined.
@@ -41,29 +32,8 @@ namespace System.Reactive.Disposables
         /// <exception cref="InvalidOperationException">Thrown if the <see cref="SingleAssignmentDisposable"/> has already been assigned to.</exception>
         public IDisposable Disposable
         {
-            get
-            {
-                var current = _current;
-
-                if (current == BooleanDisposable.True)
-                {
-                    return DefaultDisposable.Instance; // Don't leak the sentinel value.
-                }
-
-                return current;
-            }
-
-            set
-            {
-                var old = Interlocked.CompareExchange(ref _current, value, null);
-                if (old == null)
-                    return;
-
-                if (old != BooleanDisposable.True)
-                    throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
-
-                value?.Dispose();
-            }
+            get => Disposables.Disposable.GetValueOrDefault(ref _current);
+            set => Disposables.Disposable.SetSingle(ref _current, value);
         }
 
         /// <summary>
@@ -71,7 +41,7 @@ namespace System.Reactive.Disposables
         /// </summary>
         public void Dispose()
         {
-            Interlocked.Exchange(ref _current, BooleanDisposable.True)?.Dispose();
+            Disposables.Disposable.TryDispose(ref _current);
         }
     }
 }
