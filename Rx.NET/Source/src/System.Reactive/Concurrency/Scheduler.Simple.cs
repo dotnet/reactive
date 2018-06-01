@@ -23,7 +23,7 @@ namespace System.Reactive.Concurrency
                 throw new ArgumentNullException(nameof(action));
 
             // Surprisingly, passing the method group of Invoke will create a fresh
-            // delegate each an every time, although it's static, while an anonymous
+            // delegate each time although it's static, while an anonymous
             // lambda without the need of a closure will be cached.
             // Once Roslyn supports caching delegates for method groups,
             // the anonymous lambda can be replaced by the method group again. Until then,
@@ -36,11 +36,12 @@ namespace System.Reactive.Concurrency
         /// Schedules an action to be executed.
         /// </summary>
         /// <param name="scheduler">Scheduler to execute the action on.</param>
-        /// <param name="action">Action to execute.</param>
         /// <param name="state">A state object to be passed to <paramref name="action"/>.</param>
+        /// <param name="action">Action to execute.</param>
         /// <returns>The disposable object used to cancel the scheduled action (best effort).</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="action"/> is <c>null</c>.</exception>
-        internal static IDisposable Schedule<TState>(this IScheduler scheduler, Action<TState> action, TState state)
+        // Note: The naming of that method differs because otherwise, the signature would cause ambiguities.
+        internal static IDisposable ScheduleAction<TState>(this IScheduler scheduler, TState state, Action<TState> action)
         {
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
