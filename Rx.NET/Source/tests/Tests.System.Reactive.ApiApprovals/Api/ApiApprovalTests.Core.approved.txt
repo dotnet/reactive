@@ -1621,7 +1621,7 @@ namespace System.Reactive.Linq
         public static System.Reactive.Linq.IQbservable<bool> Any<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
         public static System.IObservable<TSource> AsObservable<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> AsQbservable<TSource>(this System.IObservable<TSource> source) { }
-        public static System.Reactive.Linq.IQbservable<TSource> AutoConnect<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.Action<System.IDisposable> onConnect) { }
+        public static System.Reactive.Linq.IQbservable<TSource> AutoConnect<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.Linq.Expressions.Expression<System.Action<System.IDisposable>> onConnect) { }
         public static System.Reactive.Linq.IQbservable<decimal> Average(this System.Reactive.Linq.IQbservable<decimal> source) { }
         public static System.Reactive.Linq.IQbservable<double> Average(this System.Reactive.Linq.IQbservable<double> source) { }
         public static System.Reactive.Linq.IQbservable<double> Average(this System.Reactive.Linq.IQbservable<int> source) { }
