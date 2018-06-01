@@ -11,7 +11,7 @@ namespace System.Reactive
     {
         private readonly IObserver<T> _observer;
 
-        private IDisposable disposable;
+        private IDisposable _disposable;
 
         public AutoDetachObserver(IObserver<T> observer)
         {
@@ -20,17 +20,7 @@ namespace System.Reactive
 
         public IDisposable Disposable
         {
-            set
-            {
-                if (Interlocked.CompareExchange(ref disposable, value, null) != null)
-                {
-                    value?.Dispose();
-                    if (Volatile.Read(ref disposable) != BooleanDisposable.True)
-                    {
-                        throw new InvalidOperationException(Strings_Core.DISPOSABLE_ALREADY_ASSIGNED);
-                    }
-                }
-            }
+            set => Disposables.Disposable.SetSingle(ref _disposable, value);
         }
 
         protected override void OnNextCore(T value)
@@ -111,7 +101,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Interlocked.Exchange(ref disposable, BooleanDisposable.True)?.Dispose();
+                Disposables.Disposable.TryDispose(ref _disposable);
             }
         }
     }
