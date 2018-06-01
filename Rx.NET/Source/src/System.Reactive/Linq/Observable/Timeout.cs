@@ -35,11 +35,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IObservable<TSource> _other;
                 private readonly IScheduler _scheduler;
 
-                long index;
+                long _index;
 
-                IDisposable mainDisposable;
-                IDisposable otherDisposable;
-                IDisposable timerDisposable;
+                IDisposable _mainDisposable;
+                IDisposable _otherDisposable;
+                IDisposable _timerDisposable;
 
                 public _(Relative parent, IObserver<TSource> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -54,65 +54,54 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     CreateTimer(0L);
 
-                    var d = source.SubscribeSafe(this);
-                    if (Interlocked.CompareExchange(ref mainDisposable, d, null) != null)
-                    {
-                        d.Dispose();
-                    }
+                    Disposable.SetSingle(ref _mainDisposable, source.SubscribeSafe(this));
 
                     return this;
                 }
 
                 protected override void Dispose(bool disposing)
                 {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _mainDisposable);
+                        Disposable.TryDispose(ref _otherDisposable);
+                        Disposable.TryDispose(ref _timerDisposable);
+                    }
                     base.ClearObserver();
-                    Interlocked.Exchange(ref mainDisposable, BooleanDisposable.True)?.Dispose();
-                    Interlocked.Exchange(ref otherDisposable, BooleanDisposable.True)?.Dispose();
-                    Interlocked.Exchange(ref timerDisposable, BooleanDisposable.True)?.Dispose();
                 }
 
                 private void CreateTimer(long idx)
                 {
-                    var c = Volatile.Read(ref timerDisposable);
-                    if (c != BooleanDisposable.True)
+                    if (Disposable.TrySetMultiple(ref _timerDisposable, null))
                     {
-                        c?.Dispose();
 
-                        var d = _scheduler.Schedule(new TimeoutState { idx = idx, self = this }, _dueTime, Timeout);
+                        var d = _scheduler.Schedule((idx, instance: this), _dueTime, (_, state) => { state.instance.Timeout(state.idx); return Disposable.Empty; });
 
-                        if (Interlocked.CompareExchange(ref timerDisposable, d, c) != c)
-                        {
-                            d.Dispose();
-                        }
+                        Disposable.TrySetMultiple(ref _timerDisposable, d);
                     }
-                }
-
-                private static IDisposable Timeout(IScheduler _, TimeoutState state)
-                {
-                    state.self.Timeout(state.idx);
-                    return Disposable.Empty;
                 }
 
                 private void Timeout(long idx)
                 {
-                    if (Volatile.Read(ref index) == idx && Interlocked.CompareExchange(ref index, long.MaxValue, idx) == idx)
+                    if (Volatile.Read(ref _index) == idx && Interlocked.CompareExchange(ref _index, long.MaxValue, idx) == idx)
                     {
-                        Interlocked.Exchange(ref mainDisposable, BooleanDisposable.True)?.Dispose();
+                        Disposable.TryDispose(ref _mainDisposable);
 
                         var d = _other.Subscribe(GetForwarder());
-                        if (Interlocked.CompareExchange(ref otherDisposable, d, null) != null)
-                        {
-                            d.Dispose();
-                        }
+
+                        Disposable.SetSingle(ref _otherDisposable, d);
                     }
                 }
 
                 public override void OnNext(TSource value)
                 {
-                    var idx = Volatile.Read(ref index);
-                    if (idx != long.MaxValue && Interlocked.CompareExchange(ref index, idx + 1, idx) == idx)
+                    var idx = Volatile.Read(ref _index);
+                    if (idx != long.MaxValue && Interlocked.CompareExchange(ref _index, idx + 1, idx) == idx)
                     {
-                        Volatile.Read(ref timerDisposable)?.Dispose();
+                        // Do not swap in the BooleanDisposable.True here
+                        // As we'll need _timerDisposable to store the next timer
+                        // BD.True would cancel it immediately and break the operation
+                        Volatile.Read(ref _timerDisposable)?.Dispose();
 
                         ForwardOnNext(value);
 
@@ -122,9 +111,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnError(Exception error)
                 {
-                    if (Interlocked.Exchange(ref index, long.MaxValue) != long.MaxValue)
+                    if (Interlocked.Exchange(ref _index, long.MaxValue) != long.MaxValue)
                     {
-                        Volatile.Read(ref timerDisposable)?.Dispose();
+                        Disposable.TryDispose(ref _timerDisposable);
 
                         ForwardOnError(error);
                     }
@@ -132,18 +121,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public override void OnCompleted()
                 {
-                    if (Interlocked.Exchange(ref index, long.MaxValue) != long.MaxValue)
+                    if (Interlocked.Exchange(ref _index, long.MaxValue) != long.MaxValue)
                     {
-                        Volatile.Read(ref timerDisposable)?.Dispose();
+                        Disposable.TryDispose(ref _timerDisposable);
 
                         ForwardOnCompleted();
                     }
-                }
-
-                struct TimeoutState
-                {
-                    public long idx;
-                    public _ self;
                 }
             }
         }
