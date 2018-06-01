@@ -32,14 +32,14 @@ namespace System.Reactive.Concurrency
             {
                 if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
                 {
-                    Disposable.TrySetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
+                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
                 }
             }
 
             public IDisposable CancelQueueDisposable
             {
                 get => Disposable.GetValue(ref _cancelQueueDisposable);
-                set => Disposable.TrySetSingle(ref _cancelQueueDisposable, value);
+                set => Disposable.SetSingle(ref _cancelQueueDisposable, value);
             }
 
             public void Dispose()
