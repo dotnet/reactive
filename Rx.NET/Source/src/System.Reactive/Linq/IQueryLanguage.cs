@@ -562,6 +562,8 @@ namespace System.Reactive.Linq
 
         #region * Single *
 
+        IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value);
+        IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler);
         IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count);
         IObservable<IList<TSource>> Buffer<TSource>(IObservable<TSource> source, int count, int skip);

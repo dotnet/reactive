@@ -12,6 +12,25 @@ namespace System.Reactive.Linq
 
     internal partial class QueryLanguage
     {
+        #region - Append -
+
+        public virtual IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value)
+        {
+            return Append_<TSource>(source, value, SchedulerDefaults.ConstantTimeOperations);
+        }
+
+        public virtual IObservable<TSource> Append<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            return Append_<TSource>(source, value, scheduler);
+        }
+
+        private static IObservable<TSource> Append_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            return source.Concat(Observable.Return(value, scheduler));
+        }
+
+        #endregion
+
         #region + AsObservable +
 
         public virtual IObservable<TSource> AsObservable<TSource>(IObservable<TSource> source)

@@ -843,6 +843,8 @@ namespace System.Reactive.Linq
         public static System.Reactive.Joins.Pattern<TLeft, TRight> And<TLeft, TRight>(this System.IObservable<TLeft> left, System.IObservable<TRight> right) { }
         public static System.IObservable<bool> Any<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<bool> Any<TSource>(this System.IObservable<TSource> source, System.Func<TSource, bool> predicate) { }
+        public static System.IObservable<TSource> Append<TSource>(this System.IObservable<TSource> source, TSource value) { }
+        public static System.IObservable<TSource> Append<TSource>(this System.IObservable<TSource> source, TSource value, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> AsObservable<TSource>(this System.IObservable<TSource> source) { }
         public static System.IObservable<TSource> AutoConnect<TSource>(this System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers = 1, System.Action<System.IDisposable> onConnect = null) { }
         public static System.IObservable<double> Average(this System.IObservable<double> source) { }
@@ -1619,6 +1621,8 @@ namespace System.Reactive.Linq
         public static System.Reactive.Joins.QueryablePattern<TLeft, TRight> And<TLeft, TRight>(this System.Reactive.Linq.IQbservable<TLeft> left, System.IObservable<TRight> right) { }
         public static System.Reactive.Linq.IQbservable<bool> Any<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<bool> Any<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, System.Linq.Expressions.Expression<System.Func<TSource, bool>> predicate) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Append<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value) { }
+        public static System.Reactive.Linq.IQbservable<TSource> Append<TSource>(this System.Reactive.Linq.IQbservable<TSource> source, TSource value, System.Reactive.Concurrency.IScheduler scheduler) { }
         public static System.IObservable<TSource> AsObservable<TSource>(this System.Reactive.Linq.IQbservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> AsQbservable<TSource>(this System.IObservable<TSource> source) { }
         public static System.Reactive.Linq.IQbservable<TSource> AutoConnect<TSource>(this System.Reactive.Linq.IQbservableProvider provider, System.Reactive.Subjects.IConnectableObservable<TSource> source, int minObservers, System.Linq.Expressions.Expression<System.Action<System.IDisposable>> onConnect) { }
