@@ -61,24 +61,16 @@ namespace System.Reactive.Linq.ObservableImpl
             readonly IObserver<Exception> errorSignal;
 
             internal readonly HandlerObserver handlerObserver;
-
+            
             readonly IObservable<T> source;
 
-            SingleAssignmentDisposable upstream;
+            IDisposable upstream;
 
             int trampoline;
 
             int halfSerializer;
 
             Exception error;
-
-            static readonly SingleAssignmentDisposable DISPOSED;
-
-            static MainObserver()
-            {
-                DISPOSED = new SingleAssignmentDisposable();
-                DISPOSED.Dispose();
-            }
 
             internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal)
             {
@@ -90,7 +82,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public void Dispose()
             {
-                Interlocked.Exchange(ref upstream, DISPOSED)?.Dispose();
+                Disposable.TryDispose(ref upstream);
                 handlerObserver.Dispose();
             }
 
@@ -108,7 +100,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 for (; ; )
                 {
                     var d = Volatile.Read(ref upstream);
-                    if (d == DISPOSED)
+                    if (d == BooleanDisposable.True)
                     {
                         break;
                     }
@@ -168,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     do
                     {
                         var sad = new SingleAssignmentDisposable();
-                        if (Interlocked.CompareExchange(ref upstream, sad, null) != null)
+                        if (Disposable.TrySetSingle(ref upstream, sad) != TrySetSingleResult.Success)
                         {
                             return;
                         }
@@ -192,10 +184,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 internal void OnSubscribe(IDisposable d)
                 {
-                    if (Interlocked.CompareExchange(ref upstream, d, null) != null)
-                    {
-                        d?.Dispose();
-                    }
+                    Disposable.SetSingle(ref upstream, d);
                 }
 
                 public void Dispose()

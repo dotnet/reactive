@@ -328,7 +328,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Interlocked.Exchange(ref _cancel, null)?.Dispose();
+                Disposable.TryDispose(ref _cancel);
             }
         }
     }
