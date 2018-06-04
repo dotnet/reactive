@@ -143,7 +143,7 @@ using System.Reactive.Subjects;
 //
 // In here, there's already a race between the user hooking up an event handler through the += add
 // operation and the event producer (possibly on a different thread) calling OnBar. It's also worth
-// pointing out that this race condition is migitated by a check in SynchronizationContextScheduler
+// pointing out that this race condition is mitigated by a check in SynchronizationContextScheduler
 // causing synchronous execution in case the caller is already on the target SynchronizationContext.
 // This situation is common when using FromEvent[Pattern] immediately after declaring it, e.g. in
 // the context of a UI event handler.
@@ -284,12 +284,13 @@ namespace System.Reactive.Linq.ObservableImpl
                         {
                             if (--_count == 0)
                             {
-                                _parent._scheduler.Schedule(_removeHandler.Dispose);
+                                _parent._scheduler.ScheduleAction(_removeHandler, handler => handler.Dispose());
                                 _parent._session = null;
                             }
                         }
                     });
                 }
+
             }
 
             private void Initialize()

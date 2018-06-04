@@ -36,7 +36,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private int _remaining;
 
@@ -46,24 +46,12 @@ namespace System.Reactive.Linq.ObservableImpl
                     _remaining = count;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_remaining <= 0)
-                        base._observer.OnNext(value);
+                        ForwardOnNext(value);
                     else
                         _remaining--;
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
                 }
             }
         }
@@ -102,7 +90,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => sink.Run(this);
 
-            internal sealed class _ : Sink<TSource>, IObserver<TSource>
+            internal sealed class _ : IdentitySink<TSource>
             {
                 private volatile bool _open;
 
@@ -113,32 +101,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public IDisposable Run(Time parent)
                 {
-                    var t = parent._scheduler.Schedule(parent._duration, Tick);
+                    var t = parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick());
                     var d = parent._source.SubscribeSafe(this);
                     return StableCompositeDisposable.Create(t, d);
                 }
 
-                private void Tick()
+                private IDisposable Tick()
                 {
                     _open = true;
+                    return Disposable.Empty;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     if (_open)
-                        base._observer.OnNext(value);
-                }
-
-                public void OnError(Exception error)
-                {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                        ForwardOnNext(value);
                 }
             }
         }

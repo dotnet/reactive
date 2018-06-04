@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 #pragma warning disable 0659
 #pragma warning disable 0661
@@ -555,15 +556,37 @@ namespace System.Reactive
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
 
-            return new AnonymousObservable<T>(observer => scheduler.Schedule(() =>
-            {
-                Accept(observer);
+            return new NotificationToObservable(scheduler, this);
+        }
 
-                if (Kind == NotificationKind.OnNext)
+        sealed class NotificationToObservable : ObservableBase<T>
+        {
+            readonly IScheduler scheduler;
+
+            readonly Notification<T> parent;
+
+            public NotificationToObservable(IScheduler scheduler, Notification<T> parent)
+            {
+                this.scheduler = scheduler;
+                this.parent = parent;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<T> observer)
+            {
+                return scheduler.Schedule((parent, observer), (scheduler, state) =>
                 {
-                    observer.OnCompleted();
-                }
-            }));
+                    var parent = state.parent;
+                    var o = state.observer;
+
+                    parent.Accept(o);
+
+                    if (parent.Kind == NotificationKind.OnNext)
+                    {
+                        o.OnCompleted();
+                    }
+                    return Disposable.Empty;
+                });
+            }
         }
     }
 

@@ -152,7 +152,7 @@
   </data>
   <data name="EVENT_WINRT_REMOVE_METHOD_SHOULD_TAKE_ERT" xml:space="preserve">
     <value>Remove method of a WinRT event should take an EventRegistrationToken.</value>
-    <comment>Only onn platforms supporting WinRT.</comment>
+    <comment>Only on platforms supporting WinRT.</comment>
   </data>
   <data name="MORE_THAN_ONE_ELEMENT" xml:space="preserve">
     <value>Sequence contains more than one element.</value>

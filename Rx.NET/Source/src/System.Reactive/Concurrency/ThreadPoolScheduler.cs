@@ -15,6 +15,35 @@ namespace System.Reactive.Concurrency
     /// <seealso cref="ThreadPoolScheduler.Instance">Singleton instance of this type exposed through this static property.</seealso>
     public sealed class ThreadPoolScheduler : LocalScheduler, ISchedulerLongRunning, ISchedulerPeriodic
     {
+        private sealed class UserWorkItem<TState> : IDisposable
+        {
+            private IDisposable _cancelRunDisposable;
+
+            private readonly TState _state;
+            private readonly IScheduler _scheduler;
+            private readonly Func<IScheduler, TState, IDisposable> _action;
+
+            public UserWorkItem(IScheduler scheduler, TState state, Func<IScheduler, TState, IDisposable> action)
+            {
+                _state = state;
+                _action = action;
+                _scheduler = scheduler;
+            }
+
+            public void Run()
+            {
+                if (!Disposable.GetIsDisposed(ref _cancelRunDisposable))
+                {
+                    Disposable.SetSingle(ref _cancelRunDisposable, _action(_scheduler, _state));
+                }
+            }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _cancelRunDisposable);
+            }
+        }
+
         private static readonly Lazy<ThreadPoolScheduler> s_instance = new Lazy<ThreadPoolScheduler>(() => new ThreadPoolScheduler());
         private static readonly Lazy<NewThreadScheduler> s_newBackgroundThread = new Lazy<NewThreadScheduler>(() => new NewThreadScheduler(action => new Thread(action) { IsBackground = true }));
 
@@ -40,17 +69,13 @@ namespace System.Reactive.Concurrency
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
-            var d = new SingleAssignmentDisposable();
+            var workItem = new UserWorkItem<TState>(this, state, action);
 
-            ThreadPool.QueueUserWorkItem(_ =>
-            {
-                if (!d.IsDisposed)
-                {
-                    d.Disposable = action(this, state);
-                }
-            }, null);
+            ThreadPool.QueueUserWorkItem(
+                closureWorkItem => ((UserWorkItem<TState>)closureWorkItem).Run(), 
+                workItem);
 
-            return d;
+            return workItem;
         }
 
         /// <summary>
@@ -144,15 +169,17 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                ThreadPool.QueueUserWorkItem(Tick, null);
+                ThreadPool.QueueUserWorkItem(_ => Tick(_), this);   // Replace with method group as soon as Roslyn will cache the delegate then.
             }
 
-            private void Tick(object state)
+            private static void Tick(object state)
             {
-                if (!_disposed)
+                var timer = (FastPeriodicTimer<TState>)state;
+
+                if (!timer._disposed)
                 {
-                    _state = _action(_state);
-                    ThreadPool.QueueUserWorkItem(Tick, null);
+                    timer._state = timer._action(timer._state);
+                    ThreadPool.QueueUserWorkItem(_ => Tick(_), timer);
                 }
             }
 
@@ -192,23 +219,25 @@ namespace System.Reactive.Concurrency
                 finally
                 {
                     //
-                    // Rooting of the timer happens through the this.Tick delegate's target object,
+                    // Rooting of the timer happens through the passed state,
                     // which is the current instance and has a field to store the Timer instance.
                     //
-                    _timer = new System.Threading.Timer(this.Tick, null, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
+                    _timer = new System.Threading.Timer(_ => Tick(_) /* Don't convert to method group until Roslyn catches up */, this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
                 }
             }
 
-            private void Tick(object state)
+            private static void Tick(object state)
             {
+                var timer = (Timer<TState>)state;
+
                 try
                 {
-                    _disposable.Disposable = _action(_parent, _state);
+                    timer._disposable.Disposable = timer._action(timer._parent, timer._state);
                 }
                 finally
                 {
-                    SpinWait.SpinUntil(IsTimerAssigned);
-                    Stop();
+                    SpinWait.SpinUntil(timer.IsTimerAssigned);
+                    timer.Stop();
                 }
             }
 

@@ -186,6 +186,12 @@ namespace System.Reactive.Linq
             return Enumerable.Repeat(source, retryCount).Catch();
         }
 
+        public virtual IObservable<TSource> RetryWhen<TSource, TSignal>(IObservable<TSource> source, Func<IObservable<Exception>, IObservable<TSignal>> handler)
+        {
+            return new RetryWhen<TSource, TSignal>(source, handler);
+        }
+
+
         #endregion
 
         #region + Scan +

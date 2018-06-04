@@ -113,8 +113,8 @@ namespace System.Reactive.Concurrency
                         // contexts objects at the scheduler level. It's possible to start
                         // async operations by calling Schedule, without a way to observe
                         // their completion. Not interacting with SynchronizationContext
-                        // is a concious design decision as the performance impact was non
-                        // negligable and our schedulers abstract over more constructs.
+                        // is a conscious design decision as the performance impact was non
+                        // negligible and our schedulers abstract over more constructs.
                         //
                         ctx.Post(a => ((Action)a)(), original);
                     };

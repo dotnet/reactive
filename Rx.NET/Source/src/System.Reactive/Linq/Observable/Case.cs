@@ -32,7 +32,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TResult>, IObserver<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             public _(IObserver<TResult> observer, IDisposable cancel)
                 : base(observer, cancel)
@@ -48,29 +48,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                     return Disposable.Empty;
                 }
 
                 return result.SubscribeSafe(this);
-            }
-
-            public void OnNext(TResult value)
-            {
-                base._observer.OnNext(value);
-            }
-
-            public void OnError(Exception error)
-            {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnCompleted();
-                base.Dispose();
             }
         }
     }

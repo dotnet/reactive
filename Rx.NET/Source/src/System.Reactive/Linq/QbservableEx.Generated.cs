@@ -1,5 +1,5 @@
 /*
- * WARNING: Auto-generated file (5/1/2015 21:21:20)
+ * WARNING: Auto-generated file (05/28/2018 22:20:19)
  * Run Rx's auto-homoiconizer tool to generate this file (in the HomoIcon directory).
  */
 
@@ -37,7 +37,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (iteratorMethod == null)
                 throw new ArgumentNullException(nameof(iteratorMethod));
-            
+
             return provider.CreateQuery<Unit>(
                 Expression.Call(
                     null,
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Subscribes to each observable sequence returned by the iteratorMethod in sequence and returns the observable sequence of values sent to the observer given to the iteratorMethod.
@@ -70,7 +70,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (iteratorMethod == null)
                 throw new ArgumentNullException(nameof(iteratorMethod));
-            
+
             return provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
@@ -85,7 +85,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Expands an observable sequence by recursively invoking selector.
@@ -103,7 +103,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
-            
+
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
@@ -118,7 +118,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Expands an observable sequence by recursively invoking selector, using the specified scheduler to enumerate the queue of obtained sequences.
@@ -139,7 +139,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-            
+
             return source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     null,
@@ -155,7 +155,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Runs all specified observable sequences in parallel and collects their last elements.
@@ -173,7 +173,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
-            
+
             return provider.CreateQuery<TSource[]>(
                 Expression.Call(
                     null,
@@ -188,7 +188,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Runs all observable sequences in the enumerable sources sequence in parallel and collect their last elements.
@@ -206,7 +206,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(provider));
             if (sources == null)
                 throw new ArgumentNullException(nameof(sources));
-            
+
             return provider.CreateQuery<TSource[]>(
                 Expression.Call(
                     null,
@@ -221,10 +221,10 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
-        /// Runs two observable sequences in parallel and combines their last elemenets.
+        /// Runs two observable sequences in parallel and combines their last elements.
         /// </summary>
         /// <typeparam name="TSource1">The type of the elements in the first source sequence.</typeparam>
         /// <typeparam name="TSource2">The type of the elements in the second source sequence.</typeparam>
@@ -244,7 +244,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(second));
             if (resultSelector == null)
                 throw new ArgumentNullException(nameof(resultSelector));
-            
+
             return first.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
@@ -260,7 +260,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Returns an observable sequence that is the result of invoking the selector on the source sequence, without sharing subscriptions.
@@ -280,7 +280,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
-            
+
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
@@ -295,7 +295,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Comonadic bind operator.
@@ -307,7 +307,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(source));
             if (selector == null)
                 throw new ArgumentNullException(nameof(selector));
-            
+
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
@@ -322,7 +322,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
 #if !STABLE
         /// <summary>
         /// Comonadic bind operator.
@@ -336,7 +336,7 @@ namespace System.Reactive.Linq
                 throw new ArgumentNullException(nameof(selector));
             if (scheduler == null)
                 throw new ArgumentNullException(nameof(scheduler));
-            
+
             return source.Provider.CreateQuery<TResult>(
                 Expression.Call(
                     null,
@@ -352,7 +352,7 @@ namespace System.Reactive.Linq
             );
         }
 #endif
-        
+
     }
 }
 

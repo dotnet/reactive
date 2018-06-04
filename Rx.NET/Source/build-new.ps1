@@ -1,8 +1,8 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
-$configuration = "Release"
+$configuration = $Env:BuildConfiguration
 
-$isAppVeyor = ((Test-Path -Path env:\APPVEYOR) -Or (Test-Path -Path env:\TF_BUILD))
+$isCloudBuild = Test-Path -Path env:\TF_BUILD
 $outputLocation = Join-Path $scriptPath "testResults"
 $openCoverPath = ".\packages\OpenCover\tools\OpenCover.Console.exe"
 $xUnitConsolePath = ".\packages\xunit.runner.console\tools\net452\xunit.console.exe"
@@ -43,10 +43,10 @@ Write-Host "Building $packageSemVer" -Foreground Green
 New-Item -ItemType Directory -Force -Path $artifacts
 
 Write-Host "Building $scriptPath\System.Reactive.sln" -Foreground Green
-msbuild "$scriptPath\System.Reactive.sln" /restore /t:build /m /p:Configuration=$configuration /bl:.\artifacts\build.binlog /p:CreatePackage=true /p:NoPackageAnalysis=true 
+msbuild "$scriptPath\System.Reactive.sln" /restore /t:build /m /p:Configuration=$configuration /p:CreatePackage=true /p:NoPackageAnalysis=true 
 if ($LastExitCode -ne 0) { 
         Write-Host "Error with build" -Foreground Red
-        if($isAppVeyor) {
+        if($isCloudBuild) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
         }  
@@ -68,7 +68,7 @@ if($hasSignClientSecret) {
 
     if ($LastExitCode -ne 0) { 
         Write-Host "Error signing $nupkg" -Foreground Red
-        if($isAppVeyor) {
+        if($isCloudBuild) {
           $host.SetShouldExit($LastExitCode)
           exit $LastExitCode
         }  
@@ -91,14 +91,24 @@ $dotnet = "$env:ProgramFiles\dotnet\dotnet.exe"
 
 if ($LastExitCode -ne 0) { 
 	Write-Host "Error with tests" -Foreground Red
-	if($isAppVeyor) {
+	if($isCloudBuild) {
+	  $host.SetShouldExit($LastExitCode)
+	  exit $LastExitCode
+	}  
+}
+
+.\packages\xunit.runner.console\tools\net452\xunit.console.exe tests\Tests.System.Reactive.ApiApprovals\bin\$configuration\net46\Tests.System.Reactive.ApiApprovals.dll
+
+if ($LastExitCode -ne 0) { 
+	Write-Host "Error with API approval tests" -Foreground Red
+	if($isCloudBuild) {
 	  $host.SetShouldExit($LastExitCode)
 	  exit $LastExitCode
 	}  
 }
 
 # Either display or publish the results
-if ($isAppVeyor -eq 'True')
+if ($isCloudBuild -eq 'True')
 {
   .\packages\coveralls.io.dotcover\tools\coveralls.net.exe -f -p DotCover "$outputFile"
 }

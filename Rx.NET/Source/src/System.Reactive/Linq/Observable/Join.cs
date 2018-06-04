@@ -28,7 +28,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(this);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly object _gate = new object();
             private readonly CompositeDisposable _group = new CompositeDisposable();
@@ -88,8 +88,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_parent._leftMap.Remove(id) && _parent._leftMap.Count == 0 && _parent._leftDone)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
+                            _parent.ForwardOnCompleted();
                         }
                     }
 
@@ -117,8 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        _parent._observer.OnError(exception);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(exception);
                         return;
                     }
 
@@ -137,12 +135,11 @@ namespace System.Reactive.Linq.ObservableImpl
                                 }
                                 catch (Exception exception)
                                 {
-                                    _parent._observer.OnError(exception);
-                                    _parent.Dispose();
+                                    _parent.ForwardOnError(exception);
                                     return;
                                 }
 
-                                _parent._observer.OnNext(result);
+                                _parent.ForwardOnNext(result);
                             }
                         }
                     }
@@ -181,8 +178,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -193,8 +189,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _parent._leftDone = true;
                         if (_parent._rightDone || _parent._leftMap.Count == 0)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
+                            _parent.ForwardOnCompleted();
                         }
                         else
                         {
@@ -221,8 +216,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     {
                         if (_parent._rightMap.Remove(id) && _parent._rightMap.Count == 0 && _parent._rightDone)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
+                            _parent.ForwardOnCompleted();
                         }
                     }
 
@@ -250,8 +244,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception exception)
                     {
-                        _parent._observer.OnError(exception);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(exception);
                         return;
                     }
 
@@ -270,12 +263,11 @@ namespace System.Reactive.Linq.ObservableImpl
                                 }
                                 catch (Exception exception)
                                 {
-                                    _parent._observer.OnError(exception);
-                                    _parent.Dispose();
+                                    _parent.ForwardOnError(exception);
                                     return;
                                 }
 
-                                _parent._observer.OnNext(result);
+                                _parent.ForwardOnNext(result);
                             }
                         }
                     }
@@ -314,8 +306,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     lock (_parent._gate)
                     {
-                        _parent._observer.OnError(error);
-                        _parent.Dispose();
+                        _parent.ForwardOnError(error);
                     }
                 }
 
@@ -326,8 +317,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         _parent._rightDone = true;
                         if (_parent._leftDone || _parent._rightMap.Count == 0)
                         {
-                            _parent._observer.OnCompleted();
-                            _parent.Dispose();
+                            _parent.ForwardOnCompleted();
                         }
                         else
                         {

@@ -51,7 +51,7 @@ for (var j = 1; j <= i; j++)
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink2(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
 
         protected override IDisposable Run(_ sink) => sink.Run(<#=ss#>);
 

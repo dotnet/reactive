@@ -74,8 +74,8 @@ namespace System.Linq
         private sealed class AnonymousAsyncIterator<T> : AsyncIterator<T>
         {
             private readonly Func<T> currentFunc;
-            private readonly Action dispose;
             private readonly Func<CancellationToken, Task<bool>> moveNext;
+            private Action dispose;
 
 
             public AnonymousAsyncIterator(Func<CancellationToken, Task<bool>> moveNext, Func<T> currentFunc, Action dispose)
@@ -84,7 +84,7 @@ namespace System.Linq
 
                 this.moveNext = moveNext;
                 this.currentFunc = currentFunc;
-                this.dispose = dispose;
+                Volatile.Write(ref this.dispose, dispose);
 
                 // Explicit call to initialize enumerator mode
                 GetEnumerator();
@@ -97,8 +97,7 @@ namespace System.Linq
 
             public override void Dispose()
             {
-                dispose?.Invoke();
-
+                Interlocked.Exchange(ref this.dispose, null)?.Invoke();
                 base.Dispose();
             }
 

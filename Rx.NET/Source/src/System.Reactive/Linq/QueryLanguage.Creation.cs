@@ -20,16 +20,43 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, IDisposable> subscribe)
         {
-            return new AnonymousObservable<TSource>(subscribe);
+            return new CreateWithDisposableObservable<TSource>(subscribe);
+        }
+
+        sealed class CreateWithDisposableObservable<TSource> : ObservableBase<TSource>
+        {
+            readonly Func<IObserver<TSource>, IDisposable> subscribe;
+
+            public CreateWithDisposableObservable(Func<IObserver<TSource>, IDisposable> subscribe)
+            {
+                this.subscribe = subscribe;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
+            {
+                return subscribe(observer) ?? Disposable.Empty;
+            }
         }
 
         public virtual IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, Action> subscribe)
         {
-            return new AnonymousObservable<TSource>(o =>
+            return new CreateWithActionDisposable<TSource>(subscribe);
+        }
+
+        sealed class CreateWithActionDisposable<TSource> : ObservableBase<TSource>
+        {
+            readonly Func<IObserver<TSource>, Action> subscribe;
+
+            public CreateWithActionDisposable(Func<IObserver<TSource>, Action> subscribe)
             {
-                var a = subscribe(o);
+                this.subscribe = subscribe;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TSource> observer)
+            {
+                var a = subscribe(observer);
                 return a != null ? Disposable.Create(a) : Disposable.Empty;
-            });
+            }
         }
 
         #endregion
@@ -38,16 +65,53 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new CreateWithTaskTokenObservable<TResult>(subscribeAsync);
+        }
+
+        sealed class CreateWithTaskTokenObservable<TResult> : ObservableBase<TResult>
+        {
+            readonly Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync;
+
+            public CreateWithTaskTokenObservable(Func<IObserver<TResult>, CancellationToken, Task> subscribeAsync)
+            {
+                this.subscribeAsync = subscribeAsync;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
             {
                 var cancellable = new CancellationDisposable();
 
                 var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<Unit>(Stubs<Unit>.Ignore, observer.OnError, observer.OnCompleted);
+                var taskCompletionObserver = new TaskCompletionObserver(observer);
                 var subscription = taskObservable.Subscribe(taskCompletionObserver);
 
                 return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+            }
+
+            sealed class TaskCompletionObserver : IObserver<Unit>
+            {
+                readonly IObserver<TResult> observer;
+
+                public TaskCompletionObserver(IObserver<TResult> observer)
+                {
+                    this.observer = observer;
+                }
+
+                public void OnCompleted()
+                {
+                    observer.OnCompleted();
+                }
+
+                public void OnError(Exception error)
+                {
+                    observer.OnError(error);
+                }
+
+                public void OnNext(Unit value)
+                {
+                    // deliberately ignored
+                }
+            }
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task> subscribeAsync)
@@ -57,13 +121,25 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new CreateWithTaskDisposable<TResult>(subscribeAsync);
+        }
+
+        sealed class CreateWithTaskDisposable<TResult> : ObservableBase<TResult>
+        {
+            readonly Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync;
+
+            public CreateWithTaskDisposable(Func<IObserver<TResult>, CancellationToken, Task<IDisposable>> subscribeAsync)
             {
-                var subscription = new SingleAssignmentDisposable();
+                this.subscribeAsync = subscribeAsync;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
+            {
                 var cancellable = new CancellationDisposable();
 
                 var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<IDisposable>(d => subscription.Disposable = d ?? Disposable.Empty, observer.OnError, Stubs.Nop);
+
+                var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
 
                 //
                 // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
@@ -71,8 +147,40 @@ namespace System.Reactive.Linq
                 //
                 taskObservable.Subscribe(taskCompletionObserver);
 
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
+            }
+
+            sealed class TaskDisposeCompletionObserver : IObserver<IDisposable>, IDisposable
+            {
+                readonly IObserver<TResult> observer;
+
+                IDisposable disposable;
+
+                public TaskDisposeCompletionObserver(IObserver<TResult> observer)
+                {
+                    this.observer = observer;
+                }
+
+                public void Dispose()
+                {
+                    Disposable.TryDispose(ref disposable);
+                }
+
+                public void OnCompleted()
+                {
+                    observer.OnCompleted();
+                }
+
+                public void OnError(Exception error)
+                {
+                    observer.OnError(error);
+                }
+
+                public void OnNext(IDisposable value)
+                {
+                    Disposable.SetSingle(ref disposable, value);
+                }
+            }
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<IDisposable>> subscribeAsync)
@@ -82,22 +190,71 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
         {
-            return new AnonymousObservable<TResult>(observer =>
+            return new CreateWithTaskActionObservable<TResult>(subscribeAsync);
+        }
+
+        sealed class CreateWithTaskActionObservable<TResult> : ObservableBase<TResult>
+        {
+            readonly Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync;
+
+            public CreateWithTaskActionObservable(Func<IObserver<TResult>, CancellationToken, Task<Action>> subscribeAsync)
             {
-                var subscription = new SingleAssignmentDisposable();
+                this.subscribeAsync = subscribeAsync;
+            }
+
+            protected override IDisposable SubscribeCore(IObserver<TResult> observer)
+            {
                 var cancellable = new CancellationDisposable();
 
                 var taskObservable = subscribeAsync(observer, cancellable.Token).ToObservable();
-                var taskCompletionObserver = new AnonymousObserver<Action>(a => subscription.Disposable = a != null ? Disposable.Create(a) : Disposable.Empty, observer.OnError, Stubs.Nop);
+
+                var taskCompletionObserver = new TaskDisposeCompletionObserver(observer);
 
                 //
-                // We don't cancel the subscription below *ever* and want to make sure the returned resource eventually gets disposed.
+                // We don't cancel the subscription below *ever* and want to make sure the returned resource gets disposed eventually.
                 // Notice because we're using the AnonymousObservable<T> type, we get auto-detach behavior for free.
                 //
                 taskObservable.Subscribe(taskCompletionObserver);
 
-                return StableCompositeDisposable.Create(cancellable, subscription);
-            });
+                return StableCompositeDisposable.Create(cancellable, taskCompletionObserver);
+            }
+
+            sealed class TaskDisposeCompletionObserver : IObserver<Action>, IDisposable
+            {
+                readonly IObserver<TResult> observer;
+
+                Action disposable;
+
+                static readonly Action DisposedAction = () => { };
+
+                public TaskDisposeCompletionObserver(IObserver<TResult> observer)
+                {
+                    this.observer = observer;
+                }
+
+                public void Dispose()
+                {
+                    Interlocked.Exchange(ref disposable, DisposedAction)?.Invoke();
+                }
+
+                public void OnCompleted()
+                {
+                    observer.OnCompleted();
+                }
+
+                public void OnError(Exception error)
+                {
+                    observer.OnError(error);
+                }
+
+                public void OnNext(Action value)
+                {
+                    if (Interlocked.CompareExchange(ref disposable, value, null) != null)
+                    {
+                        value?.Invoke();
+                    }
+                }
+            }
         }
 
         public virtual IObservable<TResult> Create<TResult>(Func<IObserver<TResult>, Task<Action>> subscribeAsync)
@@ -134,7 +291,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Empty<TResult>()
         {
-            return new Empty<TResult>(SchedulerDefaults.ConstantTimeOperations);
+            return EmptyDirect<TResult>.Instance;
         }
 
         public virtual IObservable<TResult> Empty<TResult>(IScheduler scheduler)
@@ -162,7 +319,7 @@ namespace System.Reactive.Linq
 
         public virtual IObservable<TResult> Never<TResult>()
         {
-            return new Never<TResult>();
+            return ObservableImpl.Never<TResult>.Default;
         }
 
         #endregion

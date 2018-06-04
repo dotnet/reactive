@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, int> 
             {
                 private int _count;
 
@@ -29,7 +29,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _count = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -40,22 +40,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnCompleted()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnNext(_count);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(_count);
+                    ForwardOnCompleted();
                 }
             }
         }
@@ -75,7 +67,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-            internal sealed class _ : Sink<int>, IObserver<TSource>
+            internal sealed class _ : Sink<TSource, int> 
             {
                 private readonly Func<TSource, bool> _predicate;
                 private int _count;
@@ -87,7 +79,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _count = 0;
                 }
 
-                public void OnNext(TSource value)
+                public override void OnNext(TSource value)
                 {
                     try
                     {
@@ -101,22 +93,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                     catch (Exception ex)
                     {
-                        base._observer.OnError(ex);
-                        base.Dispose();
+                        ForwardOnError(ex);
                     }
                 }
 
-                public void OnError(Exception error)
+                public override void OnCompleted()
                 {
-                    base._observer.OnError(error);
-                    base.Dispose();
-                }
-
-                public void OnCompleted()
-                {
-                    base._observer.OnNext(_count);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(_count);
+                    ForwardOnCompleted();
                 }
             }
         }

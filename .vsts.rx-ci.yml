@@ -1,6 +1,6 @@
 trigger:
 - master
-- develop
+- rel/*
 
 queue: Hosted VS2017
 
@@ -31,6 +31,7 @@ steps:
     VSTS_ACCESS_TOKEN: $(System.AccessToken)
     SignClientUser: $(SignClientUser)
     SignClientSecret: $(SignClientSecret)
+    COVERALLS_REPO_TOKEN: $(CoverallsToken)
   displayName: Build
 
 - task: PublishBuildArtifacts@1

@@ -16,6 +16,18 @@ namespace System.Reactive.Concurrency
     //
     internal class /*Default*/ConcurrencyAbstractionLayerImpl : IConcurrencyAbstractionLayer
     {
+        private sealed class WorkItem
+        {
+            public WorkItem(Action<object> action, object state)
+            {
+                this.Action = action;
+                this.State = state;
+            }
+
+            public Action<object> Action { get; }
+            public object State { get; }
+        }
+
         public IDisposable StartTimer(Action<object> action, object state, TimeSpan dueTime) => new Timer(action, state, Normalize(dueTime));
 
         public IDisposable StartPeriodicTimer(Action action, TimeSpan period)
@@ -39,7 +51,13 @@ namespace System.Reactive.Concurrency
 
         public IDisposable QueueUserWorkItem(Action<object> action, object state)
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(_ => action(_), state);
+            System.Threading.ThreadPool.QueueUserWorkItem(itemObject =>
+            {
+                var item = (WorkItem)itemObject;
+
+                item.Action(item.State);
+            }, new WorkItem(action, state));
+
             return Disposable.Empty;
         }
 
@@ -51,10 +69,12 @@ namespace System.Reactive.Concurrency
 
         public void StartThread(Action<object> action, object state)
         {
-            new Thread(() =>
+            new Thread(itemObject =>
             {
-                action(state);
-            }) { IsBackground = true }.Start();
+                var item = (WorkItem)itemObject;
+
+                item.Action(item.State);
+            }) { IsBackground = true }.Start(new WorkItem(action, state));
         }
 
         private static TimeSpan Normalize(TimeSpan dueTime) => dueTime < TimeSpan.Zero ? TimeSpan.Zero : dueTime;
@@ -132,11 +152,13 @@ namespace System.Reactive.Concurrency
 
         private sealed class Timer : IDisposable
         {
+            private object _state;
             private Action<object> _action;
             private volatile System.Threading.Timer _timer;
 
             public Timer(Action<object> action, object state, TimeSpan dueTime)
             {
+                _state = state;
                 _action = action;
 
                 // Don't want the spin wait in Tick to get stuck if this thread gets aborted.
@@ -144,23 +166,25 @@ namespace System.Reactive.Concurrency
                 finally
                 {
                     //
-                    // Rooting of the timer happens through the this.Tick delegate's target object,
+                    // Rooting of the timer happens through the Timer's state
                     // which is the current instance and has a field to store the Timer instance.
                     //
-                    _timer = new System.Threading.Timer(Tick, state, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
+                    _timer = new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
                 }
             }
 
-            private void Tick(object state)
+            private static void Tick(object state)
             {
+                var timer = (Timer) state;
+
                 try
                 {
-                    _action(state);
+                    timer._action(timer._state);
                 }
                 finally
                 {
-                    SpinWait.SpinUntil(IsTimerAssigned);
-                    Dispose();
+                    SpinWait.SpinUntil(timer.IsTimerAssigned);
+                    timer.Dispose();
                 }
             }
 
@@ -173,6 +197,7 @@ namespace System.Reactive.Concurrency
                 {
                     _action = Stubs<object>.Ignore;
                     _timer = TimerStubs.Never;
+                    _state = null;
 
                     timer.Dispose();
                 }
@@ -189,13 +214,18 @@ namespace System.Reactive.Concurrency
                 _action = action;
 
                 //
-                // Rooting of the timer happens through the this.Tick delegate's target object,
+                // Rooting of the timer happens through the timer's state
                 // which is the current instance and has a field to store the Timer instance.
                 //
-                _timer = new System.Threading.Timer(Tick, null, period, period);
+                _timer = new System.Threading.Timer(_ => Tick(_), this, period, period);
             }
 
-            private void Tick(object state) => _action();
+            private static void Tick(object state)
+            {
+                var timer = (PeriodicTimer)state;
+
+                timer._action();
+            }
 
             public void Dispose()
             {
@@ -219,19 +249,21 @@ namespace System.Reactive.Concurrency
             {
                 _action = action;
                 
-                new System.Threading.Thread(Loop)
+                new System.Threading.Thread(_ => Loop(_))
                 {
                     Name = "Rx-FastPeriodicTimer",
                     IsBackground = true
                 }
-                .Start();
+                .Start(this);
             }
             
-            private void Loop()
+            private static void Loop(object threadParam)
             {
-                while (!disposed)
+                var timer = (FastPeriodicTimer)threadParam;
+
+                while (!timer.disposed)
                 {
-                    _action();
+                    timer._action();
                 }
             }
 

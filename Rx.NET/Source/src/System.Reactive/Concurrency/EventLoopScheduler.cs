@@ -352,6 +352,10 @@ namespace System.Reactive.Concurrency
                 if (!_disposed)
                 {
                     var item = (ScheduledItem<TimeSpan>)state;
+                    if (item == _nextItem)
+                    {
+                        _nextItem = null;
+                    }
                     if (_queue.Remove(item))
                     {
                         _readyList.Enqueue(item);

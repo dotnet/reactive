@@ -9,7 +9,7 @@ namespace System.Reactive
 {
     internal sealed class PriorityQueue<T> where T : IComparable<T>
     {
-        private static long _count = long.MinValue;
+        private long _count = long.MinValue;
         private IndexedItem[] _items;
         private int _size;
 
@@ -125,7 +125,7 @@ namespace System.Reactive
             }
 
             var index = _size++;
-            _items[index] = new IndexedItem { Value = item, Id = Interlocked.Increment(ref _count) };
+            _items[index] = new IndexedItem { Value = item, Id = ++_count };
             Percolate(index);
         }
 
