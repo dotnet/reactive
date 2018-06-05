@@ -51,24 +51,24 @@ namespace System.Reactive.Linq.ObservableImpl
             var parent = new MainObserver(observer, source, new RedoSerializedObserver<object>(completeSignals));
 
             var d = redo.SubscribeSafe(parent.handlerObserver);
-            parent.handlerObserver.OnSubscribe(d);
+            Disposable.SetSingle(ref parent.handlerUpstream, d);
 
             parent.HandlerNext();
 
             return parent;
         }
 
-        sealed class MainObserver : IObserver<T>, IDisposable
+        sealed class MainObserver : Sink<T>, IObserver<T>
         {
-            readonly IObserver<T> downstream;
-
             readonly IObserver<Exception> errorSignal;
 
             internal readonly HandlerObserver handlerObserver;
 
             readonly IObservable<T> source;
 
-            SingleAssignmentDisposable upstream;
+            IDisposable upstream;
+
+            internal IDisposable handlerUpstream;
 
             int trampoline;
 
@@ -76,95 +76,50 @@ namespace System.Reactive.Linq.ObservableImpl
 
             Exception error;
 
-            static readonly SingleAssignmentDisposable DISPOSED;
-
-            static MainObserver()
+            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream, null)
             {
-                DISPOSED = new SingleAssignmentDisposable();
-                DISPOSED.Dispose();
-            }
-
-            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal)
-            {
-                this.downstream = downstream;
                 this.source = source;
                 this.errorSignal = errorSignal;
                 this.handlerObserver = new HandlerObserver(this);
             }
 
-            public void Dispose()
+            protected override void Dispose(bool disposing)
             {
-                Interlocked.Exchange(ref upstream, DISPOSED)?.Dispose();
-                handlerObserver.Dispose();
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref upstream);
+                    Disposable.TryDispose(ref handlerUpstream);
+                }
+                base.Dispose(disposing);
             }
 
             public void OnCompleted()
             {
-
-                for (; ; )
+                if (Disposable.TrySetSerial(ref upstream, null))
                 {
-                    var d = Volatile.Read(ref upstream);
-                    if (d == DISPOSED)
-                    {
-                        break;
-                    }
-                    if (Interlocked.CompareExchange(ref upstream, null, d) == d)
-                    {
-                        errorSignal.OnNext(null);
-                        d.Dispose();
-                        break;
-                    }
+                    errorSignal.OnNext(null);
                 }
 
             }
 
             public void OnError(Exception error)
             {
-                if (Interlocked.Increment(ref halfSerializer) == 1)
-                {
-                    downstream.OnError(error);
-                    Dispose();
-                }
+                HalfSerializer.ForwardOnError(this, error, ref halfSerializer, ref this.error);
             }
 
             public void OnNext(T value)
             {
-                if (Interlocked.CompareExchange(ref halfSerializer, 1, 0) == 0)
-                {
-                    downstream.OnNext(value);
-                    if (Interlocked.Decrement(ref halfSerializer) != 0)
-                    {
-                        var ex = error;
-                        if (ex == null)
-                        {
-                            downstream.OnCompleted();
-                        }
-                        else
-                        {
-                            downstream.OnError(ex);
-                        }
-                        Dispose();
-                    }
-                }
+                HalfSerializer.ForwardOnNext(this, value, ref halfSerializer, ref this.error);
             }
 
             internal void HandlerError(Exception error)
             {
-                this.error = error;
-                if (Interlocked.Increment(ref halfSerializer) == 1)
-                {
-                    downstream.OnError(error);
-                    Dispose();
-                }
+                HalfSerializer.ForwardOnError(this, error, ref halfSerializer, ref this.error);
             }
 
             internal void HandlerComplete()
             {
-                if (Interlocked.Increment(ref halfSerializer) == 1)
-                {
-                    downstream.OnCompleted();
-                    Dispose();
-                }
+                HalfSerializer.ForwardOnCompleted(this, ref halfSerializer, ref this.error);
             }
 
             internal void HandlerNext()
@@ -185,40 +140,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            internal sealed class HandlerObserver : IObserver<U>, IDisposable
+            internal sealed class HandlerObserver : IObserver<U>
             {
                 readonly MainObserver main;
-
-                IDisposable upstream;
 
                 internal HandlerObserver(MainObserver main)
                 {
                     this.main = main;
                 }
 
-                internal void OnSubscribe(IDisposable d)
-                {
-                    if (Interlocked.CompareExchange(ref upstream, d, null) != null)
-                    {
-                        d?.Dispose();
-                    }
-                }
-
-                public void Dispose()
-                {
-                    Interlocked.Exchange(ref upstream, BooleanDisposable.True)?.Dispose();
-                }
-
                 public void OnCompleted()
                 {
                     main.HandlerComplete();
-                    Dispose();
                 }
 
                 public void OnError(Exception error)
                 {
                     main.HandlerError(error);
-                    Dispose();
                 }
 
                 public void OnNext(U value)
