@@ -20,18 +20,18 @@ namespace System.Reactive.Linq.ObservableImpl
             _selector = selector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            public _(IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TResult> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(Multicast<TSource, TIntermediate, TResult> parent)
+            public void Run(Multicast<TSource, TIntermediate, TResult> parent)
             {
                 var observable = default(IObservable<TResult>);
                 var connectable = default(IConnectableObservable<TIntermediate>);
@@ -44,13 +44,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     ForwardOnError(exception);
-                    return Disposable.Empty;
+                    return;
                 }
 
                 var subscription = observable.SubscribeSafe(this);
                 var connection = connectable.Connect();
 
-                return StableCompositeDisposable.Create(subscription, connection);
+                SetUpstream(StableCompositeDisposable.Create(subscription, connection));
             }
         }
     }

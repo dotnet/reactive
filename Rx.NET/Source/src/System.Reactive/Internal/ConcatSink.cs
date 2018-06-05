@@ -8,8 +8,8 @@ namespace System.Reactive
 {
     internal abstract class ConcatSink<TSource> : TailRecursiveSink<TSource>
     {
-        public ConcatSink(IObserver<TSource> observer, IDisposable cancel)
-            : base(observer, cancel)
+        public ConcatSink(IObserver<TSource> observer)
+            : base(observer)
         {
         }
 
