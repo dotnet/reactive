@@ -48,7 +48,7 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Gets a value that indicates whether the object is disposed.
         /// </summary>
-        public bool IsDisposed => Volatile.Read(ref _disposable) == null;
+        public bool IsDisposed => Volatile.Read(ref _count) == int.MinValue;
 
         /// <summary>
         /// Returns a dependent disposable that when disposed decreases the refcount on the underlying disposable.
