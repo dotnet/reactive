@@ -205,10 +205,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             internal void OnSubscribe(IDisposable d)
             {
-                if (Interlocked.CompareExchange(ref upstream, d, null) != null)
-                {
-                    d?.Dispose();
-                }
+                Disposable.SetSingle(ref upstream, d);
             }
         }
 

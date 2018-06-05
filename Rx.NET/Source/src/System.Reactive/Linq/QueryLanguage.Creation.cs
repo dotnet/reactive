@@ -178,10 +178,7 @@ namespace System.Reactive.Linq
 
                 public void OnNext(IDisposable value)
                 {
-                    if (Interlocked.CompareExchange(ref disposable, value, null) != null)
-                    {
-                        value?.Dispose();
-                    }
+                    Disposable.SetSingle(ref disposable, value);
                 }
             }
         }

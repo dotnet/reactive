@@ -2,11 +2,19 @@
 // The .NET Foundation licenses this file to you under the Apache 2.0 License.
 // See the LICENSE file in the project root for more information. 
 
+using System.Reactive.Disposables;
 using System.Threading;
 
 namespace System.Reactive
 {
-    internal abstract class Sink<TTarget> : IDisposable
+    internal interface ISink<in TTarget>
+    {
+        void ForwardOnNext(TTarget value);
+        void ForwardOnCompleted();
+        void ForwardOnError(Exception error);
+    }
+
+    internal abstract class Sink<TTarget> : ISink<TTarget>, IDisposable
     {
         private IDisposable _cancel;
         private volatile IObserver<TTarget> _observer;
@@ -25,22 +33,21 @@ namespace System.Reactive
         protected virtual void Dispose(bool disposing)
         {
             _observer = NopObserver<TTarget>.Instance;
-
-            Interlocked.Exchange(ref _cancel, null)?.Dispose();
+            Disposable.TryDispose(ref _cancel);
         }
 
-        protected void ForwardOnNext(TTarget value)
+        public void ForwardOnNext(TTarget value)
         {
             _observer.OnNext(value);
         }
 
-        protected void ForwardOnCompleted()
+        public void ForwardOnCompleted()
         {
             _observer.OnCompleted();
             Dispose();
         }
 
-        protected void ForwardOnError(Exception error)
+        public void ForwardOnError(Exception error)
         {
             _observer.OnError(error);
             Dispose();
