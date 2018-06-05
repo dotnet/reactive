@@ -39,7 +39,6 @@ namespace System.Reactive.Linq.ObservableImpl
             public IDisposable Run(SkipUntil<TSource, TOther> parent)
             {
                 Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-
                 Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
 
                 return this;
@@ -70,48 +69,20 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(TSource value)
             {
                 if (_forward)
-                {
-                    if (Interlocked.CompareExchange(ref _halfSerializer, 1, 0) == 0)
-                    {
-                        ForwardOnNext(value);
-                        if (Interlocked.Decrement(ref _halfSerializer) != 0)
-                        {
-                            var ex = _error;
-                            _error = SkipUntilTerminalException.Instance;
-                            ForwardOnError(ex);
-                        }
-                    }
-                }
+                    HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
             }
 
             public override void OnError(Exception ex)
             {
-                if (Interlocked.CompareExchange(ref _error, ex, null) == null)
-                {
-                    if (Interlocked.Increment(ref _halfSerializer) == 1)
-                    {
-                        _error = SkipUntilTerminalException.Instance;
-                        ForwardOnError(ex);
-                    }
-                }
+                HalfSerializer.ForwardOnError(this, ex, ref _halfSerializer, ref _error);
             }
 
             public override void OnCompleted()
             {
                 if (_forward)
-                {
-                    if (Interlocked.CompareExchange(ref _error, SkipUntilTerminalException.Instance, null) == null)
-                    {
-                        if (Interlocked.Increment(ref _halfSerializer) == 1)
-                        {
-                            ForwardOnCompleted();
-                        }
-                    }
-                }
+                    HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
                 else
-                {
                     DisposeMain();
-                }
             }
 
             void OtherComplete()
@@ -143,7 +114,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent.OnError(error);
+                    HalfSerializer.ForwardOnError(_parent, error, ref _parent._halfSerializer, ref _parent._error);
                 }
 
                 public void OnNext(TOther value)

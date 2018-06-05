@@ -59,46 +59,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public override void OnNext(TSource value)
             {
-                if (Interlocked.CompareExchange(ref _halfSerializer, 1, 0) == 0)
-                {
-                    ForwardOnNext(value);
-                    if (Interlocked.Decrement(ref _halfSerializer) != 0)
-                    {
-                        var ex = _error;
-                        if (ex != TakeUntilTerminalException.Instance)
-                        {
-                            _error = TakeUntilTerminalException.Instance;
-                            ForwardOnError(ex);
-                        }
-                        else
-                        {
-                            ForwardOnCompleted();
-                        }
-                    }
-                }
+                HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
             }
 
             public override void OnError(Exception ex)
             {
-                if (Interlocked.CompareExchange(ref _error, ex, null) == null)
-                {
-                    if (Interlocked.Increment(ref _halfSerializer) == 1)
-                    {
-                        _error = TakeUntilTerminalException.Instance;
-                        ForwardOnError(ex);
-                    }
-                }
+                HalfSerializer.ForwardOnError(this, ex, ref _halfSerializer, ref _error);
             }
 
             public override void OnCompleted()
             {
-                if (Interlocked.CompareExchange(ref _error, TakeUntilTerminalException.Instance, null) == null)
-                {
-                    if (Interlocked.Increment(ref _halfSerializer) == 1)
-                    {
-                        ForwardOnCompleted();
-                    }
-                }
+                HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
             }
 
             sealed class OtherObserver : IObserver<TOther>
@@ -118,12 +89,12 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent.OnError(error);
+                    HalfSerializer.ForwardOnError(_parent, error, ref _parent._halfSerializer, ref _parent._error);
                 }
 
                 public void OnNext(TOther value)
                 {
-                    _parent.OnCompleted();
+                    HalfSerializer.ForwardOnCompleted(_parent, ref _parent._halfSerializer, ref _parent._error);
                 }
             }
 
