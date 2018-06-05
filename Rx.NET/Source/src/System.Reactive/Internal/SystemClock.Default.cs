@@ -42,14 +42,6 @@ namespace System.Reactive.PlatformServices
         private readonly SerialDisposable _timer;
 
         /// <summary>
-        /// Counts the number of listeners to 
-        /// <see cref="SystemClockChanged"/>, starts the
-        /// timer for the first listener and stops it after
-        /// the last one.
-        /// </summary>
-        private int _timerActive;
-
-        /// <summary>
         /// Use the Unix milliseconds for the current time
         /// so it can be atomically read/written without locking.
         /// </summary>
@@ -78,10 +70,7 @@ namespace System.Reactive.PlatformServices
         {
             add
             {
-                if (Interlocked.Increment(ref _timerActive) == 1)
-                {
-                    NewTimer();
-                }
+                NewTimer();
 
                 _systemClockChanged += value;
             }
@@ -90,10 +79,7 @@ namespace System.Reactive.PlatformServices
             {
                 _systemClockChanged -= value;
 
-                if (Interlocked.Decrement(ref _timerActive) == 0)
-                {
-                    _timer.Disposable = Disposable.Empty;
-                }
+                _timer.Disposable = Disposable.Empty;
             }
         }
 
@@ -113,7 +99,7 @@ namespace System.Reactive.PlatformServices
                 {
                     break;
                 }
-                if (Volatile.Read(ref _timerActive) == 0)
+                if (_timer.Disposable == Disposable.Empty)
                 {
                     break;
                 }
