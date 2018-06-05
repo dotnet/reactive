@@ -15,8 +15,8 @@ namespace System.Reactive.Disposables
         /// <summary>
         /// Creates a new group containing two disposable resources that are disposed together.
         /// </summary>
-        /// <param name="disposable1">The first disposable resoruce to add to the group.</param>
-        /// <param name="disposable2">The second disposable resoruce to add to the group.</param>
+        /// <param name="disposable1">The first disposable resource to add to the group.</param>
+        /// <param name="disposable2">The second disposable resource to add to the group.</param>
         /// <returns>Group of disposable resources that are disposed together.</returns>
         public static ICancelable Create(IDisposable disposable1, IDisposable disposable2)
         {
@@ -69,21 +69,21 @@ namespace System.Reactive.Disposables
 
         private sealed class Binary : StableCompositeDisposable
         {
-            private volatile IDisposable _disposable1;
-            private volatile IDisposable _disposable2;
+            private IDisposable _disposable1;
+            private IDisposable _disposable2;
 
             public Binary(IDisposable disposable1, IDisposable disposable2)
             {
-                _disposable1 = disposable1;
-                _disposable2 = disposable2;
+                Volatile.Write(ref _disposable1, disposable1);
+                Volatile.Write(ref _disposable2, disposable2);
             }
 
-            public override bool IsDisposed => _disposable1 == null;
+            public override bool IsDisposed => Disposable.GetIsDisposed(ref _disposable1);
 
             public override void Dispose()
             {
-                Interlocked.Exchange(ref _disposable1, null)?.Dispose();
-                Interlocked.Exchange(ref _disposable2, null)?.Dispose();
+                Disposable.TryDispose(ref _disposable1);
+                Disposable.TryDispose(ref _disposable2);
             }
         }
 

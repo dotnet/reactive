@@ -19,7 +19,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<TSource>, IObserver<TSource>
+        internal sealed class _ : IdentitySink<TSource>
         {
             private int _i;
 
@@ -29,29 +29,21 @@ namespace System.Reactive.Linq.ObservableImpl
                 _i = index;
             }
 
-            public void OnNext(TSource value)
+            public override void OnNext(TSource value)
             {
                 if (_i == 0)
                 {
-                    base._observer.OnNext(value);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(value);
+                    ForwardOnCompleted();
                 }
 
                 _i--;
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(default(TSource));
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(default(TSource));
+                ForwardOnCompleted();
             }
         }
     }

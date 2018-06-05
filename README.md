@@ -16,7 +16,7 @@ Catch us in the #rxnet channel over at http://reactiveui.net/slack
 - NuGet v3 feed url (VS 2015+): `https://dotnet.myget.org/F/rx/api/v3/index.json`
 
 ### v4.0 changes
-Due to the [overwhelming](https://github.com/Reactive-Extensions/Rx.NET/issues/299) [pain](https://github.com/Reactive-Extensions/Rx.NET/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/Reactive-Extensions/Rx.NET/issues/205) caused, we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
+Due to the [overwhelming](https://github.com/dotnet/reactive/issues/299) [pain](https://github.com/dotnet/reactive/issues/305) that fixing [#205 - Implement assembly version strategy](https://github.com/dotnet/reactive/issues/205) caused, we have refactored the libraries into a single library `System.Reactive`. To prevent breaking existing code that references the v3 libraries, we have facades with TypeForwarders to the new assembly. If you have a reference to a binary built against v3.0, then use the new `System.Reactive.Compatibility` package. 
 
 #### Supported Platforms
 Rx 4.0 supports the following platforms
@@ -43,7 +43,7 @@ However, there are no expected API changes, therefore, once you make the NuGet c
 A Brief Intro
 -------------------
 
-The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators. Using Rx, developers *__represent__* asynchronous data streams with [Observables](http://msdn.microsoft.com/library/dd990377.aspx), *__query__* asynchronous data streams using [LINQ operators](http://msdn.microsoft.com/en-us/library/hh242983.aspx), and *__parameterize__* the concurrency in the asynchronous data streams using [Schedulers](http://msdn.microsoft.com/en-us/library/hh242963.aspx). Simply put, Rx = Observables + LINQ + Schedulers.
+The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators. Using Rx, developers *__represent__* asynchronous data streams with [Observables](https://docs.microsoft.com/dotnet/api/system.iobservable-1), *__query__* asynchronous data streams using [LINQ operators](http://msdn.microsoft.com/en-us/library/hh242983.aspx), and *__parameterize__* the concurrency in the asynchronous data streams using [Schedulers](http://msdn.microsoft.com/en-us/library/hh242963.aspx). Simply put, Rx = Observables + LINQ + Schedulers.
 
 Whether you are authoring a traditional desktop or web-based application, you have to deal with asynchronous and event-based programming from time to time. Desktop applications have I/O operations and computationally expensive tasks that might take a long time to complete and potentially block other active threads. Furthermore, handling exceptions, cancellation, and synchronization is difficult and error-prone.
 
@@ -74,7 +74,7 @@ Flavors of Rx
 ---------------
 
 * __Rx.NET__: *(this repository)* The Reactive Extensions (Rx) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators.
-* [RxJS 4](https://github.com/Reactive-Extensions/RxJS) / [RxJS 5 beta](https://github.com/ReactiveX/rxjs): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
+* [RxJS](https://github.com/ReactiveX/rxjs): The Reactive Extensions for JavaScript (RxJS) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in JavaScript which can target both the browser and Node.js.
 * [RxJava](https://github.com/ReactiveX/RxJava): Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
 * [RxScala](https://github.com/ReactiveX/RxScala): Reactive Extensions for Scala – a library for composing asynchronous and event-based programs using observable sequences
 * [RxCpp](https://github.com/Reactive-Extensions/RxCpp): The Reactive Extensions for Native (RxCpp) is a library for composing asynchronous and event-based programs using observable sequences and LINQ-style query operators in both C and C++.
@@ -98,17 +98,17 @@ Contributing
 
 ### Source code
 
-* Clone the sources: `git clone https://github.com/Reactive-Extensions/Rx.NET.git`
-* [Building, testing and debugging the sources](https://github.com/Reactive-Extensions/Rx.NET/wiki/Building%20Testing%20and%20Debugging)
+* Clone the sources: `git clone https://github.com/dotnet/reactive.git`
+* [Building, testing and debugging the sources](https://github.com/dotnet/reactive/wiki/Building%20Testing%20and%20Debugging)
 
 ### Contribute!
 
 Some of the best ways to contribute are to try things out, file bugs, and join in design conversations.
 
-* [How to Contribute](https://github.com/Reactive-Extensions/Rx.NET/wiki/Contributing-Code)
-* [Pull requests](https://github.com/Reactive-Extensions/Rx.NET/pulls): [Open](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/Reactive-Extensions/Rx.NET/pulls?q=is%3Apr+is%3Aclosed)
+* [How to Contribute](https://github.com/dotnet/reactive/wiki/Contributing-Code)
+* [Pull requests](https://github.com/dotnet/reactive/pulls): [Open](https://github.com/dotnet/reactive/pulls?q=is%3Aopen+is%3Apr)/[Closed](https://github.com/dotnet/reactive/pulls?q=is%3Apr+is%3Aclosed)
 
-Looking for something to work on? The list of [up for grabs issues](https://github.com/Reactive-Extensions/Rx.NET/issues?q=is%3Aopen+is%3Aissue+label%3A%22Up+for+Grabs%22) is a great place to start.
+Looking for something to work on? The list of [up for grabs issues](https://github.com/dotnet/reactive/issues?q=is%3Aopen+is%3Aissue+label%3A%22Up+for+Grabs%22) is a great place to start.
 
 This project has adopted a code of conduct adapted from the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community. This code of conduct has been [adopted by many other projects](http://contributor-covenant.org/adopters/). For more information see the [Code of conduct](http://www.dotnetfoundation.org/code-of-conduct).
 

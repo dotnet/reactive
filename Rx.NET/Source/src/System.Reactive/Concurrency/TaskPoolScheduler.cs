@@ -149,7 +149,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Gets a new stopwatch ob ject.
+        /// Gets a new stopwatch object.
         /// </summary>
         /// <returns>New stopwatch object; started at the time of the request.</returns>
         public override IStopwatch StartStopwatch()

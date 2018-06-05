@@ -71,7 +71,7 @@ namespace System.Reactive {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OnCompleted notification doesn&apos;t have a value..
+        ///   Looks up a localized string similar to OnCompleted notification doesn't have a value..
         /// </summary>
         internal static string COMPLETED_NO_VALUE {
             get {

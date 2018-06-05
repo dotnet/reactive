@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            internal sealed class _ : Sink<long>
+            internal sealed class _ : IdentitySink<long>
             {
                 public _(IObserver<long> observer, IDisposable cancel)
                     : base(observer, cancel)
@@ -58,19 +58,19 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public IDisposable Run(Single parent, DateTimeOffset dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    return parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke());
                 }
 
                 public IDisposable Run(Single parent, TimeSpan dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    return parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke());
                 }
 
-                private void Invoke()
+                private IDisposable Invoke()
                 {
-                    base._observer.OnNext(0);
-                    base._observer.OnCompleted();
-                    base.Dispose();
+                    ForwardOnNext(0);
+                    ForwardOnCompleted();
+                    return Disposable.Empty;
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
             }
 
-            internal sealed class _ : Sink<long>
+            internal sealed class _ : IdentitySink<long>
             {
                 private readonly TimeSpan _period;
 
@@ -160,7 +160,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 //
                 private long Tick(long count)
                 {
-                    base._observer.OnNext(count);
+                    ForwardOnNext(count);
                     return unchecked(count + 1);
                 }
 
@@ -224,7 +224,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     try
                     {
-                        base._observer.OnNext(0L);
+                        ForwardOnNext(0L);
                     }
                     catch (Exception e)
                     {
@@ -263,7 +263,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     //
                     if (Interlocked.Increment(ref _pendingTickCount) == 1)
                     {
-                        base._observer.OnNext(count);
+                        ForwardOnNext(count);
                         Interlocked.Decrement(ref _pendingTickCount);
                     }
 
@@ -274,7 +274,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     try
                     {
-                        base._observer.OnNext(count);
+                        ForwardOnNext(count);
                     }
                     catch (Exception e)
                     {

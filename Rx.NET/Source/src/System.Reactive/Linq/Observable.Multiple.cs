@@ -1365,6 +1365,8 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Returns the elements from the source observable sequence only after the other observable sequence produces an element.
+        /// Starting from Rx.NET 4.0, this will subscribe to <paramref name="other"/> before subscribing to <paramref name="source" />
+        /// so in case <paramref name="other" /> emits an element right away, elements from <paramref name="source" /> are not missed.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements in the source sequence.</typeparam>
         /// <typeparam name="TOther">The type of the elements in the other sequence that indicates the end of skip behavior.</typeparam>
@@ -1516,6 +1518,8 @@ namespace System.Reactive.Linq
 
         /// <summary>
         /// Merges two observable sequences into one observable sequence by combining each element from the first source with the latest element from the second source, if any.
+        /// Starting from Rx.NET 4.0, this will subscribe to <paramref name="second"/> before subscribing to <paramref name="first" /> to have a latest element readily available
+        /// in case <paramref name="first" /> emits an element right away.
         /// </summary>
         /// <typeparam name="TFirst">The type of the elements in the first source sequence.</typeparam>
         /// <typeparam name="TSecond">The type of the elements in the second source sequence.</typeparam>

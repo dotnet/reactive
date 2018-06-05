@@ -34,19 +34,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 return null;
             }
 
-            public override void OnNext(TSource value)
-            {
-                base._observer.OnNext(value);
-            }
-
             public override void OnError(Exception error)
             {
-                _recurse();
+                Recurse();
             }
 
             public override void OnCompleted()
             {
-                _recurse();
+                Recurse();
             }
 
             protected override bool Fail(Exception error)

@@ -17,7 +17,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double>, IObserver<double>
+        internal sealed class _ : IdentitySink<double>
         {
             private double _sum;
 
@@ -27,22 +27,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0.0;
             }
 
-            public void OnNext(double value)
+            public override void OnNext(double value)
             {
                 _sum += value;
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -60,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float>, IObserver<float>
+        internal sealed class _ : IdentitySink<float>
         {
             private double _sum; // This is what LINQ to Objects does!
 
@@ -70,22 +63,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0.0; // This is what LINQ to Objects does!
             }
 
-            public void OnNext(float value)
+            public override void OnNext(float value)
             {
                 _sum += value; // This is what LINQ to Objects does!
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext((float)_sum); // This is what LINQ to Objects does!
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+                ForwardOnCompleted();
             }
         }
     }
@@ -103,7 +89,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal>, IObserver<decimal>
+        internal sealed class _ : IdentitySink<decimal>
         {
             private decimal _sum;
 
@@ -113,22 +99,15 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0M;
             }
 
-            public void OnNext(decimal value)
+            public override void OnNext(decimal value)
             {
                 _sum += value;
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -146,7 +125,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int>, IObserver<int>
+        internal sealed class _ : IdentitySink<int>
         {
             private int _sum;
 
@@ -156,7 +135,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0;
             }
 
-            public void OnNext(int value)
+            public override void OnNext(int value)
             {
                 try
                 {
@@ -167,22 +146,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                 }
             }
-
-            public void OnError(Exception error)
+            
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -200,7 +171,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long>, IObserver<long>
+        internal sealed class _ : IdentitySink<long>
         {
             private long _sum;
 
@@ -210,7 +181,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0L;
             }
 
-            public void OnNext(long value)
+            public override void OnNext(long value)
             {
                 try
                 {
@@ -221,22 +192,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -254,7 +217,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<double?>, IObserver<double?>
+        internal sealed class _ : IdentitySink<double?>
         {
             private double _sum;
 
@@ -264,23 +227,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0.0;
             }
 
-            public void OnNext(double? value)
+            public override void OnNext(double? value)
             {
                 if (value != null)
                     _sum += value.Value;
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -298,7 +254,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<float?>, IObserver<float?>
+        internal sealed class _ : IdentitySink<float?>
         {
             private double _sum; // This is what LINQ to Objects does!
 
@@ -308,23 +264,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0.0; // This is what LINQ to Objects does!
             }
 
-            public void OnNext(float? value)
+            public override void OnNext(float? value)
             {
                 if (value != null)
                     _sum += value.Value; // This is what LINQ to Objects does!
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext((float)_sum); // This is what LINQ to Objects does!
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext((float)_sum); // This is what LINQ to Objects does!
+                ForwardOnCompleted();
             }
         }
     }
@@ -342,7 +291,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<decimal?>, IObserver<decimal?>
+        internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal _sum;
 
@@ -352,23 +301,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0M;
             }
 
-            public void OnNext(decimal? value)
+            public override void OnNext(decimal? value)
             {
                 if (value != null)
                     _sum += value.Value;
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -386,7 +328,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<int?>, IObserver<int?>
+        internal sealed class _ : IdentitySink<int?>
         {
             private int _sum;
 
@@ -396,7 +338,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0;
             }
 
-            public void OnNext(int? value)
+            public override void OnNext(int? value)
             {
                 try
                 {
@@ -408,22 +350,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }
@@ -441,7 +375,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
 
-        internal sealed class _ : Sink<long?>, IObserver<long?>
+        internal sealed class _ : IdentitySink<long?>
         {
             private long _sum;
 
@@ -451,7 +385,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sum = 0L;
             }
 
-            public void OnNext(long? value)
+            public override void OnNext(long? value)
             {
                 try
                 {
@@ -463,22 +397,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
                 catch (Exception exception)
                 {
-                    base._observer.OnError(exception);
-                    base.Dispose();
+                    ForwardOnError(exception);
                 }
             }
 
-            public void OnError(Exception error)
+            public override void OnCompleted()
             {
-                base._observer.OnError(error);
-                base.Dispose();
-            }
-
-            public void OnCompleted()
-            {
-                base._observer.OnNext(_sum);
-                base._observer.OnCompleted();
-                base.Dispose();
+                ForwardOnNext(_sum);
+                ForwardOnCompleted();
             }
         }
     }

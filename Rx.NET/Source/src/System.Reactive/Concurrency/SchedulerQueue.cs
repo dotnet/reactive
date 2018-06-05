@@ -24,7 +24,7 @@ namespace System.Reactive.Concurrency
         }
 
         /// <summary>
-        /// Creats a new scheduler queue with the specified initial capacity.
+        /// Creates a new scheduler queue with the specified initial capacity.
         /// </summary>
         /// <param name="capacity">Initial capacity of the scheduler queue.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="capacity"/> is less than zero.</exception>

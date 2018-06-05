@@ -73,6 +73,23 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region + AutoConnect +
+
+        public virtual IObservable<TSource> AutoConnect<TSource>(IConnectableObservable<TSource> source, int minObservers = 1, Action<IDisposable> onConnect = null)
+        {
+            if (minObservers <= 0)
+            {
+                var d = source.Connect();
+                onConnect?.Invoke(d);
+                return source;
+            }
+
+            return new AutoConnect<TSource>(source, minObservers, onConnect);
+        }
+
+
+        #endregion
+
         #region + Replay +
 
         public virtual IConnectableObservable<TSource> Replay<TSource>(IObservable<TSource> source)

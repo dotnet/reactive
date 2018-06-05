@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -21,7 +22,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
         protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
 
-        internal sealed class _ : Sink<TResult>
+        internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Exception _exception;
 
@@ -33,14 +34,9 @@ namespace System.Reactive.Linq.ObservableImpl
 
             public IDisposable Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(Invoke);
+                return scheduler.ScheduleAction(this, @this => @this.ForwardOnError(@this._exception));
             }
 
-            private void Invoke()
-            {
-                base._observer.OnError(_exception);
-                base.Dispose();
-            }
         }
     }
 }
