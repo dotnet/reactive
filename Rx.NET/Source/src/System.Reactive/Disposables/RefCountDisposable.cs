@@ -72,6 +72,9 @@ namespace System.Reactive.Disposables
                     return Disposable.Empty;
                 }
 
+                // Should not overflow the bits 0..30
+                System.Diagnostics.Debug.Assert((cnt & 0x7FFFFFFF) < int.MaxValue);
+
                 // Increment the active count by one, works because the increment
                 // won't affect bit 31
                 var u = Interlocked.CompareExchange(ref _count, cnt + 1, cnt);
@@ -136,6 +139,7 @@ namespace System.Reactive.Disposables
                 // keep the main disposed state but decrement the counter
                 // in theory, active should be always > 0 at this point,
                 // guaranteed by the InnerDisposable.Dispose's Exchange operation.
+                System.Diagnostics.Debug.Assert(active > 0);
                 var u = main | (active - 1);
 
                 var b = Interlocked.CompareExchange(ref _count, u, cnt);
