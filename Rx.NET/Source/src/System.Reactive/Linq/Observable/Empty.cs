@@ -16,24 +16,24 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
+        protected override void Run(_ sink) => sink.Run(_scheduler);
 
         internal sealed class _ : IdentitySink<TResult>
         {
-            public _(IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TResult> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(IScheduler scheduler)
+            public void Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(this, (s, target) => 
+                SetUpstream(scheduler.Schedule(this, (s, target) => 
                 {
                     target.OnCompleted();
                     return Disposable.Empty;
-                });
+                }));
             }
         }
     }

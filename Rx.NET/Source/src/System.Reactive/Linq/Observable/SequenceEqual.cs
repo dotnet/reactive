@@ -22,16 +22,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer) => new _(_comparer, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : IdentitySink<bool>
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 
-                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer)
+                    : base(observer)
                 {
                     _comparer = comparer;
                 }
@@ -42,7 +42,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private Queue<TSource> _ql;
                 private Queue<TSource> _qr;
 
-                public IDisposable Run(Observable parent)
+                public void Run(Observable parent)
                 {
                     _gate = new object();
                     _donel = false;
@@ -50,11 +50,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     _ql = new Queue<TSource>();
                     _qr = new Queue<TSource>();
 
-                    return StableCompositeDisposable.Create
+                    SetUpstream(StableCompositeDisposable.Create
                     (
                         parent._first.SubscribeSafe(new FirstObserver(this)),
                         parent._second.SubscribeSafe(new SecondObserver(this))
-                    );
+                    ));
                 }
 
                 private sealed class FirstObserver : IObserver<TSource>
@@ -216,23 +216,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 _comparer = comparer;
             }
 
-            protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(_comparer, observer, cancel);
+            protected override _ CreateSink(IObserver<bool> observer) => new _(_comparer, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<TSource, bool> 
             {
                 private readonly IEqualityComparer<TSource> _comparer;
 
-                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IEqualityComparer<TSource> comparer, IObserver<bool> observer)
+                    : base(observer)
                 {
                     _comparer = comparer;
                 }
 
                 private IEnumerator<TSource> _enumerator;
 
-                public IDisposable Run(Enumerable parent)
+                public void Run(Enumerable parent)
                 {
                     //
                     // Notice the evaluation order of obtaining the enumerator and subscribing to the
@@ -248,13 +248,14 @@ namespace System.Reactive.Linq.ObservableImpl
                     catch (Exception exception)
                     {
                         ForwardOnError(exception);
-                        return Disposable.Empty;
+
+                        return;
                     }
 
-                    return StableCompositeDisposable.Create(
+                    SetUpstream(StableCompositeDisposable.Create(
                         parent._first.SubscribeSafe(this),
                         _enumerator
-                    );
+                    ));
                 }
 
                 public override void OnNext(TSource value)

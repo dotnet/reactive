@@ -19,17 +19,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TSource, TKey> _keySelector;
             private HashSet<TKey> _hashSet;
 
-            public _(Distinct<TSource, TKey> parent, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Distinct<TSource, TKey> parent, IObserver<TSource> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _hashSet = new HashSet<TKey>(parent._comparer);

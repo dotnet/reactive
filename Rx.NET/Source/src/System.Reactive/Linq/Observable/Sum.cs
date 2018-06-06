@@ -13,16 +13,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<double>
         {
             private double _sum;
 
-            public _(IObserver<double> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double> observer)
+                : base(observer)
             {
                 _sum = 0.0;
             }
@@ -49,16 +49,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<float>
         {
             private double _sum; // This is what LINQ to Objects does!
 
-            public _(IObserver<float> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float> observer)
+                : base(observer)
             {
                 _sum = 0.0; // This is what LINQ to Objects does!
             }
@@ -85,16 +85,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<decimal>
         {
             private decimal _sum;
 
-            public _(IObserver<decimal> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal> observer)
+                : base(observer)
             {
                 _sum = 0M;
             }
@@ -121,16 +121,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<int>
         {
             private int _sum;
 
-            public _(IObserver<int> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int> observer)
+                : base(observer)
             {
                 _sum = 0;
             }
@@ -167,16 +167,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<long>
         {
             private long _sum;
 
-            public _(IObserver<long> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long> observer)
+                : base(observer)
             {
                 _sum = 0L;
             }
@@ -213,16 +213,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<double?>
         {
             private double _sum;
 
-            public _(IObserver<double?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double?> observer)
+                : base(observer)
             {
                 _sum = 0.0;
             }
@@ -250,16 +250,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<float?>
         {
             private double _sum; // This is what LINQ to Objects does!
 
-            public _(IObserver<float?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float?> observer)
+                : base(observer)
             {
                 _sum = 0.0; // This is what LINQ to Objects does!
             }
@@ -287,16 +287,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal _sum;
 
-            public _(IObserver<decimal?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal?> observer)
+                : base(observer)
             {
                 _sum = 0M;
             }
@@ -324,16 +324,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<int?>
         {
             private int _sum;
 
-            public _(IObserver<int?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int?> observer)
+                : base(observer)
             {
                 _sum = 0;
             }
@@ -371,16 +371,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<long?>
         {
             private long _sum;
 
-            public _(IObserver<long?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long?> observer)
+                : base(observer)
             {
                 _sum = 0L;
             }

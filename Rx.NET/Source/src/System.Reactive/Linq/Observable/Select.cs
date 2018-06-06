@@ -17,16 +17,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_selector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_selector, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, TResult> _selector;
 
-                public _(Func<TSource, TResult> selector, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TSource, TResult> selector, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = selector;
                 }
@@ -60,17 +60,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _selector = selector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_selector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_selector, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, TResult> 
             {
                 private readonly Func<TSource, int, TResult> _selector;
                 private int _index;
 
-                public _(Func<TSource, int, TResult> selector, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TSource, int, TResult> selector, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _selector = selector;
                     _index = 0;

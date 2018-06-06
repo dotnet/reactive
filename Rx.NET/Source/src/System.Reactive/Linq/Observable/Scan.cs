@@ -17,17 +17,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
-        protected override _ CreateSink(IObserver<TAccumulate> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TAccumulate> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, TAccumulate> 
         {
             private readonly Func<TAccumulate, TSource, TAccumulate> _accumulator;
             private TAccumulate _accumulation;
 
-            public _(Scan<TSource, TAccumulate> parent, IObserver<TAccumulate> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Scan<TSource, TAccumulate> parent, IObserver<TAccumulate> observer)
+                : base(observer)
             {
                 _accumulator = parent._accumulator;
                 _accumulation = parent._seed;
@@ -61,9 +61,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _accumulator = accumulator;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_accumulator, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(_accumulator, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
@@ -71,8 +71,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private TSource _accumulation;
             private bool _hasAccumulation;
 
-            public _(Func<TSource, TSource, TSource> accumulator, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<TSource, TSource, TSource> accumulator, IObserver<TSource> observer)
+                : base(observer)
             {
                 _accumulator = accumulator;
                 _accumulation = default(TSource);
@@ -96,6 +96,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     ForwardOnError(exception);
+
                     return;
                 }
 

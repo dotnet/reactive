@@ -17,15 +17,28 @@ namespace System.Reactive.Linq.ObservableImpl
             _refCount = refCount;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, StableCompositeDisposable.Create(_refCount.GetDisposable(), cancel));
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer, _refCount.GetDisposable());
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            private readonly IDisposable _refCountDisposable;
+
+            public _(IObserver<TSource> observer, IDisposable refCountDisposable)
+                : base(observer)
             {
+                _refCountDisposable = refCountDisposable;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    _refCountDisposable.Dispose();
+                }
+
+                base.Dispose(disposing);
             }
         }
     }
