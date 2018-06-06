@@ -348,7 +348,7 @@ namespace System.Reactive.Concurrency
         public System.IDisposable SchedulePeriodic<TState>(TState state, System.TimeSpan period, System.Func<TState, TState> action) { }
         public override System.Reactive.Concurrency.IStopwatch StartStopwatch() { }
     }
-    public abstract class ScheduledItem<TAbsolute> : System.IComparable<System.Reactive.Concurrency.ScheduledItem<TAbsolute>>, System.Reactive.Concurrency.IScheduledItem<TAbsolute>
+    public abstract class ScheduledItem<TAbsolute> : System.IComparable<System.Reactive.Concurrency.ScheduledItem<TAbsolute>>, System.IDisposable, System.Reactive.Concurrency.IScheduledItem<TAbsolute>
         where TAbsolute : System.IComparable<>
     {
         protected ScheduledItem(TAbsolute dueTime, System.Collections.Generic.IComparer<TAbsolute> comparer) { }
