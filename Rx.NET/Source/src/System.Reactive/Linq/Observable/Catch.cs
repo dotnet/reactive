@@ -16,14 +16,14 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_sources);
+        protected override void Run(_ sink) => sink.Run(_sources);
 
         internal sealed class _ : TailRecursiveSink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
@@ -75,23 +75,23 @@ namespace System.Reactive.Linq.ObservableImpl
             _handler = handler;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_handler, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(_handler, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private readonly Func<TException, IObservable<TSource>> _handler;
 
-            public _(Func<TException, IObservable<TSource>> handler, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<TException, IObservable<TSource>> handler, IObserver<TSource> observer)
+                : base(observer)
             {
                 _handler = handler;
             }
 
             private SerialDisposable _subscription;
 
-            public IDisposable Run(IObservable<TSource> source)
+            public void Run(IObservable<TSource> source)
             {
                 _subscription = new SerialDisposable();
 
@@ -99,7 +99,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _subscription.Disposable = d1;
                 d1.Disposable = source.SubscribeSafe(this);
 
-                return _subscription;
+                SetUpstream(_subscription);
             }
 
             public override void OnError(Exception error)

@@ -23,18 +23,18 @@ namespace System.Reactive.Linq.ObservableImpl
             _connectableSubscription = default(IDisposable);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(RefCount<TSource> parent)
+            public void Run(RefCount<TSource> parent)
             {
                 var subscription = parent._source.SubscribeSafe(this);
 
@@ -46,7 +46,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
                 }
 
-                return Disposable.Create(() =>
+                SetUpstream(Disposable.Create(() =>
                 {
                     subscription.Dispose();
 
@@ -57,7 +57,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             parent._connectableSubscription.Dispose();
                         }
                     }
-                });
+                }));
             }
         }
     }

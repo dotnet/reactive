@@ -21,9 +21,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IDictionary<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IDictionary<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, IDictionary<TKey, TElement>> 
         {
@@ -31,8 +31,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TSource, TElement> _elementSelector;
             private readonly Dictionary<TKey, TElement> _dictionary;
 
-            public _(ToDictionary<TSource, TKey, TElement> parent, IObserver<IDictionary<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(ToDictionary<TSource, TKey, TElement> parent, IObserver<IDictionary<TKey, TElement>> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _elementSelector = parent._elementSelector;

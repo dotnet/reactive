@@ -19,9 +19,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
@@ -31,17 +31,15 @@ namespace System.Reactive.Linq.ObservableImpl
             int _halfSerializer;
             Exception _error;
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource, TOther> parent)
+            public void Run(SkipUntil<TSource, TOther> parent)
             {
                 Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
                 Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
-
-                return this;
             }
 
             protected override void Dispose(bool disposing)
@@ -161,24 +159,24 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new SkipUntil<TSource>(_source, startTime, _scheduler);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private volatile bool _open;
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource> parent)
+            public void Run(SkipUntil<TSource> parent)
             {
                 var t = parent._scheduler.Schedule(this, parent._startTime, (_, state) => state.Tick());
                 var d = parent._source.SubscribeSafe(this);
-                return StableCompositeDisposable.Create(t, d);
+                SetUpstream(StableCompositeDisposable.Create(t, d));
             }
 
             private IDisposable Tick()

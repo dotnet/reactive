@@ -22,16 +22,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _maxConcurrent = maxConcurrent;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_maxConcurrent, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_maxConcurrent, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource> 
             {
                 private readonly int _maxConcurrent;
 
-                public _(int maxConcurrent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(int maxConcurrent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _maxConcurrent = maxConcurrent;
                 }
@@ -43,7 +43,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private CompositeDisposable _group;
                 private int _activeCount = 0;
 
-                public IDisposable Run(ObservablesMaxConcurrency parent)
+                public void Run(ObservablesMaxConcurrency parent)
                 {
                     _gate = new object();
                     _q = new Queue<IObservable<TSource>>();
@@ -55,7 +55,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _sourceSubscription.Disposable = parent._sources.SubscribeSafe(this);
                     _group.Add(_sourceSubscription);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(IObservable<TSource> value)
@@ -161,14 +161,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<IObservable<TSource>, TSource> 
             {
-                public _(IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> observer)
+                    : base(observer)
                 {
                 }
 
@@ -177,7 +177,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private CompositeDisposable _group;
                 private SingleAssignmentDisposable _sourceSubscription;
 
-                public IDisposable Run(Observables parent)
+                public void Run(Observables parent)
                 {
                     _gate = new object();
                     _isStopped = false;
@@ -187,7 +187,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _group.Add(_sourceSubscription);
                     _sourceSubscription.Disposable = parent._sources.SubscribeSafe(this);
 
-                    return _group;
+                    SetUpstream(_group);
                 }
 
                 public override void OnNext(IObservable<TSource> value)
@@ -284,26 +284,26 @@ namespace System.Reactive.Linq.ObservableImpl
                 _sources = sources;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<Task<TSource>, TSource> 
             {
-                public _(IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> observer)
+                    : base(observer)
                 {
                 }
 
                 private object _gate;
                 private volatile int _count;
 
-                public IDisposable Run(Tasks parent)
+                public void Run(Tasks parent)
                 {
                     _gate = new object();
                     _count = 1;
 
-                    return parent._sources.SubscribeSafe(this);
+                    SetUpstream(parent._sources.SubscribeSafe(this));
                 }
 
                 public override void OnNext(Task<TSource> value)

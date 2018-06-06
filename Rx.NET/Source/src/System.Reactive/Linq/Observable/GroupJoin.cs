@@ -25,9 +25,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TResult>
         {
@@ -41,8 +41,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
             private readonly Func<TLeft, IObservable<TRight>, TResult> _resultSelector;
 
-            public _(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer)
+                : base(observer)
             {
                 _refCount = new RefCountDisposable(_group);
                 _leftMap = new SortedDictionary<int, IObserver<TRight>>();
@@ -56,7 +56,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private int _leftID;
             private int _rightID;
 
-            public IDisposable Run(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
+            public void Run(GroupJoin<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
             {
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
@@ -69,7 +69,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 leftSubscription.Disposable = parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
 
-                return _refCount;
+                SetUpstream(_refCount);
             }
 
             private sealed class LeftObserver : IObserver<TLeft>

@@ -6,7 +6,7 @@ namespace System.Reactive
 {
     internal abstract class IdentitySink<T> : Sink<T, T>
     {
-        protected IdentitySink(IObserver<T> observer, IDisposable cancel) : base(observer, cancel)
+        protected IdentitySink(IObserver<T> observer) : base(observer)
         {
         }
 

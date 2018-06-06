@@ -16,13 +16,12 @@ namespace System.Reactive
 
     internal abstract class Sink<TTarget> : ISink<TTarget>, IDisposable
     {
-        private IDisposable _cancel;
+        private IDisposable _upstream;
         private volatile IObserver<TTarget> _observer;
 
-        protected Sink(IObserver<TTarget> observer, IDisposable cancel)
+        protected Sink(IObserver<TTarget> observer)
         {
             _observer = observer;
-            _cancel = cancel;
         }
 
         public void Dispose()
@@ -33,7 +32,7 @@ namespace System.Reactive
         protected virtual void Dispose(bool disposing)
         {
             _observer = NopObserver<TTarget>.Instance;
-            Disposable.TryDispose(ref _cancel);
+            Disposable.TryDispose(ref _upstream);
         }
 
         public void ForwardOnNext(TTarget value)
@@ -52,6 +51,11 @@ namespace System.Reactive
             _observer.OnError(error);
             Dispose();
         }
+
+        protected void SetUpstream(IDisposable upstream)
+        {
+            Disposable.SetSingle(ref _upstream, upstream);
+        }
     }
 
     /// <summary>
@@ -62,8 +66,13 @@ namespace System.Reactive
     /// <remarks>Implementations of sinks are responsible to enforce the message grammar on the associated observer. Upon sending a terminal message, a pairing Dispose call should be made to trigger cancellation of related resources and to mute the outgoing observer.</remarks>
     internal abstract class Sink<TSource, TTarget> : Sink<TTarget>, IObserver<TSource>
     {
-        protected Sink(IObserver<TTarget> observer, IDisposable cancel) : base(observer, cancel)
+        protected Sink(IObserver<TTarget> observer) : base(observer)
         {
+        }
+
+        public virtual void Run(IObservable<TSource> source)
+        {
+            SetUpstream(source.SubscribeSafe(this));
         }
 
         public abstract void OnNext(TSource value);

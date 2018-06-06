@@ -15,16 +15,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : Sink<IObservable<TSource>, TSource> 
         {
             private readonly object _gate = new object();
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
@@ -34,7 +34,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private ulong _latest;
             private bool _hasLatest;
 
-            public IDisposable Run(Switch<TSource> parent)
+            public void Run(Switch<TSource> parent)
             {
                 _innerSubscription = new SerialDisposable();
                 _isStopped = false;
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _subscription = subscription;
                 subscription.Disposable = parent._sources.SubscribeSafe(this);
 
-                return StableCompositeDisposable.Create(_subscription, _innerSubscription);
+                SetUpstream(StableCompositeDisposable.Create(_subscription, _innerSubscription));
             }
 
             public override void OnNext(IObservable<TSource> value)
