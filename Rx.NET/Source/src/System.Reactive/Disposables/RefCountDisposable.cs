@@ -73,7 +73,10 @@ namespace System.Reactive.Disposables
                 }
 
                 // Should not overflow the bits 0..30
-                System.Diagnostics.Debug.Assert((cnt & 0x7FFFFFFF) < int.MaxValue);
+                if ((cnt & 0x7FFFFFFF) == int.MaxValue)
+                {
+                    throw new OverflowException($"RefCountDisposable can't handle more than {int.MaxValue} disposables");
+                }
 
                 // Increment the active count by one, works because the increment
                 // won't affect bit 31
