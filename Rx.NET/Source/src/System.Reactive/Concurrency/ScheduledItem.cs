@@ -149,16 +149,16 @@ namespace System.Reactive.Concurrency
         /// <summary>
         /// Cancels the work item by disposing the resource returned by <see cref="InvokeCore"/> as soon as possible.
         /// </summary>
-        public void Cancel() => Dispose();
+        public void Cancel() => Disposable.TryDispose(ref _disposable);
 
         /// <summary>
         /// Gets whether the work item has received a cancellation request.
         /// </summary>
         public bool IsCanceled => Disposable.GetIsDisposed(ref _disposable);
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
-            Disposable.TryDispose(ref _disposable);
+            Cancel();
         }
     }
 

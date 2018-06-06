@@ -356,7 +356,6 @@ namespace System.Reactive.Concurrency
         public bool IsCanceled { get; }
         public void Cancel() { }
         public int CompareTo(System.Reactive.Concurrency.ScheduledItem<TAbsolute> other) { }
-        public void Dispose() { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public void Invoke() { }
