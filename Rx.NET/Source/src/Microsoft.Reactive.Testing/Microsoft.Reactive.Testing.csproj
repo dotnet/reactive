@@ -1,0 +1,17 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+  <PropertyGroup>
+    <TargetFrameworks>net46;uap10.0;netstandard2.0</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <Description>Reactive Extensions Testing Library containing interfaces and classes providing functionality to test applications and libraries built using Reactive Extensions.</Description>    
+    <AssemblyTitle>Microsoft.Reactive.Testing - Testing Helper Library</AssemblyTitle>    
+    <DefineConstants>$(DefineConstants);PLATFORM_DOTNET;XUNIT_VISIBILITY_INTERNAL</DefineConstants>        
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>    
+    <Description>Reactive Extensions (Rx) for .NET - Testing Library</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\*.xml" />
+    <PackageReference Include="xunit.assert.source" Version="2.3.1" PrivateAssets="All" /> 
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+</Project>

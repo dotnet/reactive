@@ -1,4 +1,6 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,10 +21,9 @@ namespace System.Linq
         public static IAsyncQueryable<TElement> AsAsyncQueryable<TElement>(this IAsyncEnumerable<TElement> source)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
-            var queryable = source as IAsyncQueryable<TElement>;
-            if (queryable != null)
+            if (source is IAsyncQueryable<TElement> queryable)
             {
                 return queryable;
             }
@@ -32,8 +33,7 @@ namespace System.Linq
 
         private static Expression GetSourceExpression<TSource>(IAsyncEnumerable<TSource> source)
         {
-            var queryable = source as IAsyncQueryable<TSource>;
-            if (queryable != null)
+            if (source is IAsyncQueryable<TSource> queryable)
             {
                 return queryable.Expression;
             }

@@ -1,0 +1,60 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net46;uap10.0;uap10.0.16299</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>       
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
+    <Description>Reactive Extensions (Rx) for .NET</Description>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup>    
+    <Compile Remove="Platforms\**\*.*" />
+    <EmbeddedResource Remove="Platforms\**\*.*" />
+    <!-- Workaround so the files appear in VS -->
+    <None Include="Platforms\**\*.*" />
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />    
+    <None Update="Platforms\Windows\Strings_WindowsThreading.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Strings_WindowsThreading.resx" />     
+    <None Update="Platforms\Windows\Strings_WindowsThreading.resx" CustomToolNamespace="System.Reactive" Generator="ResXFileCodeGenerator" LastGenOutput="Strings_WindowsThreading.Designer.cs" />      
+  </ItemGroup>
+
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+  </ItemGroup>
+  
+  <!-- UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">      
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="System.ComponentModel" Version="4.0.1" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.0.1" />    
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <Compile Include="Platforms\UWP\**\*.cs" />
+  </ItemGroup>
+  
+  <!-- Windows includes for Desktop and UWP -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' or $(TargetFramework.StartsWith('uap10.0')) ">
+    <Compile Include="Platforms\Windows\**\*.cs" />
+    <EmbeddedResource Include="Platforms\Windows\**\*.resx" />    
+  </ItemGroup>
+  
+  <!-- Desktop -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46'">
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    <Compile Include="Platforms\Desktop\**\*.cs" />
+  </ItemGroup>
+  
+  <!-- Designer support -->
+  <ItemGroup>
+    <None Update="Linq\Observable\CombineLatest.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="CombineLatest.Generated.cs" />
+    <Compile Update="Linq\Observable\CombineLatest.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="CombineLatest.Generated.tt" />
+    <None Update="Linq\Observable\Zip.Generated.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="Zip.Generated.cs" />
+    <Compile Update="Linq\Observable\Zip.Generated.cs" DesignTime="True" AutoGen="True" DependentUpon="Zip.Generated.tt" />   
+  </ItemGroup>
+  
+</Project>

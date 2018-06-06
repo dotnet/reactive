@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>System.Reactive.Compatibility</id>
+        <version>$version$</version>
+        <title>Reactive Extensions (Rx) - v3 Compatibility</title>
+        <authors>.NET Foundation and Contributors</authors>
+        <owners>Microsoft,RxTeam</owners>
+        <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=261272</licenseUrl>
+        <projectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</projectUrl>
+        <iconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Reactive Extensions (Rx) Compatibility Library for enabling v3 apps to work with v4</description>
+        <copyright>Copyright (c) .NET Foundation and Contributors.</copyright>
+        <language>en-US</language>
+        <tags>Rx Reactive Extensions</tags>
+        <dependencies>
+          <group targetFramework="netstandard1.3">
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.Providers" version="$version$" />
+          </group>
+          <group targetFramework="net45">
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Experimental" version="$version$" />
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.Providers" version="$version$" />
+            <dependency id="System.Reactive.Runtime.Remoting" version="$version$" />
+            <dependency id="System.Reactive.Windows.Forms" version="$version$" />
+            <dependency id="System.Reactive.Windows.Threading" version="$version$" />
+          </group>
+          <group targetFramework="uap10.0">
+            <dependency id="System.Reactive.Interfaces" version="$version$" />
+            <dependency id="System.Reactive.Core" version="$version$" />
+            <dependency id="System.Reactive.Linq" version="$version$" />
+            <dependency id="System.Reactive.PlatformServices" version="$version$" />
+            <dependency id="System.Reactive.Providers" version="$version$" />
+            <dependency id="System.Reactive.Windows.Threading" version="$version$" />
+            <dependency id="System.Reactive.WindowsRuntime" version="$version$" />
+          </group>
+        </dependencies>
+    </metadata>
+    <files />
+</package>

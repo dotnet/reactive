@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata minClientVersion="3.0">
+        <id>Microsoft.TargetingPack.Private.NETCore.v4.5.1</id>
+        <version>1.0.0</version>
+        <title>Microsoft.TargetingPack.Private.NETCore.v4.5.1</title>
+        <authors>.NET Foundation and Contributors</authors>
+        <owners>microsoft,dotnetframework</owners>
+        <licenseUrl>http://go.microsoft.com/fwlink/?LinkId=329770</licenseUrl>
+        <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Contains a private targeting pack which contains only netcore451 Reference Assemblies and is used for producing platform specific libraries in .NET Core only.</description>
+        <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+    </metadata>
+    <files>
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5.1\*.dll" target="lib\netcore451" />        
+    </files>
+</package>

@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+        "type": "platform",
+        "version": "1.0.0"
+    },
+    "System.Reactive": "3.0.0-rc1-00354"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+    }
+  }
+}

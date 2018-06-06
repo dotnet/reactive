@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="..\Directory.build.props" />
+  <PropertyGroup>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyVersionInfo>false</GenerateAssemblyVersionInfo>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <Description>Reactive Extensions (Rx) for .NET - v3 compatibility facade for $(AssemblyName)</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\GlobalAssemblyVersion.cs" Link="GlobalAssemblyVersion.cs" />
+  </ItemGroup>
+</Project>

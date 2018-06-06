@@ -1,0 +1,42 @@
+trigger:
+- master
+- rel/*
+
+queue: Hosted VS2017
+
+variables: 
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+    
+steps:
+- task: BatchScript@1
+  inputs:
+    filename: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\Common7\\Tools\\VsDevCmd.bat"
+    arguments: -no_logo
+    modifyEnvironment: true
+  displayName: Setup Environment Variables
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: Rx.NET/Source/build/setversion.csproj
+    arguments: -c $(BuildConfiguration)   
+  displayName: Set Version
+   
+- task: PowerShell@1
+  inputs:
+    scriptName: 'Rx.NET/Source/build-new.ps1'
+    workingFolder: 'Rx.NET/Source'
+  env:
+    VSTS_ACCESS_TOKEN: $(System.AccessToken)
+    SignClientUser: $(SignClientUser)
+    SignClientSecret: $(SignClientSecret)
+    COVERALLS_REPO_TOKEN: $(CoverallsToken)
+  displayName: Build
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'Rx.NET/Source/artifacts'
+    ArtifactName: artifacts
+    publishLocation: Container
+  condition: always()

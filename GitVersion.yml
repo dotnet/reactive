@@ -1,0 +1,31 @@
+mode: ContinuousDeployment
+tag-prefix: '[vV]'
+continuous-delivery-fallback-tag: ci
+next-version: 4.0.0
+major-version-bump-message: '\+semver:\s?(breaking|major)'
+minor-version-bump-message: '\+semver:\s?(feature|minor)'
+patch-version-bump-message: '\+semver:\s?(fix|patch)'
+legacy-semver-padding: 5
+build-metadata-padding: 5
+commits-since-version-source-padding: 5
+commit-message-incrementing: Enabled
+branches:
+  master:
+    mode: ContinuousDeployment
+    tag: preview
+  release:
+    mode: ContinuousDeployment
+    tag: rc
+  feature:
+    mode: ContinuousDeployment
+  pull-request:
+    mode: ContinuousDeployment
+    tag: PullReq
+  hotfix:
+    mode: ContinuousDeployment
+    tag: beta
+  support:
+    mode: ContinuousDeployment
+  develop:
+    mode: ContinuousDeployment
+    tag: alpha

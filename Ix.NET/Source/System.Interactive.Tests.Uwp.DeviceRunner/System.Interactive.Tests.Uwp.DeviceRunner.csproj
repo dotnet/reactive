@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{ED118703-9773-4193-BC2A-966C29BC1A46}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Interactive.Tests.Uwp.DeviceRunner</RootNamespace>
+    <AssemblyName>System.Interactive.Tests.Uwp.DeviceRunner</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>System.Interactive.Tests.Uwp.DeviceRunner_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>422BF5D1CFB50C975293A3158EA46852395F42CF</PackageCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_THREAD</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;NO_THREAD</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.3" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.devices" Version="2.2.0" />
+    <PackageReference Include="FluentAssertions" Version="4.19.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="..\ReactiveX.snk">
+      <Link>ReactiveX.snk</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\System.Interactive.Async.Tests\AppendPrependTests.cs">
+      <Link>AppendPrependTests.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncEnumerableQueryTest.cs">
+      <Link>AsyncEnumerableQueryTest.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncQueryableTests.Generated.cs">
+      <Link>AsyncQueryableTests.Generated.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Aggregates.cs">
+      <Link>AsyncTests.Aggregates.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Bugs.cs">
+      <Link>AsyncTests.Bugs.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Conversions.cs">
+      <Link>AsyncTests.Conversions.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Creation.cs">
+      <Link>AsyncTests.Creation.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.cs">
+      <Link>AsyncTests.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Exceptions.cs">
+      <Link>AsyncTests.Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Multiple.cs">
+      <Link>AsyncTests.Multiple.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Async.Tests\AsyncTests.Single.cs">
+      <Link>AsyncTests.Single.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\AssertEx.cs">
+      <Link>AssertEx.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\NopObserver.cs">
+      <Link>NopObserver.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Aggregates.cs">
+      <Link>Tests.Aggregates.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Buffering.cs">
+      <Link>Tests.Buffering.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Creation.cs">
+      <Link>Tests.Creation.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.cs">
+      <Link>Tests.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Exceptions.cs">
+      <Link>Tests.Exceptions.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Imperative.cs">
+      <Link>Tests.Imperative.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Multiple.cs">
+      <Link>Tests.Multiple.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Qbservable.cs">
+      <Link>Tests.Qbservable.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Interactive.Tests\Tests.Single.cs">
+      <Link>Tests.Single.cs</Link>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="System.Interactive.Tests.Uwp.DeviceRunner_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\System.Interactive.Async.Tests\AsyncQueryableTests.Generated.tt">
+      <Link>AsyncQueryableTests.Generated.tt</Link>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AsyncQueryableTests.Generated1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\ReactiveX.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Interactive\System.Interactive.csproj" />
+    <ProjectReference Include="..\System.Interactive.Providers\System.Interactive.Providers.csproj" />
+    <ProjectReference Include="..\System.Interactive.Async\System.Interactive.Async.csproj" />
+    <ProjectReference Include="..\System.Interactive.Async.Providers\System.Interactive.Async.Providers.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

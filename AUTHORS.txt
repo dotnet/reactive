@@ -18,14 +18,14 @@ Eric Rozell
 Rx.js and Ix.js:
 Matthew Podwysocki
 Jeffrey van Gogh
-Bart de Smet
+Bart De Smet
 Brian Beckman
 Wes Dyer
 Erik Meijer
 
 Tx:
 Georgi Chkodrov
-Bart de Smet		
+Bart De Smet		
 Aaron Lahman
 Erik Meijer
 Brian Grunkemeyer

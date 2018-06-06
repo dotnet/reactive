@@ -1,0 +1,11 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFramework>uap10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>
+  
+</Project>

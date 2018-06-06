@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0-*",
+
+    "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "System.Reactive": "3.0.0-rc1-00354"
+    },
+
+  "frameworks": {
+    "netstandard1.4": {
+    }
+  }
+}

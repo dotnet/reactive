@@ -1,0 +1,115 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+var types = new[]
+{
+    new { source = typeof(int),     target = typeof(double)  },
+    new { source = typeof(long),    target = typeof(double)  },
+    new { source = typeof(float),   target = typeof(float)   },
+    new { source = typeof(double),  target = typeof(double)  },
+    new { source = typeof(decimal), target = typeof(decimal) },
+};
+var name = "Average";
+#>
+using System.Threading.Tasks;
+
+namespace System.Reactive.Linq
+{
+    partial class AsyncObservable
+    {
+<#
+foreach (var t in types)
+{
+    var sourceType = t.source;
+    var targetType = t.target;
+
+    foreach (var n in new[] { false, true })
+    {
+        var sourceTypeName = n ? sourceType.Name + "?" : sourceType.Name;
+        var targetTypeName = n ? targetType.Name + "?" : targetType.Name;
+        var methodName = n ? "Nullable" + sourceType.Name : sourceType.Name;
+
+#>
+        public static IAsyncObservable<<#=targetTypeName#>> <#=name#>(this IAsyncObservable<<#=sourceTypeName#>> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Create<<#=targetTypeName#>>(observer => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer)));
+        }
+
+        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, <#=sourceTypeName#>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<<#=targetTypeName#>>(observer => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
+        }
+
+        public static IAsyncObservable<<#=targetTypeName#>> <#=name#><TSource>(this IAsyncObservable<TSource> source, Func<TSource, Task<<#=sourceTypeName#>>> selector)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Create<<#=targetTypeName#>>(observer => source.SubscribeSafeAsync(AsyncObserver.<#=name#><#=methodName#>(observer, selector)));
+        }
+
+<#
+    }
+}
+#>
+    }
+
+    partial class AsyncObserver
+    {
+<#
+foreach (var t in types)
+{
+    var sourceType = t.source;
+    var targetType = t.target;
+
+    foreach (var n in new[] { false, true })
+    {
+        var sourceTypeName = n ? sourceType.Name + "?" : sourceType.Name;
+        var targetTypeName = n ? targetType.Name + "?" : targetType.Name;
+        var methodName = n ? "Nullable" + sourceType.Name : sourceType.Name;
+
+#>
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, <#=sourceTypeName#>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Select(<#=name#><#=methodName#>(observer), selector);
+        }
+
+        public static IAsyncObserver<TSource> <#=name#><#=methodName#><TSource>(IAsyncObserver<<#=targetTypeName#>> observer, Func<TSource, Task<<#=sourceTypeName#>>> selector)
+        {
+            if (observer == null)
+                throw new ArgumentNullException(nameof(observer));
+            if (selector == null)
+                throw new ArgumentNullException(nameof(selector));
+
+            return Select(<#=name#><#=methodName#>(observer), selector);
+        }
+
+<#
+    }
+}
+#>
+    }
+}
