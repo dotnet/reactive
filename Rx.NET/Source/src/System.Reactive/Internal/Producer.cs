@@ -51,8 +51,9 @@ namespace System.Reactive
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { subscription = subscription, observer = observer };
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.ScheduleAction(
+                    (@this: this, subscription, observer),
+                    tuple => tuple.subscription.Disposable = tuple.@this.Run(tuple.observer));
             }
             else
             {
@@ -60,18 +61,6 @@ namespace System.Reactive
             }
 
             return subscription;
-        }
-
-        private struct State
-        {
-            public SingleAssignmentDisposable subscription;
-            public IObserver<TSource> observer;
-        }
-
-        private IDisposable Run(IScheduler _, State x)
-        {
-            x.subscription.Disposable = Run(x.observer);
-            return Disposable.Empty;
         }
 
         /// <summary>
@@ -101,7 +90,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
-            var subscription = new SubscriptionDisposable();
+            SingleAssignmentDisposable subscription = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -109,59 +98,35 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
+                subscription = new SingleAssignmentDisposable();
                 observer = SafeObserver<TTarget>.Create(observer, subscription);
             }
 
-            var sink = CreateSink(observer, subscription.Inner);
+            var sink = CreateSink(observer);
 
-            subscription.Sink = sink;
+            if (subscription != null)
+                subscription.Disposable = sink;
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
-                var state = new State { sink = sink, inner = subscription.Inner };
-
-                CurrentThreadScheduler.Instance.Schedule(state, Run);
+                CurrentThreadScheduler.Instance.ScheduleAction(
+                    (@this: this, sink),
+                    tuple => tuple.@this.Run(tuple.sink));
             }
             else
             {
-                subscription.Inner.Disposable = Run(sink);
+                Run(sink);
             }
 
-            return subscription;
-        }
-
-        private struct State
-        {
-            public TSink sink;
-            public SingleAssignmentDisposable inner;
-        }
-
-        private IDisposable Run(IScheduler _, State x)
-        {
-            x.inner.Disposable = Run(x.sink);
-            return Disposable.Empty;
+            return (IDisposable)subscription ?? sink;
         }
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
         /// </summary>
         /// <param name="sink">The sink object.</param>
-        protected abstract IDisposable Run(TSink sink);
+        protected abstract void Run(TSink sink);
 
-        protected abstract TSink CreateSink(IObserver<TTarget> observer, IDisposable cancel);
-    }
-
-    internal sealed class SubscriptionDisposable : ICancelable
-    {
-        public volatile IDisposable Sink;
-        public readonly SingleAssignmentDisposable Inner = new SingleAssignmentDisposable();
-
-        public bool IsDisposed => Sink == null;
-
-        public void Dispose()
-        {
-            Interlocked.Exchange(ref Sink, null)?.Dispose();
-            Inner.Dispose();
-        }
+        protected abstract TSink CreateSink(IObserver<TTarget> observer);
     }
 }

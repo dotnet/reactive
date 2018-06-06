@@ -17,26 +17,26 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<Reactive.TimeInterval<TSource>> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : Sink<TSource, System.Reactive.TimeInterval<TSource>> 
         {
-            public _(IObserver<System.Reactive.TimeInterval<TSource>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<System.Reactive.TimeInterval<TSource>> observer)
+                : base(observer)
             {
             }
 
             private IStopwatch _watch;
             private TimeSpan _last;
 
-            public IDisposable Run(TimeInterval<TSource> parent)
+            public void Run(TimeInterval<TSource> parent)
             {
                 _watch = parent._scheduler.StartStopwatch();
                 _last = TimeSpan.Zero;
 
-                return parent._source.Subscribe(this);
+                SetUpstream(parent._source.Subscribe(this));
             }
 
             public override void OnNext(TSource value)

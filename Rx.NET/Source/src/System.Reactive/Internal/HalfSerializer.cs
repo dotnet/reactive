@@ -27,26 +27,26 @@ namespace System.Reactive
         /// Use a full SerializedObserver wrapper for merging multiple sequences.
         /// </summary>
         /// <typeparam name="T">The element type of the observer.</typeparam>
-        /// <param name="observer">The observer to signal events in a serialized fashion.</param>
+        /// <param name="sink">The observer to signal events in a serialized fashion.</param>
         /// <param name="item">The item to signal.</param>
         /// <param name="wip">Indicates there is an emission going on currently.</param>
         /// <param name="error">The field containing an error or terminal indicator.</param>
-        public static void OnNext<T>(IObserver<T> observer, T item, ref int wip, ref Exception error)
+        public static void ForwardOnNext<T>(ISink<T> sink, T item, ref int wip, ref Exception error)
         {
             if (Interlocked.CompareExchange(ref wip, 1, 0) == 0)
             {
-                observer.OnNext(item);
+                sink.ForwardOnNext(item);
                 if (Interlocked.Decrement(ref wip) != 0)
                 {
                     var ex = error;
                     if (ex != ExceptionHelper.Terminated)
                     {
                         error = ExceptionHelper.Terminated;
-                        observer.OnError(ex);
+                        sink.ForwardOnError(ex);
                     }
                     else
                     {
-                        observer.OnCompleted();
+                        sink.ForwardOnCompleted();
                     }
                 }
             }
@@ -55,23 +55,23 @@ namespace System.Reactive
         /// <summary>
         /// Signals the given exception to the observer. If there is a concurrent
         /// OnNext emission is happening, saves the exception into the given field
-        /// otherwise to be picked up by <see cref="OnNext{T}(IObserver{T}, T, ref int, ref Exception)"/>.
+        /// otherwise to be picked up by <see cref="ForwardOnNext{T}"/>.
         /// This method can be called concurrently with itself and the other methods of this
         /// helper class but only one terminal signal may actually win.
         /// </summary>
         /// <typeparam name="T">The element type of the observer.</typeparam>
-        /// <param name="observer">The observer to signal events in a serialized fashion.</param>
+        /// <param name="sink">The observer to signal events in a serialized fashion.</param>
         /// <param name="ex">The exception to signal sooner or later.</param>
         /// <param name="wip">Indicates there is an emission going on currently.</param>
         /// <param name="error">The field containing an error or terminal indicator.</param>
-        public static void OnError<T>(IObserver<T> observer, Exception ex, ref int wip, ref Exception error)
+        public static void ForwardOnError<T>(ISink<T> sink, Exception ex, ref int wip, ref Exception error)
         {
             if (ExceptionHelper.TrySetException(ref error, ex))
             {
                 if (Interlocked.Increment(ref wip) == 1)
                 {
                     error = ExceptionHelper.Terminated;
-                    observer.OnError(ex);
+                    sink.ForwardOnError(ex);
                 }
             }
         }
@@ -79,22 +79,22 @@ namespace System.Reactive
         /// <summary>
         /// Signals OnCompleted on the observer. If there is a concurrent
         /// OnNext emission happening, the error field will host a special
-        /// terminal exception signal to be picked up by <see cref="OnNext{T}(IObserver{T}, T, ref int, ref Exception)"/> once it finishes with OnNext and signal the
+        /// terminal exception signal to be picked up by <see cref="ForwardOnNext{T}"/> once it finishes with OnNext and signal the
         /// OnCompleted as well.
         /// This method can be called concurrently with itself and the other methods of this
         /// helper class but only one terminal signal may actually win.
         /// </summary>
         /// <typeparam name="T">The element type of the observer.</typeparam>
-        /// <param name="observer">The observer to signal events in a serialized fashion.</param>
+        /// <param name="sink">The observer to signal events in a serialized fashion.</param>
         /// <param name="wip">Indicates there is an emission going on currently.</param>
         /// <param name="error">The field containing an error or terminal indicator.</param>
-        public static void OnCompleted<T>(IObserver<T> observer, ref int wip, ref Exception error)
+        public static void ForwardOnCompleted<T>(ISink<T> sink, ref int wip, ref Exception error)
         {
             if (ExceptionHelper.TrySetException(ref error, ExceptionHelper.Terminated))
             {
                 if (Interlocked.Increment(ref wip) == 1)
                 {
-                    observer.OnCompleted();
+                    sink.ForwardOnCompleted();
                 }
             }
         }

@@ -23,9 +23,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TSource>
             {
@@ -34,8 +34,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Count _parent;
                 private Queue<TSource> _queue;
 
-                public _(Count parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Count parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                     _queue = new Queue<TSource>();
@@ -44,14 +44,14 @@ namespace System.Reactive.Linq.ObservableImpl
                 private SingleAssignmentDisposable _subscription;
                 private SingleAssignmentDisposable _loop;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _subscription = new SingleAssignmentDisposable();
                     _loop = new SingleAssignmentDisposable();
 
                     _subscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                    return StableCompositeDisposable.Create(_subscription, _loop);
+                    SetUpstream(StableCompositeDisposable.Create(_subscription, _loop));
                 }
 
                 public override void OnNext(TSource value)
@@ -122,9 +122,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _loopScheduler = loopScheduler;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TSource>
             {
@@ -133,8 +133,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Time _parent;
                 private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-                public _(Time parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Time parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                     _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
@@ -144,7 +144,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private SingleAssignmentDisposable _loop;
                 private IStopwatch _watch;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _subscription = new SingleAssignmentDisposable();
                     _loop = new SingleAssignmentDisposable();
@@ -152,7 +152,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _watch = _parent._scheduler.StartStopwatch();
                     _subscription.Disposable = _parent._source.SubscribeSafe(this);
 
-                    return StableCompositeDisposable.Create(_subscription, _loop);
+                    SetUpstream(StableCompositeDisposable.Create(_subscription, _loop));
                 }
 
                 public override void OnNext(TSource value)

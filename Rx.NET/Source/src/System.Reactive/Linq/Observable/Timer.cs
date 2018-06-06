@@ -29,9 +29,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+                protected override _ CreateSink(IObserver<long> observer) => new _(observer);
 
-                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
+                protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class Absolute : Single
@@ -44,32 +44,33 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+                protected override _ CreateSink(IObserver<long> observer) => new _(observer);
 
-                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
+                protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class _ : IdentitySink<long>
             {
-                public _(IObserver<long> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<long> observer)
+                    : base(observer)
                 {
                 }
 
-                public IDisposable Run(Single parent, DateTimeOffset dueTime)
+                public void Run(Single parent, DateTimeOffset dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    SetUpstream(parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke()));
                 }
 
-                public IDisposable Run(Single parent, TimeSpan dueTime)
+                public void Run(Single parent, TimeSpan dueTime)
                 {
-                    return parent._scheduler.Schedule(dueTime, Invoke);
+                    SetUpstream(parent._scheduler.Schedule(this, dueTime, (_, state) => state.Invoke()));
                 }
 
-                private void Invoke()
+                private IDisposable Invoke()
                 {
                     ForwardOnNext(0);
                     ForwardOnCompleted();
+                    return Disposable.Empty;
                 }
             }
         }
@@ -95,9 +96,9 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_period, observer, cancel);
+                protected override _ CreateSink(IObserver<long> observer) => new _(_period, observer);
 
-                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
+                protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class Absolute : Periodic
@@ -110,37 +111,35 @@ namespace System.Reactive.Linq.ObservableImpl
                     _dueTime = dueTime;
                 }
 
-                protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(_period, observer, cancel);
+                protected override _ CreateSink(IObserver<long> observer) => new _(_period, observer);
 
-                protected override IDisposable Run(_ sink) => sink.Run(this, _dueTime);
+                protected override void Run(_ sink) => sink.Run(this, _dueTime);
             }
 
             internal sealed class _ : IdentitySink<long>
             {
                 private readonly TimeSpan _period;
 
-                public _(TimeSpan period, IObserver<long> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TimeSpan period, IObserver<long> observer)
+                    : base(observer)
                 {
                     _period = period;
                 }
 
-                public IDisposable Run(Periodic parent, DateTimeOffset dueTime)
+                public void Run(Periodic parent, DateTimeOffset dueTime)
                 {
-                    return parent._scheduler.Schedule(default(object), dueTime, InvokeStart);
+                    SetUpstream(parent._scheduler.Schedule(default(object), dueTime, InvokeStart));
                 }
 
-                public IDisposable Run(Periodic parent, TimeSpan dueTime)
+                public void Run(Periodic parent, TimeSpan dueTime)
                 {
                     //
                     // Optimize for the case of Observable.Interval.
                     //
                     if (dueTime == _period)
-                    {
-                        return parent._scheduler.SchedulePeriodic(0L, _period, (Func<long, long>)Tick);
-                    }
-
-                    return parent._scheduler.Schedule(default(object), dueTime, InvokeStart);
+                        SetUpstream(parent._scheduler.SchedulePeriodic(0L, _period, (Func<long, long>)Tick));
+                    else
+                        SetUpstream(parent._scheduler.Schedule(default(object), dueTime, InvokeStart));
                 }
 
                 //

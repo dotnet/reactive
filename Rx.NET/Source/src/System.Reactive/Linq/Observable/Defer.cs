@@ -15,9 +15,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _observableFactory = observableFactory;
         }
 
-        protected override _ CreateSink(IObserver<TValue> observer, IDisposable cancel) => new _(_observableFactory, observer, cancel);
+        protected override _ CreateSink(IObserver<TValue> observer) => new _(_observableFactory, observer);
 
-        protected override IDisposable Run(_ sink) =>sink.Run();
+        protected override void Run(_ sink) => sink.Run();
 
         public IObservable<TValue> Eval() => _observableFactory();
 
@@ -25,13 +25,13 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Func<IObservable<TValue>> _observableFactory;
 
-            public _(Func<IObservable<TValue>> observableFactory, IObserver<TValue> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<IObservable<TValue>> observableFactory, IObserver<TValue> observer)
+                : base(observer)
             {
                 _observableFactory = observableFactory;
             }
 
-            public IDisposable Run()
+            public void Run()
             {
                 var result = default(IObservable<TValue>);
                 try
@@ -41,10 +41,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     ForwardOnError(exception);
-                    return Disposable.Empty;
+
+                    return;
                 }
 
-                return result.SubscribeSafe(this);
+                SetUpstream(result.SubscribeSafe(this));
             }
         }
     }

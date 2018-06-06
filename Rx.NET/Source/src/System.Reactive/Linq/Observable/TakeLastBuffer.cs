@@ -20,17 +20,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _count = count;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(_count, observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(_count, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly int _count;
                 private Queue<TSource> _queue;
 
-                public _(int count, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(int count, IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                     _count = count;
                     _queue = new Queue<TSource>();
@@ -68,17 +68,17 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(_duration, observer, cancel);
+            protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(_duration, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : Sink<TSource, IList<TSource>> 
             {
                 private readonly TimeSpan _duration;
                 private Queue<System.Reactive.TimeInterval<TSource>> _queue;
 
-                public _(TimeSpan duration, IObserver<IList<TSource>> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TimeSpan duration, IObserver<IList<TSource>> observer)
+                    : base(observer)
                 {
                     _duration = duration;
                     _queue = new Queue<System.Reactive.TimeInterval<TSource>>();
@@ -86,11 +86,11 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IStopwatch _watch;
 
-                public IDisposable Run(Time parent)
+                public void Run(Time parent)
                 {
                     _watch = parent._scheduler.StartStopwatch();
 
-                    return parent._source.SubscribeSafe(this);
+                    SetUpstream(parent._source.SubscribeSafe(this));
                 }
 
                 public override void OnNext(TSource value)

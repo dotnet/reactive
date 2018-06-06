@@ -20,30 +20,30 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
-                public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TResult value, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _value = value;
                 }
 
-                public IDisposable Run(Forever parent)
+                public void Run(Forever parent)
                 {
                     var longRunning = parent._scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        return longRunning.ScheduleLongRunning(LoopInf);
+                        SetUpstream(longRunning.ScheduleLongRunning(LoopInf));
                     }
                     else
                     {
-                        return parent._scheduler.Schedule(LoopRecInf);
+                        SetUpstream(parent._scheduler.Schedule(LoopRecInf));
                     }
                 }
 
@@ -77,30 +77,30 @@ namespace System.Reactive.Linq.ObservableImpl
                 _repeatCount = repeatCount;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly TResult _value;
 
-                public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(TResult value, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _value = value;
                 }
 
-                public IDisposable Run(Count parent)
+                public void Run(Count parent)
                 {
                     var longRunning = parent._scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        return longRunning.ScheduleLongRunning(parent._repeatCount, Loop);
+                        SetUpstream(longRunning.ScheduleLongRunning(parent._repeatCount, Loop));
                     }
                     else
                     {
-                        return parent._scheduler.Schedule(parent._repeatCount, LoopRec);
+                        SetUpstream(parent._scheduler.Schedule(parent._repeatCount, LoopRec));
                     }
                 }
 

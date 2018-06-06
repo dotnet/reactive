@@ -296,12 +296,17 @@ namespace System.Reactive
 
     internal sealed class ObserveOnObserver<T> : ScheduledObserver<T>
     {
-        private IDisposable _cancel;
+        private IDisposable _run;
 
-        public ObserveOnObserver(IScheduler scheduler, IObserver<T> observer, IDisposable cancel)
+        public ObserveOnObserver(IScheduler scheduler, IObserver<T> observer)
             : base(scheduler, observer)
         {
-            _cancel = cancel;
+
+        }
+
+        public void Run(IObservable<T> source)
+        {
+            Disposable.SetSingle(ref _run, source.SubscribeSafe(this));
         }
 
         protected override void OnNextCore(T value)
@@ -328,7 +333,7 @@ namespace System.Reactive
 
             if (disposing)
             {
-                Interlocked.Exchange(ref _cancel, null)?.Dispose();
+                Disposable.TryDispose(ref _run);
             }
         }
     }
@@ -363,6 +368,8 @@ namespace System.Reactive
         /// </summary>
         IDisposable upstream;
 
+        private IDisposable _run;
+
         /// <summary>
         /// The current task representing a running drain operation.
         /// </summary>
@@ -389,20 +396,24 @@ namespace System.Reactive
         /// </summary>
         bool disposed;
 
-        public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream, IDisposable upstream)
+        public ObserveOnObserverNew(IScheduler scheduler, IObserver<T> downstream)
         {
             this.downstream = downstream;
             this.scheduler = scheduler;
             this.longRunning = scheduler.AsLongRunning();
             this.queue = new ConcurrentQueue<T>();
-            Volatile.Write(ref this.upstream, upstream);
+        }
+
+        public void Run(IObservable<T> source)
+        {
+            Disposable.SetSingle(ref _run, source.SubscribeSafe(this));
         }
 
         public void Dispose()
         {
             Volatile.Write(ref disposed, true);
-            Disposable.TryDispose(ref upstream);
             Disposable.TryDispose(ref task);
+            Disposable.TryDispose(ref _run);
             Clear();
         }
 

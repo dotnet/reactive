@@ -95,39 +95,5 @@ namespace ReactiveTests.Tests
             Assert.False(l3);
             Assert.False(l4);
         }
-
-        public class AsyncLock
-        {
-            object instance;
-
-            public AsyncLock()
-            {
-                instance = typeof(Scheduler).GetTypeInfo().Assembly.GetType("System.Reactive.Concurrency.AsyncLock").GetConstructor(new Type[] { }).Invoke(new object[] { });
-            }
-
-            public void Wait(Action action)
-            {
-                try
-                {
-                    instance.GetType().GetMethod(nameof(AsyncLock.Wait)).Invoke(instance, new object[] { action });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    throw ex.InnerException;
-                }
-            }
-
-            public void Dispose()
-            {
-                try
-                {
-                    instance.GetType().GetMethod(nameof(AsyncLock.Dispose)).Invoke(instance, new object[0]);
-                }
-                catch (TargetInvocationException ex)
-                {
-                    throw ex.InnerException;
-                }
-            }
-        }
     }
 }

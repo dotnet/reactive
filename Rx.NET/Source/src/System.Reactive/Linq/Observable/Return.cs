@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information. 
 
 using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
 
 namespace System.Reactive.Linq.ObservableImpl
 {
@@ -17,23 +18,23 @@ namespace System.Reactive.Linq.ObservableImpl
             _scheduler = scheduler;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_value, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(_value, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_scheduler);
+        protected override void Run(_ sink) => sink.Run(_scheduler);
 
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly TResult _value;
 
-            public _(TResult value, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(TResult value, IObserver<TResult> observer)
+                : base(observer)
             {
                 _value = value;
             }
 
-            public IDisposable Run(IScheduler scheduler)
+            public void Run(IScheduler scheduler)
             {
-                return scheduler.Schedule(Invoke);
+                SetUpstream(scheduler.ScheduleAction(this, @this => @this.Invoke()));
             }
 
             private void Invoke()

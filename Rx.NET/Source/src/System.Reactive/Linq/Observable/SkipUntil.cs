@@ -19,9 +19,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _other = other;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
@@ -31,18 +31,15 @@ namespace System.Reactive.Linq.ObservableImpl
             int _halfSerializer;
             Exception _error;
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource, TOther> parent)
+            public void Run(SkipUntil<TSource, TOther> parent)
             {
                 Disposable.TrySetSingle(ref _otherDisposable, parent._other.Subscribe(new OtherObserver(this)));
-
                 Disposable.TrySetSingle(ref _mainDisposable, parent._source.Subscribe(this));
-
-                return this;
             }
 
             protected override void Dispose(bool disposing)
@@ -70,48 +67,20 @@ namespace System.Reactive.Linq.ObservableImpl
             public override void OnNext(TSource value)
             {
                 if (_forward)
-                {
-                    if (Interlocked.CompareExchange(ref _halfSerializer, 1, 0) == 0)
-                    {
-                        ForwardOnNext(value);
-                        if (Interlocked.Decrement(ref _halfSerializer) != 0)
-                        {
-                            var ex = _error;
-                            _error = SkipUntilTerminalException.Instance;
-                            ForwardOnError(ex);
-                        }
-                    }
-                }
+                    HalfSerializer.ForwardOnNext(this, value, ref _halfSerializer, ref _error);
             }
 
             public override void OnError(Exception ex)
             {
-                if (Interlocked.CompareExchange(ref _error, ex, null) == null)
-                {
-                    if (Interlocked.Increment(ref _halfSerializer) == 1)
-                    {
-                        _error = SkipUntilTerminalException.Instance;
-                        ForwardOnError(ex);
-                    }
-                }
+                HalfSerializer.ForwardOnError(this, ex, ref _halfSerializer, ref _error);
             }
 
             public override void OnCompleted()
             {
                 if (_forward)
-                {
-                    if (Interlocked.CompareExchange(ref _error, SkipUntilTerminalException.Instance, null) == null)
-                    {
-                        if (Interlocked.Increment(ref _halfSerializer) == 1)
-                        {
-                            ForwardOnCompleted();
-                        }
-                    }
-                }
+                    HalfSerializer.ForwardOnCompleted(this, ref _halfSerializer, ref _error);
                 else
-                {
                     DisposeMain();
-                }
             }
 
             void OtherComplete()
@@ -143,7 +112,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 public void OnError(Exception error)
                 {
-                    _parent.OnError(error);
+                    HalfSerializer.ForwardOnError(_parent, error, ref _parent._halfSerializer, ref _parent._error);
                 }
 
                 public void OnNext(TOther value)
@@ -190,29 +159,30 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new SkipUntil<TSource>(_source, startTime, _scheduler);
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TSource>
         {
             private volatile bool _open;
 
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
             }
 
-            public IDisposable Run(SkipUntil<TSource> parent)
+            public void Run(SkipUntil<TSource> parent)
             {
-                var t = parent._scheduler.Schedule(parent._startTime, Tick);
+                var t = parent._scheduler.Schedule(this, parent._startTime, (_, state) => state.Tick());
                 var d = parent._source.SubscribeSafe(this);
-                return StableCompositeDisposable.Create(t, d);
+                SetUpstream(StableCompositeDisposable.Create(t, d));
             }
 
-            private void Tick()
+            private IDisposable Tick()
             {
                 _open = true;
+                return Disposable.Empty;
             }
 
             public override void OnNext(TSource value)

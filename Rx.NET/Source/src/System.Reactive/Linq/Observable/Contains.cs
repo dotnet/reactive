@@ -19,17 +19,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<bool> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<bool> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, bool> 
         {
             private readonly TSource _value;
             private readonly IEqualityComparer<TSource> _comparer;
 
-            public _(Contains<TSource> parent, IObserver<bool> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Contains<TSource> parent, IObserver<bool> observer)
+                : base(observer)
             {
                 _value = parent._value;
                 _comparer = parent._comparer;

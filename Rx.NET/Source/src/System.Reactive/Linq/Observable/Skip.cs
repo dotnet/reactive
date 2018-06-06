@@ -32,16 +32,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 return new Count(_source, _count + count);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_count, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_count, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>
             {
                 private int _remaining;
 
-                public _(int count, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(int count, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _remaining = count;
                 }
@@ -86,29 +86,30 @@ namespace System.Reactive.Linq.ObservableImpl
                     return new Time(_source, duration, _scheduler);
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(this);
+            protected override void Run(_ sink) => sink.Run(this);
 
             internal sealed class _ : IdentitySink<TSource>
             {
                 private volatile bool _open;
 
-                public _(IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> observer)
+                    : base(observer)
                 {
                 }
 
-                public IDisposable Run(Time parent)
+                public void Run(Time parent)
                 {
-                    var t = parent._scheduler.Schedule(parent._duration, Tick);
+                    var t = parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick());
                     var d = parent._source.SubscribeSafe(this);
-                    return StableCompositeDisposable.Create(t, d);
+                    SetUpstream(StableCompositeDisposable.Create(t, d));
                 }
 
-                private void Tick()
+                private IDisposable Tick()
                 {
                     _open = true;
+                    return Disposable.Empty;
                 }
 
                 public override void OnNext(TSource value)
