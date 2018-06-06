@@ -1,0 +1,42 @@
+<Project>  
+  
+  <PropertyGroup>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <Copyright>Copyright (c) .NET Foundation and Contributors.</Copyright>
+    <MinClientVersion>2.12</MinClientVersion>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Authors>.NET Foundation and Contributors</Authors>
+    <PackageIconUrl>http://go.microsoft.com/fwlink/?LinkId=261274</PackageIconUrl>
+    <PackageProjectUrl>http://go.microsoft.com/fwlink/?LinkId=261273</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Reactive-Extensions/Rx.NET/master/Ix.NET/Source/license.txt</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>    
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)ReactiveX.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>$(NoWarn);1701;1702;CS1591</NoWarn>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false'">
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" /> 
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <NerdbankGitVersioningVersion>2.0.41</NerdbankGitVersioningVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- https://github.com/NuGet/Home/issues/4337 -->
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
+    <Import Project="$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets"
+            Condition="Exists('$(NuGetPackageRoot)\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets')" />
+  </ImportGroup>
+  <Target Name="FixUpVersion"
+      BeforeTargets="_GenerateRestoreProjectSpec"
+      DependsOnTargets="GetBuildVersion"
+      Condition=" '$(NerdbankGitVersioningTasksPath)' != '' " />
+</Project>

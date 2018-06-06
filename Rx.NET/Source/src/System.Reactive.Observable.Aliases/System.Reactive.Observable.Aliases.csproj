@@ -1,0 +1,15 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net46;uap10.0</TargetFrameworks>    
+    <Title>Reactive Extensions - Aliases</Title>    
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>    
+    <PackageTags>Rx;Reactive;Extensions;Observable;LINQ;Events</PackageTags>
+    <Description>Reactive Extensions (Rx) provides the aliases Map, FlatMap, and Filter</Description>    
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+  </ItemGroup>  
+  <ItemGroup>    
+    <ProjectReference Include="..\System.Reactive\System.Reactive.csproj" />
+  </ItemGroup>  
+</Project>

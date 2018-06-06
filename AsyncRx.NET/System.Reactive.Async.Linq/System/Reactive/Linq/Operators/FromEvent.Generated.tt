@@ -1,0 +1,104 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the Apache 2.0 License.
+// See the LICENSE file in the project root for more information. 
+
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
+
+namespace System.Reactive.Linq
+{
+    partial class AsyncObservable
+    {
+<#
+for (var i = 2; i <= 16; i++)
+{
+    var tuple = "(" + string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j + " arg" + j)) + ")";
+    var genArgs = string.Join(", ", Enumerable.Range(1, i).Select(j => "T" + j));
+    var pars = string.Join(", ", Enumerable.Range(1, i).Select(j => "arg" + j));
+#>
+        public static IAsyncObservable<<#=tuple#>> FromEvent<<#=genArgs#>>(Action<Action<<#=genArgs#>>> addHandler, Action<Action<<#=genArgs#>>> removeHandler)
+        {
+            if (addHandler == null)
+                throw new ArgumentNullException(nameof(addHandler));
+            if (removeHandler == null)
+                throw new ArgumentNullException(nameof(removeHandler));
+
+            return FromEventCore<Action<<#=genArgs#>>, <#=genArgs#>>(h => h, addHandler, removeHandler, GetSchedulerForCurrentContext());
+        }
+
+        public static IAsyncObservable<<#=tuple#>> FromEvent<<#=genArgs#>>(Action<Action<<#=genArgs#>>> addHandler, Action<Action<<#=genArgs#>>> removeHandler, IAsyncScheduler scheduler)
+        {
+            if (addHandler == null)
+                throw new ArgumentNullException(nameof(addHandler));
+            if (removeHandler == null)
+                throw new ArgumentNullException(nameof(removeHandler));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return FromEventCore<Action<<#=genArgs#>>, <#=genArgs#>>(h => h, addHandler, removeHandler, scheduler);
+        }
+
+        public static IAsyncObservable<<#=tuple#>> FromEvent<TDelegate, <#=genArgs#>>(Func<Action<<#=genArgs#>>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler)
+        {
+            if (conversion == null)
+                throw new ArgumentNullException(nameof(conversion));
+            if (addHandler == null)
+                throw new ArgumentNullException(nameof(addHandler));
+            if (removeHandler == null)
+                throw new ArgumentNullException(nameof(removeHandler));
+
+            return FromEventCore<TDelegate, <#=genArgs#>>(conversion, addHandler, removeHandler, GetSchedulerForCurrentContext());
+        }
+
+        public static IAsyncObservable<<#=tuple#>> FromEvent<TDelegate, <#=genArgs#>>(Func<Action<<#=genArgs#>>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IAsyncScheduler scheduler)
+        {
+            if (conversion == null)
+                throw new ArgumentNullException(nameof(conversion));
+            if (addHandler == null)
+                throw new ArgumentNullException(nameof(addHandler));
+            if (removeHandler == null)
+                throw new ArgumentNullException(nameof(removeHandler));
+            if (scheduler == null)
+                throw new ArgumentNullException(nameof(scheduler));
+
+            return FromEventCore<TDelegate, <#=genArgs#>>(conversion, addHandler, removeHandler, scheduler);
+        }
+
+        private static IAsyncObservable<<#=tuple#>> FromEventCore<TDelegate, <#=genArgs#>>(Func<Action<<#=genArgs#>>, TDelegate> conversion, Action<TDelegate> addHandler, Action<TDelegate> removeHandler, IAsyncScheduler scheduler)
+        {
+            return
+                SynchronizeEvents(
+                    Create<<#=tuple#>>(observer =>
+                    {
+                        var handler = new Action<<#=genArgs#>>((<#=pars#>) =>
+                        {
+                            observer.OnNextAsync((<#=pars#>)); // REVIEW: Fire-and-forget can lead to out of order processing, and observers may reject these calls as "busy".
+                        });
+
+                        var converted = conversion(handler);
+
+                        addHandler(converted);
+
+                        return Task.FromResult(AsyncDisposable.Create(() =>
+                        {
+                            removeHandler(converted);
+
+                            return Task.CompletedTask;
+                        }));
+                    }),
+                    scheduler
+                );
+        }
+
+<#
+}
+#>
+    }
+}

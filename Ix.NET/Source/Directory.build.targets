@@ -1,0 +1,21 @@
+<Project>  
+  <!-- This has to be set in targets as the default props will overwrite -->
+  <PropertyGroup>
+    <DebugType Condition="'$(IsTestProject)' != 'true'">embedded</DebugType>
+  </PropertyGroup>
+  
+  <!-- This props all need to be set in targets as they depend on the values set earlier -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <DefineConstants>$(DefineConstants);NO_ARRAY_EMPTY;NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;SIGNED</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+    <DefineConstants>$(DefineConstants);NO_CODE_COVERAGE_ATTRIBUTE;CRIPPLED_REFLECTION;PLIB;SIGNED</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+    <DefineConstants>$(DefineConstants);HAS_APTCA;NO_ARRAY_EMPTY;DESKTOPCLR;DESKTOPCLR45;SIGNED</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+    <DefineConstants>$(DefineConstants);HAS_APTCA;DESKTOPCLR;DESKTOPCLR46;SIGNED</DefineConstants>
+  </PropertyGroup>
+  
+</Project>

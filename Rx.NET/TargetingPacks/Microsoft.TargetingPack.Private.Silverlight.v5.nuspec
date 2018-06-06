@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata minClientVersion="3.0">
+        <id>Microsoft.TargetingPack.Private.Silverlight.v5</id>
+        <version>1.0.2</version>
+        <title>Microsoft.TargetingPack.Private.Silverlight.v5</title>
+        <authors>.NET Foundation and Contributors</authors>
+        <owners>microsoft,dotnetframework</owners>
+        <licenseUrl>http://go.microsoft.com/fwlink/?LinkId=329770</licenseUrl>
+        <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288859</iconUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Contains a private targeting pack which contains only SL5 Reference Assemblies and is used for producing platform specific libraries in .NET Core only.</description>
+        <copyright>© Microsoft Corporation.  All rights reserved.</copyright>
+    </metadata>
+    <files>
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\Microsoft.VisualBasic.dll" target="lib\sl50\Microsoft.VisualBasic.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\Microsoft.Xna.Framework.dll" target="lib\sl50\Microsoft.Xna.Framework.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\Microsoft.Xna.Framework.Graphics.dll" target="lib\sl50\Microsoft.Xna.Framework.Graphics.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\Microsoft.Xna.Framework.Graphics.Shaders.dll" target="lib\sl50\Microsoft.Xna.Framework.Graphics.Shaders.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Core.dll" target="lib\sl50\System.Core.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\system.dll" target="lib\sl50\system.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Net.dll" target="lib\sl50\System.Net.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Runtime.Serialization.dll" target="lib\sl50\System.Runtime.Serialization.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.ServiceModel.dll" target="lib\sl50\System.ServiceModel.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.ServiceModel.Web.dll" target="lib\sl50\System.ServiceModel.Web.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Windows.Browser.dll" target="lib\sl50\System.Windows.Browser.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Windows.dll" target="lib\sl50\System.Windows.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Windows.Xna.dll" target="lib\sl50\System.Windows.Xna.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\System.Xml.dll" target="lib\sl50\System.Xml.dll" />
+        <file src="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0\mscorlib.dll" target="lib\sl50\mscorlib.dll" />
+    </files>
+</package>

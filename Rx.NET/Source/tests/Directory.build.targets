@@ -1,0 +1,7 @@
+<Project>  
+  <Import Project="..\Directory.build.targets" />
+  <PropertyGroup>
+    <DebugType Condition="'$(TargetFramework)' != 'net46'">portable</DebugType>
+    <DebugType Condition="'$(TargetFramework)' == 'net46'">full</DebugType>
+  </PropertyGroup>
+</Project>

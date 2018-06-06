@@ -1,0 +1,6 @@
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.EventLoopScheduler))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.NewThreadScheduler))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.TaskPoolScheduler))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.Concurrency.ThreadPoolScheduler))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.CurrentPlatformEnlightenmentProvider))]
+[assembly:System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Reactive.PlatformServices.EnlightenmentProvider))]
