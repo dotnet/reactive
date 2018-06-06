@@ -76,7 +76,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             Exception error;
 
-            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream, null)
+            internal MainObserver(IObserver<T> downstream, IObservable<T> source, IObserver<Exception> errorSignal) : base(downstream)
             {
                 this.source = source;
                 this.errorSignal = errorSignal;
