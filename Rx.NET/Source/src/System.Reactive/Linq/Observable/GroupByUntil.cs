@@ -29,9 +29,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IGroupedObservable<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_source);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, IGroupedObservable<TKey, TElement>> 
         {
@@ -47,8 +47,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private ISubject<TElement> _null;
 
-            public _(GroupByUntil<TSource, TKey, TElement, TDuration> parent, IObserver<IGroupedObservable<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(GroupByUntil<TSource, TKey, TElement, TDuration> parent, IObserver<IGroupedObservable<TKey, TElement>> observer)
+                : base(observer)
             {
                 _refCountDisposable = new RefCountDisposable(_groupDisposable);
                 _map = new Map<TKey, ISubject<TElement>>(parent._capacity, parent._comparer);
@@ -58,11 +58,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 _durationSelector = parent._durationSelector;
             }
 
-            public IDisposable Run(IObservable<TSource> source)
+            public void Run(IObservable<TSource> source)
             {
                 _groupDisposable.Add(source.SubscribeSafe(this));
 
-                return _refCountDisposable;
+                SetUpstream(_refCountDisposable);
             }
 
             private ISubject<TElement> NewSubject()

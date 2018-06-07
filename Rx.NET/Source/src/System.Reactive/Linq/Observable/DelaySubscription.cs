@@ -27,9 +27,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => _scheduler.Schedule(sink, _dueTime, Subscribe);
+            protected override void Run(_ sink) => sink.Run(_source, _scheduler, _dueTime);
         }
 
         internal sealed class Absolute : DelaySubscription<TSource>
@@ -42,21 +42,26 @@ namespace System.Reactive.Linq.ObservableImpl
                 _dueTime = dueTime;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(observer);
 
-            protected override IDisposable Run(_ sink) => _scheduler.Schedule(sink, _dueTime, Subscribe);
-        }
-
-        private IDisposable Subscribe(IScheduler _, _ sink)
-        {
-            return _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source, _scheduler, _dueTime);
         }
 
         internal sealed class _ : IdentitySink<TSource>
         {
-            public _(IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<TSource> observer)
+                : base(observer)
             {
+            }
+
+            public void Run(IObservable<TSource> source, IScheduler scheduler, DateTimeOffset dueTime)
+            {
+                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
+            }
+
+            public void Run(IObservable<TSource> source, IScheduler scheduler, TimeSpan dueTime)
+            {
+                SetUpstream(scheduler.Schedule((@this: this, source), dueTime, (self, tuple) => tuple.source.SubscribeSafe(tuple.@this)));
             }
         }
     }

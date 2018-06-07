@@ -17,16 +17,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onNext = onNext;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_onNext, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_onNext, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly Action<TSource> _onNext;
 
-                public _(Action<TSource> onNext, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Action<TSource> onNext, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _onNext = onNext;
                 }
@@ -59,16 +59,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 _observer = observer;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_observer, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_observer, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly IObserver<TSource> _doObserver;
 
-                public _(IObserver<TSource> doObserver, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(IObserver<TSource> doObserver, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _doObserver = doObserver;
                 }
@@ -135,9 +135,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _onCompleted = onCompleted;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>
             {
@@ -145,8 +145,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Actions _parent;
 
-                public _(Actions parent, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Actions parent, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }

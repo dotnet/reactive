@@ -24,9 +24,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(this);
+        protected override void Run(_ sink) => sink.Run(this);
 
         internal sealed class _ : IdentitySink<TResult>
         {
@@ -39,8 +39,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TRight, IObservable<TRightDuration>> _rightDurationSelector;
             private readonly Func<TLeft, TRight, TResult> _resultSelector;
 
-            public _(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent, IObserver<TResult> observer)
+                : base(observer)
             {
                 _leftDurationSelector = parent._leftDurationSelector;
                 _rightDurationSelector = parent._rightDurationSelector;
@@ -53,7 +53,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _rightDone;
             private int _rightID;
 
-            public IDisposable Run(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
+            public void Run(Join<TLeft, TRight, TLeftDuration, TRightDuration, TResult> parent)
             {
                 var leftSubscription = new SingleAssignmentDisposable();
                 _group.Add(leftSubscription);
@@ -68,7 +68,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 leftSubscription.Disposable = parent._left.SubscribeSafe(new LeftObserver(this, leftSubscription));
                 rightSubscription.Disposable = parent._right.SubscribeSafe(new RightObserver(this, rightSubscription));
 
-                return _group;
+                SetUpstream(_group);
             }
 
             private sealed class LeftObserver : IObserver<TLeft>

@@ -26,23 +26,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
+            protected override void Run(_ sink) => sink.Run(_first, _second);
 
             internal sealed class _ : IdentitySink<TResult>
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _resultSelector = resultSelector;
                 }
 
                 private object _gate;
 
-                public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
+                public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
                 {
                     _gate = new object();
 
@@ -58,7 +58,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     fstSubscription.Disposable = first.SubscribeSafe(fstO);
                     sndSubscription.Disposable = second.SubscribeSafe(sndO);
 
-                    return StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO);
+                    SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO));
                 }
 
                 private sealed class FirstObserver : IObserver<TFirst>, IDisposable
@@ -246,23 +246,23 @@ namespace System.Reactive.Linq.ObservableImpl
                 _resultSelector = resultSelector;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
+            protected override void Run(_ sink) => sink.Run(_first, _second);
 
             internal sealed class _ : Sink<TFirst, TResult> 
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _resultSelector = resultSelector;
                 }
 
                 private IEnumerator<TSecond> _rightEnumerator;
 
-                public IDisposable Run(IObservable<TFirst> first, IEnumerable<TSecond> second)
+                public void Run(IObservable<TFirst> first, IEnumerable<TSecond> second)
                 {
                     //
                     // Notice the evaluation order of obtaining the enumerator and subscribing to the
@@ -278,12 +278,13 @@ namespace System.Reactive.Linq.ObservableImpl
                     catch (Exception exception)
                     {
                         ForwardOnError(exception);
-                        return Disposable.Empty;
+
+                        return;
                     }
 
                     var leftSubscription = first.SubscribeSafe(this);
 
-                    return StableCompositeDisposable.Create(leftSubscription, _rightEnumerator);
+                    SetUpstream(StableCompositeDisposable.Create(leftSubscription, _rightEnumerator));
                 }
 
                 public override void OnNext(TFirst value)
@@ -354,8 +355,8 @@ namespace System.Reactive.Linq.ObservableImpl
         private readonly ICollection[] _queues;
         private readonly bool[] _isDone;
 
-        public ZipSink(int arity, IObserver<TResult> observer, IDisposable cancel)
-            : base(observer, cancel)
+        public ZipSink(int arity, IObserver<TResult> observer)
+            : base(observer)
         {
             _gate = new object();
 
@@ -504,16 +505,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _sources = sources;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run();
+        protected override void Run(_ sink) => sink.Run();
 
         internal sealed class _ : IdentitySink<IList<TSource>>
         {
             private readonly Zip<TSource> _parent;
 
-            public _(Zip<TSource> parent, IObserver<IList<TSource>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Zip<TSource> parent, IObserver<IList<TSource>> observer)
+                : base(observer)
             {
                 _parent = parent;
             }
@@ -523,7 +524,7 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
 
-            public IDisposable Run()
+            public void Run()
             {
                 var srcs = _parent._sources.ToArray();
 
@@ -550,7 +551,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     d.Disposable = srcs[j].SubscribeSafe(o);
                 }
 
-                return new CompositeDisposable(_subscriptions) { Disposable.Create(() => { foreach (var q in _queues) q.Clear(); }) };
+                SetUpstream(new CompositeDisposable(_subscriptions) { Disposable.Create(() => { foreach (var q in _queues) q.Clear(); }) });
             }
 
             private void OnNext(int index, TSource value)

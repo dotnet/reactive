@@ -11,8 +11,8 @@ namespace System.Reactive
 {
     internal abstract class TailRecursiveSink<TSource> : IdentitySink<TSource>
     {
-        public TailRecursiveSink(IObserver<TSource> observer, IDisposable cancel)
-            : base(observer, cancel)
+        public TailRecursiveSink(IObserver<TSource> observer)
+            : base(observer)
         {
         }
 
@@ -24,17 +24,17 @@ namespace System.Reactive
 
         Stack<IEnumerator<IObservable<TSource>>> stack;
 
-        public IDisposable Run(IEnumerable<IObservable<TSource>> sources)
+        public void Run(IEnumerable<IObservable<TSource>> sources)
         {
             if (!TryGetEnumerator(sources, out var current))
-                return Disposable.Empty;
+                return;
 
             stack = new Stack<IEnumerator<IObservable<TSource>>>();
             stack.Push(current);
 
             Drain();
 
-            return new RecursiveSinkDisposable(this);
+            SetUpstream(new RecursiveSinkDisposable(this));
         }
 
         sealed class RecursiveSinkDisposable : IDisposable

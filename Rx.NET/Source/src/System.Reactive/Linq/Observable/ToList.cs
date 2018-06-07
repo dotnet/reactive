@@ -15,16 +15,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<IList<TSource>> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<IList<TSource>> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, IList<TSource>> 
         {
             private readonly List<TSource> _list;
 
-            public _(IObserver<IList<TSource>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<IList<TSource>> observer)
+                : base(observer)
             {
                 _list = new List<TSource>();
             }

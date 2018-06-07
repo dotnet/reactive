@@ -17,16 +17,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => default(TSource) == null ? (_)new Null(_comparer, observer, cancel) : new NonNull(_comparer, observer, cancel);
+        protected override _ CreateSink(IObserver<TSource> observer) => default(TSource) == null ? (_)new Null(_comparer, observer) : new NonNull(_comparer, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal abstract class _ : IdentitySink<TSource>
         {
             protected readonly IComparer<TSource> _comparer;
 
-            public _(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(observer)
             {
                 _comparer = comparer;
             }
@@ -37,8 +37,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool _hasValue;
             private TSource _lastValue;
 
-            public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(comparer, observer, cancel)
+            public NonNull(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(comparer, observer)
             {
                 _hasValue = false;
                 _lastValue = default(TSource);
@@ -90,8 +90,8 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private TSource _lastValue;
 
-            public Null(IComparer<TSource> comparer, IObserver<TSource> observer, IDisposable cancel)
-                : base(comparer, observer, cancel)
+            public Null(IComparer<TSource> comparer, IObserver<TSource> observer)
+                : base(comparer, observer)
             {
                 _lastValue = default(TSource);
             }
@@ -148,17 +148,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<double>
         {
             private bool _hasValue;
             private double _lastValue;
 
-            public _(IObserver<double> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double> observer)
+                : base(observer)
             {
                 _hasValue = false;
                 _lastValue = default(double);
@@ -204,17 +204,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<float>
         {
             private bool _hasValue;
             private float _lastValue;
 
-            public _(IObserver<float> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float> observer)
+                : base(observer)
             {
                 _hasValue = false;
                 _lastValue = default(float);
@@ -260,17 +260,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<decimal>
         {
             private bool _hasValue;
             private decimal _lastValue;
 
-            public _(IObserver<decimal> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal> observer)
+                : base(observer)
             {
                 _hasValue = false;
                 _lastValue = default(decimal);
@@ -316,17 +316,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<int>
         {
             private bool _hasValue;
             private int _lastValue;
 
-            public _(IObserver<int> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int> observer)
+                : base(observer)
             {
                 _hasValue = false;
                 _lastValue = default(int);
@@ -372,17 +372,17 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<long>
         {
             private bool _hasValue;
             private long _lastValue;
 
-            public _(IObserver<long> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long> observer)
+                : base(observer)
             {
                 _hasValue = false;
                 _lastValue = default(long);
@@ -428,16 +428,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<double?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<double?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<double?>
         {
             private double? _lastValue;
 
-            public _(IObserver<double?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<double?> observer)
+                : base(observer)
             {
                 _lastValue = default(double?);
             }
@@ -477,16 +477,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<float?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<float?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<float?>
         {
             private float? _lastValue;
 
-            public _(IObserver<float?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<float?> observer)
+                : base(observer)
             {
                 _lastValue = default(float?);
             }
@@ -526,16 +526,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<decimal?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<decimal?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<decimal?>
         {
             private decimal? _lastValue;
 
-            public _(IObserver<decimal?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<decimal?> observer)
+                : base(observer)
             {
                 _lastValue = default(decimal?);
             }
@@ -575,16 +575,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<int?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<int?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<int?>
         {
             private int? _lastValue;
 
-            public _(IObserver<int?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<int?> observer)
+                : base(observer)
             {
                 _lastValue = default(int?);
             }
@@ -624,16 +624,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _source = source;
         }
 
-        protected override _ CreateSink(IObserver<long?> observer, IDisposable cancel) => new _(observer, cancel);
+        protected override _ CreateSink(IObserver<long?> observer) => new _(observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : IdentitySink<long?>
         {
             private long? _lastValue;
 
-            public _(IObserver<long?> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(IObserver<long?> observer)
+                : base(observer)
             {
                 _lastValue = default(long?);
             }
@@ -664,3 +664,4 @@ namespace System.Reactive.Linq.ObservableImpl
         }
     }
 }
+
