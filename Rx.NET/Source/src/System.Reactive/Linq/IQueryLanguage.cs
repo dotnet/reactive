@@ -580,6 +580,8 @@ namespace System.Reactive.Linq
         IObservable<TSource> Finally<TSource>(IObservable<TSource> source, Action finallyAction);
         IObservable<TSource> IgnoreElements<TSource>(IObservable<TSource> source);
         IObservable<Notification<TSource>> Materialize<TSource>(IObservable<TSource> source);
+        IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value);
+        IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source);
         IObservable<TSource> Repeat<TSource>(IObservable<TSource> source, int repeatCount);
         IObservable<TSource> Retry<TSource>(IObservable<TSource> source);

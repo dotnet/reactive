@@ -173,6 +173,25 @@ namespace System.Reactive.Linq
 
         #endregion
 
+        #region - Prepend -
+
+        public virtual IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value)
+        {
+            return Prepend_<TSource>(source, value, SchedulerDefaults.ConstantTimeOperations);
+        }
+
+        public virtual IObservable<TSource> Prepend<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            return Prepend_<TSource>(source, value, scheduler);
+        }
+
+        private static IObservable<TSource> Prepend_<TSource>(IObservable<TSource> source, TSource value, IScheduler scheduler)
+        {
+            return StartWith_(source, scheduler, new[] { value });
+        }
+
+        #endregion
+
         #region - Repeat -
 
         public virtual IObservable<TSource> Repeat<TSource>(IObservable<TSource> source)
