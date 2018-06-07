@@ -558,7 +558,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _count = 1;
 
-                    SetUpstream(source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -715,7 +715,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _count = 1;
 
-                    SetUpstream(source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -1513,7 +1513,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _count = 1;
 
-                    SetUpstream(source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 protected override void Dispose(bool disposing)
@@ -1643,7 +1643,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _count = 1;
 
-                    SetUpstream(source.SubscribeSafe(this));
+                    base.Run(source);
                 }
 
                 protected override void Dispose(bool disposing)

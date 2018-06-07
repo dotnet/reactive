@@ -297,7 +297,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _list = new List<TSource>();
 
                     Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick));
-                    SetUpstream(parent._source.SubscribeSafe(this));
+                    base.Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
