@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _isStopped;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
@@ -212,7 +212,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _isStopped;
                 private int _index;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
@@ -554,11 +554,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private volatile int _count;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    SetUpstream(StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel));
+                    SetUpstream(source.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -702,11 +711,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 private volatile int _count;
                 private int _index;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    SetUpstream(StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel));
+                    SetUpstream(source.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -853,7 +871,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private bool _isStopped;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
@@ -1088,7 +1106,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _isStopped;
                 private int _index;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _isStopped = false;
 
@@ -1491,11 +1509,20 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private volatile int _count;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    SetUpstream(StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel));
+                    SetUpstream(source.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)
@@ -1612,11 +1639,20 @@ namespace System.Reactive.Linq.ObservableImpl
                 private volatile int _count;
                 private int _index;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _count = 1;
 
-                    SetUpstream(StableCompositeDisposable.Create(source.SubscribeSafe(this), _cancel));
+                    SetUpstream(source.SubscribeSafe(this));
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _cancel.Dispose();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)

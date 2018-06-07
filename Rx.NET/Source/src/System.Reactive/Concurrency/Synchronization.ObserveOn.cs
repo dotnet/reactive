@@ -72,7 +72,7 @@ namespace System.Reactive.Concurrency
                     _context = context;
                 }
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     //
                     // The interactions with OperationStarted/OperationCompleted below allow
@@ -83,10 +83,16 @@ namespace System.Reactive.Concurrency
                     //
                     _context.OperationStarted();
 
-                    var d = source.SubscribeSafe(this);
-                    var c = Disposable.Create(_context.OperationCompleted);
+                    SetUpstream(source.SubscribeSafe(this));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(d, c));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        _context.OperationCompleted();
+                    }
+                    base.Dispose(disposing);
                 }
 
                 public override void OnNext(TSource value)

@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private int _n;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -392,7 +392,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private RefCountDisposable _refCountDisposable;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _n = 0;
 
@@ -518,7 +518,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private ISubject<TSource> _window;
                 private RefCountDisposable _refCountDisposable;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _window = new Subject<TSource>();
 

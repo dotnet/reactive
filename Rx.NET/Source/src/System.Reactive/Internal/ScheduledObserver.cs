@@ -363,11 +363,6 @@ namespace System.Reactive
 
         readonly ConcurrentQueue<T> queue;
 
-        /// <summary>
-        /// The disposable of the upstream source.
-        /// </summary>
-        IDisposable upstream;
-
         private IDisposable _run;
 
         /// <summary>

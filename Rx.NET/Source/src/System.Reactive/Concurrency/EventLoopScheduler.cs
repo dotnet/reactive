@@ -196,15 +196,17 @@ namespace System.Reactive.Concurrency
 
             var state1 = state;
 
-            var d = new MultipleAssignmentDisposable();
+            var td = new TernaryDisposable();
+
             var gate = new AsyncLock();
+            td.Extra = gate;
 
             var tick = default(Func<IScheduler, object, IDisposable>);
             tick = (self_, _) =>
             {
                 next += period;
 
-                d.Disposable = self_.Schedule(null, next - _stopwatch.Elapsed, tick);
+                td.Next = self_.Schedule(null, next - _stopwatch.Elapsed, tick);
 
                 gate.Wait(() =>
                 {
@@ -214,9 +216,28 @@ namespace System.Reactive.Concurrency
                 return Disposable.Empty;
             };
 
-            d.Disposable = Schedule(null, next - _stopwatch.Elapsed, tick);
+            td.First = Schedule(null, next - _stopwatch.Elapsed, tick);
 
-            return StableCompositeDisposable.Create(d, gate);
+            return td;
+        }
+
+        private sealed class TernaryDisposable : IDisposable
+        {
+            private IDisposable _task;
+            private IDisposable _extra;
+
+            // If Next was called before this assignment is executed, it won't overwrite
+            // a more fresh IDisposable task
+            public IDisposable First { set { Disposable.TrySetSingle(ref _task, value); } }
+            // It is fine to overwrite the first or previous IDisposable task
+            public IDisposable Next { set { Disposable.TrySetMultiple(ref _task, value); } }
+            public IDisposable Extra { set { Disposable.SetSingle(ref _extra, value); } }
+
+            public void Dispose()
+            {
+                Disposable.TryDispose(ref _task);
+                Disposable.TryDispose(ref _extra);
+            }
         }
 
         /// <summary>

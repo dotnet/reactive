@@ -54,7 +54,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 }
             }
 
-            public void Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 var sourceSubscription = new SingleAssignmentDisposable();
                 _refCountDisposable = new RefCountDisposable(sourceSubscription);

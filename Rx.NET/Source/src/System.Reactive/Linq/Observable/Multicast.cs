@@ -26,6 +26,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
         internal sealed class _ : IdentitySink<TResult>
         {
+            private IDisposable _connection;
+
             public _(IObserver<TResult> observer)
                 : base(observer)
             {
@@ -37,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var connectable = default(IConnectableObservable<TIntermediate>);
                 try
                 {
-                    var subject =parent._subjectSelector();
+                    var subject = parent._subjectSelector();
                     connectable = new ConnectableObservable<TSource, TIntermediate>(parent._source, subject);
                     observable = parent._selector(connectable);
                 }
@@ -47,10 +49,17 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                var subscription = observable.SubscribeSafe(this);
-                var connection = connectable.Connect();
+                SetUpstream(observable.SubscribeSafe(this));
+                Disposable.SetSingle(ref _connection, connectable.Connect());
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(subscription, connection));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _connection);
+                }
+                base.Dispose(disposing);
             }
         }
     }

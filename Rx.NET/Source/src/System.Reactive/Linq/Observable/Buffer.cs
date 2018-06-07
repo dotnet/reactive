@@ -124,7 +124,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly object _gate = new object();
                 private readonly Queue<List<TSource>> _q = new Queue<List<TSource>>();
-                private readonly SerialDisposable _timerD = new SerialDisposable();
+                
+                private IDisposable _timerSerial;
 
                 public _(TimeSliding parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -146,9 +147,16 @@ namespace System.Reactive.Linq.ObservableImpl
                     CreateWindow();
                     CreateTimer();
 
-                    var subscription = parent._source.SubscribeSafe(this);
+                    SetUpstream(parent._source.SubscribeSafe(this));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(_timerD, subscription));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _timerSerial);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateWindow()
@@ -160,7 +168,8 @@ namespace System.Reactive.Linq.ObservableImpl
                 private void CreateTimer()
                 {
                     var m = new SingleAssignmentDisposable();
-                    _timerD.Disposable = m;
+
+                    Disposable.TrySetSerial(ref _timerSerial, m);
 
                     var isSpan = false;
                     var isShift = false;
@@ -281,14 +290,23 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private List<TSource> _list;
 
+                private IDisposable _periodicDisposable;
+
                 public void Run(TimeHopping parent)
                 {
                     _list = new List<TSource>();
 
-                    var d = parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick);
-                    var s = parent._source.SubscribeSafe(this);
+                    Disposable.SetSingle(ref _periodicDisposable, parent._scheduler.SchedulePeriodic(parent._timeSpan, Tick));
+                    SetUpstream(parent._source.SubscribeSafe(this));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(d, s));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _periodicDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void Tick()
@@ -353,7 +371,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly Ferry _parent;
 
                 private readonly object _gate = new object();
-                private readonly SerialDisposable _timerD = new SerialDisposable();
+                private IDisposable _timerSerial;
 
                 public _(Ferry parent, IObserver<IList<TSource>> observer)
                     : base(observer)
@@ -373,15 +391,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
                     CreateTimer(0);
 
-                    var subscription = _parent._source.SubscribeSafe(this);
+                    SetUpstream(_parent._source.SubscribeSafe(this));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(_timerD, subscription));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _timerSerial);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateTimer(int id)
                 {
                     var m = new SingleAssignmentDisposable();
-                    _timerD.Disposable = m;
+                    Disposable.TrySetSerial(ref _timerSerial, m);
 
                     m.Disposable = _parent._scheduler.Schedule(id, _parent._timeSpan, Tick);
                 }
@@ -477,7 +502,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly object _gate = new object();
                 private readonly AsyncLock _bufferGate = new AsyncLock();
-                private readonly SerialDisposable _bufferClosingSubscription = new SerialDisposable();
+                private IDisposable _bufferClosingSerialDisposable;
 
                 private readonly Func<IObservable<TBufferClosing>> _bufferClosingSelector;
 
@@ -489,15 +514,22 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IList<TSource> _buffer;
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     _buffer = new List<TSource>();
 
-                    var groupDisposable = StableCompositeDisposable.Create(_bufferClosingSubscription, source.SubscribeSafe(this));
+                    SetUpstream(source.SubscribeSafe(this));
 
                     _bufferGate.Wait(CreateBufferClose);
+                }
 
-                    SetUpstream(groupDisposable);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _bufferClosingSerialDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private void CreateBufferClose()
@@ -517,7 +549,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     var closingSubscription = new SingleAssignmentDisposable();
-                    _bufferClosingSubscription.Disposable = closingSubscription;
+                    Disposable.TrySetSerial(ref _bufferClosingSerialDisposable, closingSubscription);
                     closingSubscription.Disposable = bufferClose.SubscribeSafe(new BufferClosingObserver(this, closingSubscription));
                 }
 
@@ -616,14 +648,23 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IList<TSource> _buffer;
 
+                private IDisposable _boundariesDisposable;
+
                 public void Run(Boundaries parent)
                 {
                     _buffer = new List<TSource>();
 
-                    var sourceSubscription = parent._source.SubscribeSafe(this);
-                    var boundariesSubscription = parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this));
+                    SetUpstream(parent._source.SubscribeSafe(this));
+                    Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(sourceSubscription, boundariesSubscription));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _boundariesDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private sealed class BufferClosingObserver : IObserver<TBufferClosing>
