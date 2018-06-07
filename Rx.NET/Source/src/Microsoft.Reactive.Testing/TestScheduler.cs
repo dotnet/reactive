@@ -72,7 +72,11 @@ namespace Microsoft.Reactive.Testing
         /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
         /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
-        public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long created, long subscribed, long disposed)
+        public ITestableObserver<T> Start<T>(
+            Func<IObservable<T>> create,
+            long created = ReactiveTest.Created,
+            long subscribed = ReactiveTest.Subscribed,
+            long disposed = ReactiveTest.Disposed)
         {
             if (create == null)
                 throw new ArgumentNullException(nameof(create));
@@ -88,38 +92,6 @@ namespace Microsoft.Reactive.Testing
             Start();
 
             return observer;
-        }
-
-        /// <summary>
-        /// Starts the test scheduler and uses the specified virtual time to dispose the subscription to the sequence obtained through the factory function.
-        /// Default virtual times are used for <see cref="ReactiveTest.Created">factory invocation</see> and <see cref="ReactiveTest.Subscribed">sequence subscription</see>.
-        /// </summary>
-        /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
-        /// <param name="create">Factory method to create an observable sequence.</param>
-        /// <param name="disposed">Virtual time at which to dispose the subscription.</param>
-        /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
-        public ITestableObserver<T> Start<T>(Func<IObservable<T>> create, long disposed)
-        {
-            if (create == null)
-                throw new ArgumentNullException(nameof(create));
-
-            return Start(create, ReactiveTest.Created, ReactiveTest.Subscribed, disposed);
-        }
-
-        /// <summary>
-        /// Starts the test scheduler and uses default virtual times to <see cref="ReactiveTest.Created">invoke the factory function</see>, to <see cref="ReactiveTest.Subscribed">subscribe to the resulting sequence</see>, and to <see cref="ReactiveTest.Disposed">dispose the subscription</see>.
-        /// </summary>
-        /// <typeparam name="T">The element type of the observable sequence being tested.</typeparam>
-        /// <param name="create">Factory method to create an observable sequence.</param>
-        /// <returns>Observer with timestamped recordings of notification messages that were received during the virtual time window when the subscription to the source sequence was active.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="create"/> is null.</exception>
-        public ITestableObserver<T> Start<T>(Func<IObservable<T>> create)
-        {
-            if (create == null)
-                throw new ArgumentNullException(nameof(create));
-
-            return Start(create, ReactiveTest.Created, ReactiveTest.Subscribed, ReactiveTest.Disposed);
         }
 
         /// <summary>
