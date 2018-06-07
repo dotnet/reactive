@@ -90,7 +90,7 @@ namespace System.Reactive
 
         public IDisposable SubscribeRaw(IObserver<TTarget> observer, bool enableSafeguard)
         {
-            var subscription = new SubscriptionDisposable();
+            SingleAssignmentDisposable subscription = null;
 
             //
             // See AutoDetachObserver.cs for more information on the safeguarding requirement and
@@ -98,47 +98,35 @@ namespace System.Reactive
             //
             if (enableSafeguard)
             {
+                subscription = new SingleAssignmentDisposable();
                 observer = SafeObserver<TTarget>.Create(observer, subscription);
             }
 
-            var sink = CreateSink(observer, subscription.Inner);
+            var sink = CreateSink(observer);
 
-            subscription.Sink = sink;
+            if (subscription != null)
+                subscription.Disposable = sink;
 
             if (CurrentThreadScheduler.IsScheduleRequired)
             {
                 CurrentThreadScheduler.Instance.ScheduleAction(
-                    (@this: this, sink, inner: subscription.Inner),
-                    tuple => tuple.inner.Disposable = tuple.@this.Run(tuple.sink));
+                    (@this: this, sink),
+                    tuple => tuple.@this.Run(tuple.sink));
             }
             else
             {
-                subscription.Inner.Disposable = Run(sink);
+                Run(sink);
             }
 
-            return subscription;
+            return (IDisposable)subscription ?? sink;
         }
 
         /// <summary>
         /// Core implementation of the query operator, called upon a new subscription to the producer object.
         /// </summary>
         /// <param name="sink">The sink object.</param>
-        protected abstract IDisposable Run(TSink sink);
+        protected abstract void Run(TSink sink);
 
-        protected abstract TSink CreateSink(IObserver<TTarget> observer, IDisposable cancel);
-    }
-
-    internal sealed class SubscriptionDisposable : ICancelable
-    {
-        public volatile IDisposable Sink;
-        public readonly SingleAssignmentDisposable Inner = new SingleAssignmentDisposable();
-
-        public bool IsDisposed => Sink == null;
-
-        public void Dispose()
-        {
-            Interlocked.Exchange(ref Sink, null)?.Dispose();
-            Inner.Dispose();
-        }
+        protected abstract TSink CreateSink(IObserver<TTarget> observer);
     }
 }

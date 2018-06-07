@@ -20,10 +20,10 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
             }
 
-            protected override ObserveOnObserver<TSource> CreateSink(IObserver<TSource> observer, IDisposable cancel) => new ObserveOnObserver<TSource>(_scheduler, observer, cancel);
+            protected override ObserveOnObserver<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserver<TSource>(_scheduler, observer);
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
-            protected override IDisposable Run(ObserveOnObserver<TSource> sink) => _source.SubscribeSafe(sink);
+            protected override void Run(ObserveOnObserver<TSource> sink) => sink.Run(_source);
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace System.Reactive.Concurrency
                 _scheduler = scheduler;
             }
 
-            protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer, IDisposable cancel) => new ObserveOnObserverNew<TSource>(_scheduler, observer, cancel);
+            protected override ObserveOnObserverNew<TSource> CreateSink(IObserver<TSource> observer) => new ObserveOnObserverNew<TSource>(_scheduler, observer);
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
-            protected override IDisposable Run(ObserveOnObserverNew<TSource> sink) => _source.SubscribeSafe(sink);
+            protected override void Run(ObserveOnObserverNew<TSource> sink) => sink.Run(_source);
         }
 
         internal sealed class Context : Producer<TSource, Context._>
@@ -57,22 +57,22 @@ namespace System.Reactive.Concurrency
                 _context = context;
             }
 
-            protected override _ CreateSink(IObserver<TSource> observer, IDisposable cancel) => new _(_context, observer, cancel);
+            protected override _ CreateSink(IObserver<TSource> observer) => new _(_context, observer);
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2", Justification = "Visibility restricted to friend assemblies. Those should be correct by inspection.")]
-            protected override IDisposable Run(_ sink) => sink.Run(_source);
+            protected override void Run(_ sink) => sink.Run(_source);
 
             internal sealed class _ : IdentitySink<TSource>
             {
                 private readonly SynchronizationContext _context;
 
-                public _(SynchronizationContext context, IObserver<TSource> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(SynchronizationContext context, IObserver<TSource> observer)
+                    : base(observer)
                 {
                     _context = context;
                 }
 
-                public IDisposable Run(IObservable<TSource> source)
+                public void Run(IObservable<TSource> source)
                 {
                     //
                     // The interactions with OperationStarted/OperationCompleted below allow
@@ -86,7 +86,7 @@ namespace System.Reactive.Concurrency
                     var d = source.SubscribeSafe(this);
                     var c = Disposable.Create(_context.OperationCompleted);
 
-                    return StableCompositeDisposable.Create(d, c);
+                    SetUpstream(StableCompositeDisposable.Create(d, c));
                 }
 
                 public override void OnNext(TSource value)

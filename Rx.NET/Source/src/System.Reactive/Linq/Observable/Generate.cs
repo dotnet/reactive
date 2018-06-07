@@ -26,9 +26,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TResult>
             {
@@ -36,8 +36,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly NoTime _parent;
 
-                public _(NoTime parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(NoTime parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }
@@ -45,7 +45,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private TState _state;
                 private bool _first;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _state = _parent._initialState;
                     _first = true;
@@ -53,11 +53,11 @@ namespace System.Reactive.Linq.ObservableImpl
                     var longRunning = _parent._scheduler.AsLongRunning();
                     if (longRunning != null)
                     {
-                        return longRunning.ScheduleLongRunning(Loop);
+                        SetUpstream(longRunning.ScheduleLongRunning(Loop));
                     }
                     else
                     {
-                        return _parent._scheduler.Schedule(LoopRec);
+                        SetUpstream(_parent._scheduler.Schedule(LoopRec));
                     }
                 }
 
@@ -167,9 +167,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TResult>
             {
@@ -177,8 +177,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Absolute _parent;
 
-                public _(Absolute parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Absolute parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }
@@ -187,13 +187,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult _result;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _first = true;
                     _hasResult = false;
                     _result = default(TResult);
 
-                    return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
+                    SetUpstream(_parent._scheduler.Schedule(_parent._initialState, InvokeRec));
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)
@@ -260,9 +260,9 @@ namespace System.Reactive.Linq.ObservableImpl
                 _scheduler = scheduler;
             }
 
-            protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+            protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-            protected override IDisposable Run(_ sink) => sink.Run();
+            protected override void Run(_ sink) => sink.Run();
 
             internal sealed class _ : IdentitySink<TResult>
             {
@@ -270,8 +270,8 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private readonly Relative _parent;
 
-                public _(Relative parent, IObserver<TResult> observer, IDisposable cancel)
-                    : base(observer, cancel)
+                public _(Relative parent, IObserver<TResult> observer)
+                    : base(observer)
                 {
                     _parent = parent;
                 }
@@ -280,13 +280,13 @@ namespace System.Reactive.Linq.ObservableImpl
                 private bool _hasResult;
                 private TResult _result;
 
-                public IDisposable Run()
+                public void Run()
                 {
                     _first = true;
                     _hasResult = false;
                     _result = default(TResult);
 
-                    return _parent._scheduler.Schedule(_parent._initialState, InvokeRec);
+                    SetUpstream(_parent._scheduler.Schedule(_parent._initialState, InvokeRec));
                 }
 
                 private IDisposable InvokeRec(IScheduler self, TState state)

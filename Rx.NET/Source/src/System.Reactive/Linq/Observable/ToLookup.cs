@@ -22,9 +22,9 @@ namespace System.Reactive.Linq.ObservableImpl
             _comparer = comparer;
         }
 
-        protected override _ CreateSink(IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<ILookup<TKey, TElement>> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => _source.SubscribeSafe(sink);
+        protected override void Run(_ sink) => sink.Run(_source);
 
         internal sealed class _ : Sink<TSource, ILookup<TKey, TElement>> 
         {
@@ -32,8 +32,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly Func<TSource, TElement> _elementSelector;
             private readonly Lookup<TKey, TElement> _lookup;
 
-            public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(ToLookup<TSource, TKey, TElement> parent, IObserver<ILookup<TKey, TElement>> observer)
+                : base(observer)
             {
                 _keySelector = parent._keySelector;
                 _elementSelector = parent._elementSelector;

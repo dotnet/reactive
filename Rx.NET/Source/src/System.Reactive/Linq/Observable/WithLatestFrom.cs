@@ -19,16 +19,16 @@ namespace System.Reactive.Linq.ObservableImpl
             _resultSelector = resultSelector;
         }
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(_resultSelector, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(_resultSelector, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run(_first, _second);
+        protected override void Run(_ sink) => sink.Run(_first, _second);
 
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
+                : base(observer)
             {
                 _resultSelector = resultSelector;
             }
@@ -39,7 +39,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private object _latestGate;
 
-            public IDisposable Run(IObservable<TFirst> first, IObservable<TSecond> second)
+            public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
                 _latestGate = new object();
@@ -52,7 +52,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 sndSubscription.Disposable = second.SubscribeSafe(sndO);
                 var fstSubscription = first.SubscribeSafe(fstO);
 
-                return StableCompositeDisposable.Create(fstSubscription, sndSubscription);
+                SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription));
             }
 
             private sealed class FirstObserver : IObserver<TFirst>

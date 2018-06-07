@@ -21,21 +21,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
         public IObservable<TResult> Eval() => _condition() ? _thenSource : _elseSource;
 
-        protected override _ CreateSink(IObserver<TResult> observer, IDisposable cancel) => new _(this, observer, cancel);
+        protected override _ CreateSink(IObserver<TResult> observer) => new _(this, observer);
 
-        protected override IDisposable Run(_ sink) => sink.Run();
+        protected override void Run(_ sink) => sink.Run();
 
         internal sealed class _ : IdentitySink<TResult>
         {
             private readonly If<TResult> _parent;
 
-            public _(If<TResult> parent, IObserver<TResult> observer, IDisposable cancel)
-                : base(observer, cancel)
+            public _(If<TResult> parent, IObserver<TResult> observer)
+                : base(observer)
             {
                 _parent = parent;
             }
 
-            public IDisposable Run()
+            public void Run()
             {
                 var result = default(IObservable<TResult>);
                 try
@@ -45,10 +45,11 @@ namespace System.Reactive.Linq.ObservableImpl
                 catch (Exception exception)
                 {
                     ForwardOnError(exception);
-                    return Disposable.Empty;
+
+                    return;
                 }
 
-                return result.SubscribeSafe(this);
+                SetUpstream(result.SubscribeSafe(this));
             }
         }
     }
