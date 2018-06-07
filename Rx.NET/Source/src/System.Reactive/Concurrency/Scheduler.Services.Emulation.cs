@@ -357,7 +357,7 @@ namespace System.Reactive.Concurrency
 
             void IDisposable.Dispose()
             {
-                Disposable.TrySetSerial(ref _task, null);
+                Disposable.TryDispose(ref _task);
                 Cancel();
             }
 

@@ -147,7 +147,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     CreateWindow();
                     CreateTimer();
 
-                    SetUpstream(parent._source.SubscribeSafe(this));
+                    base.Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
