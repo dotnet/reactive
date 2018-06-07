@@ -108,21 +108,21 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private object _gate;
 
-                private IDisposable _sourceDisposable;
+                private IDisposable _task;
 
                 public void Run(Time parent)
                 {
                     _gate = new object();
 
-                    SetUpstream(parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick()));
-                    Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+                    Disposable.SetSingle(ref _task, parent._scheduler.Schedule(this, parent._duration, (_, state) => state.Tick()));
+                    base.Run(parent._source);
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref _sourceDisposable);
+                        Disposable.TryDispose(ref _task);
                     }
                     base.Dispose(disposing);
                 }
