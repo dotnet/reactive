@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                SetUpstream(observable.SubscribeSafe(this));
+                base.Run(observable);
                 Disposable.SetSingle(ref _connection, connectable.Connect());
             }
 

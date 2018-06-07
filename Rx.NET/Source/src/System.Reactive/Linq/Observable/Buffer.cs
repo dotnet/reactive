@@ -518,7 +518,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _buffer = new List<TSource>();
 
-                    SetUpstream(source.SubscribeSafe(this));
+                    base.Run(source);
 
                     _bufferGate.Wait(CreateBufferClose);
                 }
@@ -654,7 +654,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _buffer = new List<TSource>();
 
-                    SetUpstream(parent._source.SubscribeSafe(this));
+                    base.Run(parent._source);
                     Disposable.SetSingle(ref _boundariesDisposable, parent._bufferBoundaries.SubscribeSafe(new BufferClosingObserver(this)));
                 }
 
