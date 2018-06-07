@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasValue = false;
                 _id = 0UL;
 
-                SetUpstream(source.SubscribeSafe(this));
+                base.Run(source);
             }
 
             protected override void Dispose(bool disposing)
@@ -157,7 +157,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 _hasValue = false;
                 _id = 0UL;
 
-                SetUpstream(parent._source.SubscribeSafe(this));
+                base.Run(parent._source);
             }
 
             protected override void Dispose(bool disposing)

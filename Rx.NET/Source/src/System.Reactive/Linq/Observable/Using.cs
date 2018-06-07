@@ -48,7 +48,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     return;
                 }
 
-                SetUpstream(source.SubscribeSafe(this));
+                base.Run(source);
             }
 
             protected override void Dispose(bool disposing)

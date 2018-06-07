@@ -295,7 +295,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         return;
                     }
 
-                    SetUpstream(first.SubscribeSafe(this));
+                    base.Run(first);
                 }
 
                 protected override void Dispose(bool disposing)
