@@ -263,7 +263,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 private IEnumerator<TSecond> _rightEnumerator;
 
-                private static IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
+                private static readonly IEnumerator<TSecond> DisposedEnumerator = MakeDisposedEnumerator();
 
                 private static IEnumerator<TSecond> MakeDisposedEnumerator()
                 {
