@@ -152,9 +152,11 @@ namespace System.Reactive.Concurrency
 
         private sealed class Timer : IDisposable
         {
-            private object _state;
+            private volatile object _state;
             private Action<object> _action;
             private IDisposable _timer;
+
+            private static readonly object DisposedState = new object();
 
             public Timer(Action<object> action, object state, TimeSpan dueTime)
             {
@@ -170,7 +172,11 @@ namespace System.Reactive.Concurrency
 
                 try
                 {
-                    timer._action(timer._state);
+                    var timerState = timer._state;
+                    if (timerState != DisposedState)
+                    {
+                        timer._action(timerState);
+                    }
                 }
                 finally
                 {
@@ -183,7 +189,7 @@ namespace System.Reactive.Concurrency
                 if (Disposable.TryDispose(ref _timer))
                 {
                     _action = Stubs<object>.Ignore;
-                    _state = null;
+                    _state = DisposedState;
                 }
             }
         }
