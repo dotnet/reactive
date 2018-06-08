@@ -154,7 +154,7 @@ namespace System.Reactive.Concurrency
         {
             private object _state;
             private Action<object> _action;
-            private volatile System.Threading.Timer _timer;
+            private IDisposable _timer;
 
             public Timer(Action<object> action, object state, TimeSpan dueTime)
             {
@@ -169,7 +169,7 @@ namespace System.Reactive.Concurrency
                     // Rooting of the timer happens through the Timer's state
                     // which is the current instance and has a field to store the Timer instance.
                     //
-                    _timer = new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite));
+                    Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite)));
                 }
             }
 
@@ -183,23 +183,15 @@ namespace System.Reactive.Concurrency
                 }
                 finally
                 {
-                    SpinWait.SpinUntil(timer.IsTimerAssigned);
-                    timer.Dispose();
+                    Disposable.TryDispose(ref timer._timer);
                 }
             }
 
-            private bool IsTimerAssigned() => _timer != null;
-
             public void Dispose()
             {
-                var timer = _timer;
-                if (timer != TimerStubs.Never)
+                if (Disposable.TryDispose(ref _timer))
                 {
-                    _action = Stubs<object>.Ignore;
-                    _timer = TimerStubs.Never;
                     _state = null;
-
-                    timer.Dispose();
                 }
             }
         }
