@@ -49,7 +49,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     _scheduler = parent._scheduler;
                 }
 
-                public void Run(IObservable<TSource> source)
+                public override void Run(IObservable<TSource> source)
                 {
                     CreateTimer(0L);
 
@@ -152,7 +152,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 private readonly IObservable<TSource> _other;
 
                 private readonly object _gate = new object();
-                private readonly SerialDisposable _subscription = new SerialDisposable();
+                private IDisposable _serialDisposable;
 
                 public _(IObservable<TSource> other, IObserver<TSource> observer)
                     : base(observer)
@@ -166,15 +166,22 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     var original = new SingleAssignmentDisposable();
 
-                    _subscription.Disposable = original;
+                    _serialDisposable = original;
 
                     _switched = false;
 
-                    var timer = parent._scheduler.Schedule(this, parent._dueTime, (_, state) => state.Timeout());
+                    SetUpstream(parent._scheduler.Schedule(this, parent._dueTime, (_, state) => state.Timeout()));
 
                     original.Disposable = parent._source.SubscribeSafe(this);
+                }
 
-                    SetUpstream(StableCompositeDisposable.Create(_subscription, timer));
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref _serialDisposable);
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private IDisposable Timeout()
@@ -188,7 +195,7 @@ namespace System.Reactive.Linq.ObservableImpl
                     }
 
                     if (timerWins)
-                        _subscription.Disposable = _other.SubscribeSafe(GetForwarder());
+                        Disposable.TrySetSerial(ref _serialDisposable, _other.SubscribeSafe(GetForwarder()));
 
                     return Disposable.Empty;
                 }
@@ -262,8 +269,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private readonly IObservable<TSource> _other;
 
             private readonly object _gate = new object();
-            private readonly SerialDisposable _subscription = new SerialDisposable();
-            private readonly SerialDisposable _timer = new SerialDisposable();
+            private IDisposable _sourceDisposable;
+            private IDisposable _timerDisposable;
 
             public _(Timeout<TSource, TTimeout> parent, IObserver<TSource> observer)
                 : base(observer)
@@ -279,7 +286,7 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 var original = new SingleAssignmentDisposable();
 
-                _subscription.Disposable = original;
+                _sourceDisposable = original;
 
                 _id = 0UL;
                 _switched = false;
@@ -287,8 +294,16 @@ namespace System.Reactive.Linq.ObservableImpl
                 SetTimer(parent._firstTimeout);
 
                 original.Disposable = parent._source.SubscribeSafe(this);
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(_subscription, _timer));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _sourceDisposable);
+                    Disposable.TryDispose(ref _timerDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             public override void OnNext(TSource value)
@@ -333,7 +348,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 var myid = _id;
 
                 var d = new SingleAssignmentDisposable();
-                _timer.Disposable = d;
+                Disposable.TrySetSerial(ref _timerDisposable, d);
                 d.Disposable = timeout.SubscribeSafe(new TimeoutObserver(this, myid, d));
             }
 
@@ -353,7 +368,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnNext(TTimeout value)
                 {
                     if (TimerWins())
-                        _parent._subscription.Disposable = _parent._other.SubscribeSafe(_parent.GetForwarder());
+                        Disposable.TrySetSerial(ref _parent._sourceDisposable,  _parent._other.SubscribeSafe(_parent.GetForwarder()));
 
                     _self.Dispose();
                 }
@@ -369,7 +384,7 @@ namespace System.Reactive.Linq.ObservableImpl
                 public void OnCompleted()
                 {
                     if (TimerWins())
-                        _parent._subscription.Disposable = _parent._other.SubscribeSafe(_parent.GetForwarder());
+                        Disposable.TrySetSerial(ref _parent._sourceDisposable, _parent._other.SubscribeSafe(_parent.GetForwarder()));
                 }
 
                 private bool TimerWins()

@@ -147,11 +147,21 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
+            private IDisposable _sourceDisposable;
+
             public void Run(TakeUntil<TSource> parent)
             {
-                var t = parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick());
-                var d = parent._source.SubscribeSafe(this);
-                SetUpstream(StableCompositeDisposable.Create(t, d));
+                SetUpstream(parent._scheduler.Schedule(this, parent._endTime, (_, state) => state.Tick()));
+                Disposable.SetSingle(ref _sourceDisposable, parent._source.SubscribeSafe(this));
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _sourceDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             private IDisposable Tick()

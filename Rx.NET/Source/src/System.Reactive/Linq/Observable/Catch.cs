@@ -91,7 +91,7 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private SerialDisposable _subscription;
 
-            public void Run(IObservable<TSource> source)
+            public override void Run(IObservable<TSource> source)
             {
                 _subscription = new SerialDisposable();
 

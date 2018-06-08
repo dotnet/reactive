@@ -29,25 +29,35 @@ namespace System.Reactive.Linq.ObservableImpl
             {
             }
 
+            private IDisposable _disposable;
+
             public void Run(Using<TSource, TResource> parent)
             {
                 var source = default(IObservable<TSource>);
-                var disposable = Disposable.Empty;
                 try
                 {
                     var resource = parent._resourceFactory();
                     if (resource != null)
-                        disposable = resource;
+                        Disposable.SetSingle(ref _disposable, resource);
                     source = parent._observableFactory(resource);
                 }
                 catch (Exception exception)
                 {
-                    SetUpstream(StableCompositeDisposable.Create(Observable.Throw<TSource>(exception).SubscribeSafe(this), disposable));
+                    SetUpstream(Observable.Throw<TSource>(exception).SubscribeSafe(this));
 
                     return;
                 }
 
-                SetUpstream(StableCompositeDisposable.Create(source.SubscribeSafe(this), disposable));
+                base.Run(source);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _disposable);
+                }
+                base.Dispose(disposing);
             }
         }
     }

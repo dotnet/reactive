@@ -40,35 +40,41 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private object _gate;
 
+            private IDisposable _firstDisposable;
+            private IDisposable _secondDisposable;
+
             public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
 
-                var fstSubscription = new SingleAssignmentDisposable();
-                var sndSubscription = new SingleAssignmentDisposable();
-
-                var fstO = new FirstObserver(this, fstSubscription);
-                var sndO = new SecondObserver(this, sndSubscription);
+                var fstO = new FirstObserver(this);
+                var sndO = new SecondObserver(this);
 
                 fstO.Other = sndO;
                 sndO.Other = fstO;
 
-                fstSubscription.Disposable = first.SubscribeSafe(fstO);
-                sndSubscription.Disposable = second.SubscribeSafe(sndO);
+                Disposable.SetSingle(ref _firstDisposable, first.SubscribeSafe(fstO));
+                Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(sndO));
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _firstDisposable);
+                    Disposable.TryDispose(ref _secondDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             private sealed class FirstObserver : IObserver<TFirst>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
                 private SecondObserver _other;
 
-                public FirstObserver(_ parent, IDisposable self)
+                public FirstObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 public SecondObserver Other { set { _other = value; } }
@@ -128,7 +134,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            _self.Dispose();
+                            Disposable.TryDispose(ref _parent._firstDisposable);
                         }
                     }
                 }
@@ -137,13 +143,11 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class SecondObserver : IObserver<TSecond>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
                 private FirstObserver _other;
 
-                public SecondObserver(_ parent, IDisposable self)
+                public SecondObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 public FirstObserver Other { set { _other = value; } }
@@ -203,7 +207,7 @@ namespace System.Reactive.Linq.ObservableImpl
                         }
                         else
                         {
-                            _self.Dispose();
+                            Disposable.TryDispose(ref _parent._secondDisposable);
                         }
                     }
                 }

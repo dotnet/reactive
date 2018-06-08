@@ -39,20 +39,27 @@ namespace System.Reactive.Linq.ObservableImpl
 
             private object _latestGate;
 
+            private IDisposable _secondDisposable;
+
             public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
             {
                 _gate = new object();
                 _latestGate = new object();
 
-                var sndSubscription = new SingleAssignmentDisposable();
-
                 var fstO = new FirstObserver(this);
-                var sndO = new SecondObserver(this, sndSubscription);
+                var sndO = new SecondObserver(this);
 
-                sndSubscription.Disposable = second.SubscribeSafe(sndO);
-                var fstSubscription = first.SubscribeSafe(fstO);
+                Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(sndO));
+                SetUpstream(first.SubscribeSafe(fstO));
+            }
 
-                SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription));
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    Disposable.TryDispose(ref _secondDisposable);
+                }
+                base.Dispose(disposing);
             }
 
             private sealed class FirstObserver : IObserver<TFirst>
@@ -119,17 +126,15 @@ namespace System.Reactive.Linq.ObservableImpl
             private sealed class SecondObserver : IObserver<TSecond>
             {
                 private readonly _ _parent;
-                private readonly IDisposable _self;
 
-                public SecondObserver(_ parent, IDisposable self)
+                public SecondObserver(_ parent)
                 {
                     _parent = parent;
-                    _self = self;
                 }
 
                 public void OnCompleted()
                 {
-                    _self.Dispose();
+                    Disposable.TryDispose(ref _parent._secondDisposable);
                 }
 
                 public void OnError(Exception error)
