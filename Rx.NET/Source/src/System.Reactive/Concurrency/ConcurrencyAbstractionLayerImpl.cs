@@ -182,6 +182,7 @@ namespace System.Reactive.Concurrency
             {
                 if (Disposable.TryDispose(ref _timer))
                 {
+                    _action = Stubs<object>.Ignore;
                     _state = null;
                 }
             }
