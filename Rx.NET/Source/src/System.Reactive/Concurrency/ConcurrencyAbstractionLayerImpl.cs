@@ -161,16 +161,7 @@ namespace System.Reactive.Concurrency
                 _state = state;
                 _action = action;
 
-                // Don't want the spin wait in Tick to get stuck if this thread gets aborted.
-                try { }
-                finally
-                {
-                    //
-                    // Rooting of the timer happens through the Timer's state
-                    // which is the current instance and has a field to store the Timer instance.
-                    //
-                    Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite)));
-                }
+                Disposable.SetSingle(ref _timer, new System.Threading.Timer(_ => Tick(_), this, dueTime, TimeSpan.FromMilliseconds(System.Threading.Timeout.Infinite)));
             }
 
             private static void Tick(object state)

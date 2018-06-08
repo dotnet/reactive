@@ -705,15 +705,6 @@ namespace ReactiveTests.Tests
         }
 
         [Fact]
-        public void Task_Loop()
-        {
-            for (int i = 0; i < 1000; i++)
-            {
-                Observable.Return(1).Delay(TimeSpan.FromMilliseconds(1), DefaultScheduler.Instance).Wait();
-            }
-        }
-
-        [Fact]
         public void Delay_DateTimeOffset_DefaultScheduler()
         {
             Assert.True(Observable.Return(1).Delay(DateTimeOffset.UtcNow + TimeSpan.FromMilliseconds(1)).ToEnumerable().SequenceEqual(new[] { 1 }));
