@@ -35,6 +35,12 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
+                FirstObserver firstObserver;
+                IDisposable firstDisposable;
+
+                SecondObserver secondObserver;
+                IDisposable secondDisposable;
+
                 public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
                     : base(observer)
                 {
@@ -47,32 +53,43 @@ namespace System.Reactive.Linq.ObservableImpl
                 {
                     _gate = new object();
 
-                    var fstSubscription = new SingleAssignmentDisposable();
-                    var sndSubscription = new SingleAssignmentDisposable();
+                    firstObserver = new FirstObserver(this);
+                    secondObserver = new SecondObserver(this);
 
-                    var fstO = new FirstObserver(this, fstSubscription);
-                    var sndO = new SecondObserver(this, sndSubscription);
+                    firstObserver.Other = secondObserver;
+                    secondObserver.Other = firstObserver;
 
-                    fstO.Other = sndO;
-                    sndO.Other = fstO;
+                    Disposable.SetSingle(ref firstDisposable, first.SubscribeSafe(firstObserver));
+                    Disposable.SetSingle(ref secondDisposable, second.SubscribeSafe(secondObserver));
+                }
 
-                    fstSubscription.Disposable = first.SubscribeSafe(fstO);
-                    sndSubscription.Disposable = second.SubscribeSafe(sndO);
+                protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        Disposable.TryDispose(ref firstDisposable);
+                        Disposable.TryDispose(ref secondDisposable);
 
-                    SetUpstream(StableCompositeDisposable.Create(fstSubscription, sndSubscription, fstO, sndO));
+                        // clearing the queue should happen under the lock
+                        // as they are plain Queue<T>s, not concurrent queues.
+                        lock (_gate)
+                        {
+                            firstObserver.Dispose();
+                            secondObserver.Dispose();
+                        }
+                    }
+                    base.Dispose(disposing);
                 }
 
                 private sealed class FirstObserver : IObserver<TFirst>, IDisposable
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
                     private SecondObserver _other;
                     private Queue<TFirst> _queue;
 
-                    public FirstObserver(_ parent, IDisposable self)
+                    public FirstObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                         _queue = new Queue<TFirst>();
                     }
 
@@ -136,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                _self.Dispose();
+                                Disposable.TryDispose(ref _parent.firstDisposable);
                             }
                         }
                     }
@@ -150,14 +167,12 @@ namespace System.Reactive.Linq.ObservableImpl
                 private sealed class SecondObserver : IObserver<TSecond>, IDisposable
                 {
                     private readonly _ _parent;
-                    private readonly IDisposable _self;
                     private FirstObserver _other;
                     private Queue<TSecond> _queue;
 
-                    public SecondObserver(_ parent, IDisposable self)
+                    public SecondObserver(_ parent)
                     {
                         _parent = parent;
-                        _self = self;
                         _queue = new Queue<TSecond>();
                     }
 
@@ -221,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                _self.Dispose();
+                                Disposable.TryDispose(ref _parent.secondDisposable);
                             }
                         }
                     }
@@ -556,22 +571,34 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _isDone = new bool[N];
 
-                _subscriptions = new SingleAssignmentDisposable[N];
+                _subscriptions = new IDisposable[N];
 
                 _gate = new object();
 
                 for (int i = 0; i < N; i++)
                 {
-                    var j = i;
-
-                    var d = new SingleAssignmentDisposable();
-                    _subscriptions[j] = d;
-
-                    var o = new SourceObserver(this, j);
-                    d.Disposable = srcs[j].SubscribeSafe(o);
+                    var o = new SourceObserver(this, i);
+                    Disposable.SetSingle(ref _subscriptions[i], srcs[i].SubscribeSafe(o));
                 }
+            }
 
-                SetUpstream(new CompositeDisposable(_subscriptions) { Disposable.Create(() => { foreach (var q in _queues) q.Clear(); }) });
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    for (int i = 0; i < _subscriptions.Length; i++)
+                    {
+                        Disposable.TryDispose(ref _subscriptions[i]);
+                    }
+                    lock (_gate)
+                    {
+                        foreach (var q in _queues)
+                        {
+                            q.Clear();
+                        }
+                    }
+                }
+                base.Dispose(disposing);
             }
 
             private void OnNext(int index, TSource value)
