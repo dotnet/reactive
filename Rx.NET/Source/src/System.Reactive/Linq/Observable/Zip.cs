@@ -548,13 +548,15 @@ namespace System.Reactive.Linq.ObservableImpl
         {
             private readonly Zip<TSource> _parent;
 
+            private readonly object _gate;
+
             public _(Zip<TSource> parent, IObserver<IList<TSource>> observer)
                 : base(observer)
             {
+                _gate = new object();
                 _parent = parent;
             }
 
-            private object _gate;
             private Queue<TSource>[] _queues;
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
@@ -577,8 +579,6 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 if (Interlocked.CompareExchange(ref _subscriptions, subscriptions, null) == null)
                 {
-                    _gate = new object();
-
                     for (int i = 0; i < N; i++)
                     {
                         var o = new SourceObserver(this, i);
