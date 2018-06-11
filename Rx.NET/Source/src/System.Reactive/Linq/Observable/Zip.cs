@@ -35,47 +35,47 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 private readonly Func<TFirst, TSecond, TResult> _resultSelector;
 
-                FirstObserver firstObserver;
-                IDisposable firstDisposable;
+                private readonly object _gate;
 
-                SecondObserver secondObserver;
-                IDisposable secondDisposable;
+                private readonly FirstObserver _firstObserver;
+                private IDisposable _firstDisposable;
+
+                private readonly SecondObserver _secondObserver;
+                private IDisposable _secondDisposable;
 
                 public _(Func<TFirst, TSecond, TResult> resultSelector, IObserver<TResult> observer)
                     : base(observer)
                 {
+                    _gate = new object();
+
+                    _firstObserver = new FirstObserver(this);
+                    _secondObserver = new SecondObserver(this);
+
+                    _firstObserver.Other = _secondObserver;
+                    _secondObserver.Other = _firstObserver;
+
                     _resultSelector = resultSelector;
                 }
 
-                private object _gate;
-
                 public void Run(IObservable<TFirst> first, IObservable<TSecond> second)
                 {
-                    _gate = new object();
-
-                    firstObserver = new FirstObserver(this);
-                    secondObserver = new SecondObserver(this);
-
-                    firstObserver.Other = secondObserver;
-                    secondObserver.Other = firstObserver;
-
-                    Disposable.SetSingle(ref firstDisposable, first.SubscribeSafe(firstObserver));
-                    Disposable.SetSingle(ref secondDisposable, second.SubscribeSafe(secondObserver));
+                    Disposable.SetSingle(ref _firstDisposable, first.SubscribeSafe(_firstObserver));
+                    Disposable.SetSingle(ref _secondDisposable, second.SubscribeSafe(_secondObserver));
                 }
 
                 protected override void Dispose(bool disposing)
                 {
                     if (disposing)
                     {
-                        Disposable.TryDispose(ref firstDisposable);
-                        Disposable.TryDispose(ref secondDisposable);
+                        Disposable.TryDispose(ref _firstDisposable);
+                        Disposable.TryDispose(ref _secondDisposable);
 
                         // clearing the queue should happen under the lock
                         // as they are plain Queue<T>s, not concurrent queues.
                         lock (_gate)
                         {
-                            firstObserver.Dispose();
-                            secondObserver.Dispose();
+                            _firstObserver.Dispose();
+                            _secondObserver.Dispose();
                         }
                     }
                     base.Dispose(disposing);
@@ -153,7 +153,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                Disposable.TryDispose(ref _parent.firstDisposable);
+                                Disposable.TryDispose(ref _parent._firstDisposable);
                             }
                         }
                     }
@@ -236,7 +236,7 @@ namespace System.Reactive.Linq.ObservableImpl
                             }
                             else
                             {
-                                Disposable.TryDispose(ref _parent.secondDisposable);
+                                Disposable.TryDispose(ref _parent._secondDisposable);
                             }
                         }
                     }
@@ -559,6 +559,8 @@ namespace System.Reactive.Linq.ObservableImpl
             private bool[] _isDone;
             private IDisposable[] _subscriptions;
 
+            private static readonly IDisposable[] Disposed = new IDisposable[0];
+
             public void Run()
             {
                 var srcs = _parent._sources.ToArray();
@@ -571,14 +573,17 @@ namespace System.Reactive.Linq.ObservableImpl
 
                 _isDone = new bool[N];
 
-                _subscriptions = new IDisposable[N];
+                var subscriptions = new IDisposable[N];
 
-                _gate = new object();
-
-                for (int i = 0; i < N; i++)
+                if (Interlocked.CompareExchange(ref _subscriptions, subscriptions, null) == null)
                 {
-                    var o = new SourceObserver(this, i);
-                    Disposable.SetSingle(ref _subscriptions[i], srcs[i].SubscribeSafe(o));
+                    _gate = new object();
+
+                    for (int i = 0; i < N; i++)
+                    {
+                        var o = new SourceObserver(this, i);
+                        Disposable.SetSingle(ref subscriptions[i], srcs[i].SubscribeSafe(o));
+                    }
                 }
             }
 
@@ -586,15 +591,20 @@ namespace System.Reactive.Linq.ObservableImpl
             {
                 if (disposing)
                 {
-                    for (int i = 0; i < _subscriptions.Length; i++)
+                    var subscriptions = Interlocked.Exchange(ref _subscriptions, Disposed);
+                    if (subscriptions != null)
                     {
-                        Disposable.TryDispose(ref _subscriptions[i]);
-                    }
-                    lock (_gate)
-                    {
-                        foreach (var q in _queues)
+                        for (int i = 0; i < subscriptions.Length; i++)
                         {
-                            q.Clear();
+                            Disposable.TryDispose(ref subscriptions[i]);
+                        }
+
+                        lock (_gate)
+                        {
+                            foreach (var q in _queues)
+                            {
+                                q.Clear();
+                            }
                         }
                     }
                 }
